@@ -1,1 +1,18 @@
-{}
+{
+    "welcome_to_upsctorage": "Добро пожаловать в UpStorage",
+    "still_dont_have_account": "Еще нет аккаунта? Скорее присоединяйся к нам!",
+    "register": "Зарегистрироваться",
+    "allready_have_an_account": "Уже есть аккаунт?",
+    "sign_in": "Войти",
+    "sign_in_to_account": "Вход в учетную запись",
+    "email": "Email",
+    "password": "Пароль",
+    "remember_me": "Запомнить меня",
+    "forgot_password": "Забыли пароль?",
+    "or_continue_with": "или продолжить с",
+    "registration": "Регистрация",
+    "user_name": "Имя пользователя",
+    "term_of_use_before": "Я принимаю условия ",
+    "term_of_use": "Пользовательского соглашения",
+    "term_of_use_after": " и даю свое согласие на обработку моих персональных данных"
+}

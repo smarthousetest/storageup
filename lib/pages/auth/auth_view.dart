@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/components/expanded_section.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 
 import '../../constants.dart';
 
@@ -23,11 +26,16 @@ class _AuthViewState extends State<AuthView> {
 
   final ScrollController controller = ScrollController();
 
+  S translate = getIt<S>();
+
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
     if (!_isSignIn && _isAnimationCompleted) {
       controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
     }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -38,12 +46,12 @@ class _AuthViewState extends State<AuthView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ExpandedSection(
-                  child: _register(),
+                  child: _register(theme),
                   expand: !_isSignIn,
                 ),
-                _mainSection(),
+                _mainSection(theme),
                 ExpandedSection(
-                  child: _signIn(),
+                  child: _signIn(theme),
                   expand: _isSignIn,
                 ),
               ],
@@ -56,17 +64,22 @@ class _AuthViewState extends State<AuthView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  backgroundColor: _isSignIn ? Colors.blue : Colors.white,
+                  backgroundColor: Colors.transparent,
+                  radius: 22.5,
+                  child: SvgPicture.asset(
+                    'assets/auth/logo.svg',
+                    color: _isSignIn ? theme.accentColor : theme.primaryColor,
+                  ),
                 ),
                 SizedBox(
-                  width: 20,
+                  width: 10,
                 ),
                 Text(
                   'UpStorage',
                   style: TextStyle(
                     fontFamily: kBoldTextFontFamily,
                     fontSize: 20,
-                    color: _isSignIn ? Color(0xFF7D7D7D) : Colors.white,
+                    color: _isSignIn ? theme.disabledColor : theme.primaryColor,
                   ),
                 ),
               ],
@@ -77,20 +90,19 @@ class _AuthViewState extends State<AuthView> {
     );
   }
 
-  Widget _signIn() {
+  Widget _signIn(ThemeData theme) {
     var fullWidth = MediaQuery.of(context).size.width;
     var widthOfContainer = fullWidth * 0.4;
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
-          color: Color(0xFF64AEEA),
+          color: theme.accentColor,
           image: DecorationImage(
             fit: BoxFit.fitWidth,
             image: AssetImage('assets/auth/oblaka.png'),
           )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        //mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             child: Container(),
@@ -99,10 +111,10 @@ class _AuthViewState extends State<AuthView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Text(
-              'Добро пожаловать в UpStorage',
+              translate.welcome_to_upsctorage,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
+                color: theme.primaryColor,
                 fontSize: 32,
                 fontFamily: kNormalTextFontFamily,
               ),
@@ -115,10 +127,10 @@ class _AuthViewState extends State<AuthView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Text(
-              'Еще нет аккаунта? Скорее присоединяйся к нам!',
+              translate.still_dont_have_account,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
+                color: theme.primaryColor,
                 fontSize: 20,
                 fontFamily: kNormalTextFontFamily,
               ),
@@ -139,12 +151,12 @@ class _AuthViewState extends State<AuthView> {
                 horizontal: 64,
                 vertical: 18,
               ),
-              primary: Colors.white,
+              primary: theme.primaryColor,
             ),
             child: Text(
-              'Зарегистрироваться',
+              translate.register,
               style: TextStyle(
-                color: Color(0xFF64AEEA),
+                color: theme.accentColor,
                 fontFamily: kNormalTextFontFamily,
                 fontSize: 20,
               ),
@@ -159,13 +171,13 @@ class _AuthViewState extends State<AuthView> {
     );
   }
 
-  Widget _register() {
+  Widget _register(ThemeData theme) {
     var fullWidth = MediaQuery.of(context).size.width;
     var widthOfContainer = fullWidth * 0.4;
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
-          color: Color(0xFF64AEEA),
+          color: theme.accentColor,
           image: DecorationImage(
             fit: BoxFit.fitWidth,
             image: AssetImage('assets/auth/oblaka.png'),
@@ -181,10 +193,10 @@ class _AuthViewState extends State<AuthView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
             child: Text(
-              'Уже есть аккаунт?',
+              translate.allready_have_an_account,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
+                color: theme.primaryColor,
                 fontSize: 32,
                 fontFamily: kNormalTextFontFamily,
               ),
@@ -207,12 +219,12 @@ class _AuthViewState extends State<AuthView> {
                 horizontal: 135,
                 vertical: 18,
               ),
-              primary: Colors.white,
+              primary: theme.primaryColor,
             ),
             child: Text(
-              'Войти',
+              translate.sign_in,
               style: TextStyle(
-                color: Color(0xFF64AEEA),
+                color: theme.accentColor,
                 fontFamily: kNormalTextFontFamily,
                 fontSize: 20,
               ),
@@ -229,7 +241,7 @@ class _AuthViewState extends State<AuthView> {
 
   bool _checkBoxMain = false;
 
-  Widget _mainSection() {
+  Widget _mainSection(ThemeData theme) {
     var width = MediaQuery.of(context).size.width * 0.6;
     return LayoutBuilder(builder: (context, constrains) {
       return ConstrainedBox(
@@ -241,17 +253,17 @@ class _AuthViewState extends State<AuthView> {
           children: [
             ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: width),
-                child: _signInMain()),
+                child: _signInMain(theme)),
             ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: width),
-                child: _registerMain()),
+                child: _registerMain(theme)),
           ],
         ),
       );
     });
   }
 
-  Widget _signInMain() {
+  Widget _signInMain(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -261,24 +273,24 @@ class _AuthViewState extends State<AuthView> {
           flex: 3,
         ),
         Text(
-          'Вход в учетную запись',
+          translate.sign_in_to_account,
           style: TextStyle(
             fontFamily: kNormalTextFontFamily,
             fontSize: 32,
-            color: Color(0xFF7D7D7D),
+            color: theme.disabledColor,
           ),
         ),
         Expanded(
           child: Container(),
         ),
         CustomTextField(
-          hint: 'Email',
+          hint: translate.email,
           onChange: (_) {},
           invalid: false,
           isPassword: false,
         ),
         CustomTextField(
-          hint: 'Пароль',
+          hint: translate.password,
           onChange: (_) {},
           invalid: false,
           isPassword: true,
@@ -302,21 +314,21 @@ class _AuthViewState extends State<AuthView> {
                 },
               ),
               Text(
-                'Запомнить меня',
+                translate.remember_me,
                 style: TextStyle(
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 18,
-                  color: Color(0xFF7D7D7D),
+                  color: theme.disabledColor,
                 ),
               ),
               Expanded(child: Container()),
               Text(
-                'Забыли пароль?',
+                translate.forgot_password,
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 20,
-                  color: Color(0xFF7D7D7D),
+                  color: theme.disabledColor,
                 ),
               ),
             ],
@@ -335,22 +347,23 @@ class _AuthViewState extends State<AuthView> {
                 child: Divider(
                   height: 2,
                   endIndent: 10,
-                  color: Color(0xFFEDEDED),
+                  color: theme.hintColor,
                 ),
               ),
               Text(
-                'или продолжить с',
+                translate.or_continue_with,
                 style: TextStyle(
-                    fontSize: 20,
-                    height: 0.82,
-                    fontFamily: kNormalTextFontFamily,
-                    color: Color(0xFFEDEDED)),
+                  fontSize: 20,
+                  height: 0.82,
+                  fontFamily: kNormalTextFontFamily,
+                  color: theme.hintColor,
+                ),
               ),
               Expanded(
                 child: Divider(
                   height: 1,
                   indent: 10,
-                  color: Color(0xFFEDEDED),
+                  color: theme.hintColor,
                 ),
               ),
             ],
@@ -367,7 +380,7 @@ class _AuthViewState extends State<AuthView> {
               borderRadius: BorderRadius.circular(100),
               child: CircleAvatar(
                 minRadius: 30,
-                backgroundColor: Colors.white,
+                backgroundColor: theme.primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Image.asset('assets/auth/facebook.png'),
@@ -382,7 +395,7 @@ class _AuthViewState extends State<AuthView> {
               borderRadius: BorderRadius.circular(100),
               child: CircleAvatar(
                 minRadius: 30,
-                backgroundColor: Colors.white,
+                backgroundColor: theme.primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Image.asset('assets/auth/google.png'),
@@ -401,12 +414,12 @@ class _AuthViewState extends State<AuthView> {
               horizontal: 135,
               vertical: 18,
             ),
-            primary: Colors.white,
+            primary: theme.primaryColor,
           ),
           child: Text(
-            'Войти',
+            translate.sign_in,
             style: TextStyle(
-              color: Color(0xFF64AEEA),
+              color: theme.accentColor,
               fontFamily: kNormalTextFontFamily,
               fontSize: 20,
             ),
@@ -419,7 +432,7 @@ class _AuthViewState extends State<AuthView> {
 
   bool _checkboxRegister = false;
 
-  Widget _registerMain() {
+  Widget _registerMain(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -430,11 +443,11 @@ class _AuthViewState extends State<AuthView> {
         ),
         Center(
           child: Text(
-            'Регистрация',
+            translate.registration,
             style: TextStyle(
               fontFamily: kNormalTextFontFamily,
               fontSize: 32,
-              color: Color(0xFF7D7D7D),
+              color: theme.disabledColor,
             ),
           ),
         ),
@@ -442,19 +455,19 @@ class _AuthViewState extends State<AuthView> {
           child: Container(),
         ),
         CustomTextField(
-          hint: 'Имя пользователя',
+          hint: translate.user_name,
           onChange: (_) {},
           invalid: false,
           isPassword: false,
         ),
         CustomTextField(
-          hint: 'Email',
+          hint: translate.email,
           onChange: (_) {},
           invalid: false,
           isPassword: false,
         ),
         CustomTextField(
-          hint: 'Пароль',
+          hint: translate.password,
           onChange: (_) {},
           invalid: false,
           isPassword: true,
@@ -479,23 +492,21 @@ class _AuthViewState extends State<AuthView> {
               Expanded(
                 child: RichText(
                   text: TextSpan(
-                    text: 'Я принимаю условия ',
+                    text: translate.term_of_use_before,
                     style: TextStyle(
                       fontFamily: kNormalTextFontFamily,
                       fontSize: 16,
-                      color: Color(0xFF7D7D7D),
+                      color: theme.disabledColor,
                     ),
                     children: [
                       TextSpan(
-                          text: 'Пользовательского соглашения',
+                          text: translate.term_of_use,
                           style: TextStyle(
                             fontFamily: kNormalTextFontFamily,
                             fontSize: 16,
-                            color: Color(0xFF64AEEA),
+                            color: theme.accentColor,
                           )),
-                      TextSpan(
-                          text:
-                              ' и даю свое согласие на обработку моих персональных данных'),
+                      TextSpan(text: translate.term_of_use_after),
                     ],
                   ),
                 ),
@@ -513,12 +524,12 @@ class _AuthViewState extends State<AuthView> {
               horizontal: 64,
               vertical: 18,
             ),
-            primary: Colors.white,
+            primary: theme.primaryColor,
           ),
           child: Text(
-            'Зарегистрироваться',
+            translate.register,
             style: TextStyle(
-              color: Color(0xFF64AEEA),
+              color: theme.accentColor,
               fontFamily: kNormalTextFontFamily,
               fontSize: 20,
             ),
