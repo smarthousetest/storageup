@@ -4,7 +4,7 @@ import 'package:upstorage_desktop/components/custom_button_template.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
+  static const route = "home_page";
   @override
   _HomePageState createState() => _HomePageState();
 }

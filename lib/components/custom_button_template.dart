@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LeftButtonsColumn extends StatefulWidget {
+class CustomMenuButton extends StatefulWidget {
   final String icon, title;
 
   @override
   _ButtomTemplateState createState() => new _ButtomTemplateState();
 
-  LeftButtonsColumn({required this.icon, required this.title});
+  CustomMenuButton({required this.icon, required this.title});
 }
 
-class _ButtomTemplateState extends State<LeftButtonsColumn> {
+class _ButtomTemplateState extends State<CustomMenuButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -43,35 +43,35 @@ class _ButtomTemplateState extends State<LeftButtonsColumn> {
 }
 
 List buttons = [
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/home.svg",
     title: "Главная",
   ),
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/files.svg",
     title: "Файлы",
   ),
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/media.svg",
     title: "Медиа",
   ),
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/like.svg",
     title: "Избранное",
   ),
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/sell_space.svg",
     title: "Сдача места",
   ),
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/finance.svg",
     title: "Финансы",
   ),
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/gear.svg",
     title: "Настройки",
   ),
-  LeftButtonsColumn(
+  CustomMenuButton(
     icon: "assets/home_page/trash.svg",
     title: "Корзина",
   ),
