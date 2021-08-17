@@ -10,16 +10,15 @@ class $AssetsAuthGen {
 
   AssetGenImage get facebook => const AssetGenImage('assets/auth/facebook.png');
   AssetGenImage get google => const AssetGenImage('assets/auth/google.png');
-  String get leftBackground => 'assets/auth/left_background.svg';
   AssetGenImage get leftBackgroung =>
       const AssetGenImage('assets/auth/left_backgroung.png');
+  String get logo => 'assets/auth/logo.svg';
   AssetGenImage get manLeft => const AssetGenImage('assets/auth/man_left.png');
   AssetGenImage get manRight =>
       const AssetGenImage('assets/auth/man_right.png');
   AssetGenImage get oblaka => const AssetGenImage('assets/auth/oblaka.png');
-  AssetGenImage get rightBackgroundPng =>
+  AssetGenImage get rightBackground =>
       const AssetGenImage('assets/auth/right_background.png');
-  String get rightBackgroundSvg => 'assets/auth/right_background.svg';
 }
 
 class Assets {

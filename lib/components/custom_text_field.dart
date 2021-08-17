@@ -65,6 +65,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Container(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 120),
@@ -80,13 +81,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             Material(
               elevation: 2.0,
               shadowColor: Color(0xA9000000),
-              color: Colors.white,
+              color: theme.primaryColor,
               borderRadius: fCustomTextFormBorderRadius,
               child: TextFormField(
                 onChanged: widget.onChange,
                 obscureText: _hidePassword,
                 style: TextStyle(
-                  color: Color(0xFF7D7D7D),
+                  color: theme.disabledColor,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 20,
                 ),
@@ -98,7 +99,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   border: InputBorder.none,
                   hintText: widget.hint,
                   hintStyle: TextStyle(
-                    color: Color(0xFFC4C4C4),
+                    color: theme.textTheme.headline1?.color,
                     fontFamily: kNormalTextFontFamily,
                     fontSize: 20,
                   ),
