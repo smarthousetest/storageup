@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Welcome to UpStorage`
+  /// `Welcome to StorageUp`
   String get welcome_to_upsctorage {
     return Intl.message(
-      'Welcome to UpStorage',
+      'Welcome to StorageUp',
       name: 'welcome_to_upsctorage',
       desc: '',
       args: [],
@@ -205,6 +205,46 @@ class S {
     return Intl.message(
       ' and give my consent to the processing of my personal data',
       name: 'term_of_use_after',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be more than 8 characters`
+  String get wrong_password {
+    return Intl.message(
+      'Password must be more than 8 characters',
+      name: 'wrong_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid email`
+  String get wrong_email {
+    return Intl.message(
+      'Please enter a valid email',
+      name: 'wrong_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid email or password!`
+  String get wrong_cred {
+    return Intl.message(
+      'Invalid email or password!',
+      name: 'wrong_cred',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Username must be more than 2 characters`
+  String get wrong_username {
+    return Intl.message(
+      'Username must be more than 2 characters',
+      name: 'wrong_username',
       desc: '',
       args: [],
     );

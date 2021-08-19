@@ -118,12 +118,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   Padding _errorMessage(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
+      padding: const EdgeInsets.only(bottom: 5.0, top: 10.0),
       child: Text(
         widget.invalid ? widget.errorMessage : '',
         textAlign: TextAlign.left,
         style: TextStyle(
             fontFamily: kNormalTextFontFamily,
+            fontSize: 16.0,
             color: Theme.of(context).errorColor),
       ),
     );
