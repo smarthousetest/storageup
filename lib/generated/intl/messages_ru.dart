@@ -44,7 +44,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "term_of_use_before":
             MessageLookupByLibrary.simpleMessage("Я принимаю условия "),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
-        "welcome_to_upsctorage":
-            MessageLookupByLibrary.simpleMessage("Добро пожаловать в UpStorage")
+        "welcome_to_upsctorage": MessageLookupByLibrary.simpleMessage(
+            "Добро пожаловать в StorageUp"),
+        "wrong_cred":
+            MessageLookupByLibrary.simpleMessage("Неверный email или пароль!"),
+        "wrong_email":
+            MessageLookupByLibrary.simpleMessage("Введите корректный email"),
+        "wrong_password": MessageLookupByLibrary.simpleMessage(
+            "Пароль должен содержать более 8 символов"),
+        "wrong_username": MessageLookupByLibrary.simpleMessage(
+            "Имя пользователя должно содержать более 2 символов")
       };
 }

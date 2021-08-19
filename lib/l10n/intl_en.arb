@@ -1,5 +1,5 @@
 {
-    "welcome_to_upsctorage": "Welcome to UpStorage",
+    "welcome_to_upsctorage": "Welcome to StorageUp",
     "still_dont_have_account": "Don't have an account yet? Hurry to join us!",
     "register": "Register now",
     "allready_have_an_account": "Already have an account?",
@@ -14,5 +14,9 @@
     "user_name": "Username",
     "term_of_use_before": "I accept the terms ",
     "term_of_use": "User Agreement",
-    "term_of_use_after": " and give my consent to the processing of my personal data"
+    "term_of_use_after": " and give my consent to the processing of my personal data",
+    "wrong_password": "Password must be more than 8 characters",
+    "wrong_email": "Please enter a valid email",
+    "wrong_cred": "Invalid email or password!",
+    "wrong_username": "Username must be more than 2 characters"
 }

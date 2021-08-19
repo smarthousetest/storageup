@@ -540,7 +540,7 @@ packages:
     source: hosted
     version: "0.2.0-nullsafety.0"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
@@ -561,7 +561,7 @@ packages:
     source: hosted
     version: "2.0.2"
   shared_preferences_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences_platform_interface
       url: "https://pub.dartlang.org"

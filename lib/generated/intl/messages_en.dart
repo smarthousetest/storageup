@@ -44,6 +44,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("I accept the terms "),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
         "welcome_to_upsctorage":
-            MessageLookupByLibrary.simpleMessage("Welcome to UpStorage")
+            MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
+        "wrong_cred":
+            MessageLookupByLibrary.simpleMessage("Invalid email or password!"),
+        "wrong_email":
+            MessageLookupByLibrary.simpleMessage("Please enter a valid email"),
+        "wrong_password": MessageLookupByLibrary.simpleMessage(
+            "Password must be more than 8 characters"),
+        "wrong_username": MessageLookupByLibrary.simpleMessage(
+            "Username must be more than 2 characters")
       };
 }
