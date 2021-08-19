@@ -29,7 +29,7 @@ class _MyProgressIndicator extends State<MyProgressIndicator> {
           //width of circle line
           animation: true,
           //animate when it shows progress indicator first
-          percent: 60 / 100,
+          percent: widget.percent / 100,
           //vercentage value: 0.6 for 60% (60/100 = 0.6)
           center: Text(
             widget.percent.toString() + '%',

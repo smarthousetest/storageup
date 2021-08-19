@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
+import 'package:upstorage_desktop/components/custom_progress_bar.dart';
 
 import '../../constants.dart';
 
@@ -372,6 +373,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
+                    MyProgressBar(percent: 89, text: 'text', color: Colors.purple),
                   ],
                 ),
               ),
