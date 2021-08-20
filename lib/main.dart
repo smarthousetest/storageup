@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home.dart';
 import 'package:upstorage_desktop/theme.dart';
-
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
 

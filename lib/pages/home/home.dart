@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
@@ -8,6 +9,7 @@ import '../../constants.dart';
 
 class HomePage extends StatefulWidget {
   static const route = "home_page";
+
   HomePage({Key? key}) : super(key: key);
 
   @override
@@ -163,6 +165,7 @@ class _HomePageState extends State<HomePage> {
                                                   text:
                                                       "Места на вашем устройстве арендовано",
                                                   color: Color(0xff868FFF),
+                                                  radius: 150,
                                                 ),
                                                 Expanded(
                                                     flex: 20,
@@ -216,6 +219,7 @@ class _HomePageState extends State<HomePage> {
                                                     text:
                                                         "Арендованого места заполнено",
                                                     color: Color(0xff59D7AB),
+                                                    radius: 150,
                                                   ),
                                                   Expanded(
                                                       flex: 20,
@@ -299,6 +303,9 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             height: 46,
                             width: 46,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(23),
+                            ),
                             child: Image.asset('assets/home_page/glad.jpg'),
                           ),
                         ),
@@ -373,7 +380,251 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    MyProgressBar(percent: 89, text: 'text', color: Colors.purple),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: Container(
+                        child: Stack(
+                          children: [
+                            MyProgressBar(
+                              percent: 75,
+                              text: 'text',
+                              color: Color(0xffFFD75E),
+                              bgColor: Color(0xffF7F9FB),
+                            ),
+                            MyProgressBar(
+                              percent: 50,
+                              text: 'text',
+                              color: Color(0xffFF847E),
+                              bgColor: Color.fromARGB(0, 0, 0, 0),
+                            ),
+                            MyProgressBar(
+                              percent: 30,
+                              text: 'text',
+                              color: Color(0xff59D7AB),
+                              bgColor: Color.fromARGB(0, 0, 0, 0),
+                            ),
+                            MyProgressBar(
+                              percent: 15,
+                              text: 'text',
+                              color: Color(0xff868FFF),
+                              bgColor: Color.fromARGB(0, 0, 0, 0),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Files');
+                        },
+                        autofocus: true,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          shadowColor: Color.fromARGB(5, 0, 0, 0),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Container(
+                                height: 46,
+                                width: 46,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SvgPicture.asset(
+                                    'assets/home_page/files_r.svg'),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    "Файлы",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xff7D7D7D),
+                                      fontFamily: 'Lato',
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "15 файлов",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xffC4C4C4),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Foto');
+                        },
+                        autofocus: true,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          shadowColor: Color.fromARGB(5, 0, 0, 0),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Container(
+                                height: 46,
+                                width: 46,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SvgPicture.asset(
+                                    'assets/home_page/foto_r.svg'),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    "Фото",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xff7D7D7D),
+                                      fontFamily: 'Lato',
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "15 файлов",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xffC4C4C4),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Video');
+                        },
+                        autofocus: true,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          shadowColor: Color.fromARGB(5, 0, 0, 0),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Container(
+                                height: 46,
+                                width: 46,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SvgPicture.asset(
+                                    'assets/home_page/video_r.svg'),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    "Видео",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xff7D7D7D),
+                                      fontFamily: 'Lato',
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "15 файлов",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xffC4C4C4),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Audio');
+                        },
+                        autofocus: true,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                          shadowColor: Color.fromARGB(5, 0, 0, 0),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Container(
+                                height: 46,
+                                width: 46,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SvgPicture.asset(
+                                    'assets/home_page/music_r.svg'),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    "Аудио",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xff7D7D7D),
+                                      fontFamily: 'Lato',
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "15 файлов",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xffC4C4C4),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
