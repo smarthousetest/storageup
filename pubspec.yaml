@@ -29,9 +29,9 @@ dependencies:
   percent_indicator: ^3.0.1
 
 dev_dependencies:
-  injectable_generator: 
+  injectable_generator:
   build_runner: ^2.0.4
-  flutter_gen_runner: 
+  flutter_gen_runner:
   flutter_test:
     sdk: flutter
 
