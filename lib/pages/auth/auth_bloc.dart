@@ -37,6 +37,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapLoginSubmitted(event, state);
     } else if (event is AuthRegisterConfirmed) {
       yield* _mapRegisterSubmitted(event, state);
+    } else if (event is AuthClear) {
+      yield _mapClear(state);
+    } else if (event is AuthSendEmailVerify) {
+      yield _mapEmailVerify(state);
     }
   }
 
@@ -106,6 +110,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthState _mapAcceptTermsOfUseChanged(AuthState state) {
     return state.copyWith(acceptedTermsOfUse: !state.acceptedTermsOfUse);
+  }
+
+  AuthState _mapClear(AuthState state) {
+    return state.copyWith(
+      emailRegister: Email.pure(),
+      passwordRegister: Password.pure(),
+      name: Name.pure(),
+      status: FormzStatus.pure,
+      action: null,
+      error: null,
+    );
+  }
+
+  AuthState _mapEmailVerify(AuthState state) {
+    _authenticationRepository.sendEmailConfirm();
+    return state;
   }
 
   Stream<AuthState> _mapLoginSubmitted(

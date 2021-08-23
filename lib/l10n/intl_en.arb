@@ -27,5 +27,8 @@
     "nothing_on_email": "Nothing came to Email?",
     "back_to_main": "Go to the main page",
     "password_recovery": "Password recovery",
-    "password_recovery_enter_email": "To recover your password, enter your email address in the field"
+    "password_recovery_enter_email": "To recover your password, enter your email address in the field",
+    "email_confirming_after": ", to confirm the email address, follow the link inside the letter",
+    "email_confirming": "Email confirmation",
+    "back_to_registration": "Back to registration"
 }
