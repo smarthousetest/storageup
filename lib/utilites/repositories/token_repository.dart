@@ -7,8 +7,6 @@ enum RepositoryEnum { goodResponse, error }
 
 @injectable
 class TokenRepository {
-  //Future<SharedPreferences> _prefs = ;
-
   Future<RepositoryEnum> setApiToken(String token) async {
     try {
       var prefs = await SharedPreferences.getInstance();

@@ -18,5 +18,14 @@
     "wrong_password": "Password must be more than 8 characters",
     "wrong_email": "Please enter a valid email",
     "wrong_cred": "Invalid email or password!",
-    "wrong_username": "Username must be more than 2 characters"
+    "wrong_username": "Username must be more than 2 characters",
+    "something_goes_wrong": "Something went wrong. Try again later",
+    "allready_registered_email": "User with this Email is already registered",
+    "restore_password_before_email": "A letter has been sent to your e-mail ",
+    "resore_password_after_email": ", to reset your password, follow the link inside the letter",
+    "continue_button": "Continue" ,
+    "nothing_on_email": "Nothing came to Email?",
+    "back_to_main": "Go to the main page",
+    "password_recovery": "Password recovery",
+    "password_recovery_enter_email": "To recover your password, enter your email address in the field"
 }

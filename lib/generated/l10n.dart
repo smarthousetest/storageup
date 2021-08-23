@@ -249,6 +249,96 @@ class S {
       args: [],
     );
   }
+
+  /// `Something went wrong. Try again later`
+  String get something_goes_wrong {
+    return Intl.message(
+      'Something went wrong. Try again later',
+      name: 'something_goes_wrong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User with this Email is already registered`
+  String get allready_registered_email {
+    return Intl.message(
+      'User with this Email is already registered',
+      name: 'allready_registered_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A letter has been sent to your e-mail `
+  String get restore_password_before_email {
+    return Intl.message(
+      'A letter has been sent to your e-mail ',
+      name: 'restore_password_before_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `, to reset your password, follow the link inside the letter`
+  String get resore_password_after_email {
+    return Intl.message(
+      ', to reset your password, follow the link inside the letter',
+      name: 'resore_password_after_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue`
+  String get continue_button {
+    return Intl.message(
+      'Continue',
+      name: 'continue_button',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nothing came to Email?`
+  String get nothing_on_email {
+    return Intl.message(
+      'Nothing came to Email?',
+      name: 'nothing_on_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to the main page`
+  String get back_to_main {
+    return Intl.message(
+      'Go to the main page',
+      name: 'back_to_main',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password recovery`
+  String get password_recovery {
+    return Intl.message(
+      'Password recovery',
+      name: 'password_recovery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To recover your password, enter your email address in the field`
+  String get password_recovery_enter_email {
+    return Intl.message(
+      'To recover your password, enter your email address in the field',
+      name: 'password_recovery_enter_email',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

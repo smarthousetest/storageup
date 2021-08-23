@@ -23,18 +23,35 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "allready_have_an_account":
             MessageLookupByLibrary.simpleMessage("Уже есть аккаунт?"),
+        "allready_registered_email": MessageLookupByLibrary.simpleMessage(
+            "Пользователь с данным Email уже зарегистрирован"),
+        "back_to_main":
+            MessageLookupByLibrary.simpleMessage("Вернуться на главную"),
+        "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
+        "nothing_on_email":
+            MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
         "password": MessageLookupByLibrary.simpleMessage("Пароль"),
+        "password_recovery":
+            MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
+        "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
+            "Для восстановления пароля введите в поле адрес вашей электронной почты"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "registration": MessageLookupByLibrary.simpleMessage("Регистрация"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
+        "resore_password_after_email": MessageLookupByLibrary.simpleMessage(
+            " отправлено письмо, для восстановления пароля перейдите по ссылке внутри письма"),
+        "restore_password_before_email":
+            MessageLookupByLibrary.simpleMessage("На вашу электронную почту "),
         "sign_in": MessageLookupByLibrary.simpleMessage("Войти"),
         "sign_in_to_account":
             MessageLookupByLibrary.simpleMessage("Вход в учетную запись"),
+        "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
+            "Что-то пошло не так. Попробуйте позднее"),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(
