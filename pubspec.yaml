@@ -26,6 +26,9 @@ dependencies:
   injectable: ^1.5.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   desktop_window: ^0.4.0
+  shared_preferences: ^2.0.6
+  shared_preferences_platform_interface: ^2.0.0
+  
 
 dev_dependencies:
   injectable_generator: 

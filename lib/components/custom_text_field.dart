@@ -12,7 +12,8 @@ class CustomTextField extends StatefulWidget {
       required this.onChange,
       required this.invalid,
       required this.isPassword,
-      this.needErrorValidation = true});
+      this.needErrorValidation = true,
+      this.horizontalPadding = 120});
 
   final String hint;
   final String errorMessage;
@@ -20,6 +21,7 @@ class CustomTextField extends StatefulWidget {
   final bool invalid;
   final bool isPassword;
   final bool needErrorValidation;
+  final double horizontalPadding;
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState(isPassword);
 }
@@ -65,9 +67,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     return Container(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 120),
+        padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
@@ -80,13 +83,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             Material(
               elevation: 2.0,
               shadowColor: Color(0xA9000000),
-              color: Colors.white,
+              color: theme.primaryColor,
               borderRadius: fCustomTextFormBorderRadius,
               child: TextFormField(
                 onChanged: widget.onChange,
                 obscureText: _hidePassword,
                 style: TextStyle(
-                  color: Color(0xFF7D7D7D),
+                  color: theme.disabledColor,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 20,
                 ),
@@ -98,7 +101,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   border: InputBorder.none,
                   hintText: widget.hint,
                   hintStyle: TextStyle(
-                    color: Color(0xFFC4C4C4),
+                    color: theme.textTheme.headline1?.color,
                     fontFamily: kNormalTextFontFamily,
                     fontSize: 20,
                   ),
@@ -117,12 +120,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   Padding _errorMessage(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
+      padding: const EdgeInsets.only(bottom: 5.0, top: 10.0),
       child: Text(
         widget.invalid ? widget.errorMessage : '',
         textAlign: TextAlign.left,
         style: TextStyle(
             fontFamily: kNormalTextFontFamily,
+            fontSize: 16.0,
             color: Theme.of(context).errorColor),
       ),
     );
