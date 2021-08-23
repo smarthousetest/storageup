@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:formz/formz.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/components/expanded_section.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/auth_event.dart';
+import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_view.dart';
+import 'package:upstorage_desktop/utilites/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 import '../../constants.dart';
@@ -46,6 +49,7 @@ class _AuthViewState extends State<AuthView> {
         body: Stack(
           children: [
             Container(
+              color: theme.primaryColor,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -363,13 +367,16 @@ class _AuthViewState extends State<AuthView> {
                     ),
                   ),
                   Expanded(child: Container()),
-                  Text(
-                    translate.forgot_password,
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 18,
-                      color: theme.disabledColor,
+                  GestureDetector(
+                    onTap: _onForgotPasswordTapped,
+                    child: Text(
+                      translate.forgot_password,
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 18,
+                        color: theme.disabledColor,
+                      ),
                     ),
                   ),
                 ],
@@ -445,7 +452,35 @@ class _AuthViewState extends State<AuthView> {
                 ),
               ],
             ),
-            Expanded(child: Container()),
+            Expanded(
+                child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 120),
+              child: Visibility(
+                //TODO change this shit
+                visible: state.status == FormzStatus.submissionFailure,
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/auth/error.png',
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      state.error == AuthError.wrongCredentials
+                          ? translate.wrong_cred
+                          : translate.something_goes_wrong,
+                      style: TextStyle(
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 16,
+                        color: theme.disabledColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )),
             ElevatedButton(
               onPressed: _isLoginFieldValid(state)
                   ? () {
@@ -618,7 +653,36 @@ class _AuthViewState extends State<AuthView> {
                 ],
               ),
             ),
-            Expanded(child: Container(), flex: 2),
+            Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 120),
+                  child: Visibility(
+                    visible: state.status == FormzStatus.submissionFailure &&
+                        state.action == RequestedAction.registration,
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/auth/error.png',
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          state.error == AuthError.emailAlreadyRegistered
+                              ? translate.allready_registered_email
+                              : translate.something_goes_wrong,
+                          style: TextStyle(
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
+                            color: theme.disabledColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                flex: 2),
             ElevatedButton(
               onPressed: _isRegisterFieldsValid(state)
                   ? () {
@@ -679,5 +743,9 @@ class _AuthViewState extends State<AuthView> {
         _isSignIn = !_isSignIn;
       }
     });
+  }
+
+  void _onForgotPasswordTapped() {
+    showDialog(context: context, builder: (context) => ForgotPasswordView());
   }
 }

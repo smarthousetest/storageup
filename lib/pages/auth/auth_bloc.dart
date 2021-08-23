@@ -35,6 +35,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield _mapRememberMeChanged(state);
     } else if (event is AuthLoginConfirmed) {
       yield* _mapLoginSubmitted(event, state);
+    } else if (event is AuthRegisterConfirmed) {
+      yield* _mapRegisterSubmitted(event, state);
     }
   }
 
@@ -123,12 +125,54 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           yield state.copyWith(
             status: FormzStatus.submissionFailure,
             error: AuthError.wrongCredentials,
+            action: RequestedAction.login,
           );
         } else {
-          yield state.copyWith(status: FormzStatus.submissionFailure);
+          yield state.copyWith(
+            status: FormzStatus.submissionFailure,
+            action: RequestedAction.login,
+          );
         }
       } on Exception catch (_) {
-        yield state.copyWith(status: FormzStatus.submissionFailure);
+        yield state.copyWith(
+          status: FormzStatus.submissionFailure,
+          action: RequestedAction.login,
+        );
+      }
+    }
+  }
+
+  Stream<AuthState> _mapRegisterSubmitted(
+    AuthRegisterConfirmed event,
+    AuthState state,
+  ) async* {
+    if (state.status.isValidated) {
+      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      print('registration in progress');
+      try {
+        final result = await _authenticationRepository.register(
+          email: state.emailRegister.value,
+          password: state.passwordRegister.value,
+        );
+        if (result == AuthenticationStatus.authenticated) {
+          yield state.copyWith(status: FormzStatus.submissionSuccess);
+        } else if (result == AuthenticationStatus.emailAllreadyRegistered) {
+          yield state.copyWith(
+            status: FormzStatus.submissionFailure,
+            error: AuthError.emailAlreadyRegistered,
+            action: RequestedAction.registration,
+          );
+        } else {
+          yield state.copyWith(
+            status: FormzStatus.submissionFailure,
+            action: RequestedAction.registration,
+          );
+        }
+      } on Exception catch (_) {
+        yield state.copyWith(
+          status: FormzStatus.submissionFailure,
+          action: RequestedAction.registration,
+        );
       }
     }
   }

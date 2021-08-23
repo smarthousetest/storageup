@@ -6,6 +6,8 @@ import 'package:upstorage_desktop/utilites/enums.dart';
 
 import 'models/name.dart';
 
+enum RequestedAction { registration, login }
+
 class AuthState extends Equatable {
   final Password passwordLogin;
   final Email emailLogin;
@@ -21,6 +23,8 @@ class AuthState extends Equatable {
 
   final AuthError? error;
 
+  final RequestedAction? action;
+
   AuthState({
     this.emailLogin = const Email.pure(),
     this.passwordLogin = const Password.pure(),
@@ -31,6 +35,7 @@ class AuthState extends Equatable {
     this.acceptedTermsOfUse = false,
     this.rememberMe = false,
     this.error,
+    this.action,
   });
 
   AuthState copyWith({
@@ -43,6 +48,7 @@ class AuthState extends Equatable {
     bool? rememberMe,
     FormzStatus? status,
     AuthError? error,
+    RequestedAction? action,
   }) {
     return AuthState(
       acceptedTermsOfUse: acceptedTermsOfUse ?? this.acceptedTermsOfUse,
@@ -54,6 +60,7 @@ class AuthState extends Equatable {
       emailRegister: emailRegister ?? this.emailRegister,
       passwordRegister: passwordRegister ?? this.passwordRegister,
       error: error,
+      action: action,
     );
   }
 
@@ -68,5 +75,6 @@ class AuthState extends Equatable {
         rememberMe,
         status,
         error,
+        action,
       ];
 }

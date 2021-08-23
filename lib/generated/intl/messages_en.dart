@@ -23,18 +23,35 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "allready_have_an_account":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
+        "allready_registered_email": MessageLookupByLibrary.simpleMessage(
+            "User with this Email is already registered"),
+        "back_to_main":
+            MessageLookupByLibrary.simpleMessage("Go to the main page"),
+        "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
+        "nothing_on_email":
+            MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("or continue with"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "password_recovery":
+            MessageLookupByLibrary.simpleMessage("Password recovery"),
+        "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
+            "To recover your password, enter your email address in the field"),
         "register": MessageLookupByLibrary.simpleMessage("Register now"),
         "registration": MessageLookupByLibrary.simpleMessage("Registration"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Remember me"),
+        "resore_password_after_email": MessageLookupByLibrary.simpleMessage(
+            ", to reset your password, follow the link inside the letter"),
+        "restore_password_before_email": MessageLookupByLibrary.simpleMessage(
+            "A letter has been sent to your e-mail "),
         "sign_in": MessageLookupByLibrary.simpleMessage("Login"),
         "sign_in_to_account":
             MessageLookupByLibrary.simpleMessage("Login to your account"),
+        "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong. Try again later"),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(
             "Don\'t have an account yet? Hurry to join us!"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),

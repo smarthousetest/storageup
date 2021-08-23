@@ -12,7 +12,8 @@ class CustomTextField extends StatefulWidget {
       required this.onChange,
       required this.invalid,
       required this.isPassword,
-      this.needErrorValidation = true});
+      this.needErrorValidation = true,
+      this.horizontalPadding = 120});
 
   final String hint;
   final String errorMessage;
@@ -20,6 +21,7 @@ class CustomTextField extends StatefulWidget {
   final bool invalid;
   final bool isPassword;
   final bool needErrorValidation;
+  final double horizontalPadding;
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState(isPassword);
 }
@@ -68,7 +70,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     var theme = Theme.of(context);
     return Container(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 120),
+        padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,

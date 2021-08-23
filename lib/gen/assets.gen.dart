@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 class $AssetsAuthGen {
   const $AssetsAuthGen();
 
+  AssetGenImage get error => const AssetGenImage('assets/auth/error.png');
   AssetGenImage get facebook => const AssetGenImage('assets/auth/facebook.png');
   AssetGenImage get google => const AssetGenImage('assets/auth/google.png');
   AssetGenImage get leftBackgroung =>
