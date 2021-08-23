@@ -8,6 +8,7 @@ import 'package:upstorage_desktop/components/expanded_section.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/auth_event.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_view.dart';
+import 'package:upstorage_desktop/pages/tmp.dart';
 import 'package:upstorage_desktop/utilites/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
@@ -45,58 +46,68 @@ class _AuthViewState extends State<AuthView> {
 
     return BlocProvider(
       create: (context) => getIt<AuthBloc>(),
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              color: theme.primaryColor,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ExpandedSection(
-                    child: _register(theme),
-                    expand: !_isSignIn,
-                  ),
-                  _mainSection(theme),
-                  ExpandedSection(
-                    child: _signIn(theme),
-                    expand: _isSignIn,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 25, top: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    radius: 22.5,
-                    child: SvgPicture.asset(
-                      'assets/auth/logo.svg',
-                      color: _isSignIn ? theme.accentColor : theme.primaryColor,
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state.status == FormzStatus.submissionSuccess) {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (_) => TmpPage()), (route) => false);
+          }
+        },
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Container(
+                color: theme.primaryColor,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ExpandedSection(
+                      child: _register(theme),
+                      expand: !_isSignIn,
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'UpStorage',
-                    style: TextStyle(
-                      fontFamily: kBoldTextFontFamily,
-                      fontSize: 20,
-                      color:
-                          _isSignIn ? theme.disabledColor : theme.primaryColor,
+                    _mainSection(theme),
+                    ExpandedSection(
+                      child: _signIn(theme),
+                      expand: _isSignIn,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(left: 25, top: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 22.5,
+                      child: SvgPicture.asset(
+                        'assets/auth/logo.svg',
+                        color:
+                            _isSignIn ? theme.accentColor : theme.primaryColor,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'UpStorage',
+                      style: TextStyle(
+                        fontFamily: kBoldTextFontFamily,
+                        fontSize: 20,
+                        color: _isSignIn
+                            ? theme.disabledColor
+                            : theme.primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -526,195 +537,200 @@ class _AuthViewState extends State<AuthView> {
   Widget _registerMain(ThemeData theme) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Container(),
-              flex: 2,
+        return state.status.isSubmissionSuccess
+            ? _registrationSuccessed(theme, context, state)
+            : _registrationInProgress(theme, context, state);
+      },
+    );
+  }
+
+  Column _registrationInProgress(
+      ThemeData theme, BuildContext context, AuthState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: Container(),
+          flex: 2,
+        ),
+        Center(
+          child: Text(
+            translate.registration,
+            style: TextStyle(
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 32,
+              color: theme.disabledColor,
             ),
-            Center(
-              child: Text(
-                translate.registration,
-                style: TextStyle(
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 32,
-                  color: theme.disabledColor,
+          ),
+        ),
+        Expanded(
+          child: Container(),
+        ),
+        CustomTextField(
+          hint: translate.user_name,
+          errorMessage: translate.wrong_username,
+          onChange: (name) {
+            context.read<AuthBloc>().add(AuthNameChanged(name: name));
+          },
+          needErrorValidation: true,
+          invalid: state.name.invalid && state.name.value.isNotEmpty,
+          isPassword: false,
+        ),
+        CustomTextField(
+          hint: translate.email,
+          errorMessage: translate.wrong_email,
+          onChange: (email) {
+            context
+                .read<AuthBloc>()
+                .add(AuthRegisterEmailChanged(email: email));
+          },
+          needErrorValidation: true,
+          invalid: state.emailRegister.invalid &&
+              state.emailRegister.value.isNotEmpty,
+          isPassword: false,
+        ),
+        CustomTextField(
+          hint: translate.password,
+          errorMessage: translate.wrong_password,
+          onChange: (password) {
+            context
+                .read<AuthBloc>()
+                .add(AuthRegisterPasswordChanged(password: password));
+          },
+          needErrorValidation: true,
+          invalid: state.passwordRegister.invalid &&
+              state.passwordRegister.value.isNotEmpty,
+          isPassword: true,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 120, right: 200),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 21,
+                width: 21,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6.0),
+                    boxShadow: state.acceptedTermsOfUse
+                        ? [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 1, // changes position of shadow
+                            ),
+                          ]
+                        : null),
+                child: Checkbox(
+                  value: state.acceptedTermsOfUse,
+                  side: BorderSide(
+                    width: 1,
+                    color: state.acceptedTermsOfUse
+                        ? Color.fromRGBO(23, 69, 139, 0)
+                        : theme.errorColor,
+                  ),
+                  splashRadius: 0,
+                  checkColor: theme.accentColor,
+                  activeColor: theme.primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0)),
+                  onChanged: (_) {
+                    context.read<AuthBloc>().add(AuthAcceptTermsOfUseChanged());
+                  },
                 ),
               ),
-            ),
-            Expanded(
-              child: Container(),
-            ),
-            CustomTextField(
-              hint: translate.user_name,
-              errorMessage: translate.wrong_username,
-              onChange: (name) {
-                context.read<AuthBloc>().add(AuthNameChanged(name: name));
-              },
-              needErrorValidation: true,
-              invalid: state.name.invalid && state.name.value.isNotEmpty,
-              isPassword: false,
-            ),
-            CustomTextField(
-              hint: translate.email,
-              errorMessage: translate.wrong_email,
-              onChange: (email) {
-                context
-                    .read<AuthBloc>()
-                    .add(AuthRegisterEmailChanged(email: email));
-              },
-              needErrorValidation: true,
-              invalid: state.emailRegister.invalid &&
-                  state.emailRegister.value.isNotEmpty,
-              isPassword: false,
-            ),
-            CustomTextField(
-              hint: translate.password,
-              errorMessage: translate.wrong_password,
-              onChange: (password) {
-                context
-                    .read<AuthBloc>()
-                    .add(AuthRegisterPasswordChanged(password: password));
-              },
-              needErrorValidation: true,
-              invalid: state.passwordRegister.invalid &&
-                  state.passwordRegister.value.isNotEmpty,
-              isPassword: true,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 120, right: 200),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 21,
-                    width: 21,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6.0),
-                        boxShadow: state.acceptedTermsOfUse
-                            ? [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  blurRadius: 1, // changes position of shadow
-                                ),
-                              ]
-                            : null),
-                    child: Checkbox(
-                      value: state.acceptedTermsOfUse,
-                      side: BorderSide(
-                        width: 1,
-                        color: state.acceptedTermsOfUse
-                            ? Color.fromRGBO(23, 69, 139, 0)
-                            : theme.errorColor,
-                      ),
-                      splashRadius: 0,
-                      checkColor: theme.accentColor,
-                      activeColor: theme.primaryColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0)),
-                      onChanged: (_) {
-                        context
-                            .read<AuthBloc>()
-                            .add(AuthAcceptTermsOfUseChanged());
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    width: 5.0,
-                  ),
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        text: translate.term_of_use_before,
-                        style: TextStyle(
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 16,
-                          color: theme.disabledColor,
-                        ),
-                        children: [
-                          TextSpan(
-                              text: translate.term_of_use,
-                              style: TextStyle(
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 16,
-                                color: theme.accentColor,
-                              )),
-                          TextSpan(text: translate.term_of_use_after),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              SizedBox(
+                width: 5.0,
               ),
-            ),
-            Expanded(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 120),
-                  child: Visibility(
-                    visible: state.status == FormzStatus.submissionFailure &&
-                        state.action == RequestedAction.registration,
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/auth/error.png',
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          state.error == AuthError.emailAlreadyRegistered
-                              ? translate.allready_registered_email
-                              : translate.something_goes_wrong,
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    text: translate.term_of_use_before,
+                    style: TextStyle(
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 16,
+                      color: theme.disabledColor,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: translate.term_of_use,
                           style: TextStyle(
                             fontFamily: kNormalTextFontFamily,
                             fontSize: 16,
-                            color: theme.disabledColor,
-                          ),
-                        ),
-                      ],
-                    ),
+                            color: theme.accentColor,
+                          )),
+                      TextSpan(text: translate.term_of_use_after),
+                    ],
                   ),
                 ),
-                flex: 2),
-            ElevatedButton(
-              onPressed: _isRegisterFieldsValid(state)
-                  ? () {
-                      context.read<AuthBloc>().add(AuthRegisterConfirmed());
-                    }
-                  : null,
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 64,
-                  vertical: 18,
-                ),
-                primary: theme.primaryColor,
-                onSurface: theme.primaryColor,
-                elevation: 2,
               ),
-              child: Text(
-                translate.register,
-                style: TextStyle(
-                  color: _isRegisterFieldsValid(state)
-                      ? theme.accentColor
-                      : theme.textTheme.headline1?.color,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 20,
+            ],
+          ),
+        ),
+        Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 120),
+              child: Visibility(
+                visible: state.status == FormzStatus.submissionFailure &&
+                    state.action == RequestedAction.registration,
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/auth/error.png',
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      state.error == AuthError.emailAlreadyRegistered
+                          ? translate.allready_registered_email
+                          : translate.something_goes_wrong,
+                      style: TextStyle(
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 16,
+                        color: theme.disabledColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Expanded(child: Container()),
-          ],
-        );
-      },
+            flex: 2),
+        ElevatedButton(
+          onPressed: _isRegisterFieldsValid(state)
+              ? () {
+                  context.read<AuthBloc>().add(AuthRegisterConfirmed());
+                }
+              : null,
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            padding: EdgeInsets.symmetric(
+              horizontal: 64,
+              vertical: 18,
+            ),
+            primary: theme.primaryColor,
+            onSurface: theme.primaryColor,
+            elevation: 2,
+          ),
+          child: Text(
+            translate.register,
+            style: TextStyle(
+              color: _isRegisterFieldsValid(state)
+                  ? theme.accentColor
+                  : theme.textTheme.headline1?.color,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Expanded(child: Container()),
+      ],
     );
   }
 
@@ -747,5 +763,101 @@ class _AuthViewState extends State<AuthView> {
 
   void _onForgotPasswordTapped() {
     showDialog(context: context, builder: (context) => ForgotPasswordView());
+  }
+
+  _registrationSuccessed(
+      ThemeData theme, BuildContext context, AuthState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: Container(),
+          flex: 3,
+        ),
+        Center(
+          child: Text(
+            translate.email_confirming,
+            style: TextStyle(
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 32.0,
+              color: theme.disabledColor,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(),
+          flex: 3,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 160),
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: translate.restore_password_before_email,
+              style: TextStyle(
+                color: theme.disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 16.0,
+              ),
+              children: [
+                TextSpan(
+                  text: state.emailRegister.value,
+                ),
+                TextSpan(
+                  text: translate.email_confirming_after,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(),
+          flex: 5,
+        ),
+        GestureDetector(
+          onTap: () => context.read<AuthBloc>().add(AuthSendEmailVerify()),
+          child: Text(
+            translate.nothing_on_email,
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 18.0,
+              color: theme.disabledColor,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            context.read<AuthBloc>().add(AuthClear());
+          },
+          style: ElevatedButton.styleFrom(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            padding: EdgeInsets.symmetric(
+              horizontal: 64,
+              vertical: 18,
+            ),
+            primary: theme.primaryColor,
+            elevation: 1,
+          ),
+          child: Text(
+            translate.back_to_registration,
+            style: TextStyle(
+              color: theme.accentColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(),
+          flex: 2,
+        ),
+      ],
+    );
   }
 }

@@ -97,7 +97,7 @@ class AuthService {
       final response = await _dio.post('/sign-up', data: query);
       print(response);
       if (response.statusCode == 200) {
-        //await _tokenRepository.setApiToken(response.toString());
+        await _tokenRepository.setApiToken(response.toString());
         return AuthenticationStatus.authenticated;
       } else {
         return AuthenticationStatus.unauthenticated;
@@ -108,6 +108,26 @@ class AuthService {
         return AuthenticationStatus.emailAllreadyRegistered;
       else
         return AuthenticationStatus.unauthenticated;
+    }
+  }
+
+  Future<AuthenticationStatus> verifyEmail() async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+      //final query = {'token': token};
+      final response = await _dio.post(
+        '/send-email-address-verification-email',
+        options: Options(headers: {'Authorization': ' Bearer $token'}),
+      );
+      print(response);
+      if (response.statusCode == 200) {
+        return AuthenticationStatus.authenticated;
+      } else {
+        return AuthenticationStatus.unauthenticated;
+      }
+    } on DioError catch (e) {
+      print('email verification failed');
+      return AuthenticationStatus.unauthenticated;
     }
   }
 

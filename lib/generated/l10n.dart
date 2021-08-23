@@ -339,6 +339,36 @@ class S {
       args: [],
     );
   }
+
+  /// `, to confirm the email address, follow the link inside the letter`
+  String get email_confirming_after {
+    return Intl.message(
+      ', to confirm the email address, follow the link inside the letter',
+      name: 'email_confirming_after',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email confirmation`
+  String get email_confirming {
+    return Intl.message(
+      'Email confirmation',
+      name: 'email_confirming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to registration`
+  String get back_to_registration {
+    return Intl.message(
+      'Back to registration',
+      name: 'back_to_registration',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

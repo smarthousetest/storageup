@@ -42,6 +42,12 @@ class AuthenticationRepository {
     return response;
   }
 
+  Future<AuthenticationStatus> sendEmailConfirm() async {
+    final response = await _authService.verifyEmail();
+    _controller.add(response);
+    return response;
+  }
+
   void logOut() {
     _controller.add(AuthenticationStatus.unauthenticated);
   }

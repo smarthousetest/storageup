@@ -27,8 +27,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Пользователь с данным Email уже зарегистрирован"),
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Вернуться на главную"),
+        "back_to_registration":
+            MessageLookupByLibrary.simpleMessage("Вернуться к регистрации"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "email_confirming":
+            MessageLookupByLibrary.simpleMessage("Подтверждение Email"),
+        "email_confirming_after": MessageLookupByLibrary.simpleMessage(
+            " отправлено письмо, для подтверждения email адреса, перейдите по ссылке внутри письма"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "nothing_on_email":

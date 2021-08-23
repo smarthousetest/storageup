@@ -52,6 +52,14 @@ class AuthNameChanged extends AuthEvent {
   List<Object?> get props => [name];
 }
 
+class AuthSendEmailVerify extends AuthEvent {
+  AuthSendEmailVerify();
+}
+
+class AuthClear extends AuthEvent {
+  AuthClear();
+}
+
 class AuthRememberMeChanged extends AuthEvent {
   AuthRememberMeChanged();
 }

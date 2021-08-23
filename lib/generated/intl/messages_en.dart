@@ -27,8 +27,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "User with this Email is already registered"),
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
+        "back_to_registration":
+            MessageLookupByLibrary.simpleMessage("Back to registration"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "email_confirming":
+            MessageLookupByLibrary.simpleMessage("Email confirmation"),
+        "email_confirming_after": MessageLookupByLibrary.simpleMessage(
+            ", to confirm the email address, follow the link inside the letter"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "nothing_on_email":
