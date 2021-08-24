@@ -94,7 +94,7 @@ class _AuthViewState extends State<AuthView> {
                       width: 10,
                     ),
                     Text(
-                      'UpStorage',
+                      'StorageUp',
                       style: TextStyle(
                         fontFamily: kBoldTextFontFamily,
                         fontSize: 20,
