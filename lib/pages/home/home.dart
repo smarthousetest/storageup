@@ -329,27 +329,29 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
+                              padding:
+                                  const EdgeInsets.fromLTRB(40, 20, 40, 20),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Вы арендуете',
-                                     style: TextStyle(
-                                       fontSize: 20,
-                                       color: Color(0xff5F5F5F),
-                                       fontFamily: 'Lato',
-                                     ),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Color(0xff5F5F5F),
+                                      fontFamily: 'Lato',
+                                    ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 20),
-                                    child: Divider(
-                                      height: 1,
-                                      color: Color(0xffF1F8FE),
-                                    )
-                                  ),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Divider(
+                                        height: 1,
+                                        color: Color(0xffF1F8FE),
+                                      )),
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Пространство заполнено на:',
@@ -363,6 +365,167 @@ class _HomePageState extends State<HomePage> {
                                         '45%',
                                       ),
                                     ],
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 25, 0, 10),
+                                    child: MyProgressBar(
+                                      bgColor: Color(0xffF7F9FB),
+                                      color: Color(0xff868FFF),
+                                      percent: 42,
+                                    ),
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '0%',
+                                        style: TextStyle(
+                                          fontFamily: 'Lato',
+                                          fontSize: 12,
+                                          color: Color(0xff9C9C9C),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          flex: 291,
+                                          child: Container(
+                                            height: 14,
+                                          )),
+                                      Text(
+                                        '50%',
+                                        style: TextStyle(
+                                          fontFamily: 'Lato',
+                                          fontSize: 12,
+                                          color: Color(0xff9C9C9C),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          flex: 277,
+                                          child: Container(
+                                            height: 14,
+                                          )),
+                                      Text(
+                                        '100%',
+                                        style: TextStyle(
+                                          fontFamily: 'Lato',
+                                          fontSize: 12,
+                                          color: Color(0xff9C9C9C),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '300ГБ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Lato',
+                                                  fontSize: 36,
+                                                  color: Color(0xff70BBF6),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 11,
+                                              ),
+                                              Text(
+                                                'Используемое место',
+                                                style: TextStyle(
+                                                  fontFamily: 'Lato',
+                                                  fontSize: 14,
+                                                  color: Color(0xff5F5F5F),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                  'Увеличить',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Lato',
+                                                    fontSize: 14,
+                                                    color:
+                                                    Color(0xff7D7D7D),
+                                                  ),
+                                                ),
+                                                style: ElevatedButton
+                                                    .styleFrom(
+                                                  primary: Colors.white,
+                                                  fixedSize: Size(200, 46),
+                                                  shape:
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(15),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '17.17.21',
+                                                style: TextStyle(
+                                                  fontFamily: 'Lato',
+                                                  fontSize: 36,
+                                                  color: Color(0xff70BBF6),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 11,
+                                              ),
+                                              Text(
+                                                'Следущий платёж',
+                                                style: TextStyle(
+                                                  fontFamily: 'Lato',
+                                                  fontSize: 14,
+                                                  color: Color(0xff5F5F5F),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 30,
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                  'Оплатить',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Lato',
+                                                    fontSize: 14,
+                                                    color:
+                                                    Color(0xff7D7D7D),
+                                                  ),
+                                                ),
+                                                style: ElevatedButton
+                                                    .styleFrom(
+                                                  primary: Colors.white,
+                                                  fixedSize: Size(200, 46),
+                                                  shape:
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(15),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -475,30 +638,27 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                      child: Container(
+                      child: SizedBox(
+                        height: 10,
                         child: Stack(
                           children: [
                             MyProgressBar(
                               percent: 75,
-                              text: 'text',
                               color: Color(0xffFFD75E),
                               bgColor: Color(0xffF7F9FB),
                             ),
                             MyProgressBar(
                               percent: 50,
-                              text: 'text',
                               color: Color(0xffFF847E),
                               bgColor: Color.fromARGB(0, 0, 0, 0),
                             ),
                             MyProgressBar(
                               percent: 30,
-                              text: 'text',
                               color: Color(0xff59D7AB),
                               bgColor: Color.fromARGB(0, 0, 0, 0),
                             ),
                             MyProgressBar(
                               percent: 15,
-                              text: 'text',
                               color: Color(0xff868FFF),
                               bgColor: Color.fromARGB(0, 0, 0, 0),
                             ),
@@ -525,20 +685,22 @@ class _HomePageState extends State<HomePage> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
                                       child: Container(
                                         height: 46,
                                         width: 46,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: SvgPicture.asset(
                                             'assets/home_page/files_r.svg'),
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -579,20 +741,22 @@ class _HomePageState extends State<HomePage> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
                                       child: Container(
                                         height: 46,
                                         width: 46,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: SvgPicture.asset(
                                             'assets/home_page/foto_r.svg'),
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -633,20 +797,22 @@ class _HomePageState extends State<HomePage> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
                                       child: Container(
                                         height: 46,
                                         width: 46,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: SvgPicture.asset(
                                             'assets/home_page/video_r.svg'),
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
@@ -687,20 +853,22 @@ class _HomePageState extends State<HomePage> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
                                       child: Container(
                                         height: 46,
                                         width: 46,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: SvgPicture.asset(
                                             'assets/home_page/music_r.svg'),
                                       ),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
