@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          (5<3) ? InfoPage() : Expanded(child: FilePage()),
+          (5<3) ? InfoPage() : FilePage(),
         ],
       ),
     );
