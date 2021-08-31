@@ -6,12 +6,12 @@ class CustomMenuButton extends StatefulWidget {
   final String icon, title;
 
   @override
-  _ButtomTemplateState createState() => new _ButtomTemplateState();
+  _ButtonTemplateState createState() => new _ButtonTemplateState();
 
   CustomMenuButton({required this.icon, required this.title});
 }
 
-class _ButtomTemplateState extends State<CustomMenuButton> {
+class _ButtonTemplateState extends State<CustomMenuButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -40,7 +40,7 @@ class _ButtomTemplateState extends State<CustomMenuButton> {
   }
 }
 
-List buttons = [
+List<Widget> left_buttons_item = [
   CustomMenuButton(
     icon: "assets/home_page/home.svg",
     title: "Главная",
