@@ -1,14 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:upstorage_desktop/pages/home/home.dart';
+
+enum ChoosedPage {
+  home,
+  file,
+  media,
+  like,
+  sell_space,
+  finance,
+  settings,
+  trash,
+}
 
 class CustomMenuButton extends StatefulWidget {
   final String icon, title;
+  Function() function;
 
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 
-  CustomMenuButton({required this.icon, required this.title});
+  CustomMenuButton(
+      {required this.icon, required this.title, required this.function});
 }
 
 class _ButtonTemplateState extends State<CustomMenuButton> {
@@ -20,8 +34,8 @@ class _ButtonTemplateState extends State<CustomMenuButton> {
         width: 214,
         height: 44,
         child: ElevatedButton.icon(
-          onPressed: () {},
-            label: Text(widget.title),
+          onPressed: widget.function,
+          label: Text(widget.title),
           icon: SvgPicture.asset(widget.icon),
           style: ElevatedButton.styleFrom(
             alignment: Alignment.centerLeft,
@@ -40,37 +54,4 @@ class _ButtonTemplateState extends State<CustomMenuButton> {
   }
 }
 
-List<Widget> left_buttons_item = [
-  CustomMenuButton(
-    icon: "assets/home_page/home.svg",
-    title: "Главная",
-  ),
-  CustomMenuButton(
-    icon: "assets/home_page/files.svg",
-    title: "Файлы",
-  ),
-  CustomMenuButton(
-    icon: "assets/home_page/media.svg",
-    title: "Медиа",
-  ),
-  CustomMenuButton(
-    icon: "assets/home_page/like.svg",
-    title: "Избранное",
-  ),
-  CustomMenuButton(
-    icon: "assets/home_page/sell_space.svg",
-    title: "Сдача места",
-  ),
-  CustomMenuButton(
-    icon: "assets/home_page/finance.svg",
-    title: "Финансы",
-  ),
-  CustomMenuButton(
-    icon: "assets/home_page/gear.svg",
-    title: "Настройки",
-  ),
-  CustomMenuButton(
-    icon: "assets/home_page/trash.svg",
-    title: "Корзина",
-  ),
-];
+

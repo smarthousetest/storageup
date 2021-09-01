@@ -486,43 +486,43 @@ class _InfoPageState extends State<InfoPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                            child: Container(
-                              height: 46,
-                              width: 46,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(23),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Container(
+                                height: 46,
+                                width: 46,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(23),
+                                ),
+                                child: Image.asset('assets/home_page/glad.jpg'),
                               ),
-                              child: Image.asset('assets/home_page/glad.jpg'),
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
-                                child: Text(
-                                  "Валерий Жмышенко",
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    "Валерий Жмышенко",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color: kLightTheme.bottomAppBarColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "votreaa@mail.ru",
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 12,
                                     color: kLightTheme.bottomAppBarColor,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                "votreaa@mail.ru",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: kLightTheme.bottomAppBarColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              ],
+                            ),
+                          ],
+                        ),
                       Padding(
                         padding: const EdgeInsets.all(30),
                         child: Divider(
