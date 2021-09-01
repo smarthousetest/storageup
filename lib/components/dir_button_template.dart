@@ -23,6 +23,7 @@ class _ButtonTemplateState extends State<CustomDirButton> {
       final menuItem = await showMenu<int>(
           context: context,
           color: Colors.white,
+
           items: [
             PopupMenuItem(
                 child: Row(
@@ -32,53 +33,117 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                       width: 20,
                       height: 20,
                     ),
-                    Text(
-                      'Добавить файлы',
-                      style: TextStyle(
-                        color: Color(0xff7D7D7D),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'Добавить файлы',
+                        style: TextStyle(
+                          color: Color(0xff7D7D7D),
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 value: 1),
             PopupMenuItem(
-                child: Text(
-                  'Копировать',
-                  style: TextStyle(
-                    color: Color(0xff7D7D7D),
-                  ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/home_page/glad.jpg',
+                      width: 20,
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'Копировать',
+                        style: TextStyle(
+                          color: Color(0xff7D7D7D),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 value: 2),
             PopupMenuItem(
-                child: Text(
-                  'Вырезать',
-                  style: TextStyle(
-                    color: Color(0xff7D7D7D),
-                  ),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/home_page/glad.jpg',
+                      width: 20,
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'Вырезать',
+                        style: TextStyle(
+                          color: Color(0xff7D7D7D),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 value: 3),
             PopupMenuItem(
-                child: Text(
-                  'Переименовать',
-                  style: TextStyle(
-                    color: Color(0xff7D7D7D),
-                  ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/file_page/rename.svg',
+                      width: 20,
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'Переименовать',
+                        style: TextStyle(
+                          color: Color(0xff7D7D7D),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 value: 4),
             PopupMenuItem(
-                child: Text(
-                  'Свойства',
-                  style: TextStyle(
-                    color: Color(0xff7D7D7D),
-                  ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/file_page/info.svg',
+                      width: 20,
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'Свойства',
+                        style: TextStyle(
+                          color: Color(0xff7D7D7D),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 value: 5),
             PopupMenuItem(
-                child: Text(
-                  'Удалить',
-                  style: TextStyle(
-                    color: Color(0xff7D7D7D),
-                  ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/file_page/trash.svg',
+                      width: 20,
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'Удалить',
+                        style: TextStyle(
+                          color: Color(0xff7D7D7D),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 value: 6),
           ],

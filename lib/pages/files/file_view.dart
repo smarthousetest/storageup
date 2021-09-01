@@ -1,12 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/components/custom_round_graph.dart';
-import 'package:upstorage_desktop/components/custom_progress_bar.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
 import '../../theme.dart';
-import '../../constants.dart';
 
 class FilePage extends StatefulWidget {
   @override
@@ -111,9 +107,10 @@ class _FilePageState extends State<FilePage> {
                               height: 30,
                               child: RawMaterialButton(
                                 onPressed: () {},
-                                fillColor: Colors.blue,
+                                fillColor: Colors.white,
                                 child: Icon(
                                   Icons.arrow_back_ios_rounded,
+                                  color: Colors.blue,
                                   size: 20.0,
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -128,9 +125,10 @@ class _FilePageState extends State<FilePage> {
                                 height: 30,
                                 child: RawMaterialButton(
                                   onPressed: () {},
-                                  fillColor: Colors.blue,
+                                  fillColor: Colors.white,
                                   child: Icon(
                                     Icons.arrow_forward_ios,
+                                    color: Colors.blue,
                                     size: 20.0,
                                   ),
                                   shape: RoundedRectangleBorder(

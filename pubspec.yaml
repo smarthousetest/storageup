@@ -43,6 +43,7 @@ flutter:
     - assets/
     - assets/auth/
     - assets/home_page/
+    - assets/file_page/
 
   fonts:
     - family: Noto Sans
