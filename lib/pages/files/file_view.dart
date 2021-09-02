@@ -75,7 +75,7 @@ class _FilePageState extends State<FilePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: const EdgeInsets.symmetric(vertical: 15),
               child: Container(
                 height: 234,
                 decoration: BoxDecoration(
@@ -85,6 +85,7 @@ class _FilePageState extends State<FilePage> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         height: 30,
@@ -119,7 +120,7 @@ class _FilePageState extends State<FilePage> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                              padding: const EdgeInsets.only(left: 15),
                               child: Container(
                                 width: 30,
                                 height: 30,
@@ -142,15 +143,11 @@ class _FilePageState extends State<FilePage> {
                       ),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                          child: Row(
-                            children: [
-                              ListView(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                children: dirs_list,
-                              ),
-                            ],
+                          padding: const EdgeInsets.only(top: 25),
+                          child: ListView(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            children: dirs_list,
                           ),
                         ),
                       ),
@@ -164,6 +161,39 @@ class _FilePageState extends State<FilePage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
+                ),
+                child: GridView.count(
+                  crossAxisCount:
+                      ((MediaQuery.of(context).size.width - 400) ~/ 100),
+                  // childAspectRatio: (1 / 1),
+                  children: List.generate(17, (index) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              Image.asset('assets/test_img/1.jpg'),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                child: Text(
+                                  '1.jpg',
+                                  style: TextStyle(
+                                    color: Color(0xff7D7D7D),
+                                    fontSize: 14,
+                                    fontFamily: 'Lato',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
               ),
             ),

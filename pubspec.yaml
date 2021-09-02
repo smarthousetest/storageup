@@ -38,12 +38,12 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
-
   assets:
     - assets/
     - assets/auth/
     - assets/home_page/
     - assets/file_page/
+    - assets/test_img/
 
   fonts:
     - family: Noto Sans

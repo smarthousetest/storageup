@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
@@ -23,7 +24,6 @@ class _ButtonTemplateState extends State<CustomDirButton> {
       final menuItem = await showMenu<int>(
           context: context,
           color: Colors.white,
-
           items: [
             PopupMenuItem(
                 child: Row(
@@ -164,26 +164,72 @@ class _ButtonTemplateState extends State<CustomDirButton> {
           break;
         case 3:
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Вырезано'),
-              behavior: SnackBarBehavior.floating));
+              content: Text('Вырезано'), behavior: SnackBarBehavior.floating));
           break;
         case 4:
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Переименовано'),
-              behavior: SnackBarBehavior.floating));
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //     content: Text('Переименовано'),
+          //     behavior: SnackBarBehavior.floating,
+          // action: SnackBarAction(
+          //   label:'',
+          //   onPressed: (){_onRenameDown(event);},
+          // ),),
+          // );
+          _onRenameDown(event);
           break;
         case 5:
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Свойства'),
-              behavior: SnackBarBehavior.floating));
+            content: Text('Свойства'),
+            behavior: SnackBarBehavior.floating,
+          ));
           break;
         case 6:
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Удалено'),
-              behavior: SnackBarBehavior.floating));
+              content: Text('Удалено'), behavior: SnackBarBehavior.floating));
           break;
         default:
       }
+    }
+  }
+
+  Future<void> _onRenameDown(PointerDownEvent event) async {
+    final overlay =
+        Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    final menuItem = await showMenu<int>(
+        context: context,
+        color: Color.fromARGB(0, 0, 0, 0),
+        elevation: 0,
+        items: [
+          PopupMenuItem(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    filled: true,
+                    hintText: 'new name',
+                    hintStyle: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ),
+              value: 1),
+        ],
+        position: RelativeRect.fromSize(
+            event.position & Size(48.0, 48.0), overlay.size));
+    switch (menuItem) {
+      case 1:
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Новая папка'),
+          behavior: SnackBarBehavior.floating,
+        ));
+        break;
+
+      default:
     }
   }
 
@@ -216,12 +262,10 @@ class _ButtonTemplateState extends State<CustomDirButton> {
             ],
           ),
           onPressed: () {
-            dirs_list.add(
-            CustomDirButton(
+            dirs_list.add(CustomDirButton(
               name: 'Создать\n папку',
             ));
             // print(dirs_list.length);
-
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.white,
@@ -240,5 +284,3 @@ class _ButtonTemplateState extends State<CustomDirButton> {
     );
   }
 }
-
-
