@@ -63,7 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "term_of_use": MessageLookupByLibrary.simpleMessage(
             "Пользовательского соглашения"),
         "term_of_use_after": MessageLookupByLibrary.simpleMessage(
-            " и даю свое согласие на обработку моих персональных данных"),
+            " и даю согласие на обработку моих персональных данных"),
         "term_of_use_before":
             MessageLookupByLibrary.simpleMessage("Я принимаю условия "),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),

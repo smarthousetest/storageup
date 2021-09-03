@@ -9,8 +9,12 @@ abstract class AuthEvent extends Equatable {
 
 class AuthRegisterEmailChanged extends AuthEvent {
   final String email;
+  final bool needValidation;
 
-  AuthRegisterEmailChanged({required this.email});
+  AuthRegisterEmailChanged({
+    required this.email,
+    this.needValidation = false,
+  });
 
   @override
   List<Object?> get props => [email];
@@ -18,8 +22,12 @@ class AuthRegisterEmailChanged extends AuthEvent {
 
 class AuthLoginEmailChanged extends AuthEvent {
   final String email;
+  final bool needValidation;
 
-  AuthLoginEmailChanged({required this.email});
+  AuthLoginEmailChanged({
+    required this.email,
+    this.needValidation = false,
+  });
 
   @override
   List<Object?> get props => [email];
@@ -27,8 +35,12 @@ class AuthLoginEmailChanged extends AuthEvent {
 
 class AuthRegisterPasswordChanged extends AuthEvent {
   final String password;
+  final bool needValidation;
 
-  AuthRegisterPasswordChanged({required this.password});
+  AuthRegisterPasswordChanged({
+    required this.password,
+    this.needValidation = false,
+  });
 
   @override
   List<Object?> get props => [password];
@@ -36,8 +48,12 @@ class AuthRegisterPasswordChanged extends AuthEvent {
 
 class AuthLoginPasswordChanged extends AuthEvent {
   final String password;
+  final bool needValidation;
 
-  AuthLoginPasswordChanged({required this.password});
+  AuthLoginPasswordChanged({
+    required this.password,
+    this.needValidation = false,
+  });
 
   @override
   List<Object?> get props => [password];
@@ -45,8 +61,12 @@ class AuthLoginPasswordChanged extends AuthEvent {
 
 class AuthNameChanged extends AuthEvent {
   final String name;
+  final bool needValidation;
 
-  AuthNameChanged({required this.name});
+  AuthNameChanged({
+    required this.name,
+    this.needValidation = false,
+  });
 
   @override
   List<Object?> get props => [name];

@@ -1,3 +1,4 @@
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +9,7 @@ import 'package:upstorage_desktop/components/expanded_section.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/auth_event.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_view.dart';
+import 'package:upstorage_desktop/pages/home/home.dart';
 import 'package:upstorage_desktop/pages/tmp.dart';
 import 'package:upstorage_desktop/utilites/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -35,13 +37,20 @@ class _AuthViewState extends State<AuthView> {
   final ScrollController controller = ScrollController();
 
   S translate = getIt<S>();
+  @override
+  void initState() {
+    DesktopWindow.setMinWindowSize(Size(1280, 780));
+    DesktopWindow.setMaxWindowSize(Size(1280, 780));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
     if (!_isSignIn && _isAnimationCompleted) {
-      controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
+      // controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
+      controller.jumpTo(720);
     }
 
     return BlocProvider(
@@ -49,64 +58,71 @@ class _AuthViewState extends State<AuthView> {
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.status == FormzStatus.submissionSuccess) {
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (_) => TmpPage()), (route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+                context, HomePage.route, (route) => false);
           }
         },
-        child: Scaffold(
-          body: Stack(
-            children: [
-              Container(
-                color: theme.primaryColor,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ExpandedSection(
-                      child: _register(theme),
-                      expand: !_isSignIn,
-                    ),
-                    _mainSection(theme),
-                    ExpandedSection(
-                      child: _signIn(theme),
-                      expand: _isSignIn,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 25, top: 25),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      radius: 22.5,
-                      child: SvgPicture.asset(
-                        'assets/auth/logo.svg',
-                        color:
-                            _isSignIn ? theme.accentColor : theme.primaryColor,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Scaffold(
+            body: Stack(
+              children: [
+                Container(
+                  color: theme.primaryColor,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ExpandedSection(
+                        child: _register(theme),
+                        expand: !_isSignIn,
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      'StorageUp',
-                      style: TextStyle(
-                        fontFamily: kBoldTextFontFamily,
-                        fontSize: 20,
-                        color: _isSignIn
-                            ? theme.disabledColor
-                            : theme.primaryColor,
+                      _mainSection(theme),
+                      ExpandedSection(
+                        child: _signIn(theme),
+                        expand: _isSignIn,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 25, top: 25),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        radius: 22.5,
+                        child: SvgPicture.asset(
+                          'assets/auth/logo.svg',
+                          color: _isSignIn
+                              ? theme.accentColor
+                              : theme.primaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'StorageUp',
+                        style: TextStyle(
+                          fontFamily: 'Ubuntu',
+                          fontWeight: FontWeight.w900,
+                          fontSize: 24,
+                          color: _isSignIn
+                              ? theme.accentColor
+                              : theme.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -115,7 +131,7 @@ class _AuthViewState extends State<AuthView> {
 
   Widget _signIn(ThemeData theme) {
     var fullWidth = MediaQuery.of(context).size.width;
-    var widthOfContainer = fullWidth * 0.4;
+    var widthOfContainer = 560.0;
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
@@ -127,25 +143,20 @@ class _AuthViewState extends State<AuthView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: Container(),
-            flex: 2,
+          SizedBox(
+            height: 112,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60),
-            child: Text(
-              translate.welcome_to_upsctorage,
-              textAlign: TextAlign.center,
-              style: TextStyle(
+          Text(
+            translate.welcome_to_upsctorage,
+            textAlign: TextAlign.center,
+            style: TextStyle(
                 color: theme.primaryColor,
-                fontSize: 32,
+                fontSize: 28,
                 fontFamily: kNormalTextFontFamily,
-              ),
-            ),
+                fontWeight: FontWeight.w200),
           ),
-          Expanded(
-            child: Container(),
-            flex: 1,
+          SizedBox(
+            height: 15,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
@@ -154,40 +165,52 @@ class _AuthViewState extends State<AuthView> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: theme.primaryColor,
-                fontSize: 20,
+                fontSize: 17,
                 fontFamily: kNormalTextFontFamily,
               ),
             ),
           ),
+          Spacer(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Image.asset('assets/auth/man_right.png'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _changePage();
-            },
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              padding: EdgeInsets.symmetric(
-                horizontal: 64,
-                vertical: 18,
-              ),
-              primary: theme.primaryColor,
-            ),
-            child: Text(
-              translate.register,
-              style: TextStyle(
-                color: theme.accentColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 20,
+            padding: const EdgeInsets.symmetric(horizontal: 51),
+            child: Container(
+              //height: 375,
+              child: Image.asset(
+                'assets/auth/man_right.png',
+                fit: BoxFit.fitWidth,
               ),
             ),
           ),
-          Expanded(
-            child: Container(),
-            flex: 2,
+          Spacer(),
+          Container(
+            height: 60,
+            width: 320,
+            child: ElevatedButton(
+              onPressed: () {
+                _changePage();
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 80,
+                  vertical: 20,
+                ),
+                primary: theme.primaryColor,
+              ),
+              child: Text(
+                translate.register,
+                style: TextStyle(
+                  color: theme.accentColor,
+                  fontFamily: kNormalTextFontFamily,
+                  height: 1.176470588235294,
+                  fontSize: 17,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 100,
           ),
         ],
       ),
@@ -196,7 +219,8 @@ class _AuthViewState extends State<AuthView> {
 
   Widget _register(ThemeData theme) {
     var fullWidth = MediaQuery.of(context).size.width;
-    var widthOfContainer = fullWidth * 0.4;
+    // var widthOfContainer = fullWidth * 0.4;
+    var widthOfContainer = 560.0;
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
@@ -209,9 +233,8 @@ class _AuthViewState extends State<AuthView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Container(),
-            flex: 3,
+          SizedBox(
+            height: 130,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 60),
@@ -220,42 +243,48 @@ class _AuthViewState extends State<AuthView> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: theme.primaryColor,
-                fontSize: 32,
+                fontSize: 28,
                 fontFamily: kNormalTextFontFamily,
               ),
             ),
           ),
           Expanded(child: Container()),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Image.asset('assets/auth/man_left.png'),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Image.asset(
+              'assets/auth/man_left.png',
+              fit: BoxFit.fitWidth,
+            ),
           ),
           Expanded(child: Container()),
-          ElevatedButton(
-            onPressed: () {
-              _changePage();
-            },
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              padding: EdgeInsets.symmetric(
-                horizontal: 135,
-                vertical: 18,
+          Container(
+            height: 60,
+            width: 320,
+            child: ElevatedButton(
+              onPressed: () {
+                _changePage();
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 135,
+                  vertical: 18,
+                ),
+                primary: theme.primaryColor,
               ),
-              primary: theme.primaryColor,
-            ),
-            child: Text(
-              translate.sign_in,
-              style: TextStyle(
-                color: theme.accentColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 20,
+              child: Text(
+                translate.sign_in,
+                style: TextStyle(
+                  color: theme.accentColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 20,
+                ),
               ),
             ),
           ),
-          Expanded(
-            child: Container(),
-            flex: 2,
+          SizedBox(
+            height: 100,
           ),
         ],
       ),
@@ -263,7 +292,8 @@ class _AuthViewState extends State<AuthView> {
   }
 
   Widget _mainSection(ThemeData theme) {
-    var width = MediaQuery.of(context).size.width * 0.6;
+    // var width = MediaQuery.of(context).size.width * 0.6;
+    var width = 720.0;
     return LayoutBuilder(builder: (context, constrains) {
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: width),
@@ -273,10 +303,10 @@ class _AuthViewState extends State<AuthView> {
           physics: NeverScrollableScrollPhysics(),
           children: [
             ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width),
+                constraints: BoxConstraints(maxWidth: width, minWidth: width),
                 child: _signInMain(theme)),
             ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width),
+                constraints: BoxConstraints(maxWidth: width, minWidth: width),
                 child: _registerMain(theme)),
           ],
         ),
@@ -299,7 +329,7 @@ class _AuthViewState extends State<AuthView> {
               translate.sign_in_to_account,
               style: TextStyle(
                 fontFamily: kNormalTextFontFamily,
-                fontSize: 32,
+                fontSize: 28,
                 color: theme.disabledColor,
               ),
             ),
@@ -311,24 +341,31 @@ class _AuthViewState extends State<AuthView> {
               errorMessage: translate.wrong_email,
               needErrorValidation: true,
               onChange: (email) {
-                context
-                    .read<AuthBloc>()
-                    .add(AuthLoginEmailChanged(email: email));
+                context.read<AuthBloc>().add(
+                    AuthLoginEmailChanged(email: email, needValidation: false));
+              },
+              onFinishEditing: (email) {
+                context.read<AuthBloc>().add(
+                    AuthLoginEmailChanged(email: email, needValidation: true));
               },
               invalid:
                   state.emailLogin.invalid && state.emailLogin.value.isNotEmpty,
               isPassword: false,
             ),
-            SizedBox(
-              height: 20.0,
-            ),
             CustomTextField(
               hint: translate.password,
               errorMessage: translate.wrong_password,
               onChange: (password) {
-                context
-                    .read<AuthBloc>()
-                    .add(AuthLoginPasswordChanged(password: password));
+                context.read<AuthBloc>().add(AuthLoginPasswordChanged(
+                      password: password,
+                      needValidation: false,
+                    ));
+              },
+              onFinishEditing: (password) {
+                context.read<AuthBloc>().add(AuthLoginPasswordChanged(
+                      password: password,
+                      needValidation: true,
+                    ));
               },
               invalid: state.passwordLogin.invalid &&
                   state.passwordLogin.value.isNotEmpty,
@@ -339,34 +376,36 @@ class _AuthViewState extends State<AuthView> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                left: 120,
+                left: 123,
                 right: 120,
               ),
               child: Row(
                 children: [
                   Container(
-                    height: 21,
-                    width: 21,
+                    height: 23,
+                    width: 23,
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7.0),
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                    padding: EdgeInsets.all(1.5),
+                    child: Container(
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6.0),
                         color: theme.primaryColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            blurRadius: 2,
-                          ),
-                        ]),
-                    child: Checkbox(
-                      value: state.rememberMe,
-                      side: BorderSide(width: 1, color: Colors.transparent),
-                      splashRadius: 0,
-                      checkColor: theme.accentColor,
-                      activeColor: theme.primaryColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0)),
-                      onChanged: (_) {
-                        context.read<AuthBloc>().add(AuthRememberMeChanged());
-                      },
+                      ),
+                      child: Checkbox(
+                        value: state.rememberMe,
+                        side: BorderSide(width: 1, color: Colors.transparent),
+                        splashRadius: 0,
+                        checkColor: theme.accentColor,
+                        activeColor: theme.primaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6.0)),
+                        onChanged: (_) {
+                          context.read<AuthBloc>().add(AuthRememberMeChanged());
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -376,7 +415,7 @@ class _AuthViewState extends State<AuthView> {
                     translate.remember_me,
                     style: TextStyle(
                       fontFamily: kNormalTextFontFamily,
-                      fontSize: 18,
+                      fontSize: 17,
                       color: theme.disabledColor,
                     ),
                   ),
@@ -388,8 +427,8 @@ class _AuthViewState extends State<AuthView> {
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontFamily: kNormalTextFontFamily,
-                        fontSize: 18,
-                        color: theme.disabledColor,
+                        fontSize: 17,
+                        color: theme.splashColor,
                       ),
                     ),
                   ),
@@ -409,23 +448,23 @@ class _AuthViewState extends State<AuthView> {
                     child: Divider(
                       height: 2,
                       endIndent: 10,
-                      color: theme.hintColor,
+                      color: theme.colorScheme.onBackground,
                     ),
                   ),
                   Text(
                     translate.or_continue_with,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 17,
                       height: 0.82,
                       fontFamily: kNormalTextFontFamily,
-                      color: theme.hintColor,
+                      color: theme.colorScheme.onBackground,
                     ),
                   ),
                   Expanded(
                     child: Divider(
                       height: 1,
                       indent: 10,
-                      color: theme.hintColor,
+                      color: theme.colorScheme.onBackground,
                     ),
                   ),
                 ],
@@ -437,30 +476,46 @@ class _AuthViewState extends State<AuthView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Material(
-                  elevation: 2.0,
-                  borderRadius: BorderRadius.circular(100),
-                  child: CircleAvatar(
-                    minRadius: 30,
-                    backgroundColor: theme.primaryColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Image.asset('assets/auth/facebook.png'),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: theme.primaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              theme.colorScheme.onBackground.withOpacity(0.5),
+                          blurRadius: 4,
+                        )
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Image.asset(
+                      'assets/auth/facebook.png',
+                      width: 27,
+                      height: 27,
                     ),
                   ),
                 ),
                 SizedBox(
                   width: 25.0,
                 ),
-                Material(
-                  elevation: 2.0,
-                  borderRadius: BorderRadius.circular(100),
-                  child: CircleAvatar(
-                    minRadius: 30,
-                    backgroundColor: theme.primaryColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Image.asset('assets/auth/google.png'),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: theme.primaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              theme.colorScheme.onBackground.withOpacity(0.5),
+                          blurRadius: 4,
+                        )
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Image.asset(
+                      'assets/auth/google.png',
+                      width: 27,
+                      height: 27,
                     ),
                   ),
                 ),
@@ -497,71 +552,43 @@ class _AuthViewState extends State<AuthView> {
             )),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 120),
-              child: OutlinedButton(
-                onPressed: _isLoginFieldValid(state)
-                    ? () {
-                        context.read<AuthBloc>().add(AuthLoginConfirmed());
-                      }
-                    : null,
-                style: OutlinedButton.styleFrom(
-                  minimumSize: Size(double.maxFinite, 60),
-                  shape: RoundedRectangleBorder(
-                      // side: BorderSide(
-                      //   color: Colors.transparent,
-                      // ),
-                      borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 135,
-                    vertical: 20,
+              child: Container(
+                height: 60,
+                child: OutlinedButton(
+                  onPressed: _isLoginFieldValid(state)
+                      ? () {
+                          context.read<AuthBloc>().add(AuthLoginConfirmed());
+                        }
+                      : null,
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.maxFinite, 60),
+                    shape: RoundedRectangleBorder(
+                        // side: BorderSide(
+                        //   color: Colors.transparent,
+                        // ),
+                        borderRadius: BorderRadius.circular(15)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 135,
+                      vertical: 20,
+                    ),
+                    backgroundColor: _isLoginFieldValid(state)
+                        ? theme.colorScheme.onSurface
+                        : theme.colorScheme.onPrimary,
                   ),
-                  backgroundColor: _isLoginFieldValid(state)
-                      ? theme.colorScheme.onSurface
-                      : theme.colorScheme.onPrimary,
-                ),
-                child: Text(
-                  translate.sign_in,
-                  style: TextStyle(
-                    color: theme.primaryColor,
-                    fontFamily: kNormalTextFontFamily,
-                    fontWeight: FontWeight.w600,
-                    height: 1.002,
-                    fontSize: 20,
+                  child: Text(
+                    translate.sign_in,
+                    style: TextStyle(
+                      color: theme.primaryColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 17,
+                    ),
                   ),
                 ),
               ),
             ),
-            // ElevatedButton(
-            //   onPressed: // _isLoginFieldValid(state)
-            //       //?
-            //       () {
-            //     context.read<AuthBloc>().add(AuthLoginConfirmed());
-            //   },
-            //   //: null,
-
-            //   style: ElevatedButton.styleFrom(
-            //     shape: RoundedRectangleBorder(
-            //       side: BorderSide(),
-            //         borderRadius: BorderRadius.circular(15)),
-            //     padding: EdgeInsets.symmetric(
-            //       horizontal: 135,
-            //       vertical: 18,
-            //     ),
-            //     primary: theme.primaryColor,
-            //     onSurface: theme.primaryColor,
-            //     elevation: 2,
-            //   ),
-            //   child: Text(
-            //     translate.sign_in,
-            //     style: TextStyle(
-            //       color: _isLoginFieldValid(state)
-            //           ? theme.accentColor
-            //           : theme.textTheme.headline1?.color,
-            //       fontFamily: kNormalTextFontFamily,
-            //       fontSize: 20,
-            //     ),
-            //   ),
-            // ),
-            Expanded(child: Container()),
+            SizedBox(
+              height: 100,
+            ),
           ],
         );
       },
@@ -591,28 +618,30 @@ class _AuthViewState extends State<AuthView> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          child: Container(),
-          flex: 2,
+        SizedBox(
+          height: 130,
         ),
         Center(
           child: Text(
             translate.registration,
             style: TextStyle(
               fontFamily: kNormalTextFontFamily,
-              fontSize: 32,
+              fontSize: 28,
               color: theme.disabledColor,
             ),
           ),
         ),
-        Expanded(
-          child: Container(),
-        ),
+        SizedBox(height: 63),
         CustomTextField(
           hint: translate.user_name,
           errorMessage: translate.wrong_username,
           onChange: (name) {
             context.read<AuthBloc>().add(AuthNameChanged(name: name));
+          },
+          onFinishEditing: (name) {
+            context
+                .read<AuthBloc>()
+                .add(AuthNameChanged(name: name, needValidation: true));
           },
           needErrorValidation: true,
           invalid: state.name.invalid && state.name.value.isNotEmpty,
@@ -625,6 +654,10 @@ class _AuthViewState extends State<AuthView> {
             context
                 .read<AuthBloc>()
                 .add(AuthRegisterEmailChanged(email: email));
+          },
+          onFinishEditing: (email) {
+            context.read<AuthBloc>().add(
+                AuthRegisterEmailChanged(email: email, needValidation: true));
           },
           needErrorValidation: true,
           invalid: state.emailRegister.invalid &&
@@ -639,6 +672,10 @@ class _AuthViewState extends State<AuthView> {
                 .read<AuthBloc>()
                 .add(AuthRegisterPasswordChanged(password: password));
           },
+          onFinishEditing: (password) {
+            context.read<AuthBloc>().add(AuthRegisterPasswordChanged(
+                password: password, needValidation: true));
+          },
           needErrorValidation: true,
           invalid: state.passwordRegister.invalid &&
               state.passwordRegister.value.isNotEmpty,
@@ -648,7 +685,7 @@ class _AuthViewState extends State<AuthView> {
           height: 20,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 120, right: 200),
+          padding: const EdgeInsets.only(left: 123, right: 134),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -657,33 +694,63 @@ class _AuthViewState extends State<AuthView> {
                 height: 21,
                 width: 21,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7.0),
+                  color: theme.colorScheme.onPrimary,
+                ),
+                padding: EdgeInsets.all(1.5),
+                child: Container(
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6.0),
-                    boxShadow: state.acceptedTermsOfUse
-                        ? [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              blurRadius: 1, // changes position of shadow
-                            ),
-                          ]
-                        : null),
-                child: Checkbox(
-                  value: state.acceptedTermsOfUse,
-                  side: BorderSide(
-                    width: 1,
-                    color: state.acceptedTermsOfUse
-                        ? Color.fromRGBO(23, 69, 139, 0)
-                        : theme.errorColor,
+                    color: theme.primaryColor,
                   ),
-                  splashRadius: 0,
-                  checkColor: theme.accentColor,
-                  activeColor: theme.primaryColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0)),
-                  onChanged: (_) {
-                    context.read<AuthBloc>().add(AuthAcceptTermsOfUseChanged());
-                  },
+                  child: Checkbox(
+                    value: state.acceptedTermsOfUse,
+                    side: BorderSide(width: 1, color: Colors.transparent),
+                    splashRadius: 0,
+                    checkColor: theme.accentColor,
+                    activeColor: theme.primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0)),
+                    onChanged: (_) {
+                      context
+                          .read<AuthBloc>()
+                          .add(AuthAcceptTermsOfUseChanged());
+                    },
+                  ),
                 ),
               ),
+              // Container(
+              //   height: 21,
+              //   width: 21,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(6.0),
+              //     boxShadow: state.acceptedTermsOfUse
+              //         ? [
+              //             BoxShadow(
+              //               color: Colors.grey.withOpacity(0.3),
+              //               blurRadius: 1, // changes position of shadow
+              //             ),
+              //           ]
+              //         : null,
+              //   ),
+              //   child: Checkbox(
+              //     value: state.acceptedTermsOfUse,
+              //     side: BorderSide(
+              //       width: 1,
+              //       color: state.acceptedTermsOfUse
+              //           ? Color.fromRGBO(23, 69, 139, 0)
+              //           : theme.errorColor,
+              //     ),
+              //     splashRadius: 0,
+              //     checkColor: theme.accentColor,
+              //     activeColor: theme.primaryColor,
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(6.0)),
+              //     onChanged: (_) {
+              //       context.read<AuthBloc>().add(AuthAcceptTermsOfUseChanged());
+              //     },
+              //   ),
+              // ),
               SizedBox(
                 width: 5.0,
               ),
@@ -742,35 +809,73 @@ class _AuthViewState extends State<AuthView> {
               ),
             ),
             flex: 2),
-        ElevatedButton(
-          onPressed: _isRegisterFieldsValid(state)
-              ? () {
-                  context.read<AuthBloc>().add(AuthRegisterConfirmed());
-                }
-              : null,
-          style: ElevatedButton.styleFrom(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            padding: EdgeInsets.symmetric(
-              horizontal: 64,
-              vertical: 18,
-            ),
-            primary: theme.primaryColor,
-            onSurface: theme.primaryColor,
-            elevation: 2,
-          ),
-          child: Text(
-            translate.register,
-            style: TextStyle(
-              color: _isRegisterFieldsValid(state)
-                  ? theme.accentColor
-                  : theme.textTheme.headline1?.color,
-              fontFamily: kNormalTextFontFamily,
-              fontSize: 20,
+        // ElevatedButton(
+        //   onPressed: _isRegisterFieldsValid(state)
+        //       ? () {
+        //           context.read<AuthBloc>().add(AuthRegisterConfirmed());
+        //         }
+        //       : null,
+        //   style: ElevatedButton.styleFrom(
+        //     shape:
+        //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        //     padding: EdgeInsets.symmetric(
+        //       horizontal: 64,
+        //       vertical: 18,
+        //     ),
+        //     primary: theme.primaryColor,
+        //     onSurface: theme.primaryColor,
+        //     elevation: 2,
+        //   ),
+        //   child: Text(
+        //     translate.register,
+        //     style: TextStyle(
+        //       color: _isRegisterFieldsValid(state)
+        //           ? theme.accentColor
+        //           : theme.textTheme.headline1?.color,
+        //       fontFamily: kNormalTextFontFamily,
+        //       fontSize: 20,
+        //     ),
+        //   ),
+        // ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 120),
+          child: Container(
+            height: 60,
+            child: OutlinedButton(
+              onPressed: _isRegisterFieldsValid(state)
+                  ? () {
+                      context.read<AuthBloc>().add(AuthLoginConfirmed());
+                    }
+                  : null,
+              style: OutlinedButton.styleFrom(
+                minimumSize: Size(double.maxFinite, 60),
+                shape: RoundedRectangleBorder(
+                    // side: BorderSide(
+                    //   color: Colors.transparent,
+                    // ),
+                    borderRadius: BorderRadius.circular(15)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 135,
+                  vertical: 20,
+                ),
+                backgroundColor: _isRegisterFieldsValid(state)
+                    ? theme.colorScheme.onSurface
+                    : theme.colorScheme.onPrimary,
+              ),
+              child: Text(
+                translate.register,
+                style: TextStyle(
+                  color: theme.primaryColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 17,
+                ),
+              ),
             ),
           ),
         ),
-        Expanded(child: Container()),
+        SizedBox(
+          height: 100,
+        ),
       ],
     );
   }

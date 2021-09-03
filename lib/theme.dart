@@ -17,9 +17,14 @@ final kLightTheme = ThemeData.light().copyWith(
   dividerColor: Color(0xffF1F8FE),
   splashColor: Color(0xff70BBF6),
   bottomAppBarColor: Color(0xff5A5A5A),
+  colorScheme: ThemeData.light().colorScheme.copyWith(
+        onPrimary: Color(0xFFE0E0E0),
+        onSurface: Color(0xFF70BBF6),
+        onBackground: Color(0xFF9C9C9C),
+      ),
   textTheme: ThemeData.light().textTheme.copyWith(
-    headline1: TextStyle(
-      color: Color(0xFFC4C4C4),
-    ),
-  ),
+        headline1: TextStyle(
+          color: Color(0xFFC4C4C4),
+        ),
+      ),
 );

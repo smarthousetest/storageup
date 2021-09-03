@@ -147,6 +147,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                   .read<ForgotPasswordBloc>()
                   .add(ForgotPasswordEmailChanged(email: email));
             },
+
+            onFinishEditing: (email) {
+              context
+                  .read<ForgotPasswordBloc>()
+                  .add(ForgotPasswordEmailChanged(email: email));
+            }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             invalid: state.email.invalid && state.email.value.isNotEmpty,
             errorMessage: translate.wrong_email,
             isPassword: false,

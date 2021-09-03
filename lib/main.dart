@@ -16,7 +16,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    DesktopWindow.setMinWindowSize(Size(1280, 720));
     return AdaptiveTheme(
       light: kLightTheme,
       dark: kDarkTheme,
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
           S.delegate
         ],
         supportedLocales: S.delegate.supportedLocales,
-        initialRoute: HomePage.route,
+        initialRoute: AuthView.route,
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case AuthView.route:
