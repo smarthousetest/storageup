@@ -13,11 +13,13 @@ class CustomTextField extends StatefulWidget {
       required this.invalid,
       required this.isPassword,
       this.needErrorValidation = true,
+      required this.onFinishEditing,
       this.horizontalPadding = 120});
 
   final String hint;
   final String errorMessage;
   final Function(String) onChange;
+  final Function(String) onFinishEditing;
   final bool invalid;
   final bool isPassword;
   final bool needErrorValidation;
@@ -30,11 +32,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
   _CustomTextFieldState(this._hidePassword);
 
   bool _hidePassword;
+  bool _isFocused = false;
+  FocusNode _node = FocusNode();
+  TextEditingController _controller = TextEditingController();
 
-  OutlineInputBorder outlineInputBorder() {
+  OutlineInputBorder outlineInputBorder(ThemeData theme, bool isEnabled) {
     return OutlineInputBorder(
       borderSide: widget.needErrorValidation
-          ? BorderSide(color: widget.invalid ? Colors.red : Colors.transparent)
+          ? BorderSide(
+              width: 1.5,
+              color: widget.invalid
+                  ? theme.errorColor
+                  : isEnabled
+                      ? theme.accentColor
+                      : theme.colorScheme.onPrimary)
           : BorderSide(color: Colors.transparent),
       borderRadius: fCustomTextFormBorderRadius,
     );
@@ -66,6 +77,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   @override
+  void initState() {
+    _node.addListener(() {
+      setState(() {
+        _isFocused = _node.hasFocus;
+      });
+      if (!_node.hasFocus) {
+        widget.onFinishEditing(_controller.text);
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Container(
@@ -78,37 +102,51 @@ class _CustomTextFieldState extends State<CustomTextField> {
             widget.needErrorValidation
                 ? _errorMessage(context)
                 : SizedBox(
-                    height: 10,
+                    height: 30,
                   ),
-            Material(
-              elevation: 2.0,
-              shadowColor: Color(0xA9000000),
-              color: theme.primaryColor,
-              borderRadius: fCustomTextFormBorderRadius,
-              child: TextFormField(
-                onChanged: widget.onChange,
-                obscureText: _hidePassword,
-                style: TextStyle(
-                  color: theme.disabledColor,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 20,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.deny(RegExp('[ ]'))
-                ],
-                decoration: InputDecoration(
-                  suffixIcon: _suffixIcon(),
-                  border: InputBorder.none,
-                  hintText: widget.hint,
-                  hintStyle: TextStyle(
-                    color: theme.textTheme.headline1?.color,
-                    fontFamily: kNormalTextFontFamily,
-                    fontSize: 20,
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18.0),
+                color: _isFocused ? Color(0xFFF1F8FE) : Colors.transparent,
+              ),
+              padding: EdgeInsets.all(4),
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor,
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  focusedBorder: outlineInputBorder(),
-                  enabledBorder: outlineInputBorder(),
+                  child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    onChanged: widget.onChange,
+                    obscureText: _hidePassword,
+                    controller: _controller,
+                    style: TextStyle(
+                      color: theme.disabledColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 20,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                    ],
+                    focusNode: _node,
+                    decoration: InputDecoration(
+                      suffixIcon: _suffixIcon(),
+                      border: InputBorder.none,
+                      hintText: widget.hint,
+                      hintStyle: TextStyle(
+                        color: theme.textTheme.headline1?.color,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 17,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 20.0),
+                      focusedBorder: outlineInputBorder(theme, true),
+                      enabledBorder: outlineInputBorder(theme, false),
+
+                      // disabledBorder: outlineInputBorder(theme, false),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -118,15 +156,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
-  Padding _errorMessage(BuildContext context) {
+  Widget _errorMessage(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5.0, top: 10.0),
+      padding: const EdgeInsets.only(left: 20),
       child: Text(
         widget.invalid ? widget.errorMessage : '',
         textAlign: TextAlign.left,
         style: TextStyle(
             fontFamily: kNormalTextFontFamily,
-            fontSize: 16.0,
+            fontSize: 14.0,
             color: Theme.of(context).errorColor),
       ),
     );

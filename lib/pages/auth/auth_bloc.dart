@@ -48,7 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState state,
     AuthLoginEmailChanged event,
   ) {
-    Email email = Email.dirty(event.email);
+    Email email = Email.dirty(event.email, event.needValidation);
 
     return state.copyWith(
       emailLogin: email,
@@ -60,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState state,
     AuthRegisterEmailChanged event,
   ) {
-    Email email = Email.dirty(event.email);
+    Email email = Email.dirty(event.email, event.needValidation);
 
     return state.copyWith(
       emailRegister: email,
@@ -72,7 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState state,
     AuthLoginPasswordChanged event,
   ) {
-    Password password = Password.dirty(event.password);
+    Password password = Password.dirty(event.password, event.needValidation);
 
     return state.copyWith(
       passwordLogin: password,
@@ -84,7 +84,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState state,
     AuthRegisterPasswordChanged event,
   ) {
-    Password password = Password.dirty(event.password);
+    Password password = Password.dirty(event.password, event.needValidation);
 
     return state.copyWith(
       passwordRegister: password,
@@ -96,7 +96,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState state,
     AuthNameChanged event,
   ) {
-    Name name = Name.dirty(event.name);
+    Name name = Name.dirty(event.name, event.needValidation);
 
     return state.copyWith(
       name: name,
@@ -132,6 +132,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLoginConfirmed event,
     AuthState state,
   ) async* {
+    print(state.status.isValidated);
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {

@@ -26,24 +26,27 @@ dependencies:
   injectable: ^1.5.0
   scrollable_positioned_list: ^0.2.0-nullsafety.0
   desktop_window: ^0.4.0
+  percent_indicator: ^3.0.1
   shared_preferences: ^2.0.6
   shared_preferences_platform_interface: ^2.0.0
   
 
 dev_dependencies:
-  injectable_generator: 
+  injectable_generator:
   build_runner: ^2.0.4
-  flutter_gen_runner: 
+  flutter_gen_runner:
   flutter_test:
     sdk: flutter
 
 flutter:
 
   uses-material-design: true
-
   assets:
     - assets/
     - assets/auth/
+    - assets/home_page/
+    - assets/file_page/
+    - assets/test_img/
 
   fonts:
     - family: Noto Sans
@@ -52,5 +55,14 @@ flutter:
     - family: Noto Sans Bold
       fonts: 
         - asset: fonts/NotoSans-Bold.ttf
+    - family: Nunito
+      fonts:
+        - asset: fonts/Nunito-Regular.ttf
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato-Regular.ttf
+    - family: Ubuntu
+      fonts:
+        - asset: fonts/Ubuntu-Regular.ttf
 flutter_intl:
   enabled: true
