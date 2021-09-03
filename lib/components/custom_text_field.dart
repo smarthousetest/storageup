@@ -75,40 +75,53 @@ class _CustomTextFieldState extends State<CustomTextField> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            widget.needErrorValidation
-                ? _errorMessage(context)
-                : SizedBox(
-                    height: 10,
-                  ),
-            Material(
-              elevation: 2.0,
-              shadowColor: Color(0xA9000000),
-              color: theme.primaryColor,
-              borderRadius: fCustomTextFormBorderRadius,
-              child: TextFormField(
-                onChanged: widget.onChange,
-                obscureText: _hidePassword,
-                style: TextStyle(
-                  color: theme.disabledColor,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 20,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.deny(RegExp('[ ]'))
-                ],
-                decoration: InputDecoration(
-                  suffixIcon: _suffixIcon(),
-                  border: InputBorder.none,
-                  hintText: widget.hint,
-                  hintStyle: TextStyle(
-                    color: theme.textTheme.headline1?.color,
+            widget.needErrorValidation ? _errorMessage(context) : Container(),
+            // : SizedBox(
+            //     height: 10,
+            //   ),
+            // elevation: 2.0,
+            // shadowColor: Color(0xA9000000),
+            // color: theme.primaryColor,
+            // borderRadius: fCustomTextFormBorderRadius,
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                  borderRadius: fCustomTextFormBorderRadius,
+                  color: theme.primaryColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0x19000000),
+                      blurRadius: 3,
+                      spreadRadius: 3,
+                    )
+                  ]),
+              child: Center(
+                child: TextFormField(
+                  textAlignVertical: TextAlignVertical.center,
+                  onChanged: widget.onChange,
+                  obscureText: _hidePassword,
+                  style: TextStyle(
+                    color: theme.disabledColor,
                     fontFamily: kNormalTextFontFamily,
                     fontSize: 20,
                   ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                  focusedBorder: outlineInputBorder(),
-                  enabledBorder: outlineInputBorder(),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp('[ ]'))
+                  ],
+                  decoration: InputDecoration(
+                    suffixIcon: _suffixIcon(),
+                    border: InputBorder.none,
+                    hintText: widget.hint,
+                    hintStyle: TextStyle(
+                      color: theme.textTheme.headline1?.color,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 20,
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                    focusedBorder: outlineInputBorder(),
+                    enabledBorder: outlineInputBorder(),
+                  ),
                 ),
               ),
             ),
@@ -118,16 +131,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
     );
   }
 
-  Padding _errorMessage(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5.0, top: 10.0),
-      child: Text(
-        widget.invalid ? widget.errorMessage : '',
-        textAlign: TextAlign.left,
-        style: TextStyle(
-            fontFamily: kNormalTextFontFamily,
-            fontSize: 16.0,
-            color: Theme.of(context).errorColor),
+  Widget _errorMessage(BuildContext context) {
+    return Visibility(
+      visible: widget.invalid,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Text(
+          widget.invalid ? widget.errorMessage : '',
+          textAlign: TextAlign.left,
+          style: TextStyle(
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 16.0,
+              color: Theme.of(context).errorColor),
+        ),
       ),
     );
   }
