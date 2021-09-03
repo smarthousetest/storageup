@@ -319,6 +319,9 @@ class _AuthViewState extends State<AuthView> {
                   state.emailLogin.invalid && state.emailLogin.value.isNotEmpty,
               isPassword: false,
             ),
+            SizedBox(
+              height: 20.0,
+            ),
             CustomTextField(
               hint: translate.password,
               errorMessage: translate.wrong_password,
@@ -349,8 +352,8 @@ class _AuthViewState extends State<AuthView> {
                         color: theme.primaryColor,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            blurRadius: 1,
+                            color: Colors.grey.withOpacity(0.4),
+                            blurRadius: 2,
                           ),
                         ]),
                     child: Checkbox(
@@ -492,34 +495,72 @@ class _AuthViewState extends State<AuthView> {
                 ),
               ),
             )),
-            ElevatedButton(
-              onPressed: _isLoginFieldValid(state)
-                  ? () {
-                      context.read<AuthBloc>().add(AuthLoginConfirmed());
-                    }
-                  : null,
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 135,
-                  vertical: 18,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 120),
+              child: OutlinedButton(
+                onPressed: _isLoginFieldValid(state)
+                    ? () {
+                        context.read<AuthBloc>().add(AuthLoginConfirmed());
+                      }
+                    : null,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size(double.maxFinite, 60),
+                  shape: RoundedRectangleBorder(
+                      // side: BorderSide(
+                      //   color: Colors.transparent,
+                      // ),
+                      borderRadius: BorderRadius.circular(15)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 135,
+                    vertical: 20,
+                  ),
+                  backgroundColor: _isLoginFieldValid(state)
+                      ? theme.colorScheme.onSurface
+                      : theme.colorScheme.onPrimary,
                 ),
-                primary: theme.primaryColor,
-                onSurface: theme.primaryColor,
-                elevation: 2,
-              ),
-              child: Text(
-                translate.sign_in,
-                style: TextStyle(
-                  color: _isLoginFieldValid(state)
-                      ? theme.accentColor
-                      : theme.textTheme.headline1?.color,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 20,
+                child: Text(
+                  translate.sign_in,
+                  style: TextStyle(
+                    color: theme.primaryColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontWeight: FontWeight.w600,
+                    height: 1.002,
+                    fontSize: 20,
+                  ),
                 ),
               ),
             ),
+            // ElevatedButton(
+            //   onPressed: // _isLoginFieldValid(state)
+            //       //?
+            //       () {
+            //     context.read<AuthBloc>().add(AuthLoginConfirmed());
+            //   },
+            //   //: null,
+
+            //   style: ElevatedButton.styleFrom(
+            //     shape: RoundedRectangleBorder(
+            //       side: BorderSide(),
+            //         borderRadius: BorderRadius.circular(15)),
+            //     padding: EdgeInsets.symmetric(
+            //       horizontal: 135,
+            //       vertical: 18,
+            //     ),
+            //     primary: theme.primaryColor,
+            //     onSurface: theme.primaryColor,
+            //     elevation: 2,
+            //   ),
+            //   child: Text(
+            //     translate.sign_in,
+            //     style: TextStyle(
+            //       color: _isLoginFieldValid(state)
+            //           ? theme.accentColor
+            //           : theme.textTheme.headline1?.color,
+            //       fontFamily: kNormalTextFontFamily,
+            //       fontSize: 20,
+            //     ),
+            //   ),
+            // ),
             Expanded(child: Container()),
           ],
         );
