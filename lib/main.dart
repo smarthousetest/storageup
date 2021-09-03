@@ -3,8 +3,8 @@ import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
+import 'package:upstorage_desktop/pages/home/home.dart';
 import 'package:upstorage_desktop/theme.dart';
-
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
 
@@ -31,12 +31,17 @@ class MyApp extends StatelessWidget {
           S.delegate
         ],
         supportedLocales: S.delegate.supportedLocales,
-        initialRoute: AuthView.route,
+        initialRoute: HomePage.route,
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case AuthView.route:
               return MaterialPageRoute(
                 builder: (_) => AuthView(),
+                settings: settings,
+              );
+            case HomePage.route:
+              return MaterialPageRoute(
+                builder: (_) => HomePage(),
                 settings: settings,
               );
           }
