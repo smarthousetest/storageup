@@ -16,12 +16,11 @@ final kLightTheme = ThemeData.light().copyWith(
   colorScheme: ThemeData.light().colorScheme.copyWith(
         onPrimary: Color(0xFFE0E0E0),
         onSurface: Color(0xFF70BBF6),
+        onBackground: Color(0xFF9C9C9C),
       ),
-  hintColor: Color(0xFFEDEDED),
-  errorColor: Color(0xFFFF786F),
   textTheme: ThemeData.light().textTheme.copyWith(
-    headline1: TextStyle(
-      color: Color(0xFFC4C4C4),
-    ),
-  ),
+        headline1: TextStyle(
+          color: Color(0xFFC4C4C4),
+        ),
+      ),
 );

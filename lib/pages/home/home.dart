@@ -1,3 +1,4 @@
+import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
@@ -13,20 +14,17 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-
-
 class _HomePageState extends State<HomePage> {
-
   ChoosedPage choosed_page = ChoosedPage.home;
 
-  void changePage(ChoosedPage new_page){
+  void changePage(ChoosedPage new_page) {
     setState(() {
       choosed_page = new_page;
     });
   }
 
-  Widget getPage(){
-    switch(choosed_page){
+  Widget getPage() {
+    switch (choosed_page) {
       case ChoosedPage.home:
         return InfoPage();
       case ChoosedPage.file:
@@ -34,6 +32,12 @@ class _HomePageState extends State<HomePage> {
       default:
         return InfoPage();
     }
+  }
+
+  @override
+  void initState() {
+    DesktopWindow.setMaxWindowSize(Size(double.infinity, double.infinity));
+    super.initState();
   }
 
   @override
@@ -79,6 +83,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   List<Widget> left_buttons_item() {
     return [
       CustomMenuButton(
