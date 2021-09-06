@@ -11,6 +11,7 @@ class CustomDirButton extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   String name;
+  TextEditingController? dir_name;
 
   CustomDirButton({required this.name});
 }
@@ -159,6 +160,7 @@ class _ButtonTemplateState extends State<CustomDirButton> {
           ));
           break;
         case 2:
+          print('');
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Скопировано'),
             behavior: SnackBarBehavior.floating,

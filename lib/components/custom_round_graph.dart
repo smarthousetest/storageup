@@ -4,7 +4,6 @@ import 'package:percent_indicator/percent_indicator.dart';
 
 class MyProgressIndicator extends StatefulWidget {
   final double percent;
-  final String text;
   final Color color;
   final double radius;
 
@@ -13,7 +12,6 @@ class MyProgressIndicator extends StatefulWidget {
 
   MyProgressIndicator(
       {required this.percent,
-      required this.text,
       required this.color,
       required this.radius});
 }
@@ -26,7 +24,7 @@ class _MyProgressIndicator extends State<MyProgressIndicator> {
         //circular progress indicator
         radius: widget.radius,
         //radius for circle
-        lineWidth: 10.0,
+        lineWidth: 8.0,
         //width of circle line
         animation: true,
         //animate when it shows progress indicator first
@@ -41,18 +39,6 @@ class _MyProgressIndicator extends State<MyProgressIndicator> {
               fontSize: 20.0),
         ),
         //center text, you can set Icon as well
-        footer: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Text(
-            widget.text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Color(0xff5F5F5F),
-                fontWeight: FontWeight.normal,
-                fontSize: 14.0),
-          ),
-        ),
-        //footer text
         backgroundColor: Color(0xffF7F9FB),
         //backround of progress bar
         circularStrokeCap: CircularStrokeCap.round,

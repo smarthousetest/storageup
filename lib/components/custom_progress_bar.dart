@@ -23,7 +23,7 @@ class _MyProgressIndicator extends State<MyProgressBar> {
       animation: true,
       //animation to show progress at first
       animationDuration: 1000,
-      lineHeight: 10.0,
+      lineHeight: 8.0,
       //height of progress bar
       // leading: Padding( //prefix content
       //   padding: EdgeInsets.only(right:15),

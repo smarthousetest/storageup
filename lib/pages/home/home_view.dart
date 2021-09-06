@@ -32,7 +32,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ChoosedPage choosed_page = ChoosedPage.home;
-  Blur blur_item = Blur.none;
+  Blur blur_item = Blur.rename;
+
   void changePage(ChoosedPage new_page) {
     setState(() {
       choosed_page = new_page;
@@ -55,63 +56,78 @@ class _HomePageState extends State<HomePage> {
       case Blur.none:
         return Container();
       case Blur.rename:
-        return BlurRename();
+        return BlurRename(
+          blur_item: blur_item,
+        );
       case Blur.delete:
-        return BlurDelete();
-      case Blur.create_album:
-        return BlurCreateAlbum();
-      case Blur.menu_upload:
-        return BlurMenuUpload();
-      case Blur.three_directory:
-        return BlurCreateThreeDirectory();
+        return BlurDelete(
+          blur_item: blur_item,
+        );
+      // case Blur.create_album:
+      //   return BlurCreateAlbum(blur_item: blur_item,);
+      // case Blur.menu_upload:
+      //   return BlurMenuUpload(blur_item: blur_item,);
+      // case Blur.three_directory:
+      //   return BlurCreateThreeDirectory(blur_item: blur_item,);
       default:
-        return InfoPage();
+        return Container();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff7f9fb),
       body: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 15, 0, 15),
-                child: Container(
-                  width: 274,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+          Center(
+            child: Container(
+              width: 1380,
+              height: 944,
+              constraints: BoxConstraints(minWidth: 1320, maxWidth: 1320),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 274,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Color.fromARGB(25, 23, 69, 139),
+                            blurRadius: 4,
+                            offset: Offset(1, 4))
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                          child: SvgPicture.asset(
+                            'assets/home_page/storage_title.svg',
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                          child: SvgPicture.asset(
+                            'assets/home_page/separator.svg',
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView(
+                            children: left_buttons_item(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                        child: SvgPicture.asset(
-                          'assets/home_page/storage_title.svg',
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                        child: SvgPicture.asset(
-                          'assets/home_page/separator.svg',
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView(
-                          children: left_buttons_item(),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                  getPage(),
+                ],
               ),
-              getPage(),
-            ],
+            ),
           ),
-          (1 < 2)
+          (1 > 2)
               ? Stack(
                   children: [
                     Positioned.fill(
@@ -125,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    BlurRename(),
+                    getBlurItem(),
                   ],
                 )
               : Container(),

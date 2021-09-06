@@ -164,7 +164,6 @@ class _FilePageState extends State<FilePage> {
                 child: GridView.count(
                   crossAxisCount:
                       ((MediaQuery.of(context).size.width - 400) ~/ 100),
-                  // childAspectRatio: (1 / 1),
                   children: List.generate(17, (index) {
                     return Center(
                       child: Padding(
