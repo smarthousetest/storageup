@@ -41,6 +41,7 @@ class _AuthViewState extends State<AuthView> {
   void initState() {
     DesktopWindow.setMinWindowSize(Size(1280, 780));
     DesktopWindow.setMaxWindowSize(Size(1280, 780));
+    DesktopWindow.setWindowSize(Size(1280, 780));
     super.initState();
   }
 
