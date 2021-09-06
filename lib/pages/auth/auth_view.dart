@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,9 +41,14 @@ class _AuthViewState extends State<AuthView> {
   S translate = getIt<S>();
   @override
   void initState() {
-    DesktopWindow.setMinWindowSize(Size(1280, 780));
-    DesktopWindow.setMaxWindowSize(Size(1280, 780));
-    DesktopWindow.setWindowSize(Size(1280, 780));
+    var height = 780.0;
+    var width = 1280.0;
+    if (Platform.isWindows) {
+      width = 1296.0;
+    }
+    DesktopWindow.setMinWindowSize(Size(width, height));
+    DesktopWindow.setMaxWindowSize(Size(width, height));
+    DesktopWindow.setWindowSize(Size(width, height));
     super.initState();
   }
 
@@ -71,9 +78,10 @@ class _AuthViewState extends State<AuthView> {
             body: Stack(
               children: [
                 Container(
+                  width: 1280,
                   color: theme.primaryColor,
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    // crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -130,9 +138,15 @@ class _AuthViewState extends State<AuthView> {
     );
   }
 
+  void printsize() async {
+    var size = await DesktopWindow.getWindowSize();
+    print('w= ${size.width} , h = ${size.height}');
+  }
+
   Widget _signIn(ThemeData theme) {
     var fullWidth = MediaQuery.of(context).size.width;
     var widthOfContainer = 560.0;
+    printsize();
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
@@ -238,7 +252,7 @@ class _AuthViewState extends State<AuthView> {
             height: 130,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Text(
               translate.allready_have_an_account,
               textAlign: TextAlign.center,
@@ -269,7 +283,7 @@ class _AuthViewState extends State<AuthView> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
                 padding: EdgeInsets.symmetric(
-                  horizontal: 135,
+                  horizontal: 100,
                   vertical: 18,
                 ),
                 primary: theme.primaryColor,
@@ -297,10 +311,11 @@ class _AuthViewState extends State<AuthView> {
     var width = 720.0;
     return LayoutBuilder(builder: (context, constrains) {
       return ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: width),
+        constraints: BoxConstraints(maxWidth: width, minWidth: width),
         child: ListView(
           scrollDirection: Axis.horizontal,
           controller: controller,
+          shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           children: [
             ConstrainedBox(
@@ -316,6 +331,7 @@ class _AuthViewState extends State<AuthView> {
   }
 
   Widget _signInMain(ThemeData theme) {
+    printsize();
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return Column(
