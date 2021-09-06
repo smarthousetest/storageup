@@ -7,6 +7,7 @@ import '../../theme.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
+  GlobalKey _keyRed = GlobalKey();
   FilePage();
 }
 

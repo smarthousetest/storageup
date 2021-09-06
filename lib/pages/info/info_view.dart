@@ -356,7 +356,7 @@ class _InfoPageState extends State<InfoPage> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal:30),
+                              padding: const EdgeInsets.symmetric(horizontal: 30),
                               child: SizedBox(
                                 height: 372,
                                 width: 726,
@@ -591,7 +591,7 @@ class _InfoPageState extends State<InfoPage> {
               ),
             ),
           ),
-          Container(
+          (MediaQuery.of(context).size.width > 1380) ? Container(
             width: 320,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -954,7 +954,7 @@ class _InfoPageState extends State<InfoPage> {
                 ],
               ),
             ),
-          ),
+          ) : Container(),
         ],
       ),
     );
