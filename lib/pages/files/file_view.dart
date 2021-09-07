@@ -16,7 +16,7 @@ class _FilePageState extends State<FilePage> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -163,19 +163,27 @@ class _FilePageState extends State<FilePage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: GridView.count(
-                  crossAxisCount:
-                      ((MediaQuery.of(context).size.width - 400) ~/ 100),
+                  crossAxisCount: (MediaQuery.of(context).size.width > 1380) ? (1076 ~/ 160) :
+                      ((MediaQuery.of(context).size.width - 384) ~/ (160)),
+                  padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+                  crossAxisSpacing: 35,
+                  mainAxisSpacing: 0,
+
+
                   children: List.generate(17, (index) {
                     return Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          width: 100,
-                          height: 100,
+                          width: 101,
+                          height: 128,
                           color: Colors.white,
                           child: Column(
                             children: [
-                              Image.asset('assets/test_img/1.jpg'),
+                              ClipRRect(
+                                child: Image.asset('assets/test_img/1.jpg'),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                                 child: Text(
