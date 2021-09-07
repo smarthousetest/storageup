@@ -14,8 +14,8 @@ class CustomDirButton extends StatefulWidget {
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   String name;
   TextEditingController? dir_name;
-
-  CustomDirButton({required this.name});
+  Function()? onTap;
+  CustomDirButton({required this.name,  this.onTap});
 }
 
 class _ButtonTemplateState extends State<CustomDirButton> {
@@ -209,47 +209,6 @@ class _ButtonTemplateState extends State<CustomDirButton> {
     }
   }
 
-  // Future<void> _onRenameDown(PointerDownEvent event) async {
-  //   final overlay =
-  //       Overlay.of(context)!.context.findRenderObject() as RenderBox;
-  //   final menuItem = await showMenu<int>(
-  //       context: context,
-  //       color: Color.fromARGB(0, 0, 0, 0),
-  //       elevation: 0,
-  //       items: [
-  //         PopupMenuItem(
-  //             child: Container(
-  //               decoration: BoxDecoration(
-  //                 color: Colors.white,
-  //                 borderRadius: BorderRadius.circular(20),
-  //               ),
-  //               child: TextField(
-  //                 decoration: InputDecoration(
-  //                   border: OutlineInputBorder(
-  //                     borderRadius: BorderRadius.circular(20.0),
-  //                   ),
-  //                   filled: true,
-  //                   hintText: 'new name',
-  //                   hintStyle: TextStyle(color: Colors.grey),
-  //                 ),
-  //               ),
-  //             ),
-  //             value: 1),
-  //       ],
-  //       position: RelativeRect.fromSize(
-  //           event.position & Size(48.0, 48.0), overlay.size));
-  //   switch (menuItem) {
-  //     case 1:
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //         content: Text('Новая папка'),
-  //         behavior: SnackBarBehavior.floating,
-  //       ));
-  //       break;
-  //
-  //     default:
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -278,20 +237,24 @@ class _ButtonTemplateState extends State<CustomDirButton> {
               ),
             ],
           ),
-          onPressed: () async {
-            var str = await   showDialog(
+          onPressed: widget.onTap,
+          /*onPressed: () async {
+            var str = await showDialog(
               context: context,
               builder: (BuildContext context) {
                 return BlurRename();
               },
             );
             print(str);
-            dirs_list.add(CustomDirButton(
-              name: str,
-            ));
-            context.findAncestorStateOfType<_ButtonTemplateState>();
+            setState(() {
+              dirs_list.add(
+                CustomDirButton(
+                  name: str,
+                ),
+              );
+            });
             // print(dirs_list.length);
-          },
+          },*/
           style: ElevatedButton.styleFrom(
             primary: Colors.white,
             shape: RoundedRectangleBorder(

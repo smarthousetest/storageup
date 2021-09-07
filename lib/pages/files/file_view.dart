@@ -2,20 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
 import '../../theme.dart';
 
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
-  GlobalKey _keyRed = GlobalKey();
-
   FilePage();
 }
 
 class _FilePageState extends State<FilePage> {
+
+  List<Widget> dirs_list = [
+  ];
+
+
+
   @override
   Widget build(BuildContext context) {
+    if(dirs_list.isEmpty)
+      _init(context);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
@@ -149,7 +156,7 @@ class _FilePageState extends State<FilePage> {
                           child: ListView(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            children: dirs_list,
+                            children: [...dirs_list],
                           ),
                         ),
                       ),
@@ -264,10 +271,30 @@ class _FilePageState extends State<FilePage> {
       ),
     );
   }
-}
 
-List<Widget> dirs_list = [
-  CustomDirButton(
-    name: 'Создать\n папку',
-  ),
-];
+  _init(BuildContext context){
+    dirs_list.add(
+      CustomDirButton(
+      name: 'Создать\n папку',
+      onTap: () async {
+        var str = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return BlurRename();
+          },
+        );
+        print(str);
+        setState(() {
+          dirs_list.add(
+            CustomDirButton(
+              name: str,
+              onTap: (){print('tapped');},
+            ),
+          );
+        });
+
+        // print(dirs_list.length);
+      },
+    ),);
+  }
+}
