@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
         return Container();
       case Blur.rename:
         return BlurRename(
-          blur_item: blur_item,
+          //blur_item: blur_item,
         );
       case Blur.delete:
         return BlurDelete(

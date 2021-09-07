@@ -7,6 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 
+import 'blur/rename.dart';
+
 class CustomDirButton extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
@@ -276,10 +278,18 @@ class _ButtonTemplateState extends State<CustomDirButton> {
               ),
             ],
           ),
-          onPressed: () {
+          onPressed: () async {
+            var str = await   showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurRename();
+              },
+            );
+            print(str);
             dirs_list.add(CustomDirButton(
-              name: 'Создать\n папку',
+              name: str,
             ));
+            context.findAncestorStateOfType<_ButtonTemplateState>();
             // print(dirs_list.length);
           },
           style: ElevatedButton.styleFrom(
