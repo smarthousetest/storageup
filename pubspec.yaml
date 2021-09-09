@@ -29,7 +29,10 @@ dependencies:
   percent_indicator: ^3.0.1
   shared_preferences: ^2.0.6
   shared_preferences_platform_interface: ^2.0.0
-  
+
+  file_picker: ^4.0.2
+
+
 
 dev_dependencies:
   injectable_generator:
