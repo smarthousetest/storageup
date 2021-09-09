@@ -9,20 +9,16 @@ import '../../theme.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
+
   FilePage();
 }
 
 class _FilePageState extends State<FilePage> {
-
-  List<Widget> dirs_list = [
-  ];
-
-
+  List<Widget> dirs_list = [];
 
   @override
   Widget build(BuildContext context) {
-    if(dirs_list.isEmpty)
-      _init(context);
+    if (dirs_list.isEmpty) _init(context);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
@@ -222,10 +218,11 @@ class _FilePageState extends State<FilePage> {
                     ),
                     Expanded(
                       child: GridView.count(
-                        crossAxisCount: (MediaQuery.of(context).size.width > 1380)
-                            ? (1076 ~/ 160)
-                            : ((MediaQuery.of(context).size.width - 384) ~/
-                                (160)),
+                        crossAxisCount:
+                            (MediaQuery.of(context).size.width > 1380)
+                                ? (1076 ~/ 160)
+                                : ((MediaQuery.of(context).size.width - 384) ~/
+                                    (160)),
                         padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
                         crossAxisSpacing: 56,
                         children: List.generate(17, (index) {
@@ -239,12 +236,13 @@ class _FilePageState extends State<FilePage> {
                                 child: Column(
                                   children: [
                                     ClipRRect(
-                                      child: Image.asset('assets/test_img/1.jpg'),
+                                      child:
+                                          Image.asset('assets/test_img/1.jpg'),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 10, 0, 0),
                                       child: Text(
                                         '1.jpg',
                                         style: TextStyle(
@@ -272,29 +270,32 @@ class _FilePageState extends State<FilePage> {
     );
   }
 
-  _init(BuildContext context){
+  _init(BuildContext context) {
     dirs_list.add(
       CustomDirButton(
-      name: 'Создать\n папку',
-      onTap: () async {
-        var str = await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return BlurRename();
-          },
-        );
-        print(str);
-        setState(() {
-          dirs_list.add(
-            CustomDirButton(
-              name: str,
-              onTap: (){print('tapped');},
-            ),
+        name: 'Создать\n папку',
+        onTap: () async {
+          var str = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurRename();
+            },
           );
-        });
+          print(str);
+          setState(
+            () {
+              dirs_list.add(
+                CustomDirButton(
+                  name: str,
+                  onTap: () async {
 
-        // print(dirs_list.length);
-      },
-    ),);
+                  },
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }

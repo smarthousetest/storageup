@@ -1,14 +1,12 @@
+import 'dart:io';
 import 'dart:ui';
-
-import 'package:desktop_window/desktop_window.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
-import 'package:upstorage_desktop/components/blur/three_directory.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
@@ -35,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   ChoosedPage choosed_page = ChoosedPage.home;
   Blur blur_item = Blur.rename;
 
+
   void changePage(ChoosedPage new_page) {
     setState(() {
       choosed_page = new_page;
@@ -58,8 +57,8 @@ class _HomePageState extends State<HomePage> {
         return Container();
       case Blur.rename:
         return BlurRename(
-          //blur_item: blur_item,
-        );
+            //blur_item: blur_item,
+            );
       case Blur.delete:
         return BlurDelete(
           blur_item: blur_item,
@@ -196,6 +195,50 @@ class _HomePageState extends State<HomePage> {
         icon: "assets/home_page/trash.svg",
         title: "Корзина",
         function: () {},
+      ),
+      SizedBox(
+        height: 259,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: ElevatedButton(
+          onPressed: () async {
+            var str = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurMenuUpload();
+              },
+            );
+            /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
+            List<String?> list = result!.paths;*/
+
+            // var systemTempDir = Directory.current;
+            // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
+            //   print(entity.path);
+            // }
+          },
+          child: Text(
+            'Добавить +',
+            style: TextStyle(
+              color: Color(0xff70BBF6),
+              fontSize: 17,
+              fontFamily: 'Lato',
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(214, 42),
+            primary: Colors.white,
+            elevation: 0,
+            side: BorderSide(
+              style: BorderStyle.solid,
+              color: Color(0xff70BBF6),
+              width: 1.5,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
       ),
     ];
   }

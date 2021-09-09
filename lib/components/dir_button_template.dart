@@ -2,12 +2,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:upstorage_desktop/pages/files/file_view.dart';
-
-import 'blur/rename.dart';
 
 class CustomDirButton extends StatefulWidget {
   @override
@@ -211,63 +207,66 @@ class _ButtonTemplateState extends State<CustomDirButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 140,
-      height: 140,
-      child: Listener(
-        child: ElevatedButton(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: SvgPicture.asset(
-                  'assets/home_page/files_r.svg',
-                  height: 58,
-                  width: 58,
+    return Padding(
+      padding: const EdgeInsets.only(right: 31),
+      child: Container(
+        width: 140,
+        height: 140,
+        child: Listener(
+          child: ElevatedButton(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: SvgPicture.asset(
+                    'assets/home_page/files_r.svg',
+                    height: 58,
+                    width: 58,
+                  ),
                 ),
-              ),
-              Text(
-                widget.name,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'Lato',
-                  color: Color(0xff7D7D7D),
+                Text(
+                  widget.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Lato',
+                    color: Color(0xff7D7D7D),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          onPressed: widget.onTap,
-          /*onPressed: () async {
-            var str = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurRename();
-              },
-            );
-            print(str);
-            setState(() {
-              dirs_list.add(
-                CustomDirButton(
-                  name: str,
-                ),
-              );
-            });
-            // print(dirs_list.length);
-          },*/
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: BorderSide(
-                width: 2,
-                color: Color(0xffF1F8FE),
-              ),
+              ],
             ),
-            elevation: 0,
+            onPressed: widget.onTap,
+            /*onPressed: () async {
+              var str = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurRename();
+                },
+              );
+              print(str);
+              setState(() {
+                dirs_list.add(
+                  CustomDirButton(
+                    name: str,
+                  ),
+                );
+              });
+              // print(dirs_list.length);
+            },*/
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(
+                  width: 2,
+                  color: Color(0xffF1F8FE),
+                ),
+              ),
+              elevation: 0,
+            ),
           ),
+          onPointerDown: _onPointerDown,
         ),
-        onPointerDown: _onPointerDown,
       ),
     );
   }
