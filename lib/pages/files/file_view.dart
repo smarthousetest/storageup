@@ -13,8 +13,9 @@ class FilePage extends StatefulWidget {
   FilePage();
 }
 
+List<Widget> dirs_list = [];
+
 class _FilePageState extends State<FilePage> {
-  List<Widget> dirs_list = [];
 
   @override
   Widget build(BuildContext context) {
@@ -282,13 +283,11 @@ class _FilePageState extends State<FilePage> {
             },
           );
           print(str);
-          setState(
-            () {
+          setState(() {
               dirs_list.add(
                 CustomDirButton(
                   name: str,
                   onTap: () async {
-
                   },
                 ),
               );
