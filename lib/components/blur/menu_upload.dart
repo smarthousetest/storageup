@@ -13,7 +13,6 @@ class BlurMenuUpload extends StatefulWidget {
 }
 
 class _ButtonTemplateState extends State<BlurMenuUpload> {
-
   Future<List<String?>?> getFilesPaths() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
@@ -35,7 +34,6 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
       return null;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +93,8 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                         ),
                         SizedBox(height: 45),
                         GestureDetector(
-                          onTap: (){
-                            print(getDirPath());
+                          onTap: () async {
+                            print(await getDirPath());
                           },
                           child: Column(
                             children: [
@@ -193,4 +191,3 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
     );
   }
 }
-

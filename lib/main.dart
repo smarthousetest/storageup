@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
           S.delegate
         ],
         supportedLocales: S.delegate.supportedLocales,
-        initialRoute: AuthView.route,
+        // initialRoute: AuthView.route,
+        initialRoute: HomePage.route,
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case AuthView.route:
