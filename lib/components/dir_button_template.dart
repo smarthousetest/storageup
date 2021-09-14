@@ -262,7 +262,34 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                   color: Color(0xffF1F8FE),
                 ),
               ),
+<<<<<<< Updated upstream
               elevation: 0,
+=======
+            ],
+          ),
+          onPressed: () async {
+            var str = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurRename();
+              },
+            );
+            print(str);
+            dirs_list.add(CustomDirButton(
+              name: str,
+            ));
+            context.findAncestorStateOfType<_ButtonTemplateState>();
+            // print(dirs_list.length);
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(
+                width: 2,
+                color: Color(0xffF1F8FE),
+              ),
+>>>>>>> Stashed changes
             ),
           ),
           onPointerDown: _onPointerDown,

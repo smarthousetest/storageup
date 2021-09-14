@@ -35,7 +35,11 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< refs/remotes/origin/fux-patch
     version: "2.8.2"
+=======
+    version: "2.8.1"
+>>>>>>> Auto stash before merge of "fux-patch" and "origin/fux-patch"
   bloc:
     dependency: transitive
     description:
@@ -655,7 +659,11 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< refs/remotes/origin/fux-patch
     version: "0.4.3"
+=======
+    version: "0.4.2"
+>>>>>>> Auto stash before merge of "fux-patch" and "origin/fux-patch"
   time:
     dependency: transitive
     description:
