@@ -79,6 +79,26 @@ class _ButtonTemplateState extends State<FilesList> {
                 height: 100,
                 width: 20,
               ),
+              Container(
+                color: Colors.amber,
+                height: 100,
+                width: 20,
+              ),
+              Container(
+                color: Colors.blue,
+                height: 100,
+                width: 20,
+              ),
+              Container(
+                color: Colors.amber,
+                height: 100,
+                width: 20,
+              ),
+              Container(
+                color: Colors.blue,
+                height: 100,
+                width: 20,
+              ),
             ],
           ),
           // child: ListView.builder(
