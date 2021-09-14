@@ -29,8 +29,6 @@ dependencies:
   percent_indicator: ^3.0.1
   file_picker: ^4.0.2
 
-
-
 dev_dependencies:
   injectable_generator:
   build_runner: ^2.0.4
