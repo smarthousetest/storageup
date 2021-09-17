@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 final kDarkTheme = ThemeData.dark().copyWith();
 
 final kLightTheme = ThemeData.light().copyWith(
-  accentColor: Color(0xFF64AEEA),
+  accentColor: Color(0xff64AEEA),
+  indicatorColor: Color(0xFFFF847E),
   primaryColor: Color(0xFFFFFFFF),
   disabledColor: Color(0xFF7D7D7D),
   hintColor: Color(0xFFEDEDED),

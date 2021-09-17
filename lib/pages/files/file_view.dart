@@ -178,16 +178,19 @@ class _FilePageState extends State<FilePage> {
                       padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
                       child: Row(
                         children: [
-                          Text(
-                            'Недавние',
-                            style: TextStyle(
-                              color: Color(0xff5F5F5F),
-                              fontFamily: 'Lato',
-                              fontSize: 20,
+                          Container(
+                            width: 100,
+                            child: Text(
+                              'Недавние',
+                              style: TextStyle(
+                                color: Color(0xff5F5F5F),
+                                fontFamily: 'Lato',
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           Expanded(
-                            flex: 829,
+                            flex: 821,
                             child: Container(),
                           ),
                           IconButton(
@@ -204,26 +207,22 @@ class _FilePageState extends State<FilePage> {
                                     ? Theme.of(context).toggleButtonsTheme.color
                                     : Theme.of(context).splashColor),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  ifGrid = true;
-                                });
-                                print('ifGrid is $ifGrid');
-                              },
-                              icon: SvgPicture.asset(
-                                  'assets/file_page/grid.svg',
-                                  width: 30,
-                                  height: 30,
-                                  //colorBlendMode: BlendMode.softLight,
-                                  color: ifGrid
-                                      ? Theme.of(context).splashColor
-                                      : Theme.of(context)
-                                          .toggleButtonsTheme
-                                          .color),
-                            ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                ifGrid = true;
+                              });
+                              print('ifGrid is $ifGrid');
+                            },
+                            icon: SvgPicture.asset('assets/file_page/grid.svg',
+                                width: 30,
+                                height: 30,
+                                //colorBlendMode: BlendMode.softLight,
+                                color: ifGrid
+                                    ? Theme.of(context).splashColor
+                                    : Theme.of(context)
+                                        .toggleButtonsTheme
+                                        .color),
                           ),
                         ],
                       ),
