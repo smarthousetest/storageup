@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
 
 enum FileOptions {
   share,
@@ -24,8 +22,8 @@ class FilesList extends StatefulWidget {
 }
 
 class _ButtonTemplateState extends State<FilesList> {
-  List<bool> ifFavoritesPressedList = [];
-  List<bool> isPopupMenuButtonClicked = [];
+  // List<bool> ifFavoritesPressedList = [];
+  // List<bool> isPopupMenuButtonClicked = [];
   ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -35,12 +33,7 @@ class _ButtonTemplateState extends State<FilesList> {
       fontWeight: FontWeight.w700,
       fontFamily: kNormalTextFontFamily,
     );
-    TextStyle redStyle = TextStyle(
-      color: Theme.of(context).indicatorColor,
-      fontSize: 14,
-      fontWeight: FontWeight.w700,
-      fontFamily: kNormalTextFontFamily,
-    );
+
     // TextStyle fileInfoStyle = TextStyle(
     //   fontSize: 14,
     //   fontFamily: kNormalTextFontFamily,
@@ -117,377 +110,17 @@ class _ButtonTemplateState extends State<FilesList> {
               shrinkWrap: true,
               itemCount: 20,
               itemBuilder: (BuildContext context, int position) {
-                if (isPopupMenuButtonClicked.length < 20) {
-                  isPopupMenuButtonClicked.add(false);
-                  ifFavoritesPressedList.add(false);
-                }
+                // if (isPopupMenuButtonClicked.length < 20) {
+                //   isPopupMenuButtonClicked.add(false);
+                //   ifFavoritesPressedList.add(false);
+                // }
 
-                var heartPath = ifFavoritesPressedList[position]
-                    ? 'assets/file_page/favorites.png'
-                    : 'assets/file_page/file_options/favorites.png';
-                return Padding(
-                  padding:
-                      EdgeInsets.only(bottom: 7, top: position == 0 ? 4 : 0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      height: 42,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            // Theme.of(context).disabledColor
-                            primary: isPopupMenuButtonClicked[position]
-                                ? Theme.of(context).dividerColor
-                                : Theme.of(context).primaryColor,
-
-                            //       MaterialStateProperty.resolveWith<Color>(
-                            // (Set<MaterialState> states) {
-                            //   return Theme.of(context).primaryColor;
-                            // },
-                          ),
-                          onPressed: () {},
-                          child: Container(
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.asset(
-                                    'assets/home_page/glad.jpg',
-                                    height: 25,
-                                    width: 25,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 15),
-                                  child: Container(
-                                    width: 466,
-                                    child: Text(
-                                      'text',
-                                      maxLines: 1,
-                                      style: style,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 15,
-                                  child: Container(),
-                                ),
-                                GestureDetector(
-                                  // splashRadius: 15,
-                                  child: Image.asset(
-                                    heartPath,
-                                    height: 18,
-                                    width: 18,
-                                    // color: Theme.of(context).splashColor,
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      var newValue =
-                                          !ifFavoritesPressedList[position];
-                                      ifFavoritesPressedList[position] =
-                                          newValue;
-                                    });
-                                  },
-                                ),
-                                Expanded(
-                                  flex: 50,
-                                  child: Container(),
-                                ),
-                                Container(
-                                  width: 50,
-                                  child: Text(
-                                    'DOCX',
-                                    maxLines: 1,
-                                    style: style,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 88,
-                                  child: Container(),
-                                ),
-                                Container(
-                                  width: 55,
-                                  height: 17,
-                                  child: Text(
-                                    '01.05.21',
-                                    maxLines: 1,
-                                    style: style,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 80,
-                                  child: Container(),
-                                ),
-                                Container(
-                                  width: 50,
-                                  height: 17,
-                                  child: Text(
-                                    '678 Кб',
-                                    maxLines: 1,
-                                    style: style,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 55,
-                                  child: Container(),
-                                ),
-                                PopupMenuButton<FileOptions>(
-                                  offset: Offset(10, 49),
-                                  iconSize: 20,
-                                  elevation: 2,
-                                  color: Theme.of(context).primaryColor,
-                                  padding: EdgeInsets.zero,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 1,
-                                        color: Theme.of(context).dividerColor),
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  icon: Image.asset(
-                                    'assets/file_page/file_options.png',
-                                  ),
-                                  onSelected: (_) {
-                                    setState(() {
-                                      isPopupMenuButtonClicked[position] =
-                                          false;
-                                    });
-                                  },
-                                  onCanceled: () {
-                                    setState(() {
-                                      isPopupMenuButtonClicked[position] =
-                                          false;
-                                    });
-                                  },
-                                  itemBuilder: (BuildContext context) {
-                                    setState(() {
-                                      isPopupMenuButtonClicked[position] = true;
-                                    });
-                                    return [
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 190,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/share.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Share',
-                                                style: style,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuDivider(
-                                        height: 1,
-                                      ),
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 170,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/move.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Move',
-                                                style: style,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuDivider(
-                                        height: 1,
-                                      ),
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 170,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/double.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Double',
-                                                style: style,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuDivider(
-                                        height: 1,
-                                      ),
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 170,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/favorites.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Add to favorites',
-                                                style: style,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuDivider(
-                                        height: 1,
-                                      ),
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 170,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/download.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Download',
-                                                style: style,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuDivider(
-                                        height: 1,
-                                      ),
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 170,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/rename.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Rename',
-                                                style: style,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuDivider(
-                                        height: 1,
-                                      ),
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 170,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/info.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Info',
-                                                style: style,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      PopupMenuDivider(
-                                        height: 1,
-                                      ),
-                                      PopupMenuItem(
-                                        height: 40,
-                                        child: Container(
-                                          width: 170,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/file_page/file_options/trash.png',
-                                                height: 20,
-                                              ),
-                                              Container(
-                                                width: 15,
-                                              ),
-                                              Text(
-                                                'Delete',
-                                                style: redStyle,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ];
-                                  },
-                                ),
-                                // Container(
-                                //   width: 30,
-                                //   height: 30,
-                                //   color: Colors.amber,
-                                // ),
-                                Padding(
-                                  padding: EdgeInsets.only(right: 5),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                // var heartPath = ifFavoritesPressedList[position]
+                //     ? 'assets/file_page/favorites.png'
+                //     : 'assets/file_page/file_options/favorites.png';
+                // print(heartPath);
+                return FilesListElement(
+                  position: position,
                 );
               }),
         ),
@@ -507,5 +140,391 @@ class _ButtonTemplateState extends State<FilesList> {
         color: Theme.of(context).cardColor,
       ),
     );
+  }
+}
+
+class FilesListElement extends StatefulWidget {
+  FilesListElement({Key? key, required this.position}) : super(key: key);
+  int position;
+
+  @override
+  _FilesListElementState createState() => _FilesListElementState();
+}
+
+class _FilesListElementState extends State<FilesListElement> {
+  bool _isClicked = false;
+  bool _liked = false;
+  @override
+  Widget build(BuildContext context) {
+    TextStyle redStyle = TextStyle(
+      color: Theme.of(context).indicatorColor,
+      fontSize: 14,
+      fontWeight: FontWeight.w700,
+      fontFamily: kNormalTextFontFamily,
+    );
+    TextStyle style = TextStyle(
+      color: Theme.of(context).textTheme.subtitle1?.color,
+      fontSize: 14,
+      fontWeight: FontWeight.w700,
+      fontFamily: kNormalTextFontFamily,
+    );
+    return Padding(
+      padding: EdgeInsets.only(bottom: 7, top: widget.position == 0 ? 4 : 0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          height: 42,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                // Theme.of(context).disabledColor
+                primary: _isClicked
+                    ? Theme.of(context).dividerColor
+                    : Theme.of(context).primaryColor,
+
+                //       MaterialStateProperty.resolveWith<Color>(
+                // (Set<MaterialState> states) {
+                //   return Theme.of(context).primaryColor;
+                // },
+              ),
+              onPressed: () {},
+              child: Container(
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'assets/home_page/glad.jpg',
+                        height: 25,
+                        width: 25,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Container(
+                        width: 466,
+                        child: Text(
+                          'text',
+                          maxLines: 1,
+                          style: style,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 15,
+                      child: Container(),
+                    ),
+                    GestureDetector(
+                      // splashRadius: 15,
+                      child: _liked
+                          ? Image.asset(
+                              'assets/file_page/favorite.png',
+                              height: 18,
+                              width: 18,
+                              // color: Theme.of(context).splashColor,
+                            )
+                          : Image.asset(
+                              'assets/file_page/not_favorite.png',
+                              height: 18,
+                              width: 18,
+                              // color: Theme.of(context).splashColor,
+                            ),
+                      onTap: () {
+                        setState(() {
+                          var newValue = !_liked;
+                          _liked = newValue;
+                        });
+                      },
+                    ),
+                    Expanded(
+                      flex: 50,
+                      child: Container(),
+                    ),
+                    Container(
+                      width: 50,
+                      child: Text(
+                        'DOCX',
+                        maxLines: 1,
+                        style: style,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 88,
+                      child: Container(),
+                    ),
+                    Container(
+                      width: 55,
+                      height: 17,
+                      child: Text(
+                        '01.05.21',
+                        maxLines: 1,
+                        style: style,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 80,
+                      child: Container(),
+                    ),
+                    Container(
+                      width: 50,
+                      height: 17,
+                      child: Text(
+                        '678 Кб',
+                        maxLines: 1,
+                        style: style,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 55,
+                      child: Container(),
+                    ),
+                    PopupMenuButton<FileOptions>(
+                      offset: Offset(10, 49),
+                      iconSize: 20,
+                      elevation: 2,
+                      color: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            width: 1, color: Theme.of(context).dividerColor),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      icon: Image.asset(
+                        'assets/file_page/file_options.png',
+                      ),
+                      onSelected: (_) {
+                        setState(() {
+                          _isClicked = false;
+                        });
+                      },
+                      onCanceled: () {
+                        setState(() {
+                          _isClicked = false;
+                        });
+                      },
+                      itemBuilder: (BuildContext context) {
+                        setState(() {
+                          _isClicked = true;
+                        });
+                        return [
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 190,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/share.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Share',
+                                    style: style,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          PopupMenuDivider(
+                            height: 1,
+                          ),
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 170,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/move.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Move',
+                                    style: style,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          PopupMenuDivider(
+                            height: 1,
+                          ),
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 170,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/double.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Double',
+                                    style: style,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          PopupMenuDivider(
+                            height: 1,
+                          ),
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 170,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/favorites.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Add to favorites',
+                                    style: style,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          PopupMenuDivider(
+                            height: 1,
+                          ),
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 170,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/download.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Download',
+                                    style: style,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          PopupMenuDivider(
+                            height: 1,
+                          ),
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 170,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/rename.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Rename',
+                                    style: style,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          PopupMenuDivider(
+                            height: 1,
+                          ),
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 170,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/info.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Info',
+                                    style: style,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          PopupMenuDivider(
+                            height: 1,
+                          ),
+                          PopupMenuItem(
+                            height: 40,
+                            child: Container(
+                              width: 170,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/file_page/file_options/trash.png',
+                                    height: 20,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'Delete',
+                                    style: redStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ];
+                      },
+                    ),
+                    // Container(
+                    //   width: 30,
+                    //   height: 30,
+                    //   color: Colors.amber,
+                    // ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 5),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    ;
   }
 }
