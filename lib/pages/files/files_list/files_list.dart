@@ -25,7 +25,8 @@ class FilesList extends StatefulWidget {
 
 class _ButtonTemplateState extends State<FilesList> {
   List<bool> ifFavoritesPressedList = [];
-  List<bool> ifFileOptionsPressed = [];
+  List<bool> isPopupMenuButtonClicked = [];
+  ScrollController _controller = ScrollController();
   @override
   Widget build(BuildContext context) {
     TextStyle style = TextStyle(
@@ -108,24 +109,20 @@ class _ButtonTemplateState extends State<FilesList> {
         SizedBox(
           height: 10,
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(40, 0, 40, 4),
-          child: Divider(
-            height: 1,
-            color: Theme.of(context).cardColor,
-          ),
-        ),
+        listDivider(context),
         Expanded(
           child: ListView.builder(
+              controller: _controller,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: 20,
               itemBuilder: (BuildContext context, int position) {
-                ifFileOptionsPressed.add(false);
+                isPopupMenuButtonClicked.add(false);
                 bool ifFavoritesPressed = true;
                 ifFavoritesPressedList.add(ifFavoritesPressed);
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 7),
+                  padding:
+                      EdgeInsets.only(bottom: 7, top: position == 0 ? 4 : 0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
@@ -133,14 +130,18 @@ class _ButtonTemplateState extends State<FilesList> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: ElevatedButton(
-                          style: ButtonStyle(
-                              // Theme.of(context).disabledColor
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              return Theme.of(context).primaryColor;
-                            },
-                          )),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            // Theme.of(context).disabledColor
+                            primary: isPopupMenuButtonClicked[position]
+                                ? Theme.of(context).dividerColor
+                                : Theme.of(context).primaryColor,
+
+                            //       MaterialStateProperty.resolveWith<Color>(
+                            // (Set<MaterialState> states) {
+                            //   return Theme.of(context).primaryColor;
+                            // },
+                          ),
                           onPressed: () {},
                           child: Container(
                             child: Row(
@@ -171,12 +172,12 @@ class _ButtonTemplateState extends State<FilesList> {
                                 IconButton(
                                   splashRadius: 5,
                                   icon: Image.asset(
-                                    'assets/file_page/favorites.png',
+                                    ifFavoritesPressedList[position]
+                                        ? 'assets/file_page/favorites.png'
+                                        : 'assets/file_page/favorites.png',
                                     height: 18,
                                     width: 18,
-                                    color: ifFavoritesPressedList[position]
-                                        ? Theme.of(context).splashColor
-                                        : Theme.of(context).primaryColor,
+                                    color: Theme.of(context).splashColor,
                                   ),
                                   onPressed: () {
                                     setState(() {
@@ -229,31 +230,47 @@ class _ButtonTemplateState extends State<FilesList> {
                                 ),
                                 PopupMenuButton<FileOptions>(
                                   offset: Offset(10, 49),
-                                  iconSize: 30,
+                                  iconSize: 20,
+                                  elevation: 2,
                                   color: Theme.of(context).primaryColor,
                                   padding: EdgeInsets.zero,
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
-                                      color: Theme.of(context)
-                                          .dividerColor
-                                          .withOpacity(0.1),
-                                    ),
+                                        width: 1,
+                                        color: Theme.of(context).dividerColor),
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
                                   icon: Image.asset(
                                     'assets/file_page/file_options.png',
                                   ),
+                                  onSelected: (_) {
+                                    setState(() {
+                                      isPopupMenuButtonClicked[position] =
+                                          false;
+                                    });
+                                  },
+                                  onCanceled: () {
+                                    setState(() {
+                                      isPopupMenuButtonClicked[position] =
+                                          false;
+                                    });
+                                  },
                                   itemBuilder: (BuildContext context) {
+                                    setState(() {
+                                      isPopupMenuButtonClicked[position] = true;
+                                    });
                                     return [
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
-                                          width: 170,
+                                          width: 190,
                                           child: Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/share.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -270,6 +287,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                         height: 1,
                                       ),
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
                                           width: 170,
                                           child: Row(
@@ -278,6 +296,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/move.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -294,6 +313,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                         height: 1,
                                       ),
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
                                           width: 170,
                                           child: Row(
@@ -302,6 +322,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/double.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -318,6 +339,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                         height: 1,
                                       ),
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
                                           width: 170,
                                           child: Row(
@@ -326,6 +348,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/favorites.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -342,6 +365,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                         height: 1,
                                       ),
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
                                           width: 170,
                                           child: Row(
@@ -350,6 +374,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/download.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -366,6 +391,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                         height: 1,
                                       ),
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
                                           width: 170,
                                           child: Row(
@@ -374,6 +400,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/rename.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -390,6 +417,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                         height: 1,
                                       ),
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
                                           width: 170,
                                           child: Row(
@@ -398,6 +426,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/info.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -414,6 +443,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                         height: 1,
                                       ),
                                       PopupMenuItem(
+                                        height: 40,
                                         child: Container(
                                           width: 170,
                                           child: Row(
@@ -422,6 +452,7 @@ class _ButtonTemplateState extends State<FilesList> {
                                             children: [
                                               Image.asset(
                                                 'assets/file_page/file_options/trash.png',
+                                                height: 20,
                                               ),
                                               Container(
                                                 width: 15,
@@ -455,7 +486,21 @@ class _ButtonTemplateState extends State<FilesList> {
                 );
               }),
         ),
+        listDivider(context),
+        SizedBox(
+          height: 20,
+        )
       ],
+    );
+  }
+
+  Padding listDivider(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+      child: Divider(
+        height: 1,
+        color: Theme.of(context).cardColor,
+      ),
     );
   }
 }

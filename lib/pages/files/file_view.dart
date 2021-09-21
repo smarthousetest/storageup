@@ -177,6 +177,7 @@ class _FilePageState extends State<FilePage> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                             width: 100,
@@ -194,29 +195,34 @@ class _FilePageState extends State<FilePage> {
                             child: Container(),
                           ),
                           IconButton(
+                            padding: EdgeInsets.zero,
+                            iconSize: 30,
                             onPressed: () {
                               setState(() {
                                 ifGrid = false;
                               });
                               print('ifGrid is $ifGrid');
                             },
-                            icon: Image.asset('assets/file_page/list.png',
-                                width: 30,
-                                height: 30,
+                            icon: SvgPicture.asset('assets/file_page/list.svg',
+                                // icon: Image.asset('assets/file_page/list.png',
+                                // fit: BoxFit.contain,
+                                // width: 30,
+                                // height: 30,
                                 color: ifGrid
                                     ? Theme.of(context).toggleButtonsTheme.color
                                     : Theme.of(context).splashColor),
                           ),
                           IconButton(
+                            iconSize: 30,
                             onPressed: () {
                               setState(() {
                                 ifGrid = true;
                               });
                               print('ifGrid is $ifGrid');
                             },
-                            icon: SvgPicture.asset('assets/file_page/grid.svg',
-                                width: 30,
-                                height: 30,
+                            icon: SvgPicture.asset('assets/file_page/block.svg',
+                                // width: 30,
+                                // height: 30,
                                 //colorBlendMode: BlendMode.softLight,
                                 color: ifGrid
                                     ? Theme.of(context).splashColor
