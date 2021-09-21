@@ -117,9 +117,14 @@ class _ButtonTemplateState extends State<FilesList> {
               shrinkWrap: true,
               itemCount: 20,
               itemBuilder: (BuildContext context, int position) {
-                isPopupMenuButtonClicked.add(false);
-                bool ifFavoritesPressed = true;
-                ifFavoritesPressedList.add(ifFavoritesPressed);
+                if (isPopupMenuButtonClicked.length < 20) {
+                  isPopupMenuButtonClicked.add(false);
+                  ifFavoritesPressedList.add(false);
+                }
+
+                var heartPath = ifFavoritesPressedList[position]
+                    ? 'assets/file_page/favorites.png'
+                    : 'assets/file_page/file_options/favorites.png';
                 return Padding(
                   padding:
                       EdgeInsets.only(bottom: 7, top: position == 0 ? 4 : 0),
@@ -169,20 +174,20 @@ class _ButtonTemplateState extends State<FilesList> {
                                   flex: 15,
                                   child: Container(),
                                 ),
-                                IconButton(
-                                  splashRadius: 5,
-                                  icon: Image.asset(
-                                    ifFavoritesPressedList[position]
-                                        ? 'assets/file_page/favorites.png'
-                                        : 'assets/file_page/favorites.png',
+                                GestureDetector(
+                                  // splashRadius: 15,
+                                  child: Image.asset(
+                                    heartPath,
                                     height: 18,
                                     width: 18,
-                                    color: Theme.of(context).splashColor,
+                                    // color: Theme.of(context).splashColor,
                                   ),
-                                  onPressed: () {
+                                  onTap: () {
                                     setState(() {
-                                      ifFavoritesPressedList[position] =
+                                      var newValue =
                                           !ifFavoritesPressedList[position];
+                                      ifFavoritesPressedList[position] =
+                                          newValue;
                                     });
                                   },
                                 ),
