@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveTheme(
       light: kLightTheme,
-      dark: kDarkTheme,
+      //dark: kDarkTheme,
       initial: AdaptiveThemeMode.light,
       builder: (light, dark) => MaterialApp(
         title: 'Flutter Demo',
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         ],
         supportedLocales: S.delegate.supportedLocales,
         // initialRoute: AuthView.route,
-        initialRoute: HomePage.route,
+        initialRoute: AuthView.route,
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case AuthView.route:

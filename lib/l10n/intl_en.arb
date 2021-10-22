@@ -23,12 +23,19 @@
     "allready_registered_email": "User with this Email is already registered",
     "restore_password_before_email": "A letter has been sent to your e-mail ",
     "resore_password_after_email": ", to reset your password, follow the link inside the letter",
-    "continue_button": "Continue" ,
+    "continue_button": "Continue",
     "nothing_on_email": "Nothing came to Email?",
+    "to_send_letter": "Send email again",
     "back_to_main": "Go to the main page",
     "password_recovery": "Password recovery",
     "password_recovery_enter_email": "To recover your password, enter your email address in the field",
-    "email_confirming_after": ", to confirm the email address, follow the link inside the letter",
+    "email_confirming_after": " , to confirm the email address, follow the link inside the letter",
     "email_confirming": "Email confirmation",
-    "back_to_registration": "Back to registration"
+    "email_confirming_reg": "Confirmation of e-mail address",
+    "email_confirming_confirm": "To complete registration, please confirm your e-mail address.",
+    "email_confirming_letter": "We sent a letter to the mail ",
+    "email_confirming_link": "To confirm, follow the link inside the letter.",
+    "register_complete": "Registration completed",
+    "email_successfully": "Your e-mail address has been successfully confirmed",
+    "back_to_registration": "Go to authorization"
 }

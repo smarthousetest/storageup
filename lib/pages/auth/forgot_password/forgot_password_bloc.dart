@@ -30,7 +30,7 @@ class ForgotPasswordBloc
     ForgotPasswordEmailChanged event,
     ForgotPasswordState state,
   ) {
-    var email = Email.dirty(event.email);
+    var email = Email.dirty(event.email, event.needValidation);
     return state.copyWith(
       email: email,
       status: Formz.validate([email]),

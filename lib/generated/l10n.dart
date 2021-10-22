@@ -310,6 +310,16 @@ class S {
     );
   }
 
+  /// `Send email again`
+  String get to_send_letter {
+    return Intl.message(
+      'Send email again',
+      name: 'to_send_letter',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Go to the main page`
   String get back_to_main {
     return Intl.message(
@@ -340,10 +350,10 @@ class S {
     );
   }
 
-  /// `, to confirm the email address, follow the link inside the letter`
+  /// ` , to confirm the email address, follow the link inside the letter`
   String get email_confirming_after {
     return Intl.message(
-      ', to confirm the email address, follow the link inside the letter',
+      ' , to confirm the email address, follow the link inside the letter',
       name: 'email_confirming_after',
       desc: '',
       args: [],
@@ -360,10 +370,70 @@ class S {
     );
   }
 
-  /// `Back to registration`
+  /// `Confirmation of e-mail address`
+  String get email_confirming_reg {
+    return Intl.message(
+      'Confirmation of e-mail address',
+      name: 'email_confirming_reg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To complete registration, please confirm your e-mail address.`
+  String get email_confirming_confirm {
+    return Intl.message(
+      'To complete registration, please confirm your e-mail address.',
+      name: 'email_confirming_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We sent a letter to the mail `
+  String get email_confirming_letter {
+    return Intl.message(
+      'We sent a letter to the mail ',
+      name: 'email_confirming_letter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To confirm, follow the link inside the letter.`
+  String get email_confirming_link {
+    return Intl.message(
+      'To confirm, follow the link inside the letter.',
+      name: 'email_confirming_link',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration completed`
+  String get register_complete {
+    return Intl.message(
+      'Registration completed',
+      name: 'register_complete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your e-mail address has been successfully confirmed`
+  String get email_successfully {
+    return Intl.message(
+      'Your e-mail address has been successfully confirmed',
+      name: 'email_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to authorization`
   String get back_to_registration {
     return Intl.message(
-      'Back to registration',
+      'Go to authorization',
       name: 'back_to_registration',
       desc: '',
       args: [],

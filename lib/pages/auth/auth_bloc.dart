@@ -134,7 +134,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async* {
     print(state.status.isValidated);
     if (state.status.isValidated) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      yield state.copyWith(
+          status: FormzStatus.submissionInProgress,
+          action: RequestedAction.login);
       try {
         final result = await _authenticationRepository.logIn(
           email: state.emailLogin.value,
@@ -168,7 +170,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthState state,
   ) async* {
     if (state.status.isValidated) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      yield state.copyWith(
+          status: FormzStatus.submissionInProgress,
+          action: RequestedAction.registration);
+
       print('registration in progress');
       try {
         final result = await _authenticationRepository.register(

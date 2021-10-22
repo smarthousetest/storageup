@@ -48,6 +48,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                       padding: EdgeInsets.only(top: 20.0, right: 20.0),
                       child: Icon(
                         Icons.close,
+                        color: theme.splashColor,
                         size: 15,
                       ),
                     ),
@@ -74,8 +75,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         child: ElevatedButton(
                           onPressed: _buttonAction(state, context),
                           style: ElevatedButton.styleFrom(
-                            primary: theme.primaryColor,
-                            onSurface: theme.primaryColor,
+                            primary: theme.colorScheme.onSurface,
+                            onSurface: theme.colorScheme.onBackground,
                             minimumSize: Size(0, 60),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -87,11 +88,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                 : translate.continue_button,
                             style: TextStyle(
                               fontFamily: kNormalTextFontFamily,
-                              fontSize: 20.0,
-                              color: state.email.valid &&
-                                      state.email.value.isNotEmpty
-                                  ? theme.accentColor
-                                  : theme.textTheme.headline1?.color,
+                              fontSize: 17.0,
+                              color: theme.primaryColor,
                             ),
                           ),
                         ),
@@ -141,17 +139,16 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
           return CustomTextField(
-            hint: '',
+            autofocus: true,
+            hint: translate.email,
             onChange: (email) {
-              context
-                  .read<ForgotPasswordBloc>()
-                  .add(ForgotPasswordEmailChanged(email: email));
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                  email: email, needValidation: true));
             },
 
             onFinishEditing: (email) {
-              context
-                  .read<ForgotPasswordBloc>()
-                  .add(ForgotPasswordEmailChanged(email: email));
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                  email: email, needValidation: true));
             }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             invalid: state.email.invalid && state.email.value.isNotEmpty,
             errorMessage: translate.wrong_email,
@@ -185,6 +182,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     else
       return null;
   }
+
+  bool nothingOnEmail = false;
 
   List<Widget> _bodyResult(ThemeData theme) {
     return [
@@ -221,16 +220,23 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           return Center(
             child: GestureDetector(
               onTap: () {
-                context
-                    .read<ForgotPasswordBloc>()
-                    .add(ForgotPasswordConfirmed());
+                setState(() {
+                  nothingOnEmail = !nothingOnEmail;
+                });
+                nothingOnEmail
+                    ? context
+                        .read<ForgotPasswordBloc>()
+                        .add(ForgotPasswordConfirmed())
+                    : print("nothing to Email");
               },
               child: Text(
-                translate.nothing_on_email,
+                nothingOnEmail
+                    ? translate.nothing_on_email
+                    : translate.to_send_letter,
                 style: TextStyle(
                   decoration: TextDecoration.underline,
                   fontFamily: kNormalTextFontFamily,
-                  fontSize: 18,
+                  fontSize: 17,
                   color: theme.disabledColor,
                 ),
               ),

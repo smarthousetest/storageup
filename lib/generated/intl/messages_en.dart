@@ -28,13 +28,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
         "back_to_registration":
-            MessageLookupByLibrary.simpleMessage("Back to registration"),
+            MessageLookupByLibrary.simpleMessage("Go to authorization"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "email_confirming":
             MessageLookupByLibrary.simpleMessage("Email confirmation"),
         "email_confirming_after": MessageLookupByLibrary.simpleMessage(
-            ", to confirm the email address, follow the link inside the letter"),
+            " , to confirm the email address, follow the link inside the letter"),
+        "email_confirming_confirm": MessageLookupByLibrary.simpleMessage(
+            "To complete registration, please confirm your e-mail address."),
+        "email_confirming_letter": MessageLookupByLibrary.simpleMessage(
+            "We sent a letter to the mail "),
+        "email_confirming_link": MessageLookupByLibrary.simpleMessage(
+            "To confirm, follow the link inside the letter."),
+        "email_confirming_reg": MessageLookupByLibrary.simpleMessage(
+            "Confirmation of e-mail address"),
+        "email_successfully": MessageLookupByLibrary.simpleMessage(
+            "Your e-mail address has been successfully confirmed"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "nothing_on_email":
@@ -47,6 +57,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "To recover your password, enter your email address in the field"),
         "register": MessageLookupByLibrary.simpleMessage("Register now"),
+        "register_complete":
+            MessageLookupByLibrary.simpleMessage("Registration completed"),
         "registration": MessageLookupByLibrary.simpleMessage("Registration"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Remember me"),
         "resore_password_after_email": MessageLookupByLibrary.simpleMessage(
@@ -65,6 +77,8 @@ class MessageLookup extends MessageLookupByLibrary {
             " and give my consent to the processing of my personal data"),
         "term_of_use_before":
             MessageLookupByLibrary.simpleMessage("I accept the terms "),
+        "to_send_letter":
+            MessageLookupByLibrary.simpleMessage("Send email again"),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
         "welcome_to_upsctorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),

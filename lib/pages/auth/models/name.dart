@@ -18,8 +18,8 @@ class Name extends FormzInput<String, NameValidationError> {
       bool isValuesLengthNotTooSmall;
       bool isValuesLengthNotTooBig;
       if (value != null) {
-        isValuesLengthNotTooSmall = value.length > 2;
-        isValuesLengthNotTooBig = value.length < 100;
+        isValuesLengthNotTooSmall = value.replaceAll(' ', '').length > 2;
+        isValuesLengthNotTooBig = value.replaceAll(' ', '').length < 100;
 
         return isValuesLengthNotTooSmall && isValuesLengthNotTooBig
             ? null

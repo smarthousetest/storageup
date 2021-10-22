@@ -28,13 +28,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Вернуться на главную"),
         "back_to_registration":
-            MessageLookupByLibrary.simpleMessage("Вернуться к регистрации"),
+            MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "email_confirming":
             MessageLookupByLibrary.simpleMessage("Подтверждение Email"),
         "email_confirming_after": MessageLookupByLibrary.simpleMessage(
             " отправлено письмо, для подтверждения email адреса, перейдите по ссылке внутри письма"),
+        "email_confirming_confirm": MessageLookupByLibrary.simpleMessage(
+            "Чтобы закончить регистрацию, подтвердите свой e-mail адрес."),
+        "email_confirming_letter": MessageLookupByLibrary.simpleMessage(
+            "Мы отправили письмо на почту "),
+        "email_confirming_link": MessageLookupByLibrary.simpleMessage(
+            "Для подтверждения перейдите по ссылке внутри письма."),
+        "email_confirming_reg":
+            MessageLookupByLibrary.simpleMessage("Подтверждение e-mail адреса"),
+        "email_successfully": MessageLookupByLibrary.simpleMessage(
+            "Ваш e-mail адрес успешно подтверждён"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "nothing_on_email":
@@ -47,10 +57,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
+        "register_complete":
+            MessageLookupByLibrary.simpleMessage("Регистрация завершена"),
         "registration": MessageLookupByLibrary.simpleMessage("Регистрация"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
         "resore_password_after_email": MessageLookupByLibrary.simpleMessage(
-            " отправлено письмо, для восстановления пароля перейдите по ссылке внутри письма"),
+            " отправлено письмо. Для восстановления пароля перейдите по ссылке внутри письма."),
         "restore_password_before_email":
             MessageLookupByLibrary.simpleMessage("На вашу электронную почту "),
         "sign_in": MessageLookupByLibrary.simpleMessage("Войти"),
@@ -66,6 +78,8 @@ class MessageLookup extends MessageLookupByLibrary {
             " и даю согласие на обработку моих персональных данных"),
         "term_of_use_before":
             MessageLookupByLibrary.simpleMessage("Я принимаю условия "),
+        "to_send_letter":
+            MessageLookupByLibrary.simpleMessage("Отправить письмо еще раз"),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
         "welcome_to_upsctorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),

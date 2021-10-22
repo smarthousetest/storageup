@@ -14,8 +14,14 @@ class CustomTextField extends StatefulWidget {
       required this.isPassword,
       this.needErrorValidation = true,
       required this.onFinishEditing,
-      this.horizontalPadding = 120});
+      this.horizontalPadding = 120,
+      this.autofocus = false,
+      FocusNode? focusNode})
+      : this.focusNode = focusNode ?? FocusNode();
 
+  final bool autofocus;
+  //final FilteringTextInputFormatter inputFormatters;
+  final FocusNode focusNode;
   final String hint;
   final String errorMessage;
   final Function(String) onChange;
@@ -54,7 +60,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   void _changeObscure() {
     setState(() {
       _hidePassword = !_hidePassword;
-      // FocusScope.of(context).unfocus();
+      //FocusScope.of(context).unfocus();
     });
   }
 
@@ -62,14 +68,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return widget.isPassword
         ? GestureDetector(
             onTap: _changeObscure,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Image(
-                width: 26.0,
-                height: 26.0,
-                image: AssetImage(_hidePassword
-                    ? 'assets/hide_password.png'
-                    : 'assets/show_password.png'),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10.5),
+                child: Image(
+                  width: 26.0,
+                  height: 26.0,
+                  image: AssetImage(_hidePassword
+                      ? 'assets/hide_password.png'
+                      : 'assets/show_password.png'),
+                ),
               ),
             ),
           )
@@ -129,7 +139,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     inputFormatters: [
                       FilteringTextInputFormatter.deny(RegExp('[ ]'))
                     ],
-                    focusNode: _node,
+                    focusNode: widget.focusNode,
+                    autofocus: widget.autofocus,
                     decoration: InputDecoration(
                       suffixIcon: _suffixIcon(),
                       border: InputBorder.none,

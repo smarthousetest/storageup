@@ -9,8 +9,12 @@ abstract class ForgotPasswordEvent extends Equatable {
 
 class ForgotPasswordEmailChanged extends ForgotPasswordEvent {
   final String email;
+  final bool needValidation;
 
-  ForgotPasswordEmailChanged({required this.email});
+  ForgotPasswordEmailChanged({
+    required this.email,
+    this.needValidation = false,
+  });
 
   @override
   List<Object?> get props => [email];
