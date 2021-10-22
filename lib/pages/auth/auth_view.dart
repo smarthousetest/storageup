@@ -353,22 +353,6 @@ class _AuthViewState extends State<AuthView> {
     printsize();
     //final FocusNode _focusNode = FocusNode();
     List<LogicalKeyboardKey> keys = [];
-
-    void _handleKeyEvent(RawKeyEvent event) {
-      setState(() {
-        if (event.logicalKey == LogicalKeyboardKey.enter &&
-            event is RawKeyDownEvent) {
-          print('Pressed enter!');
-        }
-      });
-    }
-
-    changeFocus(FocusNode focusNodeNext) {
-      currentFocusNode.unfocus();
-      focusNodeNext.requestFocus();
-      currentFocusNode = focusNodeNext;
-    }
-
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return RawKeyboardListener(
