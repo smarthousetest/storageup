@@ -981,16 +981,6 @@ class _AuthViewState extends State<AuthView> {
           padding: EdgeInsets.symmetric(horizontal: 120),
           child: Container(
             height: 60,
-            // child: RawKeyboardListener(
-            //   focusNode: FocusNode(),
-            //   onKey: (event) {
-            //     if ((event.logicalKey == LogicalKeyboardKey.enter ||
-            //             event.logicalKey == LogicalKeyboardKey.tab) &&
-            //         event is RawKeyDownEvent) {
-            //       currentFocusNode.requestFocus();
-            //       print("button");
-            //     }
-            //   },
             child: OutlinedButton(
               focusNode: currentFocusNode,
               onPressed: _isRegisterFieldsValid(state)
