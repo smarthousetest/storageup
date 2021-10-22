@@ -400,7 +400,6 @@ class _AuthViewState extends State<AuthView> {
                   if ((event.isKeyPressed(LogicalKeyboardKey.enter) ||
                           event.logicalKey == LogicalKeyboardKey.tab) &&
                       event is RawKeyDownEvent) {
-                    // focusNodePasswordLog.requestFocus();
                     FocusScope.of(context).requestFocus(focusNodePasswordLog);
                     print("mail");
                   }
