@@ -6,18 +6,21 @@ import '../constants.dart';
 final BorderRadius fCustomTextFormBorderRadius = BorderRadius.circular(15.0);
 
 class CustomTextField extends StatefulWidget {
-  CustomTextField(
-      {required this.hint,
-      this.errorMessage = '',
-      required this.onChange,
-      required this.invalid,
-      required this.isPassword,
-      this.needErrorValidation = true,
-      required this.onFinishEditing,
-      this.horizontalPadding = 120,
-      this.autofocus = false,
-      FocusNode? focusNode})
-      : this.focusNode = focusNode ?? FocusNode();
+  CustomTextField({
+    required this.hint,
+    this.errorMessage = '',
+    required this.onChange,
+    required this.invalid,
+    required this.isPassword,
+    this.needErrorValidation = true,
+    required this.onFinishEditing,
+    this.horizontalPadding = 120,
+    this.autofocus = false,
+    FocusNode? focusNode,
+    List<TextInputFormatter>? inputFormatters,
+  })  : this.focusNode = focusNode ?? FocusNode(),
+        this.inputFormatters = inputFormatters ??
+            [FilteringTextInputFormatter.deny(RegExp('[ ]'))];
 
   final bool autofocus;
   //final FilteringTextInputFormatter inputFormatters;
@@ -30,6 +33,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final bool needErrorValidation;
   final double horizontalPadding;
+  List<TextInputFormatter>? inputFormatters;
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState(isPassword);
 }
@@ -136,9 +140,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       fontFamily: kNormalTextFontFamily,
                       fontSize: 20,
                     ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(RegExp('[ ]'))
-                    ],
+                    inputFormatters: widget.inputFormatters,
                     focusNode: widget.focusNode,
                     autofocus: widget.autofocus,
                     decoration: InputDecoration(

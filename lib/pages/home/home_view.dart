@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage> {
   ChoosedPage choosed_page = ChoosedPage.home;
   Blur blur_item = Blur.rename;
 
-
   void changePage(ChoosedPage new_page) {
+    // имя хуета
     setState(() {
       choosed_page = new_page;
     });
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff7f9fb),
+      backgroundColor: Color(0xfff7f9fb), // цвета не тут
       body: Stack(
         children: [
           Center(
@@ -95,7 +95,8 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                            color: Color.fromARGB(25, 23, 69, 139),
+                            color:
+                                Color.fromARGB(25, 23, 69, 139), // цвета не тут
                             blurRadius: 4,
                             offset: Offset(1, 4))
                       ],
@@ -116,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Expanded(
                           child: ListView(
+                            controller: ScrollController(),
                             children: left_buttons_item(),
                           ),
                         ),
@@ -127,6 +129,24 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          // Visibility(
+          //   visible: false,
+          //     child: Stack(
+          //   children: [
+          //     Positioned.fill(
+          //       child: BackdropFilter(
+          //         filter: ImageFilter.blur(
+          //           sigmaX: 5,
+          //           sigmaY: 5,
+          //         ),
+          //         child: Container(
+          //           color: Colors.black.withAlpha(25), // цвет не тут
+          //         ),
+          //       ),
+          //     ),
+          //     someWidget,
+          //   ],
+          // )),
           (1 > 2)
               ? Stack(
                   children: [
@@ -137,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                           sigmaY: 5,
                         ),
                         child: Container(
-                          color: Colors.black.withAlpha(25),
+                          color: Colors.black.withAlpha(25), // цвет не тут
                         ),
                       ),
                     ),
@@ -218,20 +238,20 @@ class _HomePageState extends State<HomePage> {
             // }
           },
           child: Text(
-            'Добавить +',
+            'Добавить +', // текст не там
             style: TextStyle(
               color: Color(0xff70BBF6),
               fontSize: 17,
-              fontFamily: 'Lato',
+              fontFamily: 'Lato', //
             ),
           ),
           style: ElevatedButton.styleFrom(
-            fixedSize: Size(214, 42),
+            fixedSize: Size(214, 42), /////
             primary: Colors.white,
             elevation: 0,
             side: BorderSide(
               style: BorderStyle.solid,
-              color: Color(0xff70BBF6),
+              color: Color(0xff70BBF6), // цвет
               width: 1.5,
             ),
             shape: RoundedRectangleBorder(

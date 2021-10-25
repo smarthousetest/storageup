@@ -525,6 +525,5 @@ class _FilesListElementState extends State<FilesListElement> {
         ),
       ),
     );
-    ;
   }
 }

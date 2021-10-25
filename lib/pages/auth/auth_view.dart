@@ -13,7 +13,6 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/auth_event.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
-import 'package:upstorage_desktop/pages/tmp.dart';
 import 'package:upstorage_desktop/utilites/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
@@ -759,6 +758,7 @@ class _AuthViewState extends State<AuthView> {
             needErrorValidation: true,
             invalid: state.name.invalid && state.name.value.isNotEmpty,
             isPassword: false,
+            inputFormatters: [],
           ),
         ),
         RawKeyboardListener(

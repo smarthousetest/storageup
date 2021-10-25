@@ -14,17 +14,23 @@ class FilePage extends StatefulWidget {
   FilePage();
 }
 
-List<Widget> dirs_list = [];
+List<Widget> dirs_list = []; // что с именем епрст.....
 
 class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
 
   @override
+  void initState() {
+    _init(context);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (dirs_list.isEmpty) _init(context);
+    // if (dirs_list.isEmpty) _init(context);
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.only(left: 30), //fromLTRB(30, 0, 0, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -34,10 +40,10 @@ class _FilePageState extends State<FilePage> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 40, 0), //
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.white, // colors should not be here
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -48,7 +54,8 @@ class _FilePageState extends State<FilePage> {
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          padding:
+                              const EdgeInsets.fromLTRB(0, 0, 10, 0), //sporno
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(23.0),
                             child: Image.asset('assets/home_page/glad.jpg'),
@@ -63,7 +70,8 @@ class _FilePageState extends State<FilePage> {
                                 "Валерий Жмышенко",
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: kLightTheme.bottomAppBarColor,
+                                  color: Theme.of(context)
+                                      .bottomAppBarColor, // vot tak
                                 ),
                               ),
                             ),
@@ -71,7 +79,7 @@ class _FilePageState extends State<FilePage> {
                               "votreaa@mail.ru",
                               style: TextStyle(
                                 fontSize: 12,
-                                color: kLightTheme.bottomAppBarColor,
+                                color: kLightTheme.bottomAppBarColor, // ne tak
                               ),
                             ),
                           ],
@@ -87,7 +95,7 @@ class _FilePageState extends State<FilePage> {
               child: Container(
                 height: 234,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.white, // color
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -100,11 +108,11 @@ class _FilePageState extends State<FilePage> {
                         child: Row(
                           children: [
                             Text(
-                              'Папки',
+                              'Папки', // text
                               style: TextStyle(
                                 color: kLightTheme.focusColor,
                                 fontSize: 20,
-                                fontFamily: 'Lato',
+                                fontFamily: 'Lato', // font
                               ),
                             ),
                             Expanded(
@@ -119,7 +127,7 @@ class _FilePageState extends State<FilePage> {
                                 fillColor: Colors.white,
                                 child: Icon(
                                   Icons.arrow_back_ios_rounded,
-                                  color: Colors.blue,
+                                  color: Colors.blue, // color
                                   size: 20.0,
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -155,7 +163,7 @@ class _FilePageState extends State<FilePage> {
                           child: ListView(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            children: [...dirs_list],
+                            children: dirs_list,
                           ),
                         ),
                       ),
@@ -243,52 +251,7 @@ class _FilePageState extends State<FilePage> {
                           )
                         : Container(),
                     Expanded(
-                      child: ifGrid
-                          ? GridView.count(
-                              crossAxisCount:
-                                  (MediaQuery.of(context).size.width > 1380)
-                                      ? (1076 ~/ 160)
-                                      : ((MediaQuery.of(context).size.width -
-                                              384) ~/
-                                          (160)),
-                              padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-                              crossAxisSpacing: 56,
-                              children: List.generate(17, (index) {
-                                return Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 101,
-                                      height: 128,
-                                      color: Colors.white,
-                                      child: Column(
-                                        children: [
-                                          ClipRRect(
-                                            child: Image.asset(
-                                                'assets/test_img/1.jpg'),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 10, 0, 0),
-                                            child: Text(
-                                              '1.jpg',
-                                              style: TextStyle(
-                                                color: Color(0xff7D7D7D),
-                                                fontSize: 14,
-                                                fontFamily: 'Lato',
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            )
-                          : FilesList(),
+                      child: ifGrid ? _filesGrid(context) : FilesList(),
                     )
                   ],
                 ),
@@ -300,10 +263,51 @@ class _FilePageState extends State<FilePage> {
     );
   }
 
+  Widget _filesGrid(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: (MediaQuery.of(context).size.width > 1380)
+          ? (1076 ~/ 160)
+          : ((MediaQuery.of(context).size.width - 384) ~/ (160)),
+      padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+      crossAxisSpacing: 56,
+      children: List.generate(17, (index) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 101,
+              height: 128,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    child: Image.asset('assets/test_img/1.jpg'),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Text(
+                      '1.jpg',
+                      style: TextStyle(
+                        color: Color(0xff7D7D7D),
+                        fontSize: 14,
+                        fontFamily: 'Lato',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
   _init(BuildContext context) {
     dirs_list.add(
       CustomDirButton(
-        name: 'Создать\n папку',
+        name: 'Создать\n папку', // текст
         onTap: () async {
           var str = await showDialog(
             context: context,
