@@ -5,7 +5,7 @@
     "allready_have_an_account": "Already have an account?",
     "sign_in": "Login",
     "sign_in_to_account": "Login to your account",
-    "email": "Email",
+    "email": "E-mail",
     "password": "Password",
     "remember_me": "Remember me",
     "forgot_password": "Forgot your password?",
@@ -37,5 +37,11 @@
     "email_confirming_link": "To confirm, follow the link inside the letter.",
     "register_complete": "Registration completed",
     "email_successfully": "Your e-mail address has been successfully confirmed",
-    "back_to_registration": "Go to authorization"
+    "back_to_authorization": "Go to authorization",
+    "go_to_authorization": "Go to authorization",
+    "non_existent_email": "Non-existent e-mail",
+    "name": "Name",
+    "format": "Format",
+    "date": "Date",
+    "size": "Size"
 }

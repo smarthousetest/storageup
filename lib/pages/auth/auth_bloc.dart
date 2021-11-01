@@ -137,13 +137,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield state.copyWith(
           status: FormzStatus.submissionInProgress,
           action: RequestedAction.login);
+      print('authorization in progress');
       try {
         final result = await _authenticationRepository.logIn(
           email: state.emailLogin.value,
           password: state.passwordLogin.value,
         );
         if (result == AuthenticationStatus.authenticated) {
-          yield state.copyWith(status: FormzStatus.submissionSuccess);
+          yield state.copyWith(
+              status: FormzStatus.submissionSuccess,
+              action: RequestedAction.login);
         } else if (result == AuthenticationStatus.wrongPassword) {
           yield state.copyWith(
             status: FormzStatus.submissionFailure,

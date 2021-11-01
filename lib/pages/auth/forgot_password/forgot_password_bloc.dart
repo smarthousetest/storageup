@@ -49,7 +49,9 @@ class ForgotPasswordBloc
       if (result == AuthenticationStatus.authenticated) {
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       } else {
-        yield state.copyWith(status: FormzStatus.submissionFailure);
+        yield state.copyWith(
+            status: FormzStatus.submissionFailure,
+            error: AuthError.wrongCredentials);
       }
     } on Exception catch (_) {
       yield state.copyWith(status: FormzStatus.submissionFailure);

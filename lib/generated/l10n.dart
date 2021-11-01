@@ -110,10 +110,10 @@ class S {
     );
   }
 
-  /// `Email`
+  /// `E-mail`
   String get email {
     return Intl.message(
-      'Email',
+      'E-mail',
       name: 'email',
       desc: '',
       args: [],
@@ -431,10 +431,70 @@ class S {
   }
 
   /// `Go to authorization`
-  String get back_to_registration {
+  String get back_to_authorization {
     return Intl.message(
       'Go to authorization',
-      name: 'back_to_registration',
+      name: 'back_to_authorization',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to authorization`
+  String get go_to_authorization {
+    return Intl.message(
+      'Go to authorization',
+      name: 'go_to_authorization',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Non-existent e-mail`
+  String get non_existent_email {
+    return Intl.message(
+      'Non-existent e-mail',
+      name: 'non_existent_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get name {
+    return Intl.message(
+      'Name',
+      name: 'name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Format`
+  String get format {
+    return Intl.message(
+      'Format',
+      name: 'format',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get date {
+    return Intl.message(
+      'Date',
+      name: 'date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Size`
+  String get size {
+    return Intl.message(
+      'Size',
+      name: 'size',
       desc: '',
       args: [],
     );

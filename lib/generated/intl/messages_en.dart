@@ -25,12 +25,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "allready_registered_email": MessageLookupByLibrary.simpleMessage(
             "User with this Email is already registered"),
+        "back_to_authorization":
+            MessageLookupByLibrary.simpleMessage("Go to authorization"),
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
-        "back_to_registration":
-            MessageLookupByLibrary.simpleMessage("Go to authorization"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
-        "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "date": MessageLookupByLibrary.simpleMessage("Date"),
+        "email": MessageLookupByLibrary.simpleMessage("E-mail"),
         "email_confirming":
             MessageLookupByLibrary.simpleMessage("Email confirmation"),
         "email_confirming_after": MessageLookupByLibrary.simpleMessage(
@@ -47,6 +48,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "Your e-mail address has been successfully confirmed"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
+        "format": MessageLookupByLibrary.simpleMessage("Format"),
+        "go_to_authorization":
+            MessageLookupByLibrary.simpleMessage("Go to authorization"),
+        "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "non_existent_email":
+            MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "or_continue_with":
@@ -68,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sign_in": MessageLookupByLibrary.simpleMessage("Login"),
         "sign_in_to_account":
             MessageLookupByLibrary.simpleMessage("Login to your account"),
+        "size": MessageLookupByLibrary.simpleMessage("Size"),
         "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
             "Something went wrong. Try again later"),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(

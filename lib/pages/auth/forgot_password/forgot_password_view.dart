@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
@@ -6,6 +7,7 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_event.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/enums.dart';
 
 import 'forgot_password_bloc.dart';
 import 'forgot_password_state.dart';
@@ -46,10 +48,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     child: Container(
                       alignment: Alignment.centerRight,
                       padding: EdgeInsets.only(top: 20.0, right: 20.0),
-                      child: Icon(
-                        Icons.close,
-                        color: theme.splashColor,
-                        size: 15,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Image.asset(
+                          'assets/auth/close.png',
+                          width: 12,
+                          height: 12,
+                        ),
                       ),
                     ),
                   ),
@@ -65,22 +70,27 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                   ),
                   Expanded(
                     child: Container(),
-                    flex: 3,
+                    flex: 2,
                   ),
                   ..._body(theme, state),
                   BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
                     builder: (context, state) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 245.0),
-                        child: ElevatedButton(
+                        child: OutlinedButton(
                           onPressed: _buttonAction(state, context),
-                          style: ElevatedButton.styleFrom(
-                            primary: theme.colorScheme.onSurface,
-                            onSurface: theme.colorScheme.onBackground,
-                            minimumSize: Size(0, 60),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size(double.maxFinite, 60),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
+                                borderRadius: BorderRadius.circular(15)),
+                            // padding: EdgeInsets.symmetric(
+                            //   horizontal: 135,
+                            //   vertical: 20,
+                            // ),
+                            backgroundColor:
+                                state.email.invalid || state.email.value.isEmpty
+                                    ? theme.colorScheme.onPrimary
+                                    : theme.colorScheme.onSurface,
                           ),
                           child: Text(
                             state.status == FormzStatus.submissionSuccess
@@ -134,7 +144,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       Expanded(
         child: Container(),
-        flex: 1,
+        flex: 2,
       ),
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
@@ -145,13 +155,16 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
                   email: email, needValidation: true));
             },
-
             onFinishEditing: (email) {
               context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
                   email: email, needValidation: true));
             }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            invalid: state.email.invalid && state.email.value.isNotEmpty,
-            errorMessage: translate.wrong_email,
+            invalid: state.email.invalid && state.email.value.isNotEmpty ||
+                state.error == AuthError.wrongCredentials,
+            errorMessage: state.error == AuthError.wrongCredentials
+                ? translate.non_existent_email
+                : translate.wrong_email,
+            needErrorValidation: true,
             isPassword: false,
             horizontalPadding: 170,
           );
@@ -159,7 +172,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       Expanded(
         child: Container(),
-        flex: 3,
+        flex: 4,
       ),
     ];
   }
@@ -189,6 +202,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     return [
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
+          Expanded(
+            child: Container(),
+            flex: 4,
+          );
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 170.0),
             child: RichText(
@@ -213,31 +230,34 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       Expanded(
         child: Container(),
-        flex: 3,
+        flex: 1,
       ),
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
           return Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  nothingOnEmail = !nothingOnEmail;
-                });
-                nothingOnEmail
-                    ? context
-                        .read<ForgotPasswordBloc>()
-                        .add(ForgotPasswordConfirmed())
-                    : print("nothing to Email");
-              },
-              child: Text(
-                nothingOnEmail
-                    ? translate.nothing_on_email
-                    : translate.to_send_letter,
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 17,
-                  color: theme.disabledColor,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    nothingOnEmail = !nothingOnEmail;
+                  });
+                  nothingOnEmail
+                      ? context
+                          .read<ForgotPasswordBloc>()
+                          .add(ForgotPasswordConfirmed())
+                      : print("nothing to Email");
+                },
+                child: Text(
+                  nothingOnEmail
+                      ? translate.nothing_on_email
+                      : translate.to_send_letter,
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 17,
+                    color: theme.splashColor,
+                  ),
                 ),
               ),
             ),
@@ -246,7 +266,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       Expanded(
         child: Container(),
-        flex: 1,
+        flex: 3,
       ),
     ];
   }

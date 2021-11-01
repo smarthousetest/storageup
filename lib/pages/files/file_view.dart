@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
+import 'package:upstorage_desktop/constants.dart';
 import '../../theme.dart';
 import 'files_list/files_list.dart';
 
@@ -14,7 +15,7 @@ class FilePage extends StatefulWidget {
   FilePage();
 }
 
-List<Widget> dirs_list = []; // что с именем епрст.....
+List<Widget> dirsList = []; // что с именем епрст.....
 
 class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
@@ -30,7 +31,7 @@ class _FilePageState extends State<FilePage> {
     // if (dirs_list.isEmpty) _init(context);
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(left: 30), //fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.only(left: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -40,10 +41,11 @@ class _FilePageState extends State<FilePage> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 40, 0), //
+                      padding: const EdgeInsets.only(right: 40),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white, // colors should not be here
+                          color: Theme.of(context)
+                              .primaryColor, // colors should not be here
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -54,8 +56,7 @@ class _FilePageState extends State<FilePage> {
                     child: Row(
                       children: [
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(0, 0, 10, 0), //sporno
+                          padding: const EdgeInsets.only(right: 10), //sporno
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(23.0),
                             child: Image.asset('assets/home_page/glad.jpg'),
@@ -79,7 +80,8 @@ class _FilePageState extends State<FilePage> {
                               "votreaa@mail.ru",
                               style: TextStyle(
                                 fontSize: 12,
-                                color: kLightTheme.bottomAppBarColor, // ne tak
+                                color: Theme.of(context)
+                                    .bottomAppBarColor, // ne tak
                               ),
                             ),
                           ],
@@ -95,7 +97,7 @@ class _FilePageState extends State<FilePage> {
               child: Container(
                 height: 234,
                 decoration: BoxDecoration(
-                  color: Colors.white, // color
+                  color: Theme.of(context).primaryColor, // color
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -110,9 +112,9 @@ class _FilePageState extends State<FilePage> {
                             Text(
                               'Папки', // text
                               style: TextStyle(
-                                color: kLightTheme.focusColor,
+                                color: Theme.of(context).focusColor,
                                 fontSize: 20,
-                                fontFamily: 'Lato', // font
+                                fontFamily: kNormalTextFontFamily, // font
                               ),
                             ),
                             Expanded(
@@ -124,10 +126,10 @@ class _FilePageState extends State<FilePage> {
                               height: 30,
                               child: RawMaterialButton(
                                 onPressed: () {},
-                                fillColor: Colors.white,
+                                fillColor: Theme.of(context).primaryColor,
                                 child: Icon(
                                   Icons.arrow_back_ios_rounded,
-                                  color: Colors.blue, // color
+                                  color: Theme.of(context).splashColor, // color
                                   size: 20.0,
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -142,10 +144,10 @@ class _FilePageState extends State<FilePage> {
                                 height: 30,
                                 child: RawMaterialButton(
                                   onPressed: () {},
-                                  fillColor: Colors.white,
+                                  fillColor: Theme.of(context).primaryColor,
                                   child: Icon(
                                     Icons.arrow_forward_ios,
-                                    color: Colors.blue,
+                                    color: Theme.of(context).splashColor,
                                     size: 20.0,
                                   ),
                                   shape: RoundedRectangleBorder(
@@ -163,7 +165,7 @@ class _FilePageState extends State<FilePage> {
                           child: ListView(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            children: dirs_list,
+                            children: dirsList,
                           ),
                         ),
                       ),
@@ -175,7 +177,7 @@ class _FilePageState extends State<FilePage> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 alignment: Alignment.center,
@@ -192,8 +194,8 @@ class _FilePageState extends State<FilePage> {
                             child: Text(
                               'Недавние',
                               style: TextStyle(
-                                color: Color(0xff5F5F5F),
-                                fontFamily: 'Lato',
+                                color: Theme.of(context).focusColor,
+                                fontFamily: kNormalTextFontFamily,
                                 fontSize: 20,
                               ),
                             ),
@@ -246,7 +248,7 @@ class _FilePageState extends State<FilePage> {
                             padding: const EdgeInsets.symmetric(horizontal: 40),
                             child: Divider(
                               height: 1,
-                              color: Color(0xffF1F8FE),
+                              color: Theme.of(context).dividerColor,
                             ),
                           )
                         : Container(),
@@ -277,7 +279,7 @@ class _FilePageState extends State<FilePage> {
             child: Container(
               width: 101,
               height: 128,
-              color: Colors.white,
+              color: Theme.of(context).primaryColor,
               child: Column(
                 children: [
                   ClipRRect(
@@ -289,9 +291,9 @@ class _FilePageState extends State<FilePage> {
                     child: Text(
                       '1.jpg',
                       style: TextStyle(
-                        color: Color(0xff7D7D7D),
+                        color: Theme.of(context).disabledColor,
                         fontSize: 14,
-                        fontFamily: 'Lato',
+                        fontFamily: kNormalTextFontFamily,
                       ),
                     ),
                   ),
@@ -305,7 +307,7 @@ class _FilePageState extends State<FilePage> {
   }
 
   _init(BuildContext context) {
-    dirs_list.add(
+    dirsList.add(
       CustomDirButton(
         name: 'Создать\n папку', // текст
         onTap: () async {
@@ -318,7 +320,7 @@ class _FilePageState extends State<FilePage> {
           print(str);
           setState(
             () {
-              dirs_list.add(
+              dirsList.add(
                 CustomDirButton(
                   name: str,
                   onTap: () async {},

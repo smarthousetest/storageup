@@ -8,6 +8,7 @@ import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
+import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
 
@@ -30,18 +31,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ChoosedPage choosed_page = ChoosedPage.home;
-  Blur blur_item = Blur.rename;
+  ChoosedPage choosedPage = ChoosedPage.home;
+  Blur blurItem = Blur.rename;
 
-  void changePage(ChoosedPage new_page) {
-    // имя хуета
+  void changePage(ChoosedPage newPage) {
     setState(() {
-      choosed_page = new_page;
+      choosedPage = newPage;
     });
   }
 
   Widget getPage() {
-    switch (choosed_page) {
+    switch (choosedPage) {
       case ChoosedPage.home:
         return InfoPage();
       case ChoosedPage.file:
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getBlurItem() {
-    switch (blur_item) {
+    switch (blurItem) {
       case Blur.none:
         return Container();
       case Blur.rename:
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             );
       case Blur.delete:
         return BlurDelete(
-          blur_item: blur_item,
+          blur_item: blurItem,
         );
       // case Blur.create_album:
       //   return BlurCreateAlbum(blur_item: blur_item,);
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff7f9fb), // цвета не тут
+      backgroundColor: Theme.of(context).cardColor, // цвета не тут
       body: Stack(
         children: [
           Center(
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     width: 274,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                           sigmaY: 5,
                         ),
                         child: Container(
-                          color: Colors.black.withAlpha(25), // цвет не тут
+                          color: Colors.black.withAlpha(25), //   // цвет не тут
                         ),
                       ),
                     ),
@@ -240,18 +240,18 @@ class _HomePageState extends State<HomePage> {
           child: Text(
             'Добавить +', // текст не там
             style: TextStyle(
-              color: Color(0xff70BBF6),
+              color: Theme.of(context).splashColor,
               fontSize: 17,
-              fontFamily: 'Lato', //
+              fontFamily: kNormalTextFontFamily,
             ),
           ),
           style: ElevatedButton.styleFrom(
             fixedSize: Size(214, 42), /////
-            primary: Colors.white,
+            primary: Theme.of(context).primaryColor,
             elevation: 0,
             side: BorderSide(
               style: BorderStyle.solid,
-              color: Color(0xff70BBF6), // цвет
+              color: Theme.of(context).splashColor,
               width: 1.5,
             ),
             shape: RoundedRectangleBorder(

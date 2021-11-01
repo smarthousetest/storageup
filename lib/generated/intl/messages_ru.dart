@@ -24,13 +24,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "allready_have_an_account":
             MessageLookupByLibrary.simpleMessage("Уже есть аккаунт?"),
         "allready_registered_email": MessageLookupByLibrary.simpleMessage(
-            "Пользователь с данным Email уже зарегистрирован"),
+            "Пользователь с данным e-mail уже зарегистрирован"),
+        "back_to_authorization":
+            MessageLookupByLibrary.simpleMessage("Вернуться к авторизации"),
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Вернуться на главную"),
-        "back_to_registration":
-            MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
-        "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "date": MessageLookupByLibrary.simpleMessage("Дата"),
+        "email": MessageLookupByLibrary.simpleMessage("E-mail"),
         "email_confirming":
             MessageLookupByLibrary.simpleMessage("Подтверждение Email"),
         "email_confirming_after": MessageLookupByLibrary.simpleMessage(
@@ -47,6 +48,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "Ваш e-mail адрес успешно подтверждён"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
+        "format": MessageLookupByLibrary.simpleMessage("Формат"),
+        "go_to_authorization":
+            MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
+        "name": MessageLookupByLibrary.simpleMessage("Имя"),
+        "non_existent_email":
+            MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "or_continue_with":
@@ -68,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sign_in": MessageLookupByLibrary.simpleMessage("Войти"),
         "sign_in_to_account":
             MessageLookupByLibrary.simpleMessage("Вход в учетную запись"),
+        "size": MessageLookupByLibrary.simpleMessage("Размер"),
         "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
             "Что-то пошло не так. Попробуйте позднее"),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(

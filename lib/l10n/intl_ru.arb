@@ -5,7 +5,7 @@
     "allready_have_an_account": "Уже есть аккаунт?",
     "sign_in": "Войти",
     "sign_in_to_account": "Вход в учетную запись",
-    "email": "Email",
+    "email": "E-mail",
     "password": "Пароль",
     "remember_me": "Запомнить меня",
     "forgot_password": "Забыли пароль?",
@@ -20,7 +20,7 @@
     "wrong_cred": "Неверный email или пароль!",
     "wrong_username": "Имя пользователя должно содержать более 2 символов",
     "something_goes_wrong": "Что-то пошло не так. Попробуйте позднее",
-    "allready_registered_email": "Пользователь с данным Email уже зарегистрирован",
+    "allready_registered_email": "Пользователь с данным e-mail уже зарегистрирован",
     "restore_password_before_email": "На вашу электронную почту ",
     "resore_password_after_email": " отправлено письмо. Для восстановления пароля перейдите по ссылке внутри письма.",
     "continue_button": "Продолжить",
@@ -37,5 +37,11 @@
     "email_confirming_link": "Для подтверждения перейдите по ссылке внутри письма.",
     "register_complete": "Регистрация завершена",
     "email_successfully": "Ваш e-mail адрес успешно подтверждён",
-    "back_to_registration": "Перейти к авторизации"
+    "back_to_authorization": "Вернуться к авторизации",
+    "go_to_authorization": "Перейти к авторизации",
+    "non_existent_email": "Неcуществующий e-mail",
+    "name": "Имя",
+    "format": "Формат",
+    "date": "Дата",
+    "size": "Размер"
 }

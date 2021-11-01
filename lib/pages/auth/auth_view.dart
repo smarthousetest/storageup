@@ -53,9 +53,9 @@ class _AuthViewState extends State<AuthView> {
   void initState() {
     var height = 780.0;
     var width = 1280.0;
-    // if (Platform.isWindows) {
-    //   width = 1296.0;
-    // }
+    if (Platform.isWindows) {
+      width = 1296.0;
+    }
     DesktopWindow.setMinWindowSize(Size(width, height));
     DesktopWindow.setMaxWindowSize(Size(width, height));
     DesktopWindow.setWindowSize(Size(width, height));
@@ -67,8 +67,8 @@ class _AuthViewState extends State<AuthView> {
     var theme = Theme.of(context);
 
     if (!_isSignIn && _isAnimationCompleted) {
-      // controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
-      controller.jumpTo(720);
+      controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
+      //controller.jumpTo(720);
     }
 
     return BlocProvider(
@@ -305,7 +305,7 @@ class _AuthViewState extends State<AuthView> {
                   style: TextStyle(
                     color: theme.accentColor,
                     fontFamily: kNormalTextFontFamily,
-                    fontSize: 20,
+                    fontSize: 17,
                   ),
                 ),
               ),
@@ -389,10 +389,10 @@ class _AuthViewState extends State<AuthView> {
                   color: theme.disabledColor,
                 ),
               ),
-              Expanded(
-                child: Container(),
-              ),
-              // SizedBox(height: 63),
+              // Expanded(
+              //   child: Container(),
+              // ),
+              SizedBox(height: 63),
               RawKeyboardListener(
                 focusNode: FocusNode(),
                 onKey: (event) {
@@ -469,7 +469,9 @@ class _AuthViewState extends State<AuthView> {
                       width: 23,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7.0),
-                        color: theme.colorScheme.onPrimary,
+                        color: state.rememberMe
+                            ? theme.colorScheme.onSurface
+                            : theme.colorScheme.onPrimary,
                       ),
                       padding: EdgeInsets.all(1.5),
                       child: Container(
@@ -482,7 +484,7 @@ class _AuthViewState extends State<AuthView> {
                           side: BorderSide(width: 1, color: Colors.transparent),
                           splashRadius: 0,
                           checkColor: theme.accentColor,
-                          activeColor: theme.primaryColor,
+                          activeColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6.0)),
                           onChanged: (_) {
@@ -614,7 +616,8 @@ class _AuthViewState extends State<AuthView> {
                 padding: EdgeInsets.symmetric(horizontal: 120),
                 child: Visibility(
                   //TODO change this shit
-                  visible: state.status == FormzStatus.submissionFailure,
+                  visible: state.status == FormzStatus.submissionFailure &&
+                      state.action == RequestedAction.login,
                   child: Row(
                     children: [
                       Image.asset(
@@ -730,6 +733,9 @@ class _AuthViewState extends State<AuthView> {
             ),
           ),
         ),
+        // Expanded(
+        //   child: Container(),
+        // ),
         SizedBox(height: 63),
         RawKeyboardListener(
           focusNode: FocusNode(),
@@ -776,8 +782,8 @@ class _AuthViewState extends State<AuthView> {
             hint: translate.email,
             errorMessage: translate.wrong_email,
             onChange: (email) {
-              context.read<AuthBloc>().add(AuthRegisterEmailChanged(
-                  email: email, needValidation: false));
+              context.read<AuthBloc>().add(
+                  AuthRegisterEmailChanged(email: email, needValidation: true));
             },
             onFinishEditing: (email) {
               context.read<AuthBloc>().add(
@@ -834,7 +840,9 @@ class _AuthViewState extends State<AuthView> {
                 width: 21,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7.0),
-                  color: theme.colorScheme.onPrimary,
+                  color: state.acceptedTermsOfUse
+                      ? theme.colorScheme.onSurface
+                      : theme.colorScheme.onPrimary,
                 ),
                 padding: EdgeInsets.all(1.5),
                 child: Container(
@@ -847,7 +855,7 @@ class _AuthViewState extends State<AuthView> {
                     side: BorderSide(width: 1, color: Colors.transparent),
                     splashRadius: 0,
                     checkColor: theme.accentColor,
-                    activeColor: theme.primaryColor,
+                    activeColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6.0)),
                     onChanged: (_) {
@@ -1062,12 +1070,13 @@ class _AuthViewState extends State<AuthView> {
       children: [
         Expanded(
           child: Container(),
-          flex: 3,
+          flex: 5,
         ),
         Center(
           child: Text(
             translate.email_confirming_reg,
             style: TextStyle(
+              fontWeight: FontWeight.w400,
               fontFamily: kNormalTextFontFamily,
               fontSize: 28.0,
               color: theme.disabledColor,
@@ -1076,10 +1085,10 @@ class _AuthViewState extends State<AuthView> {
         ),
         Expanded(
           child: Container(),
-          flex: 1,
+          flex: 2,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 160),
+          padding: const EdgeInsets.symmetric(horizontal: 120),
           child: RichText(
             textAlign: TextAlign.left,
             text: TextSpan(
@@ -1132,34 +1141,40 @@ class _AuthViewState extends State<AuthView> {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 97,
         ),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     context.read<AuthBloc>().add(AuthClear());
-        //   },
-        //   style: ElevatedButton.styleFrom(
-        //     shape:
-        //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        //     padding: EdgeInsets.symmetric(
-        //       horizontal: 64,
-        //       vertical: 18,
-        //     ),
-        //     primary: theme.primaryColor,
-        //     elevation: 1,
-        //   ),
-        //   child: Text(
-        //     translate.back_to_registration,
-        //     style: TextStyle(
-        //       color: theme.accentColor,
-        //       fontFamily: kNormalTextFontFamily,
-        //       fontSize: 20,
-        //     ),
-        //   ),
-        // ),
-        Expanded(
-          child: Container(),
-          flex: 3,
+        Expanded(child: Container()),
+        Container(
+          height: 60,
+          width: 480,
+          child: ElevatedButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(AuthClear());
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              // padding: EdgeInsets.symmetric(
+              //   horizontal: 140,
+              //   vertical: 20,
+              // ),
+              primary: theme.splashColor,
+              elevation: 1,
+            ),
+            child: Text(
+              translate.back_to_authorization,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              style: TextStyle(
+                color: theme.primaryColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 17,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 100,
         ),
       ],
     );
@@ -1222,7 +1237,7 @@ class _AuthViewState extends State<AuthView> {
               elevation: 1,
             ),
             child: Text(
-              translate.back_to_registration,
+              translate.go_to_authorization,
               style: TextStyle(
                 color: theme.primaryColor,
                 fontFamily: kNormalTextFontFamily,
