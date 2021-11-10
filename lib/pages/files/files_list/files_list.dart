@@ -42,6 +42,11 @@ class _ButtonTemplateState extends State<FilesList> {
       fontWeight: FontWeight.w700,
       fontFamily: kNormalTextFontFamily,
     );
+    TextStyle cellTextStyle = TextStyle(
+      color: Theme.of(context).textTheme.subtitle1?.color,
+      fontSize: 14,
+      fontFamily: kNormalTextFontFamily,
+    );
     S translate = getIt<S>();
     bool _isClicked = false;
     bool _liked = false;
@@ -104,7 +109,7 @@ class _ButtonTemplateState extends State<FilesList> {
                           Text(
                             "Документация",
                             maxLines: 1,
-                            style: style,
+                            style: cellTextStyle,
                           ),
                           Expanded(
                             flex: 30,
@@ -140,7 +145,7 @@ class _ButtonTemplateState extends State<FilesList> {
                           Text(
                             'DOCX',
                             maxLines: 1,
-                            style: style,
+                            style: cellTextStyle,
                           ),
                         ],
                       ),
@@ -151,7 +156,7 @@ class _ButtonTemplateState extends State<FilesList> {
                           Text(
                             '01.05.21',
                             maxLines: 1,
-                            style: style,
+                            style: cellTextStyle,
                           ),
                         ],
                       ),
@@ -162,7 +167,7 @@ class _ButtonTemplateState extends State<FilesList> {
                           Text(
                             '678 Кб',
                             maxLines: 1,
-                            style: style,
+                            style: cellTextStyle,
                           ),
                           Expanded(
                             flex: 1,

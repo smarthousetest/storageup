@@ -25,7 +25,7 @@ class _InfoPageState extends State<InfoPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
                 child: Container(
                   height: 46,
                   decoration: BoxDecoration(
@@ -41,11 +41,14 @@ class _InfoPageState extends State<InfoPage> {
                 ),
               ),
               Expanded(
+                // child: ListView(
+                //  controller: ScrollController(),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: ListView(
+                      controller: ScrollController(),
                       children: [
                         Padding(
                           padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
@@ -55,10 +58,10 @@ class _InfoPageState extends State<InfoPage> {
                             child: Container(
                               constraints: BoxConstraints(minHeight: 466),
                               /*MediaQuery.of(context).size.height -
-                                  HEIGHT_TOP_FIND_BLOCK -
-                                  PADDING_SIZE -
-                                  PADDING_SIZE -
-                                  HEIGHT_BOTTOM_BLOCK,*/
+                                    HEIGHT_TOP_FIND_BLOCK -
+                                    PADDING_SIZE -
+                                    PADDING_SIZE -
+                                    HEIGHT_BOTTOM_BLOCK,*/
                               decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
                                 borderRadius: BorderRadius.circular(10),
@@ -353,7 +356,8 @@ class _InfoPageState extends State<InfoPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          padding: const EdgeInsets.only(
+                              left: 30, right: 30, bottom: 30),
                           child: SizedBox(
                             height: 372,
                             width: 726,
@@ -397,7 +401,7 @@ class _InfoPageState extends State<InfoPage> {
                                         Text(
                                           'Пространство заполнено на:',
                                           style: TextStyle(
-                                            fontFamily: kNormalTextFontFamily,
+                                            fontFamily: 'Lato',
                                             fontSize: 14,
                                             color:
                                                 Theme.of(context).disabledColor,
@@ -601,389 +605,400 @@ class _InfoPageState extends State<InfoPage> {
           ),
         ),
         (MediaQuery.of(context).size.width > 1380)
-            ? Container(
-                width: 320,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Container(
-                              height: 46,
-                              width: 46,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(23),
+            ? Padding(
+                padding: const EdgeInsets.only(right: 0, top: 30, bottom: 30),
+                child: Container(
+                  width: 320,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Color.fromARGB(25, 23, 69, 139),
+                          blurRadius: 4,
+                          offset: Offset(1, 4))
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                height: 46,
+                                width: 46,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(23),
+                                ),
+                                child: Image.asset('assets/home_page/man.jpg'),
                               ),
-                              child: Image.asset('assets/home_page/glad.jpg'),
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Text(
-                                  "Валерий Жмышенко",
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    "А. Рождественский",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color:
+                                          Theme.of(context).bottomAppBarColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "votreaa@mail.ru",
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 12,
                                     color: Theme.of(context).bottomAppBarColor,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                "votreaa@mail.ru",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Theme.of(context).bottomAppBarColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(30),
-                        child: Divider(
-                          height: 1,
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                      Text(
-                        'Используемое пространство',
-                        style: TextStyle(
-                          color: Theme.of(context).disabledColor,
-                          fontSize: 16,
-                          fontFamily: kNormalTextFontFamily,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            '4,36',
-                            style: TextStyle(
-                              color: Theme.of(context).bottomAppBarColor,
-                              fontSize: 36,
-                              fontFamily: kNormalTextFontFamily,
+                              ],
                             ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: Divider(
+                            height: 1,
+                            color: Theme.of(context).dividerColor,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 11),
-                            child: Text(
-                              'из',
+                        ),
+                        Text(
+                          'Используемое пространство',
+                          style: TextStyle(
+                            color: Theme.of(context).disabledColor,
+                            fontSize: 14,
+                            fontFamily: kNormalTextFontFamily,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              '4,36',
                               style: TextStyle(
-                                color: Theme.of(context).shadowColor,
-                                fontSize: 24,
+                                color: Theme.of(context).bottomAppBarColor,
+                                fontSize: 36,
                                 fontFamily: kNormalTextFontFamily,
                               ),
                             ),
-                          ),
-                          Text(
-                            '20 ГБ',
-                            style: TextStyle(
-                              color: Theme.of(context).shadowColor,
-                              fontSize: 36,
-                              fontFamily: kNormalTextFontFamily,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 11),
+                              child: Text(
+                                'из',
+                                style: TextStyle(
+                                  color: Theme.of(context).shadowColor,
+                                  fontSize: 24,
+                                  fontFamily: kNormalTextFontFamily,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '20 ГБ',
+                              style: TextStyle(
+                                color: Theme.of(context).shadowColor,
+                                fontSize: 36,
+                                fontFamily: kNormalTextFontFamily,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: SizedBox(
+                            height: 10,
+                            child: Stack(
+                              children: [
+                                MyProgressBar(
+                                  percent: 75,
+                                  color: Color(0xffFFD75E),
+                                  bgColor: Theme.of(context).cardColor,
+                                ),
+                                MyProgressBar(
+                                  percent: 50,
+                                  color: Color(0xffFF847E),
+                                  bgColor: Color.fromARGB(0, 0, 0, 0),
+
+                                  ///
+                                ),
+                                MyProgressBar(
+                                  percent: 30,
+                                  color: Color(0xff59D7AB),
+                                  bgColor: Color.fromARGB(0, 0, 0, 0),
+
+                                  ///
+                                ),
+                                MyProgressBar(
+                                  percent: 15,
+                                  color: Color(0xff868FFF),
+                                  bgColor: Color.fromARGB(0, 0, 0, 0),
+
+                                  ///
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: SizedBox(
-                          height: 10,
-                          child: Stack(
-                            children: [
-                              MyProgressBar(
-                                percent: 75,
-                                color: Color(0xffFFD75E),
-                                bgColor: Theme.of(context).cardColor,
-                              ),
-                              MyProgressBar(
-                                percent: 50,
-                                color: Color(0xffFF847E),
-                                bgColor: Color.fromARGB(0, 0, 0, 0),
-
-                                ///
-                              ),
-                              MyProgressBar(
-                                percent: 30,
-                                color: Color(0xff59D7AB),
-                                bgColor: Color.fromARGB(0, 0, 0, 0),
-
-                                ///
-                              ),
-                              MyProgressBar(
-                                percent: 15,
-                                color: Color(0xff868FFF),
-                                bgColor: Color.fromARGB(0, 0, 0, 0),
-
-                                ///
-                              ),
-                            ],
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: ListView(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      print('Files');
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.white,
+                                      shadowColor:
+                                          Color.fromARGB(5, 0, 0, 0), //
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: Container(
+                                            height: 46,
+                                            width: 46,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: SvgPicture.asset(
+                                                'assets/home_page/files_r.svg'),
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              child: Text(
+                                                "Файлы",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .disabledColor,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              "15 файлов",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .shadowColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      print('Foto');
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                      shadowColor: Color.fromARGB(5, 0, 0, 0),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: Container(
+                                            height: 46,
+                                            width: 46,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: SvgPicture.asset(
+                                                'assets/home_page/foto_r.svg'),
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              child: Text(
+                                                "Фото",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .disabledColor,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              "15 файлов",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .shadowColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      print('Video');
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                      shadowColor: Color.fromARGB(5, 0, 0, 0),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: Container(
+                                            height: 46,
+                                            width: 46,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: SvgPicture.asset(
+                                                'assets/home_page/video_r.svg'),
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              child: Text(
+                                                "Видео",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .disabledColor,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              "15 файлов",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .shadowColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      print('Audio');
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).primaryColor,
+                                      shadowColor: Color.fromARGB(5, 0, 0, 0),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: Container(
+                                            height: 46,
+                                            width: 46,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: SvgPicture.asset(
+                                                'assets/home_page/music_r.svg'),
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 5),
+                                              child: Text(
+                                                "Аудио",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .disabledColor,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              "15 файлов",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .shadowColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: ListView(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    print('Files');
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.white,
-                                    shadowColor: Color.fromARGB(5, 0, 0, 0), //
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
-                                        child: Container(
-                                          height: 46,
-                                          width: 46,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: SvgPicture.asset(
-                                              'assets/home_page/files_r.svg'),
-                                        ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              "Файлы",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .disabledColor,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            "15 файлов",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                                  Theme.of(context).shadowColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    print('Foto');
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Theme.of(context).primaryColor,
-                                    shadowColor: Color.fromARGB(5, 0, 0, 0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
-                                        child: Container(
-                                          height: 46,
-                                          width: 46,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: SvgPicture.asset(
-                                              'assets/home_page/foto_r.svg'),
-                                        ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              "Фото",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .disabledColor,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            "15 файлов",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                                  Theme.of(context).shadowColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    print('Video');
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Theme.of(context).primaryColor,
-                                    shadowColor: Color.fromARGB(5, 0, 0, 0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
-                                        child: Container(
-                                          height: 46,
-                                          width: 46,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: SvgPicture.asset(
-                                              'assets/home_page/video_r.svg'),
-                                        ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              "Видео",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .disabledColor,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            "15 файлов",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                                  Theme.of(context).shadowColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    print('Audio');
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Theme.of(context).primaryColor,
-                                    shadowColor: Color.fromARGB(5, 0, 0, 0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
-                                        child: Container(
-                                          height: 46,
-                                          width: 46,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: SvgPicture.asset(
-                                              'assets/home_page/music_r.svg'),
-                                        ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              "Аудио",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .disabledColor,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            "15 файлов",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                                  Theme.of(context).shadowColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              )
+                ))
             : Container(),
       ],
     );

@@ -15,7 +15,7 @@ class FilePage extends StatefulWidget {
   FilePage();
 }
 
-List<Widget> dirsList = []; // что с именем епрст.....
+List<Widget> dirsList = [];
 
 class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
@@ -31,7 +31,7 @@ class _FilePageState extends State<FilePage> {
     // if (dirs_list.isEmpty) _init(context);
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(left: 30),
+        padding: const EdgeInsets.only(left: 0, top: 0, right: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -41,25 +41,58 @@ class _FilePageState extends State<FilePage> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 40),
+                      padding: const EdgeInsets.only(right: 20),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .primaryColor, // colors should not be here
+                          color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Color.fromARGB(25, 23, 69, 139),
+                                blurRadius: 4,
+                                offset: Offset(1, 4))
+                          ],
                         ),
                       ),
                     ),
                   ),
                   Container(
-                    width: 310,
+                    width: 46,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          //child: Padding(
+                          //padding: const EdgeInsets.only(right: 30),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Color.fromARGB(25, 23, 69, 139),
+                                        blurRadius: 4,
+                                        offset: Offset(1, 4))
+                                  ]),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                    "assets/file_page/settings.svg"),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(right: 10), //sporno
+                          padding: const EdgeInsets.only(right: 30, left: 20),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(23.0),
-                            child: Image.asset('assets/home_page/glad.jpg'),
+                            child: Image.asset('assets/home_page/man.jpg'),
                           ),
                         ),
                         Column(
@@ -68,11 +101,10 @@ class _FilePageState extends State<FilePage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Text(
-                                "Валерий Жмышенко",
+                                "Александр Рождественский",
                                 style: TextStyle(
                                   fontSize: 17,
-                                  color: Theme.of(context)
-                                      .bottomAppBarColor, // vot tak
+                                  color: Theme.of(context).bottomAppBarColor,
                                 ),
                               ),
                             ),
@@ -80,8 +112,7 @@ class _FilePageState extends State<FilePage> {
                               "votreaa@mail.ru",
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Theme.of(context)
-                                    .bottomAppBarColor, // ne tak
+                                color: Theme.of(context).bottomAppBarColor,
                               ),
                             ),
                           ],
@@ -93,11 +124,11 @@ class _FilePageState extends State<FilePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30),
+              padding: const EdgeInsets.only(top: 30, bottom: 30, right: 0),
               child: Container(
                 height: 234,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor, // color
+                  color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
@@ -114,7 +145,7 @@ class _FilePageState extends State<FilePage> {
                               style: TextStyle(
                                 color: Theme.of(context).focusColor,
                                 fontSize: 20,
-                                fontFamily: kNormalTextFontFamily, // font
+                                fontFamily: kNormalTextFontFamily,
                               ),
                             ),
                             Expanded(
@@ -129,7 +160,7 @@ class _FilePageState extends State<FilePage> {
                                 fillColor: Theme.of(context).primaryColor,
                                 child: Icon(
                                   Icons.arrow_back_ios_rounded,
-                                  color: Theme.of(context).splashColor, // color
+                                  color: Theme.of(context).splashColor,
                                   size: 20.0,
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -175,87 +206,95 @@ class _FilePageState extends State<FilePage> {
               ),
             ),
             Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 100,
-                            child: Text(
-                              'Недавние',
-                              style: TextStyle(
-                                color: Theme.of(context).focusColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 20,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 30, right: 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 20, 30, 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 100,
+                              child: Text(
+                                'Недавние',
+                                style: TextStyle(
+                                  color: Theme.of(context).focusColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 821,
-                            child: Container(),
-                          ),
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                ifGrid = false;
-                              });
-                              print('ifGrid is $ifGrid');
-                            },
-                            icon: SvgPicture.asset('assets/file_page/list.svg',
-                                // icon: Image.asset('assets/file_page/list.png',
-                                // fit: BoxFit.contain,
-                                // width: 30,
-                                // height: 30,
-                                color: ifGrid
-                                    ? Theme.of(context).toggleButtonsTheme.color
-                                    : Theme.of(context).splashColor),
-                          ),
-                          IconButton(
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                ifGrid = true;
-                              });
-                              print('ifGrid is $ifGrid');
-                            },
-                            icon: SvgPicture.asset('assets/file_page/block.svg',
-                                // width: 30,
-                                // height: 30,
-                                //colorBlendMode: BlendMode.softLight,
-                                color: ifGrid
-                                    ? Theme.of(context).splashColor
-                                    : Theme.of(context)
-                                        .toggleButtonsTheme
-                                        .color),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ifGrid
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
-                            child: Divider(
-                              height: 1,
-                              color: Theme.of(context).dividerColor,
+                            Expanded(
+                              flex: 821,
+                              child: Container(),
                             ),
-                          )
-                        : Container(),
-                    Expanded(
-                      child: ifGrid ? _filesGrid(context) : FilesList(),
-                    )
-                  ],
+                            IconButton(
+                              padding: EdgeInsets.zero,
+                              iconSize: 30,
+                              onPressed: () {
+                                setState(() {
+                                  ifGrid = false;
+                                });
+                                print('ifGrid is $ifGrid');
+                              },
+                              icon: SvgPicture.asset(
+                                  'assets/file_page/list.svg',
+                                  // icon: Image.asset('assets/file_page/list.png',
+                                  // fit: BoxFit.contain,
+                                  // width: 30,
+                                  // height: 30,
+                                  color: ifGrid
+                                      ? Theme.of(context)
+                                          .toggleButtonsTheme
+                                          .color
+                                      : Theme.of(context).splashColor),
+                            ),
+                            IconButton(
+                              iconSize: 30,
+                              onPressed: () {
+                                setState(() {
+                                  ifGrid = true;
+                                });
+                                print('ifGrid is $ifGrid');
+                              },
+                              icon: SvgPicture.asset(
+                                  'assets/file_page/block.svg',
+                                  // width: 30,
+                                  // height: 30,
+                                  //colorBlendMode: BlendMode.softLight,
+                                  color: ifGrid
+                                      ? Theme.of(context).splashColor
+                                      : Theme.of(context)
+                                          .toggleButtonsTheme
+                                          .color),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ifGrid
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40),
+                              child: Divider(
+                                height: 1,
+                                color: Theme.of(context).dividerColor,
+                              ),
+                            )
+                          : Container(),
+                      Expanded(
+                        child: ifGrid ? _filesGrid(context) : FilesList(),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
