@@ -54,7 +54,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
           ),
           Center(
             child: Container(
-              width: 363,
+              width: 388, //363 default
               height: 287,
               decoration: BoxDecoration(
                 color: Colors.white,

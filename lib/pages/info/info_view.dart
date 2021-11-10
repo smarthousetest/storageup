@@ -402,7 +402,7 @@ class _InfoPageState extends State<InfoPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Пространство заполнено на:',
+                                          'Пространство заполнено на: ',
                                           style: TextStyle(
                                             fontFamily: 'Lato',
                                             fontSize: 14,

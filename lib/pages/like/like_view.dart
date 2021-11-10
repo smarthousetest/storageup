@@ -9,8 +9,6 @@ import '../../theme.dart';
 import 'like_list/like_list.dart';
 
 class LikePage extends StatefulWidget {
-  static const route = "favorites_page";
-
   //FavoritesPage({Key? key}) : super(key: key);
 
   @override
@@ -24,7 +22,7 @@ class _LikePageState extends State<LikePage> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(left: 30, top: 30),
+        padding: const EdgeInsets.all(30),
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Container(
@@ -117,7 +115,7 @@ class _LikePageState extends State<LikePage> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 30, 20),
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
