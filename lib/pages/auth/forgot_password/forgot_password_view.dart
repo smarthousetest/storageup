@@ -6,8 +6,8 @@ import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_event.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/enums.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilities/enums.dart';
 
 import 'forgot_password_bloc.dart';
 import 'forgot_password_state.dart';

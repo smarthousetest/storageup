@@ -6,6 +6,7 @@ import 'package:upstorage_desktop/pages/home/home_view.dart';
 enum ChoosedPage {
   home,
   file,
+  keeper,
   media,
   like,
   sell_space,

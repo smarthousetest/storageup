@@ -6,7 +6,7 @@ import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
 import 'generated/l10n.dart';
-import 'utilites/injection.dart';
+import 'utilities/injection.dart';
 
 void main() async {
   await configureInjection();

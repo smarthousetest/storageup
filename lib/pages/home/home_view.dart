@@ -31,22 +31,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ChoosedPage choosedPage = ChoosedPage.home;
+  ChoosedPage selectedPage = ChoosedPage.home;
   Blur blurItem = Blur.rename;
 
   void changePage(ChoosedPage newPage) {
     setState(() {
-      choosedPage = newPage;
+      selectedPage = newPage;
     });
   }
 
   Widget getPage() {
-    switch (choosedPage) {
+    switch (selectedPage) {
       case ChoosedPage.home:
         return InfoPage();
       case ChoosedPage.file:
         return FilePage();
-
       default:
         return InfoPage();
     }
@@ -119,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: ListView(
                             controller: ScrollController(),
-                            children: left_buttons_item(),
+                            children: leftButtonsItem(),
                           ),
                         ),
                       ],
@@ -148,30 +147,12 @@ class _HomePageState extends State<HomePage> {
           //     someWidget,
           //   ],
           // )),
-          (1 > 2)
-              ? Stack(
-                  children: [
-                    Positioned.fill(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 5,
-                          sigmaY: 5,
-                        ),
-                        child: Container(
-                          color: Colors.black.withAlpha(25), //   // цвет не тут
-                        ),
-                      ),
-                    ),
-                    getBlurItem(),
-                  ],
-                )
-              : Container(),
         ],
       ),
     );
   }
 
-  List<Widget> left_buttons_item() {
+  List<Widget> leftButtonsItem() {
     return [
       CustomMenuButton(
         icon: "assets/home_page/home.svg",
@@ -200,7 +181,9 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/sell_space.svg",
         title: "Сдача места",
-        function: () {},
+        function: () {
+          changePage(ChoosedPage.keeper);
+        },
       ),
       CustomMenuButton(
         icon: "assets/home_page/finance.svg",
@@ -224,7 +207,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ElevatedButton(
           onPressed: () async {
-            var str = await showDialog(
+            await showDialog(
               context: context,
               builder: (BuildContext context) {
                 return BlurMenuUpload();
@@ -232,7 +215,6 @@ class _HomePageState extends State<HomePage> {
             );
             /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
             List<String?> list = result!.paths;*/
-
             // var systemTempDir = Directory.current;
             // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
             //   print(entity.path);

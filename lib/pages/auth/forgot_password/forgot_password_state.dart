@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/pages/auth/models/email.dart';
-import 'package:upstorage_desktop/utilites/enums.dart';
+import 'package:upstorage_desktop/utilities/enums.dart';
 
 class ForgotPasswordState extends Equatable {
   final Email email;

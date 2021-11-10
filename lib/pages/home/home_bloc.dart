@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
