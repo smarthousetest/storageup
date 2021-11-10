@@ -9,8 +9,12 @@ import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/pages/like/like_view.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 
 enum Blur {
   rename,
@@ -31,21 +35,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ChoosedPage selectedPage = ChoosedPage.home;
+  ChoosedPage choosedPage = ChoosedPage.home;
   Blur blurItem = Blur.rename;
 
+  S translate = getIt<S>();
   void changePage(ChoosedPage newPage) {
     setState(() {
-      selectedPage = newPage;
+      choosedPage = newPage;
     });
   }
 
   Widget getPage() {
-    switch (selectedPage) {
+    switch (choosedPage) {
       case ChoosedPage.home:
         return InfoPage();
       case ChoosedPage.file:
         return FilePage();
+      case ChoosedPage.like:
+        return LikePage();
+      case ChoosedPage.sell_space:
+        return SpaceSellPage();
       default:
         return InfoPage();
     }
@@ -77,7 +86,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor, // цвета не тут
+      backgroundColor: Theme.of(context).cardColor,
       body: Stack(
         children: [
           Center(
@@ -88,40 +97,43 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 274,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color:
-                                Color.fromARGB(25, 23, 69, 139), // цвета не тут
-                            blurRadius: 4,
-                            offset: Offset(1, 4))
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                          child: SvgPicture.asset(
-                            'assets/home_page/storage_title.svg',
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 0, top: 30, bottom: 30),
+                    child: Container(
+                      width: 274,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Color.fromARGB(25, 23, 69, 139),
+                              blurRadius: 4,
+                              offset: Offset(1, 4))
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                            child: SvgPicture.asset(
+                              'assets/home_page/storage_title.svg',
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                          child: SvgPicture.asset(
-                            'assets/home_page/separator.svg',
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                            child: SvgPicture.asset(
+                              'assets/home_page/separator.svg',
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: ListView(
-                            controller: ScrollController(),
-                            children: leftButtonsItem(),
+                          Expanded(
+                            child: ListView(
+                              controller: ScrollController(),
+                              children: leftButtonsItem(),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   getPage(),
@@ -147,6 +159,24 @@ class _HomePageState extends State<HomePage> {
           //     someWidget,
           //   ],
           // )),
+          (1 > 2)
+              ? Stack(
+                  children: [
+                    Positioned.fill(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: 5,
+                          sigmaY: 5,
+                        ),
+                        child: Container(
+                          color: Colors.black.withAlpha(25), //   // цвет не тут
+                        ),
+                      ),
+                    ),
+                    getBlurItem(),
+                  ],
+                )
+              : Container(),
         ],
       ),
     );
@@ -176,13 +206,15 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/like.svg",
         title: "Избранное",
-        function: () {},
+        function: () {
+          changePage(ChoosedPage.like);
+        },
       ),
       CustomMenuButton(
         icon: "assets/home_page/sell_space.svg",
         title: "Сдача места",
         function: () {
-          changePage(ChoosedPage.keeper);
+          changePage(ChoosedPage.sell_space);
         },
       ),
       CustomMenuButton(
@@ -207,7 +239,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ElevatedButton(
           onPressed: () async {
-            await showDialog(
+            var str = await showDialog(
               context: context,
               builder: (BuildContext context) {
                 return BlurMenuUpload();
@@ -215,17 +247,32 @@ class _HomePageState extends State<HomePage> {
             );
             /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
             List<String?> list = result!.paths;*/
+
             // var systemTempDir = Directory.current;
             // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
             //   print(entity.path);
             // }
           },
-          child: Text(
-            'Добавить +', // текст не там
-            style: TextStyle(
-              color: Theme.of(context).splashColor,
-              fontSize: 17,
-              fontFamily: kNormalTextFontFamily,
+          child: Center(
+            child: RichText(
+              text: TextSpan(
+                  style: TextStyle(
+                    color: Theme.of(context).splashColor,
+                    fontSize: 17,
+                    fontFamily: kNormalTextFontFamily,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: "translate.add",
+                    ),
+                    WidgetSpan(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Image.asset('assets/file_page/plus.png'),
+                      ),
+                    ),
+                  ]),
+              textAlign: TextAlign.center,
             ),
           ),
           style: ElevatedButton.styleFrom(

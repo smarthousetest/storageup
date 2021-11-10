@@ -35,7 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "email_confirming":
             MessageLookupByLibrary.simpleMessage("Подтверждение Email"),
         "email_confirming_after": MessageLookupByLibrary.simpleMessage(
-            " отправлено письмо, для подтверждения email адреса, перейдите по ссылке внутри письма"),
+            " отправлено письмо, для подтверждения e-mail адреса, перейдите по ссылке внутри письма"),
         "email_confirming_confirm": MessageLookupByLibrary.simpleMessage(
             "Чтобы закончить регистрацию, подтвердите свой e-mail адрес."),
         "email_confirming_letter": MessageLookupByLibrary.simpleMessage(
@@ -92,9 +92,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upsctorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "wrong_cred":
-            MessageLookupByLibrary.simpleMessage("Неверный email или пароль!"),
+            MessageLookupByLibrary.simpleMessage("Неверный e-mail или пароль!"),
         "wrong_email":
-            MessageLookupByLibrary.simpleMessage("Введите корректный email"),
+            MessageLookupByLibrary.simpleMessage("Введите корректный e-mail"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Пароль должен содержать более 8 символов"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
