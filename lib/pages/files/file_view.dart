@@ -31,7 +31,7 @@ class _FilePageState extends State<FilePage> {
     // if (dirs_list.isEmpty) _init(context);
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(left: 0, top: 0, right: 0),
+        padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -130,6 +130,12 @@ class _FilePageState extends State<FilePage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
@@ -212,6 +218,12 @@ class _FilePageState extends State<FilePage> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Color.fromARGB(25, 23, 69, 139),
+                          blurRadius: 4,
+                          offset: Offset(1, 4))
+                    ],
                   ),
                   alignment: Alignment.center,
                   child: Column(

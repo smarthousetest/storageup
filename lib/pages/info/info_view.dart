@@ -85,6 +85,7 @@ class _InfoPageState extends State<InfoPage> {
                                         style: TextStyle(
                                           color: Theme.of(context).focusColor,
                                           fontSize: 20,
+                                          fontFamily: kNormalTextFontFamily,
                                         ),
                                         textAlign: TextAlign.start,
                                       ),
@@ -129,6 +130,8 @@ class _InfoPageState extends State<InfoPage> {
                                                       height: 17,
                                                       child: Text(
                                                         'Места на вашем устройстве арендовано',
+                                                        textAlign:
+                                                            TextAlign.center,
                                                         style: TextStyle(
                                                           color: Theme.of(
                                                                   context)
