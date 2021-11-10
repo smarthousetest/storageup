@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
         return InfoPage();
       case ChoosedPage.file:
         return FilePage();
+
       default:
         return InfoPage();
     }

@@ -44,9 +44,15 @@ class _FilePageState extends State<FilePage> {
                       padding: const EdgeInsets.only(right: 40),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .primaryColor, // colors should not be here
+                          color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color:
+                                Color.fromARGB(25, 23, 69, 139), // цвета не тут
+                                blurRadius: 4,
+                                offset: Offset(1, 4))
+                          ],
                         ),
                       ),
                     ),
@@ -97,8 +103,15 @@ class _FilePageState extends State<FilePage> {
               child: Container(
                 height: 234,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor, // color
+                  color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color:
+                        Color.fromARGB(25, 23, 69, 139), // цвета не тут
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
@@ -179,6 +192,13 @@ class _FilePageState extends State<FilePage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color:
+                        Color.fromARGB(25, 23, 69, 139), // цвета не тут
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
                 ),
                 alignment: Alignment.center,
                 child: Column(
