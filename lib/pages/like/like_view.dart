@@ -223,10 +223,10 @@ class _LikePageState extends State<LikePage> {
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
+            child: SizedBox(
               width: 101,
               height: 128,
-              color: Theme.of(context).primaryColor,
+              //color: Theme.of(context).primaryColor,
               //padding: const EdgeInsets.all(8.0),
               // decoration: BoxDecoration(
               //     borderRadius: BorderRadius.circular(8),
@@ -235,39 +235,40 @@ class _LikePageState extends State<LikePage> {
               //     )),
               child: Column(
                 children: [
-                  // Container(
-                  //   padding:
-                  //       const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  //   decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(8),
-                  //       image: DecorationImage(
-                  //         image: AssetImage('assets/test_img/1.jpg'),
-                  //       )),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
-                  //   child: Image.asset(
-                  //     'assets/file_page/like.png',
-                  //     height: 24,
-                  //     width: 24,
-                  //   ),
-                  // ),
-                  ClipRRect(
-                    child: Image.asset('assets/test_img/1.jpg'),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      '1.jpg',
-                      style: TextStyle(
-                        color: Theme.of(context).disabledColor,
-                        fontSize: 14,
-                        fontFamily: kNormalTextFontFamily,
+                  Stack(children: <Widget>[
+                    Container(
+                      child: ClipRRect(
+                        child: Image.asset('assets/test_img/1.jpg'),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ),
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: Image.asset(
+                        'assets/file_page/like.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 70), // change
+                      child: Container(
+                        height: 20,
+                        width: 128,
+                        child: Center(
+                          child: Text(
+                            '1.jpg',
+                            style: TextStyle(
+                              color: Theme.of(context).disabledColor,
+                              fontSize: 14,
+                              fontFamily: kNormalTextFontFamily,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
                 ],
               ),
             ),
