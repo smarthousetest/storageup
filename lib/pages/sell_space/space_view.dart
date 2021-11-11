@@ -443,9 +443,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Container(
-                    child: Image.asset(
-                      'assets/file_page/prompt.png',
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      child: Image.asset(
+                        'assets/file_page/prompt.png',
+                      ),
                     ),
                   ),
                 ),
@@ -580,27 +583,91 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 20),
-                  child: Container(
-                    height: 42,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        _currentSliderValue.toInt().toString() + " ГБ",
-                        style: TextStyle(
-                          color: Theme.of(context).disabledColor,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 14,
+                Stack(children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 20),
+                    child: Container(
+                      height: 42,
+                      width: 200,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          _currentSliderValue.toInt().toString() + " ГБ",
+                          style: TextStyle(
+                            color: Theme.of(context).disabledColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                )
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 20),
+                    child: Container(
+                      height: 42,
+                      width: 42,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_currentSliderValue > 32) {
+                              _currentSliderValue = _currentSliderValue - 1;
+                            }
+                          });
+                        },
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size(double.maxFinite, 60),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10.0),
+                                  bottomLeft: Radius.circular(10.0))),
+                          backgroundColor: Theme.of(context).cardColor,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.remove,
+                            size: 15,
+                            color: Theme.of(context).focusColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 178, top: 20),
+                    child: Container(
+                      height: 42,
+                      width: 42,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_currentSliderValue < 180) {
+                              _currentSliderValue = _currentSliderValue + 1;
+                            }
+                          });
+                        },
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size(double.maxFinite, 60),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10.0),
+                                  bottomRight: Radius.circular(10.0))),
+                          backgroundColor: Theme.of(context).cardColor,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            size: 15,
+                            color: Theme.of(context).focusColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ])
               ],
             ),
             Padding(
