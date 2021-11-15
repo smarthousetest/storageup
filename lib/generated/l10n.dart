@@ -499,6 +499,256 @@ class S {
       args: [],
     );
   }
+
+  /// `Add`
+  String get add {
+    return Intl.message(
+      'Add',
+      name: 'add',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renting a place`
+  String get sell_space {
+    return Intl.message(
+      'Renting a place',
+      name: 'sell_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How it works?`
+  String get how_work {
+    return Intl.message(
+      'How it works?',
+      name: 'how_work',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can use free space on your hard`
+  String get rent_space {
+    return Intl.message(
+      'You can use free space on your hard',
+      name: 'rent_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `disk - rent space and make money on it!`
+  String get make_money {
+    return Intl.message(
+      'disk - rent space and make money on it!',
+      name: 'make_money',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select the folder on the drive where you have free space.`
+  String get select_folder {
+    return Intl.message(
+      'Select the folder on the drive where you have free space.',
+      name: 'select_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We use this space to store files, and you `
+  String get store_files {
+    return Intl.message(
+      'We use this space to store files, and you ',
+      name: 'store_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `can make money from it.`
+  String get money {
+    return Intl.message(
+      'can make money from it.',
+      name: 'money',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start earning in two steps:`
+  String get money_two_step {
+    return Intl.message(
+      'Start earning in two steps:',
+      name: 'money_two_step',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a folder`
+  String get folder {
+    return Intl.message(
+      'Select a folder',
+      name: 'folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Specify the size of the space for rent`
+  String get size_of_space {
+    return Intl.message(
+      'Specify the size of the space for rent',
+      name: 'size_of_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `As soon as we upload the first files there, money will be credited `
+  String get upload_file {
+    return Intl.message(
+      'As soon as we upload the first files there, money will be credited ',
+      name: 'upload_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `to your balance.`
+  String get your_balance {
+    return Intl.message(
+      'to your balance.',
+      name: 'your_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have no storage locations yet`
+  String get not_storage {
+    return Intl.message(
+      'You have no storage locations yet',
+      name: 'not_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add location`
+  String get add_location {
+    return Intl.message(
+      'Add location',
+      name: 'add_location',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose storage location`
+  String get select_storage {
+    return Intl.message(
+      'Choose storage location',
+      name: 'select_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Overview`
+  String get overview {
+    return Intl.message(
+      'Overview',
+      name: 'overview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set storage size`
+  String get set_size {
+    return Intl.message(
+      'Set storage size',
+      name: 'set_size',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum storage size: 32 GB`
+  String get min_storage {
+    return Intl.message(
+      'Minimum storage size: 32 GB',
+      name: 'min_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Maximum size for your drive: 180 GB`
+  String get max_storage {
+    return Intl.message(
+      'Maximum size for your drive: 180 GB',
+      name: 'max_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yuor income`
+  String get yuor_income {
+    return Intl.message(
+      'Yuor income',
+      name: 'yuor_income',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space`
+  String get our_tarff {
+    return Intl.message(
+      'Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space',
+      name: 'our_tarff',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your earnings will be`
+  String get earnings {
+    return Intl.message(
+      'Your earnings will be',
+      name: 'earnings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit`
+  String get exit {
+    return Intl.message(
+      'Exit',
+      name: 'exit',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

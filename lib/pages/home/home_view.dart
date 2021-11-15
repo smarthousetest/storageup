@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
         height: 259,
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
         child: ElevatedButton(
           onPressed: () async {
             var str = await showDialog(
@@ -263,11 +263,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   children: [
                     TextSpan(
-                      text: "translate.add",
+                      text: translate.add,
                     ),
                     WidgetSpan(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.only(left: 8),
                         child: Image.asset('assets/file_page/plus.png'),
                       ),
                     ),
@@ -290,6 +290,32 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 30, left: 40, right: 30),
+        child: Container(
+          width: 93,
+          height: 24,
+          child: RichText(
+            text: TextSpan(
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontSize: 17,
+                  fontFamily: kNormalTextFontFamily,
+                ),
+                children: [
+                  WidgetSpan(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: Image.asset('assets/home_page/exit.png'),
+                    ),
+                  ),
+                  TextSpan(
+                    text: translate.exit,
+                  ),
+                ]),
+          ),
+        ),
+      )
     ];
   }
 }
