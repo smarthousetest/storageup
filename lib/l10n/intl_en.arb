@@ -68,5 +68,6 @@
     "our_tarff": "Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space",
     "earnings": "Your earnings will be",
     "save": "Save",
-    "exit": "Exit"
+    "exit": "Exit",
+    "trust_level": "Trust level"
 }

@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -136,6 +137,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             ),
             Column(
               children: [addSpace(context)],
+            ),
+            Column(
+              children: [folderList(context)],
             )
           ],
         ),
@@ -446,8 +450,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Container(
-                      child: Image.asset(
-                        'assets/file_page/prompt.png',
+                      child: SvgPicture.asset(
+                        'assets/file_page/prompt.svg',
                       ),
                     ),
                   ),
@@ -516,18 +520,33 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.only(left: 40, top: 25),
-                child: Container(
-                  child: Text(
-                    translate.set_size,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 16,
+            Row(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.only(left: 40, top: 25),
+                    child: Container(
+                      child: Text(
+                        translate.set_size,
+                        style: TextStyle(
+                          color: Theme.of(context).focusColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 16,
+                        ),
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 25),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      child: SvgPicture.asset(
+                        'assets/file_page/prompt.svg',
+                      ),
                     ),
                   ),
-                )),
+                ),
+              ],
+            ),
             Padding(
                 padding: const EdgeInsets.only(left: 40, top: 10),
                 child: Container(
@@ -561,7 +580,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     height: 20,
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: Theme.of(context).dividerColor,
+                        activeTrackColor: Theme.of(context).splashColor,
                         inactiveTrackColor: Theme.of(context).dividerColor,
                         trackShape: RectangularSliderTrackShape(),
                         trackHeight: 8.0,
@@ -728,7 +747,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     ),
                     child: Center(
                       child: Text(
-                        "6₽/день",
+                        "${(_currentSliderValue.toInt() * 0.2).toInt()} ₽/день",
                         style: TextStyle(
                           color: Theme.of(context).disabledColor,
                           fontFamily: kNormalTextFontFamily,
@@ -746,7 +765,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 height: 42,
                 width: 200,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      index = 2;
+                      print(index);
+                    });
+                  },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),
                     shape: RoundedRectangleBorder(
@@ -764,6 +788,81 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ),
             ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget folderList(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4))
+            ],
+          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 40, top: 20),
+                  child: Container(
+                    width: 130,
+                    child: Text(
+                      translate.sell_space,
+                      style: TextStyle(
+                        color: Theme.of(context).focusColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 100,
+                  child: Container(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 40, top: 20),
+                  child: Container(
+                    height: 30,
+                    width: 142,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          index = 1;
+                          print(index);
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.maxFinite, 60),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        backgroundColor: Theme.of(context).splashColor,
+                      ),
+                      child: Text(
+                        translate.add_location,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Expanded(child: FolderList())
           ]),
         ),
       ),

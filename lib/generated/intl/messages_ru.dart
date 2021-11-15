@@ -125,6 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Я принимаю условия "),
         "to_send_letter":
             MessageLookupByLibrary.simpleMessage("Отправить письмо еще раз"),
+        "trust_level": MessageLookupByLibrary.simpleMessage("Уровень доверия"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),

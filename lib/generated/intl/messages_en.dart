@@ -123,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("I accept the terms "),
         "to_send_letter":
             MessageLookupByLibrary.simpleMessage("Send email again"),
+        "trust_level": MessageLookupByLibrary.simpleMessage("Trust level"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),

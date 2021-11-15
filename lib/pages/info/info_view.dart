@@ -609,7 +609,7 @@ class _InfoPageState extends State<InfoPage> {
         ),
         (MediaQuery.of(context).size.width > 1380)
             ? Padding(
-                padding: const EdgeInsets.only(right: 0, top: 30, bottom: 30),
+                padding: const EdgeInsets.only(right: 30, top: 30, bottom: 30),
                 child: Container(
                   width: 320,
                   decoration: BoxDecoration(
