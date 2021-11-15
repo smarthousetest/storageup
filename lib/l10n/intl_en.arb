@@ -1,8 +1,8 @@
 {
-    "welcome_to_upsctorage": "Welcome to StorageUp",
+    "welcome_to_upstorage": "Welcome to StorageUp",
     "still_dont_have_account": "Don't have an account yet? Hurry to join us!",
     "register": "Register now",
-    "allready_have_an_account": "Already have an account?",
+    "already_have_an_account": "Already have an account?",
     "sign_in": "Login",
     "sign_in_to_account": "Login to your account",
     "email": "E-mail",
@@ -20,9 +20,9 @@
     "wrong_cred": "Invalid email or password!",
     "wrong_username": "Username must be more than 2 characters",
     "something_goes_wrong": "Something went wrong. Try again later",
-    "allready_registered_email": "User with this Email is already registered",
+    "already_registered_email": "User with this Email is already registered",
     "restore_password_before_email": "A letter has been sent to your e-mail ",
-    "resore_password_after_email": ", to reset your password, follow the link inside the letter",
+    "restore_password_after_email": ", to reset your password, follow the link inside the letter",
     "continue_button": "Continue",
     "nothing_on_email": "Nothing came to Email?",
     "to_send_letter": "Send email again",
@@ -64,9 +64,11 @@
     "set_size": "Set storage size",
     "min_storage": "Minimum storage size: 32 GB",
     "max_storage": "Maximum size for your drive: 180 GB",
-    "yuor_income": "Yuor income",
-    "our_tarff": "Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space",
+    "your_income": "Your income",
+    "our_tariff": "Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space",
     "earnings": "Your earnings will be",
     "save": "Save",
-    "exit": "Exit"
+    "exit": "Exit",
+    "day": "day",
+    "currency": "$"
 }

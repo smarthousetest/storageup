@@ -1,146 +1,160 @@
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
 import 'package:file_picker/file_picker.dart';
+
+import 'keeper.dart';
 
 class SpaceSellPage extends StatefulWidget {
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
+
   SpaceSellPage();
 }
 
 class _SpaceSellPageState extends State<SpaceSellPage> {
-  Future<List<String?>?> getFilesPaths() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.any,
-    );
-    if (result != null) {
-      List<String?> file_paths = result.paths;
-      return file_paths;
-    } else {
-      return null;
-    }
+  Future<String?> getDirectoryPath() async {
+    String? result = await FilePicker.platform
+        .getDirectoryPath(dialogTitle: translate.add_location);
+    return (result != null) ? result : null;
   }
 
+  TextEditingController directoryPathController = TextEditingController();
+  int payDay = 0;
   var index = 0;
+  bool enableSaveButton = false;
   double _currentSliderValue = 32;
   S translate = getIt<S>();
+  Color saveButtonColor = Color(0xffE4E7ED);
+  List<String> listOfDirsKeepers = [];
+
+  void setColorIfDirIsExist(String pathDir) {
+    setState(() {
+      saveButtonColor = (Directory(pathDir).existsSync())
+          ? Theme.of(context).accentColor
+          : Color(0xffE4E7ED);
+      enableSaveButton = (Directory(pathDir).existsSync()) ? true : false;
+    });
+  }
 
   Widget build(BuildContext context) {
     return Expanded(
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-        //   child:
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-        child: Container(
-          height: 46,
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromARGB(25, 23, 69, 139),
-                            blurRadius: 4,
-                            offset: Offset(1, 4))
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: 46,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 23, 69, 139),
-                                    blurRadius: 4,
-                                    offset: Offset(1, 4))
-                              ]),
-                          child: Center(
-                            child: SvgPicture.asset(
-                                "assets/file_page/settings.svg"),
-                          ),
+      // Padding(
+      //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+      //   child:
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+            child: Container(
+              height: 46,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Color.fromARGB(25, 23, 69, 139),
+                                blurRadius: 4,
+                                offset: Offset(1, 4))
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30, left: 20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(23.0),
-                        child: Image.asset('assets/home_page/man.jpg'),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                  Container(
+                    width: 46,
+                    child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text(
-                            "Александр Рождественский",
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Theme.of(context).bottomAppBarColor,
+                        Expanded(
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Color.fromARGB(25, 23, 69, 139),
+                                        blurRadius: 4,
+                                        offset: Offset(1, 4))
+                                  ]),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                    "assets/file_page/settings.svg"),
+                              ),
                             ),
                           ),
                         ),
-                        Text(
-                          "votreaa@mail.ru",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).bottomAppBarColor,
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 30, left: 20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(23.0),
+                            child: Image.asset('assets/home_page/man.jpg'),
                           ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              child: Text(
+                                "Александр Рождественский",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Theme.of(context).bottomAppBarColor,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              "votreaa@mail.ru",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).bottomAppBarColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ),
-      Expanded(
-        child: IndexedStack(
-          index: index,
-          children: [
-            Column(
-              children: [rentingAPlace(context)],
             ),
-            Column(
-              children: [addSpace(context)],
-            )
-          ],
-        ),
-      )
-    ]));
+          ),
+          Expanded(
+            child: IndexedStack(
+              index: index,
+              children: [
+                Column(
+                  children: [rentingAPlace(context)],
+                ),
+                Column(
+                  children: [addSpace(context)],
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget rentingAPlace(BuildContext context) {
@@ -462,6 +476,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     height: 42,
                     width: 350,
                     child: TextField(
+                      controller: directoryPathController,
                       decoration: InputDecoration(
                         fillColor: Theme.of(context).cardColor,
                         focusedBorder: OutlineInputBorder(
@@ -475,6 +490,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               BorderSide(color: Color(0xffE4E7ED), width: 1.0),
                         ),
                       ),
+                      onChanged: (_) {
+                        setColorIfDirIsExist(directoryPathController.text);
+                      },
                     ),
                   ),
                 ),
@@ -485,8 +503,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     width: 200,
                     child: OutlinedButton(
                       onPressed: () async {
-                        List<String?>? list = await getFilesPaths();
-                        print(list);
+                        String? directoryPath = await getDirectoryPath();
+                        if (directoryPath != null) {
+                          directoryPathController.text = directoryPath;
+                          setColorIfDirIsExist(directoryPathController.text);
+                        }
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
@@ -561,7 +582,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     height: 20,
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: Theme.of(context).dividerColor,
+                        activeTrackColor: Theme.of(context).accentColor,
                         inactiveTrackColor: Theme.of(context).dividerColor,
                         trackShape: RectangularSliderTrackShape(),
                         trackHeight: 8.0,
@@ -683,7 +704,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 padding: const EdgeInsets.only(left: 40, top: 25),
                 child: Container(
                   child: Text(
-                    translate.yuor_income,
+                    translate.your_income,
                     style: TextStyle(
                       color: Theme.of(context).focusColor,
                       fontFamily: kNormalTextFontFamily,
@@ -695,7 +716,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 padding: const EdgeInsets.only(left: 40, top: 8),
                 child: Container(
                   child: Text(
-                    translate.our_tarff,
+                    translate.our_tariff,
                     style: TextStyle(
                       color: Theme.of(context).textTheme.subtitle1?.color,
                       fontFamily: kNormalTextFontFamily,
@@ -728,7 +749,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     ),
                     child: Center(
                       child: Text(
-                        "6₽/день",
+                        "$payDay${translate.currency}/${translate.day}",
                         style: TextStyle(
                           color: Theme.of(context).disabledColor,
                           fontFamily: kNormalTextFontFamily,
@@ -746,13 +767,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 height: 42,
                 width: 200,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    startKeeper(directoryPathController.text, listOfDirsKeepers,
+                        _currentSliderValue ~/ 1);
+                  },
                   style: OutlinedButton.styleFrom(
-                    minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: Color(0xffE4E7ED),
-                  ),
+                      minimumSize: Size(double.maxFinite, 60),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      backgroundColor: saveButtonColor),
                   child: Text(
                     translate.save,
                     style: TextStyle(

@@ -220,7 +220,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 children: [
                   TextSpan(text: state.email.value),
                   TextSpan(
-                    text: translate.resore_password_after_email,
+                    text: translate.restore_password_after_email,
                   )
                 ],
               ),

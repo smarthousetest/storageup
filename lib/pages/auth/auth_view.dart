@@ -32,9 +32,7 @@ class _AuthViewState extends State<AuthView> {
   bool _isSignIn = true;
   bool _isAnimationCompleted = true;
   final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
-
+  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
   final ScrollController controller = ScrollController();
 
   @override
@@ -54,6 +52,9 @@ class _AuthViewState extends State<AuthView> {
     var width = 1280.0;
     if (Platform.isWindows) {
       width = 1296.0;
+    }if (Platform.isLinux){
+      width = 1392.0;
+      height = 866.0;
     }
     DesktopWindow.setMinWindowSize(Size(width, height));
     DesktopWindow.setMaxWindowSize(Size(width, height));
@@ -148,7 +149,7 @@ class _AuthViewState extends State<AuthView> {
     );
   }
 
-  void printsize() async {
+  void printSize() async {
     // var size = await DesktopWindow.getWindowSize();
     // print('w= ${size.width} , h = ${size.height}');
   }
@@ -156,7 +157,7 @@ class _AuthViewState extends State<AuthView> {
   Widget _signIn(ThemeData theme) {
     var fullWidth = MediaQuery.of(context).size.width;
     var widthOfContainer = 560.0;
-    printsize();
+    printSize();
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
@@ -172,7 +173,7 @@ class _AuthViewState extends State<AuthView> {
             height: 112,
           ),
           Text(
-            translate.welcome_to_upsctorage,
+            translate.welcome_to_upstorage,
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: theme.primaryColor,
@@ -251,7 +252,7 @@ class _AuthViewState extends State<AuthView> {
           color: theme.accentColor,
           image: DecorationImage(
             fit: BoxFit.fitWidth,
-            image: AssetImage('assets/auth/oblakaLeft.png'),
+            image: AssetImage('assets/auth/cloudsLeft.png'),
           )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -263,7 +264,7 @@ class _AuthViewState extends State<AuthView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Text(
-              translate.allready_have_an_account,
+              translate.already_have_an_account,
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: theme.primaryColor,
@@ -348,7 +349,7 @@ class _AuthViewState extends State<AuthView> {
   var currentFocusNode = FocusNode();
 
   Widget _signInMain(ThemeData theme) {
-    printsize();
+    printSize();
     //final FocusNode _focusNode = FocusNode();
     List<LogicalKeyboardKey> keys = [];
     return BlocBuilder<AuthBloc, AuthState>(
@@ -942,7 +943,7 @@ class _AuthViewState extends State<AuthView> {
                     ),
                     Text(
                       state.error == AuthError.emailAlreadyRegistered
-                          ? translate.allready_registered_email
+                          ? translate.already_registered_email
                           : translate.something_goes_wrong,
                       style: TextStyle(
                         fontFamily: kNormalTextFontFamily,

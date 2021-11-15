@@ -14,7 +14,8 @@ import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
 
 enum Blur {
   rename,
@@ -159,24 +160,6 @@ class _HomePageState extends State<HomePage> {
           //     someWidget,
           //   ],
           // )),
-          (1 > 2)
-              ? Stack(
-                  children: [
-                    Positioned.fill(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 5,
-                          sigmaY: 5,
-                        ),
-                        child: Container(
-                          color: Colors.black.withAlpha(25), //   // цвет не тут
-                        ),
-                      ),
-                    ),
-                    getBlurItem(),
-                  ],
-                )
-              : Container(),
         ],
       ),
     );
