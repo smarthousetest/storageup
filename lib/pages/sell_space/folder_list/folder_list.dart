@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
+import 'keeper_info.dart';
 
 enum FileOptions {
   share,
@@ -17,6 +16,8 @@ enum FileOptions {
   info,
   remove,
 }
+
+
 
 class FolderList extends StatefulWidget {
   @override
@@ -120,7 +121,7 @@ class _ButtonTemplateState extends State<FolderList> {
                               child: Container(),
                             ),
                             Text(
-                              "C:\Program Files (x86)\ASUS \FilesNumber827689654",
+                              listOfDirsKeepers[0].dirPath,
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -135,7 +136,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '40 ГБ',
+                              '${listOfDirsKeepers[0].size} GB',
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -146,7 +147,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '01.05.21',
+                              listOfDirsKeepers[0].dateTime,
                               maxLines: 1,
                               style: cellTextStyle,
                             ),

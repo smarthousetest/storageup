@@ -1,5 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
+import 'dart:convert';
+import 'package:intl/intl.dart';
+
+import 'keeper_info.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
 import 'package:upstorage_desktop/utilities/repositories/token_repository.dart';
@@ -39,15 +42,15 @@ Future<String> getKeeperId(String? bearerToken, int freeSpace) async {
   }
 }
 
-Future<bool> startKeeper(String pathToDir, List<String> list, int freeSpace) async {
+Future<bool> startKeeper(String pathToDir, List<KeeperInfo> list, int freeSpace) async {
   if (list.contains(pathToDir)) {
     return false;
   } else {
-    list.add(pathToDir);
     String? bearerToken = await TokenRepository().getApiToken();
     String keeperId = await getKeeperId(bearerToken, freeSpace);
     if(bearerToken != null){
       CppNative cpp = CppNative();
+      listOfDirsKeepers.add(KeeperInfo(dirPath: pathToDir, dateTime: DateFormat.yMd().format(DateTime.now()), name: null, size: freeSpace, trustLevel: null));
       cpp.receiver(keeperId, bearerToken, pathToDir);
     }
     return true;

@@ -1,22 +1,22 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
-
-import 'keeper.dart';
+import 'folder_list/keeper_info.dart';
+import 'folder_list/keeper.dart';
 
 class SpaceSellPage extends StatefulWidget {
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
+
   SpaceSellPage();
 }
+
+
 
 class _SpaceSellPageState extends State<SpaceSellPage> {
   Future<String?> getDirectoryPath() async {
@@ -32,7 +32,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   double _currentSliderValue = 32;
   S translate = getIt<S>();
   Color saveButtonColor = Color(0xffE4E7ED);
-  List<String> listOfDirsKeepers = [];
+
 
   void setColorIfDirIsExist(String pathDir) {
     setState(() {
@@ -45,117 +45,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   Widget build(BuildContext context) {
     return Expanded(
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-        //   child:
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-        child: Container(
-          height: 46,
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromARGB(25, 23, 69, 139),
-                            blurRadius: 4,
-                            offset: Offset(1, 4))
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: 46,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 23, 69, 139),
-                                    blurRadius: 4,
-                                    offset: Offset(1, 4))
-                              ]),
-                          child: Center(
-                            child: SvgPicture.asset(
-                                "assets/file_page/settings.svg"),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30, left: 20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(23.0),
-                        child: Image.asset('assets/home_page/man.jpg'),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text(
-                            "Александр Рождественский",
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Theme.of(context).bottomAppBarColor,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          "votreaa@mail.ru",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).bottomAppBarColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      Expanded(
-        child: IndexedStack(
-          index: index,
-          children: [
-            Column(
-              children: [rentingAPlace(context)],
-            ),
-            Column(
-              children: [addSpace(context)],
-            ),
-            Column(
-              children: [folderList(context)],
-            )
-          ],
-        ),
-      )
-    ]));
       // Padding(
       //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
       //   child:
@@ -260,6 +149,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
                 Column(
                   children: [addSpace(context)],
+                ),
+                Column(
+                  children: [folderList(context)],
                 )
               ],
             ),
@@ -588,18 +480,17 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     height: 42,
                     width: 350,
                     child: TextField(
+
                       controller: directoryPathController,
                       decoration: InputDecoration(
                         fillColor: Theme.of(context).cardColor,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 1.0),
+                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 1.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 1.0),
+                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 1.0),
                         ),
                       ),
                       onChanged: (_) {
@@ -624,7 +515,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         backgroundColor: Theme.of(context).splashColor,
                       ),
                       child: Text(
@@ -710,7 +602,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: SliderTheme(
                       data: SliderTheme.of(context).copyWith(
                         activeTrackColor: Theme.of(context).splashColor,
-                        activeTrackColor: Theme.of(context).accentColor,
                         inactiveTrackColor: Theme.of(context).dividerColor,
                         trackShape: RectangularSliderTrackShape(),
                         trackHeight: 8.0,
@@ -902,6 +793,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       index = 2;
                       print(index);
                     });
+                    directoryPathController.text = '';
                   },
                   style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.maxFinite, 60),
