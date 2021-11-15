@@ -70,5 +70,6 @@
     "save": "Save",
     "exit": "Exit",
     "day": "day",
-    "currency": "$"
+    "currency": "$",
+    "trust_level": "Trust level"
 }

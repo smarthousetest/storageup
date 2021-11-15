@@ -92,15 +92,15 @@ class _HomePageState extends State<HomePage> {
         children: [
           Center(
             child: Container(
-              width: 1380,
+              width: 1480,
               height: 944,
-              constraints: BoxConstraints(minWidth: 1320, maxWidth: 1320),
+              constraints: BoxConstraints(minWidth: 1320, maxWidth: 1920),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 0, top: 30, bottom: 30),
+                        const EdgeInsets.only(left: 30, top: 30, bottom: 30),
                     child: Container(
                       width: 274,
                       decoration: BoxDecoration(

@@ -750,6 +750,16 @@ class S {
     );
   }
 
+  /// `Trust level`
+  String get trust_level {
+    return Intl.message(
+      'Trust level',
+      name: 'trust_level',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `day`
   String get day {
     return Intl.message(
