@@ -32,13 +32,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     });
   }
 
-  List<KeeperInfo> getListKeeper(){
-    setState(() {
-      List<KeeperInfo> listKeepersInfo = listOfDirsKeepers;
-    });
-    return listKeepersInfo;
-  }
-
   TextEditingController directoryPathController = TextEditingController();
   int payDay = 0;
   var index = 0;
@@ -889,7 +882,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             ),
             Expanded(child: Column(
               children: [
-                FolderList(getListKeeper())
+                FolderList(listOfDirsKeepers)
               ],
             ))
           ]),
