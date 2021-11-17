@@ -30,7 +30,9 @@ dependencies:
   shared_preferences_platform_interface: ^2.0.0
   file_picker: ^4.0.2
   percent_indicator: ^3.0.1
-  
+  cpp_native:
+    path: ../cpp_native
+
 
 dev_dependencies:
   injectable_generator:

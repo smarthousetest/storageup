@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 
+import 'folder_list.dart';
 import 'keeper_info.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
@@ -50,9 +52,12 @@ Future<bool> startKeeper(String pathToDir, List<KeeperInfo> list, int freeSpace)
     String keeperId = await getKeeperId(bearerToken, freeSpace);
     if(bearerToken != null){
       CppNative cpp = CppNative();
-      listOfDirsKeepers.add(KeeperInfo(dirPath: pathToDir, dateTime: DateFormat.yMd().format(DateTime.now()), name: null, size: freeSpace, trustLevel: null));
-      cpp.receiver(keeperId, bearerToken, pathToDir);
+      listOfDirsKeepers.add(KeeperInfo(dirPath: pathToDir, dateTime: DateFormat.yMd().format(DateTime.now()), name: null, size: freeSpace, trustLevel: 16));
+      // keeperList.add(FolderList(listOfDirsKeepers.last));
+      cpp.receiver(keeperId, bearerToken);
     }
     return true;
   }
 }
+
+

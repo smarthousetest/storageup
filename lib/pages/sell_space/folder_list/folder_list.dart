@@ -17,13 +17,13 @@ enum FileOptions {
   remove,
 }
 
-
-
 class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 
-  FolderList();
+  final List<KeeperInfo> keeperInfo;
+
+  FolderList(this.keeperInfo);
 }
 
 class _ButtonTemplateState extends State<FolderList> {
@@ -105,8 +105,9 @@ class _ButtonTemplateState extends State<FolderList> {
                     ),
                   ),
                 ],
-                rows: [
-                  DataRow(
+                rows: List<DataRow>.generate(
+                  listOfDirsKeepers.length,
+                  (int index) => DataRow(
                     cells: [
                       DataCell(
                         Row(
@@ -136,7 +137,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '${listOfDirsKeepers[0].size} GB',
+                              '${widget.keeperInfo[index].size} GB',
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -147,7 +148,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              listOfDirsKeepers[0].dateTime,
+                              widget.keeperInfo[index].dateTime,
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -158,7 +159,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '85%',
+                              '${widget.keeperInfo[index].trustLevel}%',
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -170,7 +171,7 @@ class _ButtonTemplateState extends State<FolderList> {
                                 child: MyProgressBar(
                                   bgColor: Theme.of(context).dividerColor,
                                   color: Theme.of(context).splashColor,
-                                  percent: 85,
+                                  percent: (widget.keeperInfo[index].trustLevel)!.toDouble(),
                                 ),
                               ),
                             ),
@@ -420,8 +421,8 @@ class _ButtonTemplateState extends State<FolderList> {
                         ),
                       ),
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
           ],

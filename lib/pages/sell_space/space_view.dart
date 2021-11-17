@@ -16,23 +16,12 @@ class SpaceSellPage extends StatefulWidget {
   SpaceSellPage();
 }
 
-
-
 class _SpaceSellPageState extends State<SpaceSellPage> {
   Future<String?> getDirectoryPath() async {
     String? result = await FilePicker.platform
         .getDirectoryPath(dialogTitle: translate.add_location);
     return (result != null) ? result : null;
   }
-
-  TextEditingController directoryPathController = TextEditingController();
-  int payDay = 0;
-  var index = 0;
-  bool enableSaveButton = false;
-  double _currentSliderValue = 32;
-  S translate = getIt<S>();
-  Color saveButtonColor = Color(0xffE4E7ED);
-
 
   void setColorIfDirIsExist(String pathDir) {
     setState(() {
@@ -42,6 +31,23 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
       enableSaveButton = (Directory(pathDir).existsSync()) ? true : false;
     });
   }
+
+  List<KeeperInfo> getListKeeper(){
+    setState(() {
+      List<KeeperInfo> listKeepersInfo = listOfDirsKeepers;
+    });
+    return listKeepersInfo;
+  }
+
+  TextEditingController directoryPathController = TextEditingController();
+  int payDay = 0;
+  var index = 0;
+  bool enableSaveButton = false;
+  double _currentSliderValue = 32;
+  S translate = getIt<S>();
+  Color saveButtonColor = Color(0xffE4E7ED);
+  List<KeeperInfo> listKeepersInfo = listOfDirsKeepers;
+
 
   Widget build(BuildContext context) {
     return Expanded(
@@ -246,11 +252,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               padding: const EdgeInsets.only(left: 40, top: 15),
               child: Container(
                 child: Text(
-                  translate.select_folder +
-                      "\n" +
-                      translate.store_files +
-                      "\n" +
-                      translate.money,
+                  '${translate.select_folder}\n${translate.store_files}\n${translate.money}',
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,
                     fontFamily: kNormalTextFontFamily,
@@ -480,17 +482,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     height: 42,
                     width: 350,
                     child: TextField(
-
                       controller: directoryPathController,
                       decoration: InputDecoration(
                         fillColor: Theme.of(context).cardColor,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 1.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 1.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 1.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 1.0),
                         ),
                       ),
                       onChanged: (_) {
@@ -787,8 +790,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 width: 200,
                 child: OutlinedButton(
                   onPressed: () {
-                    startKeeper(directoryPathController.text, listOfDirsKeepers,
-                        _currentSliderValue ~/ 1);
+                    startKeeper(directoryPathController.text, listOfDirsKeepers, _currentSliderValue ~/ 1);
                     setState(() {
                       index = 2;
                       print(index);
@@ -885,10 +887,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ],
             ),
-            Expanded(child: FolderList())
+            Expanded(child: Column(
+              children: [
+                FolderList(getListKeeper())
+              ],
+            ))
           ]),
         ),
       ),
     );
   }
 }
+
