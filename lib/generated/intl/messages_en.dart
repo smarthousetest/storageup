@@ -26,16 +26,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Active subscription"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "add_location": MessageLookupByLibrary.simpleMessage("Add location"),
-        "allready_have_an_account":
+        "already_have_an_account":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
-        "allready_registered_email": MessageLookupByLibrary.simpleMessage(
+        "already_registered_email": MessageLookupByLibrary.simpleMessage(
             "User with this Email is already registered"),
         "back_to_authorization":
             MessageLookupByLibrary.simpleMessage("Go to authorization"),
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
+        "currency": MessageLookupByLibrary.simpleMessage("\$"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
+        "day": MessageLookupByLibrary.simpleMessage("day"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Your earnings will be"),
         "email": MessageLookupByLibrary.simpleMessage("E-mail"),
@@ -88,7 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("or continue with"),
-        "our_tarff": MessageLookupByLibrary.simpleMessage(
+        "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space"),
         "overview": MessageLookupByLibrary.simpleMessage("Overview"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
@@ -103,7 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remember_me": MessageLookupByLibrary.simpleMessage("Remember me"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "You can use free space on your hard"),
-        "resore_password_after_email": MessageLookupByLibrary.simpleMessage(
+        "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
             ", to reset your password, follow the link inside the letter"),
         "restore_password_before_email": MessageLookupByLibrary.simpleMessage(
             "A letter has been sent to your e-mail "),
@@ -137,7 +139,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
-        "welcome_to_upsctorage":
+        "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
         "wrong_cred":
             MessageLookupByLibrary.simpleMessage("Invalid email or password!"),
@@ -149,6 +151,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "Username must be more than 2 characters"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("to your balance."),
-        "yuor_income": MessageLookupByLibrary.simpleMessage("Yuor income")
+        "your_income": MessageLookupByLibrary.simpleMessage("Your income")
       };
 }

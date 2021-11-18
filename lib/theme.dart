@@ -14,6 +14,7 @@ final kLightTheme = ThemeData.light().copyWith(
   dividerColor: Color(0xffF1F8FE),
   cardColor: Color(0xffF7F9FB),
   splashColor: Color(0xff70BBF6),
+  canvasColor: Color(0xffE4E7ED),
   toggleButtonsTheme: ThemeData.light().toggleButtonsTheme.copyWith(
         color: Color(0xffE0E0E0),
       ),

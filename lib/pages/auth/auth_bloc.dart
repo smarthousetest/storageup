@@ -3,9 +3,9 @@ import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/pages/auth/models/email.dart';
 import 'package:upstorage_desktop/pages/auth/models/name.dart';
-import 'package:upstorage_desktop/utilites/enums.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/auth_repository.dart';
+import 'package:upstorage_desktop/utilities/enums.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilities/repositories/auth_repository.dart';
 
 import 'auth_event.dart';
 import 'auth_state.dart';

@@ -35,6 +35,7 @@ dependencies:
     git:
       url: git@github.com:SergeySor/cpp_native.git
 
+
 dev_dependencies:
   injectable_generator:
   build_runner: ^2.0.4

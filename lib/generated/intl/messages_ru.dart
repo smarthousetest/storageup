@@ -26,16 +26,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
-        "allready_have_an_account":
+        "already_have_an_account":
             MessageLookupByLibrary.simpleMessage("Уже есть аккаунт?"),
-        "allready_registered_email": MessageLookupByLibrary.simpleMessage(
+        "already_registered_email": MessageLookupByLibrary.simpleMessage(
             "Пользователь с данным e-mail уже зарегистрирован"),
         "back_to_authorization":
             MessageLookupByLibrary.simpleMessage("Вернуться к авторизации"),
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Вернуться на главную"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
+        "currency": MessageLookupByLibrary.simpleMessage("₽"),
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
+        "day": MessageLookupByLibrary.simpleMessage("день"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Ваш заработок составит"),
         "email": MessageLookupByLibrary.simpleMessage("E-mail"),
@@ -88,7 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
-        "our_tarff": MessageLookupByLibrary.simpleMessage(
+        "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Наш тариф предполагает оплату 0,2 ₽/день за 1 ГБ сданного пространства"),
         "overview": MessageLookupByLibrary.simpleMessage("Обзор"),
         "password": MessageLookupByLibrary.simpleMessage("Пароль"),
@@ -103,7 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "Вы можете использовать свободное место на вашем жестком"),
-        "resore_password_after_email": MessageLookupByLibrary.simpleMessage(
+        "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
             " отправлено письмо. Для восстановления пароля перейдите по ссылке внутри письма."),
         "restore_password_before_email":
             MessageLookupByLibrary.simpleMessage("На вашу электронную почту "),
@@ -139,7 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
-        "welcome_to_upsctorage": MessageLookupByLibrary.simpleMessage(
+        "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "wrong_cred":
             MessageLookupByLibrary.simpleMessage("Неверный e-mail или пароль!"),
@@ -151,6 +153,6 @@ class MessageLookup extends MessageLookupByLibrary {
             "Имя пользователя должно содержать более 2 символов"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("начислятся деньги."),
-        "yuor_income": MessageLookupByLibrary.simpleMessage("Ваш доход")
+        "your_income": MessageLookupByLibrary.simpleMessage("Ваш доход")
       };
 }

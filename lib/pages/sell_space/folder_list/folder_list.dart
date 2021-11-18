@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
+import 'keeper_info.dart';
 
 enum FileOptions {
   share,
@@ -22,7 +21,9 @@ class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 
-  FolderList();
+  final List<KeeperInfo> keeperInfo;
+
+  FolderList(this.keeperInfo);
 }
 
 class _ButtonTemplateState extends State<FolderList> {
@@ -103,8 +104,9 @@ class _ButtonTemplateState extends State<FolderList> {
                     ),
                   ),
                 ],
-                rows: [
-                  DataRow(
+                rows: List<DataRow>.generate(
+                  listOfDirsKeepers.length,
+                  (int index) => DataRow(
                     cells: [
                       DataCell(
                         Row(
@@ -119,7 +121,7 @@ class _ButtonTemplateState extends State<FolderList> {
                               child: Container(),
                             ),
                             Text(
-                              "C:\Program Files (x86)\ASUS \FilesNumber827689654",
+                              listOfDirsKeepers[0].dirPath,
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -134,7 +136,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '40 ГБ',
+                              '${widget.keeperInfo[index].size} GB',
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -145,7 +147,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '01.05.21',
+                              widget.keeperInfo[index].dateTime,
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -156,7 +158,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '85%',
+                              '${widget.keeperInfo[index].trustLevel}%',
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -168,7 +170,7 @@ class _ButtonTemplateState extends State<FolderList> {
                                 child: MyProgressBar(
                                   bgColor: Theme.of(context).dividerColor,
                                   color: Theme.of(context).splashColor,
-                                  percent: 85,
+                                  percent: (widget.keeperInfo[index].trustLevel)!.toDouble(),
                                 ),
                               ),
                             ),
@@ -262,8 +264,8 @@ class _ButtonTemplateState extends State<FolderList> {
                         ),
                       ),
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
           ],

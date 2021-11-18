@@ -51,10 +51,10 @@ class S {
   }
 
   /// `Welcome to StorageUp`
-  String get welcome_to_upsctorage {
+  String get welcome_to_upstorage {
     return Intl.message(
       'Welcome to StorageUp',
-      name: 'welcome_to_upsctorage',
+      name: 'welcome_to_upstorage',
       desc: '',
       args: [],
     );
@@ -81,10 +81,10 @@ class S {
   }
 
   /// `Already have an account?`
-  String get allready_have_an_account {
+  String get already_have_an_account {
     return Intl.message(
       'Already have an account?',
-      name: 'allready_have_an_account',
+      name: 'already_have_an_account',
       desc: '',
       args: [],
     );
@@ -261,10 +261,10 @@ class S {
   }
 
   /// `User with this Email is already registered`
-  String get allready_registered_email {
+  String get already_registered_email {
     return Intl.message(
       'User with this Email is already registered',
-      name: 'allready_registered_email',
+      name: 'already_registered_email',
       desc: '',
       args: [],
     );
@@ -281,10 +281,10 @@ class S {
   }
 
   /// `, to reset your password, follow the link inside the letter`
-  String get resore_password_after_email {
+  String get restore_password_after_email {
     return Intl.message(
       ', to reset your password, follow the link inside the letter',
-      name: 'resore_password_after_email',
+      name: 'restore_password_after_email',
       desc: '',
       args: [],
     );
@@ -700,21 +700,21 @@ class S {
     );
   }
 
-  /// `Yuor income`
-  String get yuor_income {
+  /// `Your income`
+  String get your_income {
     return Intl.message(
-      'Yuor income',
-      name: 'yuor_income',
+      'Your income',
+      name: 'your_income',
       desc: '',
       args: [],
     );
   }
 
   /// `Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space`
-  String get our_tarff {
+  String get our_tariff {
     return Intl.message(
       'Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space',
-      name: 'our_tarff',
+      name: 'our_tariff',
       desc: '',
       args: [],
     );
@@ -745,6 +745,26 @@ class S {
     return Intl.message(
       'Exit',
       name: 'exit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `day`
+  String get day {
+    return Intl.message(
+      'day',
+      name: 'day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `$`
+  String get currency {
+    return Intl.message(
+      '\$',
+      name: 'currency',
       desc: '',
       args: [],
     );
