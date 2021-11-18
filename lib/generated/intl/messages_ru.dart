@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "active_sub":
+            MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
         "allready_have_an_account":
@@ -56,11 +58,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
+        "funds": MessageLookupByLibrary.simpleMessage("Вывод средств"),
+        "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
+        "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "make_money": MessageLookupByLibrary.simpleMessage(
             "диске - сдавайте пространство в аренду и зарабатывайте на нём!"),
+        "management":
+            MessageLookupByLibrary.simpleMessage("Управление подпиской"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Максимальный размер для вашего диска: 180 ГБ"),
         "min_storage": MessageLookupByLibrary.simpleMessage(
@@ -69,9 +76,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("сможете на этом заработать."),
         "money_two_step": MessageLookupByLibrary.simpleMessage(
             "Начните зарабатывать в два шага:"),
+        "more_space": MessageLookupByLibrary.simpleMessage(
+            "Получите больше пространства, поменяйте подписку!"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
+        "not_space": MessageLookupByLibrary.simpleMessage("Не хватает места?"),
         "not_storage":
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),
         "nothing_on_email":

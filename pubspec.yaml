@@ -31,6 +31,9 @@ dependencies:
   file_picker: ^4.0.2
   percent_indicator: ^3.0.1
   
+  cpp_native:
+    git:
+      url: git@github.com:SergeySor/cpp_native.git
 
 dev_dependencies:
   injectable_generator:

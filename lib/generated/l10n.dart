@@ -759,6 +759,76 @@ class S {
       args: [],
     );
   }
+
+  /// `Latest file`
+  String get latest_file {
+    return Intl.message(
+      'Latest file',
+      name: 'latest_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get more space change your subscription!`
+  String get more_space {
+    return Intl.message(
+      'Get more space change your subscription!',
+      name: 'more_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to`
+  String get go_to {
+    return Intl.message(
+      'Go to',
+      name: 'go_to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not enough space?`
+  String get not_space {
+    return Intl.message(
+      'Not enough space?',
+      name: 'not_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription management`
+  String get management {
+    return Intl.message(
+      'Subscription management',
+      name: 'management',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Withdraw funds`
+  String get funds {
+    return Intl.message(
+      'Withdraw funds',
+      name: 'funds',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active subscription`
+  String get active_sub {
+    return Intl.message(
+      'Active subscription',
+      name: 'active_sub',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

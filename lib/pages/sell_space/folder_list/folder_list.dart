@@ -41,7 +41,6 @@ class _ButtonTemplateState extends State<FolderList> {
     TextStyle redStyle = TextStyle(
       color: Theme.of(context).indicatorColor,
       fontSize: 14,
-      fontWeight: FontWeight.w700,
       fontFamily: kNormalTextFontFamily,
     );
     TextStyle cellTextStyle = TextStyle(
@@ -210,136 +209,6 @@ class _ButtonTemplateState extends State<FolderList> {
                                   PopupMenuItem(
                                     height: 40,
                                     child: Container(
-                                      width: 190,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/file_page/file_options/share.png',
-                                            height: 20,
-                                          ),
-                                          Container(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            'Share',
-                                            style: style,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  PopupMenuDivider(
-                                    height: 1,
-                                  ),
-                                  PopupMenuItem(
-                                    height: 40,
-                                    child: Container(
-                                      width: 170,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/file_page/file_options/move.png',
-                                            height: 20,
-                                          ),
-                                          Container(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            'Move',
-                                            style: style,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  PopupMenuDivider(
-                                    height: 1,
-                                  ),
-                                  PopupMenuItem(
-                                    height: 40,
-                                    child: Container(
-                                      width: 170,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/file_page/file_options/double.png',
-                                            height: 20,
-                                          ),
-                                          Container(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            'Double',
-                                            style: style,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  PopupMenuDivider(
-                                    height: 1,
-                                  ),
-                                  PopupMenuItem(
-                                    height: 40,
-                                    child: Container(
-                                      width: 170,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/file_page/file_options/favorites.png',
-                                            height: 20,
-                                          ),
-                                          Container(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            'Add to favorites',
-                                            style: style,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  PopupMenuDivider(
-                                    height: 1,
-                                  ),
-                                  PopupMenuItem(
-                                    height: 40,
-                                    child: Container(
-                                      width: 170,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/file_page/file_options/download.png',
-                                            height: 20,
-                                          ),
-                                          Container(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            'Download',
-                                            style: style,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  PopupMenuDivider(
-                                    height: 1,
-                                  ),
-                                  PopupMenuItem(
-                                    height: 40,
-                                    child: Container(
                                       width: 170,
                                       child: Row(
                                         crossAxisAlignment:
@@ -353,34 +222,8 @@ class _ButtonTemplateState extends State<FolderList> {
                                             width: 15,
                                           ),
                                           Text(
-                                            'Rename',
-                                            style: style,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  PopupMenuDivider(
-                                    height: 1,
-                                  ),
-                                  PopupMenuItem(
-                                    height: 40,
-                                    child: Container(
-                                      width: 170,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            'assets/file_page/file_options/info.png',
-                                            height: 20,
-                                          ),
-                                          Container(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            'Info',
-                                            style: style,
+                                            'Изменить',
+                                            style: cellTextStyle,
                                           ),
                                         ],
                                       ),
@@ -405,7 +248,7 @@ class _ButtonTemplateState extends State<FolderList> {
                                             width: 15,
                                           ),
                                           Text(
-                                            'Delete',
+                                            'Удалить',
                                             style: redStyle,
                                           ),
                                         ],

@@ -53,5 +53,3 @@ class _ButtonTemplateState extends State<CustomMenuButton> {
     );
   }
 }
-
-

@@ -69,5 +69,12 @@
     "earnings": "Your earnings will be",
     "save": "Save",
     "exit": "Exit",
-    "trust_level": "Trust level"
+    "trust_level": "Trust level",
+    "latest_file": "Latest file",
+    "more_space": "Get more space change your subscription!",
+    "go_to": "Go to",
+    "not_space": "Not enough space?",
+    "management": "Subscription management",
+    "funds": "Withdraw funds",
+    "active_sub": "Active subscription"
 }

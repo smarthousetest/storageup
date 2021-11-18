@@ -67,8 +67,8 @@ class _AuthViewState extends State<AuthView> {
     var theme = Theme.of(context);
 
     if (!_isSignIn && _isAnimationCompleted) {
-      controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
-      //controller.jumpTo(720);
+      //controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
+      controller.jumpTo(720);
     }
 
     return BlocProvider(
@@ -320,7 +320,7 @@ class _AuthViewState extends State<AuthView> {
   }
 
   Widget _mainSection(ThemeData theme) {
-    // var width = MediaQuery.of(context).size.width * 0.6;
+    //var width = MediaQuery.of(context).size.width * 0.565;
     var width = 720.0;
     return LayoutBuilder(builder: (context, constrains) {
       return ConstrainedBox(
@@ -350,7 +350,6 @@ class _AuthViewState extends State<AuthView> {
 
   Widget _signInMain(ThemeData theme) {
     printsize();
-    //final FocusNode _focusNode = FocusNode();
     List<LogicalKeyboardKey> keys = [];
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
@@ -536,7 +535,7 @@ class _AuthViewState extends State<AuthView> {
                   children: [
                     Expanded(
                       child: Divider(
-                        height: 2,
+                        height: 1,
                         endIndent: 10,
                         color: theme.colorScheme.onBackground,
                       ),
@@ -1044,7 +1043,7 @@ class _AuthViewState extends State<AuthView> {
       if (_isSignIn) {
         _isAnimationCompleted = false;
         controller
-            .animateTo(MediaQuery.of(context).size.width * 0.565,
+            .animateTo(MediaQuery.of(context).size.width * 0.563,
                 duration: Duration(milliseconds: 500), curve: Curves.linear)
             .then((value) => _isAnimationCompleted = true);
         focusNodeForName.requestFocus();

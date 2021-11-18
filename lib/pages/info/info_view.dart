@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,6 +7,10 @@ import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
 import '../../theme.dart';
 import '../../constants.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
+import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 
 class InfoPage extends StatefulWidget {
   @override
@@ -14,6 +20,33 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
+  ChoosedPage choosedPage = ChoosedPage.home;
+
+  void changePage(ChoosedPage newPage) {
+    setState(() {
+      choosedPage = newPage;
+    });
+  }
+
+  Widget getPage() {
+    switch (choosedPage) {
+      case ChoosedPage.finance:
+        return FinancePage();
+      default:
+        return InfoPage();
+    }
+  }
+
+  S translate = getIt<S>();
+
+  bool _canShowClose = true;
+
+  void hideWidget() {
+    setState(() {
+      _canShowClose = !_canShowClose;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -998,6 +1031,121 @@ class _InfoPageState extends State<InfoPage> {
                             ),
                           ),
                         ),
+                        _canShowClose
+                            ? Expanded(
+                                child: Align(
+                                  alignment: FractionalOffset.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 0, left: 0),
+                                    child: SizedBox(
+                                      height: 199,
+                                      width: 280,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).dividerColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                                color: Color.fromARGB(
+                                                    25, 23, 69, 139),
+                                                blurRadius: 4,
+                                                offset: Offset(1, 4))
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: hideWidget,
+                                              child: Align(
+                                                alignment:
+                                                    FractionalOffset.topRight,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 10, right: 10),
+                                                  child: MouseRegion(
+                                                    cursor: SystemMouseCursors
+                                                        .click,
+                                                    child: SvgPicture.asset(
+                                                        "assets/file_page/close.svg"),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 7),
+                                              child: Text(
+                                                translate.not_space,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 20),
+                                              child: Text(
+                                                translate.more_space,
+                                                textAlign: TextAlign.center,
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily:
+                                                        kNormalTextFontFamily),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 35),
+                                              child: Container(
+                                                height: 42,
+                                                width: 230,
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    changePage(
+                                                        ChoosedPage.finance);
+                                                  },
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    minimumSize: Size(
+                                                        double.maxFinite, 60),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                    backgroundColor:
+                                                        Theme.of(context)
+                                                            .splashColor,
+                                                  ),
+                                                  child: Text(
+                                                    translate.go_to,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      fontFamily:
+                                                          kNormalTextFontFamily,
+                                                      fontSize: 17,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container()
                       ],
                     ),
                   ),

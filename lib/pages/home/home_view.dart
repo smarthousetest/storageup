@@ -9,6 +9,7 @@ import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
@@ -55,6 +56,8 @@ class _HomePageState extends State<HomePage> {
         return LikePage();
       case ChoosedPage.sell_space:
         return SpaceSellPage();
+      case ChoosedPage.finance:
+        return FinancePage();
       default:
         return InfoPage();
     }
@@ -220,7 +223,9 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/finance.svg",
         title: "Финансы",
-        function: () {},
+        function: () {
+          changePage(ChoosedPage.finance);
+        },
       ),
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
@@ -232,11 +237,90 @@ class _HomePageState extends State<HomePage> {
         title: "Корзина",
         function: () {},
       ),
-      SizedBox(
-        height: 259,
+      Padding(
+        padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
+        child: Container(
+          height: 1,
+          decoration: BoxDecoration(
+            color: Theme.of(context).dividerColor,
+          ),
+        ),
       ),
       Padding(
-        padding: const EdgeInsets.only(bottom: 30, left: 30, right: 30),
+        padding: const EdgeInsets.only(top: 25, right: 75),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Text(
+                translate.latest_file,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: kNormalTextFontFamily,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 40),
+                  child: SvgPicture.asset('assets/file_page/word.svg'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, top: 20),
+                  child: Text(
+                    "Доклад",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 40),
+                  child: SvgPicture.asset('assets/file_page/word.svg'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, top: 20),
+                  child: Text(
+                    "Документ",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 40),
+                  child: SvgPicture.asset('assets/file_page/pdf.svg'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, top: 20),
+                  child: Text(
+                    "Иллюстрация",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
         child: ElevatedButton(
           onPressed: () async {
             var str = await showDialog(
@@ -290,29 +374,32 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.only(bottom: 30, left: 40, right: 30),
-        child: Container(
-          width: 93,
-          height: 24,
-          child: RichText(
-            text: TextSpan(
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontSize: 17,
-                  fontFamily: kNormalTextFontFamily,
-                ),
-                children: [
-                  WidgetSpan(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: Image.asset('assets/home_page/exit.png'),
+      Align(
+        alignment: FractionalOffset.bottomLeft,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30, left: 40, bottom: 30),
+          child: Container(
+            width: 93,
+            height: 24,
+            child: RichText(
+              text: TextSpan(
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontSize: 17,
+                    fontFamily: kNormalTextFontFamily,
+                  ),
+                  children: [
+                    WidgetSpan(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Image.asset('assets/home_page/exit.png'),
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: translate.exit,
-                  ),
-                ]),
+                    TextSpan(
+                      text: translate.exit,
+                    ),
+                  ]),
+            ),
           ),
         ),
       )

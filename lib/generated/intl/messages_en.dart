@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "active_sub":
+            MessageLookupByLibrary.simpleMessage("Active subscription"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "add_location": MessageLookupByLibrary.simpleMessage("Add location"),
         "allready_have_an_account":
@@ -56,11 +58,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "format": MessageLookupByLibrary.simpleMessage("Format"),
+        "funds": MessageLookupByLibrary.simpleMessage("Withdraw funds"),
+        "go_to": MessageLookupByLibrary.simpleMessage("Go to"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Go to authorization"),
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
+        "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
         "make_money": MessageLookupByLibrary.simpleMessage(
             "disk - rent space and make money on it!"),
+        "management":
+            MessageLookupByLibrary.simpleMessage("Subscription management"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Maximum size for your drive: 180 GB"),
         "min_storage":
@@ -69,9 +76,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("can make money from it."),
         "money_two_step":
             MessageLookupByLibrary.simpleMessage("Start earning in two steps:"),
+        "more_space": MessageLookupByLibrary.simpleMessage(
+            "Get more space change your subscription!"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
+        "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
         "not_storage": MessageLookupByLibrary.simpleMessage(
             "You have no storage locations yet"),
         "nothing_on_email":
