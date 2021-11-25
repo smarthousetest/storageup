@@ -19,8 +19,8 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
       type: FileType.any,
     );
     if (result != null) {
-      List<String?> file_paths = result.paths;
-      return file_paths;
+      List<String?> filePaths = result.paths;
+      return filePaths;
     } else {
       return null;
     }

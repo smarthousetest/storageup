@@ -849,6 +849,306 @@ class S {
       args: [],
     );
   }
+
+  /// `Personal data`
+  String get personal_data {
+    return Intl.message(
+      'Personal data',
+      name: 'personal_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Regulations`
+  String get regulations {
+    return Intl.message(
+      'Regulations',
+      name: 'regulations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Options`
+  String get options {
+    return Intl.message(
+      'Options',
+      name: 'options',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Privacy policy`
+  String get privacy_policy {
+    return Intl.message(
+      'Privacy policy',
+      name: 'privacy_policy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1. General Provisions`
+  String get provisions {
+    return Intl.message(
+      '1. General Provisions',
+      name: 'provisions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» (далее - Закон о персональных данных) и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Михайловым Иваном Сергеевичем (далее – Оператор).1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.1.2. Настоящая политика Оператора в отношении обработки персональных данных (далее – Политика) применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта httpsː//thismywebsite·com.`
+  String get personal {
+    return Intl.message(
+      'Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» (далее - Закон о персональных данных) и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Михайловым Иваном Сергеевичем (далее – Оператор).1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.1.2. Настоящая политика Оператора в отношении обработки персональных данных (далее – Политика) применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта httpsː//thismywebsite·com.',
+      name: 'personal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile photo`
+  String get profile_photo {
+    return Intl.message(
+      'Profile photo',
+      name: 'profile_photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mail`
+  String get mail {
+    return Intl.message(
+      'Mail',
+      name: 'mail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change password`
+  String get change_password {
+    return Intl.message(
+      'Change password',
+      name: 'change_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete account`
+  String get delete_account {
+    return Intl.message(
+      'Delete account',
+      name: 'delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Common parameters`
+  String get parameters {
+    return Intl.message(
+      'Common parameters',
+      name: 'parameters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date format`
+  String get date_format {
+    return Intl.message(
+      'Date format',
+      name: 'date_format',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change password`
+  String get change_Password {
+    return Intl.message(
+      'Change password',
+      name: 'change_Password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The new password must be at least 8 characters long`
+  String get new_password_8 {
+    return Intl.message(
+      'The new password must be at least 8 characters long',
+      name: 'new_password_8',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New password`
+  String get new_password {
+    return Intl.message(
+      'New password',
+      name: 'new_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repeat new password`
+  String get repeat_passsword {
+    return Intl.message(
+      'Repeat new password',
+      name: 'repeat_passsword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your old password`
+  String get old_password {
+    return Intl.message(
+      'Enter your old password',
+      name: 'old_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account deleting`
+  String get accaunt_deleting {
+    return Intl.message(
+      'Account deleting',
+      name: 'accaunt_deleting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to permanently delete your account`
+  String get permanently_delete {
+    return Intl.message(
+      'Are you sure you want to permanently delete your account',
+      name: 'permanently_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `in StorageUp?`
+  String get in_StorageUp {
+    return Intl.message(
+      'in StorageUp?',
+      name: 'in_StorageUp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your files will disappear forever and cannot be recovered.`
+  String get cannot_recovered {
+    return Intl.message(
+      'Your files will disappear forever and cannot be recovered.',
+      name: 'cannot_recovered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Before deleting an account`
+  String get before_deleting {
+    return Intl.message(
+      'Before deleting an account',
+      name: 'before_deleting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `contact us`
+  String get contact_us {
+    return Intl.message(
+      'contact us',
+      name: 'contact_us',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `, maybe we can help you.`
+  String get we_can_help {
+    return Intl.message(
+      ', maybe we can help you.',
+      name: 'we_can_help',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reason for deletion`
+  String get reason_deleting {
+    return Intl.message(
+      'Reason for deletion',
+      name: 'reason_deleting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tell us why you decided to delete your account`
+  String get tell_us {
+    return Intl.message(
+      'Tell us why you decided to delete your account',
+      name: 'tell_us',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete permanently`
+  String get delete_permanently {
+    return Intl.message(
+      'Delete permanently',
+      name: 'delete_permanently',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter password`
+  String get enter_password {
+    return Intl.message(
+      'Enter password',
+      name: 'enter_password',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "accaunt_deleting":
+            MessageLookupByLibrary.simpleMessage("Удаление аккаунта"),
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
@@ -34,10 +36,25 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Вернуться к авторизации"),
         "back_to_main":
             MessageLookupByLibrary.simpleMessage("Вернуться на главную"),
+        "before_deleting":
+            MessageLookupByLibrary.simpleMessage("До удаления аккаунта "),
+        "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "cannot_recovered": MessageLookupByLibrary.simpleMessage(
+            "Ваши файлы исчезнут навсегда без возможности восстановления."),
+        "change_Password":
+            MessageLookupByLibrary.simpleMessage("Изменение пароля"),
+        "change_password":
+            MessageLookupByLibrary.simpleMessage("Изменить пароль"),
+        "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
         "currency": MessageLookupByLibrary.simpleMessage("₽"),
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
+        "date_format": MessageLookupByLibrary.simpleMessage("Формат даты"),
         "day": MessageLookupByLibrary.simpleMessage("день"),
+        "delete_account":
+            MessageLookupByLibrary.simpleMessage("Удалить аккаунт"),
+        "delete_permanently":
+            MessageLookupByLibrary.simpleMessage("Удалить навсегда"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Ваш заработок составит"),
         "email": MessageLookupByLibrary.simpleMessage("E-mail"),
@@ -55,6 +72,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Подтверждение e-mail адреса"),
         "email_successfully": MessageLookupByLibrary.simpleMessage(
             "Ваш e-mail адрес успешно подтверждён"),
+        "enter_password":
+            MessageLookupByLibrary.simpleMessage("Введите пароль"),
         "exit": MessageLookupByLibrary.simpleMessage("Выход"),
         "folder": MessageLookupByLibrary.simpleMessage("Выберите папку"),
         "forgot_password":
@@ -65,7 +84,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
+        "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
+        "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
+        "mail": MessageLookupByLibrary.simpleMessage("Почта"),
         "make_money": MessageLookupByLibrary.simpleMessage(
             "диске - сдавайте пространство в аренду и зарабатывайте на нём!"),
         "management":
@@ -81,6 +103,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "more_space": MessageLookupByLibrary.simpleMessage(
             "Получите больше пространства, поменяйте подписку!"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
+        "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
+        "new_password_8": MessageLookupByLibrary.simpleMessage(
+            "Новый пароль должен содержать не менее 8 символов"),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
         "not_space": MessageLookupByLibrary.simpleMessage("Не хватает места?"),
@@ -88,23 +113,43 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
+        "old_password":
+            MessageLookupByLibrary.simpleMessage("Введите старый пароль"),
+        "options": MessageLookupByLibrary.simpleMessage("Параметры     "),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Наш тариф предполагает оплату 0,2 ₽/день за 1 ГБ сданного пространства"),
         "overview": MessageLookupByLibrary.simpleMessage("Обзор"),
+        "parameters": MessageLookupByLibrary.simpleMessage("Общие параметры"),
         "password": MessageLookupByLibrary.simpleMessage("Пароль"),
         "password_recovery":
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
+        "permanently_delete": MessageLookupByLibrary.simpleMessage(
+            "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
+        "personal": MessageLookupByLibrary.simpleMessage(
+            "Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» (далее - Закон о персональных данных) и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Михайловым Иваном Сергеевичем (далее – Оператор).1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.1.2. Настоящая политика Оператора в отношении обработки персональных данных (далее – Политика) применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта httpsː//thismywebsite·com."),
+        "personal_data": MessageLookupByLibrary.simpleMessage("Личные данные"),
+        "privacy_policy":
+            MessageLookupByLibrary.simpleMessage("Политика конфиденциальности"),
+        "profile_photo": MessageLookupByLibrary.simpleMessage("Фото профиля"),
+        "provisions":
+            MessageLookupByLibrary.simpleMessage("1. Общие положения"),
+        "reason_deleting":
+            MessageLookupByLibrary.simpleMessage("Причина удаления"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "register_complete":
             MessageLookupByLibrary.simpleMessage("Регистрация завершена"),
         "registration": MessageLookupByLibrary.simpleMessage("Регистрация"),
+        "regulations":
+            MessageLookupByLibrary.simpleMessage("Нормативные документы"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "Вы можете использовать свободное место на вашем жестком"),
+        "repeat_passsword":
+            MessageLookupByLibrary.simpleMessage("Повторите новый пароль"),
         "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
             " отправлено письмо. Для восстановления пароля перейдите по ссылке внутри письма."),
         "restore_password_before_email":
@@ -129,6 +174,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
+        "tell_us": MessageLookupByLibrary.simpleMessage(
+            "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(
             "Пользовательского соглашения"),
         "term_of_use_after": MessageLookupByLibrary.simpleMessage(
@@ -141,6 +188,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
+        "we_can_help": MessageLookupByLibrary.simpleMessage(
+            ", возможно, мы сможем вам помочь."),
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "wrong_cred":

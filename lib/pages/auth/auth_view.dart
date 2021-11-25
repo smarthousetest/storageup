@@ -32,7 +32,8 @@ class _AuthViewState extends State<AuthView> {
   bool _isSignIn = true;
   bool _isAnimationCompleted = true;
   final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
   final ScrollController controller = ScrollController();
 
   @override
@@ -52,7 +53,8 @@ class _AuthViewState extends State<AuthView> {
     var width = 1280.0;
     if (Platform.isWindows) {
       width = 1296.0;
-    }if (Platform.isLinux){
+    }
+    if (Platform.isLinux) {
       width = 1392.0;
       height = 866.0;
     }
@@ -349,7 +351,6 @@ class _AuthViewState extends State<AuthView> {
   var currentFocusNode = FocusNode();
 
   Widget _signInMain(ThemeData theme) {
-    printsize();
     List<LogicalKeyboardKey> keys = [];
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {

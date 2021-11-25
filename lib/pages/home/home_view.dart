@@ -15,7 +15,7 @@ import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
 
 enum Blur {
@@ -59,6 +59,8 @@ class _HomePageState extends State<HomePage> {
         return SpaceSellPage();
       case ChoosedPage.finance:
         return FinancePage();
+      case ChoosedPage.settings:
+        return SettingsPage();
       default:
         return InfoPage();
     }
@@ -213,7 +215,9 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
         title: "Настройки",
-        function: () {},
+        function: () {
+          changePage(ChoosedPage.settings);
+        },
       ),
       CustomMenuButton(
         icon: "assets/home_page/trash.svg",
