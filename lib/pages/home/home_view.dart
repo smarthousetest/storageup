@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:desktop_window/desktop_window.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 
 enum Blur {
   rename,
@@ -45,6 +47,20 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       choosedPage = newPage;
     });
+  }
+
+  bool setSize = false;
+
+  void setSizeWindow() {
+    var height = 540.0;
+    var width = 960.0;
+
+    DesktopWindow.setMinWindowSize(Size(width, height));
+
+    // var heightWindow = MediaQuery.of(context).size.height;
+    // var widthWindow = MediaQuery.of(context).size.width;
+
+    // DesktopWindow.setMaxWindowSize(Size(widthWindow, heightWindow));
   }
 
   Widget getPage() {
@@ -76,7 +92,7 @@ class _HomePageState extends State<HomePage> {
             );
       case Blur.delete:
         return BlurDelete(
-          blur_item: blurItem,
+          blurItem: blurItem,
         );
       // case Blur.create_album:
       //   return BlurCreateAlbum(blur_item: blur_item,);
@@ -91,6 +107,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (setSize == false) {
+      setSizeWindow();
+      setSize = true;
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       body: Stack(
@@ -368,24 +389,33 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             width: 93,
             height: 24,
-            child: RichText(
-              text: TextSpan(
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontSize: 17,
-                    fontFamily: kNormalTextFontFamily,
-                  ),
-                  children: [
-                    WidgetSpan(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: Image.asset('assets/home_page/exit.png'),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AuthView.route, (route) => false);
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily,
                       ),
-                    ),
-                    TextSpan(
-                      text: translate.exit,
-                    ),
-                  ]),
+                      children: [
+                        WidgetSpan(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Image.asset('assets/home_page/exit.png'),
+                          ),
+                        ),
+                        TextSpan(
+                          text: translate.exit,
+                        ),
+                      ]),
+                ),
+              ),
             ),
           ),
         ),

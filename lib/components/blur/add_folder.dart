@@ -2,14 +2,18 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilities/injection.dart';
 
-class BlurRename extends StatefulWidget {
+class BlurAddFolder extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurRename();
+  BlurAddFolder();
 }
 
-class _ButtonTemplateState extends State<BlurRename> {
+class _ButtonTemplateState extends State<BlurAddFolder> {
+  S translate = getIt<S>();
   final myController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -47,11 +51,11 @@ class _ButtonTemplateState extends State<BlurRename> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Переименовать',
+                            translate.create_folder,
                             style: TextStyle(
                               fontSize: 20,
-                              fontFamily: 'Lato',
-                              color: Color(0xff5F5F5F),
+                              fontFamily: kNormalTextFontFamily,
+                              color: Theme.of(context).focusColor,
                             ),
                           ),
                           Padding(
@@ -60,7 +64,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                               width: 400,
                               height: 36,
                               decoration: BoxDecoration(
-                                color: Color(0xffF7F9FB),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               alignment: Alignment.center,
@@ -69,20 +73,26 @@ class _ButtonTemplateState extends State<BlurRename> {
                                 textAlignVertical: TextAlignVertical.bottom,
                                 textAlign: TextAlign.start,
                                 autofocus: true,
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    hintText: 'Новое имя',
-                                    hintStyle: TextStyle(
-                                      color: Color(0xff7D7D7D),
-                                      fontFamily: 'Lato',
-                                      fontSize: 14,
-                                    )),
+                                decoration: InputDecoration(
+                                  contentPadding:
+                                      EdgeInsets.only(left: 15, bottom: 21),
+                                  hoverColor: Theme.of(context).cardColor,
+                                  focusColor: Theme.of(context).cardColor,
+                                  fillColor: Theme.of(context).cardColor,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                        color: Color(0xffE4E7ED), width: 0.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(
+                                        color: Color(0xffE4E7ED), width: 0.0),
+                                  ),
+                                ),
                                 style: TextStyle(
-                                  color: Color(0xff7D7D7D),
-                                  fontFamily: 'Lato',
+                                  color: Theme.of(context).disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
                                   fontSize: 14,
                                 ),
                               ),
@@ -91,28 +101,30 @@ class _ButtonTemplateState extends State<BlurRename> {
                           Padding(
                             padding: const EdgeInsets.only(top: 26),
                             child: Container(
-                              width: 400,
+                              width: 520,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Container(
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                       child: Text(
-                                        'Отмена',
+                                        translate.cancel,
                                         style: TextStyle(
-                                          color: Color(0xff70BBF6),
+                                          color: Theme.of(context).splashColor,
                                           fontSize: 16,
-                                          fontFamily: 'Lato',
+                                          fontFamily: kNormalTextFontFamily,
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
+                                        primary: Theme.of(context).primaryColor,
                                         fixedSize: Size(140, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Color(0xff70BBF6),
+                                          color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -129,20 +141,20 @@ class _ButtonTemplateState extends State<BlurRename> {
                                             context, myController.text);
                                       },
                                       child: Text(
-                                        'Сохранить',
+                                        translate.save,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Theme.of(context).primaryColor,
                                           fontSize: 16,
-                                          fontFamily: 'Lato',
+                                          fontFamily: kNormalTextFontFamily,
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Color(0xff70BBF6),
+                                        primary: Theme.of(context).splashColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Color(0xff70BBF6),
+                                          color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -163,11 +175,13 @@ class _ButtonTemplateState extends State<BlurRename> {
                     width: 60,
                     alignment: Alignment.topRight,
                     child: IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.close,
-                        color: Color(0xff70BBF6),
+                        color: Theme.of(context).splashColor,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
                 ],

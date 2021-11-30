@@ -1149,6 +1149,106 @@ class S {
       args: [],
     );
   }
+
+  /// `Folder`
+  String get folder_dir {
+    return Intl.message(
+      'Folder',
+      name: 'folder_dir',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent`
+  String get recent {
+    return Intl.message(
+      'Recent',
+      name: 'recent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Properties`
+  String get properties {
+    return Intl.message(
+      'Properties',
+      name: 'properties',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get type {
+    return Intl.message(
+      'Type',
+      name: 'type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Created`
+  String get created {
+    return Intl.message(
+      'Created',
+      name: 'created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Changed`
+  String get changed {
+    return Intl.message(
+      'Changed',
+      name: 'changed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Viewed`
+  String get viewed {
+    return Intl.message(
+      'Viewed',
+      name: 'viewed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location`
+  String get location {
+    return Intl.message(
+      'Location',
+      name: 'location',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open`
+  String get open {
+    return Intl.message(
+      'Open',
+      name: 'open',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create folder`
+  String get create_folder {
+    return Intl.message(
+      'Create folder',
+      name: 'create_folder',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

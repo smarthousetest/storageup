@@ -108,5 +108,15 @@
     "reason_deleting": "Reason for deletion",
     "tell_us": "Tell us why you decided to delete your account",
     "delete_permanently": "Delete permanently",
-    "enter_password": "Enter password"
+    "enter_password": "Enter password",
+    "folder_dir": "Folder",
+    "recent": "Recent",
+    "properties": "Properties",
+    "type": "Type",
+    "created": "Created",
+    "changed": "Changed",
+    "viewed": "Viewed",
+    "location": "Location",
+    "open": "Open",
+    "create_folder": "Create folder"
 }

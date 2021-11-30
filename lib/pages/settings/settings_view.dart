@@ -61,7 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   offset: Offset(1, 4))
             ],
           ),
-          child: ListView(children: [
+          child: ListView(controller: ScrollController(), children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -495,7 +495,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20, left: 40),
+                      padding:
+                          const EdgeInsets.only(top: 20, left: 40, bottom: 30),
                       child: Container(
                         width: 350,
                         height: 42,
@@ -575,7 +576,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   offset: Offset(1, 4))
             ],
           ),
-          child: ListView(children: [
+          child: ListView(controller: ScrollController(), children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -835,7 +836,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   offset: Offset(1, 4))
             ],
           ),
-          child: ListView(children: [
+          child: ListView(controller: ScrollController(), children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

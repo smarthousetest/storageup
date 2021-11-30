@@ -315,7 +315,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20),
+                padding: const EdgeInsets.only(left: 40, top: 20, bottom: 30),
                 child: Container(
                   height: 42,
                   width: 200,
@@ -731,7 +731,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 40, top: 31),
+                padding: const EdgeInsets.only(left: 40, top: 31, bottom: 30),
                 child: Container(
                   height: 42,
                   width: 200,

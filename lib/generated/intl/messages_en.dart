@@ -45,8 +45,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_password":
             MessageLookupByLibrary.simpleMessage("Change password"),
+        "changed": MessageLookupByLibrary.simpleMessage("Changed"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
+        "create_folder": MessageLookupByLibrary.simpleMessage("Create folder"),
+        "created": MessageLookupByLibrary.simpleMessage("Created"),
         "currency": MessageLookupByLibrary.simpleMessage("\$"),
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "date_format": MessageLookupByLibrary.simpleMessage("Date format"),
@@ -76,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter password"),
         "exit": MessageLookupByLibrary.simpleMessage("Exit"),
         "folder": MessageLookupByLibrary.simpleMessage("Select a folder"),
+        "folder_dir": MessageLookupByLibrary.simpleMessage("Folder"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "format": MessageLookupByLibrary.simpleMessage("Format"),
@@ -87,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
+        "location": MessageLookupByLibrary.simpleMessage("Location"),
         "mail": MessageLookupByLibrary.simpleMessage("Mail"),
         "make_money": MessageLookupByLibrary.simpleMessage(
             "disk - rent space and make money on it!"),
@@ -115,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Enter your old password"),
+        "open": MessageLookupByLibrary.simpleMessage("Open"),
         "options": MessageLookupByLibrary.simpleMessage("Options"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("or continue with"),
@@ -135,10 +141,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "privacy_policy":
             MessageLookupByLibrary.simpleMessage("Privacy policy"),
         "profile_photo": MessageLookupByLibrary.simpleMessage("Profile photo"),
+        "properties": MessageLookupByLibrary.simpleMessage("Properties"),
         "provisions":
             MessageLookupByLibrary.simpleMessage("1. General Provisions"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Reason for deletion"),
+        "recent": MessageLookupByLibrary.simpleMessage("Recent"),
         "register": MessageLookupByLibrary.simpleMessage("Register now"),
         "register_complete":
             MessageLookupByLibrary.simpleMessage("Registration completed"),
@@ -182,9 +190,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "to_send_letter":
             MessageLookupByLibrary.simpleMessage("Send email again"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Trust level"),
+        "type": MessageLookupByLibrary.simpleMessage("Type"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
+        "viewed": MessageLookupByLibrary.simpleMessage("Viewed"),
         "we_can_help":
             MessageLookupByLibrary.simpleMessage(", maybe we can help you."),
         "welcome_to_upstorage":

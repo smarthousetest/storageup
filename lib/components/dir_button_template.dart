@@ -4,12 +4,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:upstorage_desktop/constants.dart';
 
 class CustomDirButton extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   String name;
-  TextEditingController? dir_name;
+  TextEditingController? dirName;
   Function()? onTap;
   CustomDirButton({required this.name, this.onTap});
 }
@@ -203,8 +204,8 @@ class _ButtonTemplateState extends State<CustomDirButton> {
     return Padding(
       padding: const EdgeInsets.only(right: 31),
       child: Container(
-        width: 140,
-        height: 140,
+        width: 130,
+        height: 130,
         child: Listener(
           child: ElevatedButton(
             child: Column(
@@ -212,9 +213,9 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: SvgPicture.asset(
-                    'assets/home_page/files_r.svg',
-                    height: 58,
-                    width: 58,
+                    'assets/home_page/add_folder.svg',
+                    height: 46,
+                    width: 46,
                   ),
                 ),
                 Text(
@@ -222,7 +223,7 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
-                    fontFamily: 'Lato',
+                    fontFamily: kNormalTextFontFamily,
                     color: Color(0xff7D7D7D),
                   ),
                 ),

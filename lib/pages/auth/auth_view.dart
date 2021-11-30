@@ -157,7 +157,7 @@ class _AuthViewState extends State<AuthView> {
   }
 
   Widget _signIn(ThemeData theme) {
-    var fullWidth = MediaQuery.of(context).size.width;
+    //var fullWidth = MediaQuery.of(context).size.width;
     var widthOfContainer = 560.0;
     printSize();
     return Container(

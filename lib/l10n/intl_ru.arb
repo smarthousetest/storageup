@@ -110,5 +110,15 @@
     "reason_deleting": "Причина удаления",
     "tell_us": "Расскажите нам, почему вы решили удалить аккаунт",
     "delete_permanently": "Удалить навсегда",
-    "enter_password": "Введите пароль"
+    "enter_password": "Введите пароль",
+    "folder_dir": "Папки",
+    "recent": "Недавние",
+    "properties": "Свойства",
+    "type": "Тип",
+    "created": "Создано",
+    "changed": "Изменено",
+    "viewed": "Просмотрено",
+    "location": "Расположение",
+    "open": "Открыть",
+    "create_folder": "Создание папки"
 }

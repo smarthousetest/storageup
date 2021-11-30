@@ -45,8 +45,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Изменение пароля"),
         "change_password":
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
+        "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
+        "create_folder": MessageLookupByLibrary.simpleMessage("Создание папки"),
+        "created": MessageLookupByLibrary.simpleMessage("Создано"),
         "currency": MessageLookupByLibrary.simpleMessage("₽"),
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "date_format": MessageLookupByLibrary.simpleMessage("Формат даты"),
@@ -76,6 +79,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
         "exit": MessageLookupByLibrary.simpleMessage("Выход"),
         "folder": MessageLookupByLibrary.simpleMessage("Выберите папку"),
+        "folder_dir": MessageLookupByLibrary.simpleMessage("Папки"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
@@ -87,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
+        "location": MessageLookupByLibrary.simpleMessage("Расположение"),
         "mail": MessageLookupByLibrary.simpleMessage("Почта"),
         "make_money": MessageLookupByLibrary.simpleMessage(
             "диске - сдавайте пространство в аренду и зарабатывайте на нём!"),
@@ -115,6 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Введите старый пароль"),
+        "open": MessageLookupByLibrary.simpleMessage("Открыть"),
         "options": MessageLookupByLibrary.simpleMessage("Параметры     "),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
@@ -135,10 +141,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "privacy_policy":
             MessageLookupByLibrary.simpleMessage("Политика конфиденциальности"),
         "profile_photo": MessageLookupByLibrary.simpleMessage("Фото профиля"),
+        "properties": MessageLookupByLibrary.simpleMessage("Свойства"),
         "provisions":
             MessageLookupByLibrary.simpleMessage("1. Общие положения"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Причина удаления"),
+        "recent": MessageLookupByLibrary.simpleMessage("Недавние"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "register_complete":
             MessageLookupByLibrary.simpleMessage("Регистрация завершена"),
@@ -185,9 +193,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "to_send_letter":
             MessageLookupByLibrary.simpleMessage("Отправить письмо еще раз"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Уровень доверия"),
+        "type": MessageLookupByLibrary.simpleMessage("Тип"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
+        "viewed": MessageLookupByLibrary.simpleMessage("Просмотрено"),
         "we_can_help": MessageLookupByLibrary.simpleMessage(
             ", возможно, мы сможем вам помочь."),
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(

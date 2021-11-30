@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 
 class BlurDelete extends StatefulWidget {
-
-
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  Blur blur_item;
-  BlurDelete({required this.blur_item});
+  Blur blurItem;
+  BlurDelete({required this.blurItem});
 }
 
 class _ButtonTemplateState extends State<BlurDelete> {
@@ -42,9 +40,7 @@ class _ButtonTemplateState extends State<BlurDelete> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 25),
-                      child: Text(
-                        'Вы действительно хотите удалить'
-                      ),
+                      child: Text('Вы действительно хотите удалить'),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 26),
