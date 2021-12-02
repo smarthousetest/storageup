@@ -118,5 +118,13 @@
     "viewed": "Viewed",
     "location": "Location",
     "open": "Open",
-    "create_folder": "Create folder"
+    "create_folder": "Create folder",
+    "create_a_folder": "Create a folder",
+    "create_album": "Create album",
+    "upload_to_files": "Upload to files",
+    "upload_to_media": "Upload to media",
+    "you_rent": "You are renting",
+    "you_turn_in": "You turn in",
+    "upload": "Upload",
+    "rent": "Rent"
 }

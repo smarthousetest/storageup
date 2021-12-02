@@ -16,15 +16,15 @@ enum FileOptions {
   remove,
 }
 
-class FilesList extends StatefulWidget {
+class MediaList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 
-  FilesList();
+  MediaList();
 }
 // Widget Data Table
 
-class _ButtonTemplateState extends State<FilesList> {
+class _ButtonTemplateState extends State<MediaList> {
   // List<bool> ifFavoritesPressedList = [];
   // List<bool> isPopupMenuButtonClicked = [];
   ScrollController _controller = ScrollController();

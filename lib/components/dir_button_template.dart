@@ -213,7 +213,7 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: SvgPicture.asset(
-                    'assets/home_page/add_folder.svg',
+                    'assets/home_page/files_r.svg',
                     height: 46,
                     width: 46,
                   ),

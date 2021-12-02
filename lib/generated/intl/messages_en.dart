@@ -48,6 +48,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
+        "create_a_folder":
+            MessageLookupByLibrary.simpleMessage("Create a folder"),
+        "create_album": MessageLookupByLibrary.simpleMessage("Create album"),
         "create_folder": MessageLookupByLibrary.simpleMessage("Create folder"),
         "created": MessageLookupByLibrary.simpleMessage("Created"),
         "currency": MessageLookupByLibrary.simpleMessage("\$"),
@@ -153,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "registration": MessageLookupByLibrary.simpleMessage("Registration"),
         "regulations": MessageLookupByLibrary.simpleMessage("Regulations"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Remember me"),
+        "rent": MessageLookupByLibrary.simpleMessage("Rent"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "You can use free space on your hard"),
         "repeat_passsword":
@@ -191,8 +195,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Send email again"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Trust level"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
+        "upload": MessageLookupByLibrary.simpleMessage("Upload"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),
+        "upload_to_files":
+            MessageLookupByLibrary.simpleMessage("Upload to files"),
+        "upload_to_media":
+            MessageLookupByLibrary.simpleMessage("Upload to media"),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
         "viewed": MessageLookupByLibrary.simpleMessage("Viewed"),
         "we_can_help":
@@ -207,6 +216,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Password must be more than 8 characters"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Username must be more than 2 characters"),
+        "you_rent": MessageLookupByLibrary.simpleMessage("You are renting"),
+        "you_turn_in": MessageLookupByLibrary.simpleMessage("You turn in"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("to your balance."),
         "your_income": MessageLookupByLibrary.simpleMessage("Your income")

@@ -120,5 +120,13 @@
     "viewed": "Просмотрено",
     "location": "Расположение",
     "open": "Открыть",
-    "create_folder": "Создание папки"
+    "create_folder": "Создание папки",
+    "create_a_folder": "Создать папку",
+    "create_album": "Создать альбом",
+    "upload_to_files": "Загрузить в файлы",
+    "upload_to_media": "Загрузить в медиа",
+    "you_rent": "Вы арендуете",
+    "you_turn_in": "Вы сдаете",
+    "upload": "Загрузить",
+    "rent": "Сдать"
 }

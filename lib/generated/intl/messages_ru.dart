@@ -48,6 +48,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
+        "create_a_folder":
+            MessageLookupByLibrary.simpleMessage("Создать папку"),
+        "create_album": MessageLookupByLibrary.simpleMessage("Создать альбом"),
         "create_folder": MessageLookupByLibrary.simpleMessage("Создание папки"),
         "created": MessageLookupByLibrary.simpleMessage("Создано"),
         "currency": MessageLookupByLibrary.simpleMessage("₽"),
@@ -154,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "regulations":
             MessageLookupByLibrary.simpleMessage("Нормативные документы"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
+        "rent": MessageLookupByLibrary.simpleMessage("Сдать"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "Вы можете использовать свободное место на вашем жестком"),
         "repeat_passsword":
@@ -194,8 +198,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Отправить письмо еще раз"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Уровень доверия"),
         "type": MessageLookupByLibrary.simpleMessage("Тип"),
+        "upload": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),
+        "upload_to_files":
+            MessageLookupByLibrary.simpleMessage("Загрузить в файлы"),
+        "upload_to_media":
+            MessageLookupByLibrary.simpleMessage("Загрузить в медиа"),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
         "viewed": MessageLookupByLibrary.simpleMessage("Просмотрено"),
         "we_can_help": MessageLookupByLibrary.simpleMessage(
@@ -210,6 +219,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Пароль должен содержать более 8 символов"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Имя пользователя должно содержать более 2 символов"),
+        "you_rent": MessageLookupByLibrary.simpleMessage("Вы арендуете"),
+        "you_turn_in": MessageLookupByLibrary.simpleMessage("Вы сдаете"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("начислятся деньги."),
         "your_income": MessageLookupByLibrary.simpleMessage("Ваш доход")

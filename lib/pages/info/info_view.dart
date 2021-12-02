@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
@@ -21,7 +22,8 @@ class InfoPage extends StatefulWidget {
 
 class _InfoPageState extends State<InfoPage> {
   ChoosedPage choosedPage = ChoosedPage.home;
-
+  bool youRenting = false;
+  bool lease = false;
   void changePage(ChoosedPage newPage) {
     setState(() {
       choosedPage = newPage;
@@ -74,8 +76,6 @@ class _InfoPageState extends State<InfoPage> {
                 ),
               ),
               Expanded(
-                // child: ListView(
-                //  controller: ScrollController(),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: ClipRRect(
@@ -83,555 +83,610 @@ class _InfoPageState extends State<InfoPage> {
                     child: ListView(
                       controller: ScrollController(),
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
-                          child: SizedBox(
-                            height: 465,
-                            width: 726,
-                            child: Container(
-                              constraints: BoxConstraints(minHeight: 466),
-                              /*MediaQuery.of(context).size.height -
+                        youRenting
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(30, 0, 30, 30),
+                                child: SizedBox(
+                                  height: 465,
+                                  width: 726,
+                                  child: Container(
+                                    constraints: BoxConstraints(minHeight: 466),
+                                    /*MediaQuery.of(context).size.height -
                                     HEIGHT_TOP_FIND_BLOCK -
                                     PADDING_SIZE -
                                     PADDING_SIZE -
                                     HEIGHT_BOTTOM_BLOCK,*/
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Color.fromARGB(25, 23, 69, 139),
-                                      blurRadius: 4,
-                                      offset: Offset(1, 4))
-                                ],
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 19, 40, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: 24,
-                                      child: Text(
-                                        "Вы сдаёте",
-                                        style: TextStyle(
-                                          color: Theme.of(context).focusColor,
-                                          fontSize: 20,
-                                          fontFamily: kNormalTextFontFamily,
-                                        ),
-                                        textAlign: TextAlign.start,
-                                      ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                            color:
+                                                Color.fromARGB(25, 23, 69, 139),
+                                            blurRadius: 4,
+                                            offset: Offset(1, 4))
+                                      ],
                                     ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Divider(
-                                        height: 1,
-                                        color: Theme.of(context).dividerColor,
-                                      ),
-                                    ),
-                                    SizedBox(height: 23),
-                                    Expanded(
-                                      flex: 376,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          40, 19, 40, 0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  MyProgressIndicator(
-                                                    percent: 70.0,
-                                                    color: Color(0xff868FFF),
-                                                    radius: 120,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 24),
-                                                    child: Container(
-                                                      height: 17,
-                                                      child: Text(
-                                                        'Места на вашем устройстве арендовано',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .disabledColor,
-                                                          fontFamily:
-                                                              kNormalTextFontFamily,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 20),
-                                                    child: Container(
-                                                      width: 200,
-                                                      child: Divider(
-                                                        height: 1,
-                                                        color: Theme.of(context)
-                                                            .dividerColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 20),
-                                                    child: Container(
-                                                      height: 49,
-                                                      child: Text(
-                                                        "50 ₽",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .splashColor,
-                                                          fontSize: 36,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 5),
-                                                    child: Container(
-                                                      height: 17,
-                                                      child: Text(
-                                                        "Ежедневный доход",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .focusColor,
-                                                          fontSize: 14,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 30, 0, 32),
-                                                    child: ElevatedButton(
-                                                      onPressed: () {},
-                                                      child: Text(
-                                                        'Увеличить',
-                                                        style: TextStyle(
-                                                          fontFamily:
-                                                              kNormalTextFontFamily,
-                                                          fontSize: 14,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .disabledColor,
-                                                        ),
-                                                      ),
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        primary:
-                                                            Theme.of(context)
-                                                                .primaryColor,
-                                                        fixedSize:
-                                                            Size(200, 42),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(15),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
+                                          Container(
+                                            height: 24,
+                                            child: Text(
+                                              "Вы сдаёте",
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .focusColor,
+                                                fontSize: 20,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
                                               ),
+                                              textAlign: TextAlign.start,
                                             ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
                                           ),
                                           Expanded(
                                             flex: 1,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  MyProgressIndicator(
-                                                    percent: 35.0,
-                                                    color: Color(
-                                                        0xff59D7AB), // цвет индикатора
-                                                    radius: 120,
+                                            child: Divider(
+                                              height: 1,
+                                              color: Theme.of(context)
+                                                  .dividerColor,
+                                            ),
+                                          ),
+                                          SizedBox(height: 23),
+                                          Expanded(
+                                            flex: 376,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 10),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        MyProgressIndicator(
+                                                          percent: 70.0,
+                                                          color:
+                                                              Color(0xff868FFF),
+                                                          radius: 120,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 24),
+                                                          child: Container(
+                                                            height: 17,
+                                                            child: Text(
+                                                              'Места на вашем устройстве арендовано',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .disabledColor,
+                                                                fontFamily:
+                                                                    kNormalTextFontFamily,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 20),
+                                                          child: Container(
+                                                            width: 200,
+                                                            child: Divider(
+                                                              height: 1,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .dividerColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 20),
+                                                          child: Container(
+                                                            height: 49,
+                                                            child: Text(
+                                                              "50 ₽",
+                                                              style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .splashColor,
+                                                                fontSize: 36,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(top: 5),
+                                                          child: Container(
+                                                            height: 17,
+                                                            child: Text(
+                                                              "Ежедневный доход",
+                                                              style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .focusColor,
+                                                                fontSize: 14,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  0, 30, 0, 32),
+                                                          child: ElevatedButton(
+                                                            onPressed: () {},
+                                                            child: Text(
+                                                              'Увеличить',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    kNormalTextFontFamily,
+                                                                fontSize: 14,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .disabledColor,
+                                                              ),
+                                                            ),
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              primary: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              fixedSize:
+                                                                  Size(200, 42),
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            15),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 24),
-                                                    child: Container(
-                                                      height: 17,
-                                                      child: Text(
-                                                          'Арендованого места заполнено',
-                                                          textAlign:
-                                                              TextAlign.center,
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 10),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        MyProgressIndicator(
+                                                          percent: 35.0,
+                                                          color: Color(
+                                                              0xff59D7AB), // цвет индикатора
+                                                          radius: 120,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 24),
+                                                          child: Container(
+                                                            height: 17,
+                                                            child: Text(
+                                                                'Арендованого места заполнено',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .disabledColor,
+                                                                  fontSize: 14,
+                                                                  fontFamily:
+                                                                      kNormalTextFontFamily,
+                                                                )),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 20),
+                                                          child: Container(
+                                                            width: 200,
+                                                            child: Divider(
+                                                              height: 1,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .dividerColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 20),
+                                                          child: Container(
+                                                            height: 49,
+                                                            child: Text(
+                                                              "3000 ₽",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .splashColor,
+                                                                fontSize: 36,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(top: 5),
+                                                          child: Container(
+                                                            height: 17,
+                                                            child: Text(
+                                                              "Ваш баланс",
+                                                              style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .focusColor,
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  0, 30, 0, 32),
+                                                          child: ElevatedButton(
+                                                            onPressed: () {},
+                                                            child: Text(
+                                                              'Оплатить',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    kNormalTextFontFamily,
+                                                                fontSize: 14,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .disabledColor,
+                                                              ),
+                                                            ),
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              primary: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              fixedSize:
+                                                                  Size(200, 42),
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            15),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : youRent(context),
+                        lease
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 30, right: 30, bottom: 30),
+                                child: SizedBox(
+                                  height: 372,
+                                  width: 726,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                            color:
+                                                Color.fromARGB(25, 23, 69, 139),
+                                            blurRadius: 4,
+                                            offset: Offset(1, 4))
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          40, 20, 40, 0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Вы арендуете',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color:
+                                                  Theme.of(context).focusColor,
+                                              fontFamily: kNormalTextFontFamily,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 20),
+                                            child: Divider(
+                                              height: 1,
+                                              color: Theme.of(context)
+                                                  .dividerColor,
+                                            ),
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Пространство заполнено на: ',
+                                                style: TextStyle(
+                                                  fontFamily: 'Lato',
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .disabledColor,
+                                                ),
+                                              ),
+                                              Text(
+                                                '45%',
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 25, 0, 10),
+                                            child: MyProgressBar(
+                                              bgColor:
+                                                  Theme.of(context).cardColor,
+                                              color: Color(0xff868FFF),
+                                              percent: 42,
+                                            ),
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '0%',
+                                                style: TextStyle(
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  flex: 291,
+                                                  child: Container(
+                                                    height: 14,
+                                                  )),
+                                              Text(
+                                                '50%',
+                                                style: TextStyle(
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                  flex: 277,
+                                                  child: Container(
+                                                    height: 14,
+                                                  )),
+                                              Text(
+                                                '100%',
+                                                style: TextStyle(
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 30),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        '300ГБ',
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              kNormalTextFontFamily,
+                                                          fontSize: 36,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .splashColor,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 11,
+                                                      ),
+                                                      Text(
+                                                        'Используемое место',
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              kNormalTextFontFamily,
+                                                          fontSize: 14,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .focusColor,
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () {},
+                                                        child: Text(
+                                                          'Увеличить',
                                                           style: TextStyle(
+                                                            fontFamily:
+                                                                kNormalTextFontFamily,
+                                                            fontSize: 14,
                                                             color: Theme.of(
                                                                     context)
                                                                 .disabledColor,
-                                                            fontSize: 14,
-                                                            fontFamily:
-                                                                kNormalTextFontFamily,
-                                                          )),
-                                                    ),
+                                                          ),
+                                                        ),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          fixedSize:
+                                                              Size(200, 46),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 20),
-                                                    child: Container(
-                                                      width: 200,
-                                                      child: Divider(
-                                                        height: 1,
-                                                        color: Theme.of(context)
-                                                            .dividerColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 20),
-                                                    child: Container(
-                                                      height: 49,
-                                                      child: Text(
-                                                        "3000 ₽",
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        '17.17.21',
                                                         style: TextStyle(
+                                                          fontFamily:
+                                                              kNormalTextFontFamily,
+                                                          fontSize: 36,
                                                           color:
                                                               Theme.of(context)
                                                                   .splashColor,
-                                                          fontSize: 36,
                                                         ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 5),
-                                                    child: Container(
-                                                      height: 17,
-                                                      child: Text(
-                                                        "Ваш баланс",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .focusColor,
-                                                          fontSize: 14,
-                                                        ),
+                                                      SizedBox(
+                                                        height: 11,
                                                       ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 30, 0, 32),
-                                                    child: ElevatedButton(
-                                                      onPressed: () {},
-                                                      child: Text(
-                                                        'Оплатить',
+                                                      Text(
+                                                        'Следущий платёж',
                                                         style: TextStyle(
                                                           fontFamily:
                                                               kNormalTextFontFamily,
                                                           fontSize: 14,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .disabledColor,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .focusColor,
                                                         ),
                                                       ),
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        primary:
-                                                            Theme.of(context)
-                                                                .primaryColor,
-                                                        fixedSize:
-                                                            Size(200, 42),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(15),
-                                                        ),
+                                                      SizedBox(
+                                                        height: 30,
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, right: 30, bottom: 30),
-                          child: SizedBox(
-                            height: 372,
-                            width: 726,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Color.fromARGB(25, 23, 69, 139),
-                                      blurRadius: 4,
-                                      offset: Offset(1, 4))
-                                ],
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 20, 40, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Вы арендуете',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Theme.of(context).focusColor,
-                                        fontFamily: kNormalTextFontFamily,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20),
-                                      child: Divider(
-                                        height: 1,
-                                        color: Theme.of(context).dividerColor,
-                                      ),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Пространство заполнено на: ',
-                                          style: TextStyle(
-                                            fontFamily: 'Lato',
-                                            fontSize: 14,
-                                            color:
-                                                Theme.of(context).disabledColor,
-                                          ),
-                                        ),
-                                        Text(
-                                          '45%',
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 25, 0, 10),
-                                      child: MyProgressBar(
-                                        bgColor: Theme.of(context).cardColor,
-                                        color: Color(0xff868FFF),
-                                        percent: 42,
-                                      ),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '0%',
-                                          style: TextStyle(
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 12,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground,
-                                          ),
-                                        ),
-                                        Expanded(
-                                            flex: 291,
-                                            child: Container(
-                                              height: 14,
-                                            )),
-                                        Text(
-                                          '50%',
-                                          style: TextStyle(
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 12,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground,
-                                          ),
-                                        ),
-                                        Expanded(
-                                            flex: 277,
-                                            child: Container(
-                                              height: 14,
-                                            )),
-                                        Text(
-                                          '100%',
-                                          style: TextStyle(
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 12,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 30),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  '300ГБ',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        kNormalTextFontFamily,
-                                                    fontSize: 36,
-                                                    color: Theme.of(context)
-                                                        .splashColor,
+                                                      ElevatedButton(
+                                                        onPressed: () {},
+                                                        child: Text(
+                                                          'Оплатить',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                kNormalTextFontFamily,
+                                                            fontSize: 14,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .disabledColor,
+                                                          ),
+                                                        ),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          fixedSize:
+                                                              Size(200, 46),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  height: 11,
-                                                ),
-                                                Text(
-                                                  'Используемое место',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        kNormalTextFontFamily,
-                                                    fontSize: 14,
-                                                    color: Theme.of(context)
-                                                        .focusColor,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 30,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text(
-                                                    'Увеличить',
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          kNormalTextFontFamily,
-                                                      fontSize: 14,
-                                                      color: Theme.of(context)
-                                                          .disabledColor,
-                                                    ),
-                                                  ),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: Theme.of(context)
-                                                        .primaryColor,
-                                                    fixedSize: Size(200, 46),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  '17.17.21',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        kNormalTextFontFamily,
-                                                    fontSize: 36,
-                                                    color: Theme.of(context)
-                                                        .splashColor,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 11,
-                                                ),
-                                                Text(
-                                                  'Следущий платёж',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        kNormalTextFontFamily,
-                                                    fontSize: 14,
-                                                    color: Theme.of(context)
-                                                        .focusColor,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 30,
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () {},
-                                                  child: Text(
-                                                    'Оплатить',
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          kNormalTextFontFamily,
-                                                      fontSize: 14,
-                                                      color: Theme.of(context)
-                                                          .disabledColor,
-                                                    ),
-                                                  ),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: Theme.of(context)
-                                                        .primaryColor,
-                                                    fixedSize: Size(200, 46),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                  ),
-                                                )
                                               ],
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
+                              )
+                            : youLease(context)
                       ],
                     ),
                   ),
@@ -1152,6 +1207,233 @@ class _InfoPageState extends State<InfoPage> {
                 ))
             : Container(),
       ],
+    );
+  }
+
+  Widget youRent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
+      child: SizedBox(
+        height: 419,
+        width: 726,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4))
+            ],
+          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 19),
+              child: Container(
+                height: 24,
+                child: Text(
+                  translate.you_turn_in,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontSize: 20,
+                    fontFamily: kNormalTextFontFamily,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 40, top: 20, right: 40),
+              child: Divider(
+                height: 1,
+                color: Theme.of(context).dividerColor,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 30),
+              child: Container(
+                height: 42,
+                width: 200,
+                child: OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      youRenting = true;
+                    });
+                  },
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.maxFinite, 60),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    backgroundColor: Theme.of(context).splashColor,
+                  ),
+                  child: Text(
+                    translate.rent,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Stack(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 50),
+                child: Container(
+                  height: 226,
+                  width: 726,
+                  child: Image.asset(
+                    'assets/file_page/background.png',
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0, left: 59),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        'assets/file_page/badges.svg',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 64, left: 27),
+                    child: Container(
+                      height: 207,
+                      width: 194,
+                      child: Image.asset(
+                        'assets/file_page/manInfo.png',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Align(
+                alignment: FractionalOffset.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 75, right: 0),
+                  child: Container(
+                    width: 389,
+                    height: 198,
+                    child: Image.asset(
+                      'assets/file_page/blocks.png',
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget youLease(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
+      child: SizedBox(
+        height: 419,
+        width: 726,
+        child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Color.fromARGB(25, 23, 69, 139),
+                    blurRadius: 4,
+                    offset: Offset(1, 4))
+              ],
+            ),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 19, left: 40),
+                child: Text(
+                  translate.you_rent,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 40, top: 20, right: 40),
+                child: Divider(
+                  height: 1,
+                  color: Theme.of(context).dividerColor,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 40, top: 30),
+                child: Container(
+                  height: 42,
+                  width: 200,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        lease = true;
+                      });
+                    },
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(double.maxFinite, 60),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      backgroundColor: Theme.of(context).splashColor,
+                    ),
+                    child: Text(
+                      translate.upload,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Stack(children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 100),
+                    child: Container(
+                      child: SvgPicture.asset(
+                        'assets/file_page/badgesLease.svg',
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Container(
+                    height: 226,
+                    width: 726,
+                    child: Image.asset(
+                      'assets/file_page/background.png',
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: FractionalOffset.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10, right: 100),
+                    child: Container(
+                      height: 273,
+                      width: 300,
+                      child: Image.asset(
+                        'assets/file_page/manLease.png',
+                      ),
+                    ),
+                  ),
+                ),
+              ])
+            ])),
+      ),
     );
   }
 }

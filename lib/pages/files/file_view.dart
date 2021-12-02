@@ -25,12 +25,6 @@ class _FilePageState extends State<FilePage> {
   S translate = getIt<S>();
 
   @override
-  void initState() {
-    //_init(context);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     // if (dirs_list.isEmpty) _init(context);
     return Expanded(
@@ -151,7 +145,7 @@ class _FilePageState extends State<FilePage> {
                         child: Row(
                           children: [
                             Text(
-                              translate.folder_dir, // text
+                              translate.folder_dir,
                               style: TextStyle(
                                 color: Theme.of(context).focusColor,
                                 fontSize: 20,
@@ -203,78 +197,90 @@ class _FilePageState extends State<FilePage> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 25),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 31),
-                                child: Container(
-                                  width: 130,
-                                  height: 130,
-                                  child: Listener(
-                                    child: ElevatedButton(
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16),
-                                            child: SvgPicture.asset(
-                                              'assets/home_page/add_folder.svg',
-                                              height: 46,
-                                              width: 46,
+                          child: ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 31),
+                                      child: Container(
+                                        width: 130,
+                                        height: 130,
+                                        child: Listener(
+                                          child: ElevatedButton(
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 16),
+                                                  child: SvgPicture.asset(
+                                                    'assets/home_page/add_folder.svg',
+                                                    height: 46,
+                                                    width: 46,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  translate.create_a_folder,
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontFamily:
+                                                        kNormalTextFontFamily,
+                                                    color: Theme.of(context)
+                                                        .disabledColor,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          Text(
-                                            'Создать\n папку',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: kNormalTextFontFamily,
-                                              color: Color(0xff7D7D7D),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      onPressed: () async {
-                                        var str = await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return BlurAddFolder();
-                                          },
-                                        );
-                                        print(str);
-                                        setState(
-                                          () {
-                                            dirsList.add(
-                                              CustomDirButton(
-                                                name: str,
-                                                onTap: () async {},
+                                            onPressed: () async {
+                                              var str = await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return BlurAddFolder();
+                                                },
+                                              );
+                                              print(str);
+                                              setState(
+                                                () {
+                                                  dirsList.add(
+                                                    CustomDirButton(
+                                                      name: str,
+                                                      onTap: () async {},
+                                                    ),
+                                                  );
+                                                  print("add");
+                                                },
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Theme.of(context)
+                                                  .primaryColor,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                side: BorderSide(
+                                                  width: 2,
+                                                  color: Theme.of(context)
+                                                      .dividerColor,
+                                                ),
                                               ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          side: BorderSide(
-                                            width: 2,
-                                            color: Color(0xffF1F8FE),
+                                              elevation: 0,
+                                            ),
                                           ),
                                         ),
-                                        elevation: 0,
                                       ),
                                     ),
-                                  ),
+                                    ListView(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        children: dirsList),
+                                  ],
                                 ),
-                              ),
-                              ListView(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  children: dirsList),
-                            ],
-                          ),
+                              ]),
                         ),
                       ),
                     ],
@@ -425,33 +431,6 @@ class _FilePageState extends State<FilePage> {
           ),
         );
       }),
-    );
-  }
-
-  _init(BuildContext context) {
-    dirsList.add(
-      CustomDirButton(
-        name: 'Создать\n папку',
-        onTap: () async {
-          var str = await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return BlurAddFolder();
-            },
-          );
-          print(str);
-          setState(
-            () {
-              dirsList.add(
-                CustomDirButton(
-                  name: str,
-                  onTap: () async {},
-                ),
-              );
-            },
-          );
-        },
-      ),
     );
   }
 }

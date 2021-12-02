@@ -1249,6 +1249,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Create a folder`
+  String get create_a_folder {
+    return Intl.message(
+      'Create a folder',
+      name: 'create_a_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create album`
+  String get create_album {
+    return Intl.message(
+      'Create album',
+      name: 'create_album',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload to files`
+  String get upload_to_files {
+    return Intl.message(
+      'Upload to files',
+      name: 'upload_to_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload to media`
+  String get upload_to_media {
+    return Intl.message(
+      'Upload to media',
+      name: 'upload_to_media',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are renting`
+  String get you_rent {
+    return Intl.message(
+      'You are renting',
+      name: 'you_rent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You turn in`
+  String get you_turn_in {
+    return Intl.message(
+      'You turn in',
+      name: 'you_turn_in',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload`
+  String get upload {
+    return Intl.message(
+      'Upload',
+      name: 'upload',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rent`
+  String get rent {
+    return Intl.message(
+      'Rent',
+      name: 'rent',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

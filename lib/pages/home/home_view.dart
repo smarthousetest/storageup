@@ -14,6 +14,7 @@ import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
+import 'package:upstorage_desktop/pages/media/media_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
@@ -77,6 +78,8 @@ class _HomePageState extends State<HomePage> {
         return FinancePage();
       case ChoosedPage.settings:
         return SettingsPage();
+      case ChoosedPage.media:
+        return MediaPage();
       default:
         return InfoPage();
     }
@@ -210,7 +213,9 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/media.svg",
         title: "Медиа",
-        function: () {},
+        function: () {
+          changePage(ChoosedPage.media);
+        },
       ),
       CustomMenuButton(
         icon: "assets/home_page/like.svg",
