@@ -1329,6 +1329,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Are you sure you want to get out?`
+  String get get_out {
+    return Intl.message(
+      'Are you sure you want to get out?',
+      name: 'get_out',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload file`
+  String get upload_files {
+    return Intl.message(
+      'Upload file',
+      name: 'upload_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload folder`
+  String get upload_folder {
+    return Intl.message(
+      'Upload folder',
+      name: 'upload_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload media`
+  String get upload_media {
+    return Intl.message(
+      'Upload media',
+      name: 'upload_media',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

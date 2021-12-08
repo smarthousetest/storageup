@@ -7,10 +7,11 @@ import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
 import 'generated/l10n.dart';
 import 'utilities/injection.dart';
+import 'utilities/state_container.dart';
 
 void main() async {
   await configureInjection();
-  runApp(MyApp());
+  runApp(new StateContainer(child: new MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         supportedLocales: S.delegate.supportedLocales,
         // initialRoute: AuthView.route,
         initialRoute: HomePage.route,
+
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case AuthView.route:

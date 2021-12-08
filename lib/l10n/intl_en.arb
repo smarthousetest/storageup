@@ -126,5 +126,9 @@
     "you_rent": "You are renting",
     "you_turn_in": "You turn in",
     "upload": "Upload",
-    "rent": "Rent"
+    "rent": "Rent",
+    "get_out": "Are you sure you want to get out?",
+    "upload_files": "Upload file",
+    "upload_folder": "Upload folder",
+    "upload_media": "Upload media"
 }

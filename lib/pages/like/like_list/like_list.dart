@@ -56,18 +56,19 @@ class _ButtonTemplateState extends State<LikeList> {
     // );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: LayoutBuilder(
         builder: (context, constraints) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
               width: double.infinity,
               child: DataTable(
+                columnSpacing: 20,
                 columns: [
                   DataColumn(
                     label: Container(
-                      width: constraints.maxWidth * 0.5,
+                      width: constraints.maxWidth * 0.4,
                       child: Text(
                         translate.name,
                         style: style,
@@ -76,7 +77,7 @@ class _ButtonTemplateState extends State<LikeList> {
                   ),
                   DataColumn(
                     label: Container(
-                      //width: constraints.maxWidth * 0.1,
+                      width: constraints.maxWidth * 0.07,
                       child: Text(
                         translate.format,
                         style: style,
@@ -85,7 +86,7 @@ class _ButtonTemplateState extends State<LikeList> {
                   ),
                   DataColumn(
                     label: Container(
-                      //width: constraints.maxWidth * 0.1,
+                      width: constraints.maxWidth * 0.07,
                       child: Text(
                         translate.date,
                         style: style,
@@ -94,7 +95,7 @@ class _ButtonTemplateState extends State<LikeList> {
                   ),
                   DataColumn(
                     label: Container(
-                      width: constraints.maxWidth * 0.15,
+                      width: constraints.maxWidth * 0.1,
                       child: Text(
                         translate.size,
                         style: style,
@@ -424,7 +425,7 @@ class _ButtonTemplateState extends State<LikeList> {
 
   Padding listDivider(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+      padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
       child: Divider(
         height: 1,
         color: Theme.of(context).cardColor,

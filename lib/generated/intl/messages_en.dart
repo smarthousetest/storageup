@@ -87,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "format": MessageLookupByLibrary.simpleMessage("Format"),
         "funds": MessageLookupByLibrary.simpleMessage("Withdraw funds"),
+        "get_out": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to get out?"),
         "go_to": MessageLookupByLibrary.simpleMessage("Go to"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Go to authorization"),
@@ -198,6 +200,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload": MessageLookupByLibrary.simpleMessage("Upload"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),
+        "upload_files": MessageLookupByLibrary.simpleMessage("Upload file"),
+        "upload_folder": MessageLookupByLibrary.simpleMessage("Upload folder"),
+        "upload_media": MessageLookupByLibrary.simpleMessage("Upload media"),
         "upload_to_files":
             MessageLookupByLibrary.simpleMessage("Upload to files"),
         "upload_to_media":

@@ -26,6 +26,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   var index = 0;
   double _currentSliderValue = 32;
   S translate = getIt<S>();
+  String list = "";
 
   Widget build(BuildContext context) {
     return Expanded(
@@ -431,23 +432,21 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 20),
+                    padding: const EdgeInsets.only(left: 40, top: 15),
                     child: Container(
                       height: 42,
                       width: 350,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          fillColor: Theme.of(context).cardColor,
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Color(0xffE4E7ED), width: 1.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: Color(0xffE4E7ED), width: 1.0),
-                          ),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Color(0xffE4E7ED))),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15, top: 11),
+                        child: Text(
+                          list,
+                          maxLines: 1,
+                          style:
+                              TextStyle(color: Theme.of(context).disabledColor),
                         ),
                       ),
                     ),
@@ -459,8 +458,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       width: 200,
                       child: OutlinedButton(
                         onPressed: () async {
-                          String? list = await getFilesPaths();
-                          print(list);
+                          String? path = await getFilesPaths();
+                          print(path);
+                          setState(() {
+                            if (path != null) {
+                              list = path;
+                            }
+                          });
                         },
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size(double.maxFinite, 60),

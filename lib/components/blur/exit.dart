@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 
-class BlurRenameName extends StatefulWidget {
+class BlurExit extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurRenameName();
+  BlurExit();
 }
 
-class _ButtonTemplateState extends State<BlurRenameName> {
+class _ButtonTemplateState extends State<BlurExit> {
   S translate = getIt<S>();
   final myController = TextEditingController();
   @override
@@ -35,7 +36,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
           Center(
             child: Container(
               width: 520,
-              height: 235,
+              height: 193,
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(10),
@@ -43,15 +44,15 @@ class _ButtonTemplateState extends State<BlurRenameName> {
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(60, 25, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(60, 30, 0, 0),
                     child: Container(
                       width: 400,
-                      height: 212,
+                      height: 193,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            translate.user_name,
+                            translate.exit,
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: kNormalTextFontFamily,
@@ -60,9 +61,9 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                           ),
                           Center(
                             child: Padding(
-                              padding: const EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 25),
                               child: Text(
-                                translate.wrong_username,
+                                translate.get_out,
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: kNormalTextFontFamily,
@@ -75,44 +76,6 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 25),
-                            child: Container(
-                              width: 400,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              alignment: Alignment.center,
-                              child: TextFormField(
-                                controller: myController,
-                                //initialValue: "Александр Рождественский",
-                                autofocus: true,
-                                style: TextStyle(
-                                    color: Theme.of(context).disabledColor,
-                                    fontSize: 14,
-                                    fontFamily: kNormalTextFontFamily),
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(left: 15, bottom: 8),
-                                  hoverColor: Theme.of(context).cardColor,
-                                  focusColor: Theme.of(context).cardColor,
-                                  fillColor: Theme.of(context).cardColor,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                        color: Color(0xffE4E7ED), width: 0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                        color: Color(0xffE4E7ED), width: 0.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 26),
                             child: Container(
                               width: 400,
                               child: Row(
@@ -132,7 +95,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
+                                        primary: Theme.of(context).primaryColor,
                                         fixedSize: Size(140, 42),
                                         elevation: 0,
                                         side: BorderSide(
@@ -150,11 +113,13 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                            context, myController.text);
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            AuthView.route,
+                                            (route) => false);
                                       },
                                       child: Text(
-                                        translate.save,
+                                        translate.exit,
                                         style: TextStyle(
                                           color: Theme.of(context).primaryColor,
                                           fontSize: 16,
@@ -162,12 +127,14 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Theme.of(context).splashColor,
+                                        primary:
+                                            Theme.of(context).indicatorColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Theme.of(context).splashColor,
+                                          color:
+                                              Theme.of(context).indicatorColor,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:

@@ -51,6 +51,17 @@ class _MediaPageState extends State<MediaPage> {
                                 offset: Offset(1, 4))
                           ],
                         ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(13.0),
+                          child: Align(
+                            alignment: FractionalOffset.centerLeft,
+                            child: Container(
+                                width: 20,
+                                height: 20,
+                                child: SvgPicture.asset(
+                                    "assets/file_page/search.svg")),
+                          ),
+                        ),
                       ),
                     ),
                   ),

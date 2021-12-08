@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
+import 'package:upstorage_desktop/components/blur/exit.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
@@ -395,9 +396,15 @@ class _HomePageState extends State<HomePage> {
             width: 93,
             height: 24,
             child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AuthView.route, (route) => false);
+              onTap: () async {
+                var str = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurExit();
+                  },
+                );
+                // Navigator.pushNamedAndRemoveUntil(
+                //     context, AuthView.route, (route) => false);
               },
               child: MouseRegion(
                 cursor: SystemMouseCursors.click,

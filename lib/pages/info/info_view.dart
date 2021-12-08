@@ -6,7 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import '../../theme.dart';
 import '../../constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -24,6 +26,7 @@ class _InfoPageState extends State<InfoPage> {
   ChoosedPage choosedPage = ChoosedPage.home;
   bool youRenting = false;
   bool lease = false;
+
   void changePage(ChoosedPage newPage) {
     setState(() {
       choosedPage = newPage;
@@ -34,6 +37,8 @@ class _InfoPageState extends State<InfoPage> {
     switch (choosedPage) {
       case ChoosedPage.finance:
         return FinancePage();
+      case ChoosedPage.sell_space:
+        return SpaceSellPage();
       default:
         return InfoPage();
     }
@@ -72,6 +77,17 @@ class _InfoPageState extends State<InfoPage> {
                           blurRadius: 4,
                           offset: Offset(1, 4))
                     ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(13.0),
+                    child: Align(
+                      alignment: FractionalOffset.centerLeft,
+                      child: Container(
+                          width: 20,
+                          height: 20,
+                          child:
+                              SvgPicture.asset("assets/file_page/search.svg")),
+                    ),
                   ),
                 ),
               ),
@@ -1258,9 +1274,10 @@ class _InfoPageState extends State<InfoPage> {
                 width: 200,
                 child: OutlinedButton(
                   onPressed: () {
-                    setState(() {
-                      youRenting = true;
-                    });
+                    changePage(ChoosedPage.sell_space);
+                    // setState(() {
+                    //   youRenting = true;
+                    // });
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),
@@ -1375,10 +1392,13 @@ class _InfoPageState extends State<InfoPage> {
                   height: 42,
                   width: 200,
                   child: OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        lease = true;
-                      });
+                    onPressed: () async {
+                      var str = await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return BlurMenuUpload();
+                        },
+                      );
                     },
                     style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.maxFinite, 60),

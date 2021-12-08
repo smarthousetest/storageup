@@ -106,7 +106,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      'Загрузить файл',
+                                      translate.upload_files,
                                       style: TextStyle(
                                         fontFamily: kNormalTextFontFamily,
                                         fontSize: 14,
@@ -134,7 +134,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                        'Создать папку',
+                                        translate.create_a_folder,
                                         style: TextStyle(
                                           fontFamily: kNormalTextFontFamily,
                                           fontSize: 14,
@@ -162,7 +162,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      'Загрузить папку',
+                                      translate.upload_folder,
                                       style: TextStyle(
                                         fontFamily: kNormalTextFontFamily,
                                         fontSize: 14,
@@ -210,14 +210,14 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                       MouseRegion(
                                         cursor: SystemMouseCursors.click,
                                         child: SvgPicture.asset(
-                                          'assets/file_page/upload_media.svg',
+                                          'assets/file_page/upload_mediaa.svg',
                                           height: 64,
                                           width: 64,
                                         ),
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                        'Загрузить медиа',
+                                        translate.upload_media,
                                         style: TextStyle(
                                           fontFamily: kNormalTextFontFamily,
                                           fontSize: 14,
@@ -241,7 +241,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                         ),
                                         SizedBox(height: 10),
                                         Text(
-                                          'Создать альбом',
+                                          translate.create_album,
                                           style: TextStyle(
                                             fontFamily: kNormalTextFontFamily,
                                             fontSize: 14,

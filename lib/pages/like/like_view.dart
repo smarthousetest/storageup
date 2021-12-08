@@ -132,7 +132,7 @@ class _LikePageState extends State<LikePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 20, 40, 10),
+                      padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [

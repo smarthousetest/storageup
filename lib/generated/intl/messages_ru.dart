@@ -87,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
         "funds": MessageLookupByLibrary.simpleMessage("Вывод средств"),
+        "get_out": MessageLookupByLibrary.simpleMessage(
+            "Вы уверены, что хотите выйти?"),
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
@@ -201,6 +203,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),
+        "upload_files": MessageLookupByLibrary.simpleMessage("Загрузить файл"),
+        "upload_folder":
+            MessageLookupByLibrary.simpleMessage("Загрузить папку"),
+        "upload_media": MessageLookupByLibrary.simpleMessage("Загрузить медиа"),
         "upload_to_files":
             MessageLookupByLibrary.simpleMessage("Загрузить в файлы"),
         "upload_to_media":

@@ -20,6 +20,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   S translate = getIt<S>();
+  var name = "Александр Рождественский";
   var index = 0;
   var focusName = true;
   var focusNodeForName = FocusNode();
@@ -266,7 +267,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 // ),
 
                                 PopupMenuItem(
-                                  height: 44,
                                   child: Container(
                                     width: 185,
                                     height: 44,
@@ -328,6 +328,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               return BlurRenameName();
                             },
                           );
+                          setState(() {
+                            name = str;
+                            print(name);
+                          });
                           // setState(() {
                           //   focusName = !focusName;
                           // });
@@ -348,32 +352,16 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Container(
                     height: 42,
                     width: 350,
-                    child: TextFormField(
-                      focusNode: focusNodeForName,
-                      initialValue: "Александр Рождественский",
-                      readOnly: focusName,
-                      style: TextStyle(
-                          color: Theme.of(context).disabledColor,
-                          fontSize: 15,
-                          fontFamily: kNormalTextFontFamily),
-                      decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.only(left: 15, top: 11, bottom: 11),
-                        filled: focusName,
-                        //hintText: "Александр Рождественский",
-                        hoverColor: Theme.of(context).cardColor,
-                        focusColor: Theme.of(context).primaryColor,
-                        fillColor: Theme.of(context).cardColor,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 1.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 1.0),
-                        ),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Color(0xffE4E7ED))),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15, top: 11),
+                      child: Text(
+                        name,
+                        style:
+                            TextStyle(color: Theme.of(context).disabledColor),
                       ),
                     ),
                   ),

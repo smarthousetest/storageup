@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/components/password_text_field.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/pages/auth/models/password.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
 
