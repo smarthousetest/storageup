@@ -21,6 +21,7 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
+import 'package:upstorage_desktop/utilities/state_container.dart';
 
 enum Blur {
   rename,
@@ -46,9 +47,10 @@ class _HomePageState extends State<HomePage> {
 
   S translate = getIt<S>();
   void changePage(ChoosedPage newPage) {
-    setState(() {
-      choosedPage = newPage;
-    });
+    // setState(() {
+    //   choosedPage = newPage;
+    // });
+    StateContainer.of(context).changePage(newPage);
   }
 
   bool setSize = false;
@@ -66,7 +68,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getPage() {
-    switch (choosedPage) {
+    switch (StateContainer.of(context).choosedPage) {
       case ChoosedPage.home:
         return InfoPage();
       case ChoosedPage.file:
@@ -200,56 +202,64 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/home.svg",
         title: "Главная",
-        function: () {
+        page: ChoosedPage.home,
+        onTap: () {
           changePage(ChoosedPage.home);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/files.svg",
         title: "Файлы",
-        function: () {
+        page: ChoosedPage.file,
+        onTap: () {
           changePage(ChoosedPage.file);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/media.svg",
         title: "Медиа",
-        function: () {
+        page: ChoosedPage.media,
+        onTap: () {
           changePage(ChoosedPage.media);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/like.svg",
         title: "Избранное",
-        function: () {
+        page: ChoosedPage.like,
+        onTap: () {
           changePage(ChoosedPage.like);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/sell_space.svg",
         title: "Сдача места",
-        function: () {
+        page: ChoosedPage.sell_space,
+        onTap: () {
           changePage(ChoosedPage.sell_space);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/finance.svg",
         title: "Финансы",
-        function: () {
+        page: ChoosedPage.finance,
+        onTap: () {
           changePage(ChoosedPage.finance);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
         title: "Настройки",
-        function: () {
+        page: ChoosedPage.settings,
+        onTap: () {
           changePage(ChoosedPage.settings);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/trash.svg",
         title: "Корзина",
-        function: () {},
+        page: ChoosedPage.trash,
+        onTap: () {},
       ),
       Padding(
         padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
@@ -277,6 +287,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 40),
@@ -295,6 +306,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 40),
@@ -313,6 +325,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 40),

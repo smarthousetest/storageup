@@ -50,10 +50,10 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                       width: 400,
                       height: 374,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 30),
+                            padding: const EdgeInsets.only(top: 0),
                             child: Text(
                               translate.change_Password,
                               style: TextStyle(

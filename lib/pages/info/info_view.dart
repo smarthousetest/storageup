@@ -10,6 +10,7 @@ import 'package:upstorage_desktop/pages/home/home_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/utilities/injection.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
+import 'package:upstorage_desktop/utilities/state_container.dart';
 import '../../theme.dart';
 import '../../constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -1276,11 +1277,8 @@ class _InfoPageState extends State<InfoPage> {
                 width: 200,
                 child: OutlinedButton(
                   onPressed: () {
-                    //context.findAncestorRenderObjectOfType<HomeState>();
-                    //changePage(ChoosedPage.sell_space);
-                    // setState(() {
-                    //   youRenting = true;
-                    // });
+                    StateContainer.of(context)
+                        .changePage(ChoosedPage.sell_space);
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),

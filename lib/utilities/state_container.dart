@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 
 class StateContainer extends StatefulWidget {
   final Widget child;
@@ -8,8 +9,8 @@ class StateContainer extends StatefulWidget {
   });
 
   static StateContainerState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType()
-            as _InheritedStateContainer)
+    return (context
+            .dependOnInheritedWidgetOfExactType<_InheritedStateContainer>())!
         .data;
   }
 
@@ -18,14 +19,21 @@ class StateContainer extends StatefulWidget {
 }
 
 class StateContainerState extends State<StateContainer> {
+  var _choosedPage = ChoosedPage.home;
+  ChoosedPage get choosedPage => _choosedPage;
+
   @override
   Widget build(BuildContext context) {
     return new _InheritedStateContainer(
       data: this,
       child: widget.child,
     );
+  }
 
-    //void
+  void changePage(ChoosedPage newPage) {
+    setState(() {
+      _choosedPage = newPage;
+    });
   }
 }
 
@@ -33,7 +41,7 @@ class _InheritedStateContainer extends InheritedWidget {
   final StateContainerState data;
 
   _InheritedStateContainer({
-    key,
+    Key? key,
     required this.data,
     required Widget child,
   }) : super(key: key, child: child);

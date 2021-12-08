@@ -207,7 +207,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             iconSize: 20,
                             elevation: 0,
                             color: Theme.of(context).primaryColor,
-                            //padding: EdgeInsets.zero,
+                            // padding: EdgeInsets.zero,
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                   width: 1,
@@ -237,28 +237,34 @@ class _SettingsPageState extends State<SettingsPage> {
                               return [
                                 PopupMenuItem<FileOptions>(
                                   height: 44,
+                                  padding: EdgeInsets.zero,
                                   child: Container(
                                     width: 185,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/file_page/photo_change.svg',
-                                          height: 18,
-                                        ),
-                                        Container(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          'Изменить фото',
-                                          style: TextStyle(
-                                            color: Theme.of(context).focusColor,
-                                            fontSize: 14,
-                                            fontFamily: kNormalTextFontFamily,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/file_page/photo_change.svg',
+                                            height: 18,
                                           ),
-                                        ),
-                                      ],
+                                          Container(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            'Изменить фото',
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(context).focusColor,
+                                              fontSize: 14,
+                                              fontFamily: kNormalTextFontFamily,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -267,36 +273,41 @@ class _SettingsPageState extends State<SettingsPage> {
                                 // ),
 
                                 PopupMenuItem(
+                                  padding: EdgeInsets.zero,
                                   child: Container(
-                                    width: 185,
+                                    //width: 185,
                                     height: 44,
                                     decoration: BoxDecoration(
                                       color: Theme.of(context)
                                           .indicatorColor
                                           .withAlpha(10),
-                                      borderRadius: BorderRadius.circular(10),
+                                      //borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/file_page/trash.svg',
-                                          height: 18,
-                                        ),
-                                        Container(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          'Удалить',
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .indicatorColor,
-                                            fontSize: 14,
-                                            fontFamily: kNormalTextFontFamily,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/file_page/trash.svg',
+                                            height: 18,
                                           ),
-                                        ),
-                                      ],
+                                          Container(
+                                            width: 15,
+                                          ),
+                                          Text(
+                                            'Удалить',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .indicatorColor,
+                                              fontSize: 14,
+                                              fontFamily: kNormalTextFontFamily,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 )
