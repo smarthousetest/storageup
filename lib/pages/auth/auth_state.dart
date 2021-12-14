@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/pages/auth/models/email.dart';
 import 'package:upstorage_desktop/pages/auth/models/password.dart';
-import 'package:upstorage_desktop/utilities/enums.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 
 import 'models/name.dart';
 

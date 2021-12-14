@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
-import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'folder_list/keeper_info.dart';

@@ -10,7 +10,7 @@ import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import '../../theme.dart';
 import 'files_list/files_list.dart';
-import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 
 class FilePage extends StatefulWidget {
@@ -31,7 +31,6 @@ class _FilePageState extends State<FilePage> {
     // if (dirs_list.isEmpty) _init(context);
     return Expanded(
       child: Container(
-        // width: MediaQuery.of(context).size.width - 330,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

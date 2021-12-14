@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
+        "all": MessageLookupByLibrary.simpleMessage("Все"),
         "already_have_an_account":
             MessageLookupByLibrary.simpleMessage("Уже есть аккаунт?"),
         "already_registered_email": MessageLookupByLibrary.simpleMessage(
@@ -80,7 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Ваш e-mail адрес успешно подтверждён"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
-        "exit": MessageLookupByLibrary.simpleMessage("Выход"),
+        "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
         "folder": MessageLookupByLibrary.simpleMessage("Выберите папку"),
         "folder_dir": MessageLookupByLibrary.simpleMessage("Папки"),
         "forgot_password":
@@ -143,6 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "personal": MessageLookupByLibrary.simpleMessage(
             "Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» (далее - Закон о персональных данных) и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Михайловым Иваном Сергеевичем (далее – Оператор).1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.1.2. Настоящая политика Оператора в отношении обработки персональных данных (далее – Политика) применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта httpsː//thismywebsite·com."),
         "personal_data": MessageLookupByLibrary.simpleMessage("Личные данные"),
+        "photos": MessageLookupByLibrary.simpleMessage("Фото"),
         "privacy_policy":
             MessageLookupByLibrary.simpleMessage("Политика конфиденциальности"),
         "profile_photo": MessageLookupByLibrary.simpleMessage("Фото профиля"),
@@ -212,6 +214,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload_to_media":
             MessageLookupByLibrary.simpleMessage("Загрузить в медиа"),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
+        "video": MessageLookupByLibrary.simpleMessage("Видео"),
         "viewed": MessageLookupByLibrary.simpleMessage("Просмотрено"),
         "we_can_help": MessageLookupByLibrary.simpleMessage(
             ", возможно, мы сможем вам помочь."),

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/utilities/repositories/token_repository.dart';
+import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
-import '../enums.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import '../injection.dart';
 
 @Injectable()

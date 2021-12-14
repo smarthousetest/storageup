@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/utilities/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 
 enum ChoosedPage {
   home,

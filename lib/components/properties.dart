@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 
 class PropertiesView extends StatefulWidget {
   @override
@@ -125,7 +125,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                             child: Column(
                               children: [
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
                                       translate.size,
@@ -160,7 +160,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   padding: const EdgeInsets.only(top: 18),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         translate.type,
@@ -193,7 +193,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   padding: const EdgeInsets.only(top: 18),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         translate.format,
@@ -213,7 +213,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                         alignment: Alignment.centerRight,
                                         child: Text(
                                           "TXT",
-                                          textAlign: TextAlign.end,
+                                          //textAlign: TextAlign.end,
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -230,7 +230,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   padding: const EdgeInsets.only(top: 18),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         translate.created,
@@ -246,14 +246,17 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                         flex: 100,
                                         child: Container(),
                                       ),
-                                      Text(
-                                        "12 мая 2021 г., 23:37",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontFamily: kNormalTextFontFamily,
-                                          fontSize: 14,
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "12 мая 2021 г., 23:37",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -263,7 +266,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   padding: const EdgeInsets.only(top: 18),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         translate.changed,
@@ -279,14 +282,17 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                         flex: 100,
                                         child: Container(),
                                       ),
-                                      Text(
-                                        "25 июня 2021 г., 21:20",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontFamily: kNormalTextFontFamily,
-                                          fontSize: 14,
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "25 июня 2021 г., 21:20",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -296,7 +302,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   padding: const EdgeInsets.only(top: 18),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         translate.viewed,
@@ -312,14 +318,17 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                         flex: 100,
                                         child: Container(),
                                       ),
-                                      Text(
-                                        "сегодня, 15:11",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontFamily: kNormalTextFontFamily,
-                                          fontSize: 14,
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "сегодня, 15:11",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -329,7 +338,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   padding: const EdgeInsets.only(top: 18),
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         translate.location,
@@ -345,14 +354,17 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                         flex: 100,
                                         child: Container(),
                                       ),
-                                      Text(
-                                        "папка «Документы»",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontFamily: kNormalTextFontFamily,
-                                          fontSize: 14,
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "папка «Документы»",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
                                     ],

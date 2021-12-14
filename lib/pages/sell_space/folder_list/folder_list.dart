@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
 import 'keeper_info.dart';
 
@@ -170,7 +170,9 @@ class _ButtonTemplateState extends State<FolderList> {
                                 child: MyProgressBar(
                                   bgColor: Theme.of(context).dividerColor,
                                   color: Theme.of(context).splashColor,
-                                  percent: (widget.keeperInfo[index].trustLevel)!.toDouble(),
+                                  percent:
+                                      (widget.keeperInfo[index].trustLevel)!
+                                          .toDouble(),
                                 ),
                               ),
                             ),

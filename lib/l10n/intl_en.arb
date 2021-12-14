@@ -130,5 +130,8 @@
     "get_out": "Are you sure you want to get out?",
     "upload_files": "Upload file",
     "upload_folder": "Upload folder",
-    "upload_media": "Upload media"
+    "upload_media": "Upload media",
+    "all": "All",
+    "photos": "Photos",
+    "video": "Video"
 }

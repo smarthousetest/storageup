@@ -1,10 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 import 'home_event.dart';
 import 'home_state.dart';
-
 
 @Injectable()
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -55,7 +54,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //     emailRegister: email,
   //     status: Formz.validate([email]),
   //   );
-  }
+}
 
   // AuthState _mapLoginPasswordChanged(
   //     AuthState state,

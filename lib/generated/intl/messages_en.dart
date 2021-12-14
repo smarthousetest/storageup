@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Active subscription"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "add_location": MessageLookupByLibrary.simpleMessage("Add location"),
+        "all": MessageLookupByLibrary.simpleMessage("All"),
         "already_have_an_account":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "already_registered_email": MessageLookupByLibrary.simpleMessage(
@@ -143,6 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "personal": MessageLookupByLibrary.simpleMessage(
             "Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» (далее - Закон о персональных данных) и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Михайловым Иваном Сергеевичем (далее – Оператор).1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.1.2. Настоящая политика Оператора в отношении обработки персональных данных (далее – Политика) применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта httpsː//thismywebsite·com."),
         "personal_data": MessageLookupByLibrary.simpleMessage("Personal data"),
+        "photos": MessageLookupByLibrary.simpleMessage("Photos"),
         "privacy_policy":
             MessageLookupByLibrary.simpleMessage("Privacy policy"),
         "profile_photo": MessageLookupByLibrary.simpleMessage("Profile photo"),
@@ -208,6 +210,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "upload_to_media":
             MessageLookupByLibrary.simpleMessage("Upload to media"),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
+        "video": MessageLookupByLibrary.simpleMessage("Video"),
         "viewed": MessageLookupByLibrary.simpleMessage("Viewed"),
         "we_can_help":
             MessageLookupByLibrary.simpleMessage(", maybe we can help you."),

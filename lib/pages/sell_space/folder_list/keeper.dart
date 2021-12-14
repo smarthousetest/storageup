@@ -7,7 +7,7 @@ import 'folder_list.dart';
 import 'keeper_info.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
-import 'package:upstorage_desktop/utilities/repositories/token_repository.dart';
+import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
 Future<String> getKeeperId(String? bearerToken, int freeSpace) async {
   while (true) {
@@ -28,11 +28,13 @@ Future<String> getKeeperId(String? bearerToken, int freeSpace) async {
         }),
       );
       Map<String, dynamic> jsonDecode = response.data;
-      if(!Directory('./keepers').existsSync()){
+      if (!Directory('./keepers').existsSync()) {
         Directory('${Directory.current.path}/keepers').createSync();
       }
-      if(!File('${Directory.current.path}/keepers/${jsonDecode['id']}.txt').existsSync()){
-        File keeperIdFile = File('${Directory.current.path}/keepers/${jsonDecode['id']}.txt');
+      if (!File('${Directory.current.path}/keepers/${jsonDecode['id']}.txt')
+          .existsSync()) {
+        File keeperIdFile =
+            File('${Directory.current.path}/keepers/${jsonDecode['id']}.txt');
         keeperIdFile.createSync();
         keeperIdFile.writeAsStringSync(jsonDecode['id']);
       }
@@ -44,20 +46,24 @@ Future<String> getKeeperId(String? bearerToken, int freeSpace) async {
   }
 }
 
-Future<bool> startKeeper(String pathToDir, List<KeeperInfo> list, int freeSpace) async {
+Future<bool> startKeeper(
+    String pathToDir, List<KeeperInfo> list, int freeSpace) async {
   if (list.contains(pathToDir)) {
     return false;
   } else {
     String? bearerToken = await TokenRepository().getApiToken();
     String keeperId = await getKeeperId(bearerToken, freeSpace);
-    if(bearerToken != null){
+    if (bearerToken != null) {
       CppNative cpp = CppNative();
-      listOfDirsKeepers.add(KeeperInfo(dirPath: pathToDir, dateTime: DateFormat.yMd().format(DateTime.now()), name: null, size: freeSpace, trustLevel: 16));
+      listOfDirsKeepers.add(KeeperInfo(
+          dirPath: pathToDir,
+          dateTime: DateFormat.yMd().format(DateTime.now()),
+          name: null,
+          size: freeSpace,
+          trustLevel: 16));
       // keeperList.add(FolderList(listOfDirsKeepers.last));
       cpp.receiver(keeperId, bearerToken);
     }
     return true;
   }
 }
-
-

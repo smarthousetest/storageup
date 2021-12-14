@@ -19,9 +19,9 @@ import 'package:upstorage_desktop/pages/media/media_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
-import 'package:upstorage_desktop/utilities/injection.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
-import 'package:upstorage_desktop/utilities/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 
 enum Blur {
   rename,

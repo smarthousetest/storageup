@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/utilities/services/auth_service.dart';
+import 'package:upstorage_desktop/utilites/services/auth_service.dart';
 
-import '../enums.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import '../injection.dart';
 
 @Singleton()
