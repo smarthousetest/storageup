@@ -7,16 +7,17 @@ import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/upstorage_desktop.dart';
+import 'package:upstorage_desktop/utilites/repositories/file_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 
 @Injectable()
 class FilesController {
-  FilesRepository _filesRepo =
-      getIt<FilesRepository>(instanceName: 'files_repo');
   MediaRepository _mediaRepo =
       getIt<MediaRepository>(instanceName: 'media_repo');
+  FilesRepository _filesRepo =
+      getIt<FilesRepository>(instanceName: 'files_repo');
+
   FilesService _service = getIt<FilesService>();
   S translate = getIt<S>();
 

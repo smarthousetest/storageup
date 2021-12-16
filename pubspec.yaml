@@ -1,7 +1,7 @@
 name: upstorage_desktop
 description: A new Flutter project.
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -18,7 +18,7 @@ dependencies:
   intl: ^0.17.0
   adaptive_theme: ^2.2.0
   flutter_svg: ^0.22.0
-  flutter_bloc: 
+  flutter_bloc: ^7.3.0
   formz: ^0.4.0
   equatable: ^2.0.3
   dio: ^4.0.0
@@ -32,21 +32,18 @@ dependencies:
   file_picker: ^4.0.2
   percent_indicator: ^3.0.1
   connectivity: ^3.0.6
-  
+
   cpp_native:
     git:
       url: git@github.com:SergeySor/cpp_native.git
 
-
 dev_dependencies:
   injectable_generator:
   build_runner: ^2.0.4
-  flutter_gen_runner:
   flutter_test:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
   assets:
     - assets/
@@ -58,10 +55,10 @@ flutter:
 
   fonts:
     - family: Noto Sans
-      fonts: 
+      fonts:
         - asset: fonts/NotoSans-Regular.ttf
     - family: Noto Sans Bold
-      fonts: 
+      fonts:
         - asset: fonts/NotoSans-Bold.ttf
     - family: Nunito
       fonts:

@@ -221,9 +221,11 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                 Text(
                   widget.name,
                   textAlign: TextAlign.center,
+                  maxLines: 2,
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: kNormalTextFontFamily,
+                    overflow: TextOverflow.ellipsis,
                     color: Color(0xff7D7D7D),
                   ),
                 ),

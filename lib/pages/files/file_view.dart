@@ -1,16 +1,14 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import '../../theme.dart';
 import 'files_list/files_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -35,9 +33,7 @@ class _FilePageState extends State<FilePage> {
   Widget build(BuildContext context) {
     // if (dirs_list.isEmpty) _init(context);
     return BlocProvider(
-      create: (context) =>
-          FilesBloc(getIt<FilesController>(instanceName: "files_controller"))
-            ..add(FilesPageOpened()),
+      create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
       child: Expanded(
         child: Container(
           child: Row(
@@ -372,68 +368,68 @@ class _FilePageState extends State<FilePage> {
               scrollDirection: Axis.horizontal,
               children: [
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 31),
                       child: Container(
                         width: 130,
                         height: 130,
-                        child: Listener(
-                          child: ElevatedButton(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  child: SvgPicture.asset(
-                                    'assets/home_page/add_folder.svg',
-                                    height: 46,
-                                    width: 46,
-                                  ),
-                                ),
-                                Text(
-                                  translate.create_a_folder,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: kNormalTextFontFamily,
-                                    color: Theme.of(context).disabledColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () async {
-                              var str = await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return BlurAddFolder();
-                                },
-                              );
-                              print(str);
-                              setState(
-                                () {
-                                  folderList.add(
-                                    CustomDirButton(
-                                      name: str,
-                                      onTap: () async {},
+                        child: BlocBuilder<FilesBloc, FilesState>(
+                          builder: (context, state) {
+                            return Listener(
+                              child: ElevatedButton(
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      child: SvgPicture.asset(
+                                        'assets/home_page/add_folder.svg',
+                                        height: 46,
+                                        width: 46,
+                                      ),
                                     ),
+                                    Text(
+                                      translate.create_a_folder,
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: kNormalTextFontFamily,
+                                        color: Theme.of(context).disabledColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  var str = await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return BlurAddFolder();
+                                    },
                                   );
+                                  print(str);
+                                  if (str is String)
+                                    context.read<FilesBloc>().add(FileAddFolder(
+                                        name: str,
+                                        parentFolderId:
+                                            state.currentFolder?.id));
                                 },
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).dividerColor,
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide(
+                                      width: 2,
+                                      color: Theme.of(context).dividerColor,
+                                    ),
+                                  ),
+                                  elevation: 0,
                                 ),
                               ),
-                              elevation: 0,
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -454,13 +450,22 @@ class _FilePageState extends State<FilePage> {
     return Container(
       child: BlocBuilder<FilesBloc, FilesState>(
         builder: (context, state) {
-          return ListView(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            children: [
-              ..._getFolders(theme, state, context),
-            ],
-          );
+          if (state.currentFolder != null) {
+            var folders =
+                state.allFiles.where((item) => item is Folder).toList();
+            return ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: folders.length,
+              itemBuilder: (context, index) {
+                return CustomDirButton(
+                  name: folders[index].name!,
+                );
+              },
+            );
+          } else {
+            return Container();
+          }
         },
       ),
     );

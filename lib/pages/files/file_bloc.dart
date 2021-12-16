@@ -33,6 +33,7 @@ enum ContextActionEnum {
   addToFavorites
 }
 
+@Injectable()
 class FilesBloc extends Bloc<FilesEvent, FilesState> {
   FilesBloc(
     @Named('files_controller') this._controller,
@@ -306,8 +307,9 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     });
     if (event.direction == SortingDirection.up) {
       emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+    } else {
+      emit(state.copyWith(sortedFiles: sortedFiles));
     }
-    emit(state.copyWith(sortedFiles: sortedFiles));
   }
 
   Future<void> _sortByDate(
