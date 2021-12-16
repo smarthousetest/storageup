@@ -405,47 +405,44 @@ class _MediaPageState extends State<MediaPage> {
   }
 
   Widget _filesGrid(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: (MediaQuery.of(context).size.width > 1380)
-          ? (1076 ~/ 160)
-          : ((MediaQuery.of(context).size.width - 384) ~/ (160)),
-      padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-      crossAxisSpacing: 12,
-      children: List.generate(17, (index) {
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 100,
-              height: 128,
-              color: Theme.of(context).primaryColor,
-              child: Column(
-                children: [
-                  ClipRRect(
-                    child: Image.asset(
-                      'assets/test_img/20.jpg',
-                      width: 100,
-                      height: 100,
+    return LayoutBuilder(builder: (context, constrains) {
+      var crossAxisCount = constrains.minWidth ~/ 145;
+      return GridView.count(
+        crossAxisCount: crossAxisCount,
+        padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
+        crossAxisSpacing: 56,
+        children: List.generate(17, (index) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: constrains.minWidth / crossAxisCount,
+                height: constrains.minWidth / crossAxisCount * 1.3,
+                color: Theme.of(context).primaryColor,
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      child: Image.asset('assets/test_img/20.jpg'),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                    child: Text(
-                      'В.HEIC',
-                      style: TextStyle(
-                        color: Theme.of(context).disabledColor,
-                        fontSize: 14,
-                        fontFamily: kNormalTextFontFamily,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Text(
+                        'В.HEIC',
+                        style: TextStyle(
+                          color: Theme.of(context).disabledColor,
+                          fontSize: 14,
+                          fontFamily: kNormalTextFontFamily,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }),
-    );
+          );
+        }),
+      );
+    });
   }
 }

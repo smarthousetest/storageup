@@ -426,6 +426,7 @@ class LoadController {
 
     if (downloadingFiles.isNotEmpty &&
         downloadingFiles.any((element) => element.isInProgress)) {
+      //await
       _cpp.abortDownload();
       _state.changeDowloadingFiles([]);
     }

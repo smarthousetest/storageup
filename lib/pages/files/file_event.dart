@@ -22,9 +22,10 @@ class FilesSortingFieldChanged extends FilesEvent {
 }
 
 class FilesPageOpened extends FilesEvent {
+  final BaseObject? choosedFolder;
   final String? folderId;
   final List<BaseObject>? filesToMove;
-  const FilesPageOpened({this.folderId, this.filesToMove});
+  const FilesPageOpened({this.folderId, this.filesToMove, this.choosedFolder});
 }
 
 class FilesSortingClear extends FilesEvent {

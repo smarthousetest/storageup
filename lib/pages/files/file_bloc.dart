@@ -33,7 +33,6 @@ enum ContextActionEnum {
   addToFavorites
 }
 
-@Injectable()
 class FilesBloc extends Bloc<FilesEvent, FilesState> {
   FilesBloc(
     @Named('files_controller') this._controller,
@@ -88,6 +87,8 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     if (folderId == null) {
       var files = await _controller.getFiles();
       var currentFolder = _controller.getFilesRootFolder;
+      print(files?.length);
+      print(currentFolder?.name);
       emit(
         state.copyWith(
           allFiles: files,
