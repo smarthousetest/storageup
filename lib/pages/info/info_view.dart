@@ -1007,6 +1007,7 @@ class _InfoPageState extends State<InfoPage> {
                                       },
                                       style: ElevatedButton.styleFrom(
                                         primary: Theme.of(context).primaryColor,
+                                        padding: EdgeInsets.zero,
                                         shadowColor: Color.fromARGB(5, 0, 0, 0),
                                       ),
                                       child: Row(

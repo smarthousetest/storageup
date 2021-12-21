@@ -378,24 +378,22 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: Row(
-                children: [
-                  Text(
-                    translate.add,
-                    style: TextStyle(
-                      color: Theme.of(context).splashColor,
-                      fontSize: 17,
-                      fontFamily: kNormalTextFontFamily,
-                    ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  translate.add,
+                  style: TextStyle(
+                    color: Theme.of(context).splashColor,
+                    fontSize: 17,
+                    fontFamily: kNormalTextFontFamily,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Image.asset('assets/file_page/plus.png'),
-                  ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Image.asset('assets/file_page/plus.png'),
+                ),
+              ],
             ),
           ),
         ),

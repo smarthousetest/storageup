@@ -128,7 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "old_password":
             MessageLookupByLibrary.simpleMessage("Введите старый пароль"),
         "open": MessageLookupByLibrary.simpleMessage("Открыть"),
-        "options": MessageLookupByLibrary.simpleMessage("Параметры     "),
+        "options": MessageLookupByLibrary.simpleMessage("Параметры "),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(

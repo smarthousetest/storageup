@@ -20,19 +20,19 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
   static const platformMedia = MethodChannel('com.upstorage/media');
 
-  static void setLocale(BuildContext context, Locale newLocale) {
-    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
-    state?.setLocale(newLocale);
-  }
+  // static void setLocale(BuildContext context, Locale newLocale) {
+  //   _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+  //   state?.setLocale(newLocale);
+  // }
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale? _locale;
-  setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
-  }
+  // Locale? _locale;
+  // setLocale(Locale locale) {
+  //   setState(() {
+  //     _locale = locale;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo',
         darkTheme: dark,
         theme: light,
+        locale: StateContainer.of(context).loacale,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

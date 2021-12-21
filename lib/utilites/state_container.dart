@@ -20,11 +20,13 @@ class StateContainer extends StatefulWidget {
 
 class StateContainerState extends State<StateContainer> {
   var _choosedPage = ChoosedPage.home;
+  var _locale = Locale('ru');
   ChoosedPage get choosedPage => _choosedPage;
+  Locale get loacale => _locale;
 
   @override
   Widget build(BuildContext context) {
-    return new _InheritedStateContainer(
+    return _InheritedStateContainer(
       data: this,
       child: widget.child,
     );
@@ -33,6 +35,12 @@ class StateContainerState extends State<StateContainer> {
   void changePage(ChoosedPage newPage) {
     setState(() {
       _choosedPage = newPage;
+    });
+  }
+
+  void changeLocale(Locale newLocale) {
+    setState(() {
+      _locale = newLocale;
     });
   }
 }
