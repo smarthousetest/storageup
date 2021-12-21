@@ -223,14 +223,14 @@ class _HomePageState extends State<HomePage> {
           changePage(ChoosedPage.media);
         },
       ),
-      CustomMenuButton(
-        icon: "assets/home_page/like.svg",
-        title: "Избранное",
-        page: ChoosedPage.like,
-        onTap: () {
-          changePage(ChoosedPage.like);
-        },
-      ),
+      // CustomMenuButton(
+      //   icon: "assets/home_page/like.svg",
+      //   title: "Избранное",
+      //   page: ChoosedPage.like,
+      //   onTap: () {
+      //     changePage(ChoosedPage.like);
+      //   },
+      // ),
       CustomMenuButton(
         icon: "assets/home_page/sell_space.svg",
         title: "Сдача места",
@@ -239,14 +239,14 @@ class _HomePageState extends State<HomePage> {
           changePage(ChoosedPage.sell_space);
         },
       ),
-      CustomMenuButton(
-        icon: "assets/home_page/finance.svg",
-        title: "Финансы",
-        page: ChoosedPage.finance,
-        onTap: () {
-          changePage(ChoosedPage.finance);
-        },
-      ),
+      // CustomMenuButton(
+      //   icon: "assets/home_page/finance.svg",
+      //   title: "Финансы",
+      //   page: ChoosedPage.finance,
+      //   onTap: () {
+      //     changePage(ChoosedPage.finance);
+      //   },
+      // ),
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
         title: "Настройки",
@@ -255,12 +255,12 @@ class _HomePageState extends State<HomePage> {
           changePage(ChoosedPage.settings);
         },
       ),
-      CustomMenuButton(
-        icon: "assets/home_page/trash.svg",
-        title: "Корзина",
-        page: ChoosedPage.trash,
-        onTap: () {},
-      ),
+      // CustomMenuButton(
+      //   icon: "assets/home_page/trash.svg",
+      //   title: "Корзина",
+      //   page: ChoosedPage.trash,
+      //   onTap: () {},
+      // ),
       Padding(
         padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
         child: Container(
@@ -348,55 +348,54 @@ class _HomePageState extends State<HomePage> {
       ),
       Padding(
         padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
-        child: ElevatedButton(
-          onPressed: () async {
-            var str = await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurMenuUpload();
-              },
-            );
-            /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
-            List<String?> list = result!.paths;*/
+        child: Container(
+          height: 42,
+          width: 214,
+          child: ElevatedButton(
+            onPressed: () async {
+              var str = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurMenuUpload();
+                },
+              );
+              /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
+              List<String?> list = result!.paths;*/
 
-            // var systemTempDir = Directory.current;
-            // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
-            //   print(entity.path);
-            // }
-          },
-          child: Center(
-            child: RichText(
-              text: TextSpan(
-                  style: TextStyle(
-                    color: Theme.of(context).splashColor,
-                    fontSize: 17,
-                    fontFamily: kNormalTextFontFamily,
+              // var systemTempDir = Directory.current;
+              // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
+              //   print(entity.path);
+              // }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+              side: BorderSide(
+                style: BorderStyle.solid,
+                color: Theme.of(context).splashColor,
+                width: 1.5,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Row(
+                children: [
+                  Text(
+                    translate.add,
+                    style: TextStyle(
+                      color: Theme.of(context).splashColor,
+                      fontSize: 17,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
                   ),
-                  children: [
-                    TextSpan(
-                      text: translate.add,
-                    ),
-                    WidgetSpan(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Image.asset('assets/file_page/plus.png'),
-                      ),
-                    ),
-                  ]),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            fixedSize: Size(214, 42), /////
-            primary: Theme.of(context).primaryColor,
-            elevation: 0,
-            side: BorderSide(
-              style: BorderStyle.solid,
-              color: Theme.of(context).splashColor,
-              width: 1.5,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Image.asset('assets/file_page/plus.png'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

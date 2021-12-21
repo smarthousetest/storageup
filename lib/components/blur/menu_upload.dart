@@ -119,9 +119,6 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 28.0),
                                 child: GestureDetector(
-                                  onTap: () async {
-                                    print(await getDirPath());
-                                  },
                                   child: Column(
                                     children: [
                                       MouseRegion(
@@ -152,12 +149,17 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: SvgPicture.asset(
-                                        'assets/file_page/upload_dir.svg',
-                                        height: 64,
-                                        width: 64,
+                                    GestureDetector(
+                                      onTap: () async {
+                                        print(await getDirPath());
+                                      },
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: SvgPicture.asset(
+                                          'assets/file_page/upload_dir.svg',
+                                          height: 64,
+                                          width: 64,
+                                        ),
                                       ),
                                     ),
                                     SizedBox(height: 10),

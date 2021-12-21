@@ -470,7 +470,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             Align(
                               alignment: FractionalOffset.centerRight,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 148),
+                                padding:
+                                    const EdgeInsets.only(left: 148, top: 2),
                                 child: Container(
                                     child: SvgPicture.asset(
                                         "assets/file_page/arrow.svg")),
@@ -540,7 +541,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             Align(
                               alignment: FractionalOffset.centerRight,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 148),
+                                padding:
+                                    const EdgeInsets.only(left: 148, top: 2),
                                 child: Container(
                                     child: SvgPicture.asset(
                                         "assets/file_page/arrow.svg")),

@@ -133,5 +133,6 @@
     "upload_media": "Upload media",
     "all": "All",
     "photos": "Photos",
-    "video": "Video"
+    "video": "Video",
+    "files": "Files"
 }

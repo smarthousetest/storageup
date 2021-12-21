@@ -1399,6 +1399,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Files`
+  String get files {
+    return Intl.message(
+      'Files',
+      name: 'files',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

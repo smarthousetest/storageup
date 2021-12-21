@@ -82,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
         "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
+        "files": MessageLookupByLibrary.simpleMessage("Файлы"),
         "folder": MessageLookupByLibrary.simpleMessage("Выберите папку"),
         "folder_dir": MessageLookupByLibrary.simpleMessage("Папки"),
         "forgot_password":

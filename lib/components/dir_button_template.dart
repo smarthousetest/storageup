@@ -226,12 +226,13 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                     fontSize: 16,
                     fontFamily: kNormalTextFontFamily,
                     overflow: TextOverflow.ellipsis,
-                    color: Color(0xff7D7D7D),
+                    color: Theme.of(context).disabledColor,
                   ),
                 ),
               ],
             ),
             onPressed: widget.onTap,
+
             /*onPressed: () async {
               var str = await showDialog(
                 context: context,
@@ -250,12 +251,13 @@ class _ButtonTemplateState extends State<CustomDirButton> {
               // print(dirs_list.length);
             },*/
             style: ElevatedButton.styleFrom(
-              primary: Colors.white,
+              primary: Theme.of(context).primaryColor,
+              onSurface: Theme.of(context).primaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
                 side: BorderSide(
                   width: 2,
-                  color: Color(0xffF1F8FE),
+                  color: Theme.of(context).dividerColor,
                 ),
               ),
               elevation: 0,

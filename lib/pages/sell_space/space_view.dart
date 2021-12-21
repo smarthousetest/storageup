@@ -485,15 +485,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
-                child: Container(
-                  height: 1,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor,
-                  ),
-                ),
-              ),
               Row(
                 children: [
                   Padding(
@@ -663,15 +654,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     ),
                   ])
                 ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 50, right: 40),
-                child: Container(
-                  height: 1,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor,
-                  ),
-                ),
               ),
               Padding(
                   padding: const EdgeInsets.only(left: 40, top: 25),
