@@ -134,5 +134,8 @@
     "all": "All",
     "photos": "Photos",
     "video": "Video",
-    "files": "Files"
+    "files": "Files",
+    "home": "Home",
+    "media": "Media",
+    "settings": "Settings"
 }

@@ -241,6 +241,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget personalData(BuildContext context) {
     return ListView(controller: ScrollController(), children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 40, top: 30),
+        child: Container(
+          child: Text(
+            translate.profile_photo,
+            maxLines: 1,
+            style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 18,
+            ),
+          ),
+        ),
+      ),
       Stack(children: [
         Padding(
           padding: const EdgeInsets.only(top: 13, left: 40),

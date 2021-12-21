@@ -148,9 +148,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 40, top: 20),
                 child: Container(
-                  width: 130,
                   child: Text(
                     translate.sell_space,
+                    maxLines: 1,
                     style: TextStyle(
                       color: Theme.of(context).focusColor,
                       fontFamily: kNormalTextFontFamily,
@@ -774,9 +774,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 40, top: 20),
                   child: Container(
-                    width: 130,
                     child: Text(
                       translate.sell_space,
+                      maxLines: 1,
                       style: TextStyle(
                         color: Theme.of(context).focusColor,
                         fontFamily: kNormalTextFontFamily,

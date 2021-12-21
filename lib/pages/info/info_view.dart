@@ -935,12 +935,13 @@ class _InfoPageState extends State<InfoPage> {
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.only(top: 20),
-                                    child: OutlinedButton(
+                                    child: ElevatedButton(
                                       onPressed: () {
                                         print('Files');
                                       },
-                                      style: OutlinedButton.styleFrom(
+                                      style: ElevatedButton.styleFrom(
                                         primary: Colors.white,
+                                        padding: EdgeInsets.zero,
                                         shadowColor:
                                             Color.fromARGB(5, 0, 0, 0), //
                                       ),
@@ -1067,6 +1068,7 @@ class _InfoPageState extends State<InfoPage> {
                                       },
                                       style: ElevatedButton.styleFrom(
                                         primary: Theme.of(context).primaryColor,
+                                        padding: EdgeInsets.zero,
                                         shadowColor: Color.fromARGB(5, 0, 0, 0),
                                       ),
                                       child: Row(
@@ -1127,6 +1129,7 @@ class _InfoPageState extends State<InfoPage> {
                                       },
                                       style: ElevatedButton.styleFrom(
                                         primary: Theme.of(context).primaryColor,
+                                        padding: EdgeInsets.zero,
                                         shadowColor: Color.fromARGB(5, 0, 0, 0),
                                       ),
                                       child: Row(

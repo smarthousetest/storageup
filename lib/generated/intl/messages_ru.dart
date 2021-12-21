@@ -94,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
+        "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
@@ -106,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Управление подпиской"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Максимальный размер для вашего диска: 180 ГБ"),
+        "media": MessageLookupByLibrary.simpleMessage("Медиа"),
         "min_storage": MessageLookupByLibrary.simpleMessage(
             "Минимальный размер хранилища: 32 ГБ"),
         "money":
@@ -179,6 +181,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sell_space": MessageLookupByLibrary.simpleMessage("Сдача места"),
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
+        "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
         "sign_in": MessageLookupByLibrary.simpleMessage("Войти"),
         "sign_in_to_account":
             MessageLookupByLibrary.simpleMessage("Вход в учетную запись"),

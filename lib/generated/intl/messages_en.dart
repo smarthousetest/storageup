@@ -94,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Go to"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Go to authorization"),
+        "home": MessageLookupByLibrary.simpleMessage("Home"),
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
@@ -106,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Subscription management"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Maximum size for your drive: 180 GB"),
+        "media": MessageLookupByLibrary.simpleMessage("Media"),
         "min_storage":
             MessageLookupByLibrary.simpleMessage("Minimum storage size: 32 GB"),
         "money":
@@ -177,6 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Choose storage location"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Renting a place"),
         "set_size": MessageLookupByLibrary.simpleMessage("Set storage size"),
+        "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "sign_in": MessageLookupByLibrary.simpleMessage("Login"),
         "sign_in_to_account":
             MessageLookupByLibrary.simpleMessage("Login to your account"),

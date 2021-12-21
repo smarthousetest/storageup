@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
     return [
       CustomMenuButton(
         icon: "assets/home_page/home.svg",
-        title: "Главная",
+        title: translate.home,
         page: ChoosedPage.home,
         onTap: () {
           changePage(ChoosedPage.home);
@@ -209,7 +209,7 @@ class _HomePageState extends State<HomePage> {
       ),
       CustomMenuButton(
         icon: "assets/home_page/files.svg",
-        title: "Файлы",
+        title: translate.files,
         page: ChoosedPage.file,
         onTap: () {
           changePage(ChoosedPage.file);
@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
       ),
       CustomMenuButton(
         icon: "assets/home_page/media.svg",
-        title: "Медиа",
+        title: translate.media,
         page: ChoosedPage.media,
         onTap: () {
           changePage(ChoosedPage.media);
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
       // ),
       CustomMenuButton(
         icon: "assets/home_page/sell_space.svg",
-        title: "Сдача места",
+        title: translate.sell_space,
         page: ChoosedPage.sell_space,
         onTap: () {
           changePage(ChoosedPage.sell_space);
@@ -249,7 +249,7 @@ class _HomePageState extends State<HomePage> {
       // ),
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
-        title: "Настройки",
+        title: translate.settings,
         page: ChoosedPage.settings,
         onTap: () {
           changePage(ChoosedPage.settings);
