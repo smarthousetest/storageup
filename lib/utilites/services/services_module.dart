@@ -5,6 +5,7 @@ import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/repositories/file_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
+import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
 
 @module
 abstract class ServiceModule {
@@ -36,4 +37,7 @@ abstract class ServiceModule {
 
   @lazySingleton
   LoadController get leadController => LoadController();
+
+  @lazySingleton
+  UserRepository get userRepository => UserRepository();
 }

@@ -60,5 +60,10 @@ class AuthenticationRepository {
     return response;
   }
 
+  Future<AuthenticationStatus> updateUserInfo() {
+    final response = _authService.getUserInfo();
+    return response;
+  }
+
   void dispose() => _controller.close();
 }

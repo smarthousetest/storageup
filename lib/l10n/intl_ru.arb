@@ -139,5 +139,8 @@
     "files": "Файлы",
     "home": "Главная",
     "media": "Медиа",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "all_files": "Все файлы",
+    "count_of_files" :"{count} файлов"
+    
 }

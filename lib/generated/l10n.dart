@@ -1439,6 +1439,26 @@ class S {
       args: [],
     );
   }
+
+  /// `All files`
+  String get all_files {
+    return Intl.message(
+      'All files',
+      name: 'all_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} files`
+  String count_of_files(Object count) {
+    return Intl.message(
+      '$count files',
+      name: 'count_of_files',
+      desc: '',
+      args: [count],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

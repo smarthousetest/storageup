@@ -12,7 +12,14 @@ class CustomDirButton extends StatefulWidget {
   String name;
   TextEditingController? dirName;
   Function()? onTap;
-  CustomDirButton({required this.name, this.onTap});
+  String description;
+  bool readonly;
+  CustomDirButton({
+    required this.name,
+    this.onTap,
+    required this.description,
+    required this.readonly,
+  });
 }
 
 class _ButtonTemplateState extends State<CustomDirButton> {
@@ -216,17 +223,27 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                     'assets/home_page/files_r.svg',
                     height: 46,
                     width: 46,
+                    color: widget.readonly ? kPurpleColor : kLightGreenColor,
                   ),
                 ),
                 Text(
                   widget.name,
                   textAlign: TextAlign.center,
-                  maxLines: 2,
+                  maxLines: 1,
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: kNormalTextFontFamily,
                     overflow: TextOverflow.ellipsis,
                     color: Theme.of(context).disabledColor,
+                  ),
+                ),
+                Text(
+                  widget.description,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: kNormalTextFontFamily,
+                    overflow: TextOverflow.ellipsis,
+                    color: Theme.of(context).colorScheme.onBackground,
                   ),
                 ),
               ],
@@ -263,7 +280,7 @@ class _ButtonTemplateState extends State<CustomDirButton> {
               elevation: 0,
             ),
           ),
-          onPointerDown: _onPointerDown,
+          onPointerDown: widget.readonly ? null : _onPointerDown,
         ),
       ),
     );

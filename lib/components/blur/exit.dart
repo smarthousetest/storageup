@@ -6,6 +6,7 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
+import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
 class BlurExit extends StatefulWidget {
   @override
@@ -16,6 +17,9 @@ class BlurExit extends StatefulWidget {
 class _ButtonTemplateState extends State<BlurExit> {
   S translate = getIt<S>();
   final myController = TextEditingController();
+
+  final TokenRepository _tokenRepository = getIt<TokenRepository>();
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -112,7 +116,8 @@ class _ButtonTemplateState extends State<BlurExit> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        await _tokenRepository.setApiToken('');
                                         Navigator.pushNamedAndRemoveUntil(
                                             context,
                                             AuthView.route,

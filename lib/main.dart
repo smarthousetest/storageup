@@ -1,5 +1,4 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -52,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: S.delegate.supportedLocales,
         // initialRoute: AuthView.route,
-        initialRoute: HomePage.route,
+        initialRoute: AuthView.route,
 
         onGenerateRoute: (settings) {
           switch (settings.name) {

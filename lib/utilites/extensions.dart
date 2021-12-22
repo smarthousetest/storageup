@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/models/user.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -29,4 +30,25 @@ extension GlobalKeyExtension on GlobalKey {
 Future<String> getDownloadAppFolder() async {
   var appPath = await getApplicationDocumentsDirectory();
   return appPath.path + '/downloads/';
+}
+
+extension UserProficeImage on User? {
+  Widget get image {
+    Widget image = Container();
+
+    if (this != null && this!.avatars != null) {
+      image = Container(
+        height: 46,
+        width: 46,
+        child: Image.network(
+          this!.avatars!.first.publicUrl ?? "",
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+      image = Image.asset('assets/home_page/man.jpg');
+    }
+
+    return image;
+  }
 }

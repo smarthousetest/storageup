@@ -19,6 +19,7 @@ import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
+import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
 
 enum SortingDirection { neutral, up, down }
 enum ContextActionEnum {
@@ -76,6 +77,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
   //Box  get _box async  => await Hive.openBox('file_path_db');
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
   final LoadController _loadController = getIt<LoadController>();
+  final UserRepository _userRepository = getIt<UserRepository>();
   List<UploadObserver> _listeners = [];
 
   Future<void> _mapFilesPageOpened(
@@ -88,6 +90,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     if (folderId == null) {
       var files = await _controller.getFiles();
       var currentFolder = _controller.getFilesRootFolder;
+      var user = _userRepository.getUser;
       print(files?.length);
       print(currentFolder?.name);
       emit(
@@ -96,17 +99,20 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
           sortedFiles: files,
           currentFolder: currentFolder,
           filesToMove: filesToMove,
+          user: user,
         ),
       );
     } else {
       var files = await _controller.getContentFromFolderById(folderId);
       var currentFolder = await _controller.getFolderById(folderId);
+      var user = _userRepository.getUser;
       emit(
         state.copyWith(
           allFiles: files,
           sortedFiles: files,
           currentFolder: currentFolder,
           filesToMove: filesToMove,
+          user: user,
         ),
       );
     }

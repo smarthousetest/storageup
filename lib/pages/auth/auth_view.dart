@@ -74,7 +74,7 @@ class _AuthViewState extends State<AuthView> {
     }
 
     return BlocProvider(
-      create: (context) => getIt<AuthBloc>(),
+      create: (context) => getIt<AuthBloc>()..add(AuthPageOpened()),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.status == FormzStatus.submissionSuccess &&

@@ -3,6 +3,7 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:formz/formz.dart';
+import 'package:upstorage_desktop/models/user.dart';
 
 enum FilesAction { moving }
 
@@ -10,6 +11,8 @@ class FilesState extends Equatable {
   final List<BaseObject> allFiles;
 
   final List<BaseObject> sortedFiles;
+
+  final User? user;
 
   final Folder? currentFolder;
 
@@ -38,6 +41,7 @@ class FilesState extends Equatable {
     this.filesToMove = const [],
     this.filesAction,
     this.errorType,
+    this.user,
   });
 
   FilesState.init({
@@ -51,6 +55,7 @@ class FilesState extends Equatable {
     this.filesToMove = const [],
     this.filesAction,
     this.errorType,
+    this.user,
   }) : sortedFiles = allFiles;
 
   FilesState copyWith({
@@ -64,6 +69,7 @@ class FilesState extends Equatable {
     List<BaseObject>? filesToMove,
     FilesAction? filesAction,
     ErrorType? errorType,
+    User? user,
   }) {
     return FilesState(
       allFiles: allFiles ?? this.allFiles,
@@ -76,6 +82,7 @@ class FilesState extends Equatable {
       filesToMove: filesToMove ?? this.filesToMove,
       filesAction: filesAction ?? this.filesAction,
       errorType: errorType ?? this.errorType,
+      user: user ?? this.user,
     );
   }
 
@@ -91,5 +98,6 @@ class FilesState extends Equatable {
         filesToMove,
         filesAction,
         errorType,
+        user,
       ];
 }

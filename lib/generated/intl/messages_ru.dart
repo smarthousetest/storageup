@@ -20,6 +20,8 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
+  static String m0(count) => "${count} файлов";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accaunt_deleting":
@@ -29,6 +31,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
         "all": MessageLookupByLibrary.simpleMessage("Все"),
+        "all_files": MessageLookupByLibrary.simpleMessage("Все файлы"),
         "already_have_an_account":
             MessageLookupByLibrary.simpleMessage("Уже есть аккаунт?"),
         "already_registered_email": MessageLookupByLibrary.simpleMessage(
@@ -49,6 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
+        "count_of_files": m0,
         "create_a_folder":
             MessageLookupByLibrary.simpleMessage("Создать папку"),
         "create_album": MessageLookupByLibrary.simpleMessage("Создать альбом"),

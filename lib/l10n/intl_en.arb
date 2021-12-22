@@ -137,5 +137,7 @@
     "files": "Files",
     "home": "Home",
     "media": "Media",
-    "settings": "Settings"
+    "settings": "Settings",
+    "all_files": "All files",
+    "count_of_files" :"{count} files"
 }

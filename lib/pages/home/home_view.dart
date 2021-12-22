@@ -1,8 +1,4 @@
-import 'dart:io';
-import 'dart:ui';
 import 'package:desktop_window/desktop_window.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
@@ -20,7 +16,6 @@ import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 
 enum Blur {
@@ -64,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     // var heightWindow = MediaQuery.of(context).size.height;
     // var widthWindow = MediaQuery.of(context).size.width;
 
-    // DesktopWindow.setMaxWindowSize(Size(widthWindow, heightWindow));
+    DesktopWindow.resetMaxWindowSize();
   }
 
   Widget getPage() {

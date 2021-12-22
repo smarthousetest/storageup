@@ -1,12 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
-import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
-import '../../theme.dart';
 import 'media_list/media_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -257,12 +253,13 @@ class _MediaPageState extends State<MediaPage> {
                                               print(str);
                                               setState(
                                                 () {
-                                                  dirsList.add(
-                                                    CustomDirButton(
-                                                      name: str,
-                                                      onTap: () async {},
-                                                    ),
-                                                  );
+                                                  // dirsList.add(
+                                                  //   CustomDirButton(
+                                                  //     name: str,
+
+                                                  //     onTap: () async {},
+                                                  //   ),
+                                                  // );
                                                   print("add");
                                                 },
                                               );
