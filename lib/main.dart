@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: S.delegate.supportedLocales,
         // initialRoute: AuthView.route,
-        initialRoute: AuthView.route,
+        initialRoute: HomePage.route,
 
         onGenerateRoute: (settings) {
           switch (settings.name) {

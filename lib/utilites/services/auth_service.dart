@@ -156,6 +156,56 @@ class AuthService {
     }
   }
 
+  Future<AuthenticationStatus> changeName({required String name}) async {
+    try {
+      // var data = {
+      //   'data': {
+      //     'firstName': user.firstName,
+      //     'lastName': user.lastName,
+      //     'phoneNumber': user.phoneNumber,
+      //     'avatars': [
+      //       {'publicUrl': url}
+      //     ]
+      //   }
+      // };
+      var user = _userRepository.getUser;
+      String? url = '';
+      if (user?.avatars != null && user!.avatars!.isNotEmpty)
+        url = user.avatars?.first.publicUrl;
+      final query = {
+        'data': {
+          "firstName": name,
+          'lastName': user?.lastName,
+          'phoneNumber': user?.phoneNumber,
+          'avatars': [
+            {
+              'publicUrl': url,
+            }
+          ]
+        }
+      };
+      String? token = await _tokenRepository.getApiToken();
+      if (token != null && token.isNotEmpty) {
+        final response = await _dio.put(
+          '/profile',
+          data: query,
+          options: Options(headers: {'Authorization': ' Bearer $token'}),
+        );
+        if (response.statusCode == 200)
+          return AuthenticationStatus.authenticated;
+        else
+          return AuthenticationStatus.unknown;
+      }
+      return AuthenticationStatus.unknown;
+    } on DioError catch (e) {
+      print(e);
+      if (e.response?.statusCode == 401)
+        return AuthenticationStatus.unauthenticated;
+      else
+        return AuthenticationStatus.externalError;
+    }
+  }
+
   void _printDioError(DioError e) {
     if (e.response != null) {
       print(e.response?.data);
