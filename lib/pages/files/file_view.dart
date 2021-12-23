@@ -33,7 +33,13 @@ class _FilePageState extends State<FilePage> {
   void initState() {
     _opendedFolders.add(
       Column(
-        children: [_recentFiles()],
+        children: [
+          OpenedFolderView(
+              currentFolder: null, //state.currentFolder!,
+              previousFolders: [],
+              pop: _pop,
+              push: _push),
+        ],
       ),
     );
     super.initState();
@@ -44,149 +50,152 @@ class _FilePageState extends State<FilePage> {
     // if (dirs_list.isEmpty) _init(context);
     return BlocProvider(
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
-      child: Expanded(
-        child: Container(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 30, top: 30, right: 30),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: 46,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color:
-                                              Color.fromARGB(25, 23, 69, 139),
-                                          blurRadius: 4,
-                                          offset: Offset(1, 4))
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(13.0),
-                                    child: Align(
-                                      alignment: FractionalOffset.centerLeft,
-                                      child: Container(
-                                          width: 20,
-                                          height: 20,
-                                          child: SvgPicture.asset(
-                                              "assets/file_page/search.svg")),
+      child: BlocListener<FilesBloc, FilesState>(
+        listener: (context, state) {},
+        child: Expanded(
+          child: Container(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 30, top: 30, right: 30),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 46,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                            color:
+                                                Color.fromARGB(25, 23, 69, 139),
+                                            blurRadius: 4,
+                                            offset: Offset(1, 4))
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(13.0),
+                                      child: Align(
+                                        alignment: FractionalOffset.centerLeft,
+                                        child: Container(
+                                            width: 20,
+                                            height: 20,
+                                            child: SvgPicture.asset(
+                                                "assets/file_page/search.svg")),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              width: 46,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    //child: Padding(
-                                    //padding: const EdgeInsets.only(right: 30),
-                                    child: MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: Color.fromARGB(
-                                                      25, 23, 69, 139),
-                                                  blurRadius: 4,
-                                                  offset: Offset(1, 4))
-                                            ]),
-                                        child: Center(
-                                          child: SvgPicture.asset(
-                                              "assets/file_page/settings.svg"),
+                              Container(
+                                width: 46,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      //child: Padding(
+                                      //padding: const EdgeInsets.only(right: 30),
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                    color: Color.fromARGB(
+                                                        25, 23, 69, 139),
+                                                    blurRadius: 4,
+                                                    offset: Offset(1, 4))
+                                              ]),
+                                          child: Center(
+                                            child: SvgPicture.asset(
+                                                "assets/file_page/settings.svg"),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              child: BlocBuilder<FilesBloc, FilesState>(
-                                builder: (context, state) {
-                                  return Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 10, left: 20),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(23.0),
-                                          child: state.user.image,
+                              Container(
+                                child: BlocBuilder<FilesBloc, FilesState>(
+                                  builder: (context, state) {
+                                    return Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 10, left: 20),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(23.0),
+                                            child: state.user.image,
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text(
-                                            state.user?.fullName ?? '',
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              color: Theme.of(context)
-                                                  .bottomAppBarColor,
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                              state.user?.fullName ?? '',
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                color: Theme.of(context)
+                                                    .bottomAppBarColor,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            state.user?.email ?? '',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Theme.of(context)
-                                                  .bottomAppBarColor,
+                                            Text(
+                                              state.user?.email ?? '',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .bottomAppBarColor,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                },
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: IndexedStack(
-                          index: widget.index,
-                          children: [
-                            // _recentFiles(context),
-                            // openFolder(context)
-                            ..._opendedFolders
-                            // Column(
-                            //   children: [openFolder(context)],
-                            // ),
-                          ],
+                        Expanded(
+                          child: IndexedStack(
+                            index: widget.index,
+                            children: [
+                              // _recentFiles(context),
+                              // openFolder(context)
+                              ..._opendedFolders
+                              // Column(
+                              //   children: [openFolder(context)],
+                              // ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              //PropertiesView(),
-            ],
+                //PropertiesView(),
+              ],
+            ),
           ),
         ),
       ),

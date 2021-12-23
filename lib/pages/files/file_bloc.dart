@@ -116,7 +116,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
         ),
       );
     }
-    print('Load controller init id: ${_loadController.isInited()}');
+    print('Load controller init is: ${_loadController.isInited()}');
   }
 
   Future<void> _mapUpdateFilesList(

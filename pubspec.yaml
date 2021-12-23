@@ -53,6 +53,7 @@ flutter:
     - assets/file_page/
     - assets/test_img/
     - assets/file_page/file_options/
+    - assets/file_icons/
 
   fonts:
     - family: Noto Sans
