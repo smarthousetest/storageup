@@ -31,5 +31,8 @@ final kLightTheme = ThemeData.light().copyWith(
         subtitle1: TextStyle(
           color: Color(0xff9C9C9C),
         ),
+        headline2: TextStyle(
+          color: Color(0xFF5A5A5A),
+        ),
       ),
 );

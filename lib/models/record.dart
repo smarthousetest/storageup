@@ -95,7 +95,7 @@ class Record extends BaseObject {
         updatedBy: json['updatedBy'] as String?,
         createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
         updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? ''),
-        favorite: json['favorite'] as bool? ?? false,
+        favorite: json['isFavorite'] as bool,
         extension: name?.split('.').last);
   }
 

@@ -61,7 +61,7 @@ class _FilePageState extends State<FilePage> {
                   child: Container(
                     padding: EdgeInsets.only(left: 30, top: 30, right: 30),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                      // mainAxisSize: MainAxisSize.max,
                       children: [
                         Container(
                           height: 46,
@@ -179,21 +179,13 @@ class _FilePageState extends State<FilePage> {
                         Expanded(
                           child: IndexedStack(
                             index: widget.index,
-                            children: [
-                              // _recentFiles(context),
-                              // openFolder(context)
-                              ..._opendedFolders
-                              // Column(
-                              //   children: [openFolder(context)],
-                              // ),
-                            ],
+                            children: _opendedFolders,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                //PropertiesView(),
               ],
             ),
           ),
@@ -209,13 +201,15 @@ class _FilePageState extends State<FilePage> {
     });
   }
 
-  void _pop() {
-    setState(() {
-      if (_opendedFolders.length != 1) {
-        _opendedFolders.removeLast();
-        widget.index--;
-      }
-    });
+  void _pop(int countOfPop) {
+    for (var i = 0; i < countOfPop; i++) {
+      setState(() {
+        if (_opendedFolders.length != 1) {
+          _opendedFolders.removeLast();
+          widget.index--;
+        }
+      });
+    }
   }
 
   Widget _recentFiles() {
@@ -351,10 +345,6 @@ class _FilePageState extends State<FilePage> {
                               },
                               icon: SvgPicture.asset(
                                   'assets/file_page/list.svg',
-                                  // icon: Image.asset('assets/file_page/list.png',
-                                  // fit: BoxFit.contain,
-                                  // width: 30,
-                                  // height: 30,
                                   color: ifGrid
                                       ? Theme.of(context)
                                           .toggleButtonsTheme
@@ -371,9 +361,6 @@ class _FilePageState extends State<FilePage> {
                               },
                               icon: SvgPicture.asset(
                                   'assets/file_page/block.svg',
-                                  // width: 30,
-                                  // height: 30,
-                                  //colorBlendMode: BlendMode.softLight,
                                   color: ifGrid
                                       ? Theme.of(context).splashColor
                                       : Theme.of(context)
