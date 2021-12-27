@@ -1459,6 +1459,126 @@ class S {
       args: [count],
     );
   }
+
+  /// `Folder`
+  String get foldr {
+    return Intl.message(
+      'Folder',
+      name: 'foldr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} B`
+  String b(Object count) {
+    return Intl.message(
+      '$count B',
+      name: 'b',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Kb`
+  String kb(Object count) {
+    return Intl.message(
+      '$count Kb',
+      name: 'kb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Mb`
+  String mb(Object count) {
+    return Intl.message(
+      '$count Mb',
+      name: 'mb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Gb`
+  String gb(Object count) {
+    return Intl.message(
+      '$count Gb',
+      name: 'gb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Tb`
+  String tb(Object count) {
+    return Intl.message(
+      '$count Tb',
+      name: 'tb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Pb`
+  String pb(Object count) {
+    return Intl.message(
+      '$count Pb',
+      name: 'pb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Share`
+  String get share {
+    return Intl.message(
+      'Share',
+      name: 'share',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Move`
+  String get move {
+    return Intl.message(
+      'Move',
+      name: 'move',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download`
+  String get download {
+    return Intl.message(
+      'Download',
+      name: 'download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Info`
+  String get info {
+    return Intl.message(
+      'Info',
+      name: 'info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

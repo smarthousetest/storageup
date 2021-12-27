@@ -1,7 +1,9 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
@@ -9,6 +11,7 @@ import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class OpenedFolderView extends StatefulWidget {
@@ -226,6 +229,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     );
   }
 
+  var _controller = CustomPopupMenuController();
   Widget _filesList(BuildContext context, OpenedFolderState state) {
     TextStyle style = TextStyle(
       color: Theme.of(context).textTheme.subtitle1?.color,
@@ -247,7 +251,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
             columns: [
               DataColumn(
                 label: Container(
-                  width: constraints.maxWidth * 0.50,
+                  width: constraints.maxWidth * 0.5,
                   child: Text(
                     translate.name,
                     style: style,
@@ -256,7 +260,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
               ),
               DataColumn(
                 label: Container(
-                  width: constraints.maxWidth * 0.1,
+                  width: constraints.maxWidth * 0.06,
                   child: Text(
                     translate.format,
                     style: style,
@@ -265,7 +269,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
               ),
               DataColumn(
                 label: Container(
-                  width: constraints.maxWidth * 0.1,
+                  width: constraints.maxWidth * 0.05,
                   child: Text(
                     translate.date,
                     style: style,
@@ -274,10 +278,18 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
               ),
               DataColumn(
                 label: Container(
-                  width: constraints.maxWidth * 0.22,
+                  width: constraints.maxWidth * 0.05,
                   child: Text(
                     translate.size,
                     style: style,
+                  ),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: constraints.maxWidth * 0.001,
+                  child: SizedBox(
+                    width: constraints.maxWidth * 0.001,
                   ),
                 ),
               ),
@@ -336,9 +348,62 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                     )
                   ],
                 )),
-                DataCell(Text('a')),
-                DataCell(Text('a')),
-                DataCell(Text('a')),
+                DataCell(
+                  Text(
+                    type.isEmpty ? translate.foldr : type.toUpperCase(),
+                    style: cellTextStyle,
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    DateFormat('dd.MM.yyyy').format(e.createdAt!),
+                    style: cellTextStyle,
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    filesize(e.size, translate, 1),
+                    style: cellTextStyle,
+                  ),
+                ),
+                DataCell(
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      hoverColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                    ),
+                    child: CustomPopupMenu(
+                      pressType: PressType.singleClick,
+                      barrierColor: Colors.transparent,
+                      showArrow: false,
+                      controller: _controller,
+
+                      menuBuilder: () {
+                        return FilesPopupMenuActions(
+                          theme: Theme.of(context),
+                          translate: translate,
+                        );
+                      },
+                      child:
+                          SvgPicture.asset('assets/file_page/three_dots.svg'),
+                      // offset: Offset(10, 49),
+                      // iconSize: 20,
+                      // padding: EdgeInsets.zero,
+                      // color: Theme.of(context).primaryColor,
+                      // shape: RoundedRectangleBorder(
+                      //   side: BorderSide(
+                      //     width: 1,
+                      //     color: Theme.of(context).dividerColor,
+                      //   ),
+                      //   borderRadius: BorderRadius.circular(5.0),
+                      // ),
+                      // icon: SvgPicture.asset('assets/file_page/three_dots.svg'),
+                      // itemBuilder: (context) {
+                      //   return [PopupMenuItem(child: Text('click'))];
+                      // },
+                    ),
+                  ),
+                ),
               ]);
             }).toList(),
           ),
@@ -424,6 +489,242 @@ class ObjectView extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class FilesPopupMenuActions extends StatefulWidget {
+  FilesPopupMenuActions(
+      {required this.theme, required this.translate, Key? key})
+      : super(key: key);
+
+  final ThemeData theme;
+  final S translate;
+  @override
+  _FilesPopupMenuActionsState createState() => _FilesPopupMenuActionsState();
+}
+
+class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
+  int ind = -1;
+  @override
+  Widget build(BuildContext context) {
+    var style = TextStyle(
+      fontFamily: kNormalTextFontFamily,
+      fontSize: 14,
+      color: Theme.of(context).disabledColor,
+    );
+    var mainColor = widget.theme.colorScheme.onSecondary;
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: mainColor,
+            spreadRadius: 3,
+            blurRadius: 3,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+          ),
+          child: IntrinsicWidth(
+            child: Column(
+              children: [
+                MouseRegion(
+                  onEnter: (event) {
+                    setState(() {
+                      ind = 0;
+                    });
+                  },
+                  child: Container(
+                    width: 190,
+                    height: 40,
+                    color: ind == 0 ? mainColor : null,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Image.asset(
+                        //   'assets/file_page/file_options/share.png',
+                        //   height: 20,
+                        // ),
+                        SvgPicture.asset(
+                          'assets/options/share.svg',
+                          height: 20,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Text(
+                          widget.translate.share,
+                          style: style,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                MouseRegion(
+                  onEnter: (event) {
+                    setState(() {
+                      ind = 1;
+                    });
+                  },
+                  child: Container(
+                    width: 190,
+                    height: 40,
+                    color: ind == 1 ? mainColor : null,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Image.asset(
+                        //   'assets/file_page/file_options/move.png',
+                        //   height: 20,
+                        // ),
+                        SvgPicture.asset(
+                          'assets/options/folder.svg',
+                          height: 20,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Text(
+                          widget.translate.move,
+                          style: style,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                MouseRegion(
+                  onEnter: (event) {
+                    setState(() {
+                      ind = 2;
+                    });
+                  },
+                  child: Container(
+                    width: 190,
+                    height: 40,
+                    color: ind == 2 ? mainColor : null,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Image.asset(
+                        //   'assets/file_page/file_options/download.png',
+                        //   height: 20,
+                        // ),
+                        SvgPicture.asset(
+                          'assets/options/download.svg',
+                          height: 20,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Text(
+                          widget.translate.download,
+                          style: style,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                MouseRegion(
+                  onEnter: (event) {
+                    setState(() {
+                      ind = 3;
+                    });
+                  },
+                  child: Container(
+                    width: 190,
+                    height: 40,
+                    color: ind == 3 ? mainColor : null,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    margin: EdgeInsets.zero,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Image.asset(
+                        //   'assets/file_page/file_options/info.png',
+                        //   height: 20,
+                        // ),
+                        SvgPicture.asset(
+                          'assets/options/info.svg',
+                          height: 20,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Text(
+                          widget.translate.info,
+                          style: style,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                MouseRegion(
+                  onEnter: (event) {
+                    setState(() {
+                      ind = 4;
+                    });
+                  },
+                  child: Container(
+                    width: 190,
+                    height: 40,
+                    color: ind == 4
+                        ? widget.theme.indicatorColor.withOpacity(0.1)
+                        : null,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Image.asset(
+                        //   'assets/file_page/file_options/trash.png',
+                        //   height: 20,
+                        // ),
+                        SvgPicture.asset(
+                          'assets/options/trash.svg',
+                          height: 20,
+                          color: widget.theme.indicatorColor,
+                        ),
+                        Container(
+                          width: 15,
+                        ),
+                        Text(
+                          widget.translate.delete,
+                          style: style.copyWith(
+                              color: Theme.of(context).errorColor),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

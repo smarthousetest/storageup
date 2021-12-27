@@ -20,7 +20,19 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ru';
 
-  static String m0(count) => "${count} файлов";
+  static String m0(count) => "${count} Б";
+
+  static String m1(count) => "${count} файлов";
+
+  static String m2(count) => "${count} Гб";
+
+  static String m3(count) => "${count} Кб";
+
+  static String m4(count) => "${count} Мб";
+
+  static String m5(count) => "${count} Пб";
+
+  static String m6(count) => "${count} Тб";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -36,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Уже есть аккаунт?"),
         "already_registered_email": MessageLookupByLibrary.simpleMessage(
             "Пользователь с данным e-mail уже зарегистрирован"),
+        "b": m0,
         "back_to_authorization":
             MessageLookupByLibrary.simpleMessage("Вернуться к авторизации"),
         "back_to_main":
@@ -52,7 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
-        "count_of_files": m0,
+        "count_of_files": m1,
         "create_a_folder":
             MessageLookupByLibrary.simpleMessage("Создать папку"),
         "create_album": MessageLookupByLibrary.simpleMessage("Создать альбом"),
@@ -62,10 +75,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "date_format": MessageLookupByLibrary.simpleMessage("Формат даты"),
         "day": MessageLookupByLibrary.simpleMessage("день"),
+        "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Удалить аккаунт"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Удалить навсегда"),
+        "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Ваш заработок составит"),
         "email": MessageLookupByLibrary.simpleMessage("E-mail"),
@@ -89,10 +104,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "files": MessageLookupByLibrary.simpleMessage("Файлы"),
         "folder": MessageLookupByLibrary.simpleMessage("Выберите папку"),
         "folder_dir": MessageLookupByLibrary.simpleMessage("Папки"),
+        "foldr": MessageLookupByLibrary.simpleMessage("Папка"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
         "funds": MessageLookupByLibrary.simpleMessage("Вывод средств"),
+        "gb": m2,
         "get_out": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите выйти?"),
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
@@ -101,6 +118,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
+        "info": MessageLookupByLibrary.simpleMessage("Свойства"),
+        "kb": m3,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "location": MessageLookupByLibrary.simpleMessage("Расположение"),
@@ -111,6 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Управление подпиской"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Максимальный размер для вашего диска: 180 ГБ"),
+        "mb": m4,
         "media": MessageLookupByLibrary.simpleMessage("Медиа"),
         "min_storage": MessageLookupByLibrary.simpleMessage(
             "Минимальный размер хранилища: 32 ГБ"),
@@ -120,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Начните зарабатывать в два шага:"),
         "more_space": MessageLookupByLibrary.simpleMessage(
             "Получите больше пространства, поменяйте подписку!"),
+        "move": MessageLookupByLibrary.simpleMessage("Переместить"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
@@ -146,6 +167,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
+        "pb": m5,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -186,6 +208,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
+        "share": MessageLookupByLibrary.simpleMessage("Поделиться"),
         "sign_in": MessageLookupByLibrary.simpleMessage("Войти"),
         "sign_in_to_account":
             MessageLookupByLibrary.simpleMessage("Вход в учетную запись"),
@@ -198,6 +221,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
+        "tb": m6,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/user.dart';
 
 extension StringExtension on String {
@@ -50,5 +51,71 @@ extension UserProficeImage on User? {
     }
 
     return image;
+  }
+}
+
+String filesize(dynamic size, S translate, [int round = 2]) {
+  /** 
+   * [size] can be passed as number or as string
+   *
+   * the optional parameter [round] specifies the number 
+   * of digits after comma/point (default is 2)
+   */
+  var divider = 1024;
+  int _size;
+  try {
+    _size = int.parse(size.toString());
+  } catch (e) {
+    throw ArgumentError('Can not parse the size parameter: $e');
+  }
+
+  if (_size < divider) {
+    return translate.b(_size);
+  }
+
+  if (_size < divider * divider && _size % divider == 0) {
+    return translate.kb((_size / divider).toStringAsFixed(0));
+  }
+
+  if (_size < divider * divider) {
+    return translate.kb((_size / divider).toStringAsFixed(round));
+  }
+
+  if (_size < divider * divider * divider && _size % divider == 0) {
+    return translate.mb((_size / (divider * divider)).toStringAsFixed(0));
+  }
+
+  if (_size < divider * divider * divider) {
+    return translate.mb((_size / divider / divider).toStringAsFixed(round));
+  }
+
+  if (_size < divider * divider * divider * divider && _size % divider == 0) {
+    return translate
+        .gb((_size / (divider * divider * divider)).toStringAsFixed(0));
+  }
+
+  if (_size < divider * divider * divider * divider) {
+    return translate
+        .gb((_size / divider / divider / divider).toStringAsFixed(round));
+  }
+
+  if (_size < divider * divider * divider * divider * divider &&
+      _size % divider == 0) {
+    num r = _size / divider / divider / divider / divider;
+    return translate.tb(r.toStringAsFixed(0));
+  }
+
+  if (_size < divider * divider * divider * divider * divider) {
+    num r = _size / divider / divider / divider / divider;
+    return translate.tb(r.toStringAsFixed(round));
+  }
+
+  if (_size < divider * divider * divider * divider * divider * divider &&
+      _size % divider == 0) {
+    num r = _size / divider / divider / divider / divider / divider;
+    return translate.pb(r.toStringAsFixed(0));
+  } else {
+    num r = _size / divider / divider / divider / divider / divider;
+    return translate.pb(r.toStringAsFixed(round));
   }
 }

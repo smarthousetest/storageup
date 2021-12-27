@@ -139,5 +139,17 @@
     "media": "Media",
     "settings": "Settings",
     "all_files": "All files",
-    "count_of_files" :"{count} files"
+    "count_of_files" :"{count} files",
+    "foldr": "Folder",
+    "b": "{count} B",
+    "kb": "{count} Kb",
+    "mb": "{count} Mb",
+    "gb": "{count} Gb",
+    "tb": "{count} Tb",
+    "pb": "{count} Pb",
+    "share":"Share",
+    "move":"Move",
+    "download":"Download",
+    "info":"Info",
+    "delete":"Delete"
 }

@@ -33,6 +33,7 @@ dependencies:
   image_picker: ^0.8.4
   percent_indicator: ^3.0.1
   connectivity: ^3.0.6
+  custom_pop_up_menu: ^1.2.2
 
   cpp_native:
     git:
@@ -54,6 +55,7 @@ flutter:
     - assets/test_img/
     - assets/file_page/file_options/
     - assets/file_icons/
+    - assets/options/
 
   fonts:
     - family: Noto Sans

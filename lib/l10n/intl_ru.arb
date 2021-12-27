@@ -141,6 +141,18 @@
     "media": "Медиа",
     "settings": "Настройки",
     "all_files": "Все файлы",
-    "count_of_files" :"{count} файлов"
+    "count_of_files" :"{count} файлов",
+    "foldr": "Папка",
+    "b": "{count} Б",
+    "kb": "{count} Кб",
+    "mb": "{count} Мб",
+    "gb": "{count} Гб",
+    "tb": "{count} Тб",
+    "pb": "{count} Пб",
+    "share":"Поделиться",
+    "move":"Переместить",
+    "download":"Загрузить",
+    "info":"Свойства",
+    "delete":"Удалить"
     
 }

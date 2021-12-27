@@ -23,6 +23,7 @@ final kLightTheme = ThemeData.light().copyWith(
         onPrimary: Color(0xFFE0E0E0),
         onSurface: Color(0xFF70BBF6),
         onBackground: Color(0xFF9C9C9C),
+        onSecondary: Color(0xFFF1F8FE),
       ),
   textTheme: ThemeData.light().textTheme.copyWith(
         headline1: TextStyle(
