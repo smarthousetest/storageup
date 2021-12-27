@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-class InfoState extends Equatable {
+import 'package:upstorage_desktop/models/user.dart';
 
+class InfoState extends Equatable {
   final double usingSpace;
   final int allSpace;
   final double loadPercentRentPlace;
@@ -16,6 +17,7 @@ class InfoState extends Equatable {
   final bool settingsTab;
   final bool trashTab;
   final bool financeTab;
+  final User? user;
 
   InfoState({
     this.usingSpace = 0,
@@ -32,6 +34,7 @@ class InfoState extends Equatable {
     this.settingsTab = false,
     this.trashTab = false,
     this.financeTab = false,
+    this.user,
   });
 
   InfoState copyWith({
@@ -44,30 +47,34 @@ class InfoState extends Equatable {
     bool? homeTab,
     bool? filesTab,
     bool? mediaTab,
+    User? user,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
       allSpace: allSpace ?? this.allSpace,
       loadPercentRentPlace: loadPercentRentPlace ?? this.loadPercentRentPlace,
-      loadPercentPentPlaceFull: loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
+      loadPercentPentPlaceFull:
+          loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
       dailyProfit: dailyProfit ?? this.dailyProfit,
       yourBalance: yourBalance ?? this.yourBalance,
       homeTab: homeTab ?? this.homeTab,
       filesTab: filesTab ?? this.filesTab,
       mediaTab: mediaTab ?? this.mediaTab,
+      user: user ?? this.user,
     );
   }
 
   @override
   List<Object?> get props => [
-    usingSpace,
-    allSpace,
-    loadPercentRentPlace,
-    loadPercentPentPlaceFull,
-    dailyProfit,
-    yourBalance,
-    homeTab,
-    filesTab,
-    mediaTab,
-  ];
+        usingSpace,
+        allSpace,
+        loadPercentRentPlace,
+        loadPercentPentPlaceFull,
+        dailyProfit,
+        yourBalance,
+        homeTab,
+        filesTab,
+        mediaTab,
+        user
+      ];
 }

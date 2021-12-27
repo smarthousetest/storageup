@@ -1459,6 +1459,26 @@ class S {
       args: [count],
     );
   }
+
+  /// `Change photo`
+  String get change_photo {
+    return Intl.message(
+      'Change photo',
+      name: 'change_photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

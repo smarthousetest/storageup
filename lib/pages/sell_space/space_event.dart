@@ -1,4 +1,4 @@
-part of 'space_bloc.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class SpaceEvent extends Equatable {
   SpaceEvent();

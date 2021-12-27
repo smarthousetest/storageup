@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
-import 'package:upstorage_desktop/components/dir_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'media_list/media_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';

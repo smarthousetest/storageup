@@ -49,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Изменение пароля"),
         "change_password":
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
+        "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
@@ -62,6 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "date_format": MessageLookupByLibrary.simpleMessage("Формат даты"),
         "day": MessageLookupByLibrary.simpleMessage("день"),
+        "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Удалить аккаунт"),
         "delete_permanently":

@@ -1,6 +1,21 @@
-part of 'space_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:upstorage_desktop/models/user.dart';
 
-@immutable
-abstract class SpaceState {}
+class SpaceState extends Equatable {
+  final User? user;
 
-class SpaceInitial extends SpaceState {}
+  SpaceState({
+    this.user,
+  });
+
+  SpaceState copyWith({
+    User? user,
+  }) {
+    return SpaceState(
+      user: user ?? this.user,
+    );
+  }
+
+  @override
+  List<Object?> get props => [user];
+}

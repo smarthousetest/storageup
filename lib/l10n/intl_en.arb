@@ -139,5 +139,7 @@
     "media": "Media",
     "settings": "Settings",
     "all_files": "All files",
-    "count_of_files" :"{count} files"
+    "count_of_files": "{count} files",
+    "change_photo": "Change photo",
+    "delete": "Delete"
 }

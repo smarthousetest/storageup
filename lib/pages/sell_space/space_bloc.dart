@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
-part 'space_event.dart';
-part 'space_state.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
-  SpaceBloc() : super(SpaceInitial());
+  SpaceBloc() : super(SpaceState());
 
   @override
   Stream<SpaceState> mapEventToState(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
@@ -79,11 +80,19 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     SettingsState state,
     Emitter<SettingsState> emit,
   ) async {
-    var picker = ImagePicker();
-    var img = await picker.pickImage(source: ImageSource.gallery);
+    //var picker = FilePicker();
+    var img = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
+    );
+    print(img);
+    // var img = await FilePicker.platform.pickFiles(allowMultiple: true,
+    //   type: FileType.image,);
+
     if (img != null) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
-      var file = File(img.path);
+      var file = File(img.paths.join(""));
+      print(file);
 
       var publicUrl = await _filesService.uploadProfilePic(file: file);
 

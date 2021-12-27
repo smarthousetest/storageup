@@ -1,7 +1,5 @@
 import 'dart:ui';
-
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
@@ -17,6 +15,7 @@ class BlurMenuUpload extends StatefulWidget {
 
 class _ButtonTemplateState extends State<BlurMenuUpload> {
   S translate = getIt<S>();
+
   Future<List<String?>?> getFilesPaths() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,

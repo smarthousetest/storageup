@@ -141,6 +141,7 @@
     "media": "Медиа",
     "settings": "Настройки",
     "all_files": "Все файлы",
-    "count_of_files" :"{count} файлов"
-    
+    "count_of_files": "{count} файлов",
+    "change_photo": "Изменить фото",
+    "delete": "Удалить"
 }

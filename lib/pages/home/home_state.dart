@@ -1,11 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
-
-
-
 
 class HomeState extends Equatable {
-
   final double usingSpace;
   final int allSpace;
   final double loadPercentRentPlace;
@@ -53,7 +48,8 @@ class HomeState extends Equatable {
       usingSpace: usingSpace ?? this.usingSpace,
       allSpace: allSpace ?? this.allSpace,
       loadPercentRentPlace: loadPercentRentPlace ?? this.loadPercentRentPlace,
-      loadPercentPentPlaceFull: loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
+      loadPercentPentPlaceFull:
+          loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
       dailyProfit: dailyProfit ?? this.dailyProfit,
       yourBalance: yourBalance ?? this.yourBalance,
       homeTab: homeTab ?? this.homeTab,
@@ -64,14 +60,14 @@ class HomeState extends Equatable {
 
   @override
   List<Object?> get props => [
-    usingSpace,
-    allSpace,
-    loadPercentRentPlace,
-    loadPercentPentPlaceFull,
-    dailyProfit,
-    yourBalance,
-    homeTab,
-    filesTab,
-    mediaTab,
-  ];
+        usingSpace,
+        allSpace,
+        loadPercentRentPlace,
+        loadPercentPentPlaceFull,
+        dailyProfit,
+        yourBalance,
+        homeTab,
+        filesTab,
+        mediaTab,
+      ];
 }

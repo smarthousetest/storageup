@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BlurCreateAlbum extends StatefulWidget {
-
-
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 
@@ -55,7 +52,8 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                           autofocus: true,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
                               ),
                               hintText: 'Новый альбом',
                               hintStyle: TextStyle(
