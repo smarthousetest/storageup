@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
 import 'package:upstorage_desktop/pages/info/info_bloc.dart';
+import 'package:upstorage_desktop/pages/info/info_event.dart';
 import 'package:upstorage_desktop/pages/info/info_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -59,7 +60,7 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => InfoBloc(),
+      create: (context) => InfoBloc()..add(InfoPageOpened()),
       child: Expanded(
         child: Container(
           child: Row(
@@ -835,48 +836,50 @@ class _InfoPageState extends State<InfoPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: Container(
-                                      height: 46,
-                                      width: 46,
-                                      decoration: BoxDecoration(
+                              BlocBuilder<InfoBloc, InfoState>(
+                                  builder: (context, state) {
+                                return Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: ClipRRect(
                                         borderRadius: BorderRadius.circular(23),
+                                        child: Container(
+                                          height: 46,
+                                          width: 46,
+                                          child: state.user.image,
+                                        ),
                                       ),
-                                      child: Image.asset(
-                                          'assets/home_page/man.jpg'),
                                     ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5),
-                                        child: Text(
-                                          "А. Рождественский",
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Text(
+                                            state.user!.fullName ?? '',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Theme.of(context)
+                                                  .bottomAppBarColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          state.user!.email ?? '',
                                           style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 12,
                                             color: Theme.of(context)
                                                 .bottomAppBarColor,
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        "votreaa@mail.ru",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Theme.of(context)
-                                              .bottomAppBarColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }),
                               Padding(
                                 padding: const EdgeInsets.all(30),
                                 child: Divider(

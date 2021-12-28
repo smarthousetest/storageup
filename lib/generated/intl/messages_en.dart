@@ -43,8 +43,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "before_deleting":
             MessageLookupByLibrary.simpleMessage("Before deleting an account"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "canceled": MessageLookupByLibrary.simpleMessage("Canceled"),
         "cannot_recovered": MessageLookupByLibrary.simpleMessage(
             "Your files will disappear forever and cannot be recovered."),
+        "card": MessageLookupByLibrary.simpleMessage("Card:"),
+        "change": MessageLookupByLibrary.simpleMessage("Change"),
         "change_Password":
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_password":
@@ -94,6 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "format": MessageLookupByLibrary.simpleMessage("Format"),
+        "free_sub": MessageLookupByLibrary.simpleMessage("Free subcription"),
         "funds": MessageLookupByLibrary.simpleMessage("Withdraw funds"),
         "get_out": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to get out?"),
@@ -133,12 +137,16 @@ class MessageLookup extends MessageLookupByLibrary {
             "You have no storage locations yet"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
+        "offer": MessageLookupByLibrary.simpleMessage(
+            "Advantageous offer - switch to an annual subscription"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Enter your old password"),
         "open": MessageLookupByLibrary.simpleMessage("Open"),
         "options": MessageLookupByLibrary.simpleMessage("Options"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("or continue with"),
+        "other_sub":
+            MessageLookupByLibrary.simpleMessage("Other subscriptions"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space"),
         "overview": MessageLookupByLibrary.simpleMessage("Overview"),
@@ -148,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Password recovery"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "To recover your password, enter your email address in the field"),
+        "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to permanently delete your account"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -179,6 +188,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "restore_password_before_email": MessageLookupByLibrary.simpleMessage(
             "A letter has been sent to your e-mail "),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Select the folder on the drive where you have free space."),
         "select_storage":

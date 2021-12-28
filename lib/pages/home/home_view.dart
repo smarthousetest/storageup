@@ -234,14 +234,14 @@ class _HomePageState extends State<HomePage> {
           changePage(ChoosedPage.sell_space);
         },
       ),
-      // CustomMenuButton(
-      //   icon: "assets/home_page/finance.svg",
-      //   title: "Финансы",
-      //   page: ChoosedPage.finance,
-      //   onTap: () {
-      //     changePage(ChoosedPage.finance);
-      //   },
-      // ),
+      CustomMenuButton(
+        icon: "assets/home_page/finance.svg",
+        title: "Финансы",
+        page: ChoosedPage.finance,
+        onTap: () {
+          changePage(ChoosedPage.finance);
+        },
+      ),
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
         title: translate.settings,

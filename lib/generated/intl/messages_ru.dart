@@ -43,8 +43,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "before_deleting":
             MessageLookupByLibrary.simpleMessage("До удаления аккаунта "),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "canceled": MessageLookupByLibrary.simpleMessage("Отменить"),
         "cannot_recovered": MessageLookupByLibrary.simpleMessage(
             "Ваши файлы исчезнут навсегда без возможности восстановления."),
+        "card": MessageLookupByLibrary.simpleMessage("Карта:"),
+        "change": MessageLookupByLibrary.simpleMessage("Изменить"),
         "change_Password":
             MessageLookupByLibrary.simpleMessage("Изменение пароля"),
         "change_password":
@@ -94,6 +97,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
+        "free_sub": MessageLookupByLibrary.simpleMessage("Бесплатная подписка"),
         "funds": MessageLookupByLibrary.simpleMessage("Вывод средств"),
         "get_out": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите выйти?"),
@@ -133,12 +137,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
+        "offer": MessageLookupByLibrary.simpleMessage(
+            "Выгодное предложение - переход на годовую подписку"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Введите старый пароль"),
         "open": MessageLookupByLibrary.simpleMessage("Открыть"),
         "options": MessageLookupByLibrary.simpleMessage("Параметры "),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
+        "other_sub": MessageLookupByLibrary.simpleMessage("Другие подписки"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Наш тариф предполагает оплату 0,2 ₽/день за 1 ГБ сданного пространства"),
         "overview": MessageLookupByLibrary.simpleMessage("Обзор"),
@@ -148,6 +155,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
+        "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -180,6 +188,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "restore_password_before_email":
             MessageLookupByLibrary.simpleMessage("На вашу электронную почту "),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
+        "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Выберите папку на диске, где у вас есть свободное пространство."),
         "select_storage":

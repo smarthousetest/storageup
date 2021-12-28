@@ -1479,6 +1479,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Advantageous offer - switch to an annual subscription`
+  String get offer {
+    return Intl.message(
+      'Advantageous offer - switch to an annual subscription',
+      name: 'offer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment:`
+  String get payment {
+    return Intl.message(
+      'Payment:',
+      name: 'payment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Canceled`
+  String get canceled {
+    return Intl.message(
+      'Canceled',
+      name: 'canceled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Card:`
+  String get card {
+    return Intl.message(
+      'Card:',
+      name: 'card',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change`
+  String get change {
+    return Intl.message(
+      'Change',
+      name: 'change',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other subscriptions`
+  String get other_sub {
+    return Intl.message(
+      'Other subscriptions',
+      name: 'other_sub',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free subcription`
+  String get free_sub {
+    return Intl.message(
+      'Free subcription',
+      name: 'free_sub',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select`
+  String get select {
+    return Intl.message(
+      'Select',
+      name: 'select',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

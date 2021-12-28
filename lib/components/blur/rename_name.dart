@@ -1,19 +1,31 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/pages/settings/settings_bloc.dart';
+import 'package:upstorage_desktop/pages/settings/settings_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurRenameName extends StatefulWidget {
+  String name;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurRenameName();
+  BlurRenameName(this.name);
 }
 
 class _ButtonTemplateState extends State<BlurRenameName> {
   S translate = getIt<S>();
-  final myController = TextEditingController();
+  var myController = TextEditingController();
+  bool canSave = false;
+
+  @override
+  void initState() {
+    myController = TextEditingController(text: widget.name);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -84,8 +96,17 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                               alignment: Alignment.center,
                               child: TextFormField(
                                 controller: myController,
-                                //initialValue: "Александр Рождественский",
+                                initialValue: widget.name,
                                 autofocus: true,
+                                onChanged: (content) {
+                                  print(myController.value.text);
+                                  if (content.isNotEmpty &&
+                                      content.length > 2) {
+                                    setState(() {
+                                      canSave = true;
+                                    });
+                                  }
+                                },
                                 style: TextStyle(
                                     color: Theme.of(context).disabledColor,
                                     fontSize: 14,
@@ -131,7 +152,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
+                                        primary: Theme.of(context).primaryColor,
                                         fixedSize: Size(140, 42),
                                         elevation: 0,
                                         side: BorderSide(
@@ -149,8 +170,11 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                            context, myController.text);
+                                        canSave
+                                            ? Navigator.pop(
+                                                context, widget.name)
+                                            : null;
+                                        print(widget.name);
                                       },
                                       child: Text(
                                         translate.save,
@@ -161,12 +185,16 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Theme.of(context).splashColor,
+                                        primary: canSave
+                                            ? Theme.of(context).splashColor
+                                            : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Theme.of(context).splashColor,
+                                          color: canSave
+                                              ? Theme.of(context).splashColor
+                                              : Theme.of(context).canvasColor,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:

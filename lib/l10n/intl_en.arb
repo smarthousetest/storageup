@@ -141,5 +141,13 @@
     "all_files": "All files",
     "count_of_files": "{count} files",
     "change_photo": "Change photo",
-    "delete": "Delete"
+    "delete": "Delete",
+    "offer": "Advantageous offer - switch to an annual subscription",
+    "payment": "Payment:",
+    "canceled": "Canceled",
+    "card": "Card:",
+    "change": "Change",
+    "other_sub": "Other subscriptions",
+    "free_sub": "Free subcription",
+    "select": "Select"
 }

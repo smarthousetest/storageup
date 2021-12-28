@@ -54,14 +54,15 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i13.S>(serviceModule.s);
   gh.factory<_i14.SettingsBloc>(() => _i14.SettingsBloc());
   gh.factory<_i15.TokenRepository>(() => _i15.TokenRepository());
-  gh.factory<_i16.UserController>(() => _i16.UserController());
-  gh.lazySingleton<_i17.UserRepository>(() => serviceModule.userRepository);
+  gh.lazySingleton<_i17.UserRepository>(() => serviceModule.userRepository,
+      instanceName: 'user_repo');
   gh.factory<_i18.AuthService>(
       () => _i18.AuthService(get<_i5.Dio>(instanceName: 'auth_dio')));
   gh.factory<_i19.FilesBloc>(() => _i19.FilesBloc(
       get<_i6.FilesController>(instanceName: 'files_controller')));
   gh.singleton<_i4.AuthenticationRepository>(_i4.AuthenticationRepository());
   gh.factory<_i3.AuthBloc>(() => _i3.AuthBloc());
+  gh.factory<_i16.UserController>(() => _i16.UserController());
   return get;
 }
 

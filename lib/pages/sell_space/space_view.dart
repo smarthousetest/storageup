@@ -6,6 +6,7 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -31,7 +32,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => SpaceBloc(),
+        create: (context) => SpaceBloc()..add(SpacePageOpened()),
         child: Expanded(
             // Padding(
             //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
@@ -742,7 +743,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       minimumSize: Size(double.maxFinite, 60),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: Color(0xffE4E7ED),
+                      backgroundColor: Theme.of(context).canvasColor,
                     ),
                     child: Text(
                       translate.save,

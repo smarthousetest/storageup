@@ -36,8 +36,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   FilesController _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
 
-  UserController _userController =
-      getIt<UserController>(instanceName: 'user_controller');
+  UserController _userController = getIt<UserController>();
 
   Future _mapSettingsPageOpened(
     SettingsPageOpened event,
@@ -82,7 +81,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     //var picker = FilePicker();
     var img = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
+      allowMultiple: false,
       type: FileType.image,
     );
     print(img);
@@ -91,7 +90,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     if (img != null) {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
-      var file = File(img.paths.join(""));
+      var file = File(img.paths.first!);
       print(file);
 
       var publicUrl = await _filesService.uploadProfilePic(file: file);
