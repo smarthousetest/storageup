@@ -1559,6 +1559,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Unsubscribe`
+  String get unsubscribe {
+    return Intl.message(
+      'Unsubscribe',
+      name: 'unsubscribe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete file`
+  String get delete_file {
+    return Intl.message(
+      'Delete file',
+      name: 'delete_file',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

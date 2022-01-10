@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
@@ -53,6 +54,7 @@ class _FinancePageState extends State<FinancePage> {
         ),
       );
     };
+
     ThemeData theme = Theme.of(context);
     return BlocProvider(
       create: (context) => FinanceBloc()..add(FinancePageOpened()),
@@ -403,7 +405,14 @@ class _FinancePageState extends State<FinancePage> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      var str = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return BlurCancelSub();
+                                        },
+                                      );
+                                    },
                                     child: Padding(
                                       padding:
                                           const EdgeInsets.only(left: 10.0),
@@ -477,13 +486,21 @@ class _FinancePageState extends State<FinancePage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10.0),
-                                    child: Text(
-                                      translate.change,
-                                      style: TextStyle(
-                                        color: Theme.of(context).splashColor,
-                                        fontFamily: kNormalTextFontFamily,
-                                        fontSize: 14,
-                                        decoration: TextDecoration.underline,
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Text(
+                                          translate.change,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).splashColor,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),

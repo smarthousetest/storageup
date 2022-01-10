@@ -69,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Delete account"),
+        "delete_file": MessageLookupByLibrary.simpleMessage("Delete file"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Delete permanently"),
         "earnings":
@@ -219,6 +220,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Send email again"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Trust level"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
+        "unsubscribe": MessageLookupByLibrary.simpleMessage("Unsubscribe"),
         "upload": MessageLookupByLibrary.simpleMessage("Upload"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),

@@ -36,17 +36,6 @@ class _InfoPageState extends State<InfoPage> {
     });
   }
 
-  Widget getPage() {
-    switch (choosedPage) {
-      case ChoosedPage.finance:
-        return FinancePage();
-      case ChoosedPage.sell_space:
-        return SpaceSellPage();
-      default:
-        return InfoPage();
-    }
-  }
-
   S translate = getIt<S>();
 
   bool _canShowClose = true;

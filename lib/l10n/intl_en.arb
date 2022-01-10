@@ -149,5 +149,7 @@
     "change": "Change",
     "other_sub": "Other subscriptions",
     "free_sub": "Free subcription",
-    "select": "Select"
+    "select": "Select",
+    "unsubscribe": "Unsubscribe",
+    "delete_file": "Delete file"
 }
