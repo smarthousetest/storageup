@@ -423,14 +423,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 builder: (context, state) {
               return GestureDetector(
                 onTap: () async {
-                  var str = await showDialog(
+                  var str = await showDialog<String>(
                     context: context,
                     builder: (BuildContext context) {
-                      return BlurRenameName(state.user!.fullName!);
+                      return BlurRenameName(state.user!.firstName!);
                     },
                   );
-                  SettingsNameChanged(name: str);
-                  // state.user?.fullName = str;
+                  if (str != null)
+                    context
+                        .read<SettingsBloc>()
+                        .add(SettingsNameChanged(name: str));
                 },
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
@@ -459,7 +461,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: BlocBuilder<SettingsBloc, SettingsState>(
                     builder: (context, state) {
                   return Text(
-                    state.user?.fullName ?? '',
+                    state.user?.firstName ?? '',
                     style: TextStyle(color: Theme.of(context).disabledColor),
                   );
                 }),

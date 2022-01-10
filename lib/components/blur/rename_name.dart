@@ -96,7 +96,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                               alignment: Alignment.center,
                               child: TextFormField(
                                 controller: myController,
-                                initialValue: widget.name,
+                                // initialValue: widget.name,
                                 autofocus: true,
                                 onChanged: (content) {
                                   print(myController.value.text);
@@ -171,8 +171,8 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     child: ElevatedButton(
                                       onPressed: () {
                                         canSave
-                                            ? Navigator.pop(
-                                                context, widget.name)
+                                            ? Navigator.pop(context,
+                                                myController.value.text)
                                             : null;
                                         print(widget.name);
                                       },
