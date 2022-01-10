@@ -229,6 +229,23 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     );
   }
 
+  Color _getDataRowColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+      MaterialState.error,
+      MaterialState.scrolledUnder,
+      MaterialState.selected,
+    };
+
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    //return Colors.green; // Use the default value.
+    return Colors.transparent;
+  }
+
   Widget _filesList(BuildContext context, OpenedFolderState state) {
     TextStyle style = TextStyle(
       color: Theme.of(context).textTheme.subtitle1?.color,
@@ -246,8 +263,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
       child: LayoutBuilder(builder: (context, constraints) {
         return SingleChildScrollView(
           scrollDirection: Axis.vertical,
+          controller: ScrollController(),
           child: DataTable(
             columnSpacing: 25,
+            dataRowColor:
+                MaterialStateProperty.resolveWith<Color?>(_getDataRowColor),
             columns: [
               DataColumn(
                 label: Container(
@@ -305,101 +325,115 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       FileAttribute().getFilesType(record.name!.toLowerCase());
                 }
               }
-              return DataRow(cells: [
-                DataCell(Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      isFile
-                          ? type.isNotEmpty
-                              ? 'assets/file_icons/${type}_s.png'
-                              : 'assets/file_icons/unexpected_s.png'
-                          : 'assets/file_icons/folder.png',
-                      fit: BoxFit.contain,
-                      height: 24,
-                      width: 24,
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Expanded(
-                      child: Text(
-                        e.name ?? '',
-                        style: cellTextStyle,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    // Spacer(),
-                    BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-                      builder: (context, state) {
-                        return GestureDetector(
-                          onTap: () {
-                            context.read<OpenedFolderCubit>().setFavorite(e);
-                          },
-                          child: Image.asset(
-                            e.favorite
-                                ? 'assets/file_page/favorite.png'
-                                : 'assets/file_page/not_favorite.png',
-                            height: 18,
-                            width: 18,
+              return DataRow.byIndex(
+                index: state.objects.indexOf(e),
+                color: MaterialStateProperty.resolveWith<Color?>((states) {
+                  print(states.toList().toString());
+                  if (states.contains(MaterialState.focused)) {
+                    return Theme.of(context).splashColor;
+                  }
+                  return null;
+                }),
+                cells: [
+                  DataCell(
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(
+                          isFile
+                              ? type.isNotEmpty
+                                  ? 'assets/file_icons/${type}_s.png'
+                                  : 'assets/file_icons/unexpected_s.png'
+                              : 'assets/file_icons/folder.png',
+                          fit: BoxFit.contain,
+                          height: 24,
+                          width: 24,
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Text(
+                            e.name ?? '',
+                            style: cellTextStyle,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        );
-                      },
-                    )
-                  ],
-                )),
-                DataCell(
-                  Text(
-                    type.isEmpty ? translate.foldr : type.toUpperCase(),
-                    style: cellTextStyle,
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    DateFormat('dd.MM.yyyy').format(e.createdAt!),
-                    style: cellTextStyle,
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    filesize(e.size, translate, 1),
-                    style: cellTextStyle,
-                  ),
-                ),
-                DataCell(
-                  Theme(
-                    data: Theme.of(context).copyWith(
-                      hoverColor: Colors.transparent,
-                      splashColor: Colors.transparent,
+                        ),
+                        // Spacer(),
+                        BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                          builder: (context, state) {
+                            return GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<OpenedFolderCubit>()
+                                    .setFavorite(e);
+                              },
+                              child: Image.asset(
+                                e.favorite
+                                    ? 'assets/file_page/favorite.png'
+                                    : 'assets/file_page/not_favorite.png',
+                                height: 18,
+                                width: 18,
+                              ),
+                            );
+                          },
+                        )
+                      ],
                     ),
-                    child: CustomPopupMenu(
-                      pressType: PressType.singleClick,
-                      barrierColor: Colors.transparent,
-                      showArrow: false,
-                      horizontalMargin: 110,
-                      verticalMargin: 0,
-                      menuBuilder: () {
-                        return FilesPopupMenuActions(
-                          theme: Theme.of(context),
-                          translate: translate,
-                        );
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/file_page/three_dots.svg',
-                            ),
-                          ],
+                  ),
+                  DataCell(
+                    Text(
+                      type.isEmpty ? translate.foldr : type.toUpperCase(),
+                      style: cellTextStyle,
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      DateFormat('dd.MM.yyyy').format(e.createdAt!),
+                      style: cellTextStyle,
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      filesize(e.size, translate, 1),
+                      style: cellTextStyle,
+                    ),
+                  ),
+                  DataCell(
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                      ),
+                      child: CustomPopupMenu(
+                        pressType: PressType.singleClick,
+                        barrierColor: Colors.transparent,
+                        showArrow: false,
+                        horizontalMargin: 110,
+                        verticalMargin: 0,
+                        menuBuilder: () {
+                          return FilesPopupMenuActions(
+                            theme: Theme.of(context),
+                            translate: translate,
+                          );
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/file_page/three_dots.svg',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ]);
+                ],
+              );
             }).toList(),
           ),
         );
