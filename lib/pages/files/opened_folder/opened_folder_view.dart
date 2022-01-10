@@ -229,7 +229,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     );
   }
 
-  var _controller = CustomPopupMenuController();
   Widget _filesList(BuildContext context, OpenedFolderState state) {
     TextStyle style = TextStyle(
       color: Theme.of(context).textTheme.subtitle1?.color,
@@ -248,6 +247,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         return SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: DataTable(
+            columnSpacing: 25,
             columns: [
               DataColumn(
                 label: Container(
@@ -278,7 +278,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
               ),
               DataColumn(
                 label: Container(
-                  width: constraints.maxWidth * 0.05,
+                  width: constraints.maxWidth * 0.06,
                   child: Text(
                     translate.size,
                     style: style,
@@ -376,31 +376,26 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       pressType: PressType.singleClick,
                       barrierColor: Colors.transparent,
                       showArrow: false,
-                      controller: _controller,
-
+                      horizontalMargin: 110,
+                      verticalMargin: 0,
                       menuBuilder: () {
                         return FilesPopupMenuActions(
                           theme: Theme.of(context),
                           translate: translate,
                         );
                       },
-                      child:
-                          SvgPicture.asset('assets/file_page/three_dots.svg'),
-                      // offset: Offset(10, 49),
-                      // iconSize: 20,
-                      // padding: EdgeInsets.zero,
-                      // color: Theme.of(context).primaryColor,
-                      // shape: RoundedRectangleBorder(
-                      //   side: BorderSide(
-                      //     width: 1,
-                      //     color: Theme.of(context).dividerColor,
-                      //   ),
-                      //   borderRadius: BorderRadius.circular(5.0),
-                      // ),
-                      // icon: SvgPicture.asset('assets/file_page/three_dots.svg'),
-                      // itemBuilder: (context) {
-                      //   return [PopupMenuItem(child: Text('click'))];
-                      // },
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/file_page/three_dots.svg',
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
