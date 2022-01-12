@@ -848,7 +848,7 @@ class _InfoPageState extends State<InfoPage> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 5),
                                           child: Text(
-                                            state.user!.fullName ?? '',
+                                            state.user!.firstName ?? '',
                                             style: TextStyle(
                                               fontSize: 17,
                                               color: Theme.of(context)

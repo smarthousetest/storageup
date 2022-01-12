@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_bloc.dart';
@@ -96,12 +97,17 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                               alignment: Alignment.center,
                               child: TextFormField(
                                 controller: myController,
-                                // initialValue: widget.name,
                                 autofocus: true,
-                                onChanged: (content) {
-                                  print(myController.value.text);
-                                  if (content.isNotEmpty &&
-                                      content.length > 2) {
+                                onChanged: (myController) {
+                                  print(myController);
+                                  if (myController.isEmpty &&
+                                      myController.length <= 2) {
+                                    setState(() {
+                                      canSave = false;
+                                    });
+                                  }
+                                  if (myController.isNotEmpty &&
+                                      myController.length > 2) {
                                     setState(() {
                                       canSave = true;
                                     });
@@ -212,18 +218,18 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                     ),
                   ),
                   Container(
-                    width: 60,
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).splashColor,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                      width: 60,
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.only(right: 10, top: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child:
+                                SvgPicture.asset('assets/file_page/close.svg')),
+                      )),
                 ],
               ),
             ),

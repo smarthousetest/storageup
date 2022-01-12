@@ -12,8 +12,8 @@ import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
+import 'package:upstorage_desktop/utilites/services/auth_service.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
-import 'package:image_picker/image_picker.dart';
 
 @injectable
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
@@ -27,6 +27,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         await _logout(state, emit);
       } else if (event is SettingsChangeProfileImage) {
         await _changeProfilePic(state, emit);
+      } else if (event is SettingsPasswordChanged) {
+        await _changePassword(event, state, emit);
       }
     });
   }
@@ -37,6 +39,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       getIt<FilesController>(instanceName: 'files_controller');
 
   UserController _userController = getIt<UserController>();
+
+  AuthService _authController = getIt<AuthService>();
 
   Future _mapSettingsPageOpened(
     SettingsPageOpened event,
@@ -60,6 +64,21 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(
       user: user,
       status: FormzStatus.submissionSuccess,
+    ));
+  }
+
+  Future _changePassword(
+    SettingsPasswordChanged event,
+    SettingsState state,
+    Emitter<SettingsState> emit,
+  ) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    var result = await _authController.changePassword(
+        oldPassword: event.oldPassword, newPassword: event.newPassword);
+    print(result);
+    emit(state.copyWith(
+      status: FormzStatus.submissionSuccess,
+      needToLogout: true,
     ));
   }
 

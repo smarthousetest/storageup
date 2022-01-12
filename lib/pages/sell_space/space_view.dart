@@ -69,7 +69,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           return Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(right: 30),
+                                padding: const EdgeInsets.only(right: 20),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(23.0),
                                   child: state.user.image,
@@ -82,7 +82,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 5),
                                     child: Text(
-                                      state.user?.fullName ?? '',
+                                      state.user?.firstName ?? '',
                                       style: TextStyle(
                                         fontSize: 17,
                                         color:

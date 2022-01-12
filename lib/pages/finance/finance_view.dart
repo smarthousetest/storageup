@@ -102,7 +102,7 @@ class _FinancePageState extends State<FinancePage> {
                         return Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(right: 30, left: 20),
+                              padding: EdgeInsets.only(right: 20, left: 10),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(23.0),
                                 child: Container(child: state.user.image),
@@ -115,7 +115,7 @@ class _FinancePageState extends State<FinancePage> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: Text(
-                                    state.user?.fullName ?? '',
+                                    state.user?.firstName ?? '',
                                     style: TextStyle(
                                       fontSize: 17,
                                       color:

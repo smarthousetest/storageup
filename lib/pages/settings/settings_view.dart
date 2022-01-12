@@ -515,77 +515,82 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      GestureDetector(
-        onTap: () async {
-          var str = await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return BlurChangePassword();
-            },
-          );
-        },
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, left: 40),
-            child: Row(
-              children: [
-                Container(
-                  width: 350,
-                  height: 42,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Align(
-                        alignment: FractionalOffset.centerLeft,
-                        child: Container(
-                          width: 34,
-                          height: 34,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).cardColor,
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                "assets/file_page/key.svg",
-                                alignment: Alignment.center,
-                                width: 20,
-                                height: 16,
+      BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
+        return GestureDetector(
+          onTap: () async {
+            var str = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurChangePassword();
+              },
+            );
+            if (str is ChangePasswordPopupResult)
+              context.read<SettingsBloc>().add(SettingsPasswordChanged(
+                  oldPassword: str.oldPassword, newPassword: str.newPassword));
+          },
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20, left: 40),
+              child: Row(
+                children: [
+                  Container(
+                    width: 350,
+                    height: 42,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Align(
+                          alignment: FractionalOffset.centerLeft,
+                          child: Container(
+                            width: 34,
+                            height: 34,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).cardColor,
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SvgPicture.asset(
+                                  "assets/file_page/key.svg",
+                                  alignment: Alignment.center,
+                                  width: 20,
+                                  height: 16,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Text(
-                          translate.change_password,
-                          style: TextStyle(
-                              color: Theme.of(context).disabledColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 17),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Text(
+                            translate.change_password,
+                            style: TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17),
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Align(
-                        alignment: FractionalOffset.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 148, top: 2),
-                          child: Container(
-                              child: SvgPicture.asset(
-                                  "assets/file_page/arrow.svg")),
+                        Spacer(),
+                        Align(
+                          alignment: FractionalOffset.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 148, top: 2),
+                            child: Container(
+                                child: SvgPicture.asset(
+                                    "assets/file_page/arrow.svg")),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
       GestureDetector(
         onTap: () async {
           var str = await showDialog(
