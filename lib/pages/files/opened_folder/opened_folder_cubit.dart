@@ -46,14 +46,25 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   void _syncWithLoadController(List<BaseObject> filesInFolder) async {
     var loadState = _loadController.getState;
 
+    var updateObserver = Observer((a) {
+      _update();
+    });
+
+    loadState.registerObserver(updateObserver);
+
     filesInFolder.forEach((fileInFolder) {
       var index = loadState.uploadingFiles
           .indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
       if (index != -1) {
-        _observers.add(
-            UploadObserver(loadState.uploadingFiles[index].localPath, (p0) {
-          _uploadListener(loadState.uploadingFiles[index].localPath);
-        }));
+        var observer = UploadObserver(
+          loadState.uploadingFiles[index].localPath,
+          (p0) {
+            _uploadListener(loadState.uploadingFiles[index].localPath);
+          },
+        );
+        _observers.add(observer);
+
+        loadState.registerObserver(observer);
       }
     });
   }
@@ -70,7 +81,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  void _update() async {
+  Future<void> _update() async {
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
 
@@ -79,8 +90,51 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     ));
   }
 
+  void _tryToFindObservableRecords() {
+    var controllerState = _loadController.getState;
+
+    if (controllerState.uploadingFiles.isNotEmpty) {
+      try {
+        var uploadingFile = controllerState.uploadingFiles
+            .firstWhere((file) => file.isInProgress);
+
+        if (state.objects.any((object) => object.id == uploadingFile.id)) {
+          var observer = UploadObserver(uploadingFile.localPath,
+              (_) => _uploadListener(uploadingFile.localPath));
+
+          _observers.add(observer);
+
+          _loadController.getState.registerObserver(observer);
+        }
+      } catch (e) {
+        print(
+            'OpenedFolderCubit: can\'t find any uploading files in folder: ${state.currentFolder?.name}');
+      }
+    }
+  }
+
   void _uploadListener(String pathToFile) async {
     var controllerState = _loadController.getState;
+
+    if (pathToFile.isEmpty) {
+      var currentFileIndex = controllerState.uploadingFiles
+          .indexWhere((file) => file.isInProgress);
+
+      if (currentFileIndex != -1) {
+        var currentFilePath =
+            controllerState.uploadingFiles[currentFileIndex].localPath;
+
+        var indexOfObserver =
+            _observers.indexWhere((observer) => observer.id == currentFilePath);
+
+        if (indexOfObserver == -1) {
+          await _update();
+          _tryToFindObservableRecords();
+        }
+      }
+      return;
+    }
+
     try {
       var currentFile = controllerState.uploadingFiles.firstWhere(
           (element) => element.localPath == pathToFile && element.isInProgress);

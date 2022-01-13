@@ -23,15 +23,15 @@ class LoadController {
 
   _LoadState _state = _LoadState();
 
-  CppNative _cpp = CppNative();
+  late CppNative _cpp;
 
   _LoadState get getState => _state;
 
   LoadController() {
-    init();
+    // init();
   }
 
-  bool isInited() {
+  bool isNotInited() {
     return _autouploadController == null;
   }
 
@@ -41,13 +41,15 @@ class LoadController {
       _onAddAutouploadingFile = callback;
   void clearAutouploadNextFileCallback() => _onAddAutouploadingFile = null;
 
-  void init() async {
+  Future<void> init() async {
     print('initializing load controller');
     _autouploadController =
         await GetIt.instance.getAsync<AutouploadController>();
-    _autouploadController?.listen(null).listen((event) {
+    _cpp = await getInstanceCppNative(baseUrl: kServerUrl.split('/').last);
+    _autouploadController?.listen(null).listen((event) async {
       try {
         var uploadMedia = event.value as UploadMedia;
+        if (uploadMedia.serverId == null) return;
 
         var mediaFromState = _state.uploadingFiles;
 
@@ -90,18 +92,28 @@ class LoadController {
     String? folderId,
     bool force = false,
   }) async {
+    if (isNotInited()) {
+      await init();
+    }
     var uploadingFiles = _state.uploadingFiles;
     UploadFileInfo obj;
     if (filePath == null) {
-      obj = uploadingFiles.firstWhere((element) =>
-          element.isInProgress == false &&
-          element.uploadPercent != 100 &&
-          !element.auto);
+      obj = uploadingFiles.firstWhere(
+        (element) =>
+            element.isInProgress == false &&
+            element.uploadPercent != 100 &&
+            !element.auto &&
+            !element.endedWithException,
+      );
     } else {
       obj = UploadFileInfo(localPath: filePath, folderId: folderId);
     }
 
     print('start processing file: $filePath');
+    print(!force &&
+        _state.uploadingFiles.isNotEmpty &&
+        _state.uploadingFiles.any((element) => element.isInProgress));
+    print(!_state.uploadingFiles.contains(obj));
 
     if (!force &&
         _state.uploadingFiles.isNotEmpty &&
@@ -170,18 +182,6 @@ class LoadController {
 
           element.uploadPercent = value;
           _state.changeUploadingFiles(uploadingFiles);
-        } else if (value is CustomError) {
-          var nf = element.copyWith(
-            isInProgress: false,
-            uploadPercent: -1,
-            endedWithException: true,
-          );
-
-          var ind = uploadingFiles.indexOf(element);
-          uploadingFiles[ind] = nf;
-
-          _state.changeUploadingFiles(uploadingFiles);
-          _processNextFileUpload();
         } else {
           // var element = uploadingFiles
           //     .firstWhere((element) => element.localPath == filePath);
@@ -197,11 +197,23 @@ class LoadController {
 
           _processNextFileUpload();
         }
+      } else if (value is CustomError) {
+        var nf = element.copyWith(
+          isInProgress: false,
+          uploadPercent: -1,
+          endedWithException: true,
+        );
+
+        var ind = uploadingFiles.indexOf(element);
+        uploadingFiles[ind] = nf;
+
+        _state.changeUploadingFiles(uploadingFiles);
+        _processNextFileUpload();
       }
       print(
           '_processUploadCallback ! count of uploading files : ${_state.uploadingFiles.length}');
     } catch (e, sw) {
-      print('_processUploadCallback error: $e \nstack trace: $sw');
+      print('_processUploadCallback error: $e \nstack trace: \n$sw');
       _processNextFileUpload();
     }
   }
@@ -215,7 +227,8 @@ class LoadController {
           (element) =>
               !element.isInProgress &&
               element.uploadPercent != 100 &&
-              !element.auto,
+              !element.auto &&
+              !element.endedWithException,
         )) {
       print('start uploading next file');
       try {
@@ -426,8 +439,7 @@ class LoadController {
 
     if (downloadingFiles.isNotEmpty &&
         downloadingFiles.any((element) => element.isInProgress)) {
-      //await
-      _cpp.abortDownload();
+      await _cpp.abortDownload();
       _state.changeDowloadingFiles([]);
     }
   }
@@ -549,7 +561,10 @@ class UploadFileInfo {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is UploadFileInfo && other.localPath == localPath;
+    return other is UploadFileInfo &&
+        other.localPath == localPath &&
+        other.isInProgress == isInProgress &&
+        other.uploadPercent == uploadPercent;
   }
 
   @override

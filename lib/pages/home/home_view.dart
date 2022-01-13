@@ -1,5 +1,6 @@
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
@@ -8,6 +9,7 @@ import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
+import 'package:upstorage_desktop/pages/home/home_event.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
@@ -17,6 +19,9 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
+
+import 'home_bloc.dart';
+import 'home_state.dart';
 
 enum Blur {
   rename,
@@ -113,81 +118,86 @@ class _HomePageState extends State<HomePage> {
       setSize = true;
     }
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
-      body: Stack(
-        children: [
-          Center(
-            child: Container(
-              width: 1480,
-              height: 944,
-              constraints: BoxConstraints(minWidth: 1320, maxWidth: 1920),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 30, top: 30, bottom: 30),
-                    child: Container(
-                      width: 274,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Color.fromARGB(25, 23, 69, 139),
-                              blurRadius: 4,
-                              offset: Offset(1, 4))
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                            child: SvgPicture.asset(
-                              'assets/home_page/storage_title.svg',
+    return BlocProvider(
+      create: (context) => HomeBloc()..add(HomePageOpened()),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).cardColor,
+        body: Stack(
+          children: [
+            Center(
+              child: Container(
+                width: 1480,
+                height: 944,
+                constraints: BoxConstraints(minWidth: 1320, maxWidth: 1920),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 30, top: 30, bottom: 30),
+                      child: Container(
+                        width: 274,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Color.fromARGB(25, 23, 69, 139),
+                                blurRadius: 4,
+                                offset: Offset(1, 4))
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                              child: SvgPicture.asset(
+                                'assets/home_page/storage_title.svg',
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                            child: SvgPicture.asset(
-                              'assets/home_page/separator.svg',
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                              child: SvgPicture.asset(
+                                'assets/home_page/separator.svg',
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: ListView(
-                              controller: ScrollController(),
-                              children: leftButtonsItem(),
+                            Expanded(
+                              child: ListView(
+                                controller: ScrollController(),
+                                children: leftButtonsItem(),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  getPage(),
-                ],
+                    getPage(),
+                  ],
+                ),
               ),
             ),
-          ),
-          // Visibility(
-          //   visible: false,
-          //     child: Stack(
-          //   children: [
-          //     Positioned.fill(
-          //       child: BackdropFilter(
-          //         filter: ImageFilter.blur(
-          //           sigmaX: 5,
-          //           sigmaY: 5,
-          //         ),
-          //         child: Container(
-          //           color: Colors.black.withAlpha(25), // цвет не тут
-          //         ),
-          //       ),
-          //     ),
-          //     someWidget,
-          //   ],
-          // )),
-        ],
+            // Visibility(
+            //   visible: false,
+            //     child: Stack(
+            //   children: [
+            //     Positioned.fill(
+            //       child: BackdropFilter(
+            //         filter: ImageFilter.blur(
+            //           sigmaX: 5,
+            //           sigmaY: 5,
+            //         ),
+            //         child: Container(
+            //           color: Colors.black.withAlpha(25), // цвет не тут
+            //         ),
+            //       ),
+            //     ),
+            //     someWidget,
+            //   ],
+            // )),
+          ],
+        ),
       ),
     );
   }
@@ -341,57 +351,70 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
-        child: Container(
-          height: 42,
-          width: 214,
-          child: ElevatedButton(
-            onPressed: () async {
-              var str = await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurMenuUpload();
-                },
-              );
-              /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
-              List<String?> list = result!.paths;*/
+      BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
+            child: Container(
+              height: 42,
+              width: 214,
+              child: ElevatedButton(
+                onPressed: () async {
+                  var result = await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BlurMenuUpload();
+                    },
+                  );
 
-              // var systemTempDir = Directory.current;
-              // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
-              //   print(entity.path);
-              // }
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).primaryColor,
-              side: BorderSide(
-                style: BorderStyle.solid,
-                color: Theme.of(context).splashColor,
-                width: 1.5,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  translate.add,
-                  style: TextStyle(
+                  if (result is AddMenuResult) {
+                    context.read<HomeBloc>().add(
+                          HomeUserActionChoosed(
+                            action: result.action,
+                            values: result.result,
+                          ),
+                        );
+                  }
+                  /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
+                    List<String?> list = result!.paths;*/
+
+                  // var systemTempDir = Directory.current;
+                  // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
+                  //   print(entity.path);
+                  // }
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  side: BorderSide(
+                    style: BorderStyle.solid,
                     color: Theme.of(context).splashColor,
-                    fontSize: 17,
-                    fontFamily: kNormalTextFontFamily,
+                    width: 1.5,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Image.asset('assets/file_page/plus.png'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      translate.add,
+                      style: TextStyle(
+                        color: Theme.of(context).splashColor,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Image.asset('assets/file_page/plus.png'),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
       Align(
         alignment: FractionalOffset.bottomLeft,

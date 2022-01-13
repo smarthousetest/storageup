@@ -147,7 +147,7 @@ class FilesController {
     }
 
     _filesRepo.setFiles(files);
-    _prepareMediaFolders(media);
+    await _prepareMediaFolders(media);
   }
 
   Future<ResponseStatus> deleteObjects(List<BaseObject> objects) async {
@@ -221,8 +221,8 @@ class FilesController {
       readOnly: true,
     );
 
-    folders.forEach((element) async {
-      var folder = await getFolderById(element.id); // element as Folder?;
+    for (int i = 0; i < folders.length; i++) {
+      var folder = await getFolderById(folders[i].id); // element as Folder?;
       if (folder?.name == 'Photo') {
         folder?.name = translate.photos;
         folder?.assetImage = 'assets/media_page/photo.svg';
@@ -231,7 +231,7 @@ class FilesController {
         folder?.assetImage = 'assets/media_page/video.svg';
       }
       all.records?.addAll(folder?.records ?? []);
-    });
+    }
     folders.insert(0, all);
 
     _mediaRepo.setMedia(folders);

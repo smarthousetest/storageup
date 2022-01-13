@@ -34,7 +34,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   final serviceModule = _$ServiceModule();
 
   gh.lazySingletonAsync<AutouploadController>(
-      () async => await AutouploadController());
+      () async => await AutouploadController().init());
   gh.lazySingleton<_i5.Dio>(() => serviceModule.dio, instanceName: 'auth_dio');
   gh.lazySingleton<_i5.Dio>(() => serviceModule.recordDio,
       instanceName: 'record_dio');

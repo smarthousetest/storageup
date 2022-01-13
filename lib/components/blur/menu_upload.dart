@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurMenuUpload extends StatefulWidget {
@@ -93,6 +94,12 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                 onTap: () async {
                                   List<String?>? list = await getFilesPaths();
                                   print(list);
+                                  Navigator.pop(
+                                      context,
+                                      AddMenuResult(
+                                        action: UserAction.uploadFiles,
+                                        result: list,
+                                      ));
                                 },
                                 child: Column(
                                   children: [
@@ -284,4 +291,14 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
       ),
     );
   }
+}
+
+class AddMenuResult {
+  UserAction action;
+  List<String?>? result;
+
+  AddMenuResult({
+    required this.action,
+    this.result,
+  });
 }

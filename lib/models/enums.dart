@@ -23,6 +23,15 @@ enum Status {
   emptyPermissions,
 }
 
+enum UserAction {
+  nothing,
+  uploadFiles,
+  uploadMedia,
+  createFolder,
+  createAlbum,
+  uploadFolder,
+}
+
 enum ResponseStatus {
   ok,
   declined,

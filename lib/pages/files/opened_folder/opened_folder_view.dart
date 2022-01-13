@@ -478,33 +478,41 @@ class ObjectView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constrains) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            height: 90,
-            // width: constrains.minHeight - 17,
-            width: 80,
-            child: isFile && type != 'image'
-                ? type!.isNotEmpty
-                    ? Image.asset(
-                        'assets/file_icons/$type.png',
-                        fit: BoxFit.contain,
-                      )
-                    : Image.asset(
-                        'assets/file_icons/files.png',
-                        fit: BoxFit.contain,
-                      )
-                : type == 'image'
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          (object as Record).thumbnail!.first.publicUrl!,
-                          fit: BoxFit.contain,
-                        ),
-                      )
-                    : Image.asset(
-                        'assets/file_icons/folder.png',
-                        fit: BoxFit.contain,
-                      ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: 90,
+                // width: constrains.minHeight - 17,
+                width: 80,
+                child: isFile && type != 'image'
+                    ? type!.isNotEmpty
+                        ? Image.asset(
+                            'assets/file_icons/$type.png',
+                            fit: BoxFit.contain,
+                          )
+                        : Image.asset(
+                            'assets/file_icons/files.png',
+                            fit: BoxFit.contain,
+                          )
+                    : type == 'image'
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              (object as Record).thumbnail!.first.publicUrl!,
+                              fit: BoxFit.contain,
+                            ),
+                          )
+                        : Image.asset(
+                            'assets/file_icons/folder.png',
+                            fit: BoxFit.contain,
+                          ),
+              ),
+              ..._uploadProgress(
+                  isFile ? (object as Record).loadPercent : null),
+            ],
           ),
           Text(
             object.name ?? '',
@@ -520,6 +528,22 @@ class ObjectView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<Widget> _uploadProgress(double? progress) {
+    List<Widget> indicators = [Container()];
+    if (progress != null) {
+      indicators = [
+        Visibility(
+          child: CircularProgressIndicator(
+            value: progress / 100,
+          ),
+        ),
+        CircularProgressIndicator.adaptive(),
+      ];
+    }
+
+    return indicators;
   }
 }
 

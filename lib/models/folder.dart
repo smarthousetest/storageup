@@ -36,6 +36,8 @@ class Folder extends BaseObject {
           isChoosed: isChoosed,
         );
 
+  factory Folder.empty() => Folder(size: -1, id: '', readOnly: false);
+
   @override
   String toString() {
     return 'Folder(records: $records, folders: $folders, size: $size, id: $id, name: $name, parentFolder: $parentFolder,  createdBy: $createdBy, updatedBy: $updatedBy, createdAt: $createdAt, updatedAt: $updatedAt)';
