@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
 import 'package:upstorage_desktop/pages/media/media_cubit.dart';
 import 'package:upstorage_desktop/pages/media/media_state.dart';
@@ -232,14 +233,22 @@ class _MediaPageState extends State<MediaPage> {
                             child: BlocBuilder<MediaCubit, MediaState>(
                               builder: (context, state) {
                                 return ListView(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    controller: _folderListScrollController,
-                                    children: [
-                                      ...state.albums
-                                          .map((album) => _folderIcon(album))
-                                          .toList(),
-                                    ]);
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  controller: _folderListScrollController,
+                                  children: [
+                                    ...state.albums
+                                        .map(
+                                          (album) => _folderIcon(
+                                            album,
+                                            isChoosed: album.id ==
+                                                state.currentFolder.id,
+                                            blocContext: context,
+                                          ),
+                                        )
+                                        .toList(),
+                                  ],
+                                );
                               },
                             ),
                           ),
@@ -275,9 +284,9 @@ class _MediaPageState extends State<MediaPage> {
                               BlocBuilder<MediaCubit, MediaState>(
                                 builder: (context, state) {
                                   return Container(
-                                    width: 100,
                                     child: Text(
                                       state.currentFolder.name ?? ':(',
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: Theme.of(context).focusColor,
                                         fontFamily: kNormalTextFontFamily,
@@ -291,45 +300,50 @@ class _MediaPageState extends State<MediaPage> {
                                 flex: 821,
                                 child: Container(),
                               ),
-                              IconButton(
-                                padding: EdgeInsets.zero,
-                                iconSize: 30,
-                                onPressed: () {
-                                  setState(() {
-                                    ifGrid = false;
-                                  });
-                                  print('ifGrid is $ifGrid');
+                              BlocBuilder<MediaCubit, MediaState>(
+                                  builder: (context, state) {
+                                return IconButton(
+                                  padding: EdgeInsets.zero,
+                                  iconSize: 30,
+                                  onPressed: () {
+                                    context
+                                        .read<MediaCubit>()
+                                        .changeRepresentation(
+                                            FilesRepresentation.table);
+                                  },
+                                  icon: SvgPicture.asset(
+                                      'assets/file_page/list.svg',
+                                      color: state.representation ==
+                                              FilesRepresentation.table
+                                          ? Theme.of(context).splashColor
+                                          : Theme.of(context)
+                                              .toggleButtonsTheme
+                                              .color),
+                                );
+                              }),
+                              BlocBuilder<MediaCubit, MediaState>(
+                                builder: (context, state) {
+                                  return IconButton(
+                                    iconSize: 30,
+                                    onPressed: () {
+                                      context
+                                          .read<MediaCubit>()
+                                          .changeRepresentation(
+                                              FilesRepresentation.grid);
+                                    },
+                                    icon: SvgPicture.asset(
+                                        'assets/file_page/block.svg',
+                                        // width: 30,
+                                        // height: 30,
+                                        //colorBlendMode: BlendMode.softLight,
+                                        color: state.representation ==
+                                                FilesRepresentation.grid
+                                            ? Theme.of(context).splashColor
+                                            : Theme.of(context)
+                                                .toggleButtonsTheme
+                                                .color),
+                                  );
                                 },
-                                icon: SvgPicture.asset(
-                                    'assets/file_page/list.svg',
-                                    // icon: Image.asset('assets/file_page/list.png',
-                                    // fit: BoxFit.contain,
-                                    // width: 30,
-                                    // height: 30,
-                                    color: ifGrid
-                                        ? Theme.of(context)
-                                            .toggleButtonsTheme
-                                            .color
-                                        : Theme.of(context).splashColor),
-                              ),
-                              IconButton(
-                                iconSize: 30,
-                                onPressed: () {
-                                  setState(() {
-                                    ifGrid = true;
-                                  });
-                                  print('ifGrid is $ifGrid');
-                                },
-                                icon: SvgPicture.asset(
-                                    'assets/file_page/block.svg',
-                                    // width: 30,
-                                    // height: 30,
-                                    //colorBlendMode: BlendMode.softLight,
-                                    color: ifGrid
-                                        ? Theme.of(context).splashColor
-                                        : Theme.of(context)
-                                            .toggleButtonsTheme
-                                            .color),
                               ),
                             ],
                           ),
@@ -347,7 +361,8 @@ class _MediaPageState extends State<MediaPage> {
                         BlocBuilder<MediaCubit, MediaState>(
                           builder: (context, state) {
                             return Expanded(
-                              child: ifGrid
+                              child: state.representation ==
+                                      FilesRepresentation.grid
                                   ? _filesGrid()
                                   : _filesList(context, state),
                             );
@@ -365,47 +380,72 @@ class _MediaPageState extends State<MediaPage> {
     );
   }
 
-  Widget _folderIcon(Folder album) {
+  Widget _folderIcon(
+    Folder album, {
+    required bool isChoosed,
+    required BuildContext blocContext,
+  }) {
+    Color activeColor;
+    String icon = 'album';
+    if (album.id == '-1') {
+      activeColor = Color(0xFF868FFF);
+    } else if (album.name == translate.photos) {
+      activeColor = Color(0xFF59D7AB);
+      icon = 'photo';
+    } else if (album.name == translate.video) {
+      activeColor = Color(0xFFFF847E);
+      icon = 'video';
+    } else {
+      activeColor = Color(0xFFFF94E1);
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 13),
-      child: Container(
-        width: _folderButtonSize.toDouble(),
-        height: _folderButtonSize.toDouble(),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            width: 2,
-            color: Theme.of(context).buttonTheme.colorScheme!.primary,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: SvgPicture.asset(
-                'assets/file_page/folder_icon.svg',
-                color: album.id == '-1' ? Color(0xFF868FFF) : null,
-              ),
+      child: GestureDetector(
+        onTap: () {
+          print('folder tapped: ${album.name}');
+          blocContext.read<MediaCubit>().changeFolder(album);
+        },
+        child: Container(
+          width: _folderButtonSize.toDouble(),
+          height: _folderButtonSize.toDouble(),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              width: 2,
+              color: isChoosed
+                  ? activeColor
+                  : Theme.of(context).buttonTheme.colorScheme!.primary,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 14, right: 14, top: 14),
-              child: Text(
-                album.name ?? ':(',
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: TextStyle(
-                  color: Theme.of(context).disabledColor,
-                  fontSize: 16,
-                  fontFamily: kNormalTextFontFamily,
-                  height: 1.1,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: SvgPicture.asset(
+                  'assets/file_page/${icon}_icon.svg',
+                  color: activeColor,
                 ),
               ),
-            ),
-            Spacer(),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(left: 14, right: 14, top: 14),
+                child: Text(
+                  album.name ?? ':(',
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: TextStyle(
+                    color: Theme.of(context).disabledColor,
+                    fontSize: 16,
+                    fontFamily: kNormalTextFontFamily,
+                    height: 1.1,
+                  ),
+                ),
+              ),
+              Spacer(),
+            ],
+          ),
         ),
       ),
     );
@@ -462,173 +502,175 @@ class _MediaPageState extends State<MediaPage> {
         controller: ScrollController(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: DataTable(
-            columnSpacing: 25,
-            showCheckboxColumn: false,
-            columns: [
-              DataColumn(
-                label: Container(
-                  width: constraints.maxWidth * 0.5,
-                  child: Text(
-                    translate.name,
-                    style: style,
+          child: Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: DataTable(
+              columnSpacing: 25,
+              showCheckboxColumn: false,
+              columns: [
+                DataColumn(
+                  label: Container(
+                    width: constraints.maxWidth * 0.5,
+                    child: Text(
+                      translate.name,
+                      style: style,
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Container(
-                  width: constraints.maxWidth * 0.06,
-                  child: Text(
-                    translate.format,
-                    style: style,
+                DataColumn(
+                  label: Container(
+                    width: constraints.maxWidth * 0.06,
+                    child: Text(
+                      translate.format,
+                      style: style,
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Container(
-                  width: constraints.maxWidth * 0.05,
-                  child: Text(
-                    translate.date,
-                    style: style,
+                DataColumn(
+                  label: Container(
+                    width: constraints.maxWidth * 0.05,
+                    child: Text(
+                      translate.date,
+                      style: style,
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Container(
-                  width: constraints.maxWidth * 0.06,
-                  child: Text(
-                    translate.size,
-                    style: style,
+                DataColumn(
+                  label: Container(
+                    width: constraints.maxWidth * 0.06,
+                    child: Text(
+                      translate.size,
+                      style: style,
+                    ),
                   ),
                 ),
-              ),
-              DataColumn(
-                label: Container(
-                  width: constraints.maxWidth * 0.001,
-                  child: SizedBox(
+                DataColumn(
+                  label: Container(
                     width: constraints.maxWidth * 0.001,
+                    child: SizedBox(
+                      width: constraints.maxWidth * 0.001,
+                    ),
                   ),
                 ),
-              ),
-            ],
-            rows: state.currentFolderRecords.map((e) {
-              String? type = '';
-              bool isFile = false;
+              ],
+              rows: state.currentFolderRecords.map((e) {
+                String? type = '';
+                bool isFile = false;
 
-              var record = e;
-              isFile = true;
-              if (record.thumbnail != null && record.thumbnail!.isNotEmpty) {
-                type = FileAttribute().getFilesType(record.name!.toLowerCase());
-              }
+                var record = e;
+                isFile = true;
+                if (record.thumbnail != null && record.thumbnail!.isNotEmpty) {
+                  type =
+                      FileAttribute().getFilesType(record.name!.toLowerCase());
+                }
 
-              return DataRow.byIndex(
-                index: state.currentFolderRecords.indexOf(e),
-                color: MaterialStateProperty.resolveWith<Color?>((states) {
-                  print(states.toList().toString());
-                  if (states.contains(MaterialState.focused)) {
-                    return Theme.of(context).splashColor;
-                  }
-                  return null;
-                }),
-                cells: [
-                  DataCell(
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Image.asset(
-                          type.isNotEmpty
-                              ? 'assets/file_icons/${type}_s.png'
-                              : 'assets/file_icons/unexpected_s.png',
-                          fit: BoxFit.contain,
-                          height: 24,
-                          width: 24,
-                        ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Expanded(
-                          child: Text(
-                            e.name ?? '',
-                            style: cellTextStyle,
-                            overflow: TextOverflow.ellipsis,
+                return DataRow.byIndex(
+                  index: state.currentFolderRecords.indexOf(e),
+                  color: MaterialStateProperty.resolveWith<Color?>((states) {
+                    print(states.toList().toString());
+                    if (states.contains(MaterialState.focused)) {
+                      return Theme.of(context).splashColor;
+                    }
+                    return null;
+                  }),
+                  cells: [
+                    DataCell(
+                      Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.asset(
+                            type.isNotEmpty
+                                ? 'assets/file_icons/${type}_s.png'
+                                : 'assets/file_icons/unexpected_s.png',
+                            fit: BoxFit.contain,
+                            height: 24,
+                            width: 24,
                           ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: Text(
+                              e.name ?? '',
+                              style: cellTextStyle,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          // Spacer(),
+                          BlocBuilder<MediaCubit, MediaState>(
+                            builder: (context, state) {
+                              return GestureDetector(
+                                onTap: () {
+                                  context.read<MediaCubit>().setFavorite(e);
+                                },
+                                child: Image.asset(
+                                  e.favorite
+                                      ? 'assets/file_page/favorite.png'
+                                      : 'assets/file_page/not_favorite.png',
+                                  height: 18,
+                                  width: 18,
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        type.isEmpty ? translate.foldr : type.toUpperCase(),
+                        style: cellTextStyle,
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        DateFormat('dd.MM.yyyy').format(e.createdAt!),
+                        style: cellTextStyle,
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        filesize(e.size, translate, 1),
+                        style: cellTextStyle,
+                      ),
+                    ),
+                    DataCell(
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          hoverColor: Colors.transparent,
+                          splashColor: Colors.transparent,
                         ),
-                        // Spacer(),
-                        BlocBuilder<MediaCubit, MediaState>(
-                          builder: (context, state) {
-                            return GestureDetector(
-                              onTap: () {
-                                // context
-                                //     .read<OpenedFolderCubit>()
-                                //     .setFavorite(e);
-                              },
-                              child: Image.asset(
-                                e.favorite
-                                    ? 'assets/file_page/favorite.png'
-                                    : 'assets/file_page/not_favorite.png',
-                                height: 18,
-                                width: 18,
-                              ),
+                        child: CustomPopupMenu(
+                          pressType: PressType.singleClick,
+                          barrierColor: Colors.transparent,
+                          showArrow: false,
+                          horizontalMargin: 110,
+                          verticalMargin: 0,
+                          menuBuilder: () {
+                            return FilesPopupMenuActions(
+                              theme: Theme.of(context),
+                              translate: translate,
                             );
                           },
-                        )
-                      ],
-                    ),
-                  ),
-                  DataCell(
-                    Text(
-                      type.isEmpty ? translate.foldr : type.toUpperCase(),
-                      style: cellTextStyle,
-                    ),
-                  ),
-                  DataCell(
-                    Text(
-                      DateFormat('dd.MM.yyyy').format(e.createdAt!),
-                      style: cellTextStyle,
-                    ),
-                  ),
-                  DataCell(
-                    Text(
-                      filesize(e.size, translate, 1),
-                      style: cellTextStyle,
-                    ),
-                  ),
-                  DataCell(
-                    Theme(
-                      data: Theme.of(context).copyWith(
-                        hoverColor: Colors.transparent,
-                        splashColor: Colors.transparent,
-                      ),
-                      child: CustomPopupMenu(
-                        pressType: PressType.singleClick,
-                        barrierColor: Colors.transparent,
-                        showArrow: false,
-                        horizontalMargin: 110,
-                        verticalMargin: 0,
-                        menuBuilder: () {
-                          return FilesPopupMenuActions(
-                            theme: Theme.of(context),
-                            translate: translate,
-                          );
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/file_page/three_dots.svg',
-                              ),
-                            ],
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/file_page/three_dots.svg',
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            }).toList(),
+                  ],
+                );
+              }).toList(),
+            ),
           ),
         ),
       );

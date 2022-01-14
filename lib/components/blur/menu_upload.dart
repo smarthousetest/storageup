@@ -126,6 +126,13 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 28.0),
                                 child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(
+                                        context,
+                                        AddMenuResult(
+                                          action: UserAction.createFolder,
+                                        ));
+                                  },
                                   child: Column(
                                     children: [
                                       MouseRegion(
@@ -238,27 +245,36 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 18.0),
-                                    child: Column(
-                                      children: [
-                                        MouseRegion(
-                                          cursor: SystemMouseCursors.click,
-                                          child: SvgPicture.asset(
-                                            'assets/file_page/create_album.svg',
-                                            height: 64,
-                                            width: 64,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(
+                                            context,
+                                            AddMenuResult(
+                                              action: UserAction.createAlbum,
+                                            ));
+                                      },
+                                      child: Column(
+                                        children: [
+                                          MouseRegion(
+                                            cursor: SystemMouseCursors.click,
+                                            child: SvgPicture.asset(
+                                              'assets/file_page/create_album.svg',
+                                              height: 64,
+                                              width: 64,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          translate.create_album,
-                                          style: TextStyle(
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                            color:
-                                                Theme.of(context).disabledColor,
-                                          ),
-                                        )
-                                      ],
+                                          SizedBox(height: 10),
+                                          Text(
+                                            translate.create_album,
+                                            style: TextStyle(
+                                              fontFamily: kNormalTextFontFamily,
+                                              fontSize: 14,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],

@@ -230,7 +230,8 @@ class FilesController {
         folder?.name = translate.video;
         folder?.assetImage = 'assets/media_page/video.svg';
       }
-      all.records?.addAll(folder?.records ?? []);
+      folders[i] = folder!;
+      all.records?.addAll(folder.records ?? []);
     }
     folders.insert(0, all);
 

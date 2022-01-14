@@ -7,7 +7,7 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "32.0.0"
+    version: "33.0.0"
   adaptive_theme:
     dependency: "direct main"
     description:
@@ -21,7 +21,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.0"
   archive:
     dependency: transitive
     description:
@@ -209,7 +209,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: c40089e27c51a3df837498dfc8f18e2825476310
+      resolved-ref: "8022623e000ed0d8a3132ef189033511a2cc3244"
       url: "ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git"
     source: git
     version: "0.0.1"
@@ -435,7 +435,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   image_picker:
     dependency: "direct main"
     description:

@@ -2,12 +2,15 @@ import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:upstorage_desktop/components/blur/add_folder.dart';
+import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 import 'package:upstorage_desktop/pages/home/home_event.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
@@ -368,12 +371,7 @@ class _HomePageState extends State<HomePage> {
                   );
 
                   if (result is AddMenuResult) {
-                    context.read<HomeBloc>().add(
-                          HomeUserActionChoosed(
-                            action: result.action,
-                            values: result.result,
-                          ),
-                        );
+                    _processUserAction(context, result);
                   }
                   /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
                     List<String?> list = result!.paths;*/
@@ -461,5 +459,46 @@ class _HomePageState extends State<HomePage> {
         ),
       )
     ];
+  }
+
+  void _processUserAction(
+    BuildContext context,
+    AddMenuResult userAction,
+  ) async {
+    switch (userAction.action) {
+      case UserAction.createFolder:
+        var name = await showDialog<String?>(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurAddFolder();
+            });
+        if (name != null && name.isNotEmpty) {
+          userAction = AddMenuResult(
+            action: userAction.action,
+            result: [name],
+          );
+        }
+        break;
+      case UserAction.createAlbum:
+        var name = await showDialog<String?>(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurCreateAlbum();
+            });
+        if (name != null && name.isNotEmpty) {
+          userAction = AddMenuResult(
+            action: userAction.action,
+            result: [name],
+          );
+        }
+        break;
+      default:
+    }
+    context.read<HomeBloc>().add(
+          HomeUserActionChoosed(
+            action: userAction.action,
+            values: userAction.result,
+          ),
+        );
   }
 }
