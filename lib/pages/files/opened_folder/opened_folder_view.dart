@@ -120,7 +120,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       builder: (context, state) {
         if (state.representation == FilesRepresentation.grid) {
-          return _filesGrid(context, state);
+          return _filesGrid();
         } else {
           return _filesList(context, state);
         }
@@ -181,46 +181,50 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     );
   }
 
-  Widget _filesGrid(BuildContext context, OpenedFolderState state) {
+  Widget _filesGrid() {
     return Expanded(
       child: LayoutBuilder(builder: (context, constrains) {
         print('min width ${constrains.smallest.width}');
 
         return Container(
-          child: GridView.builder(
-            itemCount: state.objects.length,
-            shrinkWrap: true,
-            controller: ScrollController(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: constrains.smallest.width ~/ 110,
-              childAspectRatio: (1 / 1.22),
-              mainAxisSpacing: 15,
-            ),
-            itemBuilder: (context, index) {
-              Function() onTap;
-              var obj = state.objects[index];
-              if (obj is Folder) {
-                onTap = () {
-                  widget.push(
-                    OpenedFolderView(
-                      currentFolder: obj,
-                      previousFolders: [
-                        ...state.previousFolders,
-                        state.currentFolder!
-                      ],
-                      pop: widget.pop,
-                      push: widget.push,
-                    ),
+          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+            builder: (context, state) {
+              return GridView.builder(
+                itemCount: state.objects.length,
+                shrinkWrap: true,
+                controller: ScrollController(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: constrains.smallest.width ~/ 110,
+                  childAspectRatio: (1 / 1.22),
+                  mainAxisSpacing: 15,
+                ),
+                itemBuilder: (context, index) {
+                  Function() onTap;
+                  var obj = state.objects[index];
+                  if (obj is Folder) {
+                    onTap = () {
+                      widget.push(
+                        OpenedFolderView(
+                          currentFolder: obj,
+                          previousFolders: [
+                            ...state.previousFolders,
+                            state.currentFolder!
+                          ],
+                          pop: widget.pop,
+                          push: widget.push,
+                        ),
+                      );
+                    };
+                  } else {
+                    onTap = () {
+                      print('file tapped');
+                    };
+                  }
+                  return GestureDetector(
+                    onTap: onTap,
+                    child: ObjectView(object: state.objects[index]),
                   );
-                };
-              } else {
-                onTap = () {
-                  print('file tapped');
-                };
-              }
-              return GestureDetector(
-                onTap: onTap,
-                child: ObjectView(object: obj),
+                },
               );
             },
           ),
@@ -461,6 +465,8 @@ class ObjectView extends StatelessWidget {
           ) {
         type = FileAttribute().getFilesType(
             record.name!.toLowerCase()); //record.thumbnail?.first.name;
+        print(
+            'file ${record.name} upload percent is ${record.loadPercent} , isFile = $isFile');
         // print(type);
       }
 
@@ -510,8 +516,7 @@ class ObjectView extends StatelessWidget {
                             fit: BoxFit.contain,
                           ),
               ),
-              ..._uploadProgress(
-                  isFile ? (object as Record).loadPercent : null),
+              ..._uploadProgress(isFile ? (object as Record).loadPercent : 10),
             ],
           ),
           Text(
@@ -533,6 +538,7 @@ class ObjectView extends StatelessWidget {
   List<Widget> _uploadProgress(double? progress) {
     List<Widget> indicators = [Container()];
     if (progress != null) {
+      print('creating indicators with progress: $progress');
       indicators = [
         Visibility(
           child: CircularProgressIndicator(

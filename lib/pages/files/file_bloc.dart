@@ -136,8 +136,8 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
 
     if (event.id != null) {
       try {
-        (files?.firstWhere((element) => element.id == event.id) as Record)
-            .loadPercent = 0;
+        // (files?.firstWhere((element) => element.id == event.id) as Record)
+        //     .loadPercent = 0;
       } catch (e) {
         print(
             'on updating files can\'t find file with the same id as sended in event');

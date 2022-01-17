@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/foundation.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/file.dart';
@@ -27,7 +29,7 @@ class Record extends BaseObject {
   // String? get updatedBy => super.updatedBy;
   // final String? extension;
   bool isChoosed;
-  double? loadPercent;
+  final double? loadPercent;
 
   Record({
     this.stored,

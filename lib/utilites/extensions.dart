@@ -37,7 +37,7 @@ extension UserProficeImage on User? {
   Widget get image {
     Widget image = Container();
 
-    if (this != null && this!.avatars != null) {
+    if (this != null && this!.avatars != null && this!.avatars!.isNotEmpty) {
       image = Container(
         height: 46,
         width: 46,
@@ -47,7 +47,10 @@ extension UserProficeImage on User? {
         ),
       );
     } else {
-      image = Image.asset('assets/home_page/man.jpg');
+      image = Image.asset(
+        'assets/home_page/man.jpg',
+        fit: BoxFit.cover,
+      );
     }
 
     return image;

@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
+import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
@@ -18,8 +19,23 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
   var _loadController = getIt<LoadController>();
+  late Observer _updateObserver = Observer((a) {
+    if (_canUpdate) _update();
+  });
+
+  var _canUpdate = true;
 
   List<UploadObserver> _observers = [];
+  @override
+  Future<void> close() async {
+    _observers.forEach((element) {
+      _loadController.getState.unregisterObserver(element);
+    });
+
+    _loadController.getState.unregisterObserver(_updateObserver);
+
+    return super.close();
+  }
 
   void init(Folder? folder, List<Folder> previousFolders) async {
     Folder? currentFolder;
@@ -40,31 +56,31 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       ),
     );
 
+    _loadController.getState.registerObserver(_updateObserver);
+
     _syncWithLoadController(objects);
   }
 
   void _syncWithLoadController(List<BaseObject> filesInFolder) async {
     var loadState = _loadController.getState;
 
-    var updateObserver = Observer((a) {
-      _update();
-    });
-
-    loadState.registerObserver(updateObserver);
-
     filesInFolder.forEach((fileInFolder) {
       var index = loadState.uploadingFiles
           .indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
-      if (index != -1) {
+      if (index != -1 &&
+          !_observers.any((element) =>
+              element.id == loadState.uploadingFiles[index].localPath)) {
         var observer = UploadObserver(
           loadState.uploadingFiles[index].localPath,
           (p0) {
             _uploadListener(loadState.uploadingFiles[index].localPath);
           },
         );
+
         _observers.add(observer);
 
         loadState.registerObserver(observer);
+        _checkIfNeedToUpdating();
       }
     });
   }
@@ -88,6 +104,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     emit(state.copyWith(
       objects: objects,
     ));
+
+    print('files was updated');
+
+    _syncWithLoadController(objects);
   }
 
   void _tryToFindObservableRecords() {
@@ -141,20 +161,28 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
       if (currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty) {
         // add(FileUpdateFiles(id: currentFile.id));
+        _update();
+        print('currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty');
         return;
       }
 
       if (!currentFile.isInProgress && currentFile.uploadPercent == -1) {
+        print('!currentFile.isInProgress && currentFile.uploadPercent == -1');
         return;
       }
 
       if (currentFile.uploadPercent >= 0 && currentFile.uploadPercent < 100) {
-        print(
-            'file\'s $pathToFile upload percent = ${currentFile.uploadPercent}');
+        // print(
+        //     'file\'s $pathToFile upload percent = ${currentFile.uploadPercent}');
         // add(FileChangeUploadPercent(
         //   id: currentFile.id,
         //   percent: currentFile.uploadPercent.toDouble(),
         // ));
+
+        _updateUploadPercent(
+          fileId: currentFile.id,
+          percent: currentFile.uploadPercent,
+        );
       } else if (currentFile.uploadPercent != -1) {
         // add(FileUpdateFiles());
         // add(FileChangeUploadPercent(
@@ -177,7 +205,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         controllerState.unregisterObserver(observer);
 
         _observers.remove(observer);
-
+        _checkIfNeedToUpdating();
         // var connect = await Connectivity().checkConnectivity();
 
         // if (connect == ConnectivityResult.none) {
@@ -185,6 +213,30 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         // } else {
         //   add(FileUpdateFiles());
         // }
+      }
+    }
+  }
+
+  void _checkIfNeedToUpdating() {
+    _canUpdate = _observers.isEmpty;
+  }
+
+  void _updateUploadPercent({required String fileId, required int percent}) {
+    var objects = state.objects;
+
+    var indexOfUploadingFile =
+        objects.indexWhere((element) => element.id == fileId);
+    print('index if uploading filse is $indexOfUploadingFile');
+    if (indexOfUploadingFile != -1) {
+      var uploadingFile = objects[indexOfUploadingFile];
+
+      if (uploadingFile is Record) {
+        objects[indexOfUploadingFile] =
+            uploadingFile.copyWith(loadPercent: percent.toDouble());
+        print(
+            'file\'s ${uploadingFile.name} upload percent = ${uploadingFile.loadPercent}');
+        var newState = state.copyWith(objects: List.from(objects));
+        emit(newState);
       }
     }
   }
