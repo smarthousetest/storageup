@@ -7,6 +7,7 @@
 import 'package:dio/dio.dart' as _i5;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
+import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
 
 import '../generated/l10n.dart' as _i13;
 import '../pages/auth/auth_bloc.dart' as _i3;
@@ -52,6 +53,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i12.MediaRepository>(() => serviceModule.mediaRepo,
       instanceName: 'media_repo');
   gh.singleton<_i13.S>(serviceModule.s);
+  gh.factory<SubscriptionService>(() => SubscriptionService());
   gh.factory<_i14.SettingsBloc>(() => _i14.SettingsBloc());
   gh.factory<_i15.TokenRepository>(() => _i15.TokenRepository());
   gh.lazySingleton<_i17.UserRepository>(() => serviceModule.userRepository,
@@ -63,6 +65,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i4.AuthenticationRepository>(_i4.AuthenticationRepository());
   gh.factory<_i3.AuthBloc>(() => _i3.AuthBloc());
   gh.factory<_i16.UserController>(() => _i16.UserController());
+
   return get;
 }
 

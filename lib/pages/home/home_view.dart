@@ -121,9 +121,10 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: 1480,
               height: 944,
-              constraints: BoxConstraints(minWidth: 1320, maxWidth: 1920),
+              // constraints: BoxCons.traints(minWidth: 1320, maxWidth: 1920),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding:

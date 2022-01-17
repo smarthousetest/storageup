@@ -3,12 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:upstorage_desktop/components/password_text_field.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
-import 'package:upstorage_desktop/pages/auth/auth_event.dart';
-import 'package:upstorage_desktop/pages/auth/auth_state.dart';
-import 'package:upstorage_desktop/pages/auth/models/password.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 

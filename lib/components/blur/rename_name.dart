@@ -1,12 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/settings/settings_bloc.dart';
-import 'package:upstorage_desktop/pages/settings/settings_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurRenameName extends StatefulWidget {
