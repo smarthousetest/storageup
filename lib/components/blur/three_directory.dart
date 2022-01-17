@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BlurCreateThreeDirectory extends StatefulWidget {
-
-
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 

@@ -56,74 +56,74 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   //   );
 }
 
-  // AuthState _mapLoginPasswordChanged(
-  //     AuthState state,
-  //     AuthLoginPasswordChanged event,
-  //     ) {
-  //   Password password = Password.dirty(event.password);
-  //
-  //   return state.copyWith(
-  //     passwordLogin: password,
-  //     status: Formz.validate([password]),
-  //   );
-  // }
+// AuthState _mapLoginPasswordChanged(
+//     AuthState state,
+//     AuthLoginPasswordChanged event,
+//     ) {
+//   Password password = Password.dirty(event.password);
+//
+//   return state.copyWith(
+//     passwordLogin: password,
+//     status: Formz.validate([password]),
+//   );
+// }
 
-  // AuthState _mapRegisterPasswordChanged(
-  //     AuthState state,
-  //     AuthRegisterPasswordChanged event,
-  //     ) {
-  //   Password password = Password.dirty(event.password);
-  //
-  //   return state.copyWith(
-  //     passwordRegister: password,
-  //     status: Formz.validate([password]),
-  //   );
-  // }
+// AuthState _mapRegisterPasswordChanged(
+//     AuthState state,
+//     AuthRegisterPasswordChanged event,
+//     ) {
+//   Password password = Password.dirty(event.password);
+//
+//   return state.copyWith(
+//     passwordRegister: password,
+//     status: Formz.validate([password]),
+//   );
+// }
 
-  // AuthState _mapNameChanged(
-  //     AuthState state,
-  //     AuthNameChanged event,
-  //     ) {
-  //   Name name = Name.dirty(event.name);
-  //
-  //   return state.copyWith(
-  //     name: name,
-  //     status: Formz.validate([name]),
-  //   );
-  // }
+// AuthState _mapNameChanged(
+//     AuthState state,
+//     AuthNameChanged event,
+//     ) {
+//   Name name = Name.dirty(event.name);
+//
+//   return state.copyWith(
+//     name: name,
+//     status: Formz.validate([name]),
+//   );
+// }
 
-  // AuthState _mapRememberMeChanged(AuthState state) {
-  //   return state.copyWith(rememberMe: !state.rememberMe);
-  // }
-  //
-  // AuthState _mapAcceptTermsOfUseChanged(AuthState state) {
-  //   return state.copyWith(acceptedTermsOfUse: !state.acceptedTermsOfUse);
-  // }
+// AuthState _mapRememberMeChanged(AuthState state) {
+//   return state.copyWith(rememberMe: !state.rememberMe);
+// }
+//
+// AuthState _mapAcceptTermsOfUseChanged(AuthState state) {
+//   return state.copyWith(acceptedTermsOfUse: !state.acceptedTermsOfUse);
+// }
 
-  // Stream<AuthState> _mapLoginSubmitted(
-  //     AuthLoginConfirmed event,
-  //     AuthState state,
-  //     ) async* {
-  //   if (state.status.isValidated) {
-  //     yield state.copyWith(status: FormzStatus.submissionInProgress);
-  //     try {
-  //       final result = await _authenticationRepository.logIn(
-  //         email: state.emailLogin.value,
-  //         password: state.passwordLogin.value,
-  //       );
-  //       if (result == AuthenticationStatus.authenticated) {
-  //         yield state.copyWith(status: FormzStatus.submissionSuccess);
-  //       } else if (result == AuthenticationStatus.wrongPassword) {
-  //         yield state.copyWith(
-  //           status: FormzStatus.submissionFailure,
-  //           error: AuthError.wrongCredentials,
-  //         );
-  //       } else {
-  //         yield state.copyWith(status: FormzStatus.submissionFailure);
-  //       }
-  //     } on Exception catch (_) {
-  //       yield state.copyWith(status: FormzStatus.submissionFailure);
-  //     }
-  //   }
-  // }
+// Stream<AuthState> _mapLoginSubmitted(
+//     AuthLoginConfirmed event,
+//     AuthState state,
+//     ) async* {
+//   if (state.status.isValidated) {
+//     yield state.copyWith(status: FormzStatus.submissionInProgress);
+//     try {
+//       final result = await _authenticationRepository.logIn(
+//         email: state.emailLogin.value,
+//         password: state.passwordLogin.value,
+//       );
+//       if (result == AuthenticationStatus.authenticated) {
+//         yield state.copyWith(status: FormzStatus.submissionSuccess);
+//       } else if (result == AuthenticationStatus.wrongPassword) {
+//         yield state.copyWith(
+//           status: FormzStatus.submissionFailure,
+//           error: AuthError.wrongCredentials,
+//         );
+//       } else {
+//         yield state.copyWith(status: FormzStatus.submissionFailure);
+//       }
+//     } on Exception catch (_) {
+//       yield state.copyWith(status: FormzStatus.submissionFailure);
+//     }
+//   }
+// }
 // }
