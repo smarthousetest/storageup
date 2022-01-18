@@ -22,6 +22,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(count) => "${count} файлов";
 
+  static String m1(date, cost) => "Следующая оплата ${date} составит ${cost} ₽";
+
+  static String m2(count_of_gb, cost) => "${count_of_gb} ГБ за ${cost} ₽/месяц";
+
+  static String m3(count) => "${count} ГБ";
+
+  static String m4(count) => "${count} ₽/месяц";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accaunt_deleting":
@@ -63,6 +71,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "create_folder": MessageLookupByLibrary.simpleMessage("Создание папки"),
         "created": MessageLookupByLibrary.simpleMessage("Создано"),
         "currency": MessageLookupByLibrary.simpleMessage("₽"),
+        "current_subscription_payment": m1,
+        "current_subscription_title": m2,
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "date_format": MessageLookupByLibrary.simpleMessage("Формат даты"),
         "day": MessageLookupByLibrary.simpleMessage("день"),
@@ -100,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
         "free_sub": MessageLookupByLibrary.simpleMessage("Бесплатная подписка"),
         "funds": MessageLookupByLibrary.simpleMessage("Вывод средств"),
+        "gb": m3,
         "get_out": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите выйти?"),
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
@@ -210,6 +221,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
+        "subscription_pay_mounth": m4,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(

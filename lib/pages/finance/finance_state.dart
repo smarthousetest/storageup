@@ -6,17 +6,26 @@ import 'package:upstorage_desktop/models/user.dart';
 class FinanceState extends Equatable {
   final User? user;
   final Subscription? sub;
-  final Tariff? numberSub;
+  final List<Tariff> allSub;
 
-  FinanceState({this.user, this.sub, this.numberSub});
+  FinanceState({
+    this.user,
+    this.sub,
+    this.allSub = const [],
+  });
 
-  FinanceState copyWith({User? user, Subscription? sub, Tariff? numberSub}) {
+  FinanceState copyWith({
+    User? user,
+    Subscription? sub,
+    List<Tariff>? allSub,
+  }) {
     return FinanceState(
-        user: user ?? this.user,
-        sub: sub ?? this.sub,
-        numberSub: numberSub ?? numberSub);
+      user: user ?? this.user,
+      sub: sub ?? this.sub,
+      allSub: allSub ?? this.allSub,
+    );
   }
 
   @override
-  List<Object?> get props => [user, sub, numberSub];
+  List<Object?> get props => [user, sub, allSub];
 }

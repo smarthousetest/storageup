@@ -27,6 +27,9 @@ class Tariff extends Equatable {
         priceEur: data['price_EUR'] as int?,
         spaceGb: data['spaceGb'] as int?,
       );
+  static List<Tariff> fromJsonList(List<Map<String, dynamic>> list) {
+    return list.map((e) => Tariff.fromMap(e)).toList();
+  }
 
   Map<String, dynamic> toMap() => {
         '_id': id,

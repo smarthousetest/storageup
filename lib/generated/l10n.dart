@@ -1579,6 +1579,49 @@ class S {
       args: [],
     );
   }
+
+  /// `{count_of_gb} GB for {cost} $/mounth`
+  String current_subscription_title(Object count_of_gb, Object cost) {
+    return Intl.message(
+      '$count_of_gb GB for $cost \$/mounth',
+      name: 'current_subscription_title',
+      desc: '',
+      args: [count_of_gb, cost],
+    );
+  }
+
+  /// `Next payment on {date} will be {cost} $`
+  String current_subscription_payment(DateTime date, Object cost) {
+    final DateFormat dateDateFormat = DateFormat.yMd(Intl.getCurrentLocale());
+    final String dateString = dateDateFormat.format(date);
+
+    return Intl.message(
+      'Next payment on $dateString will be $cost \$',
+      name: 'current_subscription_payment',
+      desc: '',
+      args: [dateString, cost],
+    );
+  }
+
+  /// `{count} GB`
+  String gb(Object count) {
+    return Intl.message(
+      '$count GB',
+      name: 'gb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} $/mounth`
+  String subscription_pay_mounth(Object count) {
+    return Intl.message(
+      '$count \$/mounth',
+      name: 'subscription_pay_mounth',
+      desc: '',
+      args: [count],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
