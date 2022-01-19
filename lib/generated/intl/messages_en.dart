@@ -24,20 +24,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(count) => "${count} files";
 
-  static String m2(count) => "${count} Gb";
+  static String m2(date, cost) => "Next payment on ${date} will be ${cost} \$";
 
-  static String m3(count) => "${count} Kb";
-
-  static String m4(count) => "${count} Mb";
-
-  static String m5(count) => "${count} Pb";
-
-  static String m6(count) => "${count} Tb";
-
-  static String m1(date, cost) => "Next payment on ${date} will be ${cost} \$";
-  static String m2(count_of_gb, cost) =>
+  static String m3(count_of_gb, cost) =>
       "${count_of_gb} GB for ${cost} \$/mounth";
-  static String m4(count) => "${count} \$/mounth";
+
+  static String m4(count) => "${count} Gb";
+
+  static String m5(count) => "${count} Kb";
+
+  static String m6(count) => "${count} Mb";
+
+  static String m7(count) => "${count} Pb";
+
+  static String m8(count) => "${count} \$/mounth";
+
+  static String m9(count) => "${count} Tb";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accaunt_deleting":
@@ -80,8 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "create_folder": MessageLookupByLibrary.simpleMessage("Create folder"),
         "created": MessageLookupByLibrary.simpleMessage("Created"),
         "currency": MessageLookupByLibrary.simpleMessage("\$"),
-        "current_subscription_payment": m1,
-        "current_subscription_title": m2,
+        "current_subscription_payment": m2,
+        "current_subscription_title": m3,
         "date": MessageLookupByLibrary.simpleMessage("Date"),
         "date_format": MessageLookupByLibrary.simpleMessage("Date format"),
         "day": MessageLookupByLibrary.simpleMessage("day"),
@@ -121,7 +124,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "format": MessageLookupByLibrary.simpleMessage("Format"),
         "free_sub": MessageLookupByLibrary.simpleMessage("Free subcription"),
         "funds": MessageLookupByLibrary.simpleMessage("Withdraw funds"),
-        "gb": m2,
+        "gb": m4,
         "get_out": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to get out?"),
         "go_to": MessageLookupByLibrary.simpleMessage("Go to"),
@@ -131,7 +134,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
         "info": MessageLookupByLibrary.simpleMessage("Info"),
-        "kb": m3,
+        "kb": m5,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
         "location": MessageLookupByLibrary.simpleMessage("Location"),
@@ -142,7 +145,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Subscription management"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Maximum size for your drive: 180 GB"),
-        "mb": m4,
+        "mb": m6,
         "media": MessageLookupByLibrary.simpleMessage("Media"),
         "min_storage":
             MessageLookupByLibrary.simpleMessage("Minimum storage size: 32 GB"),
@@ -183,8 +186,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Password recovery"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "To recover your password, enter your email address in the field"),
-        "pb": m5,
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
+        "pb": m7,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to permanently delete your account"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -237,8 +240,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m4,
-        "tb": m6,
+        "subscription_pay_mounth": m8,
+        "tb": m9,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),

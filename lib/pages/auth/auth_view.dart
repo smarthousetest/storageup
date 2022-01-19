@@ -48,7 +48,6 @@ class _AuthViewState extends State<AuthView> {
     super.dispose();
   }
 
-  S translate = getIt<S>();
   @override
   void initState() {
     var height = 780.0;

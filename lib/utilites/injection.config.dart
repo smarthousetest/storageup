@@ -15,6 +15,7 @@ import '../pages/auth/forgot_password/forgot_password_bloc.dart' as _i9;
 import '../pages/files/file_bloc.dart' as _i19;
 import '../pages/home/home_bloc.dart' as _i10;
 import '../pages/settings/settings_bloc.dart' as _i14;
+import 'autoupload/autoupload_controller.dart';
 import 'controllers/files_controller.dart' as _i6;
 import 'controllers/load_controller.dart' as _i11;
 import 'controllers/user_controller.dart' as _i16;
@@ -40,7 +41,6 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i5.Dio>(() => serviceModule.dio, instanceName: 'auth_dio');
   gh.lazySingleton<_i5.Dio>(() => serviceModule.recordDio,
       instanceName: 'record_dio');
-  gh.factory<_i6.FilesController>(() => _i6.FilesController());
   gh.factory<_i6.FilesController>(() => serviceModule.filesController,
       instanceName: 'files_controller');
   gh.factory<_i7.FilesRepository>(() => _i7.FilesRepository());

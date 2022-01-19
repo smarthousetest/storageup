@@ -77,7 +77,8 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
   //Box  get _box async  => await Hive.openBox('file_path_db');
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
   final LoadController _loadController = getIt<LoadController>();
-  final UserRepository _userRepository = getIt<UserRepository>();
+  final UserRepository _userRepository =
+      getIt<UserRepository>(instanceName: 'user_repo');
   List<UploadObserver> _listeners = [];
 
   Future<void> _mapFilesPageOpened(

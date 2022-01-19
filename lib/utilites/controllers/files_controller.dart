@@ -11,7 +11,6 @@ import 'package:upstorage_desktop/utilites/repositories/file_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 
-@Injectable()
 class FilesController {
   MediaRepository _mediaRepo =
       getIt<MediaRepository>(instanceName: 'media_repo');

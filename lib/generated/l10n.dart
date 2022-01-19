@@ -1460,6 +1460,159 @@ class S {
     );
   }
 
+  /// `Change photo`
+  String get change_photo {
+    return Intl.message(
+      'Change photo',
+      name: 'change_photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Advantageous offer - switch to an annual subscription`
+  String get offer {
+    return Intl.message(
+      'Advantageous offer - switch to an annual subscription',
+      name: 'offer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment:`
+  String get payment {
+    return Intl.message(
+      'Payment:',
+      name: 'payment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Canceled`
+  String get canceled {
+    return Intl.message(
+      'Canceled',
+      name: 'canceled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Card:`
+  String get card {
+    return Intl.message(
+      'Card:',
+      name: 'card',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change`
+  String get change {
+    return Intl.message(
+      'Change',
+      name: 'change',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other subscriptions`
+  String get other_sub {
+    return Intl.message(
+      'Other subscriptions',
+      name: 'other_sub',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free subcription`
+  String get free_sub {
+    return Intl.message(
+      'Free subcription',
+      name: 'free_sub',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select`
+  String get select {
+    return Intl.message(
+      'Select',
+      name: 'select',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unsubscribe`
+  String get unsubscribe {
+    return Intl.message(
+      'Unsubscribe',
+      name: 'unsubscribe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete file`
+  String get delete_file {
+    return Intl.message(
+      'Delete file',
+      name: 'delete_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count_of_gb} GB for {cost} $/mounth`
+  String current_subscription_title(Object count_of_gb, Object cost) {
+    return Intl.message(
+      '$count_of_gb GB for $cost \$/mounth',
+      name: 'current_subscription_title',
+      desc: '',
+      args: [count_of_gb, cost],
+    );
+  }
+
+  /// `Next payment on {date} will be {cost} $`
+  String current_subscription_payment(DateTime date, Object cost) {
+    final DateFormat dateDateFormat = DateFormat.yMd(Intl.getCurrentLocale());
+    final String dateString = dateDateFormat.format(date);
+
+    return Intl.message(
+      'Next payment on $dateString will be $cost \$',
+      name: 'current_subscription_payment',
+      desc: '',
+      args: [dateString, cost],
+    );
+  }
+
+  /// `{count} $/mounth`
+  String subscription_pay_mounth(Object count) {
+    return Intl.message(
+      '$count \$/mounth',
+      name: 'subscription_pay_mounth',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Folder`
   String get foldr {
     return Intl.message(
@@ -1568,144 +1721,6 @@ class S {
       desc: '',
       args: [],
     );
-  }
-
-  /// `Delete`
-  String get delete {
-    return Intl.message(
-      'Delete',
-      name: 'delete',
-      desc: '',
-      args: [],
-    );
-  }
-  String get change_photo {
-    return Intl.message(
-      'Change photo',
-      name: 'change_photo',
-      desc: '',
-      args: [],
-    );
-  }
-  String get offer {
-    return Intl.message(
-      'Advantageous offer - switch to an annual subscription',
-      name: 'offer',
-      desc: '',
-      args: [],
-    );
-  }
-  /// `Advantageous offer - switch to an annual subscription`
-  /// `Payment:`
-  String get payment {
-    return Intl.message(
-      'Payment:',
-      name: 'payment',
-      desc: '',
-  }
-      args: [],
-    );
-  /// `Canceled`
-  String get canceled {
-    return Intl.message(
-      'Canceled',
-      name: 'canceled',
-      desc: '',
-      args: [],
-  }
-    );
-  /// `Card:`
-  String get card {
-    return Intl.message(
-      'Card:',
-      name: 'card',
-      desc: '',
-      args: [],
-    );
-  }
-  /// `Change`
-  String get change {
-    return Intl.message(
-      'Change',
-      name: 'change',
-      args: [],
-      desc: '',
-    );
-  }
-  /// `Other subscriptions`
-  String get other_sub {
-    return Intl.message(
-      'Other subscriptions',
-      name: 'other_sub',
-      desc: '',
-      args: [],
-    );
-  }
-  /// `Free subcription`
-  String get free_sub {
-    return Intl.message(
-      'Free subcription',
-      name: 'free_sub',
-      desc: '',
-      args: [],
-    );
-  }
-  /// `Select`
-  String get select {
-    return Intl.message(
-      'Select',
-      name: 'select',
-      desc: '',
-    );
-  }
-      args: [],
-  /// `Unsubscribe`
-  }
-    );
-      desc: '',
-  String get unsubscribe {
-    return Intl.message(
-      'Unsubscribe',
-      name: 'unsubscribe',
-      args: [],
-  /// `Delete file`
-    return Intl.message(
-  String get delete_file {
-      'Delete file',
-      name: 'delete_file',
-      desc: '',
-  }
-    );
-      args: [],
-  /// `{count_of_gb} GB for {cost} $/mounth`
-  String current_subscription_title(Object count_of_gb, Object cost) {
-    return Intl.message(
-      '$count_of_gb GB for $cost \$/mounth',
-      name: 'current_subscription_title',
-      desc: '',
-      args: [count_of_gb, cost],
-    );
-  }
-  String current_subscription_payment(DateTime date, Object cost) {
-  /// `Next payment on {date} will be {cost} $`
-    final DateFormat dateDateFormat = DateFormat.yMd(Intl.getCurrentLocale());
-    final String dateString = dateDateFormat.format(date);
-
-    return Intl.message(
-      'Next payment on $dateString will be $cost \$',
-      name: 'current_subscription_payment',
-      desc: '',
-      args: [dateString, cost],
-    );
-  }
-  /// `{count} $/mounth`
-    return Intl.message(
-  String subscription_pay_mounth(Object count) {
-      '$count \$/mounth',
-      name: 'subscription_pay_mounth',
-      desc: '',
-    );
-      args: [count],
   }
 }
 

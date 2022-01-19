@@ -24,19 +24,22 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(count) => "${count} файлов";
 
-  static String m2(count) => "${count} Гб";
+  static String m2(date, cost) => "Следующая оплата ${date} составит ${cost} ₽";
 
-  static String m3(count) => "${count} Кб";
+  static String m3(count_of_gb, cost) => "${count_of_gb} ГБ за ${cost} ₽/месяц";
 
-  static String m4(count) => "${count} Мб";
+  static String m4(count) => "${count} Гб";
 
-  static String m5(count) => "${count} Пб";
+  static String m5(count) => "${count} Кб";
 
-  static String m6(count) => "${count} Тб";
+  static String m6(count) => "${count} Мб";
 
-  static String m1(date, cost) => "Следующая оплата ${date} составит ${cost} ₽";
-  static String m2(count_of_gb, cost) => "${count_of_gb} ГБ за ${cost} ₽/месяц";
-  static String m4(count) => "${count} ₽/месяц";
+  static String m7(count) => "${count} Пб";
+
+  static String m8(count) => "${count} ₽/месяц";
+
+  static String m9(count) => "${count} Тб";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accaunt_deleting":
@@ -79,8 +82,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "create_folder": MessageLookupByLibrary.simpleMessage("Создание папки"),
         "created": MessageLookupByLibrary.simpleMessage("Создано"),
         "currency": MessageLookupByLibrary.simpleMessage("₽"),
-        "current_subscription_payment": m1,
-        "current_subscription_title": m2,
+        "current_subscription_payment": m2,
+        "current_subscription_title": m3,
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "date_format": MessageLookupByLibrary.simpleMessage("Формат даты"),
         "day": MessageLookupByLibrary.simpleMessage("день"),
@@ -120,7 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
         "free_sub": MessageLookupByLibrary.simpleMessage("Бесплатная подписка"),
         "funds": MessageLookupByLibrary.simpleMessage("Вывод средств"),
-        "gb": m2,
+        "gb": m4,
         "get_out": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите выйти?"),
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
@@ -130,7 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
         "info": MessageLookupByLibrary.simpleMessage("Свойства"),
-        "kb": m3,
+        "kb": m5,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "location": MessageLookupByLibrary.simpleMessage("Расположение"),
@@ -141,7 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Управление подпиской"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Максимальный размер для вашего диска: 180 ГБ"),
-        "mb": m4,
+        "mb": m6,
         "media": MessageLookupByLibrary.simpleMessage("Медиа"),
         "min_storage": MessageLookupByLibrary.simpleMessage(
             "Минимальный размер хранилища: 32 ГБ"),
@@ -182,7 +185,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
-        "pb": m5,
+        "pb": m7,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -237,8 +240,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
-        "subscription_pay_mounth": m4,
-        "tb": m6,
+        "subscription_pay_mounth": m8,
+        "tb": m9,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(

@@ -169,8 +169,7 @@
             "cost": {}
         }
     },
-    "subscription_pay_mounth": "{count} $/mounth"
-    "count_of_files" :"{count} files",
+    "subscription_pay_mounth": "{count} $/mounth",
     "foldr": "Folder",
     "b": "{count} B",
     "kb": "{count} Kb",
@@ -181,6 +180,5 @@
     "share":"Share",
     "move":"Move",
     "download":"Download",
-    "info":"Info",
-    "delete":"Delete"
+    "info":"Info"
 }
