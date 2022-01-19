@@ -3,9 +3,10 @@ import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/pages/auth/models/email.dart';
 import 'package:upstorage_desktop/pages/auth/models/name.dart';
-import 'package:upstorage_desktop/utilites/enums.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/auth_repository.dart';
+import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -13,162 +14,191 @@ import 'models/password.dart';
 
 @Injectable()
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(AuthState());
+  AuthBloc() : super(AuthState()) {
+    on((event, emit) async {
+      if (event is AuthLoginEmailChanged) {
+        _mapLoginEmailChanged(state, event, emit);
+      } else if (event is AuthLoginPasswordChanged) {
+        _mapLoginPasswordChanged(state, event, emit);
+      } else if (event is AuthRegisterEmailChanged) {
+        _mapRegisterEmailChanged(state, event, emit);
+      } else if (event is AuthRegisterPasswordChanged) {
+        _mapRegisterPasswordChanged(state, event, emit);
+      } else if (event is AuthNameChanged) {
+        _mapNameChanged(state, event, emit);
+      } else if (event is AuthAcceptTermsOfUseChanged) {
+        _mapAcceptTermsOfUseChanged(state, emit);
+      } else if (event is AuthRememberMeChanged) {
+        _mapRememberMeChanged(state, emit);
+      } else if (event is AuthLoginConfirmed) {
+        await _mapLoginSubmitted(event, state, emit);
+      } else if (event is AuthRegisterConfirmed) {
+        await _mapRegisterSubmitted(event, state, emit);
+      } else if (event is AuthClear) {
+        _mapClear(state, emit);
+      } else if (event is AuthSendEmailVerify) {
+        _mapEmailVerify(state, emit);
+      } else if (event is AuthPageOpened) {
+        await _mapOpened(state, emit);
+      }
+    });
+  }
   final AuthenticationRepository _authenticationRepository =
       getIt<AuthenticationRepository>();
+  final TokenRepository _tokenRepository = getIt<TokenRepository>();
 
-  @override
-  Stream<AuthState> mapEventToState(AuthEvent event) async* {
-    if (event is AuthLoginEmailChanged) {
-      yield _mapLoginEmailChanged(state, event);
-    } else if (event is AuthLoginPasswordChanged) {
-      yield _mapLoginPasswordChanged(state, event);
-    } else if (event is AuthRegisterEmailChanged) {
-      yield _mapRegisterEmailChanged(state, event);
-    } else if (event is AuthRegisterPasswordChanged) {
-      yield _mapRegisterPasswordChanged(state, event);
-    } else if (event is AuthNameChanged) {
-      yield _mapNameChanged(state, event);
-    } else if (event is AuthAcceptTermsOfUseChanged) {
-      yield _mapAcceptTermsOfUseChanged(state);
-    } else if (event is AuthRememberMeChanged) {
-      yield _mapRememberMeChanged(state);
-    } else if (event is AuthLoginConfirmed) {
-      yield* _mapLoginSubmitted(event, state);
-    } else if (event is AuthRegisterConfirmed) {
-      yield* _mapRegisterSubmitted(event, state);
-    } else if (event is AuthClear) {
-      yield _mapClear(state);
-    } else if (event is AuthSendEmailVerify) {
-      yield _mapEmailVerify(state);
-    }
-  }
-
-  AuthState _mapLoginEmailChanged(
+  void _mapLoginEmailChanged(
     AuthState state,
     AuthLoginEmailChanged event,
+    Emitter<AuthState> emit,
   ) {
     Email email = Email.dirty(event.email, event.needValidation);
 
-    return state.copyWith(
+    emit(state.copyWith(
       emailLogin: email,
       status: Formz.validate([email]),
-    );
+    ));
   }
 
-  AuthState _mapRegisterEmailChanged(
+  void _mapRegisterEmailChanged(
     AuthState state,
     AuthRegisterEmailChanged event,
+    Emitter<AuthState> emit,
   ) {
     Email email = Email.dirty(event.email, event.needValidation);
 
-    return state.copyWith(
+    emit(state.copyWith(
       emailRegister: email,
       status: Formz.validate([email]),
-    );
+    ));
   }
 
-  AuthState _mapLoginPasswordChanged(
+  void _mapLoginPasswordChanged(
     AuthState state,
     AuthLoginPasswordChanged event,
+    Emitter<AuthState> emit,
   ) {
     Password password = Password.dirty(event.password, event.needValidation);
 
-    return state.copyWith(
+    emit(state.copyWith(
       passwordLogin: password,
       status: Formz.validate([password]),
-    );
+    ));
   }
 
-  AuthState _mapRegisterPasswordChanged(
+  void _mapRegisterPasswordChanged(
     AuthState state,
     AuthRegisterPasswordChanged event,
+    Emitter<AuthState> emit,
   ) {
     Password password = Password.dirty(event.password, event.needValidation);
 
-    return state.copyWith(
+    emit(state.copyWith(
       passwordRegister: password,
       status: Formz.validate([password]),
-    );
+    ));
   }
 
-  AuthState _mapNameChanged(
+  void _mapNameChanged(
     AuthState state,
     AuthNameChanged event,
+    Emitter<AuthState> emit,
   ) {
     Name name = Name.dirty(event.name, event.needValidation);
 
-    return state.copyWith(
+    emit(state.copyWith(
       name: name,
       status: Formz.validate([name]),
-    );
+    ));
   }
 
-  AuthState _mapRememberMeChanged(AuthState state) {
-    return state.copyWith(rememberMe: !state.rememberMe);
+  void _mapRememberMeChanged(
+    AuthState state,
+    Emitter<AuthState> emit,
+  ) {
+    emit(state.copyWith(rememberMe: !state.rememberMe));
   }
 
-  AuthState _mapAcceptTermsOfUseChanged(AuthState state) {
-    return state.copyWith(acceptedTermsOfUse: !state.acceptedTermsOfUse);
+  void _mapAcceptTermsOfUseChanged(
+    AuthState state,
+    Emitter<AuthState> emit,
+  ) {
+    emit(state.copyWith(acceptedTermsOfUse: !state.acceptedTermsOfUse));
   }
 
-  AuthState _mapClear(AuthState state) {
-    return state.copyWith(
+  void _mapClear(
+    AuthState state,
+    Emitter<AuthState> emit,
+  ) {
+    emit(state.copyWith(
       emailRegister: Email.pure(),
       passwordRegister: Password.pure(),
       name: Name.pure(),
       status: FormzStatus.pure,
       action: null,
       error: null,
-    );
+    ));
   }
 
-  AuthState _mapEmailVerify(AuthState state) {
+  void _mapEmailVerify(
+    AuthState state,
+    Emitter<AuthState> emit,
+  ) {
     _authenticationRepository.sendEmailConfirm();
-    return state;
+    emit(state);
   }
 
-  Stream<AuthState> _mapLoginSubmitted(
+  Future<void> _mapLoginSubmitted(
     AuthLoginConfirmed event,
     AuthState state,
-  ) async* {
+    Emitter<AuthState> emit,
+  ) async {
     print(state.status.isValidated);
     if (state.status.isValidated) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      emit(state.copyWith(
+          status: FormzStatus.submissionInProgress,
+          action: RequestedAction.login));
+      print('authorization in progress');
       try {
         final result = await _authenticationRepository.logIn(
           email: state.emailLogin.value,
           password: state.passwordLogin.value,
         );
         if (result == AuthenticationStatus.authenticated) {
-          yield state.copyWith(status: FormzStatus.submissionSuccess);
+          emit(state.copyWith(
+              status: FormzStatus.submissionSuccess,
+              action: RequestedAction.login));
         } else if (result == AuthenticationStatus.wrongPassword) {
-          yield state.copyWith(
+          emit(state.copyWith(
             status: FormzStatus.submissionFailure,
             error: AuthError.wrongCredentials,
             action: RequestedAction.login,
-          );
+          ));
         } else {
-          yield state.copyWith(
+          emit(state.copyWith(
             status: FormzStatus.submissionFailure,
             action: RequestedAction.login,
-          );
+          ));
         }
       } on Exception catch (_) {
-        yield state.copyWith(
+        emit(state.copyWith(
           status: FormzStatus.submissionFailure,
           action: RequestedAction.login,
-        );
+        ));
       }
     }
   }
 
-  Stream<AuthState> _mapRegisterSubmitted(
+  Future<void> _mapRegisterSubmitted(
     AuthRegisterConfirmed event,
     AuthState state,
-  ) async* {
+    Emitter<AuthState> emit,
+  ) async {
     if (state.status.isValidated) {
-      yield state.copyWith(status: FormzStatus.submissionInProgress);
+      emit(state.copyWith(
+          status: FormzStatus.submissionInProgress,
+          action: RequestedAction.registration));
+
       print('registration in progress');
       try {
         final result = await _authenticationRepository.register(
@@ -176,24 +206,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: state.passwordRegister.value,
         );
         if (result == AuthenticationStatus.authenticated) {
-          yield state.copyWith(status: FormzStatus.submissionSuccess);
+          emit(state.copyWith(status: FormzStatus.submissionSuccess));
         } else if (result == AuthenticationStatus.emailAllreadyRegistered) {
-          yield state.copyWith(
+          emit(state.copyWith(
             status: FormzStatus.submissionFailure,
             error: AuthError.emailAlreadyRegistered,
             action: RequestedAction.registration,
-          );
+          ));
         } else {
-          yield state.copyWith(
+          emit(state.copyWith(
             status: FormzStatus.submissionFailure,
             action: RequestedAction.registration,
-          );
+          ));
         }
       } on Exception catch (_) {
-        yield state.copyWith(
+        emit(state.copyWith(
           status: FormzStatus.submissionFailure,
           action: RequestedAction.registration,
-        );
+        ));
+      }
+    }
+  }
+
+  Future<void> _mapOpened(AuthState state, Emitter<AuthState> emit) async {
+    var token = await _tokenRepository.getApiToken();
+
+    if (token != null && token.isNotEmpty) {
+      var result = await _authenticationRepository.updateUserInfo();
+      if (result == AuthenticationStatus.authenticated) {
+        emit(state.copyWith(
+            status: FormzStatus.submissionSuccess,
+            action: RequestedAction.login));
       }
     }
   }

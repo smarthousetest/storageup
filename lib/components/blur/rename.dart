@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
 
 class BlurRename extends StatefulWidget {
   @override
@@ -98,8 +97,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                                 children: [
                                   Container(
                                     child: ElevatedButton(
-                                      onPressed: () {
-                                      },
+                                      onPressed: () {},
                                       child: Text(
                                         'Отмена',
                                         style: TextStyle(
@@ -117,7 +115,8 @@ class _ButtonTemplateState extends State<BlurRename> {
                                           color: Color(0xff70BBF6),
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -126,7 +125,8 @@ class _ButtonTemplateState extends State<BlurRename> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(context, myController.text);
+                                        Navigator.pop(
+                                            context, myController.text);
                                       },
                                       child: Text(
                                         'Сохранить',
@@ -145,7 +145,8 @@ class _ButtonTemplateState extends State<BlurRename> {
                                           color: Color(0xff70BBF6),
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),

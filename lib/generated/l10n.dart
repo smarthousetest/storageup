@@ -51,10 +51,10 @@ class S {
   }
 
   /// `Welcome to StorageUp`
-  String get welcome_to_upsctorage {
+  String get welcome_to_upstorage {
     return Intl.message(
       'Welcome to StorageUp',
-      name: 'welcome_to_upsctorage',
+      name: 'welcome_to_upstorage',
       desc: '',
       args: [],
     );
@@ -81,10 +81,10 @@ class S {
   }
 
   /// `Already have an account?`
-  String get allready_have_an_account {
+  String get already_have_an_account {
     return Intl.message(
       'Already have an account?',
-      name: 'allready_have_an_account',
+      name: 'already_have_an_account',
       desc: '',
       args: [],
     );
@@ -110,10 +110,10 @@ class S {
     );
   }
 
-  /// `Email`
+  /// `E-mail`
   String get email {
     return Intl.message(
-      'Email',
+      'E-mail',
       name: 'email',
       desc: '',
       args: [],
@@ -261,10 +261,10 @@ class S {
   }
 
   /// `User with this Email is already registered`
-  String get allready_registered_email {
+  String get already_registered_email {
     return Intl.message(
       'User with this Email is already registered',
-      name: 'allready_registered_email',
+      name: 'already_registered_email',
       desc: '',
       args: [],
     );
@@ -281,10 +281,10 @@ class S {
   }
 
   /// `, to reset your password, follow the link inside the letter`
-  String get resore_password_after_email {
+  String get restore_password_after_email {
     return Intl.message(
       ', to reset your password, follow the link inside the letter',
-      name: 'resore_password_after_email',
+      name: 'restore_password_after_email',
       desc: '',
       args: [],
     );
@@ -305,6 +305,16 @@ class S {
     return Intl.message(
       'Nothing came to Email?',
       name: 'nothing_on_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send email again`
+  String get to_send_letter {
+    return Intl.message(
+      'Send email again',
+      name: 'to_send_letter',
       desc: '',
       args: [],
     );
@@ -340,10 +350,10 @@ class S {
     );
   }
 
-  /// `, to confirm the email address, follow the link inside the letter`
+  /// ` , to confirm the email address, follow the link inside the letter`
   String get email_confirming_after {
     return Intl.message(
-      ', to confirm the email address, follow the link inside the letter',
+      ' , to confirm the email address, follow the link inside the letter',
       name: 'email_confirming_after',
       desc: '',
       args: [],
@@ -360,11 +370,1211 @@ class S {
     );
   }
 
-  /// `Back to registration`
-  String get back_to_registration {
+  /// `Confirmation of e-mail address`
+  String get email_confirming_reg {
     return Intl.message(
-      'Back to registration',
-      name: 'back_to_registration',
+      'Confirmation of e-mail address',
+      name: 'email_confirming_reg',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To complete registration, please confirm your e-mail address.`
+  String get email_confirming_confirm {
+    return Intl.message(
+      'To complete registration, please confirm your e-mail address.',
+      name: 'email_confirming_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We sent a letter to the mail `
+  String get email_confirming_letter {
+    return Intl.message(
+      'We sent a letter to the mail ',
+      name: 'email_confirming_letter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To confirm, follow the link inside the letter.`
+  String get email_confirming_link {
+    return Intl.message(
+      'To confirm, follow the link inside the letter.',
+      name: 'email_confirming_link',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registration completed`
+  String get register_complete {
+    return Intl.message(
+      'Registration completed',
+      name: 'register_complete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your e-mail address has been successfully confirmed`
+  String get email_successfully {
+    return Intl.message(
+      'Your e-mail address has been successfully confirmed',
+      name: 'email_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to authorization`
+  String get back_to_authorization {
+    return Intl.message(
+      'Go to authorization',
+      name: 'back_to_authorization',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to authorization`
+  String get go_to_authorization {
+    return Intl.message(
+      'Go to authorization',
+      name: 'go_to_authorization',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Non-existent e-mail`
+  String get non_existent_email {
+    return Intl.message(
+      'Non-existent e-mail',
+      name: 'non_existent_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get name {
+    return Intl.message(
+      'Name',
+      name: 'name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Format`
+  String get format {
+    return Intl.message(
+      'Format',
+      name: 'format',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date`
+  String get date {
+    return Intl.message(
+      'Date',
+      name: 'date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Size`
+  String get size {
+    return Intl.message(
+      'Size',
+      name: 'size',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add`
+  String get add {
+    return Intl.message(
+      'Add',
+      name: 'add',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Renting a place`
+  String get sell_space {
+    return Intl.message(
+      'Renting a place',
+      name: 'sell_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How it works?`
+  String get how_work {
+    return Intl.message(
+      'How it works?',
+      name: 'how_work',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can use free space on your hard`
+  String get rent_space {
+    return Intl.message(
+      'You can use free space on your hard',
+      name: 'rent_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `disk - rent space and make money on it!`
+  String get make_money {
+    return Intl.message(
+      'disk - rent space and make money on it!',
+      name: 'make_money',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select the folder on the drive where you have free space.`
+  String get select_folder {
+    return Intl.message(
+      'Select the folder on the drive where you have free space.',
+      name: 'select_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We use this space to store files, and you `
+  String get store_files {
+    return Intl.message(
+      'We use this space to store files, and you ',
+      name: 'store_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `can make money from it.`
+  String get money {
+    return Intl.message(
+      'can make money from it.',
+      name: 'money',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start earning in two steps:`
+  String get money_two_step {
+    return Intl.message(
+      'Start earning in two steps:',
+      name: 'money_two_step',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a folder`
+  String get folder {
+    return Intl.message(
+      'Select a folder',
+      name: 'folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Specify the size of the space for rent`
+  String get size_of_space {
+    return Intl.message(
+      'Specify the size of the space for rent',
+      name: 'size_of_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `As soon as we upload the first files there, money will be credited `
+  String get upload_file {
+    return Intl.message(
+      'As soon as we upload the first files there, money will be credited ',
+      name: 'upload_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `to your balance.`
+  String get your_balance {
+    return Intl.message(
+      'to your balance.',
+      name: 'your_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have no storage locations yet`
+  String get not_storage {
+    return Intl.message(
+      'You have no storage locations yet',
+      name: 'not_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add location`
+  String get add_location {
+    return Intl.message(
+      'Add location',
+      name: 'add_location',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose storage location`
+  String get select_storage {
+    return Intl.message(
+      'Choose storage location',
+      name: 'select_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Overview`
+  String get overview {
+    return Intl.message(
+      'Overview',
+      name: 'overview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set storage size`
+  String get set_size {
+    return Intl.message(
+      'Set storage size',
+      name: 'set_size',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum storage size: 32 GB`
+  String get min_storage {
+    return Intl.message(
+      'Minimum storage size: 32 GB',
+      name: 'min_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Maximum size for your drive: 180 GB`
+  String get max_storage {
+    return Intl.message(
+      'Maximum size for your drive: 180 GB',
+      name: 'max_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your income`
+  String get your_income {
+    return Intl.message(
+      'Your income',
+      name: 'your_income',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space`
+  String get our_tariff {
+    return Intl.message(
+      'Our tariff assumes payment of 0.2 rubles / day for 1 GB of surrendered space',
+      name: 'our_tariff',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your earnings will be`
+  String get earnings {
+    return Intl.message(
+      'Your earnings will be',
+      name: 'earnings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get save {
+    return Intl.message(
+      'Save',
+      name: 'save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exit`
+  String get exit {
+    return Intl.message(
+      'Exit',
+      name: 'exit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `day`
+  String get day {
+    return Intl.message(
+      'day',
+      name: 'day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `$`
+  String get currency {
+    return Intl.message(
+      '\$',
+      name: 'currency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Trust level`
+  String get trust_level {
+    return Intl.message(
+      'Trust level',
+      name: 'trust_level',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Latest file`
+  String get latest_file {
+    return Intl.message(
+      'Latest file',
+      name: 'latest_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Get more space change your subscription!`
+  String get more_space {
+    return Intl.message(
+      'Get more space change your subscription!',
+      name: 'more_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to`
+  String get go_to {
+    return Intl.message(
+      'Go to',
+      name: 'go_to',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not enough space?`
+  String get not_space {
+    return Intl.message(
+      'Not enough space?',
+      name: 'not_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription management`
+  String get management {
+    return Intl.message(
+      'Subscription management',
+      name: 'management',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Withdraw funds`
+  String get funds {
+    return Intl.message(
+      'Withdraw funds',
+      name: 'funds',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active subscription`
+  String get active_sub {
+    return Intl.message(
+      'Active subscription',
+      name: 'active_sub',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personal data`
+  String get personal_data {
+    return Intl.message(
+      'Personal data',
+      name: 'personal_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Regulations`
+  String get regulations {
+    return Intl.message(
+      'Regulations',
+      name: 'regulations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Options`
+  String get options {
+    return Intl.message(
+      'Options',
+      name: 'options',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Privacy policy`
+  String get privacy_policy {
+    return Intl.message(
+      'Privacy policy',
+      name: 'privacy_policy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1. General Provisions`
+  String get provisions {
+    return Intl.message(
+      '1. General Provisions',
+      name: 'provisions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» (далее - Закон о персональных данных) и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Михайловым Иваном Сергеевичем (далее – Оператор).1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.1.2. Настоящая политика Оператора в отношении обработки персональных данных (далее – Политика) применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта httpsː//thismywebsite·com.`
+  String get personal {
+    return Intl.message(
+      'Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от 27.07.2006. №152-ФЗ «О персональных данных» (далее - Закон о персональных данных) и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Михайловым Иваном Сергеевичем (далее – Оператор).1.1. Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.1.2. Настоящая политика Оператора в отношении обработки персональных данных (далее – Политика) применяется ко всей информации, которую Оператор может получить о посетителях веб-сайта httpsː//thismywebsite·com.',
+      name: 'personal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile photo`
+  String get profile_photo {
+    return Intl.message(
+      'Profile photo',
+      name: 'profile_photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mail`
+  String get mail {
+    return Intl.message(
+      'Mail',
+      name: 'mail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change password`
+  String get change_password {
+    return Intl.message(
+      'Change password',
+      name: 'change_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete account`
+  String get delete_account {
+    return Intl.message(
+      'Delete account',
+      name: 'delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Common parameters`
+  String get parameters {
+    return Intl.message(
+      'Common parameters',
+      name: 'parameters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date format`
+  String get date_format {
+    return Intl.message(
+      'Date format',
+      name: 'date_format',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change password`
+  String get change_Password {
+    return Intl.message(
+      'Change password',
+      name: 'change_Password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The new password must be at least 8 characters long`
+  String get new_password_8 {
+    return Intl.message(
+      'The new password must be at least 8 characters long',
+      name: 'new_password_8',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New password`
+  String get new_password {
+    return Intl.message(
+      'New password',
+      name: 'new_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Repeat new password`
+  String get repeat_passsword {
+    return Intl.message(
+      'Repeat new password',
+      name: 'repeat_passsword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your old password`
+  String get old_password {
+    return Intl.message(
+      'Enter your old password',
+      name: 'old_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account deleting`
+  String get accaunt_deleting {
+    return Intl.message(
+      'Account deleting',
+      name: 'accaunt_deleting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to permanently delete your account`
+  String get permanently_delete {
+    return Intl.message(
+      'Are you sure you want to permanently delete your account',
+      name: 'permanently_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `in StorageUp?`
+  String get in_StorageUp {
+    return Intl.message(
+      'in StorageUp?',
+      name: 'in_StorageUp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your files will disappear forever and cannot be recovered.`
+  String get cannot_recovered {
+    return Intl.message(
+      'Your files will disappear forever and cannot be recovered.',
+      name: 'cannot_recovered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Before deleting an account`
+  String get before_deleting {
+    return Intl.message(
+      'Before deleting an account',
+      name: 'before_deleting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `contact us`
+  String get contact_us {
+    return Intl.message(
+      'contact us',
+      name: 'contact_us',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `, maybe we can help you.`
+  String get we_can_help {
+    return Intl.message(
+      ', maybe we can help you.',
+      name: 'we_can_help',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reason for deletion`
+  String get reason_deleting {
+    return Intl.message(
+      'Reason for deletion',
+      name: 'reason_deleting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tell us why you decided to delete your account`
+  String get tell_us {
+    return Intl.message(
+      'Tell us why you decided to delete your account',
+      name: 'tell_us',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete permanently`
+  String get delete_permanently {
+    return Intl.message(
+      'Delete permanently',
+      name: 'delete_permanently',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter password`
+  String get enter_password {
+    return Intl.message(
+      'Enter password',
+      name: 'enter_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Folder`
+  String get folder_dir {
+    return Intl.message(
+      'Folder',
+      name: 'folder_dir',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recent`
+  String get recent {
+    return Intl.message(
+      'Recent',
+      name: 'recent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Properties`
+  String get properties {
+    return Intl.message(
+      'Properties',
+      name: 'properties',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type`
+  String get type {
+    return Intl.message(
+      'Type',
+      name: 'type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Created`
+  String get created {
+    return Intl.message(
+      'Created',
+      name: 'created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Changed`
+  String get changed {
+    return Intl.message(
+      'Changed',
+      name: 'changed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Viewed`
+  String get viewed {
+    return Intl.message(
+      'Viewed',
+      name: 'viewed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location`
+  String get location {
+    return Intl.message(
+      'Location',
+      name: 'location',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open`
+  String get open {
+    return Intl.message(
+      'Open',
+      name: 'open',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create folder`
+  String get create_folder {
+    return Intl.message(
+      'Create folder',
+      name: 'create_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create a folder`
+  String get create_a_folder {
+    return Intl.message(
+      'Create a folder',
+      name: 'create_a_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create album`
+  String get create_album {
+    return Intl.message(
+      'Create album',
+      name: 'create_album',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload to files`
+  String get upload_to_files {
+    return Intl.message(
+      'Upload to files',
+      name: 'upload_to_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload to media`
+  String get upload_to_media {
+    return Intl.message(
+      'Upload to media',
+      name: 'upload_to_media',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You are renting`
+  String get you_rent {
+    return Intl.message(
+      'You are renting',
+      name: 'you_rent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You turn in`
+  String get you_turn_in {
+    return Intl.message(
+      'You turn in',
+      name: 'you_turn_in',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload`
+  String get upload {
+    return Intl.message(
+      'Upload',
+      name: 'upload',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rent`
+  String get rent {
+    return Intl.message(
+      'Rent',
+      name: 'rent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to get out?`
+  String get get_out {
+    return Intl.message(
+      'Are you sure you want to get out?',
+      name: 'get_out',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload file`
+  String get upload_files {
+    return Intl.message(
+      'Upload file',
+      name: 'upload_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload folder`
+  String get upload_folder {
+    return Intl.message(
+      'Upload folder',
+      name: 'upload_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upload media`
+  String get upload_media {
+    return Intl.message(
+      'Upload media',
+      name: 'upload_media',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get all {
+    return Intl.message(
+      'All',
+      name: 'all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Photos`
+  String get photos {
+    return Intl.message(
+      'Photos',
+      name: 'photos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Video`
+  String get video {
+    return Intl.message(
+      'Video',
+      name: 'video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Files`
+  String get files {
+    return Intl.message(
+      'Files',
+      name: 'files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home`
+  String get home {
+    return Intl.message(
+      'Home',
+      name: 'home',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Media`
+  String get media {
+    return Intl.message(
+      'Media',
+      name: 'media',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get settings {
+    return Intl.message(
+      'Settings',
+      name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All files`
+  String get all_files {
+    return Intl.message(
+      'All files',
+      name: 'all_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} files`
+  String count_of_files(Object count) {
+    return Intl.message(
+      '$count files',
+      name: 'count_of_files',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Folder`
+  String get foldr {
+    return Intl.message(
+      'Folder',
+      name: 'foldr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} B`
+  String b(Object count) {
+    return Intl.message(
+      '$count B',
+      name: 'b',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Kb`
+  String kb(Object count) {
+    return Intl.message(
+      '$count Kb',
+      name: 'kb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Mb`
+  String mb(Object count) {
+    return Intl.message(
+      '$count Mb',
+      name: 'mb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Gb`
+  String gb(Object count) {
+    return Intl.message(
+      '$count Gb',
+      name: 'gb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Tb`
+  String tb(Object count) {
+    return Intl.message(
+      '$count Tb',
+      name: 'tb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} Pb`
+  String pb(Object count) {
+    return Intl.message(
+      '$count Pb',
+      name: 'pb',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Share`
+  String get share {
+    return Intl.message(
+      'Share',
+      name: 'share',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Move`
+  String get move {
+    return Intl.message(
+      'Move',
+      name: 'move',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download`
+  String get download {
+    return Intl.message(
+      'Download',
+      name: 'download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Info`
+  String get info {
+    return Intl.message(
+      'Info',
+      name: 'info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get delete {
+    return Intl.message(
+      'Delete',
+      name: 'delete',
       desc: '',
       args: [],
     );

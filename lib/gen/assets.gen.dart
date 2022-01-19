@@ -17,7 +17,9 @@ class $AssetsAuthGen {
   AssetGenImage get manLeft => const AssetGenImage('assets/auth/man_left.png');
   AssetGenImage get manRight =>
       const AssetGenImage('assets/auth/man_right.png');
-  AssetGenImage get oblaka => const AssetGenImage('assets/auth/oblaka.png');
+  AssetGenImage get oblakaRight =>
+      const AssetGenImage('assets/auth/oblaka.png');
+  AssetGenImage get oblakaLeft => const AssetGenImage('assets/auth/oblaka.png');
   AssetGenImage get rightBackground =>
       const AssetGenImage('assets/auth/right_background.png');
 }

@@ -1,130 +1,72 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
+import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
-
 @Injectable()
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeState());
-  // final AuthenticationRepository _authenticationRepository =
-  // getIt<AuthenticationRepository>();
+  HomeBloc() : super(HomeState()) {
+    on<HomeUserActionChoosed>((event, emit) async {
+      switch (event.action) {
+        case UserAction.uploadFiles:
+          _uploadFiles(event, emit);
+          break;
+        case UserAction.createFolder:
+          await _createFolder(event, emit);
+          break;
+        case UserAction.createAlbum:
+          await _cerateAlbum(event, emit);
+          break;
+        default:
+          break;
+      }
+    });
 
-  @override
-  Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    // if (event is AuthLoginEmailChanged) {
-    //   yield _mapLoginEmailChanged(state, event);
-    // } else if (event is AuthLoginPasswordChanged) {
-    //   yield _mapLoginPasswordChanged(state, event);
-    // } else if (event is AuthRegisterEmailChanged) {
-    //   yield _mapRegisterEmailChanged(state, event);
-    // } else if (event is AuthRegisterPasswordChanged) {
-    //   yield _mapRegisterPasswordChanged(state, event);
-    // } else if (event is AuthNameChanged) {
-    //   yield _mapNameChanged(state, event);
-    // } else if (event is AuthAcceptTermsOfUseChanged) {
-    //   yield _mapAcceptTermsOfUseChanged(state);
-    // } else if (event is AuthRememberMeChanged) {
-    //   yield _mapRememberMeChanged(state);
-    // } else if (event is AuthLoginConfirmed) {
-    //   yield* _mapLoginSubmitted(event, state);
-    // }
+    on<HomePageOpened>((event, emit) async {
+      getApplicationDocumentsDirectory().then((value) {
+        Hive.init(value.path);
+        print('Hive initialized');
+      });
+    });
   }
 
-  // HomeState _mapLoginEmailChanged(
-  //     HomeState state,
-  //     AuthLoginEmailChanged event,
-  //     ) {
-  //   // Email email = Email.dirty(event.email);
-  //
-  //   return state.copyWith(
-  //     // emailLogin: email,
-  //     // status: Formz.validate([email]),
-  //   );
-  // }
+  var _loadController = getIt<LoadController>();
+  var _filesController = getIt<FilesController>();
 
-  // AuthState _mapRegisterEmailChanged(
-  //     AuthState state,
-  //     AuthRegisterEmailChanged event,
-  //     ) {
-  //   Email email = Email.dirty(event.email);
-  //
-  //   return state.copyWith(
-  //     emailRegister: email,
-  //     status: Formz.validate([email]),
-  //   );
+  Future<void> _uploadFiles(
+    HomeUserActionChoosed event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (event.values != null) {
+      for (int i = 0; i < event.values!.length; i++) {
+        await _loadController.uploadFile(filePath: event.values![i]);
+      }
+    }
   }
 
-  // AuthState _mapLoginPasswordChanged(
-  //     AuthState state,
-  //     AuthLoginPasswordChanged event,
-  //     ) {
-  //   Password password = Password.dirty(event.password);
-  //
-  //   return state.copyWith(
-  //     passwordLogin: password,
-  //     status: Formz.validate([password]),
-  //   );
-  // }
+  Future<void> _createFolder(
+    HomeUserActionChoosed event,
+    Emitter<HomeState> emit,
+  ) async {
+    var filesRootFolder = _filesController.getFilesRootFolder;
+    if (event.values?.first != null && filesRootFolder != null) {
+      _filesController.createFolder(event.values!.first!, filesRootFolder.id);
+    }
+  }
 
-  // AuthState _mapRegisterPasswordChanged(
-  //     AuthState state,
-  //     AuthRegisterPasswordChanged event,
-  //     ) {
-  //   Password password = Password.dirty(event.password);
-  //
-  //   return state.copyWith(
-  //     passwordRegister: password,
-  //     status: Formz.validate([password]),
-  //   );
-  // }
-
-  // AuthState _mapNameChanged(
-  //     AuthState state,
-  //     AuthNameChanged event,
-  //     ) {
-  //   Name name = Name.dirty(event.name);
-  //
-  //   return state.copyWith(
-  //     name: name,
-  //     status: Formz.validate([name]),
-  //   );
-  // }
-
-  // AuthState _mapRememberMeChanged(AuthState state) {
-  //   return state.copyWith(rememberMe: !state.rememberMe);
-  // }
-  //
-  // AuthState _mapAcceptTermsOfUseChanged(AuthState state) {
-  //   return state.copyWith(acceptedTermsOfUse: !state.acceptedTermsOfUse);
-  // }
-
-  // Stream<AuthState> _mapLoginSubmitted(
-  //     AuthLoginConfirmed event,
-  //     AuthState state,
-  //     ) async* {
-  //   if (state.status.isValidated) {
-  //     yield state.copyWith(status: FormzStatus.submissionInProgress);
-  //     try {
-  //       final result = await _authenticationRepository.logIn(
-  //         email: state.emailLogin.value,
-  //         password: state.passwordLogin.value,
-  //       );
-  //       if (result == AuthenticationStatus.authenticated) {
-  //         yield state.copyWith(status: FormzStatus.submissionSuccess);
-  //       } else if (result == AuthenticationStatus.wrongPassword) {
-  //         yield state.copyWith(
-  //           status: FormzStatus.submissionFailure,
-  //           error: AuthError.wrongCredentials,
-  //         );
-  //       } else {
-  //         yield state.copyWith(status: FormzStatus.submissionFailure);
-  //       }
-  //     } on Exception catch (_) {
-  //       yield state.copyWith(status: FormzStatus.submissionFailure);
-  //     }
-  //   }
-  // }
-// }
+  Future<void> _cerateAlbum(
+    HomeUserActionChoosed event,
+    Emitter<HomeState> emit,
+  ) async {
+    var mediaRootFolderId = _filesController.getMediaRootFolderId();
+    if (event.values?.first != null && mediaRootFolderId != null) {
+      _filesController.createFolder(event.values!.first!, mediaRootFolderId);
+    }
+  }
+}

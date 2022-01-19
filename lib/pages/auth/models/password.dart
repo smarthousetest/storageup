@@ -9,7 +9,6 @@ class Password extends FormzInput<String, PasswordValidationError> {
   const Password.dirty([String value = '', bool needValidation = true])
       : this.needValidation = needValidation,
         super.dirty(value);
-
   final bool needValidation;
 
   @override

@@ -11,9 +11,7 @@ class MyProgressIndicator extends StatefulWidget {
   _MyProgressIndicator createState() => new _MyProgressIndicator();
 
   MyProgressIndicator(
-      {required this.percent,
-      required this.color,
-      required this.radius});
+      {required this.percent, required this.color, required this.radius});
 }
 
 class _MyProgressIndicator extends State<MyProgressIndicator> {

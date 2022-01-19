@@ -4,14 +4,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:upstorage_desktop/constants.dart';
 
 class CustomDirButton extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   String name;
-  TextEditingController? dir_name;
+  TextEditingController? dirName;
   Function()? onTap;
-  CustomDirButton({required this.name,  this.onTap});
+  String description;
+  bool readonly;
+  CustomDirButton({
+    required this.name,
+    this.onTap,
+    required this.description,
+    required this.readonly,
+  });
 }
 
 class _ButtonTemplateState extends State<CustomDirButton> {
@@ -21,6 +29,10 @@ class _ButtonTemplateState extends State<CustomDirButton> {
       final overlay =
           Overlay.of(context)!.context.findRenderObject() as RenderBox;
       final menuItem = await showMenu<int>(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(width: 1, color: Theme.of(context).dividerColor),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           context: context,
           color: Colors.white,
           items: [
@@ -28,16 +40,16 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                 child: Row(
                   children: [
                     SvgPicture.asset(
-                      'assets/file_page/upload.svg',
+                      'assets/file_page/like.svg',
                       width: 20,
                       height: 20,
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: Text(
-                        'Добавить файлы',
+                        'В избранное',
                         style: TextStyle(
-                          color: Color(0xff7D7D7D),
+                          color: Theme.of(context).disabledColor,
                           fontSize: 14,
                         ),
                       ),
@@ -48,43 +60,24 @@ class _ButtonTemplateState extends State<CustomDirButton> {
             PopupMenuItem(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/home_page/glad.jpg',
+                    SvgPicture.asset(
+                      'assets/file_page/save_dir.svg',
                       width: 20,
                       height: 20,
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                       child: Text(
-                        'Копировать',
+                        'Скачать',
                         style: TextStyle(
-                          color: Color(0xff7D7D7D),
+                          color: Theme.of(context).disabledColor,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                   ],
                 ),
                 value: 2),
-            PopupMenuItem(
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/home_page/glad.jpg',
-                      width: 20,
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      child: Text(
-                        'Вырезать',
-                        style: TextStyle(
-                          color: Color(0xff7D7D7D),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                value: 3),
             PopupMenuItem(
                 child: Row(
                   children: [
@@ -98,13 +91,14 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                       child: Text(
                         'Переименовать',
                         style: TextStyle(
-                          color: Color(0xff7D7D7D),
+                          color: Theme.of(context).disabledColor,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                   ],
                 ),
-                value: 4),
+                value: 3),
             PopupMenuItem(
                 child: Row(
                   children: [
@@ -118,33 +112,40 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                       child: Text(
                         'Свойства',
                         style: TextStyle(
-                          color: Color(0xff7D7D7D),
+                          color: Theme.of(context).disabledColor,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                   ],
+                ),
+                value: 4),
+            PopupMenuItem(
+                child: Container(
+                  color: Theme.of(context).indicatorColor.withAlpha(30),
+                  height: 43,
+                  width: 189,
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/file_page/trash.svg',
+                        width: 20,
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                        child: Text(
+                          'Удалить',
+                          style: TextStyle(
+                            color: Theme.of(context).indicatorColor,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 value: 5),
-            PopupMenuItem(
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/file_page/trash.svg',
-                      width: 20,
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      child: Text(
-                        'Удалить',
-                        style: TextStyle(
-                          color: Color(0xff7D7D7D),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                value: 6),
           ],
           position: RelativeRect.fromSize(
               event.position & Size(48.0, 48.0), overlay.size));
@@ -210,8 +211,8 @@ class _ButtonTemplateState extends State<CustomDirButton> {
     return Padding(
       padding: const EdgeInsets.only(right: 31),
       child: Container(
-        width: 140,
-        height: 140,
+        width: 130,
+        height: 130,
         child: Listener(
           child: ElevatedButton(
             child: Column(
@@ -220,22 +221,35 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: SvgPicture.asset(
                     'assets/home_page/files_r.svg',
-                    height: 58,
-                    width: 58,
+                    height: 46,
+                    width: 46,
+                    color: widget.readonly ? kPurpleColor : kLightGreenColor,
                   ),
                 ),
                 Text(
                   widget.name,
                   textAlign: TextAlign.center,
+                  maxLines: 1,
                   style: TextStyle(
                     fontSize: 16,
-                    fontFamily: 'Lato',
-                    color: Color(0xff7D7D7D),
+                    fontFamily: kNormalTextFontFamily,
+                    overflow: TextOverflow.ellipsis,
+                    color: Theme.of(context).disabledColor,
+                  ),
+                ),
+                Text(
+                  widget.description,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: kNormalTextFontFamily,
+                    overflow: TextOverflow.ellipsis,
+                    color: Theme.of(context).colorScheme.onBackground,
                   ),
                 ),
               ],
             ),
             onPressed: widget.onTap,
+
             /*onPressed: () async {
               var str = await showDialog(
                 context: context,
@@ -254,18 +268,19 @@ class _ButtonTemplateState extends State<CustomDirButton> {
               // print(dirs_list.length);
             },*/
             style: ElevatedButton.styleFrom(
-              primary: Colors.white,
+              primary: Theme.of(context).primaryColor,
+              onSurface: Theme.of(context).primaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
                 side: BorderSide(
                   width: 2,
-                  color: Color(0xffF1F8FE),
+                  color: Theme.of(context).dividerColor,
                 ),
               ),
               elevation: 0,
             ),
           ),
-          onPointerDown: _onPointerDown,
+          onPointerDown: widget.readonly ? null : _onPointerDown,
         ),
       ),
     );

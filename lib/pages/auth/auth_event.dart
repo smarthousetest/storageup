@@ -7,6 +7,10 @@ abstract class AuthEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class AuthPageOpened extends AuthEvent {
+  AuthPageOpened();
+}
+
 class AuthRegisterEmailChanged extends AuthEvent {
   final String email;
   final bool needValidation;

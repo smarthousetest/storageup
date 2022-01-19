@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/pages/auth/models/email.dart';
-import 'package:upstorage_desktop/utilites/enums.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/auth_repository.dart';
 
@@ -30,7 +30,7 @@ class ForgotPasswordBloc
     ForgotPasswordEmailChanged event,
     ForgotPasswordState state,
   ) {
-    var email = Email.dirty(event.email);
+    var email = Email.dirty(event.email, event.needValidation);
     return state.copyWith(
       email: email,
       status: Formz.validate([email]),
@@ -49,7 +49,9 @@ class ForgotPasswordBloc
       if (result == AuthenticationStatus.authenticated) {
         yield state.copyWith(status: FormzStatus.submissionSuccess);
       } else {
-        yield state.copyWith(status: FormzStatus.submissionFailure);
+        yield state.copyWith(
+            status: FormzStatus.submissionFailure,
+            error: AuthError.wrongCredentials);
       }
     } on Exception catch (_) {
       yield state.copyWith(status: FormzStatus.submissionFailure);

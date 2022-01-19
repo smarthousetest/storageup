@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
-import '../enums.dart';
+import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
 import '../injection.dart';
 
 @Injectable()
@@ -13,6 +15,7 @@ class AuthService {
   AuthService(@Named('auth_dio') this._dio);
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
+  final UserRepository _userRepository = getIt<UserRepository>();
 
   Future<AuthenticationStatus> signInByCredentials(
       {required String email, required String password}) async {
@@ -21,6 +24,7 @@ class AuthService {
       final response = await _dio.post('/sign-in', data: query);
       if (response.statusCode == 200) {
         await _tokenRepository.setApiToken(response.toString());
+        await getUserInfo();
         return AuthenticationStatus.authenticated;
       } else {
         return AuthenticationStatus.unauthenticated;
@@ -128,6 +132,77 @@ class AuthService {
     } on DioError catch (e) {
       print('email verification failed');
       return AuthenticationStatus.unauthenticated;
+    }
+  }
+
+  Future<AuthenticationStatus> getUserInfo() async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+      if (token != null && token.isNotEmpty) {
+        final response = await _dio.get(
+          '/me',
+          options: Options(headers: {'Authorization': ' Bearer $token'}),
+        );
+        if (response.statusCode == 200 &&
+            response.data['emailVerified'] == true) {
+          _userRepository.setUser = User.fromJson(response.data);
+          return AuthenticationStatus.authenticated;
+        } else
+          return AuthenticationStatus.unauthenticated;
+      } else
+        return AuthenticationStatus.externalError;
+    } on DioError catch (_) {
+      return AuthenticationStatus.unauthenticated;
+    }
+  }
+
+  Future<AuthenticationStatus> changeName({required String name}) async {
+    try {
+      // var data = {
+      //   'data': {
+      //     'firstName': user.firstName,
+      //     'lastName': user.lastName,
+      //     'phoneNumber': user.phoneNumber,
+      //     'avatars': [
+      //       {'publicUrl': url}
+      //     ]
+      //   }
+      // };
+      var user = _userRepository.getUser;
+      String? url = '';
+      if (user?.avatars != null && user!.avatars!.isNotEmpty)
+        url = user.avatars?.first.publicUrl;
+      final query = {
+        'data': {
+          "firstName": name,
+          'lastName': user?.lastName,
+          'phoneNumber': user?.phoneNumber,
+          'avatars': [
+            {
+              'publicUrl': url,
+            }
+          ]
+        }
+      };
+      String? token = await _tokenRepository.getApiToken();
+      if (token != null && token.isNotEmpty) {
+        final response = await _dio.put(
+          '/profile',
+          data: query,
+          options: Options(headers: {'Authorization': ' Bearer $token'}),
+        );
+        if (response.statusCode == 200)
+          return AuthenticationStatus.authenticated;
+        else
+          return AuthenticationStatus.unknown;
+      }
+      return AuthenticationStatus.unknown;
+    } on DioError catch (e) {
+      print(e);
+      if (e.response?.statusCode == 401)
+        return AuthenticationStatus.unauthenticated;
+      else
+        return AuthenticationStatus.externalError;
     }
   }
 

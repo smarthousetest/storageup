@@ -1,7 +1,7 @@
 name: upstorage_desktop
 description: A new Flutter project.
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -18,31 +18,36 @@ dependencies:
   intl: ^0.17.0
   adaptive_theme: ^2.2.0
   flutter_svg: ^0.22.0
-  flutter_bloc: 
+  flutter_bloc: ^7.3.0
   formz: ^0.4.0
   equatable: ^2.0.3
   dio: ^4.0.0
   get_it: ^7.1.3
   injectable: ^1.5.0
+  permission_handler: ^8.1.6
   scrollable_positioned_list: ^0.2.0-nullsafety.0
+  hive: ^2.0.4
+  path_provider: ^2.0.2
   desktop_window: ^0.4.0
-  percent_indicator: ^3.0.1
   shared_preferences: ^2.0.6
   shared_preferences_platform_interface: ^2.0.0
-
   file_picker: ^4.0.2
+  image_picker: ^0.8.4
+  percent_indicator: ^3.0.1
+  connectivity: ^3.0.6
+  custom_pop_up_menu: ^1.2.2
 
-
+  cpp_native:
+    git:
+      url: ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git
 
 dev_dependencies:
   injectable_generator:
   build_runner: ^2.0.4
-  flutter_gen_runner:
   flutter_test:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
   assets:
     - assets/
@@ -50,13 +55,16 @@ flutter:
     - assets/home_page/
     - assets/file_page/
     - assets/test_img/
+    - assets/file_page/file_options/
+    - assets/file_icons/
+    - assets/options/
 
   fonts:
     - family: Noto Sans
-      fonts: 
+      fonts:
         - asset: fonts/NotoSans-Regular.ttf
     - family: Noto Sans Bold
-      fonts: 
+      fonts:
         - asset: fonts/NotoSans-Bold.ttf
     - family: Nunito
       fonts:

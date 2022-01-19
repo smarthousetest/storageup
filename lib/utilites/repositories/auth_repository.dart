@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/utilites/services/auth_service.dart';
 
-import '../enums.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import '../injection.dart';
 
 @Singleton()
@@ -57,6 +57,11 @@ class AuthenticationRepository {
     final response =
         await _authService.register(email: email, password: password);
     _controller.add(response);
+    return response;
+  }
+
+  Future<AuthenticationStatus> updateUserInfo() {
+    final response = _authService.getUserInfo();
     return response;
   }
 
