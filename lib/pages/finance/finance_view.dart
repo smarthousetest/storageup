@@ -548,7 +548,7 @@ class _FinancePageState extends State<FinancePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 40.0, left: 40),
+                            padding: const EdgeInsets.only(top: 40.0, left: 35),
                             child: Text(
                               translate
                                   .gb(subscription[index].spaceGb.toString()),
@@ -560,7 +560,7 @@ class _FinancePageState extends State<FinancePage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 30.0, left: 40),
+                            padding: const EdgeInsets.only(top: 30.0, left: 35),
                             child: Text(
                               translate.subscription_pay_mounth(
                                   subscription[index].priceRub ?? ''),
@@ -573,7 +573,7 @@ class _FinancePageState extends State<FinancePage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 40, top: 60),
+                            padding: const EdgeInsets.only(left: 35, top: 60),
                             child: ElevatedButton(
                               onPressed: () {
                                 context.read<FinanceBloc>().add(

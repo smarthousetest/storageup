@@ -7,8 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/pages/files/file_bloc.dart';
+import 'package:upstorage_desktop/pages/files/file_event.dart';
+import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -320,11 +324,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                     ),
                   ),
                 ],
-                rows: state.objects.map((e) {
+                rows: state.objects.map((element) {
                   String? type = '';
                   bool isFile = false;
-                  if (e is Record) {
-                    var record = e;
+                  if (element is Record) {
+                    var record = element;
                     isFile = true;
                     if (record.thumbnail != null &&
                         record.thumbnail!.isNotEmpty) {
@@ -333,7 +337,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                     }
                   }
                   return DataRow.byIndex(
-                    index: state.objects.indexOf(e),
+                    index: state.objects.indexOf(element),
                     color: MaterialStateProperty.resolveWith<Color?>((states) {
                       print(states.toList().toString());
                       if (states.contains(MaterialState.focused)) {
@@ -361,7 +365,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                             ),
                             Expanded(
                               child: Text(
-                                e.name ?? '',
+                                element.name ?? '',
                                 style: cellTextStyle,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -373,10 +377,10 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                   onTap: () {
                                     context
                                         .read<OpenedFolderCubit>()
-                                        .setFavorite(e);
+                                        .setFavorite(element);
                                   },
                                   child: Image.asset(
-                                    e.favorite
+                                    element.favorite
                                         ? 'assets/file_page/favorite.png'
                                         : 'assets/file_page/not_favorite.png',
                                     height: 18,
@@ -396,13 +400,13 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       ),
                       DataCell(
                         Text(
-                          DateFormat('dd.MM.yyyy').format(e.createdAt!),
+                          DateFormat('dd.MM.yyyy').format(element.createdAt!),
                           style: cellTextStyle,
                         ),
                       ),
                       DataCell(
                         Text(
-                          filesize(e.size, translate, 1),
+                          filesize(element.size, translate, 1),
                           style: cellTextStyle,
                         ),
                       ),
@@ -412,31 +416,43 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                             hoverColor: Colors.transparent,
                             splashColor: Colors.transparent,
                           ),
-                          child: CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
-                            menuBuilder: () {
-                              return FilesPopupMenuActions(
-                                theme: Theme.of(context),
-                                translate: translate,
-                              );
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/file_page/three_dots.svg',
-                                  ),
-                                ],
+                          child:
+                              BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                                  builder: (context, snapshot) {
+                            var controller = CustomPopupMenuController();
+                            return CustomPopupMenu(
+                              pressType: PressType.singleClick,
+                              barrierColor: Colors.transparent,
+                              showArrow: false,
+                              horizontalMargin: 110,
+                              verticalMargin: 0,
+                              controller: controller,
+                              menuBuilder: () {
+                                return FilesPopupMenuActions(
+                                  theme: Theme.of(context),
+                                  translate: translate,
+                                  onTap: (action) {
+                                    controller.hideMenu();
+                                    context
+                                        .read<OpenedFolderCubit>()
+                                        .onRecordActionChoosed(action, element);
+                                  },
+                                );
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/file_page/three_dots.svg',
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          }),
                         ),
                       ),
                     ],
@@ -561,11 +577,15 @@ class ObjectView extends StatelessWidget {
 
 class FilesPopupMenuActions extends StatefulWidget {
   FilesPopupMenuActions(
-      {required this.theme, required this.translate, Key? key})
+      {required this.theme,
+      required this.translate,
+      required this.onTap,
+      Key? key})
       : super(key: key);
 
   final ThemeData theme;
   final S translate;
+  final Function(FileAction) onTap;
   @override
   _FilesPopupMenuActionsState createState() => _FilesPopupMenuActionsState();
 }
@@ -749,40 +769,45 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   color: mainColor,
                   height: 1,
                 ),
-                MouseRegion(
-                  onEnter: (event) {
-                    setState(() {
-                      ind = 4;
-                    });
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.delete);
                   },
-                  child: Container(
-                    width: 190,
-                    height: 40,
-                    color: ind == 4
-                        ? widget.theme.indicatorColor.withOpacity(0.1)
-                        : null,
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Image.asset(
-                        //   'assets/file_page/file_options/trash.png',
-                        //   height: 20,
-                        // ),
-                        SvgPicture.asset(
-                          'assets/options/trash.svg',
-                          height: 20,
-                          color: widget.theme.indicatorColor,
-                        ),
-                        Container(
-                          width: 15,
-                        ),
-                        Text(
-                          widget.translate.delete,
-                          style: style.copyWith(
-                              color: Theme.of(context).errorColor),
-                        ),
-                      ],
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 4;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 4
+                          ? widget.theme.indicatorColor.withOpacity(0.1)
+                          : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/trash.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/trash.svg',
+                            height: 20,
+                            color: widget.theme.indicatorColor,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.delete,
+                            style: style.copyWith(
+                                color: Theme.of(context).errorColor),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

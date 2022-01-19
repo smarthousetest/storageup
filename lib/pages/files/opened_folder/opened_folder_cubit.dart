@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
@@ -59,6 +61,25 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     _loadController.getState.registerObserver(_updateObserver);
 
     _syncWithLoadController(objects);
+  }
+
+  void onRecordActionChoosed(FileAction action, BaseObject object) {
+    switch (action) {
+      case FileAction.delete:
+        _onActionDeleteChoosed(object);
+        break;
+      default:
+        print('default');
+    }
+  }
+
+  void _onActionDeleteChoosed(BaseObject object) async {
+    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    var result = await _filesController.deleteObjects([object]);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    }
   }
 
   void _syncWithLoadController(List<BaseObject> filesInFolder) async {

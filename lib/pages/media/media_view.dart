@@ -105,40 +105,45 @@ class _MediaPageState extends State<MediaPage> {
                       ),
                     ),
                     Container(
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 30, left: 20),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(23.0),
-                              child: Image.asset('assets/home_page/man.jpg'),
+                      child: BlocBuilder<MediaCubit, MediaState>(
+                          builder: (context, state) {
+                        return Row(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 20, left: 20),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(23.0),
+                                child: state.user.image,
+                              ),
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Text(
-                                  "Александр Рождественский",
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    state.user?.fullName ?? '',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color:
+                                          Theme.of(context).bottomAppBarColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  state.user?.email ?? '',
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 12,
                                     color: Theme.of(context).bottomAppBarColor,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                "votreaa@mail.ru",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Theme.of(context).bottomAppBarColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -400,7 +405,7 @@ class _MediaPageState extends State<MediaPage> {
       activeColor = Color(0xFFFF94E1);
     }
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 13),
+      padding: const EdgeInsets.only(right: 13),
       child: GestureDetector(
         onTap: () {
           print('folder tapped: ${album.name}');
@@ -651,6 +656,9 @@ class _MediaPageState extends State<MediaPage> {
                             return FilesPopupMenuActions(
                               theme: Theme.of(context),
                               translate: translate,
+                              onTap: (action) {
+                                context.read<MediaCubit>();
+                              },
                             );
                           },
                           child: Container(

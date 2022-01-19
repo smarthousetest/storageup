@@ -2,8 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
+import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 import 'media_state.dart';
@@ -13,16 +16,18 @@ class MediaCubit extends Cubit<MediaState> {
 
   FilesController _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
+  UserController _userController = getIt<UserController>();
 
   void init() async {
     var allMediaFolders = await _filesController.getMediaFolders(true);
     var currentFolder =
         allMediaFolders?.firstWhere((element) => element.id == '-1');
+    User? user = await _userController.getUser;
     emit(state.copyWith(
-      albums: allMediaFolders,
-      currentFolder: currentFolder,
-      currentFolderRecords: currentFolder?.records,
-    ));
+        albums: allMediaFolders,
+        currentFolder: currentFolder,
+        currentFolderRecords: currentFolder?.records,
+        user: user));
   }
 
   void changeRepresentation(FilesRepresentation representation) {
