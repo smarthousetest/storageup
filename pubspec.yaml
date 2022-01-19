@@ -55,10 +55,12 @@ flutter:
     - assets/home_page/
     - assets/file_page/
     - assets/test_img/
+    - assets/finance_page/
     - assets/file_page/file_options/
     - assets/file_icons/
     - assets/options/
 
+    
   fonts:
     - family: Noto Sans
       fonts:

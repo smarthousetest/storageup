@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 
 import 'folder_list.dart';
 import 'keeper_info.dart';

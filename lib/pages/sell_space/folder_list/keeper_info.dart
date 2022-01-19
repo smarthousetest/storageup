@@ -8,7 +8,11 @@ class KeeperInfo {
   int? trustLevel;
 
   KeeperInfo(
-      {required this.dirPath, required this.name, required this.size, required this.dateTime, required this.trustLevel});
+      {required this.dirPath,
+      required this.name,
+      required this.size,
+      required this.dateTime,
+      required this.trustLevel});
 }
 
 List<KeeperInfo> listOfDirsKeepers = [];

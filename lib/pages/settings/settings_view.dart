@@ -1,15 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/change_password.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/pages/settings/settings_bloc.dart';
+import 'package:upstorage_desktop/pages/settings/settings_event.dart';
+import 'package:upstorage_desktop/pages/settings/settings_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:upstorage_desktop/components/blur/rename_name.dart';
 import 'package:upstorage_desktop/components/blur/delete_account.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 
 enum FileOptions { changePhoto, remove }
 
@@ -64,175 +66,178 @@ class _SettingsPageState extends State<SettingsPage> {
       );
     };
 
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color.fromARGB(25, 23, 69, 139),
-                  blurRadius: 4,
-                  offset: Offset(1, 4))
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 40, right: 40, top: 20),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Container(
-                      decoration: decoration(),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            index = 0;
-                            print(index);
-                          });
-                        },
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
+    return BlocProvider(
+      create: (context) => SettingsBloc()..add(SettingsPageOpened()),
+      child: Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Color.fromARGB(25, 23, 69, 139),
+                    blurRadius: 4,
+                    offset: Offset(1, 4))
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 40, right: 40, top: 20),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Container(
+                        decoration: decoration(),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              index = 0;
+                              print(index);
+                            });
+                          },
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 10),
+                              decoration: decorationUnderline(0),
+                              child: Text(
+                                translate.personal_data,
+                                key: _keys[0],
+                                style: TextStyle(
+                                  color: index == 0
+                                      ? Theme.of(context).focusColor
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          ?.color,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: decoration(),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              index = 1;
+                              print(index);
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 10),
+                                decoration: decorationUnderline(1),
+                                child: Text(
+                                  translate.options,
+                                  key: _keys[1],
+                                  style: TextStyle(
+                                    color: index == 1
+                                        ? Theme.of(context).focusColor
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .subtitle1
+                                            ?.color,
+                                    fontFamily: kNormalTextFontFamily,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: decoration(),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              index = 2;
+                              print(index);
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 29),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 10),
+                                decoration: decorationUnderline(2),
+                                child: Text(
+                                  translate.regulations,
+                                  key: _keys[2],
+                                  style: TextStyle(
+                                    color: index == 2
+                                        ? Theme.of(context).focusColor
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .subtitle1
+                                            ?.color,
+                                    fontFamily: kNormalTextFontFamily,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
                           child: Container(
-                            padding: EdgeInsets.only(bottom: 10),
-                            decoration: decorationUnderline(0),
+                            padding: EdgeInsets.only(bottom: 12),
                             child: Text(
-                              translate.personal_data,
-                              key: _keys[0],
+                              '',
                               style: TextStyle(
-                                color: index == 0
+                                color: index == 2
                                     ? Theme.of(context).focusColor
                                     : Theme.of(context)
                                         .textTheme
                                         .subtitle1
                                         ?.color,
                                 fontFamily: kNormalTextFontFamily,
+                                overflow: TextOverflow.ellipsis,
                                 fontSize: 20,
                               ),
                             ),
+                            decoration: decoration(),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      decoration: decoration(),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            index = 1;
-                            print(index);
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 10),
-                              decoration: decorationUnderline(1),
-                              child: Text(
-                                translate.options,
-                                key: _keys[1],
-                                style: TextStyle(
-                                  color: index == 1
-                                      ? Theme.of(context).focusColor
-                                      : Theme.of(context)
-                                          .textTheme
-                                          .subtitle1
-                                          ?.color,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: decoration(),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            index = 2;
-                            print(index);
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 29),
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 10),
-                              decoration: decorationUnderline(2),
-                              child: Text(
-                                translate.regulations,
-                                key: _keys[2],
-                                style: TextStyle(
-                                  color: index == 2
-                                      ? Theme.of(context).focusColor
-                                      : Theme.of(context)
-                                          .textTheme
-                                          .subtitle1
-                                          ?.color,
-                                  fontFamily: kNormalTextFontFamily,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        child: Container(
-                          padding: EdgeInsets.only(bottom: 12),
-                          child: Text(
-                            '',
-                            style: TextStyle(
-                              color: index == 2
-                                  ? Theme.of(context).focusColor
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.color,
-                              fontFamily: kNormalTextFontFamily,
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 20,
-                            ),
-                          ),
-                          decoration: decoration(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return IndexedStack(
-                    index: index,
-                    sizing: StackFit.passthrough,
-                    children: [
-                      personalData(context),
-                      options(context),
-                      regulations(context),
                     ],
-                  );
-                }),
-              ),
-            ],
+                  ),
+                ),
+                Expanded(
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    return IndexedStack(
+                      index: index,
+                      sizing: StackFit.passthrough,
+                      children: [
+                        personalData(context),
+                        options(context),
+                        regulations(context),
+                      ],
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -255,146 +260,151 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      Stack(children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 13, left: 40),
-          child: Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).focusColor,
-              image: DecorationImage(
-                image: AssetImage(
-                  "assets/file_page/val.jpg",
+      BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
+        return Stack(children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 13, left: 40),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(60),
+              child: Container(
+                width: 120,
+                height: 120,
+                child: state.user.image,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
                 ),
-                fit: BoxFit.fill,
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 100, left: 124),
-          child: Container(
-            width: 34,
-            height: 34,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _isClicked
-                  ? Theme.of(context).dividerColor
-                  : Theme.of(context).cardColor,
-            ),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: PopupMenuButton<FileOptions>(
-                  offset: Offset(40, -80),
-                  iconSize: 20,
-                  elevation: 0,
-                  color: Theme.of(context).primaryColor,
-                  // padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        width: 1, color: Theme.of(context).dividerColor),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  icon: SvgPicture.asset(
-                    "assets/file_page/photo.svg",
-                    color: _isClicked
-                        ? Theme.of(context).splashColor
-                        : Theme.of(context).focusColor,
-                  ),
-                  onSelected: (_) {
-                    setState(() {
-                      _isClicked = false;
-                    });
-                  },
-                  onCanceled: () {
-                    setState(() {
-                      _isClicked = false;
-                    });
-                  },
-                  itemBuilder: (BuildContext context) {
-                    setState(() {
-                      _isClicked = true;
-                    });
-                    return [
-                      PopupMenuItem<FileOptions>(
-                        height: 44,
-                        padding: EdgeInsets.zero,
-                        child: Container(
-                          width: 185,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/file_page/photo_change.svg',
-                                  height: 18,
-                                ),
-                                Container(
-                                  width: 15,
-                                ),
-                                Text(
-                                  'Изменить фото',
-                                  style: TextStyle(
-                                    color: Theme.of(context).focusColor,
-                                    fontSize: 14,
-                                    fontFamily: kNormalTextFontFamily,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      // PopupMenuDivider(
-                      //   height: 1,
-                      // ),
-
-                      PopupMenuItem(
-                        padding: EdgeInsets.zero,
-                        child: Container(
-                          //width: 185,
+          Padding(
+            padding: const EdgeInsets.only(top: 100, left: 124),
+            child: Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _isClicked
+                    ? Theme.of(context).dividerColor
+                    : Theme.of(context).cardColor,
+              ),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: PopupMenuButton<FileOptions>(
+                    offset: Offset(40, -80),
+                    iconSize: 20,
+                    elevation: 0,
+                    color: Theme.of(context).primaryColor,
+                    // padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          width: 1, color: Theme.of(context).dividerColor),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    icon: SvgPicture.asset(
+                      "assets/file_page/photo.svg",
+                      color: _isClicked
+                          ? Theme.of(context).splashColor
+                          : Theme.of(context).focusColor,
+                    ),
+                    onSelected: (_) {
+                      setState(() {
+                        _isClicked = false;
+                      });
+                    },
+                    onCanceled: () {
+                      setState(() {
+                        _isClicked = false;
+                      });
+                    },
+                    itemBuilder: (BuildContext context) {
+                      setState(() {
+                        _isClicked = true;
+                      });
+                      return [
+                        PopupMenuItem<FileOptions>(
                           height: 44,
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).indicatorColor.withAlpha(10),
-                            //borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/file_page/trash.svg',
-                                  height: 18,
-                                ),
-                                Container(
-                                  width: 15,
-                                ),
-                                Text(
-                                  'Удалить',
-                                  style: TextStyle(
-                                    color: Theme.of(context).indicatorColor,
-                                    fontSize: 14,
-                                    fontFamily: kNormalTextFontFamily,
+                          padding: EdgeInsets.zero,
+                          onTap: () {
+                            context
+                                .read<SettingsBloc>()
+                                .add(SettingsChangeProfileImage());
+                          },
+                          child: Container(
+                            width: 185,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/file_page/photo_change.svg',
+                                    height: 18,
                                   ),
-                                ),
-                              ],
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    translate.change_photo,
+                                    style: TextStyle(
+                                      color: Theme.of(context).focusColor,
+                                      fontSize: 14,
+                                      fontFamily: kNormalTextFontFamily,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      )
-                    ];
-                  }),
+                        // PopupMenuDivider(
+                        //   height: 1,
+                        // ),
+
+                        PopupMenuItem(
+                          padding: EdgeInsets.zero,
+                          child: Container(
+                            //width: 185,
+                            height: 44,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .indicatorColor
+                                  .withAlpha(10),
+                              //borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/file_page/trash.svg',
+                                    height: 18,
+                                  ),
+                                  Container(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    translate.delete,
+                                    style: TextStyle(
+                                      color: Theme.of(context).indicatorColor,
+                                      fontSize: 14,
+                                      fontFamily: kNormalTextFontFamily,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ];
+                    }),
+              ),
             ),
           ),
-        ),
-      ]),
+        ]);
+      }),
       Row(
         children: [
           Padding(
@@ -409,30 +419,29 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5, top: 25),
-            child: GestureDetector(
-              onTap: () async {
-                var str = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BlurRenameName();
-                  },
-                );
-                setState(() {
-                  name = str;
-                  print(name);
-                });
-                // setState(() {
-                //   focusName = !focusName;
-                // });
-                // focusNodeForName.requestFocus();
-              },
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: SvgPicture.asset(
-                  "assets/file_page/pencil.svg",
+            child: BlocBuilder<SettingsBloc, SettingsState>(
+                builder: (context, state) {
+              return GestureDetector(
+                onTap: () async {
+                  var str = await showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BlurRenameName(state.user!.firstName!);
+                    },
+                  );
+                  if (str != null)
+                    context
+                        .read<SettingsBloc>()
+                        .add(SettingsNameChanged(name: str));
+                },
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: SvgPicture.asset(
+                    "assets/file_page/pencil.svg",
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
         ],
       ),
@@ -449,10 +458,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   border: Border.all(color: Color(0xffE4E7ED))),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, top: 11),
-                child: Text(
-                  name,
-                  style: TextStyle(color: Theme.of(context).disabledColor),
-                ),
+                child: BlocBuilder<SettingsBloc, SettingsState>(
+                    builder: (context, state) {
+                  return Text(
+                    state.user?.firstName ?? '',
+                    style: TextStyle(color: Theme.of(context).disabledColor),
+                  );
+                }),
               ),
             ),
           ],
@@ -481,10 +493,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   border: Border.all(color: Color(0xffE4E7ED))),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, top: 11),
-                child: Text(
-                  "votreaa@mail.ru",
-                  style: TextStyle(color: Theme.of(context).disabledColor),
-                ),
+                child: BlocBuilder<SettingsBloc, SettingsState>(
+                    builder: (context, state) {
+                  return Text(
+                    state.user?.email ?? '',
+                    style: TextStyle(color: Theme.of(context).disabledColor),
+                  );
+                }),
               ),
             ),
           ],
@@ -500,77 +515,82 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      GestureDetector(
-        onTap: () async {
-          var str = await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return BlurChangePassword();
-            },
-          );
-        },
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20, left: 40),
-            child: Row(
-              children: [
-                Container(
-                  width: 350,
-                  height: 42,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Align(
-                        alignment: FractionalOffset.centerLeft,
-                        child: Container(
-                          width: 34,
-                          height: 34,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).cardColor,
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                "assets/file_page/key.svg",
-                                alignment: Alignment.center,
-                                width: 20,
-                                height: 16,
+      BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
+        return GestureDetector(
+          onTap: () async {
+            var str = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurChangePassword();
+              },
+            );
+            if (str is ChangePasswordPopupResult)
+              context.read<SettingsBloc>().add(SettingsPasswordChanged(
+                  oldPassword: str.oldPassword, newPassword: str.newPassword));
+          },
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20, left: 40),
+              child: Row(
+                children: [
+                  Container(
+                    width: 350,
+                    height: 42,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Align(
+                          alignment: FractionalOffset.centerLeft,
+                          child: Container(
+                            width: 34,
+                            height: 34,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).cardColor,
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SvgPicture.asset(
+                                  "assets/file_page/key.svg",
+                                  alignment: Alignment.center,
+                                  width: 20,
+                                  height: 16,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Text(
-                          translate.change_password,
-                          style: TextStyle(
-                              color: Theme.of(context).disabledColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 17),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Text(
+                            translate.change_password,
+                            style: TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17),
+                          ),
                         ),
-                      ),
-                      Spacer(),
-                      Align(
-                        alignment: FractionalOffset.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 148, top: 2),
-                          child: Container(
-                              child: SvgPicture.asset(
-                                  "assets/file_page/arrow.svg")),
+                        Spacer(),
+                        Align(
+                          alignment: FractionalOffset.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 148, top: 2),
+                            child: Container(
+                                child: SvgPicture.asset(
+                                    "assets/file_page/arrow.svg")),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
       GestureDetector(
         onTap: () async {
           var str = await showDialog(

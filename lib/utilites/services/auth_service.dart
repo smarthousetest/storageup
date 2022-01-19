@@ -15,7 +15,8 @@ class AuthService {
   AuthService(@Named('auth_dio') this._dio);
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
-  final UserRepository _userRepository = getIt<UserRepository>();
+  final UserRepository _userRepository =
+      getIt<UserRepository>(instanceName: 'user_repo');
 
   Future<AuthenticationStatus> signInByCredentials(
       {required String email, required String password}) async {

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -26,7 +24,6 @@ class LikeList extends StatefulWidget {
 class _ButtonTemplateState extends State<LikeList> {
   // List<bool> ifFavoritesPressedList = [];
   // List<bool> isPopupMenuButtonClicked = [];
-  ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {

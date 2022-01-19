@@ -1,12 +1,11 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
-import 'package:upstorage_desktop/pages/home/home_state.dart';
+import 'package:upstorage_desktop/pages/info/info_bloc.dart';
+import 'package:upstorage_desktop/pages/info/info_event.dart';
+import 'package:upstorage_desktop/pages/info/info_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
@@ -16,7 +15,8 @@ import '../../constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
-import 'package:upstorage_desktop/pages/home/home_state.dart';
+
+import 'package:upstorage_desktop/utilites/extensions.dart';
 
 class InfoPage extends StatefulWidget {
   @override
@@ -34,17 +34,6 @@ class _InfoPageState extends State<InfoPage> {
     setState(() {
       choosedPage = newPage;
     });
-  }
-
-  Widget getPage() {
-    switch (choosedPage) {
-      case ChoosedPage.finance:
-        return FinancePage();
-      case ChoosedPage.sell_space:
-        return SpaceSellPage();
-      default:
-        return InfoPage();
-    }
   }
 
   S translate = getIt<S>();

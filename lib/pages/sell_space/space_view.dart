@@ -1,13 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
-
+import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'folder_list/keeper_info.dart';
 
 class SpaceSellPage extends StatefulWidget {
@@ -29,91 +31,100 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   String list = "";
 
   Widget build(BuildContext context) {
-    return Expanded(
-        // Padding(
-        //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-        //   child:
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-        child: Container(
-          height: 46,
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 30),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromARGB(25, 23, 69, 139),
-                            blurRadius: 4,
-                            offset: Offset(1, 4))
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(23.0),
-                        child: Image.asset('assets/home_page/man.jpg'),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Text(
-                            "Александр Рождественский",
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Theme.of(context).bottomAppBarColor,
+    return BlocProvider(
+        create: (context) => SpaceBloc()..add(SpacePageOpened()),
+        child: Expanded(
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+            //   child:
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+                child: Container(
+                  height: 46,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 30),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: Color.fromARGB(25, 23, 69, 139),
+                                    blurRadius: 4,
+                                    offset: Offset(1, 4))
+                              ],
                             ),
                           ),
                         ),
-                        Text(
-                          "votreaa@mail.ru",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).bottomAppBarColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Container(
+                        child: BlocBuilder<SpaceBloc, SpaceState>(
+                            builder: (context, state) {
+                          return Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(23.0),
+                                  child: state.user.image,
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text(
+                                      state.user?.firstName ?? '',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        color:
+                                            Theme.of(context).bottomAppBarColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    state.user?.email ?? '',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color:
+                                          Theme.of(context).bottomAppBarColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-      Expanded(
-        child: IndexedStack(
-          index: index,
-          children: [
-            Column(
-              children: [rentingAPlace(context)],
-            ),
-            Column(
-              children: [addSpace(context)],
-            ),
-            Column(
-              children: [folderList(context)],
-            )
-          ],
-        ),
-      )
-    ]));
+              Expanded(
+                child: IndexedStack(
+                  index: index,
+                  children: [
+                    Column(
+                      children: [rentingAPlace(context)],
+                    ),
+                    Column(
+                      children: [addSpace(context)],
+                    ),
+                    Column(
+                      children: [folderList(context)],
+                    )
+                  ],
+                ),
+              )
+            ])));
   }
 
   Widget rentingAPlace(BuildContext context) {
@@ -732,7 +743,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       minimumSize: Size(double.maxFinite, 60),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: Color(0xffE4E7ED),
+                      backgroundColor: Theme.of(context).canvasColor,
                     ),
                     child: Text(
                       translate.save,

@@ -155,4 +155,35 @@
     "info":"Свойства",
     "delete":"Удалить"
     
+    "count_of_files": "{count} файлов",
+    "change_photo": "Изменить фото",
+    "delete": "Удалить",
+    "offer": "Выгодное предложение - переход на годовую подписку",
+    "payment": "Оплата:",
+    "canceled": "Отменить",
+    "card": "Карта:",
+    "change": "Изменить",
+    "other_sub": "Другие подписки",
+    "free_sub": "Бесплатная подписка",
+    "select": "Выбрать",
+    "unsubscribe": "Отмена подписки",
+    "delete_file": "Удалить файлы",
+    "current_subscription_title": "{count_of_gb} ГБ за {cost} ₽/месяц",
+    "@current_subscription_title": {
+        "placeholders": {
+            "count_of_gb": {},
+            "cost": {}
+        }
+    },
+    "current_subscription_payment": "Следующая оплата {date} составит {cost} ₽",
+    "@current_subscription_payment": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMd"
+            },
+            "cost": {}
+        }
+    },
+    "subscription_pay_mounth": "{count} ₽/месяц"
 }

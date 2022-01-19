@@ -16,6 +16,7 @@ class PasswordTextField extends StatefulWidget {
     required this.onFinishEditing,
     this.horizontalPadding = 0,
     this.autofocus = false,
+    required this.controller,
     FocusNode? focusNode,
     List<TextInputFormatter>? inputFormatters,
   })  : this.focusNode = focusNode ?? FocusNode(),
@@ -30,6 +31,7 @@ class PasswordTextField extends StatefulWidget {
   final Function(String) onChange;
   final Function(String) onFinishEditing;
   final bool invalid;
+  final TextEditingController controller;
   final bool isPassword;
   final bool needErrorValidation;
   final double horizontalPadding;
@@ -68,26 +70,26 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     });
   }
 
-  GestureDetector? _suffixIcon() {
-    return widget.isPassword
-        ? GestureDetector(
-            onTap: _changeObscure,
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 9),
-                child: Image(
-                  width: 24.0,
-                  height: 24.0,
-                  image: AssetImage(_hidePassword
-                      ? 'assets/hide_password.png'
-                      : 'assets/show_password.png'),
-                ),
-              ),
-            ),
-          )
-        : null;
-  }
+  // GestureDetector? _suffixIcon() {
+  //   return widget.isPassword
+  //       ? GestureDetector(
+  //           onTap: _changeObscure,
+  //           child: MouseRegion(
+  //             cursor: SystemMouseCursors.click,
+  //             child: Padding(
+  //               padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 9),
+  //               child: Image(
+  //                 width: 24.0,
+  //                 height: 24.0,
+  //                 image: AssetImage(_hidePassword
+  //                     ? 'assets/hide_password.png'
+  //                     : 'assets/show_password.png'),
+  //               ),
+  //             ),
+  //           ),
+  //         )
+  //       : null;
+  // }
 
   @override
   void initState() {
@@ -143,7 +145,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                     focusNode: widget.focusNode,
                     autofocus: widget.autofocus,
                     decoration: InputDecoration(
-                      suffixIcon: _suffixIcon(),
+                      //suffixIcon: _suffixIcon(),
                       border: InputBorder.none,
                       hintText: widget.hint,
                       hintStyle: TextStyle(

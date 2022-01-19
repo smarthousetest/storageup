@@ -1,12 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
+import 'package:upstorage_desktop/models/tariff.dart';
+import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
+import 'package:upstorage_desktop/pages/finance/finance_event.dart';
+import 'package:upstorage_desktop/pages/finance/finance_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 
 class FinancePage extends StatefulWidget {
   @override
@@ -17,310 +20,604 @@ class FinancePage extends StatefulWidget {
 class _FinancePageState extends State<FinancePage> {
   S translate = getIt<S>();
   var index = 0;
+  List<GlobalKey> _keys = [];
+
+  @override
+  void initState() {
+    for (var i = 0; i < 2; i++) {
+      _keys.add(GlobalKey());
+    }
+
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
-    return Expanded(
-      // Padding(
-      //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-      //   child:
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-          child: Container(
-            height: 46,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 30),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Color.fromARGB(25, 23, 69, 139),
-                              blurRadius: 4,
-                              offset: Offset(1, 4))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 30),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(23.0),
-                          child: Image.asset('assets/home_page/man.jpg'),
+    var decoration = () {
+      return BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Theme.of(context).dividerColor,
+          ),
+        ),
+      );
+    };
+
+    var decorationUnderline = (int ind) {
+      return BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 2,
+            style: BorderStyle.solid,
+            color: index == ind
+                ? Theme.of(context).splashColor
+                : Colors.transparent,
+          ),
+        ),
+      );
+    };
+
+    ThemeData theme = Theme.of(context);
+    return BlocProvider(
+      create: (context) => FinanceBloc()..add(FinancePageOpened()),
+      child: Expanded(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0, right: 30, top: 30),
+              child: Container(
+                height: 46,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Color.fromARGB(25, 23, 69, 139),
+                                  blurRadius: 4,
+                                  offset: Offset(1, 4))
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(13.0),
+                            child: Align(
+                              alignment: FractionalOffset.centerLeft,
+                              child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: SvgPicture.asset(
+                                      "assets/file_page/search.svg")),
+                            ),
+                          ),
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    Container(
+                      height: 46,
+                      child: BlocBuilder<FinanceBloc, FinanceState>(
+                          builder: (context, state) {
+                        return Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 20, left: 10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(23.0),
+                                child: Container(child: state.user.image),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    state.user?.firstName ?? '',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color:
+                                          Theme.of(context).bottomAppBarColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  state.user?.email ?? '',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Theme.of(context).bottomAppBarColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 40, right: 40, top: 20),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        textBaseline: TextBaseline.alphabetic,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              "Александр Рождественский",
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Theme.of(context).bottomAppBarColor,
+                          Container(
+                            decoration: decoration(),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  index = 0;
+                                  print(index);
+                                });
+                              },
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Container(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  decoration: decorationUnderline(0),
+                                  child: Text(
+                                    translate.management,
+                                    key: _keys[0],
+                                    style: TextStyle(
+                                      color: index == 0
+                                          ? Theme.of(context).focusColor
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .subtitle1
+                                              ?.color,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                          Text(
-                            "votreaa@mail.ru",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).bottomAppBarColor,
+                          Container(
+                            decoration: decoration(),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  index = 1;
+                                  print(index);
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 10),
+                                    decoration: decorationUnderline(1),
+                                    child: Text(
+                                      translate.funds,
+                                      key: _keys[1],
+                                      style: TextStyle(
+                                        color: index == 1
+                                            ? Theme.of(context).focusColor
+                                            : Theme.of(context)
+                                                .textTheme
+                                                .subtitle1
+                                                ?.color,
+                                        fontFamily: kNormalTextFontFamily,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Expanded(
+                      child: IndexedStack(
+                        index: index,
+                        sizing: StackFit.passthrough,
+                        children: [
+                          subcription(theme),
+                          withdrawFunds(context),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget subcription(ThemeData theme) {
+    return activeSub(theme);
+  }
+
+  Widget activeSub(ThemeData theme) {
+    return ListView(children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 40, top: 30),
+        child: Container(
+          child: Text(
+            translate.active_sub,
+            style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
+            ),
+          ),
+        ),
+      ),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 30),
+              child: Container(
+                width: 510,
+                height: 220,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).splashColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BlocBuilder<FinanceBloc, FinanceState>(
+                        builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 40.0, left: 40),
+                        child: Text(
+                          translate.current_subscription_title(
+                              state.sub?.tariff?.spaceGb ?? '',
+                              state.sub?.tariff?.priceRub ?? ''),
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 36,
+                          ),
+                        ),
+                      );
+                    }),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0, left: 40),
+                      child: Text(
+                        translate.offer,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40, top: 26),
+                      child: Container(
+                        height: 42,
+                        width: 200,
+                        child: OutlinedButton(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size(double.maxFinite, 60),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            backgroundColor: Theme.of(context).primaryColor,
+                          ),
+                          child: Text(
+                            '1490 ₽/год',
+                            style: TextStyle(
+                              color: Theme.of(context).splashColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 40, top: 30, right: 40),
+                child: Container(
+                  width: 510,
+                  height: 220,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor,
+                      width: 2,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 40.0, left: 40),
+                        child: Text(
+                          translate.payment,
+                          style: TextStyle(
+                            color: Theme.of(context).bottomAppBarColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0, left: 40),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              translate.current_subscription_payment(
+                                  DateTime.now(),
+                                  state.sub?.tariff?.priceRub?.toInt() ?? ''),
+                              style: TextStyle(
+                                color: Theme.of(context).bottomAppBarColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 14,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                var str = await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return BlurCancelSub();
+                                  },
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Text(
+                                    translate.canceled,
+                                    style: TextStyle(
+                                      color: Theme.of(context).indicatorColor,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 14,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40.0, top: 21),
+                        child: Text(
+                          translate.card,
+                          style: TextStyle(
+                            color: Theme.of(context).bottomAppBarColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40.0, top: 12),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/finance_page/visa.svg",
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                '07/24',
+                                style: TextStyle(
+                                  color: Theme.of(context).bottomAppBarColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 40.0, top: 4),
+                        child: Row(
+                          children: [
+                            Text(
+                              '••••   ••••   ••••   3282',
+                              style: TextStyle(
+                                color: Theme.of(context).bottomAppBarColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Text(
+                                    translate.change,
+                                    style: TextStyle(
+                                      color: Theme.of(context).splashColor,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 14,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              );
+            }),
+          ],
+        ),
+      ),
+      ...otherSub(theme),
+    ]);
+  }
+
+  List<Widget> otherSub(ThemeData theme) {
+    return [
+      Padding(
+        padding: const EdgeInsets.only(left: 40, top: 25),
+        child: Container(
+          child: Text(
+            translate.other_sub,
+            style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
             ),
           ),
         ),
-        Expanded(
-          child: IndexedStack(
-            index: index,
-            children: [
-              Column(
-                children: [subscriptionManagement(context)],
-              ),
-              Column(
-                children: [withdrawFunds(context)],
-              ),
-            ],
-          ),
-        )
-      ]),
-    );
-  }
-
-  Widget subscriptionManagement(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Color.fromARGB(25, 23, 69, 139),
-                    blurRadius: 4,
-                    offset: Offset(1, 4))
-              ],
-            ),
-            alignment: Alignment.center,
-            child: ListView(children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 20),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Container(
-                              child: Text(
-                                translate.management,
-                                style: TextStyle(
-                                  color: Theme.of(context).focusColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              index = 1;
-                              print(index);
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Container(
-                                child: Text(
-                                  translate.funds,
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.color,
-                                    fontFamily: kNormalTextFontFamily,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ]),
-                ),
-                Stack(children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 40, top: 15, right: 40),
+      ),
+      Container(
+          margin: EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
+          height: 312,
+          child:
+              BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
+            var sub = state.allSub;
+            var subscription = List.from(state.allSub);
+            subscription
+                .removeWhere((element) => element.id == state.sub?.tariff?.id);
+            int ind = -1;
+            print(subscription);
+            return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: subscription.length,
+                itemBuilder: (context, index) {
+                  return MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    // onEnter: (event) {
+                    //   setState(() {
+                    //     ind = 0;
+                    //   });
+                    // },
                     child: Container(
-                      height: 1,
+                      width: 230,
+                      height: 312,
+                      margin: EdgeInsets.only(right: 25),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 14),
-                    child: Container(
-                      width: 220,
-                      height: 3,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).splashColor,
-                      ),
-                    ),
-                  ),
-                ]),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 30),
-                  child: Container(
-                    child: Text(
-                      translate.active_sub,
-                      style: TextStyle(
-                        color: Theme.of(context).focusColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                Stack(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 30),
-                    child: Container(
-                      width: 510,
-                      height: 220,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).splashColor,
+                        border: Border.all(
+                            color: Theme.of(context).dividerColor, width: 3),
+                        color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Color.fromARGB(25, 23, 69, 139),
-                              blurRadius: 4,
-                              offset: Offset(1, 4))
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40.0, left: 40),
+                            child: Text(
+                              translate
+                                  .gb(subscription[index].spaceGb.toString()),
+                              style: TextStyle(
+                                color: Theme.of(context).splashColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 36,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30.0, left: 40),
+                            child: Text(
+                              translate.subscription_pay_mounth(
+                                  subscription[index].priceRub ?? ''),
+                              maxLines: 2,
+                              style: TextStyle(
+                                color: Theme.of(context).bottomAppBarColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 40, top: 60),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context.read<FinanceBloc>().add(
+                                    ChangeSubscription(
+                                        choosedSub: subscription[index].id!));
+
+                                setState(() {
+                                  ind = 0;
+                                });
+                              },
+                              child: Text(
+                                translate.select,
+                                style: TextStyle(
+                                  color: Theme.of(context).splashColor,
+                                  fontSize: 16,
+                                  fontFamily: kNormalTextFontFamily,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Theme.of(context).primaryColor,
+                                fixedSize: Size(160, 42),
+                                elevation: 0,
+                                side: BorderSide(
+                                  style: BorderStyle.solid,
+                                  color: Theme.of(context).splashColor,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ]),
-              ]),
-            ])),
-      ),
-    );
+                  );
+                });
+          })),
+    ];
   }
 
   Widget withdrawFunds(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Color.fromARGB(25, 23, 69, 139),
-                    blurRadius: 4,
-                    offset: Offset(1, 4))
-              ],
-            ),
-            alignment: Alignment.center,
-            child: ListView(children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 20),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              index = 0;
-                              print(index);
-                            });
-                          },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Container(
-                              child: Text(
-                                translate.management,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.color,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Container(
-                                child: Text(
-                                  translate.funds,
-                                  style: TextStyle(
-                                    color: Theme.of(context).focusColor,
-                                    fontFamily: kNormalTextFontFamily,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ]),
-                ),
-                Stack(children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 40, top: 15, right: 40),
-                    child: Container(
-                      height: 1,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 285, top: 14),
-                    child: Container(
-                      width: 150,
-                      height: 3,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).splashColor,
-                      ),
-                    ),
-                  ),
-                ]),
-              ]),
-            ])),
-      ),
+    return Column(
+      children: [],
     );
   }
 }

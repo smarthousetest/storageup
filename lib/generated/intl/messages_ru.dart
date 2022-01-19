@@ -34,6 +34,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m6(count) => "${count} Тб";
 
+  static String m1(date, cost) => "Следующая оплата ${date} составит ${cost} ₽";
+  static String m2(count_of_gb, cost) => "${count_of_gb} ГБ за ${cost} ₽/месяц";
+  static String m4(count) => "${count} ₽/месяц";
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accaunt_deleting":
@@ -56,12 +59,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "before_deleting":
             MessageLookupByLibrary.simpleMessage("До удаления аккаунта "),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
+        "canceled": MessageLookupByLibrary.simpleMessage("Отменить"),
         "cannot_recovered": MessageLookupByLibrary.simpleMessage(
             "Ваши файлы исчезнут навсегда без возможности восстановления."),
+        "card": MessageLookupByLibrary.simpleMessage("Карта:"),
+        "change": MessageLookupByLibrary.simpleMessage("Изменить"),
         "change_Password":
             MessageLookupByLibrary.simpleMessage("Изменение пароля"),
         "change_password":
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
+        "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
@@ -72,12 +79,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "create_folder": MessageLookupByLibrary.simpleMessage("Создание папки"),
         "created": MessageLookupByLibrary.simpleMessage("Создано"),
         "currency": MessageLookupByLibrary.simpleMessage("₽"),
+        "current_subscription_payment": m1,
+        "current_subscription_title": m2,
         "date": MessageLookupByLibrary.simpleMessage("Дата"),
         "date_format": MessageLookupByLibrary.simpleMessage("Формат даты"),
         "day": MessageLookupByLibrary.simpleMessage("день"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Удалить аккаунт"),
+        "delete_file": MessageLookupByLibrary.simpleMessage("Удалить файлы"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Удалить навсегда"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
@@ -108,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
+        "free_sub": MessageLookupByLibrary.simpleMessage("Бесплатная подписка"),
         "funds": MessageLookupByLibrary.simpleMessage("Вывод средств"),
         "gb": m2,
         "get_out": MessageLookupByLibrary.simpleMessage(
@@ -152,12 +163,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
+        "offer": MessageLookupByLibrary.simpleMessage(
+            "Выгодное предложение - переход на годовую подписку"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Введите старый пароль"),
         "open": MessageLookupByLibrary.simpleMessage("Открыть"),
         "options": MessageLookupByLibrary.simpleMessage("Параметры "),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
+        "other_sub": MessageLookupByLibrary.simpleMessage("Другие подписки"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Наш тариф предполагает оплату 0,2 ₽/день за 1 ГБ сданного пространства"),
         "overview": MessageLookupByLibrary.simpleMessage("Обзор"),
@@ -167,6 +181,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
+        "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
         "pb": m5,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
@@ -200,6 +215,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "restore_password_before_email":
             MessageLookupByLibrary.simpleMessage("На вашу электронную почту "),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
+        "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Выберите папку на диске, где у вас есть свободное пространство."),
         "select_storage":
@@ -221,6 +237,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
+        "subscription_pay_mounth": m4,
         "tb": m6,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
@@ -234,6 +251,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Отправить письмо еще раз"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Уровень доверия"),
         "type": MessageLookupByLibrary.simpleMessage("Тип"),
+        "unsubscribe": MessageLookupByLibrary.simpleMessage("Отмена подписки"),
         "upload": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),

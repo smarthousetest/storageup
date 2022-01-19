@@ -39,6 +39,7 @@ abstract class ServiceModule {
   @lazySingleton
   LoadController get leadController => LoadController();
 
+  @Named('user_repo')
   @lazySingleton
   UserRepository get userRepository => UserRepository();
 }

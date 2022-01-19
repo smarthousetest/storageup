@@ -1,20 +1,29 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurRenameName extends StatefulWidget {
+  String name;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurRenameName();
+  BlurRenameName(this.name);
 }
 
 class _ButtonTemplateState extends State<BlurRenameName> {
   S translate = getIt<S>();
-  final myController = TextEditingController();
+  var myController = TextEditingController();
+  bool canSave = false;
+
+  @override
+  void initState() {
+    myController = TextEditingController(text: widget.name);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -85,8 +94,22 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                               alignment: Alignment.center,
                               child: TextFormField(
                                 controller: myController,
-                                //initialValue: "Александр Рождественский",
                                 autofocus: true,
+                                onChanged: (myController) {
+                                  print(myController);
+                                  if (myController.isEmpty &&
+                                      myController.length <= 2) {
+                                    setState(() {
+                                      canSave = false;
+                                    });
+                                  }
+                                  if (myController.isNotEmpty &&
+                                      myController.length > 2) {
+                                    setState(() {
+                                      canSave = true;
+                                    });
+                                  }
+                                },
                                 style: TextStyle(
                                     color: Theme.of(context).disabledColor,
                                     fontSize: 14,
@@ -132,7 +155,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
+                                        primary: Theme.of(context).primaryColor,
                                         fixedSize: Size(140, 42),
                                         elevation: 0,
                                         side: BorderSide(
@@ -150,8 +173,11 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                            context, myController.text);
+                                        canSave
+                                            ? Navigator.pop(context,
+                                                myController.value.text)
+                                            : null;
+                                        print(widget.name);
                                       },
                                       child: Text(
                                         translate.save,
@@ -162,12 +188,16 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Theme.of(context).splashColor,
+                                        primary: canSave
+                                            ? Theme.of(context).splashColor
+                                            : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Theme.of(context).splashColor,
+                                          color: canSave
+                                              ? Theme.of(context).splashColor
+                                              : Theme.of(context).canvasColor,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -185,18 +215,18 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                     ),
                   ),
                   Container(
-                    width: 60,
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).splashColor,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                      width: 60,
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.only(right: 10, top: 10),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child:
+                                SvgPicture.asset('assets/file_page/close.svg')),
+                      )),
                 ],
               ),
             ),
