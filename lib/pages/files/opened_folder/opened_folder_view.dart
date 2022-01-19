@@ -521,7 +521,8 @@ class ObjectView extends StatelessWidget {
                             fit: BoxFit.contain,
                           ),
               ),
-              ..._uploadProgress(isFile ? (object as Record).loadPercent : 10),
+              ..._uploadProgress(
+                  isFile ? (object as Record).loadPercent : null),
             ],
           ),
           Text(
