@@ -46,6 +46,7 @@ class _MyAppState extends State<MyApp> {
         locale: StateContainer.of(context).loacale,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           S.delegate
         ],

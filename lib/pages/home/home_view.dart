@@ -129,9 +129,9 @@ class _HomePageState extends State<HomePage> {
           children: [
             Center(
               child: Container(
-                width: 1480,
-                height: 944,
-                constraints: BoxConstraints(minWidth: 1320, maxWidth: 1920),
+                // width: 1480,
+                // height: 944,
+                // constraints: BoxConstraints(minWidth: 1320, maxWidth: 1920),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -168,10 +168,12 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Expanded(
                               child: ListView(
+                                shrinkWrap: true,
                                 controller: ScrollController(),
                                 children: leftButtonsItem(),
                               ),
                             ),
+                            _logout(),
                           ],
                         ),
                       ),
@@ -414,51 +416,54 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      Align(
-        alignment: FractionalOffset.bottomLeft,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30, left: 40, bottom: 30),
-          child: Container(
-            width: 93,
-            height: 24,
-            child: GestureDetector(
-              onTap: () async {
-                var str = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BlurExit();
-                  },
-                );
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, AuthView.route, (route) => false);
-              },
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
+    ];
+  }
+
+  Widget _logout() {
+    return Align(
+      alignment: FractionalOffset.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 30, left: 40, bottom: 30),
+        child: Container(
+          width: 93,
+          height: 24,
+          child: GestureDetector(
+            onTap: () async {
+              var str = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurExit();
+                },
+              );
+              // Navigator.pushNamedAndRemoveUntil(
+              //     context, AuthView.route, (route) => false);
+            },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: RichText(
+                text: TextSpan(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontSize: 17,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                    children: [
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Image.asset('assets/home_page/exit.png'),
+                        ),
                       ),
-                      children: [
-                        WidgetSpan(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: Image.asset('assets/home_page/exit.png'),
-                          ),
-                        ),
-                        TextSpan(
-                          text: translate.exit,
-                        ),
-                      ]),
-                ),
+                      TextSpan(
+                        text: translate.exit,
+                      ),
+                    ]),
               ),
             ),
           ),
         ),
-      )
-    ];
+      ),
+    );
   }
 
   void _processUserAction(

@@ -120,10 +120,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   }
 
   List<Widget> _body(ThemeData theme, ForgotPasswordState state) {
-    if (state.status == FormzStatus.submissionSuccess)
-      return _bodyResult(theme);
-    else
+    if (state.status != FormzStatus.submissionSuccess)
       return _bodyRequest(theme);
+    else
+      return _bodyResult(theme);
   }
 
   List<Widget> _bodyRequest(ThemeData theme) {
@@ -196,7 +196,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       return null;
   }
 
-  bool nothingOnEmail = false;
+  // bool nothingOnEmail = false;
 
   List<Widget> _bodyResult(ThemeData theme) {
     return [
@@ -239,19 +239,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    nothingOnEmail = !nothingOnEmail;
-                  });
-                  nothingOnEmail
-                      ? context
-                          .read<ForgotPasswordBloc>()
-                          .add(ForgotPasswordConfirmed())
-                      : print("nothing to Email");
+                  context
+                      .read<ForgotPasswordBloc>()
+                      .add(ForgotPasswordConfirmed());
                 },
                 child: Text(
-                  nothingOnEmail
-                      ? translate.nothing_on_email
-                      : translate.to_send_letter,
+                  translate.to_send_letter,
                   style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontFamily: kNormalTextFontFamily,

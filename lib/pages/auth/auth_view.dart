@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -1062,7 +1063,7 @@ class _AuthViewState extends State<AuthView> {
     showDialog(context: context, builder: (context) => ForgotPasswordView());
   }
 
-  _registrationSuccessed(
+  Widget _registrationSuccessed(
       ThemeData theme, BuildContext context, AuthState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -1128,15 +1129,18 @@ class _AuthViewState extends State<AuthView> {
           child: Container(),
           flex: 3,
         ),
-        GestureDetector(
-          onTap: () => context.read<AuthBloc>().add(AuthSendEmailVerify()),
-          child: Text(
-            translate.to_send_letter,
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-              fontFamily: kNormalTextFontFamily,
-              fontSize: 17.0,
-              color: theme.splashColor,
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => context.read<AuthBloc>().add(AuthSendEmailVerify()),
+            child: Text(
+              translate.to_send_letter,
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 17.0,
+                color: theme.splashColor,
+              ),
             ),
           ),
         ),
@@ -1150,6 +1154,7 @@ class _AuthViewState extends State<AuthView> {
           child: ElevatedButton(
             onPressed: () {
               context.read<AuthBloc>().add(AuthClear());
+              _changePage();
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -1180,7 +1185,7 @@ class _AuthViewState extends State<AuthView> {
     );
   }
 
-  _registrationComplete(
+  Widget _registrationComplete(
       ThemeData theme, BuildContext context, AuthState state) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
