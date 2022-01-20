@@ -15,6 +15,7 @@ enum AuthenticationStatus {
 
 enum FileAction {
   delete,
+  properties,
 }
 
 enum ErrorType {

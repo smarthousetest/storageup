@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
@@ -67,6 +67,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     switch (action) {
       case FileAction.delete:
         _onActionDeleteChoosed(object);
+        break;
+      case FileAction.properties:
+        //PropertiesView(object: object);
         break;
       default:
         print('default');

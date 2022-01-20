@@ -1,5 +1,6 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,13 +11,13 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/file_bloc.dart';
-import 'package:upstorage_desktop/pages/files/file_event.dart';
 import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({
@@ -205,6 +206,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 itemBuilder: (context, index) {
                   Function() onTap;
                   var obj = state.objects[index];
+                  // _onPointerDown(PointerDownEvent event) async {
+                  //   if (event.kind == PointerDeviceKind.mouse &&
+                  //       event.buttons == kSecondaryMouseButton) {}
+                  // }
+
                   if (obj is Folder) {
                     onTap = () {
                       widget.push(
@@ -433,9 +439,14 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                   translate: translate,
                                   onTap: (action) {
                                     controller.hideMenu();
-                                    context
-                                        .read<OpenedFolderCubit>()
-                                        .onRecordActionChoosed(action, element);
+                                    if (action == FileAction.properties) {
+                                      StateInfoContainer.of(context)
+                                          ?.setInfoObject(element);
+                                    } else
+                                      context
+                                          .read<OpenedFolderCubit>()
+                                          .onRecordActionChoosed(
+                                              action, element);
                                   },
                                 );
                               },
@@ -556,6 +567,8 @@ class ObjectView extends StatelessWidget {
       ),
     );
   }
+
+  void _showFileInfoView(BaseObject object) {}
 
   List<Widget> _uploadProgress(double? progress) {
     List<Widget> indicators = [Container()];
@@ -731,37 +744,42 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   color: mainColor,
                   height: 1,
                 ),
-                MouseRegion(
-                  onEnter: (event) {
-                    setState(() {
-                      ind = 3;
-                    });
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.properties);
                   },
-                  child: Container(
-                    width: 190,
-                    height: 40,
-                    color: ind == 3 ? mainColor : null,
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    margin: EdgeInsets.zero,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Image.asset(
-                        //   'assets/file_page/file_options/info.png',
-                        //   height: 20,
-                        // ),
-                        SvgPicture.asset(
-                          'assets/options/info.svg',
-                          height: 20,
-                        ),
-                        Container(
-                          width: 15,
-                        ),
-                        Text(
-                          widget.translate.info,
-                          style: style,
-                        ),
-                      ],
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 3;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 3 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.zero,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/info.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/info.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.info,
+                            style: style,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

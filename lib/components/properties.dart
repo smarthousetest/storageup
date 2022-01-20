@@ -1,18 +1,31 @@
+import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/base_object.dart';
+import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
-class PropertiesView extends StatefulWidget {
+class FileInfoView extends StatefulWidget {
+  BaseObject? object;
+  User? user;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  PropertiesView();
+  FileInfoView({required this.object, required this.user});
 }
 
-class _ButtonTemplateState extends State<PropertiesView> {
+class _ButtonTemplateState extends State<FileInfoView> {
   S translate = getIt<S>();
+  var setNull;
+
   Widget build(BuildContext context) {
+    var type = FileAttribute().getFilesType(widget.object!.name!.toLowerCase());
+
     return Padding(
         padding: const EdgeInsets.only(right: 30, top: 30, bottom: 30, left: 0),
         child: Container(
@@ -29,7 +42,24 @@ class _ButtonTemplateState extends State<PropertiesView> {
             ),
             child: ListView(controller: ScrollController(), children: [
               Padding(
-                  padding: const EdgeInsets.all(30.0),
+                  padding: EdgeInsets.only(right: 17, top: 17),
+                  child: Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          StateInfoContainer.of(context)?.setInfoObject(null);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            child:
+                                SvgPicture.asset('assets/file_page/close.svg'),
+                          ),
+                        ),
+                      ))),
+              Padding(
+                  padding: const EdgeInsets.only(
+                      right: 30.0, left: 30, bottom: 30, top: 5),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -40,10 +70,10 @@ class _ButtonTemplateState extends State<PropertiesView> {
                               child: Container(
                                 height: 46,
                                 width: 46,
-                                decoration: BoxDecoration(
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.circular(23),
+                                  child: widget.user.image,
                                 ),
-                                child: Image.asset('assets/home_page/man.jpg'),
                               ),
                             ),
                             Column(
@@ -53,7 +83,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: Text(
-                                    "Александр Рождественский",
+                                    widget.user?.fullName ?? '',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color:
@@ -62,7 +92,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                   ),
                                 ),
                                 Text(
-                                  "votreaa@mail.ru",
+                                  widget.user?.email ?? '',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context)
@@ -97,15 +127,43 @@ class _ButtonTemplateState extends State<PropertiesView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
                           child: Center(
-                            child: SvgPicture.asset(
-                                "assets/file_page/word_big.svg"),
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              child: widget.object is Record && type != 'image'
+                                  ? type.isNotEmpty
+                                      ? Image.asset(
+                                          'assets/file_icons/$type.png',
+                                          fit: BoxFit.contain,
+                                        )
+                                      : Image.asset(
+                                          'assets/file_icons/files.png',
+                                          fit: BoxFit.contain,
+                                        )
+                                  : type == 'image'
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.network(
+                                            (widget.object as Record)
+                                                .thumbnail!
+                                                .first
+                                                .publicUrl!,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        )
+                                      : Image.asset(
+                                          'assets/file_icons/folder.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                            ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
                           child: Center(
                             child: Text(
-                              "Документация",
+                              widget.object?.name ?? '',
                               style: TextStyle(
                                 color: Theme.of(context).disabledColor,
                                 fontFamily: kNormalTextFontFamily,
@@ -141,7 +199,8 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        "678 Кб",
+                                        filesize(
+                                            widget.object?.size, translate, 1),
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -174,7 +233,14 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                         child: Container(),
                                       ),
                                       Text(
-                                        "Файл",
+                                        widget.object is Record
+                                            ? widget.object!.extension
+                                                    ?.toUpperCase() ??
+                                                ''
+                                            : translate.foldr,
+                                        // type.isEmpty
+                                        //     ? translate.foldr
+                                        //     : type.toUpperCase(),
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -209,7 +275,9 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          "TXT",
+                                          widget.object is Record
+                                              ? type.toUpperCase()
+                                              : translate.foldr,
                                           //textAlign: TextAlign.end,
                                           style: TextStyle(
                                             color: Theme.of(context)
@@ -246,7 +314,8 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          "12 мая 2021 г., 23:37",
+                                          DateFormat('dd.MM.yyyy').format(
+                                              widget.object!.createdAt!),
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -282,7 +351,8 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          "25 июня 2021 г., 21:20",
+                                          DateFormat('dd.MM.yyyy').format(
+                                              widget.object!.updatedAt!),
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -318,7 +388,7 @@ class _ButtonTemplateState extends State<PropertiesView> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          "сегодня, 15:11",
+                                          widget.object?.updatedBy ?? '',
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme

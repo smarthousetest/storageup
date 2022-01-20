@@ -22,6 +22,7 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 import 'home_bloc.dart';
 import 'home_state.dart';
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
       case ChoosedPage.home:
         return InfoPage();
       case ChoosedPage.file:
-        return FilePage();
+        return StateInfoContainer(child: FilePage());
       case ChoosedPage.like:
         return LikePage();
       case ChoosedPage.sell_space:

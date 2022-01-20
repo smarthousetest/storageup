@@ -3,9 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
+import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/folder.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'files_list/files_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -127,50 +132,54 @@ class _FilePageState extends State<FilePage> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                child: BlocBuilder<FilesBloc, FilesState>(
-                                  builder: (context, state) {
-                                    return Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 10, left: 20),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(23.0),
-                                            child: state.user.image,
-                                          ),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              state.user?.fullName ?? '',
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                color: Theme.of(context)
-                                                    .bottomAppBarColor,
+                              StateInfoContainer.of(context)?.object == null
+                                  ? Container(
+                                      child: BlocBuilder<FilesBloc, FilesState>(
+                                        builder: (context, state) {
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10, left: 20),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          23.0),
+                                                  child: state.user.image,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              state.user?.email ?? '',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context)
-                                                    .bottomAppBarColor,
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Text(
+                                                    state.user?.fullName ?? '',
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Theme.of(context)
+                                                          .bottomAppBarColor,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    state.user?.email ?? '',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Theme.of(context)
+                                                          .bottomAppBarColor,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  : Container()
                             ],
                           ),
                         ),
@@ -184,12 +193,31 @@ class _FilePageState extends State<FilePage> {
                     ),
                   ),
                 ),
+                StateInfoContainer.of(context)?.object == null
+                    ? Container()
+                    : showViewFileInfo(),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget showViewFileInfo() {
+    try {
+      if (StateInfoContainer.of(context)?.object == null) {
+        return Container();
+      } else
+        return BlocBuilder<FilesBloc, FilesState>(builder: (context, state) {
+          return Container(
+              child: FileInfoView(
+                  user: state.user,
+                  object: StateInfoContainer.of(context)?.object));
+        });
+    } catch (e) {
+      return Container();
+    }
   }
 
   void _push(Widget child) {
