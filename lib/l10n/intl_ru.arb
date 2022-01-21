@@ -141,7 +141,7 @@
     "media": "Медиа",
     "settings": "Настройки",
     "all_files": "Все файлы",
-    "count_of_files" :"{count} файлов",
+    "count_of_files": "{count} файлов",
     "foldr": "Папка",
     "b": "{count} Б",
     "kb": "{count} Кб",
@@ -149,11 +149,11 @@
     "gb": "{count} Гб",
     "tb": "{count} Тб",
     "pb": "{count} Пб",
-    "share":"Поделиться",
-    "move":"Переместить",
-    "download":"Загрузить",
-    "info":"Свойства",
-    "delete":"Удалить",
+    "share": "Поделиться",
+    "move": "Переместить",
+    "download": "Загрузить",
+    "info": "Свойства",
+    "delete": "Удалить",
     "change_photo": "Изменить фото",
     "offer": "Выгодное предложение - переход на годовую подписку",
     "payment": "Оплата:",
@@ -182,5 +182,12 @@
             "cost": {}
         }
     },
-    "subscription_pay_mounth": "{count} ₽/месяц"
+    "subscription_pay_mounth": "{count} ₽/месяц",
+    "by_type": "По типу",
+    "by_name": "По названию",
+    "by_date_added": "По дате добавления",
+    "by_date_viewed": "По дате просмотра",
+    "by_size": "По размеру",
+    "search": "Поиск",
+    "finance": "Финансы"
 }

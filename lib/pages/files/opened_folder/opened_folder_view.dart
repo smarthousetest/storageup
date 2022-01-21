@@ -49,7 +49,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         ),
       child: Expanded(
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 30),
+          margin: EdgeInsets.only(top: 30),
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(10),
@@ -442,6 +442,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                     if (action == FileAction.properties) {
                                       StateInfoContainer.of(context)
                                           ?.setInfoObject(element);
+                                      controller.hideMenu();
                                     } else
                                       context
                                           .read<OpenedFolderCubit>()

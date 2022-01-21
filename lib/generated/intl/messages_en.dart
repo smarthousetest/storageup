@@ -62,6 +62,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Go to the main page"),
         "before_deleting":
             MessageLookupByLibrary.simpleMessage("Before deleting an account"),
+        "by_date_added": MessageLookupByLibrary.simpleMessage("By date addded"),
+        "by_date_viewed":
+            MessageLookupByLibrary.simpleMessage("By date viewed"),
+        "by_name": MessageLookupByLibrary.simpleMessage("By name"),
+        "by_size": MessageLookupByLibrary.simpleMessage("By size"),
+        "by_type": MessageLookupByLibrary.simpleMessage("By type"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "canceled": MessageLookupByLibrary.simpleMessage("Canceled"),
         "cannot_recovered": MessageLookupByLibrary.simpleMessage(
@@ -116,6 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter password"),
         "exit": MessageLookupByLibrary.simpleMessage("Exit"),
         "files": MessageLookupByLibrary.simpleMessage("Files"),
+        "finance": MessageLookupByLibrary.simpleMessage("Finance"),
         "folder": MessageLookupByLibrary.simpleMessage("Select a folder"),
         "folder_dir": MessageLookupByLibrary.simpleMessage("Folder"),
         "foldr": MessageLookupByLibrary.simpleMessage("Folder"),
@@ -219,6 +226,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "restore_password_before_email": MessageLookupByLibrary.simpleMessage(
             "A letter has been sent to your e-mail "),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "search": MessageLookupByLibrary.simpleMessage("Search"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Select the folder on the drive where you have free space."),

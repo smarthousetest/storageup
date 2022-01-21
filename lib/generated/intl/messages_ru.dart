@@ -61,6 +61,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Вернуться на главную"),
         "before_deleting":
             MessageLookupByLibrary.simpleMessage("До удаления аккаунта "),
+        "by_date_added":
+            MessageLookupByLibrary.simpleMessage("По дате добавления"),
+        "by_date_viewed":
+            MessageLookupByLibrary.simpleMessage("По дате просмотра"),
+        "by_name": MessageLookupByLibrary.simpleMessage("По названию"),
+        "by_size": MessageLookupByLibrary.simpleMessage("По размеру"),
+        "by_type": MessageLookupByLibrary.simpleMessage("По типу"),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "canceled": MessageLookupByLibrary.simpleMessage("Отменить"),
         "cannot_recovered": MessageLookupByLibrary.simpleMessage(
@@ -115,6 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
         "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
         "files": MessageLookupByLibrary.simpleMessage("Файлы"),
+        "finance": MessageLookupByLibrary.simpleMessage("Финансы"),
         "folder": MessageLookupByLibrary.simpleMessage("Выберите папку"),
         "folder_dir": MessageLookupByLibrary.simpleMessage("Папки"),
         "foldr": MessageLookupByLibrary.simpleMessage("Папка"),
@@ -218,6 +226,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "restore_password_before_email":
             MessageLookupByLibrary.simpleMessage("На вашу электронную почту "),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
+        "search": MessageLookupByLibrary.simpleMessage("Поиск"),
         "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Выберите папку на диске, где у вас есть свободное пространство."),

@@ -1,4 +1,4 @@
-enum SortingCriterion { byName, byDate, byType, bySize }
+enum SortingCriterion { byName, byDateCreated, byDateViewed, byType, bySize }
 
 class SortingElement {
   String text;

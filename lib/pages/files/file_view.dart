@@ -1,15 +1,15 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
+import 'package:upstorage_desktop/components/expanded_section.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'files_list/files_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -29,8 +29,16 @@ class FilePage extends StatefulWidget {
 class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
   S translate = getIt<S>();
-
+  List<SortingElement> _items = [];
   List<Widget> _opendedFolders = [];
+  String _sortingTextField = '';
+  final double _rowSpasing = 20.0;
+  final double _rowPadding = 30.0;
+  double? _searchFieldWidth;
+  bool _isSearchFieldChoosen = false;
+  final TextEditingController _searchingFieldController =
+      TextEditingController();
+  SortingDirection _direction = SortingDirection.neutral;
 
   @override
   void initState() {
@@ -45,163 +53,289 @@ class _FilePageState extends State<FilePage> {
         ],
       ),
     );
+    _initFilterList();
     super.initState();
+  }
+
+  void _prepareFields(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    _searchFieldWidth =
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60;
+  }
+
+  void _initFilterList() {
+    _items = [
+      SortingElement(
+          text: translate.by_date_added, type: SortingCriterion.byType),
+      SortingElement(
+          text: translate.by_date_viewed, type: SortingCriterion.byDateViewed),
+      SortingElement(text: translate.by_name, type: SortingCriterion.byName),
+      SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
+      SortingElement(
+          text: translate.by_type, type: SortingCriterion.byDateCreated),
+    ];
+    _sortingTextField = _items[0].text;
   }
 
   @override
   Widget build(BuildContext context) {
     // if (dirs_list.isEmpty) _init(context);
+    _prepareFields(context);
     return BlocProvider(
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
       child: BlocListener<FilesBloc, FilesState>(
         listener: (context, state) {},
-        child: Expanded(
-          child: Container(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 30, top: 30, right: 30),
-                    child: Column(
-                      // mainAxisSize: MainAxisSize.max,
+        child: _filewView(context),
+      ),
+    );
+  }
+
+  void _changeSortFieldsVisibility(BuildContext context) {
+    // setState(() {
+    _isSearchFieldChoosen = !_isSearchFieldChoosen;
+    // });
+    context.read<FilesBloc>().add(FilesSortingClear());
+  }
+
+  Widget _filewView(BuildContext context) {
+    return Expanded(
+      child: Container(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(_rowPadding),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 46,
+                      child: Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            LayoutBuilder(builder: (context, constrains) {
+                              return _searchField(context, constrains);
+                            }),
+                            SizedBox(
+                              width: _rowSpasing,
+                            ),
+                            LayoutBuilder(builder: (context, constrains) {
+                              return _sortingField(context, constrains);
+                            }),
+                            _infoUser(context),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: IndexedStack(
+                        index: widget.index,
+                        children: _opendedFolders,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            StateInfoContainer.of(context)?.object == null
+                ? Container()
+                : showViewFileInfo(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  var controller = CustomPopupMenuController();
+
+  Widget _sortingField(BuildContext context, BoxConstraints constrains) {
+    return BlocBuilder<FilesBloc, FilesState>(builder: (
+      context,
+      state,
+    ) {
+      return CustomPopupMenu(
+        pressType: PressType.singleClick,
+        barrierColor: Colors.transparent,
+        showArrow: false,
+        horizontalMargin: 110,
+        verticalMargin: 0,
+        controller: controller,
+        menuBuilder: () {
+          _changeSortFieldsVisibility(context);
+          return SortingMenuActions(
+            theme: Theme.of(context),
+            translate: translate,
+            onTap: (action) {
+              controller.hideMenu();
+            },
+          );
+        },
+        child: GestureDetector(
+          onTap: () {
+            _isSearchFieldChoosen
+                ? setState(() {
+                    _changeSortFieldsVisibility(context);
+                  })
+                : print('a');
+            controller.showMenu();
+          },
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Container(
+              width: _searchFieldWidth,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ]),
+              child: Container(
+                width: 46,
+                child: Row(
+                  children: [
+                    ExpandedSection(
+                      expand: !_isSearchFieldChoosen,
+                      child: Container(
+                        width: _isSearchFieldChoosen
+                            ? constrains.maxWidth - 46
+                            : 0,
+                        child: Center(child: Text(_sortingTextField)
+                            // child: SvgPicture.asset(
+                            //     "assets/file_page/settings.svg"),
+                            ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(left: 10),
+                      child: SvgPicture.asset("assets/file_page/settings.svg"),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget _searchField(BuildContext context, BoxConstraints constrains) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Color.fromARGB(25, 23, 69, 139),
+              blurRadius: 4,
+              offset: Offset(1, 4))
+        ],
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(13.0),
+                  child: Align(
+                    alignment: FractionalOffset.centerLeft,
+                    child: Container(
+                        width: 20,
+                        height: 20,
+                        child: SvgPicture.asset("assets/file_page/search.svg")),
+                  ),
+                ),
+              ),
+            ),
+            onTap: _isSearchFieldChoosen
+                ? null
+                : () {
+                    setState(() {
+                      _changeSortFieldsVisibility(context);
+                    });
+                    _direction = SortingDirection.neutral;
+                    _searchingFieldController.clear();
+                  },
+          ),
+          ExpandedSection(
+            expand: _isSearchFieldChoosen,
+            child: Container(
+              width: _isSearchFieldChoosen ? _searchFieldWidth : 0,
+              child: BlocBuilder<FilesBloc, FilesState>(
+                builder: (context, state) {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Center(
+                      child: TextField(
+                        onChanged: (value) {
+                          context.read<FilesBloc>().add(
+                              FilesSortingFieldChanged(sortingText: value));
+                        },
+                        controller: _searchingFieldController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: translate.search,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _infoUser(BuildContext context) {
+    return StateInfoContainer.of(context)?.object == null
+        ? Container(
+            child: BlocBuilder<FilesBloc, FilesState>(
+              builder: (context, state) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10, left: 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(23.0),
+                        child: state.user.image,
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          height: 46,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color:
-                                                Color.fromARGB(25, 23, 69, 139),
-                                            blurRadius: 4,
-                                            offset: Offset(1, 4))
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(13.0),
-                                      child: Align(
-                                        alignment: FractionalOffset.centerLeft,
-                                        child: Container(
-                                            width: 20,
-                                            height: 20,
-                                            child: SvgPicture.asset(
-                                                "assets/file_page/search.svg")),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 46,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      //child: Padding(
-                                      //padding: const EdgeInsets.only(right: 30),
-                                      child: MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              boxShadow: <BoxShadow>[
-                                                BoxShadow(
-                                                    color: Color.fromARGB(
-                                                        25, 23, 69, 139),
-                                                    blurRadius: 4,
-                                                    offset: Offset(1, 4))
-                                              ]),
-                                          child: Center(
-                                            child: SvgPicture.asset(
-                                                "assets/file_page/settings.svg"),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              StateInfoContainer.of(context)?.object == null
-                                  ? Container(
-                                      child: BlocBuilder<FilesBloc, FilesState>(
-                                        builder: (context, state) {
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10, left: 20),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          23.0),
-                                                  child: state.user.image,
-                                                ),
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Text(
-                                                    state.user?.fullName ?? '',
-                                                    style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: Theme.of(context)
-                                                          .bottomAppBarColor,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    state.user?.email ?? '',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Theme.of(context)
-                                                          .bottomAppBarColor,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    )
-                                  : Container()
-                            ],
+                        Text(
+                          state.user?.fullName ?? '',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Theme.of(context).bottomAppBarColor,
                           ),
                         ),
-                        Expanded(
-                          child: IndexedStack(
-                            index: widget.index,
-                            children: _opendedFolders,
+                        Text(
+                          state.user?.email ?? '',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).bottomAppBarColor,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-                StateInfoContainer.of(context)?.object == null
-                    ? Container()
-                    : showViewFileInfo(),
-              ],
+                  ],
+                );
+              },
             ),
-          ),
-        ),
-      ),
-    );
+          )
+        : Container();
   }
 
   Widget showViewFileInfo() {
@@ -698,6 +832,218 @@ class _FilePageState extends State<FilePage> {
           ),
         );
       }),
+    );
+  }
+}
+
+class SortingMenuActions extends StatefulWidget {
+  SortingMenuActions(
+      {required this.theme,
+      required this.translate,
+      required this.onTap,
+      Key? key})
+      : super(key: key);
+
+  final ThemeData theme;
+  final S translate;
+  final Function(SortingCriterion) onTap;
+  @override
+  _SortingPopupMenuActionsState createState() =>
+      _SortingPopupMenuActionsState();
+}
+
+class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
+  int ind = -1;
+  @override
+  Widget build(BuildContext context) {
+    var style = TextStyle(
+      fontFamily: kNormalTextFontFamily,
+      fontSize: 14,
+      color: Theme.of(context).disabledColor,
+    );
+    var choosedStyle = TextStyle(
+      fontFamily: kNormalTextFontFamily,
+      fontSize: 14,
+      color: Theme.of(context).splashColor,
+    );
+    var mainColor = widget.theme.colorScheme.onSecondary;
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: mainColor,
+            spreadRadius: 3,
+            blurRadius: 3,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+          ),
+          child: IntrinsicWidth(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(SortingCriterion.byType);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 0;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 0 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.translate.by_type,
+                            style: ind == 0 ? choosedStyle : style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(SortingCriterion.byName);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 1;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 1 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.translate.by_name,
+                            style: ind == 1 ? choosedStyle : style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(SortingCriterion.byDateCreated);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 2;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 2 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.translate.by_date_added,
+                            style: ind == 2 ? choosedStyle : style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(SortingCriterion.byDateViewed);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 3;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 3 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.zero,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.translate.by_date_viewed,
+                            style: ind == 3 ? choosedStyle : style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(SortingCriterion.bySize);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 4;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 4 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.translate.by_size,
+                            style: ind == 4 ? choosedStyle : style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

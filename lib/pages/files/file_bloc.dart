@@ -216,7 +216,10 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
       case SortingCriterion.byName:
         await _sortByName(event, newState, emit);
         break;
-      case SortingCriterion.byDate:
+      case SortingCriterion.byDateCreated:
+        await _sortByDate(event, newState, emit);
+        break;
+      case SortingCriterion.byDateViewed:
         await _sortByDate(event, newState, emit);
         break;
       case SortingCriterion.bySize:

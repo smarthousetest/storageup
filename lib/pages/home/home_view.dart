@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
       ),
       CustomMenuButton(
         icon: "assets/home_page/finance.svg",
-        title: "Финансы",
+        title: translate.finance,
         page: ChoosedPage.finance,
         onTap: () {
           changePage(ChoosedPage.finance);
