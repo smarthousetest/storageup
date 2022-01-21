@@ -262,6 +262,9 @@ class LoadController {
   }
 
   void downloadFile({required String? fileId, bool force = false}) async {
+    if (isNotInited()) {
+      await init();
+    }
     var downloadingFiles = _state.downloadingFiles;
 
     DownloadFileInfo fileInfo;
@@ -346,6 +349,7 @@ class LoadController {
           //   ..downloadPercent = 100;
 
           _state.changeDowloadingFiles(filesList);
+          _processNextFileDownload();
         }
       } else if (value is CustomError) {
         var filesList = _state.downloadingFiles;
@@ -365,6 +369,7 @@ class LoadController {
           //   ..downloadPercent = 100;
 
           _state.changeDowloadingFiles(filesList);
+          _processNextFileDownload();
         }
       } else {
         var filesList = _state.downloadingFiles;
@@ -382,8 +387,6 @@ class LoadController {
           _state.changeDowloadingFiles(filesList);
         }
       }
-
-      _processNextFileDownload();
     } catch (e) {
       print(e);
       _processNextFileDownload();

@@ -30,6 +30,19 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
     }
   }
 
+  Future<List<String?>?> getMediasPaths() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.media,
+    );
+    if (result != null) {
+      List<String?> filePaths = result.paths;
+      return filePaths;
+    } else {
+      return null;
+    }
+  }
+
   Future<String?> getDirPath() async {
     String? result = await FilePicker.platform.getDirectoryPath();
     if (result != null) {
@@ -220,27 +233,38 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Column(
-                                    children: [
-                                      MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: SvgPicture.asset(
-                                          'assets/file_page/upload_mediaa.svg',
-                                          height: 64,
-                                          width: 64,
-                                        ),
+                                  MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        var paths = await getMediasPaths();
+                                        Navigator.pop(
+                                            context,
+                                            AddMenuResult(
+                                              action: UserAction.uploadMedia,
+                                              result: paths,
+                                            ));
+                                      },
+                                      child: Column(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/file_page/upload_mediaa.svg',
+                                            height: 64,
+                                            width: 64,
+                                          ),
+                                          SizedBox(height: 10),
+                                          Text(
+                                            translate.upload_media,
+                                            style: TextStyle(
+                                              fontFamily: kNormalTextFontFamily,
+                                              fontSize: 14,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                      SizedBox(height: 10),
-                                      Text(
-                                        translate.upload_media,
-                                        style: TextStyle(
-                                          fontFamily: kNormalTextFontFamily,
-                                          fontSize: 14,
-                                          color:
-                                              Theme.of(context).disabledColor,
-                                        ),
-                                      )
-                                    ],
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 18.0),

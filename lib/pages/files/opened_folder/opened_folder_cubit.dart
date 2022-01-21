@@ -1,4 +1,10 @@
+import 'dart:io';
+
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
@@ -8,6 +14,8 @@ import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
+
+import '../../../constants.dart';
 
 class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   OpenedFolderCubit()
@@ -19,11 +27,23 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
   var _loadController = getIt<LoadController>();
-  late Observer _updateObserver = Observer((a) {
-    if (_canUpdate) _update();
-  });
 
-  var _canUpdate = true;
+  late Observer _updateObserver = Observer((a) {
+    try {
+      var uploadingFilesList = a as List<UploadFileInfo>;
+      if (uploadingFilesList.any((file) =>
+          file.isInProgress &&
+          file.uploadPercent == -1 &&
+          file.id.isNotEmpty)) {
+        var file = uploadingFilesList.firstWhere(
+            (file) => file.isInProgress && file.uploadPercent == -1);
+
+        _update(uploadingFileId: file.id);
+      }
+    } catch (e) {
+      print('upload updater error: $e');
+    }
+  });
 
   List<UploadObserver> _observers = [];
   @override
@@ -80,7 +100,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         _observers.add(observer);
 
         loadState.registerObserver(observer);
-        _checkIfNeedToUpdating();
       }
     });
   }
@@ -97,9 +116,16 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> _update() async {
+  Future<void> _update({String? uploadingFileId}) async {
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
+
+    if (uploadingFileId != null) {
+      var uploadingFileIndex =
+          objects.indexWhere((element) => element.id == uploadingFileId);
+      objects[uploadingFileIndex] =
+          (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
+    }
 
     emit(state.copyWith(
       objects: objects,
@@ -189,6 +215,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         //   id: currentFile.id,
         //   percent: null,
         // ));
+        _updateUploadPercent(
+          fileId: currentFile.id,
+          percent: currentFile.uploadPercent,
+        );
         var observer =
             _observers.firstWhere((element) => element.id == pathToFile);
         controllerState.unregisterObserver(observer);
@@ -205,7 +235,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         controllerState.unregisterObserver(observer);
 
         _observers.remove(observer);
-        _checkIfNeedToUpdating();
+
         // var connect = await Connectivity().checkConnectivity();
 
         // if (connect == ConnectivityResult.none) {
@@ -217,12 +247,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  void _checkIfNeedToUpdating() {
-    _canUpdate = _observers.isEmpty;
-  }
-
-  void _updateUploadPercent({required String fileId, required int percent}) {
-    var objects = state.objects;
+  void _updateUploadPercent(
+      {required String fileId, required int percent}) async {
+    var objects = List.from(state.objects);
 
     var indexOfUploadingFile =
         objects.indexWhere((element) => element.id == fileId);
@@ -231,13 +258,88 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       var uploadingFile = objects[indexOfUploadingFile];
 
       if (uploadingFile is Record) {
-        objects[indexOfUploadingFile] =
-            uploadingFile.copyWith(loadPercent: percent.toDouble());
+        objects.insert(
+          indexOfUploadingFile,
+          uploadingFile.copyWith(
+            loadPercent: percent == 100 ? null : percent.toDouble(),
+          ),
+        );
+        objects.removeAt(indexOfUploadingFile + 1);
+        // objects[indexOfUploadingFile] =
+        //     uploadingFile.copyWith(loadPercent: percent.toDouble());
         print(
             'file\'s ${uploadingFile.name} upload percent = ${uploadingFile.loadPercent}');
         var newState = state.copyWith(objects: List.from(objects));
+
         emit(newState);
       }
+    }
+  }
+
+  Future<void> fileTapped(Record record) async {
+    var box = await Hive.openBox(kPathDBName);
+
+    String path = box.get(record.id, defaultValue: '');
+
+    if (path.isNotEmpty) {
+      var appPath = (await getApplicationDocumentsDirectory()).path;
+      var fullPathToFile = '$appPath/$path';
+      var isExisting = await File(fullPathToFile).exists();
+      if (isExisting) {
+        var res = await OpenFile.open(fullPathToFile);
+        print(res.message);
+      }
+    } else {
+      _loadController.downloadFile(fileId: record.id);
+
+      var controllerState = _loadController.getState;
+      _setRecordDownloading(recordId: record.id);
+
+      controllerState.registerObserver(
+        DownloadObserver(record.id, (value) async {
+          if (value is CustomError) {
+            print('error while trying download file');
+          } else {
+            var state = _loadController.getState;
+            var fileId = state.downloadingFiles
+                .indexWhere((element) => element.id == record.id);
+            if (fileId != -1) {
+              var file = state.downloadingFiles[fileId];
+              if (file.localPath.isNotEmpty) {
+                var path = file.localPath
+                    .split('/')
+                    .skipWhile((value) => value != 'downloads')
+                    .join('/');
+                await box.put(file.id, path);
+
+                _setRecordDownloading(
+                  recordId: record.id,
+                  isDownloading: false,
+                );
+
+                var res = await OpenFile.open(file.localPath);
+                print(res.message);
+              }
+            }
+          }
+        }),
+      );
+    }
+  }
+
+  void _setRecordDownloading(
+      {required String recordId, bool isDownloading = true}) {
+    try {
+      var currentRecordIndex =
+          state.objects.indexWhere((element) => element.id == recordId);
+
+      var objects = [...state.objects];
+      var currentRecord = objects[currentRecordIndex] as Record;
+      objects[currentRecordIndex] =
+          currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
+      emit(state.copyWith(objects: objects));
+    } catch (e) {
+      print(e);
     }
   }
 }
@@ -245,4 +347,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 class UploadObserver extends Observer {
   String id;
   UploadObserver(this.id, Function(dynamic) onChange) : super(onChange);
+}
+
+class DownloadObserver extends Observer {
+  String id;
+  DownloadObserver(this.id, Function(dynamic) onChange) : super(onChange);
 }

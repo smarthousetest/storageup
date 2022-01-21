@@ -14,7 +14,6 @@ import 'package:upstorage_desktop/pages/media/media_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -688,11 +687,16 @@ class MediaGridElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.network(
-            record.thumbnail!.first.publicUrl!,
-          ),
+        Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                record.thumbnail!.first.publicUrl!,
+              ),
+            ),
+            ..._uploadProgress(record.loadPercent),
+          ],
         ),
         SizedBox(
           height: 8,
@@ -710,5 +714,22 @@ class MediaGridElement extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  List<Widget> _uploadProgress(double? progress) {
+    List<Widget> indicators = [Container()];
+    if (progress != null) {
+      print('creating indicators with progress: $progress');
+      indicators = [
+        Visibility(
+          child: CircularProgressIndicator(
+            value: progress / 100,
+          ),
+        ),
+        CircularProgressIndicator.adaptive(),
+      ];
+    }
+
+    return indicators;
   }
 }
