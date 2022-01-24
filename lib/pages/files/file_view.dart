@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
-import 'package:upstorage_desktop/components/expanded_section.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/folder.dart';
@@ -35,10 +34,11 @@ class _FilePageState extends State<FilePage> {
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   double? _searchFieldWidth;
-  bool _isSearchFieldChoosen = false;
+  bool _isSearchFieldChoosen = true;
   final TextEditingController _searchingFieldController =
       TextEditingController();
   SortingDirection _direction = SortingDirection.neutral;
+  GlobalKey stickyKey = GlobalKey();
 
   @override
   void initState() {
@@ -59,8 +59,20 @@ class _FilePageState extends State<FilePage> {
 
   void _prepareFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    _searchFieldWidth =
-        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60;
+    final keyContext = stickyKey.currentContext;
+    if (keyContext != null) {
+      final box = keyContext.findRenderObject() as RenderBox;
+      _searchFieldWidth = width -
+          _rowSpasing * 3 -
+          30 * 2 -
+          _rowPadding * 2 -
+          274 -
+          60 -
+          box.size.width;
+    } else {
+      _searchFieldWidth =
+          width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60;
+    }
   }
 
   void _initFilterList() {
@@ -110,23 +122,21 @@ class _FilePageState extends State<FilePage> {
                   children: [
                     Container(
                       height: 46,
-                      child: Expanded(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            LayoutBuilder(builder: (context, constrains) {
-                              return _searchField(context, constrains);
-                            }),
-                            SizedBox(
-                              width: _rowSpasing,
-                            ),
-                            LayoutBuilder(builder: (context, constrains) {
-                              return _sortingField(context, constrains);
-                            }),
-                            _infoUser(context),
-                          ],
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          LayoutBuilder(builder: (context, constrains) {
+                            return _searchField(context, constrains);
+                          }),
+                          SizedBox(
+                            width: _rowSpasing,
+                          ),
+                          LayoutBuilder(builder: (context, constrains) {
+                            return _sortingField(context, constrains);
+                          }),
+                          _infoUser(context),
+                        ],
                       ),
                     ),
                     Expanded(
@@ -163,7 +173,7 @@ class _FilePageState extends State<FilePage> {
         verticalMargin: 0,
         controller: controller,
         menuBuilder: () {
-          _changeSortFieldsVisibility(context);
+          //_changeSortFieldsVisibility(context);
           return SortingMenuActions(
             theme: Theme.of(context),
             translate: translate,
@@ -172,54 +182,54 @@ class _FilePageState extends State<FilePage> {
             },
           );
         },
-        child: GestureDetector(
-          onTap: () {
-            _isSearchFieldChoosen
-                ? setState(() {
-                    _changeSortFieldsVisibility(context);
-                  })
-                : print('a');
-            controller.showMenu();
-          },
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: Container(
-              width: _searchFieldWidth,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ]),
-              child: Container(
-                width: 46,
-                child: Row(
-                  children: [
-                    ExpandedSection(
-                      expand: !_isSearchFieldChoosen,
-                      child: Container(
-                        width: _isSearchFieldChoosen
-                            ? constrains.maxWidth - 46
-                            : 0,
-                        child: Center(child: Text(_sortingTextField)
-                            // child: SvgPicture.asset(
-                            //     "assets/file_page/settings.svg"),
-                            ),
-                      ),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                _isSearchFieldChoosen
+                    ? setState(() {
+                        _changeSortFieldsVisibility(context);
+                      })
+                    : print('a');
+                controller.showMenu();
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  width: _isSearchFieldChoosen ? 46 : _searchFieldWidth! + 46,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Color.fromARGB(25, 23, 69, 139),
+                            blurRadius: 4,
+                            offset: Offset(1, 4))
+                      ]),
+                  child: Container(
+                    //width: 46,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: _isSearchFieldChoosen ? 0 : _searchFieldWidth,
+                          child: Center(child: Text(_sortingTextField)
+                              // child: SvgPicture.asset(
+                              //     "assets/file_page/settings.svg"),
+                              ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.all(9.0),
+                          child:
+                              SvgPicture.asset("assets/file_page/settings.svg"),
+                        ),
+                      ],
                     ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(left: 10),
-                      child: SvgPicture.asset("assets/file_page/settings.svg"),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       );
     });
@@ -243,6 +253,7 @@ class _FilePageState extends State<FilePage> {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Container(
+                width: 46,
                 child: Padding(
                   padding: const EdgeInsets.all(13.0),
                   child: Align(
@@ -265,29 +276,35 @@ class _FilePageState extends State<FilePage> {
                     _searchingFieldController.clear();
                   },
           ),
-          ExpandedSection(
-            expand: _isSearchFieldChoosen,
-            child: Container(
-              width: _isSearchFieldChoosen ? _searchFieldWidth : 0,
-              child: BlocBuilder<FilesBloc, FilesState>(
-                builder: (context, state) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Center(
-                      child: TextField(
-                        onChanged: (value) {
-                          context.read<FilesBloc>().add(
-                              FilesSortingFieldChanged(sortingText: value));
-                        },
-                        controller: _searchingFieldController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: translate.search,
+          Container(
+            width: _isSearchFieldChoosen ? _searchFieldWidth : 0,
+            child: BlocBuilder<FilesBloc, FilesState>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Center(
+                    child: TextField(
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Theme.of(context).disabledColor,
+                      ),
+                      onChanged: (value) {
+                        context
+                            .read<FilesBloc>()
+                            .add(FilesSortingFieldChanged(sortingText: value));
+                      },
+                      controller: _searchingFieldController,
+                      decoration: InputDecoration.collapsed(
+                        hintText: translate.search,
+                        hintStyle: TextStyle(
+                          fontSize: 16.0,
+                          color: Theme.of(context).disabledColor,
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -301,6 +318,7 @@ class _FilePageState extends State<FilePage> {
             child: BlocBuilder<FilesBloc, FilesState>(
               builder: (context, state) {
                 return Row(
+                  key: stickyKey,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
