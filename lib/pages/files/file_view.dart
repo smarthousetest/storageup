@@ -55,7 +55,6 @@ class _FilePageState extends State<FilePage> {
       ),
     );
     _initFilterList();
-
     super.initState();
   }
 
@@ -66,10 +65,9 @@ class _FilePageState extends State<FilePage> {
       final box = keyContext.findRenderObject() as RenderBox;
       _searchFieldWidth = width -
           _rowSpasing * 3 -
-          30 * 2 -
+          30 * 3 -
           _rowPadding * 2 -
           274 -
-          60 -
           box.size.width;
     } else {
       _searchFieldWidth =
@@ -104,9 +102,9 @@ class _FilePageState extends State<FilePage> {
   }
 
   void _changeSortFieldsVisibility(BuildContext context) {
-    // setState(() {
-    _isSearchFieldChoosen = !_isSearchFieldChoosen;
-    // });
+    setState(() {
+      _isSearchFieldChoosen = !_isSearchFieldChoosen;
+    });
     context.read<FilesBloc>().add(FilesSortingClear());
   }
 
@@ -125,7 +123,7 @@ class _FilePageState extends State<FilePage> {
                       height: 46,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           LayoutBuilder(builder: (context, constrains) {
                             return _searchField(context, constrains);
@@ -242,6 +240,7 @@ class _FilePageState extends State<FilePage> {
                               ),
                         ),
                         Container(
+                          //width: 46,
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.all(9.0),
                           child: SvgPicture.asset(
