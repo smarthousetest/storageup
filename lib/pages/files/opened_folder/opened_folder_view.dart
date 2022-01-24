@@ -1,6 +1,5 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,12 +10,10 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
@@ -568,8 +565,6 @@ class ObjectView extends StatelessWidget {
       ),
     );
   }
-
-  void _showFileInfoView(BaseObject object) {}
 
   List<Widget> _uploadProgress(double? progress) {
     List<Widget> indicators = [Container()];

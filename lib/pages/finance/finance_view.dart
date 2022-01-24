@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/tariff.dart';
 import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
 import 'package:upstorage_desktop/pages/finance/finance_event.dart';
 import 'package:upstorage_desktop/pages/finance/finance_state.dart';

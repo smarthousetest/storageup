@@ -3,7 +3,6 @@ import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';

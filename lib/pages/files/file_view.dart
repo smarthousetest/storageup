@@ -39,6 +39,7 @@ class _FilePageState extends State<FilePage> {
       TextEditingController();
   SortingDirection _direction = SortingDirection.neutral;
   GlobalKey stickyKey = GlobalKey();
+  SortingCriterion _lastCriterion = SortingCriterion.byDateCreated;
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _FilePageState extends State<FilePage> {
       ),
     );
     _initFilterList();
+
     super.initState();
   }
 
@@ -77,14 +79,13 @@ class _FilePageState extends State<FilePage> {
 
   void _initFilterList() {
     _items = [
+      SortingElement(text: translate.by_type, type: SortingCriterion.byType),
+      SortingElement(text: translate.by_name, type: SortingCriterion.byName),
       SortingElement(
-          text: translate.by_date_added, type: SortingCriterion.byType),
+          text: translate.by_date_added, type: SortingCriterion.byDateCreated),
       SortingElement(
           text: translate.by_date_viewed, type: SortingCriterion.byDateViewed),
-      SortingElement(text: translate.by_name, type: SortingCriterion.byName),
       SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
-      SortingElement(
-          text: translate.by_type, type: SortingCriterion.byDateCreated),
     ];
     _sortingTextField = _items[0].text;
   }
@@ -179,6 +180,23 @@ class _FilePageState extends State<FilePage> {
             translate: translate,
             onTap: (action) {
               controller.hideMenu();
+              switch (action) {
+                case SortingCriterion.byType:
+                  _onActionSheetTap(context, _items[0]);
+                  break;
+                case SortingCriterion.byName:
+                  _onActionSheetTap(context, _items[1]);
+                  break;
+                case SortingCriterion.byDateCreated:
+                  _onActionSheetTap(context, _items[2]);
+                  break;
+                case SortingCriterion.byDateViewed:
+                  _onActionSheetTap(context, _items[3]);
+                  break;
+                case SortingCriterion.bySize:
+                  _onActionSheetTap(context, _items[4]);
+                  break;
+              }
             },
           );
         },
@@ -212,7 +230,13 @@ class _FilePageState extends State<FilePage> {
                       children: [
                         Container(
                           width: _isSearchFieldChoosen ? 0 : _searchFieldWidth,
-                          child: Center(child: Text(_sortingTextField)
+                          child: Center(
+                              child: Text(
+                            _sortingTextField,
+                            style: TextStyle(
+                              color: Theme.of(context).splashColor,
+                            ),
+                          )
                               // child: SvgPicture.asset(
                               //     "assets/file_page/settings.svg"),
                               ),
@@ -220,8 +244,12 @@ class _FilePageState extends State<FilePage> {
                         Container(
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.all(9.0),
-                          child:
-                              SvgPicture.asset("assets/file_page/settings.svg"),
+                          child: SvgPicture.asset(
+                            "assets/file_page/settings.svg",
+                            color: _isSearchFieldChoosen
+                                ? Theme.of(context).disabledColor
+                                : Theme.of(context).splashColor,
+                          ),
                         ),
                       ],
                     ),
@@ -354,6 +382,16 @@ class _FilePageState extends State<FilePage> {
             ),
           )
         : Container();
+  }
+
+  void _onActionSheetTap(BuildContext context, SortingElement item) {
+    setState(() {
+      _sortingTextField = item.text;
+    });
+    _lastCriterion = item.type;
+    context.read<FilesBloc>().add(
+          FileSortingByCriterion(criterion: item.type, direction: _direction),
+        );
   }
 
   Widget showViewFileInfo() {
