@@ -170,9 +170,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       //   return a.size == null ? 0 : 1;
     });
     if (direction == SortingDirection.up) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(objects: sortedFiles.reversed.toList()));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(objects: sortedFiles));
     }
   }
 
@@ -188,9 +188,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         return a.name == null ? 0 : 1;
     });
     if (direction == SortingDirection.up) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(objects: sortedFiles.reversed.toList()));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(objects: sortedFiles));
     }
   }
 
@@ -206,9 +206,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         return a.createdAt == null ? 0 : 1;
     });
     if (direction == SortingDirection.up) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(objects: sortedFiles.reversed.toList()));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(objects: sortedFiles));
     }
   }
 

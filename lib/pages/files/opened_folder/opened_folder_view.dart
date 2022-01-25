@@ -16,6 +16,7 @@ import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
+import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({
@@ -39,6 +40,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   S translate = getIt<S>();
   @override
   Widget build(BuildContext context) {
+    // var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
+    // var direction = StateSortedContainer.of(context).direction;
+    // var object = context
+    //     .read<OpenedFolderCubit>()
+    //     .mapFileSortingByCreterion(sortedCriterion, direction);
+
     return BlocProvider(
       create: (context) => OpenedFolderCubit()
         ..init(
@@ -192,13 +199,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         return Container(
           child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
             builder: (context, state) {
-              //       var sortedCriterion = StateInfoContainer.of(context)?.sortedCriterion;
-              // var direction = StateInfoContainer.of(context)?.direction;
-              // if ((sortedCriterion != null) && (direction != null))
-              // {
-              //      var object = context.read<OpenedFolderCubit>().mapFileSortingByCreterion(sortedCriterion, direction);
-              // }
-
               return GridView.builder(
                 itemCount: state.objects.length,
                 shrinkWrap: true,
