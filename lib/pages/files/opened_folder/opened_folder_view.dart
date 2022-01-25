@@ -10,6 +10,7 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -191,6 +192,13 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         return Container(
           child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
             builder: (context, state) {
+              //       var sortedCriterion = StateInfoContainer.of(context)?.sortedCriterion;
+              // var direction = StateInfoContainer.of(context)?.direction;
+              // if ((sortedCriterion != null) && (direction != null))
+              // {
+              //      var object = context.read<OpenedFolderCubit>().mapFileSortingByCreterion(sortedCriterion, direction);
+              // }
+
               return GridView.builder(
                 itemCount: state.objects.length,
                 shrinkWrap: true,

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,9 +30,9 @@ class FilePage extends StatefulWidget {
 class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
   S translate = getIt<S>();
-  List<SortingElement> _items = [];
+
   List<Widget> _opendedFolders = [];
-  String _sortingTextField = '';
+  int _sortingTextFieldIndex = 0;
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   double? _searchFieldWidth;
@@ -71,12 +73,25 @@ class _FilePageState extends State<FilePage> {
           box.size.width;
     } else {
       _searchFieldWidth =
-          width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60;
+          width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
     }
   }
 
   void _initFilterList() {
-    _items = [
+    // _items = [
+    //   SortingElement(text: translate.by_type, type: SortingCriterion.byType),
+    //   SortingElement(text: translate.by_name, type: SortingCriterion.byName),
+    //   SortingElement(
+    //       text: translate.by_date_added, type: SortingCriterion.byDateCreated),
+    //   SortingElement(
+    //       text: translate.by_date_viewed, type: SortingCriterion.byDateViewed),
+    //   SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
+    // ];
+    _sortingTextFieldIndex = 0;
+  }
+
+  List<SortingElement> _getSortingElements() {
+    return [
       SortingElement(text: translate.by_type, type: SortingCriterion.byType),
       SortingElement(text: translate.by_name, type: SortingCriterion.byName),
       SortingElement(
@@ -85,7 +100,6 @@ class _FilePageState extends State<FilePage> {
           text: translate.by_date_viewed, type: SortingCriterion.byDateViewed),
       SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
     ];
-    _sortingTextField = _items[0].text;
   }
 
   @override
@@ -172,6 +186,7 @@ class _FilePageState extends State<FilePage> {
         verticalMargin: 0,
         controller: controller,
         menuBuilder: () {
+          var items = _getSortingElements();
           //_changeSortFieldsVisibility(context);
           return SortingMenuActions(
             theme: Theme.of(context),
@@ -180,19 +195,19 @@ class _FilePageState extends State<FilePage> {
               controller.hideMenu();
               switch (action) {
                 case SortingCriterion.byType:
-                  _onActionSheetTap(context, _items[0]);
+                  _onActionSheetTap(context, items[0]);
                   break;
                 case SortingCriterion.byName:
-                  _onActionSheetTap(context, _items[1]);
+                  _onActionSheetTap(context, items[1]);
                   break;
                 case SortingCriterion.byDateCreated:
-                  _onActionSheetTap(context, _items[2]);
+                  _onActionSheetTap(context, items[2]);
                   break;
                 case SortingCriterion.byDateViewed:
-                  _onActionSheetTap(context, _items[3]);
+                  _onActionSheetTap(context, items[3]);
                   break;
                 case SortingCriterion.bySize:
-                  _onActionSheetTap(context, _items[4]);
+                  _onActionSheetTap(context, items[4]);
                   break;
               }
             },
@@ -230,7 +245,7 @@ class _FilePageState extends State<FilePage> {
                           width: _isSearchFieldChoosen ? 0 : _searchFieldWidth,
                           child: Center(
                               child: Text(
-                            _sortingTextField,
+                            _getSortingElements()[_sortingTextFieldIndex].text,
                             style: TextStyle(
                               color: Theme.of(context).splashColor,
                             ),
@@ -298,8 +313,9 @@ class _FilePageState extends State<FilePage> {
                 : () {
                     setState(() {
                       _changeSortFieldsVisibility(context);
+                      _direction = SortingDirection.neutral;
                     });
-                    _direction = SortingDirection.neutral;
+                    // _direction = SortingDirection.down;
                     _searchingFieldController.clear();
                   },
           ),
@@ -385,12 +401,37 @@ class _FilePageState extends State<FilePage> {
 
   void _onActionSheetTap(BuildContext context, SortingElement item) {
     setState(() {
-      _sortingTextField = item.text;
+      _sortingTextFieldIndex = _getSortingElements()
+          .indexWhere((element) => element.text == item.text);
     });
     _lastCriterion = item.type;
-    context.read<FilesBloc>().add(
-          FileSortingByCriterion(criterion: item.type, direction: _direction),
-        );
+
+    StateInfoContainer.of(context)?.newSortedCriterion(item.type, _direction);
+
+    // context.read<FilesBloc>().add(
+    //       FileSortingByCriterion(criterion: item.type, direction: _direction),
+    //     );
+  }
+
+  Function() _onArrowTap(BuildContext context) {
+    return !_isSearchFieldChoosen
+        ? () {
+            setState(() {
+              if (_direction == SortingDirection.down) {
+                _direction = SortingDirection.up;
+              } else {
+                _direction = SortingDirection.down;
+              }
+            });
+            context.read<FilesBloc>().add(FileSortingByCriterion(
+                criterion: _lastCriterion, direction: _direction));
+          }
+        : () {
+            _changeSortFieldsVisibility(context);
+            context.read<FilesBloc>().add(FileSortingByCriterion(
+                criterion: _lastCriterion, direction: _direction));
+            _direction = SortingDirection.down;
+          };
   }
 
   Widget showViewFileInfo() {
