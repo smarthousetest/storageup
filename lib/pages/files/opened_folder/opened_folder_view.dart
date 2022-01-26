@@ -10,7 +10,6 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -40,12 +39,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   S translate = getIt<S>();
   @override
   Widget build(BuildContext context) {
-    // var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
-    // var direction = StateSortedContainer.of(context).direction;
-    // var object = context
-    //     .read<OpenedFolderCubit>()
-    //     .mapFileSortingByCreterion(sortedCriterion, direction);
-
     return BlocProvider(
       create: (context) => OpenedFolderCubit()
         ..init(
@@ -129,6 +122,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   Widget _filesSection() {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       builder: (context, state) {
+        var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
+        var direction = StateSortedContainer.of(context).direction;
+        context
+            .read<OpenedFolderCubit>()
+            .mapFileSortingByCreterion(sortedCriterion, direction);
         if (state.representation == FilesRepresentation.grid) {
           return _filesGrid();
         } else {
@@ -200,7 +198,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
             builder: (context, state) {
               return GridView.builder(
-                itemCount: state.objects.length,
+                itemCount: state.sortedFiles.length,
                 shrinkWrap: true,
                 controller: ScrollController(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -210,7 +208,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 ),
                 itemBuilder: (context, index) {
                   Function() onTap;
-                  var obj = state.objects[index];
+                  var obj = state.sortedFiles[index];
                   // _onPointerDown(PointerDownEvent event) async {
                   //   if (event.kind == PointerDeviceKind.mouse &&
                   //       event.buttons == kSecondaryMouseButton) {}
@@ -237,7 +235,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   }
                   return GestureDetector(
                     onTap: onTap,
-                    child: ObjectView(object: state.objects[index]),
+                    child: ObjectView(object: state.sortedFiles[index]),
                   );
                 },
               );
@@ -335,7 +333,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                     ),
                   ),
                 ],
-                rows: state.objects.map((element) {
+                rows: state.sortedFiles.map((element) {
                   String? type = '';
                   bool isFile = false;
                   if (element is Record) {
@@ -348,7 +346,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                     }
                   }
                   return DataRow.byIndex(
-                    index: state.objects.indexOf(element),
+                    index: state.sortedFiles.indexOf(element),
                     color: MaterialStateProperty.resolveWith<Color?>((states) {
                       print(states.toList().toString());
                       if (states.contains(MaterialState.focused)) {
