@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:upstorage_desktop/pages/finance/finance_event.dart';
 import 'package:upstorage_desktop/pages/finance/finance_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 
 class FinancePage extends StatefulWidget {
   @override
@@ -104,35 +106,48 @@ class _FinancePageState extends State<FinancePage> {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(right: 20, left: 10),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(23.0),
-                                child: Container(child: state.user.image),
+                              child: GestureDetector(
+                                onTap: () {
+                                  StateContainer.of(context)
+                                      .changePage(ChoosedPage.settings);
+                                },
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(23.0),
+                                    child: Container(child: state.user.image),
+                                  ),
+                                ),
                               ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text(
-                                    state.user?.firstName ?? '',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color:
-                                          Theme.of(context).bottomAppBarColor,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  state.user?.email ?? '',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).bottomAppBarColor,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            (MediaQuery.of(context).size.width > 965)
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        child: Text(
+                                          state.user?.firstName ?? '',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Theme.of(context)
+                                                .bottomAppBarColor,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        state.user?.email ?? '',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context)
+                                              .bottomAppBarColor,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                           ],
                         );
                       }),
@@ -193,7 +208,7 @@ class _FinancePageState extends State<FinancePage> {
                                               .subtitle1
                                               ?.color,
                                       fontFamily: kNormalTextFontFamily,
-                                      fontSize: 20,
+                                      fontSize: 24,
                                     ),
                                   ),
                                 ),
@@ -227,7 +242,7 @@ class _FinancePageState extends State<FinancePage> {
                                                 .subtitle1
                                                 ?.color,
                                         fontFamily: kNormalTextFontFamily,
-                                        fontSize: 20,
+                                        fontSize: 24,
                                       ),
                                     ),
                                   ),
@@ -272,7 +287,7 @@ class _FinancePageState extends State<FinancePage> {
             style: TextStyle(
               color: Theme.of(context).focusColor,
               fontFamily: kNormalTextFontFamily,
-              fontSize: 20,
+              fontSize: 24,
             ),
           ),
         ),
@@ -305,6 +320,7 @@ class _FinancePageState extends State<FinancePage> {
                             color: Theme.of(context).primaryColor,
                             fontFamily: kNormalTextFontFamily,
                             fontSize: 36,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       );
@@ -506,7 +522,8 @@ class _FinancePageState extends State<FinancePage> {
             style: TextStyle(
               color: Theme.of(context).focusColor,
               fontFamily: kNormalTextFontFamily,
-              fontSize: 20,
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
@@ -555,6 +572,7 @@ class _FinancePageState extends State<FinancePage> {
                                 color: Theme.of(context).splashColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 36,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
@@ -568,6 +586,7 @@ class _FinancePageState extends State<FinancePage> {
                                 color: Theme.of(context).bottomAppBarColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 24,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
