@@ -37,10 +37,13 @@ class OpenedFolderView extends StatefulWidget {
 
 class _OpenedFolderViewState extends State<OpenedFolderView> {
   S translate = getIt<S>();
+
+  var _bloc = OpenedFolderCubit();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OpenedFolderCubit()
+      create: (context) => _bloc
         ..init(
           widget.currentFolder,
           widget.previousFolders,
@@ -77,6 +80,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
   Widget _pathSection() {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+      bloc: _bloc,
       builder: (context, state) {
         return Row(
           // crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -121,6 +125,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
   Widget _filesSection() {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+      bloc: _bloc,
       builder: (context, state) {
         var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
         var direction = StateSortedContainer.of(context).direction;
@@ -196,6 +201,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
         return Container(
           child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+            bloc: _bloc,
             builder: (context, state) {
               return GridView.builder(
                 itemCount: state.sortedFiles.length,
@@ -277,6 +283,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     );
 
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+      bloc: _bloc,
       builder: (context, state) {
         return Expanded(
           child: LayoutBuilder(builder: (context, constraints) {
@@ -381,6 +388,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                             ),
                             // Spacer(),
                             BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                              bloc: _bloc,
                               builder: (context, state) {
                                 return GestureDetector(
                                   onTap: () {
@@ -427,47 +435,49 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                           ),
                           child:
                               BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-                                  builder: (context, snapshot) {
-                            var controller = CustomPopupMenuController();
-                            return CustomPopupMenu(
-                              pressType: PressType.singleClick,
-                              barrierColor: Colors.transparent,
-                              showArrow: false,
-                              horizontalMargin: 110,
-                              verticalMargin: 0,
-                              controller: controller,
-                              menuBuilder: () {
-                                return FilesPopupMenuActions(
-                                  theme: Theme.of(context),
-                                  translate: translate,
-                                  onTap: (action) {
-                                    controller.hideMenu();
-                                    if (action == FileAction.properties) {
-                                      StateInfoContainer.of(context)
-                                          ?.setInfoObject(element);
+                            bloc: _bloc,
+                            builder: (context, snapshot) {
+                              var controller = CustomPopupMenuController();
+                              return CustomPopupMenu(
+                                pressType: PressType.singleClick,
+                                barrierColor: Colors.transparent,
+                                showArrow: false,
+                                horizontalMargin: 110,
+                                verticalMargin: 0,
+                                controller: controller,
+                                menuBuilder: () {
+                                  return FilesPopupMenuActions(
+                                    theme: Theme.of(context),
+                                    translate: translate,
+                                    onTap: (action) {
                                       controller.hideMenu();
-                                    } else
-                                      context
-                                          .read<OpenedFolderCubit>()
-                                          .onRecordActionChoosed(
-                                              action, element);
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/file_page/three_dots.svg',
-                                    ),
-                                  ],
+                                      if (action == FileAction.properties) {
+                                        StateInfoContainer.of(context)
+                                            ?.setInfoObject(element);
+                                        controller.hideMenu();
+                                      } else
+                                        context
+                                            .read<OpenedFolderCubit>()
+                                            .onRecordActionChoosed(
+                                                action, element);
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/file_page/three_dots.svg',
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
