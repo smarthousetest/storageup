@@ -169,6 +169,24 @@
             "cost": {}
         }
     },
+    "cancel_sub": "Your {count_of_gb} GB subscription will be valid until {date} after which time ",
+    "@cancel_sub": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMd"
+            },
+            "count_of_gb": {}
+        }
+    },
+    "filled_gb": "objects from the files and media sections, filling {count_of_gb}",
+    "@filled_gb": {
+        "placeholders": {
+            "count_of_gb": {}
+        }
+    },
+    "will_be_deleted": "spaces will be deleted without the possibility of recovery.",
+    "further_use": "You will be able to use the app free of charge from now on.",
     "subscription_pay_mounth": "{count} $/mounth",
     "foldr": "Folder",
     "b": "{count} B",

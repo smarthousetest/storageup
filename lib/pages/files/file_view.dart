@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
@@ -42,6 +43,7 @@ class _FilePageState extends State<FilePage> {
       TextEditingController();
   SortingDirection _direction = SortingDirection.neutral;
   GlobalKey stickyKey = GlobalKey();
+  GlobalKey propertiesWidthKey = GlobalKey();
   SortingCriterion _lastCriterion = SortingCriterion.byDateCreated;
 
   @override
@@ -61,20 +63,47 @@ class _FilePageState extends State<FilePage> {
     super.initState();
   }
 
+  Timer? _timer;
+
   void _prepareFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final keyContext = stickyKey.currentContext;
+    final keyInfoContext = propertiesWidthKey.currentContext;
+
     if (keyContext != null) {
+      _timer?.cancel();
+      _timer = null;
       final box = keyContext.findRenderObject() as RenderBox;
-      _searchFieldWidth = width -
-          _rowSpasing * 3 -
-          30 * 3 -
-          _rowPadding * 2 -
-          274 -
-          box.size.width;
+      setState(() {
+        _searchFieldWidth = width -
+            _rowSpasing * 3 -
+            30 * 3 -
+            _rowPadding * 2 -
+            274 -
+            box.size.width;
+      });
+    } else if (keyInfoContext != null) {
+      // _timer?.cancel();
+      // _timer = null;
+
+      final box = keyInfoContext.findRenderObject() as RenderBox;
+      // var res = box.size.width;
+      setState(() {
+        _searchFieldWidth = width -
+            _rowSpasing * 3 -
+            30 * 3 -
+            _rowPadding * 2 -
+            274 -
+            box.size.width;
+      });
     } else {
       _searchFieldWidth =
           width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
+      if (_timer == null) {
+        _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+          _prepareFields(context);
+        });
+      }
     }
   }
 
@@ -441,8 +470,10 @@ class _FilePageState extends State<FilePage> {
         return Container();
       } else
         return BlocBuilder<FilesBloc, FilesState>(builder: (context, state) {
+          //_prepareFields(context);
           return Container(
               child: FileInfoView(
+                  key: propertiesWidthKey,
                   user: state.user,
                   object: StateInfoContainer.of(context)?.object));
         });

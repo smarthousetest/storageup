@@ -59,7 +59,7 @@ class _FinancePageState extends State<FinancePage> {
 
     ThemeData theme = Theme.of(context);
     return BlocProvider(
-      create: (context) => FinanceBloc()..add(FinancePageOpened()),
+      create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: Expanded(
         child: Column(
           children: [
@@ -407,31 +407,37 @@ class _FinancePageState extends State<FinancePage> {
                                 fontSize: 14,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () async {
-                                var str = await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return BlurCancelSub();
-                                  },
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: Text(
-                                    translate.canceled,
-                                    style: TextStyle(
-                                      color: Theme.of(context).indicatorColor,
-                                      fontFamily: kNormalTextFontFamily,
-                                      fontSize: 14,
-                                      decoration: TextDecoration.underline,
+                            BlocBuilder<FinanceBloc, FinanceState>(
+                                builder: (context, state) {
+                              var choosedSubGb = state.sub?.tariff?.spaceGb;
+                              var allFilledGb = state.rootFolders?.size;
+                              return GestureDetector(
+                                onTap: () async {
+                                  var str = await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return BlurCancelSub(choosedSubGb,
+                                          DateTime.now(), allFilledGb);
+                                    },
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Text(
+                                      translate.canceled,
+                                      style: TextStyle(
+                                        color: Theme.of(context).indicatorColor,
+                                        fontFamily: kNormalTextFontFamily,
+                                        fontSize: 14,
+                                        decoration: TextDecoration.underline,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                           ],
                         ),
                       ),

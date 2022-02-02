@@ -1603,6 +1603,49 @@ class S {
     );
   }
 
+  /// `Your {count_of_gb} GB subscription will be valid until {date} after which time `
+  String cancel_sub(DateTime date, Object count_of_gb) {
+    final DateFormat dateDateFormat = DateFormat.yMd(Intl.getCurrentLocale());
+    final String dateString = dateDateFormat.format(date);
+
+    return Intl.message(
+      'Your $count_of_gb GB subscription will be valid until $dateString after which time ',
+      name: 'cancel_sub',
+      desc: '',
+      args: [dateString, count_of_gb],
+    );
+  }
+
+  /// `objects from the files and media sections, filling {count_of_gb}`
+  String filled_gb(Object count_of_gb) {
+    return Intl.message(
+      'objects from the files and media sections, filling $count_of_gb',
+      name: 'filled_gb',
+      desc: '',
+      args: [count_of_gb],
+    );
+  }
+
+  /// `spaces will be deleted without the possibility of recovery.`
+  String get will_be_deleted {
+    return Intl.message(
+      'spaces will be deleted without the possibility of recovery.',
+      name: 'will_be_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You will be able to use the app free of charge from now on.`
+  String get further_use {
+    return Intl.message(
+      'You will be able to use the app free of charge from now on.',
+      name: 'further_use',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{count} $/mounth`
   String subscription_pay_mounth(Object count) {
     return Intl.message(

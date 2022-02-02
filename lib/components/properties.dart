@@ -14,9 +14,10 @@ import 'package:upstorage_desktop/utilites/state_info_container.dart';
 class FileInfoView extends StatefulWidget {
   BaseObject? object;
   User? user;
+  GlobalKey? key;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  FileInfoView({required this.object, required this.user});
+  FileInfoView({required this.object, required this.user, required this.key});
 }
 
 class _ButtonTemplateState extends State<FileInfoView> {

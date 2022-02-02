@@ -30,6 +30,8 @@ class FilesController {
 
   Folder? get getFilesRootFolder => _filesRepo.getRootFolder;
 
+  Future<Folder?> get getRootFolder => _service.getRootFolder();
+
   Future<List<Folder>?> getMediaFolders(bool withUpdate) async {
     if (withUpdate) {
       await updateFilesList();

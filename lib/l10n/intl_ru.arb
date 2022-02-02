@@ -182,6 +182,24 @@
             "cost": {}
         }
     },
+    "cancel_sub": "Ваша подписка на {count_of_gb} ГБ будет действительна до {date} после чего",
+    "@cancel_sub": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMd"
+            },
+            "count_of_gb": {}
+        }
+    },
+    "filled_gb": "объекты из разделов файлы и медиа, заполняющие {count_of_gb}",
+    "@filled_gb": {
+        "placeholders": {
+            "count_of_gb": {}
+        }
+    },
+    "will_be_deleted": "пространства, будут удалены без возможности восстановления.",
+    "further_use": "Дальнейшее использование приложения станет для вас бесплатным.",
     "subscription_pay_mounth": "{count} ₽/месяц",
     "by_type": "По типу",
     "by_name": "По названию",

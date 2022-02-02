@@ -1,5 +1,6 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -215,10 +216,44 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 itemBuilder: (context, index) {
                   Function() onTap;
                   var obj = state.sortedFiles[index];
-                  // _onPointerDown(PointerDownEvent event) async {
-                  //   if (event.kind == PointerDeviceKind.mouse &&
-                  //       event.buttons == kSecondaryMouseButton) {}
-                  // }
+
+                  Future<void> _onPointerDown(PointerDownEvent event) async {
+                    if (event.kind == PointerDeviceKind.mouse &&
+                        event.buttons == kSecondaryMouseButton) {
+                      BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                        bloc: _bloc,
+                        builder: (context, snapshot) {
+                          var controller = CustomPopupMenuController();
+                          return CustomPopupMenu(
+                            pressType: PressType.singleClick,
+                            barrierColor: Colors.transparent,
+                            showArrow: false,
+                            horizontalMargin: 110,
+                            verticalMargin: 0,
+                            controller: controller,
+                            menuBuilder: () {
+                              return FilesPopupMenuActions(
+                                theme: Theme.of(context),
+                                translate: translate,
+                                onTap: (action) {
+                                  controller.hideMenu();
+                                  if (action == FileAction.properties) {
+                                    StateInfoContainer.of(context)
+                                        ?.setInfoObject(obj);
+                                    controller.hideMenu();
+                                  } else
+                                    context
+                                        .read<OpenedFolderCubit>()
+                                        .onRecordActionChoosed(action, obj);
+                                },
+                              );
+                            },
+                            child: ObjectView(object: state.sortedFiles[index]),
+                          );
+                        },
+                      );
+                    }
+                  }
 
                   if (obj is Folder) {
                     onTap = () {
@@ -241,7 +276,10 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   }
                   return GestureDetector(
                     onTap: onTap,
-                    child: ObjectView(object: state.sortedFiles[index]),
+                    child: Listener(
+                      child: ObjectView(object: state.sortedFiles[index]),
+                      onPointerDown: _onPointerDown,
+                    ),
                   );
                 },
               );

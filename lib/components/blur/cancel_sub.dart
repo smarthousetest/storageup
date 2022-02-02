@@ -3,11 +3,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurCancelSub extends StatefulWidget {
+  var choosedSubGb;
+  DateTime dateTime;
+  var filledGb;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
+  BlurCancelSub(this.choosedSubGb, this.dateTime, this.filledGb);
 }
 
 class _ButtonTemplateState extends State<BlurCancelSub> {
@@ -15,6 +20,11 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
 
   @override
   Widget build(BuildContext context) {
+    var textStyle = TextStyle(
+      fontSize: 14,
+      fontFamily: kNormalTextFontFamily,
+      color: Theme.of(context).textTheme.headline2?.color,
+    );
     return Material(
       color: Colors.transparent,
       child: Stack(
@@ -41,9 +51,9 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(60, 25, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(50, 25, 0, 0),
                     child: Container(
-                      width: 460,
+                      width: 480,
                       height: 212,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -56,17 +66,30 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
                               color: Theme.of(context).focusColor,
                             ),
                           ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 25),
-                              child: Text(
-                                translate.wrong_username,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: kNormalTextFontFamily,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 0),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        translate.cancel_sub(widget.dateTime,
+                                            widget.choosedSubGb),
+                                        style: textStyle),
+                                    Text(
+                                        translate.filled_gb(filesize(
+                                            widget.filledGb, translate)),
+                                        style: textStyle),
+                                    Text(translate.will_be_deleted,
+                                        style: textStyle),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Text(translate.further_use,
+                                          style: textStyle),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -120,7 +143,7 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
                     ),
                   ),
                   Container(
-                    width: 60,
+                    width: 40,
                     alignment: Alignment.topRight,
                     child: IconButton(
                       icon: Icon(
