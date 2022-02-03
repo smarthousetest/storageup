@@ -1,5 +1,6 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -453,7 +454,12 @@ class _MediaPageState extends State<MediaPage> {
 
   Widget _filesGrid() {
     return BlocBuilder<MediaCubit, MediaState>(
-      builder: (context, state) {
+      buildWhen: (previous, current) {
+        var needToUpdate =
+            previous.currentFolderRecords != current.currentFolderRecords;
+        return needToUpdate;
+      },
+      builder: (blocContext, state) {
         return LayoutBuilder(builder: (context, constrains) {
           print('min width ${constrains.smallest.width}');
 
@@ -472,8 +478,14 @@ class _MediaPageState extends State<MediaPage> {
               ),
               itemBuilder: (context, index) {
                 return GestureDetector(
+                  onTap: () {
+                    blocContext
+                        .read<MediaCubit>()
+                        .fileTapped(state.currentFolderRecords[index]);
+                  },
                   child: MediaGridElement(
-                      record: state.currentFolderRecords[index]),
+                    record: state.currentFolderRecords[index],
+                  ),
                 );
               },
             ),
@@ -685,15 +697,27 @@ class MediaGridElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var imageUrl = record.thumbnail!.first.publicUrl!;
+    Widget image;
+    if (imageUrl.isURL()) {
+      image = Image.network(
+        record.thumbnail!.first.publicUrl!,
+      );
+    } else {
+      image = Image.asset(
+        'assets/file_icons/image_default.png',
+      );
+    }
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Stack(
+          alignment: Alignment.center,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                record.thumbnail!.first.publicUrl!,
-              ),
+              child: image,
             ),
             ..._uploadProgress(record.loadPercent),
           ],
@@ -717,7 +741,7 @@ class MediaGridElement extends StatelessWidget {
   }
 
   List<Widget> _uploadProgress(double? progress) {
-    List<Widget> indicators = [Container()];
+    List<Widget> indicators = [];
     if (progress != null) {
       print('creating indicators with progress: $progress');
       indicators = [
@@ -726,7 +750,7 @@ class MediaGridElement extends StatelessWidget {
             value: progress / 100,
           ),
         ),
-        CircularProgressIndicator.adaptive(),
+        CupertinoActivityIndicator(),
       ];
     }
 

@@ -33,7 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
 
     on<HomePageOpened>((event, emit) async {
-      getApplicationDocumentsDirectory().then((value) {
+      getApplicationSupportDirectory().then((value) {
         Hive.init(value.path);
         print('Hive initialized');
       });

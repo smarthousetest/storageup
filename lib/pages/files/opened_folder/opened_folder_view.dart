@@ -572,7 +572,7 @@ class ObjectView extends StatelessWidget {
             value: progress / 100,
           ),
         ),
-        CircularProgressIndicator.adaptive(),
+        CupertinoActivityIndicator(),
       ];
     }
 

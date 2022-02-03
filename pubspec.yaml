@@ -17,7 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   intl: ^0.17.0
   adaptive_theme: ^2.2.0
-  flutter_svg: ^0.22.0
+  flutter_svg: ^1.0.3
   flutter_bloc: ^7.3.0
   formz: ^0.4.0
   equatable: ^2.0.3
