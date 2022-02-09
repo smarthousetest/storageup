@@ -126,8 +126,6 @@ class _FilePageState extends State<FilePage> {
       SortingElement(text: translate.by_name, type: SortingCriterion.byName),
       SortingElement(
           text: translate.by_date_added, type: SortingCriterion.byDateCreated),
-      SortingElement(
-          text: translate.by_date_viewed, type: SortingCriterion.byDateViewed),
       SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
     ];
   }
@@ -233,11 +231,9 @@ class _FilePageState extends State<FilePage> {
                 case SortingCriterion.byDateCreated:
                   _onActionSheetTap(context, items[2]);
                   break;
-                case SortingCriterion.byDateViewed:
-                  _onActionSheetTap(context, items[3]);
-                  break;
+
                 case SortingCriterion.bySize:
-                  _onActionSheetTap(context, items[4]);
+                  _onActionSheetTap(context, items[3]);
                   break;
               }
             },
@@ -250,6 +246,7 @@ class _FilePageState extends State<FilePage> {
                 _isSearchFieldChoosen
                     ? setState(() {
                         _changeSortFieldsVisibility(context);
+                        StateSortedContainer.of(context).actionForButton();
                       })
                     : print('a');
                 controller.showMenu();
@@ -343,7 +340,8 @@ class _FilePageState extends State<FilePage> {
                 : () {
                     setState(() {
                       _changeSortFieldsVisibility(context);
-                      _direction = SortingDirection.neutral;
+                      StateSortedContainer.of(context).actionForButton();
+                      _direction = SortingDirection.down;
                     });
                     // _direction = SortingDirection.down;
                     _searchingFieldController.clear();
@@ -406,7 +404,7 @@ class _FilePageState extends State<FilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          state.user?.fullName ?? '',
+                          state.user?.fullName ?? 'Александр',
                           style: TextStyle(
                             fontSize: 17,
                             color: Theme.of(context).bottomAppBarColor,
@@ -435,9 +433,7 @@ class _FilePageState extends State<FilePage> {
           .indexWhere((element) => element.text == item.text);
     });
     _lastCriterion = item.type;
-
-    StateSortedContainer.of(context).newSortedCriterion(item.type, _direction);
-
+    StateSortedContainer.of(context).newSortedCriterion(item.type);
     // context.read<FilesBloc>().add(
     //       FileSortingByCriterion(criterion: item.type, direction: _direction),
     //     );
@@ -1110,7 +1106,7 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    widget.onTap(SortingCriterion.byDateViewed);
+                    widget.onTap(SortingCriterion.bySize);
                   },
                   child: MouseRegion(
                     onEnter: (event) {
@@ -1123,44 +1119,12 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
                       height: 40,
                       color: ind == 3 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
-                      margin: EdgeInsets.zero,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.translate.by_date_viewed,
-                            style: ind == 3 ? choosedStyle : style,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: mainColor,
-                  height: 1,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    widget.onTap(SortingCriterion.bySize);
-                  },
-                  child: MouseRegion(
-                    onEnter: (event) {
-                      setState(() {
-                        ind = 4;
-                      });
-                    },
-                    child: Container(
-                      width: 190,
-                      height: 40,
-                      color: ind == 4 ? mainColor : null,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             widget.translate.by_size,
-                            style: ind == 4 ? choosedStyle : style,
+                            style: ind == 3 ? choosedStyle : style,
                           ),
                         ],
                       ),

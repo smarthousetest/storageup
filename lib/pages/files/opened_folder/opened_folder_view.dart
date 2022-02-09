@@ -11,6 +11,7 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -38,7 +39,7 @@ class OpenedFolderView extends StatefulWidget {
 
 class _OpenedFolderViewState extends State<OpenedFolderView> {
   S translate = getIt<S>();
-
+  SortingDirection _direction = SortingDirection.down;
   var _bloc = OpenedFolderCubit();
 
   @override
@@ -89,19 +90,45 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           children: [
             _pathRow(state.previousFolders, state.currentFolder),
             Spacer(),
-            IconButton(
-              padding: EdgeInsets.zero,
-              iconSize: 30,
-              onPressed: () {
-                context
-                    .read<OpenedFolderCubit>()
-                    .changeRepresentation(FilesRepresentation.table);
-              },
-              icon: SvgPicture.asset(
-                'assets/file_page/list.svg',
-                color: state.representation == FilesRepresentation.table
-                    ? Theme.of(context).splashColor
-                    : Theme.of(context).toggleButtonsTheme.color,
+            StateSortedContainer.of(context).sortedActionButton
+                ? IconButton(
+                    padding: EdgeInsets.zero,
+                    iconSize: 30,
+                    onPressed: () {
+                      if (_direction == SortingDirection.down) {
+                        _direction = SortingDirection.up;
+                        StateSortedContainer.of(context)
+                            .newSortedDirection(_direction);
+                      } else {
+                        _direction = SortingDirection.down;
+                        StateSortedContainer.of(context)
+                            .newSortedDirection(_direction);
+                      }
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/file_page/arrows_${StateSortedContainer.of(context).direction.toString().split('.').last}.svg',
+                      color: state.representation == FilesRepresentation.table
+                          ? Theme.of(context).splashColor
+                          : Theme.of(context).toggleButtonsTheme.color,
+                    ),
+                  )
+                : Container(),
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                iconSize: 30,
+                onPressed: () {
+                  context
+                      .read<OpenedFolderCubit>()
+                      .changeRepresentation(FilesRepresentation.table);
+                },
+                icon: SvgPicture.asset(
+                  'assets/file_page/list.svg',
+                  color: state.representation == FilesRepresentation.table
+                      ? Theme.of(context).splashColor
+                      : Theme.of(context).toggleButtonsTheme.color,
+                ),
               ),
             ),
             IconButton(
@@ -130,9 +157,9 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
       builder: (context, state) {
         var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
         var direction = StateSortedContainer.of(context).direction;
-        context
-            .read<OpenedFolderCubit>()
-            .mapFileSortingByCreterion(sortedCriterion, direction);
+        context.read<OpenedFolderCubit>()
+          ..setNewCriterionAndDirection(sortedCriterion, direction)
+          ..mapFileSortingByCreterion();
         if (state.representation == FilesRepresentation.grid) {
           return _filesGrid();
         } else {
@@ -141,6 +168,27 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
       },
     );
   }
+
+  // Function() _onArrowTap(BuildContext context) {
+  //   return !_isSearchFieldChoosen
+  //       ? () {
+  //           setState(() {
+  //             if (_direction == SortingDirection.down) {
+  //               _direction = SortingDirection.up;
+  //             } else {
+  //               _direction = SortingDirection.down;
+  //             }
+  //           });
+  //           context.read<FilesBloc>().add(FileSortingByCriterion(
+  //               criterion: _lastCriterion, direction: _direction));
+  //         }
+  //       : () {
+  //           _changeSortFieldsVisibility(context);
+  //           context.read<FilesBloc>().add(FileSortingByCriterion(
+  //               criterion: _lastCriterion, direction: _direction));
+  //           _direction = SortingDirection.down;
+  //         };
+  // }
 
   Widget _pathRow(List<Folder> folders, Folder? currentFolder) {
     List<Widget> path = [];
@@ -219,40 +267,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
                   Future<void> _onPointerDown(PointerDownEvent event) async {
                     if (event.kind == PointerDeviceKind.mouse &&
-                        event.buttons == kSecondaryMouseButton) {
-                      BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-                        bloc: _bloc,
-                        builder: (context, snapshot) {
-                          var controller = CustomPopupMenuController();
-                          return CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
-                            controller: controller,
-                            menuBuilder: () {
-                              return FilesPopupMenuActions(
-                                theme: Theme.of(context),
-                                translate: translate,
-                                onTap: (action) {
-                                  controller.hideMenu();
-                                  if (action == FileAction.properties) {
-                                    StateInfoContainer.of(context)
-                                        ?.setInfoObject(obj);
-                                    controller.hideMenu();
-                                  } else
-                                    context
-                                        .read<OpenedFolderCubit>()
-                                        .onRecordActionChoosed(action, obj);
-                                },
-                              );
-                            },
-                            child: ObjectView(object: state.sortedFiles[index]),
-                          );
-                        },
-                      );
-                    }
+                        event.buttons == kSecondaryMouseButton) {}
                   }
 
                   if (obj is Folder) {
@@ -274,13 +289,44 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       print('file tapped');
                     };
                   }
+
                   return GestureDetector(
-                    onTap: onTap,
-                    child: Listener(
-                      child: ObjectView(object: state.sortedFiles[index]),
-                      onPointerDown: _onPointerDown,
-                    ),
-                  );
+                      onTap: onTap,
+                      child: Listener(
+                        //   child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                        //       builder: (context, state) {
+                        //     var controller = CustomPopupMenuController();
+                        //     return CustomPopupMenu(
+                        //       pressType: PressType.singleClick,
+                        //       barrierColor: Colors.transparent,
+                        //       showArrow: false,
+                        //       horizontalMargin: 110,
+                        //       verticalMargin: 0,
+                        //       controller: controller,
+                        //       menuBuilder: () {
+                        //         return FilesPopupMenuActions(
+                        //           theme: Theme.of(context),
+                        //           translate: translate,
+                        //           onTap: (action) {
+                        //             controller.hideMenu();
+                        //             if (action == FileAction.properties) {
+                        //               StateInfoContainer.of(context)
+                        //                   ?.setInfoObject(obj);
+                        //               controller.hideMenu();
+                        //             } else
+                        //               context
+                        //                   .read<OpenedFolderCubit>()
+                        //                   .onRecordActionChoosed(action, obj);
+                        //           },
+                        //         );
+                        //       },
+                        child: ObjectView(object: state.sortedFiles[index]),
+                        onPointerDown: _onPointerDown,
+                      ));
+                  // }),
+
+                  //),
+                  //  );
                 },
               );
             },

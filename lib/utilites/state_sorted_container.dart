@@ -19,12 +19,14 @@ class StateSortedContainer extends StatefulWidget {
 }
 
 class StateSortedContainerState extends State<StateSortedContainer> {
-  SortingCriterion _sortedCriterion = SortingCriterion.byType;
+  SortingCriterion _sortedCriterion = SortingCriterion.byDateCreated;
   SortingCriterion get sortedCriterion => _sortedCriterion;
-  SortingDirection _direction = SortingDirection.neutral;
+  SortingDirection _direction = SortingDirection.down;
   SortingDirection get direction => _direction;
   String? _search;
   String? get search => _search;
+  bool _sortedActionButton = false;
+  bool get sortedActionButton => _sortedActionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +36,21 @@ class StateSortedContainerState extends State<StateSortedContainer> {
     );
   }
 
-  void newSortedCriterion(
-      SortingCriterion newSortedCriterion, SortingDirection direction) {
+  void newSortedCriterion(SortingCriterion newSortedCriterion) {
     setState(() {
       _sortedCriterion = newSortedCriterion;
+    });
+  }
+
+  void newSortedDirection(SortingDirection direction) {
+    setState(() {
       _direction = direction;
+    });
+  }
+
+  void actionForButton() {
+    setState(() {
+      _sortedActionButton = !sortedActionButton;
     });
   }
 }

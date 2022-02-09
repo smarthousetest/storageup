@@ -79,18 +79,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> mapFileSortingByCreterion(
-      SortingCriterion criterion, SortingDirection direction) async {
+  Future<void> mapFileSortingByCreterion() async {
     OpenedFolderState newState = _clearGroupedMap(state);
-
+    var criterion = newState.criterion;
+    var direction = newState.direction;
     switch (criterion) {
       case SortingCriterion.byType:
         await _sortByType(newState, direction, criterion);
         break;
       case SortingCriterion.byDateCreated:
-        await _sortByDate(newState, direction, criterion);
-        break;
-      case SortingCriterion.byDateViewed:
         await _sortByDate(newState, direction, criterion);
         break;
       case SortingCriterion.byName:
@@ -222,6 +219,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   void _onActionDeleteChoosed(BaseObject object) async {
     //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
     var result = await _filesController.deleteObjects([object]);
     print(result);
     if (result == ResponseStatus.ok) {
@@ -265,13 +263,20 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
+  Future<void> setNewCriterionAndDirection(
+      SortingCriterion criterion, SortingDirection direction) async {
+    emit(state.copyWith(criterion: criterion, direction: direction));
+  }
+
   Future<void> _update() async {
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
 
     emit(state.copyWith(
-      objects: objects,
+      sortedFiles: objects,
     ));
+
+    mapFileSortingByCreterion();
 
     print('files was updated');
 

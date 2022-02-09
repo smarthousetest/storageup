@@ -1,4 +1,4 @@
-enum SortingCriterion { byName, byDateCreated, byDateViewed, byType, bySize }
+enum SortingCriterion { byName, byDateCreated, byType, bySize }
 enum SortingDirection { neutral, up, down }
 
 class SortingElement {
