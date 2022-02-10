@@ -167,7 +167,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       // } else
       //   return a.size == null ? 0 : 1;
     });
-    if (direction == SortingDirection.up) {
+    if (direction == SortingDirection.down) {
       emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
     } else {
       emit(state.copyWith(sortedFiles: sortedFiles));
@@ -203,7 +203,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       } else
         return a.createdAt == null ? 0 : 1;
     });
-    if (direction == SortingDirection.up) {
+    if (direction == SortingDirection.down) {
       emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
     } else {
       emit(state.copyWith(sortedFiles: sortedFiles));

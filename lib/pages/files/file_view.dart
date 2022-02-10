@@ -210,7 +210,7 @@ class _FilePageState extends State<FilePage> {
         pressType: PressType.singleClick,
         barrierColor: Colors.transparent,
         showArrow: false,
-        horizontalMargin: 110,
+        horizontalMargin: 210,
         verticalMargin: 0,
         controller: controller,
         menuBuilder: () {
@@ -269,30 +269,41 @@ class _FilePageState extends State<FilePage> {
                     child: Row(
                       children: [
                         Container(
-                          width: _isSearchFieldChoosen ? 0 : _searchFieldWidth,
-                          child: Center(
-                              child: Text(
-                            _sortingTextFieldIndex == -1
-                                ? translate.file_sorting
-                                : _getSortingElements()[_sortingTextFieldIndex]
-                                    .text,
-                            style: TextStyle(
-                              color: Theme.of(context).splashColor,
+                            width:
+                                _isSearchFieldChoosen ? 0 : _searchFieldWidth,
+                            child: Center(
+                                child: _sortingTextFieldIndex == -1
+                                    ? Text(
+                                        translate.file_sorting,
+                                        style: TextStyle(
+                                          color: Theme.of(context).splashColor,
+                                        ),
+                                      )
+                                    : Text(
+                                        _getSortingElements()[
+                                                _sortingTextFieldIndex]
+                                            .text,
+                                        style: TextStyle(
+                                          color:
+                                              Theme.of(context).disabledColor,
+                                        ),
+                                      ))),
+                        GestureDetector(
+                          onTap: () {
+                            //controller.showMenu();
+                          },
+                          child: Container(
+                            //width: 46,
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.all(9.0),
+                            child: SvgPicture.asset(
+                              "assets/file_page/settings.svg",
+                              color: _isSearchFieldChoosen
+                                  ? Theme.of(context).disabledColor
+                                  : _sortingTextFieldIndex == -1
+                                      ? Theme.of(context).splashColor
+                                      : Theme.of(context).disabledColor,
                             ),
-                          )
-                              // child: SvgPicture.asset(
-                              //     "assets/file_page/settings.svg"),
-                              ),
-                        ),
-                        Container(
-                          //width: 46,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.all(9.0),
-                          child: SvgPicture.asset(
-                            "assets/file_page/settings.svg",
-                            color: _isSearchFieldChoosen
-                                ? Theme.of(context).disabledColor
-                                : Theme.of(context).splashColor,
                           ),
                         ),
                       ],
@@ -357,6 +368,7 @@ class _FilePageState extends State<FilePage> {
                   padding: const EdgeInsets.only(left: 10.0),
                   child: Center(
                     child: TextField(
+                      // autofocus: true,
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Theme.of(context).disabledColor,
