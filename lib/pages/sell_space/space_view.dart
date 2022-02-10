@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +29,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   double _currentSliderValue = 32;
   S translate = getIt<S>();
   String list = "";
+  List<String> dirPath = [];
 
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -458,7 +457,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         return Padding(
                           padding: const EdgeInsets.only(left: 15, top: 11),
                           child: Text(
-                            state.dirPath ?? '',
+                            list,
                             maxLines: 1,
                             style: TextStyle(
                                 color: Theme.of(context).disabledColor),
@@ -474,18 +473,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         height: 42,
                         width: 200,
                         child: OutlinedButton(
-                          onPressed: () {
-                            context.read<SpaceBloc>().add(DirPath());
+                          onPressed: () async {
+                            String? path = await getFilesPaths();
+                            print(path);
+                            setState(() {
+                              if (path != null) {
+                                dirPath.add(path);
+                                list = path;
+                              }
+                            });
                           },
-                          // () async {
-                          //   String? path = await getFilesPaths();
-                          //   print(path);
-                          //   setState(() {
-                          //     if (path != null) {
-                          //       list = path;
-                          //     }
-                          //   });
-                          // },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
                             shape: RoundedRectangleBorder(
@@ -746,18 +743,24 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       builder: (context, state) {
                     return OutlinedButton(
                       onPressed: () {
-                        setState(() {
-                          index = 2;
-                          print(index);
-                        });
+                        if (list.isEmpty) {
+                          print('path null');
+                        } else {
+                          setState(() {
+                            index = 2;
+                            print(list);
+                            print(index);
+                            context.read<SpaceBloc>().add(RunSoft());
+                          });
+                        }
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: state.dirPath!.isEmpty
-                            ? Theme.of(context).splashColor
-                            : Theme.of(context).canvasColor,
+                        backgroundColor: list.isEmpty
+                            ? Theme.of(context).canvasColor
+                            : Theme.of(context).splashColor,
                       ),
                       child: Text(
                         translate.save,
@@ -848,7 +851,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             ),
             Expanded(
                 child: Column(
-              children: [FolderList(listOfDirsKeepers)],
+              children: [
+                FolderList(
+                    listOfDirsKeepers, dirPath, _currentSliderValue.toInt())
+              ],
             ))
           ]),
         ),

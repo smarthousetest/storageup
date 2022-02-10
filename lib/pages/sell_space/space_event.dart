@@ -19,6 +19,6 @@ class SpacePageOpened extends SpaceEvent {
   const SpacePageOpened();
 }
 
-class DirPath extends SpaceEvent {
-  const DirPath();
+class RunSoft extends SpaceEvent {
+  const RunSoft();
 }

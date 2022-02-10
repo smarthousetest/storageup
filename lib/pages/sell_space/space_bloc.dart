@@ -13,8 +13,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       if (event is SpacePageOpened) {
         await _mapSpacePageOpened(event, state, emit);
       }
-      if (event is DirPath) {
-        await _mapDirPath(event, state, emit);
+      if (event is RunSoft) {
+        await _mapRunSoft(event, state, emit);
       }
     });
   }
@@ -32,8 +32,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(user: user));
   }
 
-  Future _mapDirPath(
-    DirPath event,
+  Future _mapRunSoft(
+    RunSoft event,
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
@@ -54,6 +54,5 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           'Вес папки с ползунка'
         ],
         runInShell: true);
-    emit(state.copyWith(dirPath: dirPath));
   }
 }
