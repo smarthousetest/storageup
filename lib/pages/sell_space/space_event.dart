@@ -18,3 +18,7 @@ abstract class SpaceEvent extends Equatable {
 class SpacePageOpened extends SpaceEvent {
   const SpacePageOpened();
 }
+
+class DirPath extends SpaceEvent {
+  const DirPath();
+}

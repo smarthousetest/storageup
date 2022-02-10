@@ -128,6 +128,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
         "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
+        "file_sorting":
+            MessageLookupByLibrary.simpleMessage("Сортировка файлов"),
         "files": MessageLookupByLibrary.simpleMessage("Файлы"),
         "filled_gb": m5,
         "finance": MessageLookupByLibrary.simpleMessage("Финансы"),

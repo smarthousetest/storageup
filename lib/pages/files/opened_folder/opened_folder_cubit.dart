@@ -127,7 +127,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> _sortByType(OpenedFolderState state, SortingDirection direction,
       SortingCriterion criterion) async {
-    List<BaseObject> items = state.objects;
+    List<BaseObject> items = await _getClearListOfFiles(state);
 
     Map<String, List<BaseObject>> groupedFiles = {};
 

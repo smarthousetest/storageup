@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -451,49 +453,57 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Color(0xffE4E7ED))),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15, top: 11),
-                        child: Text(
-                          list,
-                          maxLines: 1,
-                          style:
-                              TextStyle(color: Theme.of(context).disabledColor),
-                        ),
-                      ),
+                      child: BlocBuilder<SpaceBloc, SpaceState>(
+                          builder: (context, state) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 15, top: 11),
+                          child: Text(
+                            state.dirPath ?? '',
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: Theme.of(context).disabledColor),
+                          ),
+                        );
+                      }),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 20),
-                    child: Container(
-                      height: 42,
-                      width: 200,
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          String? path = await getFilesPaths();
-                          print(path);
-                          setState(() {
-                            if (path != null) {
-                              list = path;
-                            }
-                          });
-                        },
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(double.maxFinite, 60),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: Theme.of(context).splashColor,
-                        ),
-                        child: Text(
-                          translate.overview,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 17,
+                  BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20, top: 20),
+                      child: Container(
+                        height: 42,
+                        width: 200,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            context.read<SpaceBloc>().add(DirPath());
+                          },
+                          // () async {
+                          //   String? path = await getFilesPaths();
+                          //   print(path);
+                          //   setState(() {
+                          //     if (path != null) {
+                          //       list = path;
+                          //     }
+                          //   });
+                          // },
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size(double.maxFinite, 60),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            backgroundColor: Theme.of(context).splashColor,
+                          ),
+                          child: Text(
+                            translate.overview,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
               Row(
@@ -732,28 +742,33 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 child: Container(
                   height: 42,
                   width: 200,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        index = 2;
-                        print(index);
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: Theme.of(context).canvasColor,
-                    ),
-                    child: Text(
-                      translate.save,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 17,
+                  child: BlocBuilder<SpaceBloc, SpaceState>(
+                      builder: (context, state) {
+                    return OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          index = 2;
+                          print(index);
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.maxFinite, 60),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: state.dirPath!.isEmpty
+                            ? Theme.of(context).splashColor
+                            : Theme.of(context).canvasColor,
                       ),
-                    ),
-                  ),
+                      child: Text(
+                        translate.save,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 17,
+                        ),
+                      ),
+                    );
+                  }),
                 ),
               ),
             ]),

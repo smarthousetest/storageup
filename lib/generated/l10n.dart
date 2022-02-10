@@ -1835,6 +1835,16 @@ class S {
       args: [],
     );
   }
+
+  /// `File sorting`
+  String get file_sorting {
+    return Intl.message(
+      'File sorting',
+      name: 'file_sorting',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -34,17 +34,17 @@ class _FilePageState extends State<FilePage> {
   S translate = getIt<S>();
 
   List<Widget> _opendedFolders = [];
-  int _sortingTextFieldIndex = 0;
+  int _sortingTextFieldIndex = -1;
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   double? _searchFieldWidth;
   bool _isSearchFieldChoosen = true;
   final TextEditingController _searchingFieldController =
       TextEditingController();
-  SortingDirection _direction = SortingDirection.neutral;
+  //SortingDirection _direction = SortingDirection.neutral;
   GlobalKey stickyKey = GlobalKey();
   GlobalKey propertiesWidthKey = GlobalKey();
-  SortingCriterion _lastCriterion = SortingCriterion.byDateCreated;
+  //SortingCriterion _lastCriterion = SortingCriterion.byDateCreated;
 
   @override
   void initState() {
@@ -117,7 +117,7 @@ class _FilePageState extends State<FilePage> {
     //       text: translate.by_date_viewed, type: SortingCriterion.byDateViewed),
     //   SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
     // ];
-    _sortingTextFieldIndex = 0;
+    _sortingTextFieldIndex = -1;
   }
 
   List<SortingElement> _getSortingElements() {
@@ -272,7 +272,10 @@ class _FilePageState extends State<FilePage> {
                           width: _isSearchFieldChoosen ? 0 : _searchFieldWidth,
                           child: Center(
                               child: Text(
-                            _getSortingElements()[_sortingTextFieldIndex].text,
+                            _sortingTextFieldIndex == -1
+                                ? translate.file_sorting
+                                : _getSortingElements()[_sortingTextFieldIndex]
+                                    .text,
                             style: TextStyle(
                               color: Theme.of(context).splashColor,
                             ),
@@ -341,9 +344,8 @@ class _FilePageState extends State<FilePage> {
                     setState(() {
                       _changeSortFieldsVisibility(context);
                       StateSortedContainer.of(context).actionForButton();
-                      _direction = SortingDirection.down;
                     });
-                    // _direction = SortingDirection.down;
+
                     _searchingFieldController.clear();
                   },
           ),
@@ -432,33 +434,30 @@ class _FilePageState extends State<FilePage> {
       _sortingTextFieldIndex = _getSortingElements()
           .indexWhere((element) => element.text == item.text);
     });
-    _lastCriterion = item.type;
+    // _lastCriterion = item.type;
     StateSortedContainer.of(context).newSortedCriterion(item.type);
-    // context.read<FilesBloc>().add(
-    //       FileSortingByCriterion(criterion: item.type, direction: _direction),
-    //     );
   }
 
-  Function() _onArrowTap(BuildContext context) {
-    return !_isSearchFieldChoosen
-        ? () {
-            setState(() {
-              if (_direction == SortingDirection.down) {
-                _direction = SortingDirection.up;
-              } else {
-                _direction = SortingDirection.down;
-              }
-            });
-            context.read<FilesBloc>().add(FileSortingByCriterion(
-                criterion: _lastCriterion, direction: _direction));
-          }
-        : () {
-            _changeSortFieldsVisibility(context);
-            context.read<FilesBloc>().add(FileSortingByCriterion(
-                criterion: _lastCriterion, direction: _direction));
-            _direction = SortingDirection.down;
-          };
-  }
+  // Function() _onArrowTap(BuildContext context) {
+  //   return !_isSearchFieldChoosen
+  //       ? () {
+  //           setState(() {
+  //             if (_direction == SortingDirection.down) {
+  //               _direction = SortingDirection.up;
+  //             } else {
+  //               _direction = SortingDirection.down;
+  //             }
+  //           });
+  //           context.read<FilesBloc>().add(FileSortingByCriterion(
+  //               criterion: _lastCriterion, direction: _direction));
+  //         }
+  //       : () {
+  //           _changeSortFieldsVisibility(context);
+  //           context.read<FilesBloc>().add(FileSortingByCriterion(
+  //               criterion: _lastCriterion, direction: _direction));
+  //           _direction = SortingDirection.down;
+  //         };
+  // }
 
   Widget showViewFileInfo() {
     try {
