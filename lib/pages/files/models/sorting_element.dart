@@ -1,4 +1,5 @@
-enum SortingCriterion { byName, byDate, byType, bySize }
+enum SortingCriterion { byName, byDateCreated, byType, bySize }
+enum SortingDirection { neutral, up, down }
 
 class SortingElement {
   String text;

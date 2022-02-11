@@ -20,8 +20,9 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
+import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
-enum SortingDirection { neutral, up, down }
+//enum SortingDirection { neutral, up, down }
 enum ContextActionEnum {
   share,
   move,
@@ -213,17 +214,18 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     FilesState newState = _clearGroupedMap(state);
 
     switch (criterion) {
+      case SortingCriterion.byType:
+        await _sortByType(event, newState, emit);
+        break;
+      case SortingCriterion.byDateCreated:
+        await _sortByDate(event, newState, emit);
+        break;
+
       case SortingCriterion.byName:
         await _sortByName(event, newState, emit);
         break;
-      case SortingCriterion.byDate:
-        await _sortByDate(event, newState, emit);
-        break;
       case SortingCriterion.bySize:
         await _sortBySize(event, newState, emit);
-        break;
-      case SortingCriterion.byType:
-        await _sortByType(event, newState, emit);
         break;
     }
   }

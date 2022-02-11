@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/tariff.dart';
@@ -10,6 +11,7 @@ import 'package:upstorage_desktop/pages/finance/finance_event.dart';
 import 'package:upstorage_desktop/pages/finance/finance_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 
 class FinancePage extends StatefulWidget {
   @override
@@ -21,6 +23,7 @@ class _FinancePageState extends State<FinancePage> {
   S translate = getIt<S>();
   var index = 0;
   List<GlobalKey> _keys = [];
+  var pointedSubCardIndex = -1;
 
   @override
   void initState() {
@@ -58,14 +61,13 @@ class _FinancePageState extends State<FinancePage> {
 
     ThemeData theme = Theme.of(context);
     return BlocProvider(
-      create: (context) => FinanceBloc()..add(FinancePageOpened()),
+      create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: Expanded(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 30.0, right: 30, top: 30),
               child: Container(
-                height: 46,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -73,8 +75,9 @@ class _FinancePageState extends State<FinancePage> {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Container(
+                          height: 46,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: theme.primaryColor,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
@@ -105,35 +108,48 @@ class _FinancePageState extends State<FinancePage> {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(right: 20, left: 10),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(23.0),
-                                child: Container(child: state.user.image),
+                              child: GestureDetector(
+                                onTap: () {
+                                  StateContainer.of(context)
+                                      .changePage(ChoosedPage.settings);
+                                },
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(23.0),
+                                    child: Container(child: state.user.image),
+                                  ),
+                                ),
                               ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text(
-                                    state.user?.firstName ?? '',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color:
-                                          Theme.of(context).bottomAppBarColor,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  state.user?.email ?? '',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).bottomAppBarColor,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            (MediaQuery.of(context).size.width > 965)
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        child: Text(
+                                          state.user?.firstName ?? '',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Theme.of(context)
+                                                .bottomAppBarColor,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        state.user?.email ?? '',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context)
+                                              .bottomAppBarColor,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                           ],
                         );
                       }),
@@ -194,7 +210,7 @@ class _FinancePageState extends State<FinancePage> {
                                               .subtitle1
                                               ?.color,
                                       fontFamily: kNormalTextFontFamily,
-                                      fontSize: 20,
+                                      fontSize: 24,
                                     ),
                                   ),
                                 ),
@@ -228,7 +244,7 @@ class _FinancePageState extends State<FinancePage> {
                                                 .subtitle1
                                                 ?.color,
                                         fontFamily: kNormalTextFontFamily,
-                                        fontSize: 20,
+                                        fontSize: 24,
                                       ),
                                     ),
                                   ),
@@ -259,87 +275,268 @@ class _FinancePageState extends State<FinancePage> {
     );
   }
 
-  Widget subcription(ThemeData theme) {
-    return activeSub(theme);
-  }
+  // Widget subcription(ThemeData theme) {
+  //   return activeSub(theme);
+  // }
 
-  Widget activeSub(ThemeData theme) {
-    return ListView(children: [
-      Padding(
-        padding: const EdgeInsets.only(left: 40, top: 30),
-        child: Container(
-          child: Text(
-            translate.active_sub,
-            style: TextStyle(
-              color: Theme.of(context).focusColor,
-              fontFamily: kNormalTextFontFamily,
-              fontSize: 20,
+  Widget subcription(ThemeData theme) {
+    return ListView(
+      children: [
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 40, top: 30),
+            child: Container(
+              child: Text(
+                translate.active_sub,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 24,
+                ),
+              ),
             ),
           ),
+          (MediaQuery.of(context).size.width > 1440)
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 40, top: 30),
+                  child: Row(
+                    children: [
+                      Stack(
+                        children: [
+                          activeSub(context),
+                          subInfo(context),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 40, top: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 200),
+                            child: subInfo(context),
+                          ),
+                          activeSub(context),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+          ...otherSub(theme),
+        ]),
+      ],
+    );
+  }
+
+  Widget activeSub(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 0, top: 0),
+      child: Container(
+        width: 510,
+        height: 220,
+        decoration: BoxDecoration(
+          color: Theme.of(context).splashColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 40.0, left: 40),
+                child: Text(
+                  translate.current_subscription_title(
+                      state.sub?.tariff?.spaceGb ?? '',
+                      state.sub?.tariff?.priceRub ?? ''),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 36,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
+            }),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0, left: 40),
+              child: Text(
+                translate.offer,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 26),
+              child: Container(
+                height: 42,
+                width: 200,
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.maxFinite, 60),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                  child: Text(
+                    '1490 ₽/год',
+                    style: TextStyle(
+                      color: Theme.of(context).splashColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 17,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 40, top: 30),
-              child: Container(
-                width: 510,
-                height: 220,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).splashColor,
-                  borderRadius: BorderRadius.circular(12),
+    );
+  }
+
+  Widget subInfo(BuildContext context) {
+    return BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 0, top: 0, right: 40),
+        child: Container(
+          width: 510,
+          height: 220,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).dividerColor,
+              width: 2,
+            ),
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 40.0, left: 40),
+                child: Text(
+                  translate.payment,
+                  style: TextStyle(
+                    color: Theme.of(context).bottomAppBarColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Text(
+                      translate.current_subscription_payment(DateTime.now(),
+                          state.sub?.tariff?.priceRub?.toInt() ?? ''),
+                      style: TextStyle(
+                        color: Theme.of(context).bottomAppBarColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    ),
                     BlocBuilder<FinanceBloc, FinanceState>(
                         builder: (context, state) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 40.0, left: 40),
-                        child: Text(
-                          translate.current_subscription_title(
-                              state.sub?.tariff?.spaceGb ?? '',
-                              state.sub?.tariff?.priceRub ?? ''),
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 36,
+                      var choosedSubGb = state.sub?.tariff?.spaceGb;
+                      var allFilledGb = state.rootFolders?.size;
+                      return GestureDetector(
+                        onTap: () async {
+                          var str = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return BlurCancelSub(
+                                  choosedSubGb, DateTime.now(), allFilledGb);
+                            },
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Text(
+                              translate.canceled,
+                              style: TextStyle(
+                                color: Theme.of(context).indicatorColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 14,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
                           ),
                         ),
                       );
                     }),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0, top: 21),
+                child: Text(
+                  translate.card,
+                  style: TextStyle(
+                    color: Theme.of(context).bottomAppBarColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0, top: 12),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/finance_page/visa.svg",
+                    ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10.0, left: 40),
+                      padding: const EdgeInsets.only(left: 10.0),
                       child: Text(
-                        translate.offer,
+                        '07/24',
                         style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).bottomAppBarColor,
                           fontFamily: kNormalTextFontFamily,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0, top: 4),
+                child: Row(
+                  children: [
+                    Text(
+                      '••••   ••••   ••••   3282',
+                      style: TextStyle(
+                        color: Theme.of(context).bottomAppBarColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 40, top: 26),
-                      child: Container(
-                        height: 42,
-                        width: 200,
-                        child: OutlinedButton(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                            minimumSize: Size(double.maxFinite, 60),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            backgroundColor: Theme.of(context).primaryColor,
-                          ),
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
                           child: Text(
-                            '1490 ₽/год',
+                            translate.change,
                             style: TextStyle(
                               color: Theme.of(context).splashColor,
                               fontFamily: kNormalTextFontFamily,
-                              fontSize: 17,
+                              fontSize: 14,
+                              decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
@@ -348,153 +545,11 @@ class _FinancePageState extends State<FinancePage> {
                   ],
                 ),
               ),
-            ),
-            BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 40, top: 30, right: 40),
-                child: Container(
-                  width: 510,
-                  height: 220,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).dividerColor,
-                      width: 2,
-                    ),
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 40.0, left: 40),
-                        child: Text(
-                          translate.payment,
-                          style: TextStyle(
-                            color: Theme.of(context).bottomAppBarColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0, left: 40),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              translate.current_subscription_payment(
-                                  DateTime.now(),
-                                  state.sub?.tariff?.priceRub?.toInt() ?? ''),
-                              style: TextStyle(
-                                color: Theme.of(context).bottomAppBarColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 14,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                var str = await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return BlurCancelSub();
-                                  },
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: Text(
-                                    translate.canceled,
-                                    style: TextStyle(
-                                      color: Theme.of(context).indicatorColor,
-                                      fontFamily: kNormalTextFontFamily,
-                                      fontSize: 14,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40.0, top: 21),
-                        child: Text(
-                          translate.card,
-                          style: TextStyle(
-                            color: Theme.of(context).bottomAppBarColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40.0, top: 12),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              "assets/finance_page/visa.svg",
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                '07/24',
-                                style: TextStyle(
-                                  color: Theme.of(context).bottomAppBarColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 40.0, top: 4),
-                        child: Row(
-                          children: [
-                            Text(
-                              '••••   ••••   ••••   3282',
-                              style: TextStyle(
-                                color: Theme.of(context).bottomAppBarColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 14,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: Text(
-                                    translate.change,
-                                    style: TextStyle(
-                                      color: Theme.of(context).splashColor,
-                                      fontFamily: kNormalTextFontFamily,
-                                      fontSize: 14,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }),
-          ],
+            ],
+          ),
         ),
-      ),
-      ...otherSub(theme),
-    ]);
+      );
+    });
   }
 
   List<Widget> otherSub(ThemeData theme) {
@@ -507,7 +562,8 @@ class _FinancePageState extends State<FinancePage> {
             style: TextStyle(
               color: Theme.of(context).focusColor,
               fontFamily: kNormalTextFontFamily,
-              fontSize: 20,
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
@@ -517,91 +573,100 @@ class _FinancePageState extends State<FinancePage> {
           height: 312,
           child:
               BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
-            var sub = state.allSub;
+            //var sub = state.allSub;
             var subscription = List.from(state.allSub);
             subscription
                 .removeWhere((element) => element.id == state.sub?.tariff?.id);
-            int ind = -1;
-            print(subscription);
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: subscription.length,
                 itemBuilder: (context, index) {
                   return MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    // onEnter: (event) {
-                    //   setState(() {
-                    //     ind = 0;
-                    //   });
-                    // },
+                    onExit: (event) {
+                      setState(() {
+                        pointedSubCardIndex = -1;
+                      });
+                    },
+                    onEnter: (event) {
+                      setState(() {
+                        pointedSubCardIndex = index;
+                      });
+                    },
                     child: Container(
                       width: 230,
                       height: 312,
-                      margin: EdgeInsets.only(right: 25),
+                      margin: EdgeInsets.only(right: 50),
                       decoration: BoxDecoration(
                         border: Border.all(
                             color: Theme.of(context).dividerColor, width: 3),
-                        color: Theme.of(context).primaryColor,
+                        color: pointedSubCardIndex == index
+                            ? Theme.of(context).splashColor
+                            : Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 40.0, left: 40),
+                            padding: const EdgeInsets.only(top: 40.0, left: 35),
                             child: Text(
                               translate
                                   .gb(subscription[index].spaceGb.toString()),
                               style: TextStyle(
-                                color: Theme.of(context).splashColor,
+                                color: pointedSubCardIndex == index
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).splashColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 36,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 30.0, left: 40),
+                            padding: const EdgeInsets.only(top: 30.0, left: 35),
                             child: Text(
                               translate.subscription_pay_mounth(
                                   subscription[index].priceRub ?? ''),
                               maxLines: 2,
                               style: TextStyle(
-                                color: Theme.of(context).bottomAppBarColor,
+                                color: pointedSubCardIndex == index
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).bottomAppBarColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 24,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 40, top: 60),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                context.read<FinanceBloc>().add(
-                                    ChangeSubscription(
-                                        choosedSub: subscription[index].id!));
-
-                                setState(() {
-                                  ind = 0;
-                                });
-                              },
-                              child: Text(
-                                translate.select,
-                                style: TextStyle(
-                                  color: Theme.of(context).splashColor,
-                                  fontSize: 16,
-                                  fontFamily: kNormalTextFontFamily,
+                            padding: const EdgeInsets.only(left: 35, top: 60),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context.read<FinanceBloc>().add(
+                                      ChangeSubscription(
+                                          choosedSub: subscription[index].id!));
+                                },
+                                child: Text(
+                                  translate.select,
+                                  style: TextStyle(
+                                    color: Theme.of(context).splashColor,
+                                    fontSize: 16,
+                                    fontFamily: kNormalTextFontFamily,
+                                  ),
                                 ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                primary: Theme.of(context).primaryColor,
-                                fixedSize: Size(160, 42),
-                                elevation: 0,
-                                side: BorderSide(
-                                  style: BorderStyle.solid,
-                                  color: Theme.of(context).splashColor,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Theme.of(context).primaryColor,
+                                  fixedSize: Size(160, 42),
+                                  elevation: 0,
+                                  side: BorderSide(
+                                    style: BorderStyle.solid,
+                                    color: Theme.of(context).splashColor,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
                               ),
                             ),

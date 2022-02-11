@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -246,7 +245,7 @@ class _AuthViewState extends State<AuthView> {
   }
 
   Widget _register(ThemeData theme) {
-    var fullWidth = MediaQuery.of(context).size.width;
+    // var fullWidth = MediaQuery.of(context).size.width;
     // var widthOfContainer = fullWidth * 0.4;
     var widthOfContainer = 560.0;
     return Container(

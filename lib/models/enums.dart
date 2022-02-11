@@ -13,6 +13,11 @@ enum AuthenticationStatus {
   externalError,
 }
 
+enum FileAction {
+  delete,
+  properties,
+}
+
 enum ErrorType {
   noInternet,
 }

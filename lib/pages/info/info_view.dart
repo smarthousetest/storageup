@@ -6,15 +6,12 @@ import 'package:upstorage_desktop/components/custom_progress_bar.dart';
 import 'package:upstorage_desktop/pages/info/info_bloc.dart';
 import 'package:upstorage_desktop/pages/info/info_event.dart';
 import 'package:upstorage_desktop/pages/info/info_state.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
-import '../../theme.dart';
 import '../../constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 
 import 'package:upstorage_desktop/utilites/extensions.dart';
 
@@ -48,17 +45,20 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _mainFields(context),
-          (MediaQuery.of(context).size.width > 1380)
-              ? _rightInfoWidget(context)
-              : Container(),
-        ],
+    return BlocProvider(
+      create: (context) => InfoBloc()..add(InfoPageOpened()),
+      child: Expanded(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _mainFields(context),
+            (MediaQuery.of(context).size.width > 1380)
+                ? _rightInfoWidget(context)
+                : Container(),
+          ],
+        ),
       ),
     );
   }
@@ -109,44 +109,46 @@ class _InfoPageState extends State<InfoPage> {
         ));
   }
 
-  Row _userRow(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: Container(
-            height: 46,
-            // width: 46,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(23),
+  _userRow(BuildContext context) {
+    return BlocBuilder<InfoBloc, InfoState>(builder: (context, state) {
+      return Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Container(
+              height: 46,
+              // width: 46,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(23),
+                child: state.user.image,
+              ),
             ),
-            child: Image.asset('assets/home_page/man.jpg'),
           ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                "А. Рождественский",
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  state.user?.fullName ?? '',
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Theme.of(context).bottomAppBarColor,
+                  ),
+                ),
+              ),
+              Text(
+                state.user?.email ?? '',
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 12,
                   color: Theme.of(context).bottomAppBarColor,
                 ),
               ),
-            ),
-            Text(
-              "votreaa@mail.ru",
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).bottomAppBarColor,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+            ],
+          ),
+        ],
+      );
+    });
   }
 
   Row _filledGbCount(BuildContext context) {
@@ -586,11 +588,13 @@ class _InfoPageState extends State<InfoPage> {
                                       StateContainer.of(context)
                                           .changePage(ChoosedPage.settings);
                                     },
-                                    child: MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: Image.asset(
-                                          'assets/file_page/val.jpg'),
-                                    ),
+                                    child: BlocBuilder<InfoBloc, InfoState>(
+                                        builder: (context, state) {
+                                      return MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: state.user.image,
+                                      );
+                                    }),
                                   ),
                                 ),
                               ),

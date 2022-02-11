@@ -141,7 +141,7 @@
     "media": "Медиа",
     "settings": "Настройки",
     "all_files": "Все файлы",
-    "count_of_files" :"{count} файлов",
+    "count_of_files": "{count} файлов",
     "foldr": "Папка",
     "b": "{count} Б",
     "kb": "{count} Кб",
@@ -149,11 +149,11 @@
     "gb": "{count} Гб",
     "tb": "{count} Тб",
     "pb": "{count} Пб",
-    "share":"Поделиться",
-    "move":"Переместить",
-    "download":"Загрузить",
-    "info":"Свойства",
-    "delete":"Удалить",
+    "share": "Поделиться",
+    "move": "Переместить",
+    "download": "Загрузить",
+    "info": "Свойства",
+    "delete": "Удалить",
     "change_photo": "Изменить фото",
     "offer": "Выгодное предложение - переход на годовую подписку",
     "payment": "Оплата:",
@@ -182,5 +182,31 @@
             "cost": {}
         }
     },
-    "subscription_pay_mounth": "{count} ₽/месяц"
+    "cancel_sub": "Ваша подписка на {count_of_gb} ГБ будет действительна до {date} после чего",
+    "@cancel_sub": {
+        "placeholders": {
+            "date": {
+                "type": "DateTime",
+                "format": "yMd"
+            },
+            "count_of_gb": {}
+        }
+    },
+    "filled_gb": "объекты из разделов файлы и медиа, заполняющие {count_of_gb}",
+    "@filled_gb": {
+        "placeholders": {
+            "count_of_gb": {}
+        }
+    },
+    "will_be_deleted": "пространства, будут удалены без возможности восстановления.",
+    "further_use": "Дальнейшее использование приложения станет для вас бесплатным.",
+    "subscription_pay_mounth": "{count} ₽/месяц",
+    "by_type": "По типу",
+    "by_name": "По названию",
+    "by_date_added": "По дате добавления",
+    "by_date_viewed": "По дате просмотра",
+    "by_size": "По размеру",
+    "search": "Поиск",
+    "finance": "Финансы",
+    "file_sorting": "Сортировка файлов"
 }

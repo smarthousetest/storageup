@@ -7,6 +7,7 @@
 import 'package:dio/dio.dart' as _i5;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
+import 'package:upstorage_desktop/pages/finance/finance_bloc.dart' as _i20;
 import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
 
 import '../generated/l10n.dart' as _i13;
@@ -62,6 +63,8 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       instanceName: 'user_repo');
   gh.factory<_i18.AuthService>(
       () => _i18.AuthService(get<_i5.Dio>(instanceName: 'auth_dio')));
+  gh.factory<_i20.FinanceBloc>(() => _i20.FinanceBloc(
+      get<_i6.FilesController>(instanceName: 'files_controller')));
   gh.factory<_i19.FilesBloc>(() => _i19.FilesBloc(
       get<_i6.FilesController>(instanceName: 'files_controller')));
   gh.singleton<_i4.AuthenticationRepository>(_i4.AuthenticationRepository());

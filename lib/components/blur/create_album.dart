@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:upstorage_desktop/components/blur/menu_upload.dart';
-import 'package:upstorage_desktop/models/enums.dart';
 
 class BlurCreateAlbum extends StatefulWidget {
   @override

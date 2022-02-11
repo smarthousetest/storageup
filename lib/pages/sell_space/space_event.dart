@@ -18,3 +18,11 @@ abstract class SpaceEvent extends Equatable {
 class SpacePageOpened extends SpaceEvent {
   const SpacePageOpened();
 }
+
+class RunSoft extends SpaceEvent {
+  const RunSoft();
+}
+
+class SaveDirPath extends SpaceEvent {
+  const SaveDirPath();
+}

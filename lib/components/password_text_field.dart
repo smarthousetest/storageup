@@ -63,12 +63,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     );
   }
 
-  void _changeObscure() {
-    setState(() {
-      _hidePassword = !_hidePassword;
-      //FocusScope.of(context).unfocus();
-    });
-  }
+  // void _changeObscure() {
+  //   setState(() {
+  //     _hidePassword = !_hidePassword;
+  //     //FocusScope.of(context).unfocus();
+  //   });
+  // }
 
   // GestureDetector? _suffixIcon() {
   //   return widget.isPassword

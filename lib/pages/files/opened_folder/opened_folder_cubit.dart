@@ -1,13 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
+
+//enum SortingDirection { neutral, up, down }
 
 class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   OpenedFolderCubit()
@@ -52,6 +56,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       state.copyWith(
         currentFolder: currentFolder,
         objects: objects,
+        sortedFiles: objects,
         previousFolders: previousFolders,
       ),
     );
@@ -59,6 +64,167 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     _loadController.getState.registerObserver(_updateObserver);
 
     _syncWithLoadController(objects);
+  }
+
+  void onRecordActionChoosed(FileAction action, BaseObject object) {
+    switch (action) {
+      case FileAction.delete:
+        _onActionDeleteChoosed(object);
+        break;
+      case FileAction.properties:
+        //PropertiesView(object: object);
+        break;
+      default:
+        print('default');
+    }
+  }
+
+  Future<void> mapFileSortingByCreterion() async {
+    OpenedFolderState newState = _clearGroupedMap(state);
+    var criterion = newState.criterion;
+    var direction = newState.direction;
+    switch (criterion) {
+      case SortingCriterion.byType:
+        await _sortByType(newState, direction, criterion);
+        break;
+      case SortingCriterion.byDateCreated:
+        await _sortByDate(newState, direction, criterion);
+        break;
+      case SortingCriterion.byName:
+        await _sortByName(newState, direction, criterion);
+        break;
+      case SortingCriterion.bySize:
+        await _sortBySize(newState, direction, criterion);
+        break;
+    }
+  }
+
+  OpenedFolderState _clearGroupedMap(
+    OpenedFolderState state,
+  ) {
+    return state.copyWith(groupedFiles: Map());
+  }
+
+  void _mapSortedClear(
+    OpenedFolderState state,
+  ) {
+    final clearedState = _clearGroupedMap(state);
+    emit(state.copyWith(
+        sortedFiles: clearedState.sortedFiles,
+        groupedFiles: clearedState.groupedFiles,
+        status: FormzStatus.valid));
+  }
+
+  Future<List<BaseObject>> _getClearListOfFiles(
+    OpenedFolderState state,
+  ) async {
+    List<BaseObject>? items = await _filesController.getFiles();
+    List<BaseObject> sortedFiles = [];
+    sortedFiles.addAll(items ?? []);
+
+    return sortedFiles;
+  }
+
+  Future<void> _sortByType(OpenedFolderState state, SortingDirection direction,
+      SortingCriterion criterion) async {
+    List<BaseObject> items = await _getClearListOfFiles(state);
+
+    Map<String, List<BaseObject>> groupedFiles = {};
+
+    items.forEach((element) {
+      String key;
+      if (element.extension == null) {
+        key = 'folder';
+      } else {
+        key = element.extension!.toLowerCase();
+      }
+      if (groupedFiles.containsKey(key)) {
+        groupedFiles[key]?.add(element);
+      } else {
+        groupedFiles[key] = [element];
+      }
+    });
+
+    if (direction == SortingDirection.down) {
+      emit(state.copyWith(groupedFiles: groupedFiles));
+    } else {
+      emit(state.copyWith(
+        groupedFiles: groupedFiles
+            .map((key, value) => MapEntry(key, value.reversed.toList())),
+      ));
+    }
+  }
+
+  Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction,
+      SortingCriterion criterion) async {
+    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    sortedFiles.sort((a, b) {
+      // if (a.size != null && b.size != null) {
+      return a.size.compareTo(b.size);
+      // }
+      // else if (a.size == null && b.size == null) {
+      //   return a.id.compareTo(b.id);
+      // } else
+      //   return a.size == null ? 0 : 1;
+    });
+    if (direction == SortingDirection.down) {
+      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+    } else {
+      emit(state.copyWith(sortedFiles: sortedFiles));
+    }
+  }
+
+  Future<void> _sortByName(OpenedFolderState state, SortingDirection direction,
+      SortingCriterion criterion) async {
+    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    sortedFiles.sort((a, b) {
+      if (a.name != null && b.name != null) {
+        return a.name!.compareTo(b.name!);
+      } else if (a.name == null && b.name == null) {
+        return a.id.compareTo(b.id);
+      } else
+        return a.name == null ? 0 : 1;
+    });
+    if (direction == SortingDirection.up) {
+      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+    } else {
+      emit(state.copyWith(sortedFiles: sortedFiles));
+    }
+  }
+
+  Future<void> _sortByDate(OpenedFolderState state, SortingDirection direction,
+      SortingCriterion criterion) async {
+    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    sortedFiles.sort((a, b) {
+      if (a.createdAt != null && b.createdAt != null) {
+        return _compareDates(a.createdAt!, b.createdAt!);
+      } else if (a.createdAt == null && b.createdAt == null) {
+        return a.id.compareTo(b.id);
+      } else
+        return a.createdAt == null ? 0 : 1;
+    });
+    if (direction == SortingDirection.down) {
+      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+    } else {
+      emit(state.copyWith(sortedFiles: sortedFiles));
+    }
+  }
+
+  int _compareDates(DateTime a, DateTime b) {
+    // var dateA = DateTime.parse(a);
+    // var dateB = DateTime.parse(b);
+
+    return a.compareTo(b);
+  }
+
+  void _onActionDeleteChoosed(BaseObject object) async {
+    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    var result = await _filesController.deleteObjects([object]);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    }
   }
 
   void _syncWithLoadController(List<BaseObject> filesInFolder) async {
@@ -97,13 +263,20 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
+  Future<void> setNewCriterionAndDirection(
+      SortingCriterion criterion, SortingDirection direction) async {
+    emit(state.copyWith(criterion: criterion, direction: direction));
+  }
+
   Future<void> _update() async {
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
 
     emit(state.copyWith(
-      objects: objects,
+      sortedFiles: objects,
     ));
+
+    mapFileSortingByCreterion();
 
     print('files was updated');
 
