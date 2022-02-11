@@ -30,7 +30,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   S translate = getIt<S>();
   String list = "";
   List<String> dirPath = [];
-  List countGbSpace = [];
+  List<int> countGbSpace = [];
 
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -753,7 +753,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             index = 2;
                             print(list);
                             print(index);
-                            //context.read<SpaceBloc>().add(RunSoft());
+                            context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },

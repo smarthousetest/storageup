@@ -1,5 +1,6 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -467,6 +468,31 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                           .getFilesType(record.name!.toLowerCase());
                     }
                   }
+                  List<Widget> _uploadProgress(double? progress) {
+                    List<Widget> indicators = [Container()];
+                    if (progress != null) {
+                      print('creating indicators with progress: $progress');
+                      indicators = [
+                        SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(
+                            value: progress / 100,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CupertinoActivityIndicator(
+                            animating: true,
+                          ),
+                        ),
+                      ];
+                    }
+
+                    return indicators;
+                  }
+
                   return DataRow.byIndex(
                     index: state.sortedFiles.indexOf(element),
                     color: MaterialStateProperty.resolveWith<Color?>((states) {
@@ -481,15 +507,23 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                         Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.asset(
-                              isFile
-                                  ? type.isNotEmpty
-                                      ? 'assets/file_icons/${type}_s.png'
-                                      : 'assets/file_icons/unexpected_s.png'
-                                  : 'assets/file_icons/folder.png',
-                              fit: BoxFit.contain,
-                              height: 24,
-                              width: 24,
+                            Stack(
+                              children: [
+                                Image.asset(
+                                  isFile
+                                      ? type.isNotEmpty
+                                          ? 'assets/file_icons/${type}_s.png'
+                                          : 'assets/file_icons/unexpected_s.png'
+                                      : 'assets/file_icons/folder.png',
+                                  fit: BoxFit.contain,
+                                  height: 24,
+                                  width: 24,
+                                ),
+                                ...isFile &&
+                                        (element as Record).loadPercent != null
+                                    ? _uploadProgress(element.loadPercent)
+                                    : [],
+                              ],
                             ),
                             SizedBox(
                               width: 15,
@@ -614,33 +648,16 @@ class ObjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     String? type = '';
     bool isFile = false;
-    // List<Widget> indicators = [Container()];
     if (object is Record) {
       var record = object as Record;
       isFile = true;
-      // print(record.thumbnail?.first.publicUrl);
       if (record.thumbnail != null &&
               record.thumbnail!
                   .isNotEmpty /*&&
           record.thumbnail!.first.name!.contains('.')*/
           ) {
-        type = FileAttribute().getFilesType(
-            record.name!.toLowerCase()); //record.thumbnail?.first.name;
-        print(
-            'file ${record.name} upload percent is ${record.loadPercent} , isFile = $isFile');
-        // print(type);
+        type = FileAttribute().getFilesType(record.name!.toLowerCase());
       }
-
-      // if (record.loadPercent != null && record.loadPercent != 99) {
-      //   indicators = [
-      //     Visibility(
-      //       child: CircularProgressIndicator(
-      //         value: record.loadPercent! / 100,
-      //       ),
-      //     ),
-      //     CircularProgressIndicator.adaptive(),
-      //   ];
-      // }
     }
     return LayoutBuilder(
       builder: (context, constrains) => Column(
@@ -652,7 +669,6 @@ class ObjectView extends StatelessWidget {
             children: [
               Container(
                 height: 90,
-                // width: constrains.minHeight - 17,
                 width: 80,
                 child: isFile && type != 'image'
                     ? type!.isNotEmpty
@@ -707,7 +723,7 @@ class ObjectView extends StatelessWidget {
             value: progress / 100,
           ),
         ),
-        CircularProgressIndicator.adaptive(),
+        CupertinoActivityIndicator(),
       ];
     }
 

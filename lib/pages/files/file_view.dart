@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
@@ -74,14 +75,19 @@ class _FilePageState extends State<FilePage> {
       _timer?.cancel();
       _timer = null;
       final box = keyContext.findRenderObject() as RenderBox;
-      setState(() {
-        _searchFieldWidth = width -
-            _rowSpasing * 3 -
-            30 * 3 -
-            _rowPadding * 2 -
-            274 -
-            box.size.width;
-      });
+      if (StateInfoContainer.of(context)?.object != null) {
+        Future.delayed(Duration(seconds: 1), () {
+          _prepareFields(context);
+        });
+      } else
+        setState(() {
+          _searchFieldWidth = width -
+              _rowSpasing * 3 -
+              30 * 3 -
+              _rowPadding * 2 -
+              274 -
+              box.size.width;
+        });
     } else if (keyInfoContext != null) {
       // _timer?.cancel();
       // _timer = null;
@@ -99,12 +105,22 @@ class _FilePageState extends State<FilePage> {
     } else {
       _searchFieldWidth =
           width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
-      if (_timer == null) {
-        _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-          _prepareFields(context);
-        });
-      }
+      Future.delayed(Duration(seconds: 1), () {
+        _prepareFields(context);
+      });
+      // if (_timer == null) {
+      //   _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      //     _prepareFields(context);
+      //   });
+      // }
     }
+  }
+
+  void postPrepareFields(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    _searchFieldWidth =
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
   }
 
   void _initFilterList() {
@@ -475,15 +491,17 @@ class _FilePageState extends State<FilePage> {
     try {
       if (StateInfoContainer.of(context)?.object == null) {
         return Container();
-      } else
+      } else {
+        // _prepareFields(context);
         return BlocBuilder<FilesBloc, FilesState>(builder: (context, state) {
-          //_prepareFields(context);
           return Container(
               child: FileInfoView(
-                  key: propertiesWidthKey,
-                  user: state.user,
-                  object: StateInfoContainer.of(context)?.object));
+            key: propertiesWidthKey,
+            user: state.user,
+            object: StateInfoContainer.of(context)?.object,
+          ));
         });
+      }
     } catch (e) {
       return Container();
     }

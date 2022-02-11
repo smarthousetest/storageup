@@ -23,13 +23,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         case UserAction.createAlbum:
           await _cerateAlbum(event, emit);
           break;
+        case UserAction.uploadMedia:
+          await _uploadMedia(event, emit);
+          break;
         default:
           break;
       }
     });
 
     on<HomePageOpened>((event, emit) async {
-      getApplicationDocumentsDirectory().then((value) {
+      getApplicationSupportDirectory().then((value) {
         Hive.init(value.path);
         print('Hive initialized');
       });
@@ -68,6 +71,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     var mediaRootFolderId = _filesController.getMediaRootFolderId();
     if (event.values?.first != null && mediaRootFolderId != null) {
       _filesController.createFolder(event.values!.first!, mediaRootFolderId);
+    }
+  }
+
+  Future<void> _uploadMedia(
+    HomeUserActionChoosed event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (event.values != null && event.values!.isNotEmpty) {
+      for (int i = 0; i < event.values!.length; i++) {
+        await _loadController.uploadFile(filePath: event.values![i]);
+      }
     }
   }
 }

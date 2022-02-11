@@ -9,6 +9,12 @@ extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1)}";
   }
+
+  bool isURL() {
+    var urlPattern =
+        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    return RegExp(urlPattern, caseSensitive: false).hasMatch(this);
+  }
 }
 
 extension FileExtension on File {

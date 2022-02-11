@@ -23,7 +23,7 @@ class FolderList extends StatefulWidget {
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   List<String> dirPath;
   final List<KeeperInfo> keeperInfo;
-  List countGb;
+  List<int> countGb = [0];
   FolderList(this.keeperInfo, this.dirPath, this.countGb);
 }
 

@@ -17,7 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   intl: ^0.17.0
   adaptive_theme: ^2.2.0
-  flutter_svg: ^0.22.0
+  flutter_svg: ^1.0.3
   flutter_bloc: ^7.3.0
   formz: ^0.4.0
   equatable: ^2.0.3
@@ -36,6 +36,7 @@ dependencies:
   percent_indicator: ^3.0.1
   connectivity: ^3.0.6
   custom_pop_up_menu: ^1.2.2
+  open_file: ^3.2.1
 
   cpp_native:
     git:
@@ -60,7 +61,6 @@ flutter:
     - assets/file_icons/
     - assets/options/
 
-    
   fonts:
     - family: Noto Sans
       fonts:

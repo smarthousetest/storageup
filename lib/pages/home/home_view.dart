@@ -501,12 +501,12 @@ class _HomePageState extends State<HomePage> {
         }
         break;
       default:
+        context.read<HomeBloc>().add(
+              HomeUserActionChoosed(
+                action: userAction.action,
+                values: userAction.result,
+              ),
+            );
     }
-    context.read<HomeBloc>().add(
-          HomeUserActionChoosed(
-            action: userAction.action,
-            values: userAction.result,
-          ),
-        );
   }
 }
