@@ -16,6 +16,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       if (event is RunSoft) {
         await _mapRunSoft(event, state, emit);
       }
+      if (event is SaveDirPath) {
+        await _mapSaveDirPath(event, state, emit);
+      }
     });
   }
   // final AuthenticationRepository _authenticationRepository =
@@ -55,4 +58,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         ],
         runInShell: true);
   }
+
+  _mapSaveDirPath(
+    SaveDirPath event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) {}
 }

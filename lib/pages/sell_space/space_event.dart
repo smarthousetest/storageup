@@ -22,3 +22,7 @@ class SpacePageOpened extends SpaceEvent {
 class RunSoft extends SpaceEvent {
   const RunSoft();
 }
+
+class SaveDirPath extends SpaceEvent {
+  const SaveDirPath();
+}

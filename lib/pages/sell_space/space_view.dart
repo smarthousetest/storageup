@@ -30,6 +30,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   S translate = getIt<S>();
   String list = "";
   List<String> dirPath = [];
+  List countGbSpace = [];
 
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -747,10 +748,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           print('path null');
                         } else {
                           setState(() {
+                            countGbSpace.add(_currentSliderValue.toInt());
+                            print(countGbSpace);
                             index = 2;
                             print(list);
                             print(index);
-                            context.read<SpaceBloc>().add(RunSoft());
+                            //context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },
@@ -851,10 +854,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             ),
             Expanded(
                 child: Column(
-              children: [
-                FolderList(
-                    listOfDirsKeepers, dirPath, _currentSliderValue.toInt())
-              ],
+              children: [FolderList(listOfDirsKeepers, dirPath, countGbSpace)],
             ))
           ]),
         ),

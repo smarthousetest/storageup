@@ -23,7 +23,7 @@ class FolderList extends StatefulWidget {
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   List<String> dirPath;
   final List<KeeperInfo> keeperInfo;
-  var countGb;
+  List countGb;
   FolderList(this.keeperInfo, this.dirPath, this.countGb);
 }
 
@@ -122,7 +122,7 @@ class _ButtonTemplateState extends State<FolderList> {
                               child: Container(),
                             ),
                             Text(
-                              widget.dirPath[0],
+                              widget.dirPath[index],
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -137,7 +137,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '${widget.countGb} GB',
+                              '${widget.countGb[index]} GB',
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
