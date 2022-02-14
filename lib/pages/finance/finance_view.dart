@@ -296,17 +296,13 @@ class _FinancePageState extends State<FinancePage> {
               ),
             ),
           ),
-          (MediaQuery.of(context).size.width > 1440)
+          (MediaQuery.of(context).size.width > 1465)
               ? Padding(
                   padding: const EdgeInsets.only(left: 40, top: 30),
                   child: Row(
                     children: [
-                      Stack(
-                        children: [
-                          activeSub(context),
-                          subInfo(context),
-                        ],
-                      ),
+                      activeSub(context),
+                      subInfo(context),
                     ],
                   ),
                 )

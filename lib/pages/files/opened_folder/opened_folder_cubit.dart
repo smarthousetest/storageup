@@ -23,6 +23,18 @@ import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
 import '../../../constants.dart';
 
+enum ContextActionEnum {
+  share,
+  move,
+  duplicate,
+  rename,
+  info,
+  delete,
+  select,
+  download,
+  addToFavorites
+}
+
 class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   OpenedFolderCubit()
       : super(OpenedFolderState(
@@ -157,8 +169,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     return sortedFiles;
   }
 
-  Future<void> _sortByType(OpenedFolderState state, SortingDirection direction,
-      SortingCriterion criterion) async {
+  Future<void> _sortByType(
+    OpenedFolderState state,
+    SortingDirection direction,
+    SortingCriterion criterion,
+  ) async {
     List<BaseObject> items = await _getClearListOfFiles(state);
 
     Map<String, List<BaseObject>> groupedFiles = {};
@@ -282,6 +297,23 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       }
     });
   }
+
+  // Future<void> _mapContextActionChoosed(
+  //    ContextActionEnum action,
+  // ) async {
+  //   // emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+  //   //print('${action} ${event.file}');
+  //   if (action == ContextActionEnum.delete) {
+  //     await _onActionDeleteChoosed();
+  //   } else if (action == ContextActionEnum.share) {
+  //     // await _mapDownloadFile(event, state, emit); //TODO remove this
+  //   } else if (action == ContextActionEnum.select) {
+  //     await _mapSelectFile(event, state, emit);
+  //   } else {
+  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
+  //   }
+  // }
 
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(representation: representation));

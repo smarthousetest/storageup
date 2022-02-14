@@ -306,7 +306,7 @@ class _FilePageState extends State<FilePage> {
                                       ))),
                         GestureDetector(
                           onTap: () {
-                            //controller.showMenu();
+                            controller.showMenu();
                           },
                           child: Container(
                             //width: 46,
