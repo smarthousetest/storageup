@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/autoupload/autoupload_controller.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/upload_media.dart';
@@ -127,6 +125,13 @@ class LoadController {
       obj.isInProgress = true;
       uploadingFiles.add(obj);
       _state.changeUploadingFiles(uploadingFiles);
+    } else {
+      final uploadingFileIndex = _state.uploadingFiles.indexOf(obj);
+      if (uploadingFileIndex != -1) {
+        obj.isInProgress = true;
+        uploadingFiles[uploadingFileIndex] = obj;
+        _state.changeUploadingFiles(uploadingFiles);
+      }
     }
     if (_autouploadController == null) {
       _autouploadController =
@@ -164,36 +169,25 @@ class LoadController {
     print('--------------------------------------- $value');
     try {
       if (fileId == null) fileId = '-1';
-      var uploadingFiles = _state.uploadingFiles;
+      var uploadingFiles = List<UploadFileInfo>.from(_state.uploadingFiles);
 
       var element = uploadingFiles.firstWhere((element) =>
           (element.localPath == filePath &&
               (element.isInProgress || element.uploadPercent != 100)) ||
           element.id == fileId);
-      if (value is String) {
-        element.id = value;
-        element.isInProgress = true;
-        await copyFileToDownloadDir(filePath: filePath, fileId: value);
-        _state.changeUploadingFiles(uploadingFiles);
-      } else if (value is int) {
-        if (value != 100) {
-          // var element = uploadingFiles
-          //     .firstWhere((element) => element.localPath == filePath);
-
-          element.uploadPercent = value;
+      if (value is SendProgress) {
+        final uploadingPercent = value.percent;
+        if (uploadingPercent != 100) {
+          element.uploadPercent = uploadingPercent;
+          element.id = value.recordId;
           _state.changeUploadingFiles(uploadingFiles);
         } else {
-          // var element = uploadingFiles
-          //     .firstWhere((element) => element.localPath == filePath);
-
           element.uploadPercent = 100;
 
           _state.changeUploadingFiles(uploadingFiles);
 
           element.isInProgress = false;
           _state.changeUploadingFiles(uploadingFiles);
-          // uploadingFiles.remove(element);
-          // _state.changeUploadingFiles(uploadingFiles);
 
           _processNextFileUpload();
         }
@@ -202,6 +196,7 @@ class LoadController {
           isInProgress: false,
           uploadPercent: -1,
           endedWithException: true,
+          errorReason: value.errorReason,
         );
 
         var ind = uploadingFiles.indexOf(element);
@@ -213,7 +208,7 @@ class LoadController {
       print(
           '_processUploadCallback ! count of uploading files : ${_state.uploadingFiles.length}');
     } catch (e, sw) {
-      print('_processUploadCallback error: $e \nstack trace: \n$sw');
+      print('_processUploadCallback error: $e \nstack trace: $sw');
       _processNextFileUpload();
     }
   }
@@ -232,12 +227,12 @@ class LoadController {
         )) {
       print('start uploading next file');
       try {
-        var file = uploadingFiles.firstWhere(
-          (element) =>
-              !element.isInProgress &&
-              element.uploadPercent != 100 &&
-              !element.auto,
-        );
+        // var file = uploadingFiles.firstWhere(
+        //   (element) =>
+        //       !element.isInProgress &&
+        //       element.uploadPercent != 100 &&
+        //       !element.auto,
+        // );
         uploadFile(
           // filePath: file.localPath,
           force: true,
@@ -531,6 +526,7 @@ class UploadFileInfo {
   String? folderId;
   bool auto;
   bool endedWithException;
+  ErrorReason? errorReason;
 
   UploadFileInfo({
     this.id = '',
@@ -540,6 +536,7 @@ class UploadFileInfo {
     required this.folderId,
     this.auto = false,
     this.endedWithException = false,
+    this.errorReason,
   });
 
   UploadFileInfo copyWith({
@@ -549,6 +546,7 @@ class UploadFileInfo {
     bool? isInProgress,
     String? folderId,
     bool? endedWithException,
+    ErrorReason? errorReason,
   }) {
     return UploadFileInfo(
       localPath: localPath ?? this.localPath,
@@ -557,6 +555,7 @@ class UploadFileInfo {
       uploadPercent: uploadPercent ?? this.uploadPercent,
       folderId: folderId ?? this.folderId,
       endedWithException: endedWithException ?? this.endedWithException,
+      errorReason: errorReason ?? this.errorReason,
     );
   }
 
@@ -585,6 +584,7 @@ class DownloadFileInfo {
   int downloadPercent;
   bool isInProgress;
   bool endedWithException;
+  ErrorReason? errorReason;
 
   DownloadFileInfo({
     required this.id,
@@ -592,6 +592,7 @@ class DownloadFileInfo {
     this.downloadPercent = -1,
     this.isInProgress = false,
     this.endedWithException = false,
+    this.errorReason,
   });
 
   DownloadFileInfo copyWith({
@@ -600,6 +601,7 @@ class DownloadFileInfo {
     int? downloadPercent,
     bool? isInProgress,
     bool? endedWithException,
+    ErrorReason? errorReason,
   }) {
     return DownloadFileInfo(
       localPath: localPath ?? this.localPath,
@@ -607,6 +609,7 @@ class DownloadFileInfo {
       isInProgress: isInProgress ?? this.isInProgress,
       downloadPercent: downloadPercent ?? this.downloadPercent,
       endedWithException: endedWithException ?? this.endedWithException,
+      errorReason: errorReason ?? this.errorReason,
     );
   }
 }

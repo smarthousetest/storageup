@@ -227,7 +227,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
       return Container(
         child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
           bloc: _bloc,
-          builder: (context, state) {
+          builder: (blocContext, state) {
             return GridView.builder(
               itemCount: state.sortedFiles.length,
               shrinkWrap: true,
@@ -314,58 +314,59 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   }
 
   Widget _filesGridForType() {
-    return LayoutBuilder(builder: (context, constrains) {
-      return Container(
-          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-              bloc: _bloc,
-              builder: (context, state) {
-                return GridView.builder(
-                  itemCount: state.sortedFiles.length,
-                  shrinkWrap: true,
-                  controller: ScrollController(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: constrains.smallest.width ~/ 110,
-                    childAspectRatio: (1 / 1.22),
-                    mainAxisSpacing: 15,
-                  ),
-                  itemBuilder: (context, index) {
-                    Function() onTap;
-                    var obj = state.sortedFiles[index];
+    return Expanded(
+      child: LayoutBuilder(builder: (blocContext, constrains) {
+        return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+            bloc: _bloc,
+            builder: (context, state) {
+              return GridView.builder(
+                itemCount: state.sortedFiles.length,
+                shrinkWrap: true,
+                controller: ScrollController(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: constrains.smallest.width ~/ 110,
+                  childAspectRatio: (1 / 1.22),
+                  mainAxisSpacing: 15,
+                ),
+                itemBuilder: (context, index) {
+                  Function() onTap;
+                  var obj = state.sortedFiles[index];
 
-                    // Future<void> _onPointerDown(PointerDownEvent event) async {
-                    //   if (event.kind == PointerDeviceKind.mouse &&
-                    //       event.buttons == kSecondaryMouseButton) {}
-                    // }
+                  // Future<void> _onPointerDown(PointerDownEvent event) async {
+                  //   if (event.kind == PointerDeviceKind.mouse &&
+                  //       event.buttons == kSecondaryMouseButton) {}
+                  // }
 
-                    if (obj is Folder) {
-                      onTap = () {
-                        print(obj);
-                        print("lol");
-                        widget.push(
-                          OpenedFolderView(
-                            currentFolder: obj,
-                            previousFolders: [
-                              ...state.previousFolders,
-                              state.currentFolder!
-                            ],
-                            pop: widget.pop,
-                            push: widget.push,
-                          ),
-                        );
-                      };
-                    } else {
-                      onTap = () {
-                        print('file tapped');
-                      };
-                    }
-                    return GestureDetector(
-                      onTap: onTap,
-                      child: ObjectView(object: state.sortedFiles[index]),
-                    );
-                  },
-                );
-              }));
-    });
+                  if (obj is Folder) {
+                    onTap = () {
+                      print(obj);
+                      print("lol");
+                      widget.push(
+                        OpenedFolderView(
+                          currentFolder: obj,
+                          previousFolders: [
+                            ...state.previousFolders,
+                            state.currentFolder!
+                          ],
+                          pop: widget.pop,
+                          push: widget.push,
+                        ),
+                      );
+                    };
+                  } else {
+                    onTap = () => blocContext
+                        .read<OpenedFolderCubit>()
+                        .fileTapped(obj as Record);
+                  }
+                  return GestureDetector(
+                    onTap: onTap,
+                    child: ObjectView(object: state.sortedFiles[index]),
+                  );
+                },
+              );
+            });
+      }),
+    );
   }
 
   Color _getDataRowColor(Set<MaterialState> states) {

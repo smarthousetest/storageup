@@ -36,10 +36,10 @@ class MediaCubit extends Cubit<MediaState> {
         final uploadingFilesList = e;
         if (uploadingFilesList.any((file) =>
             file.isInProgress &&
-            file.uploadPercent == -1 &&
+            file.uploadPercent == 0 &&
             file.id.isNotEmpty)) {
           final file = uploadingFilesList.firstWhere(
-              (file) => file.isInProgress && file.uploadPercent == -1);
+              (file) => file.isInProgress && file.uploadPercent == 0);
 
           _update(uploadingFileId: file.id);
         }

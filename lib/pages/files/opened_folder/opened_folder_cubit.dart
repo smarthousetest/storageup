@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:formz/formz.dart';
@@ -41,10 +40,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         final uploadingFilesList = e;
         if (uploadingFilesList.any((file) =>
             file.isInProgress &&
-            file.uploadPercent == -1 &&
+            file.uploadPercent == 0 &&
             file.id.isNotEmpty)) {
           final file = uploadingFilesList.firstWhere(
-              (file) => file.isInProgress && file.uploadPercent == -1);
+              (file) => file.isInProgress && file.uploadPercent == 0);
 
           _update(uploadingFileId: file.id);
         }
@@ -150,9 +149,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   Future<List<BaseObject>> _getClearListOfFiles(
     OpenedFolderState state,
   ) async {
-    List<BaseObject>? items = await _filesController.getFiles();
+    List<BaseObject> items = state.objects;
     List<BaseObject> sortedFiles = [];
-    sortedFiles.addAll(items ?? []);
+    sortedFiles.addAll(items);
 
     return sortedFiles;
   }
@@ -307,12 +306,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     if (uploadingFileId != null) {
       var uploadingFileIndex =
           objects.indexWhere((element) => element.id == uploadingFileId);
-      objects[uploadingFileIndex] =
-          (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
+      if (uploadingFileIndex != -1)
+        objects[uploadingFileIndex] =
+            (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
     }
 
     emit(state.copyWith(
-      sortedFiles: objects,
+      objects: objects,
     ));
 
     mapFileSortingByCreterion();
@@ -373,16 +373,16 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       var currentFile = controllerState.uploadingFiles.firstWhere(
           (element) => element.localPath == pathToFile && element.isInProgress);
 
-      if (value is CustomError) {
-        var observer =
-            _observers.firstWhere((element) => element.id == pathToFile);
-        controllerState.unregisterObserver(observer);
+      // if (value is CustomError) {
+      //   var observer =
+      //       _observers.firstWhere((element) => element.id == pathToFile);
+      //   controllerState.unregisterObserver(observer);
 
-        _observers.remove(observer);
+      //   _observers.remove(observer);
 
-        _update();
-        return;
-      }
+      //   _update();
+      //   return;
+      // }
 
       if (currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty) {
         _update();
@@ -449,9 +449,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         //     uploadingFile.copyWith(loadPercent: percent.toDouble());
         print(
             'file\'s ${uploadingFile.name} upload percent = ${uploadingFile.loadPercent}');
-        var newState = state.copyWith(objects: List.from(objects));
+        var newState = state.copyWith(
+          objects: List.from(objects),
+        );
 
         emit(newState);
+
+        mapFileSortingByCreterion();
       }
     }
   }
