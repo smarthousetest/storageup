@@ -64,6 +64,7 @@ class _FinancePageState extends State<FinancePage> {
       create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: Expanded(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 30.0, right: 30, top: 30),
@@ -174,7 +175,7 @@ class _FinancePageState extends State<FinancePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.max,
+                  //mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
                       padding:

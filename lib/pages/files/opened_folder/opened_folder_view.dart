@@ -224,98 +224,100 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   }
 
   Widget _filesGrid(OpenedFolderState state) {
-    return LayoutBuilder(builder: (context, constrains) {
-      print('min width ${constrains.smallest.width}');
+    return Expanded(
+      child: LayoutBuilder(builder: (context, constrains) {
+        print('min width ${constrains.smallest.width}');
 
-      return Container(
-        child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-          bloc: _bloc,
-          builder: (context, state) {
-            return GridView.builder(
-              itemCount: state.sortedFiles.length,
-              shrinkWrap: true,
-              controller: ScrollController(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constrains.smallest.width ~/ 110,
-                childAspectRatio: (1 / 1.22),
-                mainAxisSpacing: 15,
-              ),
-              itemBuilder: (context, index) {
-                Function() onTap;
-                var obj = state.sortedFiles[index];
+        return Container(
+          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+            bloc: _bloc,
+            builder: (context, state) {
+              return GridView.builder(
+                itemCount: state.sortedFiles.length,
+                shrinkWrap: true,
+                controller: ScrollController(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: constrains.smallest.width ~/ 110,
+                  childAspectRatio: (1 / 1.22),
+                  mainAxisSpacing: 15,
+                ),
+                itemBuilder: (context, index) {
+                  Function() onTap;
+                  var obj = state.sortedFiles[index];
 
-                Future<void> _onPointerDown(PointerDownEvent event) async {
-                  if (event.kind == PointerDeviceKind.mouse &&
-                      event.buttons == kSecondaryMouseButton) {
-                    print("right button click");
+                  Future<void> _onPointerDown(PointerDownEvent event) async {
+                    if (event.kind == PointerDeviceKind.mouse &&
+                        event.buttons == kSecondaryMouseButton) {
+                      print("right button click");
+                    }
                   }
-                }
 
-                if (obj is Folder) {
-                  onTap = () {
-                    print(obj);
-                    print("lol");
-                    widget.push(
-                      OpenedFolderView(
-                        currentFolder: obj,
-                        previousFolders: [
-                          ...state.previousFolders,
-                          state.currentFolder!
-                        ],
-                        pop: widget.pop,
-                        push: widget.push,
-                      ),
-                    );
-                  };
-                } else {
-                  onTap = () {
-                    print('file tapped');
-                  };
-                }
+                  if (obj is Folder) {
+                    onTap = () {
+                      print(obj);
+                      print("lol");
+                      widget.push(
+                        OpenedFolderView(
+                          currentFolder: obj,
+                          previousFolders: [
+                            ...state.previousFolders,
+                            state.currentFolder!
+                          ],
+                          pop: widget.pop,
+                          push: widget.push,
+                        ),
+                      );
+                    };
+                  } else {
+                    onTap = () {
+                      print('file tapped');
+                    };
+                  }
 
-                return GestureDetector(
-                    onTap: onTap,
-                    child: Listener(
-                      //   child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-                      //       builder: (context, state) {
-                      //     var controller = CustomPopupMenuController();
-                      //     return CustomPopupMenu(
-                      //       pressType: PressType.singleClick,
-                      //       barrierColor: Colors.transparent,
-                      //       showArrow: false,
-                      //       horizontalMargin: 110,
-                      //       verticalMargin: 0,
-                      //       controller: controller,
-                      //       menuBuilder: () {
-                      //         return FilesPopupMenuActions(
-                      //           theme: Theme.of(context),
-                      //           translate: translate,
-                      //           onTap: (action) {
-                      //             controller.hideMenu();
-                      //             if (action == FileAction.properties) {
-                      //               StateInfoContainer.of(context)
-                      //                   ?.setInfoObject(obj);
-                      //               controller.hideMenu();
-                      //             } else
-                      //               context
-                      //                   .read<OpenedFolderCubit>()
-                      //                   .onRecordActionChoosed(action, obj);
-                      //           },
-                      //         );
-                      //       },
-                      child: ObjectView(object: state.sortedFiles[index]),
-                      onPointerDown: _onPointerDown,
-                    ));
-                // }),
+                  return GestureDetector(
+                      onTap: onTap,
+                      child: Listener(
+                        //   child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                        //       builder: (context, state) {
+                        //     var controller = CustomPopupMenuController();
+                        //     return CustomPopupMenu(
+                        //       pressType: PressType.singleClick,
+                        //       barrierColor: Colors.transparent,
+                        //       showArrow: false,
+                        //       horizontalMargin: 110,
+                        //       verticalMargin: 0,
+                        //       controller: controller,
+                        //       menuBuilder: () {
+                        //         return FilesPopupMenuActions(
+                        //           theme: Theme.of(context),
+                        //           translate: translate,
+                        //           onTap: (action) {
+                        //             controller.hideMenu();
+                        //             if (action == FileAction.properties) {
+                        //               StateInfoContainer.of(context)
+                        //                   ?.setInfoObject(obj);
+                        //               controller.hideMenu();
+                        //             } else
+                        //               context
+                        //                   .read<OpenedFolderCubit>()
+                        //                   .onRecordActionChoosed(action, obj);
+                        //           },
+                        //         );
+                        //       },
+                        child: ObjectView(object: state.sortedFiles[index]),
+                        onPointerDown: _onPointerDown,
+                      ));
+                  // }),
 
-                //),
-                //  );
-              },
-            );
-          },
-        ),
-      );
-    });
+                  //),
+                  //  );
+                },
+              );
+            },
+          ),
+        );
+      }),
+    );
   }
 
   List<GridElement> _gridList(
@@ -393,6 +395,18 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           // physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           children: List.generate(grids.length, (index) {
+            String type = grids[index].type;
+            switch (type) {
+              case 'folder':
+                type = translate.folder_dir;
+                break;
+              case 'jpg':
+                type = translate.photos;
+                break;
+              case 'txt':
+                type = translate.documents;
+                break;
+            }
             return Column(
               children: [
                 Padding(
@@ -401,7 +415,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   child: Container(
                     width: double.infinity,
                     child: Text(
-                      grids[index].type.toString().split('.').last,
+                      type,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         color: Theme.of(context).disabledColor,

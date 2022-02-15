@@ -162,9 +162,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   Future<List<BaseObject>> _getClearListOfFiles(
     OpenedFolderState state,
   ) async {
-    List<BaseObject>? items = await _filesController.getFiles();
+    List<BaseObject>? items = state.objects;
     List<BaseObject> sortedFiles = [];
-    sortedFiles.addAll(items ?? []);
+    sortedFiles.addAll(items);
 
     return sortedFiles;
   }
@@ -196,8 +196,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       emit(state.copyWith(groupedFiles: groupedFiles));
     } else {
       emit(state.copyWith(
-        groupedFiles: groupedFiles
-            .map((key, value) => MapEntry(key, value.reversed.toList())),
+        groupedFiles:
+            // SplayTreeMap<String, List<BaseObject>>.from(
+            //     groupedFiles, (a, b) => a.compareTo(b))
+            //groupedFiles.keys.toList()..sort()
+            // LinkedHashMap.fromEntries(groupedFiles.entries.toList().reversed)
+            groupedFiles
+                .map((key, value) => MapEntry(key, value.reversed.toList())),
       ));
     }
   }
@@ -344,7 +349,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
 
     emit(state.copyWith(
-      sortedFiles: objects,
+      objects: objects,
     ));
 
     mapFileSortingByCreterion();

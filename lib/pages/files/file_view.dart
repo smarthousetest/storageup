@@ -222,113 +222,114 @@ class _FilePageState extends State<FilePage> {
       context,
       state,
     ) {
-      return CustomPopupMenu(
-        pressType: PressType.singleClick,
-        barrierColor: Colors.transparent,
-        showArrow: false,
-        horizontalMargin: 210,
-        verticalMargin: 0,
-        controller: controller,
-        menuBuilder: () {
-          var items = _getSortingElements();
-          //_changeSortFieldsVisibility(context);
-          return SortingMenuActions(
-            theme: Theme.of(context),
-            translate: translate,
-            onTap: (action) {
-              controller.hideMenu();
-              switch (action) {
-                case SortingCriterion.byType:
-                  _onActionSheetTap(context, items[0]);
-                  break;
-                case SortingCriterion.byName:
-                  _onActionSheetTap(context, items[1]);
-                  break;
-                case SortingCriterion.byDateCreated:
-                  _onActionSheetTap(context, items[2]);
-                  break;
-
-                case SortingCriterion.bySize:
-                  _onActionSheetTap(context, items[3]);
-                  break;
-              }
+      return Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              //controller.showMenu();
             },
-          );
-        },
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                //controller.showMenu();
-              },
+            child: Container(
+              width: _isSearchFieldChoosen ? 46 : _searchFieldWidth! + 46,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ]),
               child: Container(
-                width: _isSearchFieldChoosen ? 46 : _searchFieldWidth! + 46,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Color.fromARGB(25, 23, 69, 139),
-                          blurRadius: 4,
-                          offset: Offset(1, 4))
-                    ]),
-                child: Container(
-                  //width: 46,
-                  child: Row(
-                    children: [
-                      Container(
-                          width: _isSearchFieldChoosen ? 0 : _searchFieldWidth,
-                          child: Center(
-                              child: _sortingTextFieldIndex == -1
-                                  ? Text(
-                                      translate.file_sorting,
-                                      style: TextStyle(
-                                        color: Theme.of(context).splashColor,
-                                      ),
-                                    )
-                                  : Text(
-                                      _getSortingElements()[
-                                              _sortingTextFieldIndex]
-                                          .text,
-                                      style: TextStyle(
-                                        color: Theme.of(context).disabledColor,
-                                      ),
-                                    ))),
-                      Container(
-                        //width: 46,
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.all(9.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            _isSearchFieldChoosen
-                                ? setState(() {
-                                    _changeSortFieldsVisibility(context);
-                                    StateSortedContainer.of(context)
-                                        .actionForButton();
-                                  })
-                                : print('a');
-                            controller.showMenu();
-                          },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: SvgPicture.asset(
-                              "assets/file_page/settings.svg",
-                              color: _isSearchFieldChoosen
-                                  ? Theme.of(context).disabledColor
-                                  : _sortingTextFieldIndex == -1
-                                      ? Theme.of(context).splashColor
-                                      : Theme.of(context).disabledColor,
+                //width: 46,
+                child: Row(children: [
+                  Container(
+                      width: _isSearchFieldChoosen ? 0 : _searchFieldWidth,
+                      child: Center(
+                          child: _sortingTextFieldIndex == -1
+                              ? Text(
+                                  translate.file_sorting,
+                                  style: TextStyle(
+                                    color: Theme.of(context).splashColor,
+                                  ),
+                                )
+                              : Text(
+                                  _getSortingElements()[_sortingTextFieldIndex]
+                                      .text,
+                                  style: TextStyle(
+                                    color: Theme.of(context).disabledColor,
+                                  ),
+                                ))),
+                  CustomPopupMenu(
+                    pressType: PressType.singleClick,
+                    barrierColor: Colors.transparent,
+                    showArrow: false,
+                    horizontalMargin: 210,
+                    verticalMargin: 0,
+                    controller: controller,
+                    menuBuilder: () {
+                      var items = _getSortingElements();
+                      //_changeSortFieldsVisibility(context);
+                      return SortingMenuActions(
+                        theme: Theme.of(context),
+                        translate: translate,
+                        onTap: (action) {
+                          controller.hideMenu();
+                          switch (action) {
+                            case SortingCriterion.byType:
+                              _onActionSheetTap(context, items[0]);
+                              break;
+                            case SortingCriterion.byName:
+                              _onActionSheetTap(context, items[1]);
+                              break;
+                            case SortingCriterion.byDateCreated:
+                              _onActionSheetTap(context, items[2]);
+                              break;
+
+                            case SortingCriterion.bySize:
+                              _onActionSheetTap(context, items[3]);
+                              break;
+                          }
+                        },
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 46,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.all(9.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              _isSearchFieldChoosen
+                                  ? setState(() {
+                                      _changeSortFieldsVisibility(context);
+                                      StateSortedContainer.of(context)
+                                          .actionForButton();
+                                    })
+                                  : print('a');
+                              controller.showMenu();
+                            },
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: SvgPicture.asset(
+                                "assets/file_page/settings.svg",
+                                color: _isSearchFieldChoosen
+                                    ? Theme.of(context).disabledColor
+                                    : _sortingTextFieldIndex == -1
+                                        ? Theme.of(context).splashColor
+                                        : Theme.of(context).disabledColor,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ]),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     });
   }
