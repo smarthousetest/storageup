@@ -3,7 +3,6 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -227,7 +226,14 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return Expanded(
       child: LayoutBuilder(builder: (context, constrains) {
         print('min width ${constrains.smallest.width}');
+        var searchText = StateSortedContainer.of(context).search;
 
+        if (state.search != searchText) {
+          context.read<OpenedFolderCubit>().mapSortedFieldChanged(
+                state,
+                searchText,
+              );
+        }
         return Container(
           child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
             bloc: _bloc,
@@ -434,58 +440,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
             );
           }),
         );
-        // return Container(
-        //     child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-        //         bloc: _bloc,
-        //         builder: (context, state) {
-
-        //           print("lol");
-        //           return GridView.builder(
-        //             itemCount: state.sortedFiles.length,
-        //             shrinkWrap: true,
-        //             controller: ScrollController(),
-        //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        //               crossAxisCount: constrains.smallest.width ~/ 110,
-        //               childAspectRatio: (1 / 1.22),
-        //               mainAxisSpacing: 15,
-        //             ),
-        //             itemBuilder: (context, index) {
-        //               Function() onTap;
-        //               var obj = state.sortedFiles[index];
-
-        //               // Future<void> _onPointerDown(PointerDownEvent event) async {
-        //               //   if (event.kind == PointerDeviceKind.mouse &&
-        //               //       event.buttons == kSecondaryMouseButton) {}
-        //               // }
-
-        //               if (obj is Folder) {
-        //                 onTap = () {
-        //                   print(obj);
-        //                   print("lol");
-        //                   widget.push(
-        //                     OpenedFolderView(
-        //                       currentFolder: obj,
-        //                       previousFolders: [
-        //                         ...state.previousFolders,
-        //                         state.currentFolder!
-        //                       ],
-        //                       pop: widget.pop,
-        //                       push: widget.push,
-        //                     ),
-        //                   );
-        //                 };
-        //               } else {
-        //                 onTap = () {
-        //                   print('file tapped');
-        //                 };
-        //               }
-        //               return GestureDetector(
-        //                 onTap: onTap,
-        //                 child: ObjectView(object: state.sortedFiles[index]),
-        //               );
-        //             },
-        //           );
-        //         }));
       }),
     );
   }

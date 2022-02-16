@@ -374,7 +374,7 @@ class FilesService {
         }
       };
       var response = await Dio().put(
-        'https://storageup.net/api/auth/profile',
+        'https://upstorage.net/api/auth/profile',
         options: Options(headers: {'Authorization': ' Bearer $token'}),
         data: data,
       );

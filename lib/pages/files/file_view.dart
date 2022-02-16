@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
@@ -393,6 +391,7 @@ class _FilePageState extends State<FilePage> {
                         context
                             .read<FilesBloc>()
                             .add(FilesSortingFieldChanged(sortingText: value));
+                        StateSortedContainer.of(context).searchAction(value);
                       },
                       controller: _searchingFieldController,
                       decoration: InputDecoration.collapsed(

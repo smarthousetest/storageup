@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:connectivity/connectivity.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/autoupload/autoupload_controller.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/upload_media.dart';

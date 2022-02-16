@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -108,6 +109,32 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     _loadController.getState.registerObserver(_updateObserver);
 
     _syncWithLoadController();
+  }
+
+  void mapSortedFieldChanged(OpenedFolderState state, String sortText) {
+    // final tmpState = _resetSortedList(state: state);
+    final allFiles = state.objects;
+    // final sortText = ;
+
+    List<BaseObject> sortedFiles = [];
+    var textLoverCase = sortText.toLowerCase();
+
+    allFiles.forEach((element) {
+      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
+          .format(element.createdAt!)
+          .toString()
+          .toLowerCase()
+          .contains(textLoverCase);
+      if ((element.createdAt != null && containsDate) ||
+          (element.name != null &&
+              element.name!.toLowerCase().contains(textLoverCase)) ||
+          (element.extension != null &&
+              element.extension!.toLowerCase().contains(textLoverCase))) {
+        sortedFiles.add(element);
+      }
+    });
+
+    emit(state.copyWith(sortedFiles: sortedFiles, search: sortText));
   }
 
   void onRecordActionChoosed(FileAction action, BaseObject object) {
