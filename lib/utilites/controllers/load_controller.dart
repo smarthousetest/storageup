@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cpp_native/cpp_native.dart';
@@ -327,14 +328,33 @@ class LoadController {
       if (value is File) {
         throwIfNot(
             value.existsSync(), Exception('Downloaded file doesn\'t exists'));
-
         var filesList = _state.downloadingFiles;
         var fileIndex = filesList.indexWhere((element) => element.id == fileId);
         if (fileIndex != -1) {
+          log('LoadController -> processDownloadCallback: \n file recieved: ${value.path}');
           var record = filesList[fileIndex].copyWith(
             localPath: value.path,
             isInProgress: false,
             downloadPercent: 100,
+          );
+
+          filesList[fileIndex] = record;
+          // filesList.firstWhere((element) => element.id == fileId)
+          //   ..localPath = file.path
+          //   ..isInProgress = false
+          //   ..downloadPercent = 100;
+
+          _state.changeDowloadingFiles(filesList);
+        }
+      } else if (value is SendProgress) {
+        var filesList = _state.downloadingFiles;
+        var fileIndex = filesList.indexWhere((element) => element.id == fileId);
+        if (fileIndex != -1) {
+          log('LoadController -> processDownloadCallback: \n file: ${value.filePath}, download percent ${value.percent}');
+          var record = filesList[fileIndex].copyWith(
+            localPath: value.filePath,
+            isInProgress: true,
+            downloadPercent: value.percent,
           );
 
           filesList[fileIndex] = record;
