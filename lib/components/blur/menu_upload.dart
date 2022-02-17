@@ -8,10 +8,10 @@ import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurMenuUpload extends StatefulWidget {
-  @override
-  _ButtonTemplateState createState() => new _ButtonTemplateState();
-
   BlurMenuUpload();
+
+  @override
+  _ButtonTemplateState createState() => _ButtonTemplateState();
 }
 
 class _ButtonTemplateState extends State<BlurMenuUpload> {

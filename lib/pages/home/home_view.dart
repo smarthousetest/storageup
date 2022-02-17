@@ -367,17 +367,21 @@ class _HomePageState extends State<HomePage> {
               height: 42,
               width: 214,
               child: ElevatedButton(
-                onPressed: () async {
-                  var result = await showDialog(
+                onPressed: () {
+                  var result = showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return BlurMenuUpload();
                     },
-                  );
+                  ).then((result) {
+                    if (result is AddMenuResult) {
+                      _processUserAction(context, result);
+                    }
+                  });
 
-                  if (result is AddMenuResult) {
-                    _processUserAction(context, result);
-                  }
+                  // if (result is AddMenuResult) {
+                  //   _processUserAction(context, result);
+                  // }
                   /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
                     List<String?> list = result!.paths;*/
 
@@ -481,10 +485,15 @@ class _HomePageState extends State<HomePage> {
               return BlurAddFolder();
             });
         if (name != null && name.isNotEmpty) {
-          userAction = AddMenuResult(
-            action: userAction.action,
-            result: [name],
-          );
+          // userAction = AddMenuResult(
+          //   action: userAction.action,
+          //   result: [name],
+          // );
+
+          context.read<HomeBloc>().add(HomeUserActionChoosed(
+                action: userAction.action,
+                values: [name],
+              ));
         }
         break;
       case UserAction.createAlbum:
@@ -494,10 +503,15 @@ class _HomePageState extends State<HomePage> {
               return BlurCreateAlbum();
             });
         if (name != null && name.isNotEmpty) {
-          userAction = AddMenuResult(
-            action: userAction.action,
-            result: [name],
-          );
+          // userAction = AddMenuResult(
+          //   action: userAction.action,
+          //   result: [name],
+          // );
+
+          context.read<HomeBloc>().add(HomeUserActionChoosed(
+                action: userAction.action,
+                values: [name],
+              ));
         }
         break;
       default:
