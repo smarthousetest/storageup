@@ -63,5 +63,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SaveDirPath event,
     SpaceState state,
     Emitter<SpaceState> emit,
-  ) {}
+  ) {
+    var countGb = event.countGb;
+    var dirPath = event.dirPath;
+    emit(state.copyWith(dirPath: dirPath, countGb: countGb));
+  }
 }

@@ -24,5 +24,10 @@ class RunSoft extends SpaceEvent {
 }
 
 class SaveDirPath extends SpaceEvent {
-  const SaveDirPath();
+  final List<String>? dirPath;
+  List<int> countGb;
+  SaveDirPath({
+    required this.dirPath,
+    required this.countGb,
+  });
 }

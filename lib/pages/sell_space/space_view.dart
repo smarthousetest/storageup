@@ -111,20 +111,25 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ),
               Expanded(
-                child: IndexedStack(
-                  index: index,
-                  children: [
-                    Column(
-                      children: [rentingAPlace(context)],
-                    ),
-                    Column(
-                      children: [addSpace(context)],
-                    ),
-                    Column(
-                      children: [folderList(context)],
-                    )
-                  ],
-                ),
+                child: BlocBuilder<SpaceBloc, SpaceState>(
+                    builder: (context, state) {
+                  return IndexedStack(
+                    index: index,
+                    children: [
+                      state.dirPath.isEmpty
+                          ? Column(
+                              children: [rentingAPlace(context)],
+                            )
+                          : folderList(context),
+                      Column(
+                        children: [addSpace(context)],
+                      ),
+                      Column(
+                        children: [folderList(context)],
+                      )
+                    ],
+                  );
+                }),
               )
             ])));
   }
@@ -480,6 +485,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             setState(() {
                               if (path != null) {
                                 dirPath.add(path);
+
                                 list = path;
                               }
                             });
@@ -749,10 +755,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         } else {
                           setState(() {
                             countGbSpace.add(_currentSliderValue.toInt());
-                            print(countGbSpace);
+
+                            context.read<SpaceBloc>().add(SaveDirPath(
+                                dirPath: dirPath, countGb: countGbSpace));
                             index = 2;
-                            print(list);
-                            print(index);
+
                             context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
@@ -852,10 +859,14 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ],
             ),
-            Expanded(
-                child: Column(
-              children: [FolderList(listOfDirsKeepers, dirPath, countGbSpace)],
-            ))
+            Expanded(child:
+                BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+              return Column(
+                children: [
+                  FolderList(listOfDirsKeepers, state.dirPath, state.countGb)
+                ],
+              );
+            }))
           ]),
         ),
       ),
