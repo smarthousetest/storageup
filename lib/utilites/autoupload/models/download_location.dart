@@ -4,27 +4,31 @@ part 'download_location.g.dart';
 @HiveType(typeId: 2)
 class DownloadLocation {
   @HiveField(0)
-  List<String>? dirPath;
+  String dirPath;
   @HiveField(1)
-  List<int>? countGb;
+  int countGb;
+  @HiveField(2)
+  int id;
 
   DownloadLocation({
-    this.dirPath,
-    this.countGb,
+    required this.dirPath,
+    required this.countGb,
+    required this.id,
   });
 
   DownloadLocation copyWith({
-    List<String>? dirPath,
-    List<int>? countGb,
+    String? dirPath,
+    int? countGb,
   }) {
     return DownloadLocation(
       dirPath: dirPath ?? this.dirPath,
       countGb: countGb ?? this.countGb,
+      id: id,
     );
   }
 
   @override
   String toString() {
-    return 'dirPath: $dirPath, countGb: $countGb';
+    return 'dirPath: $dirPath, countGb: $countGb, id: $id';
   }
 }

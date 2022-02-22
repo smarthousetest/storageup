@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   SpaceBloc() : super(SpaceState()) {
@@ -25,6 +27,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   // getIt<AuthenticationRepository>();
 
   UserController _userController = getIt<UserController>();
+  late final DownloadLocationsRepository _repository;
 
   Future _mapSpacePageOpened(
     SpacePageOpened event,
@@ -32,6 +35,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     Emitter<SpaceState> emit,
   ) async {
     User? user = await _userController.getUser;
+    _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+    final locationsInfo = _repository.getlocationsInfo;
     emit(state.copyWith(user: user));
   }
 
