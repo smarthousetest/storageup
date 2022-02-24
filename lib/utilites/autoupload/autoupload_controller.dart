@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cpp_native/cpp_native.dart';
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upstorage_desktop/main.dart';
@@ -10,8 +11,9 @@ import 'package:upstorage_desktop/utilites/autoupload/upload_media_repository.da
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 
+@lazySingleton
 class AutouploadController {
-  late UploadMediaRepo _repo;
+  UploadMediaRepo _repo;
   var native = CppNative();
 
   bool _isInProgress = false;
@@ -19,10 +21,13 @@ class AutouploadController {
   Function()? _afterStopAction;
   List<int> _unUploadedMediaIds = [];
 
-  Future<AutouploadController> init() async {
-    _repo = await UploadMediaRepo().init();
-    return this;
+  @factoryMethod
+  static Future<AutouploadController> init() async {
+    var repo = await UploadMediaRepo().init();
+    return AutouploadController._(repo);
   }
+
+  AutouploadController._(this._repo);
 
   bool get isInProgress => _isInProgress;
   void setNeedStop(Function() afterStopAction) {
