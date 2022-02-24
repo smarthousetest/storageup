@@ -111,10 +111,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     _syncWithLoadController();
   }
 
-  void mapSortedFieldChanged(OpenedFolderState state, String sortText) {
-    // final tmpState = _resetSortedList(state: state);
+  void mapSortedFieldChanged(String sortText) {
     final allFiles = state.objects;
-    // final sortText = ;
 
     List<BaseObject> sortedFiles = [];
     var textLoverCase = sortText.toLowerCase();
@@ -150,7 +148,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> mapFileSortingByCreterion() async {
+  Future<void> mapFileSortingByCriterion() async {
     OpenedFolderState newState = _clearGroupedMap(state);
     var criterion = newState.criterion;
     var direction = newState.direction;
@@ -359,9 +357,32 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> setNewCriterionAndDirection(
-      SortingCriterion criterion, SortingDirection direction) async {
-    emit(state.copyWith(criterion: criterion, direction: direction));
+  Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
+      SortingDirection direction, String sortText) async {
+    final allFiles = state.sortedFiles;
+
+    List<BaseObject> sortedFiles = [];
+    var textLoverCase = sortText.toLowerCase();
+
+    allFiles.forEach((element) {
+      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
+          .format(element.createdAt!)
+          .toString()
+          .toLowerCase()
+          .contains(textLoverCase);
+      if ((element.createdAt != null && containsDate) ||
+          (element.name != null &&
+              element.name!.toLowerCase().contains(textLoverCase)) ||
+          (element.extension != null &&
+              element.extension!.toLowerCase().contains(textLoverCase))) {
+        sortedFiles.add(element);
+      }
+    });
+    emit(state.copyWith(
+      criterion: criterion,
+      direction: direction,
+      search: sortText,
+    ));
   }
 
   Future<void> _update({String? uploadingFileId}) async {
@@ -379,7 +400,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       objects: objects,
     ));
 
-    mapFileSortingByCreterion();
+    mapFileSortingByCriterion();
 
     print('files was updated');
 

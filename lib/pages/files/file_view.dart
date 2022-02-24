@@ -388,9 +388,6 @@ class _FilePageState extends State<FilePage> {
                         color: Theme.of(context).disabledColor,
                       ),
                       onChanged: (value) {
-                        context
-                            .read<FilesBloc>()
-                            .add(FilesSortingFieldChanged(sortingText: value));
                         StateSortedContainer.of(context).searchAction(value);
                       },
                       controller: _searchingFieldController,

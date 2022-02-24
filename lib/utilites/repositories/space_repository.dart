@@ -11,6 +11,7 @@ class DownloadLocationsRepository {
 
   @factoryMethod
   static Future<DownloadLocationsRepository> create() async {
+    Hive.registerAdapter(DownloadLocationAdapter());
     final box = await Hive.openBox<DownloadLocation>(_downloadLocationsBoxName);
     return DownloadLocationsRepository._(locationsBox: box);
   }
@@ -43,7 +44,13 @@ class DownloadLocationsRepository {
   //     _locationsInfo = locationsInfo;
 
   void createLocation({required String path, required int countOfGb}) {
-    final lastKey = _locationsBox.keys.last;
+    var lastKey;
+    try {
+      lastKey = _locationsBox.keys.last;
+    } catch (e) {
+      lastKey = 0;
+    }
+
     final downloadLocation = DownloadLocation(
       dirPath: path,
       countGb: countOfGb,

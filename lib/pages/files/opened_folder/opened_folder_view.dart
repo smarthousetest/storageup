@@ -153,11 +153,18 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
+        var searchText = StateSortedContainer.of(context).search;
+
+        // if (state.search != searchText) {
+        //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(
+        //         searchText,
+        //       );
+        // }
         var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
         var direction = StateSortedContainer.of(context).direction;
         context.read<OpenedFolderCubit>()
-          ..setNewCriterionAndDirection(sortedCriterion, direction)
-          ..mapFileSortingByCreterion();
+          ..setNewCriterionAndDirection(sortedCriterion, direction, searchText)
+          ..mapFileSortingByCriterion();
         if (state.representation == FilesRepresentation.grid) {
           return state.groupedFiles.isNotEmpty
               ? _filesGridForType(state)
@@ -226,14 +233,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return Expanded(
       child: LayoutBuilder(builder: (context, constrains) {
         print('min width ${constrains.smallest.width}');
-        var searchText = StateSortedContainer.of(context).search;
 
-        if (state.search != searchText) {
-          context.read<OpenedFolderCubit>().mapSortedFieldChanged(
-                state,
-                searchText,
-              );
-        }
         return Container(
           child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
             bloc: _bloc,
