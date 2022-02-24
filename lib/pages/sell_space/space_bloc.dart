@@ -37,7 +37,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
-    emit(state.copyWith(user: user));
+    emit(state.copyWith(user: user, locationsInfo: locationsInfo));
   }
 
   Future _mapRunSoft(
@@ -69,8 +69,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) {
-    var countGb = event.countGb;
-    var dirPath = event.dirPath;
-    emit(state.copyWith(dirPath: dirPath, countGb: countGb));
+    var countOfGb = event.countGb;
+    var path = event.pathDir;
+
+    _repository.createLocation(countOfGb: countOfGb, path: path);
+    var locationsInfo = _repository.getlocationsInfo;
+    emit(state.copyWith(locationsInfo: locationsInfo));
   }
 }

@@ -1,28 +1,26 @@
 import 'package:equatable/equatable.dart';
 import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
 class SpaceState extends Equatable {
   final User? user;
-  final List<String> dirPath;
-  List<int> countGb;
+  final List<DownloadLocation> locationsInfo;
+
   SpaceState({
     this.user,
-    this.dirPath = const [],
-    this.countGb = const [],
+    this.locationsInfo = const [],
   });
 
   SpaceState copyWith({
     User? user,
-    List<String>? dirPath,
-    List<int>? countGb,
+    List<DownloadLocation>? locationsInfo,
   }) {
     return SpaceState(
       user: user ?? this.user,
-      dirPath: dirPath ?? this.dirPath,
-      countGb: countGb ?? this.countGb,
+      locationsInfo: locationsInfo ?? this.locationsInfo,
     );
   }
 
   @override
-  List<Object?> get props => [user, dirPath, countGb];
+  List<Object?> get props => [user, locationsInfo];
 }

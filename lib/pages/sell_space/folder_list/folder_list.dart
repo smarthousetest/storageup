@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
 import 'keeper_info.dart';
@@ -21,10 +22,8 @@ enum FileOptions {
 class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  List<String> dirPath;
-  final List<KeeperInfo> keeperInfo;
-  List<int> countGb = [0];
-  FolderList(this.keeperInfo, this.dirPath, this.countGb);
+  List<DownloadLocation> locationsInfo;
+  FolderList(this.locationsInfo);
 }
 
 class _ButtonTemplateState extends State<FolderList> {
@@ -106,7 +105,7 @@ class _ButtonTemplateState extends State<FolderList> {
                   ),
                 ],
                 rows: List<DataRow>.generate(
-                  widget.dirPath.length,
+                  widget.locationsInfo.length,
                   (int index) => DataRow(
                     cells: [
                       DataCell(
@@ -122,7 +121,7 @@ class _ButtonTemplateState extends State<FolderList> {
                               child: Container(),
                             ),
                             Text(
-                              widget.dirPath[index],
+                              widget.locationsInfo[index].dirPath,
                               maxLines: 1,
                               style: cellTextStyle,
                             ),
@@ -137,7 +136,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         Row(
                           children: [
                             Text(
-                              '${widget.countGb[index]} GB',
+                              translate.gb(widget.locationsInfo[index].countGb),
                               maxLines: 1,
                               style: cellTextStyle,
                             ),

@@ -7,12 +7,15 @@ import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart'
 import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'folder_list/keeper_info.dart';
 
 class SpaceSellPage extends StatefulWidget {
+// final List<DownloadLocation> locationsInfo;
+
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
   SpaceSellPage();
@@ -25,12 +28,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return result;
   }
 
+  //final List<DownloadLocation> locationsInfo;
   var index = 0;
   double _currentSliderValue = 32;
   S translate = getIt<S>();
   String list = "";
-  List<String> dirPath = [];
-  List<int> countGbSpace = [];
+  String dirPath = '';
+  int countGbSpace = 0;
 
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -113,10 +117,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               Expanded(
                 child: BlocBuilder<SpaceBloc, SpaceState>(
                     builder: (context, state) {
+                  var locInfo = state.locationsInfo;
+                  var notEmptyInfo;
+                  if (locInfo != null) {
+                    notEmptyInfo = locInfo;
+                  }
                   return IndexedStack(
                     index: index,
                     children: [
-                      state.dirPath.isEmpty
+                      notEmptyInfo.isEmpty
                           ? Column(
                               children: [rentingAPlace(context)],
                             )
@@ -484,7 +493,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             print(path);
                             setState(() {
                               if (path != null) {
-                                dirPath.add(path);
+                                dirPath = path;
 
                                 list = path;
                               }
@@ -748,19 +757,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   width: 200,
                   child: BlocBuilder<SpaceBloc, SpaceState>(
                       builder: (context, state) {
+                    DownloadLocation locationsInfo;
                     return OutlinedButton(
                       onPressed: () {
                         if (list.isEmpty) {
                           print('path null');
                         } else {
                           setState(() {
-                            countGbSpace.add(_currentSliderValue.toInt());
-
+                            countGbSpace = _currentSliderValue.toInt();
                             context.read<SpaceBloc>().add(SaveDirPath(
-                                dirPath: dirPath, countGb: countGbSpace));
+                                pathDir: dirPath, countGb: countGbSpace));
                             index = 2;
 
-                            context.read<SpaceBloc>().add(RunSoft());
+                            //context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },
@@ -863,7 +872,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
               return Column(
                 children: [
-                  FolderList(listOfDirsKeepers, state.dirPath, state.countGb)
+                  FolderList(
+                    state.locationsInfo,
+                  )
                 ],
               );
             }))
