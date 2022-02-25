@@ -111,7 +111,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     _syncWithLoadController();
   }
 
-  void mapSortedFieldChanged(String sortText) {
+  List<BaseObject> mapSortedFieldChanged(String sortText) {
     final allFiles = state.objects;
 
     List<BaseObject> sortedFiles = [];
@@ -131,8 +131,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         sortedFiles.add(element);
       }
     });
-
-    emit(state.copyWith(sortedFiles: sortedFiles, search: sortText));
+    return sortedFiles;
+    //emit(state.copyWith(sortedFiles: sortedFiles));
   }
 
   void onRecordActionChoosed(FileAction action, BaseObject object) {
@@ -199,7 +199,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     SortingDirection direction,
     SortingCriterion criterion,
   ) async {
-    List<BaseObject> items = await _getClearListOfFiles(state);
+    List<BaseObject> items = mapSortedFieldChanged(state.search);
+    //await _getClearListOfFiles(state);
 
     Map<String, List<BaseObject>> groupedFiles = {};
 
@@ -234,7 +235,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction,
       SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
     sortedFiles.sort((a, b) {
       // if (a.size != null && b.size != null) {
       return a.size.compareTo(b.size);
@@ -253,7 +254,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> _sortByName(OpenedFolderState state, SortingDirection direction,
       SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
     sortedFiles.sort((a, b) {
       if (a.name != null && b.name != null) {
         return a.name!.compareTo(b.name!);
@@ -271,7 +272,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> _sortByDate(OpenedFolderState state, SortingDirection direction,
       SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
+
     sortedFiles.sort((a, b) {
       if (a.createdAt != null && b.createdAt != null) {
         return _compareDates(a.createdAt!, b.createdAt!);
@@ -280,6 +282,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       } else
         return a.createdAt == null ? 0 : 1;
     });
+
+    //mapSortedFieldChanged(state.search);
+
     if (direction == SortingDirection.down) {
       emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
     } else {
@@ -359,25 +364,26 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
       SortingDirection direction, String sortText) async {
-    final allFiles = state.sortedFiles;
+    // final allFiles = state.sortedFiles;
 
-    List<BaseObject> sortedFiles = [];
-    var textLoverCase = sortText.toLowerCase();
+    // List<BaseObject> sortedFiles = [];
+    // var textLoverCase = sortText.toLowerCase();
 
-    allFiles.forEach((element) {
-      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
-          .format(element.createdAt!)
-          .toString()
-          .toLowerCase()
-          .contains(textLoverCase);
-      if ((element.createdAt != null && containsDate) ||
-          (element.name != null &&
-              element.name!.toLowerCase().contains(textLoverCase)) ||
-          (element.extension != null &&
-              element.extension!.toLowerCase().contains(textLoverCase))) {
-        sortedFiles.add(element);
-      }
-    });
+    // allFiles.forEach((element) {
+    //   var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
+    //       .format(element.createdAt!)
+    //       .toString()
+    //       .toLowerCase()
+    //       .contains(textLoverCase);
+    //   if ((element.createdAt != null && containsDate) ||
+    //       (element.name != null &&
+    //           element.name!.toLowerCase().contains(textLoverCase)) ||
+    //       (element.extension != null &&
+    //           element.extension!.toLowerCase().contains(textLoverCase))) {
+    //     sortedFiles.add(element);
+    //   }
+    // });
+    //mapSortedFieldChanged(sortText);
     emit(state.copyWith(
       criterion: criterion,
       direction: direction,
