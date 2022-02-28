@@ -32,3 +32,8 @@ class SaveDirPath extends SpaceEvent {
     required this.countGb,
   });
 }
+
+class DeleteLocation extends SpaceEvent {
+  DownloadLocation location;
+  DeleteLocation({required this.location});
+}

@@ -21,6 +21,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
       }
+      if (event is DeleteLocation) {
+        await _mapDeleteLocation(event, state, emit);
+      }
     });
   }
   // final AuthenticationRepository _authenticationRepository =
@@ -75,5 +78,14 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     _repository.createLocation(countOfGb: countOfGb, path: path);
     var locationsInfo = _repository.getlocationsInfo;
     emit(state.copyWith(locationsInfo: locationsInfo));
+  }
+
+  _mapDeleteLocation(
+    DeleteLocation event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) {
+    var idLocation = event.location.id;
+    _repository.deleteLocation(id: idLocation);
   }
 }
