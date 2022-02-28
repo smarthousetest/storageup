@@ -504,7 +504,8 @@ class _InfoPageState extends State<InfoPage> {
                     width: 230,
                     child: OutlinedButton(
                       onPressed: () {
-                        changePage(ChoosedPage.finance);
+                        StateContainer.of(context)
+                            .changePage(ChoosedPage.finance);
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),

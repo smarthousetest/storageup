@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 
 class StateInfoContainer extends StatefulWidget {
   final Widget child;

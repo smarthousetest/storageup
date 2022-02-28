@@ -5,7 +5,6 @@ import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/tariff.dart';
 import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
 import 'package:upstorage_desktop/pages/finance/finance_event.dart';
 import 'package:upstorage_desktop/pages/finance/finance_state.dart';
@@ -64,6 +63,7 @@ class _FinancePageState extends State<FinancePage> {
       create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: Expanded(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 30.0, right: 30, top: 30),
@@ -174,7 +174,7 @@ class _FinancePageState extends State<FinancePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.max,
+                  //mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
                       padding:
@@ -296,17 +296,13 @@ class _FinancePageState extends State<FinancePage> {
               ),
             ),
           ),
-          (MediaQuery.of(context).size.width > 1440)
+          (MediaQuery.of(context).size.width > 1465)
               ? Padding(
                   padding: const EdgeInsets.only(left: 40, top: 30),
                   child: Row(
                     children: [
-                      Stack(
-                        children: [
-                          activeSub(context),
-                          subInfo(context),
-                        ],
-                      ),
+                      activeSub(context),
+                      subInfo(context),
                     ],
                   ),
                 )
@@ -343,58 +339,75 @@ class _FinancePageState extends State<FinancePage> {
           color: Theme.of(context).splashColor,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 40.0, left: 40),
-                child: Text(
-                  translate.current_subscription_title(
-                      state.sub?.tariff?.spaceGb ?? '',
-                      state.sub?.tariff?.priceRub ?? ''),
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontFamily: kNormalTextFontFamily,
-                    fontSize: 36,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            }),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0, left: 40),
-              child: Text(
-                translate.offer,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 40, top: 26),
-              child: Container(
-                height: 42,
-                width: 200,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BlocBuilder<FinanceBloc, FinanceState>(
+                    builder: (context, state) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 40.0, left: 40),
+                    child: Text(
+                      translate.current_subscription_title(
+                          state.sub?.tariff?.spaceGb ?? '',
+                          state.sub?.tariff?.priceRub ?? ''),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 36,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  );
+                }),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, left: 40),
                   child: Text(
-                    '1490 ₽/год',
+                    translate.offer,
                     style: TextStyle(
-                      color: Theme.of(context).splashColor,
+                      color: Theme.of(context).primaryColor,
                       fontFamily: kNormalTextFontFamily,
-                      fontSize: 17,
+                      fontSize: 16,
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 40, top: 26),
+                  child: Container(
+                    height: 42,
+                    width: 200,
+                    child: OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.maxFinite, 60),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      child: Text(
+                        '1490 ₽/год',
+                        style: TextStyle(
+                          color: Theme.of(context).splashColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: SvgPicture.asset(
+                "assets/finance_page/ellipse_right.svg",
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: SvgPicture.asset(
+                "assets/finance_page/ellipse_left.svg",
               ),
             ),
           ],

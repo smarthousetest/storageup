@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -21,6 +22,18 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
 import '../../../constants.dart';
+
+enum ContextActionEnum {
+  share,
+  move,
+  duplicate,
+  rename,
+  info,
+  delete,
+  select,
+  download,
+  addToFavorites
+}
 
 class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   OpenedFolderCubit()
@@ -97,6 +110,30 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     _syncWithLoadController();
   }
 
+  List<BaseObject> mapSortedFieldChanged(String sortText) {
+    final allFiles = state.objects;
+
+    List<BaseObject> sortedFiles = [];
+    var textLoverCase = sortText.toLowerCase();
+
+    allFiles.forEach((element) {
+      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
+          .format(element.createdAt!)
+          .toString()
+          .toLowerCase()
+          .contains(textLoverCase);
+      if ((element.createdAt != null && containsDate) ||
+          (element.name != null &&
+              element.name!.toLowerCase().contains(textLoverCase)) ||
+          (element.extension != null &&
+              element.extension!.toLowerCase().contains(textLoverCase))) {
+        sortedFiles.add(element);
+      }
+    });
+    return sortedFiles;
+    //emit(state.copyWith(sortedFiles: sortedFiles));
+  }
+
   void onRecordActionChoosed(FileAction action, BaseObject object) {
     switch (action) {
       case FileAction.delete:
@@ -110,7 +147,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> mapFileSortingByCreterion() async {
+  Future<void> mapFileSortingByCriterion() async {
     OpenedFolderState newState = _clearGroupedMap(state);
     var criterion = newState.criterion;
     var direction = newState.direction;
@@ -156,9 +193,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     return sortedFiles;
   }
 
-  Future<void> _sortByType(OpenedFolderState state, SortingDirection direction,
-      SortingCriterion criterion) async {
-    List<BaseObject> items = await _getClearListOfFiles(state);
+  Future<void> _sortByType(
+    OpenedFolderState state,
+    SortingDirection direction,
+    SortingCriterion criterion,
+  ) async {
+    List<BaseObject> items = mapSortedFieldChanged(state.search);
+    //await _getClearListOfFiles(state);
 
     Map<String, List<BaseObject>> groupedFiles = {};
 
@@ -180,15 +221,20 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       emit(state.copyWith(groupedFiles: groupedFiles));
     } else {
       emit(state.copyWith(
-        groupedFiles: groupedFiles
-            .map((key, value) => MapEntry(key, value.reversed.toList())),
+        groupedFiles:
+            // SplayTreeMap<String, List<BaseObject>>.from(
+            //     groupedFiles, (a, b) => a.compareTo(b))
+            //groupedFiles.keys.toList()..sort()
+            // LinkedHashMap.fromEntries(groupedFiles.entries.toList().reversed)
+            groupedFiles
+                .map((key, value) => MapEntry(key, value.reversed.toList())),
       ));
     }
   }
 
   Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction,
       SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
     sortedFiles.sort((a, b) {
       // if (a.size != null && b.size != null) {
       return a.size.compareTo(b.size);
@@ -207,7 +253,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> _sortByName(OpenedFolderState state, SortingDirection direction,
       SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
     sortedFiles.sort((a, b) {
       if (a.name != null && b.name != null) {
         return a.name!.compareTo(b.name!);
@@ -225,7 +271,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> _sortByDate(OpenedFolderState state, SortingDirection direction,
       SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
+    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
+
     sortedFiles.sort((a, b) {
       if (a.createdAt != null && b.createdAt != null) {
         return _compareDates(a.createdAt!, b.createdAt!);
@@ -234,6 +281,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       } else
         return a.createdAt == null ? 0 : 1;
     });
+
+    //mapSortedFieldChanged(state.search);
+
     if (direction == SortingDirection.down) {
       emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
     } else {
@@ -282,6 +332,23 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
   }
 
+  // Future<void> _mapContextActionChoosed(
+  //    ContextActionEnum action,
+  // ) async {
+  //   // emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+  //   //print('${action} ${event.file}');
+  //   if (action == ContextActionEnum.delete) {
+  //     await _onActionDeleteChoosed();
+  //   } else if (action == ContextActionEnum.share) {
+  //     // await _mapDownloadFile(event, state, emit); //TODO remove this
+  //   } else if (action == ContextActionEnum.select) {
+  //     await _mapSelectFile(event, state, emit);
+  //   } else {
+  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
+  //   }
+  // }
+
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(representation: representation));
   }
@@ -294,9 +361,33 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> setNewCriterionAndDirection(
-      SortingCriterion criterion, SortingDirection direction) async {
-    emit(state.copyWith(criterion: criterion, direction: direction));
+  Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
+      SortingDirection direction, String sortText) async {
+    // final allFiles = state.sortedFiles;
+
+    // List<BaseObject> sortedFiles = [];
+    // var textLoverCase = sortText.toLowerCase();
+
+    // allFiles.forEach((element) {
+    //   var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
+    //       .format(element.createdAt!)
+    //       .toString()
+    //       .toLowerCase()
+    //       .contains(textLoverCase);
+    //   if ((element.createdAt != null && containsDate) ||
+    //       (element.name != null &&
+    //           element.name!.toLowerCase().contains(textLoverCase)) ||
+    //       (element.extension != null &&
+    //           element.extension!.toLowerCase().contains(textLoverCase))) {
+    //     sortedFiles.add(element);
+    //   }
+    // });
+    //mapSortedFieldChanged(sortText);
+    emit(state.copyWith(
+      criterion: criterion,
+      direction: direction,
+      search: sortText,
+    ));
   }
 
   Future<void> _update({String? uploadingFileId}) async {
@@ -315,7 +406,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       objects: objects,
     ));
 
-    mapFileSortingByCreterion();
+    mapFileSortingByCriterion();
 
     print('files was updated');
 
@@ -455,7 +546,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
         emit(newState);
 
-        mapFileSortingByCreterion();
+        mapFileSortingByCriterion();
       }
     }
   }

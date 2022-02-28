@@ -10,6 +10,7 @@ import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
 
+@injectable
 class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
   FinanceBloc(@Named('files_controller') this._filesController)
       : super(FinanceState()) {

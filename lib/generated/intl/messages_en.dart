@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_file": MessageLookupByLibrary.simpleMessage("Delete file"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Delete permanently"),
+        "documents": MessageLookupByLibrary.simpleMessage("Documents"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Your earnings will be"),

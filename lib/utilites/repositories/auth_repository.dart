@@ -4,13 +4,13 @@ import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/utilites/services/auth_service.dart';
 
 import 'package:upstorage_desktop/models/enums.dart';
-import '../injection.dart';
 
 @Singleton()
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
-  final AuthService _authService = getIt<AuthService>();
+  final AuthService _authService;
 
+  AuthenticationRepository(this._authService);
   Stream<AuthenticationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
     yield* _controller.stream;

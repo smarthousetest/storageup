@@ -41,10 +41,12 @@ dependencies:
   cpp_native:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git
+  
 
 dev_dependencies:
   injectable_generator:
   build_runner: ^2.0.4
+  hive_generator: ^1.1.2
   flutter_test:
     sdk: flutter
 

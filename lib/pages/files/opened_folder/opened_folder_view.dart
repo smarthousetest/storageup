@@ -153,13 +153,22 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
+        var searchText = StateSortedContainer.of(context).search;
+
+        // if (state.search != searchText) {
+        //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(
+        //         searchText,
+        //       );
+        // }
         var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
         var direction = StateSortedContainer.of(context).direction;
         context.read<OpenedFolderCubit>()
-          ..setNewCriterionAndDirection(sortedCriterion, direction)
-          ..mapFileSortingByCreterion();
+          ..setNewCriterionAndDirection(sortedCriterion, direction, searchText)
+          ..mapFileSortingByCriterion();
         if (state.representation == FilesRepresentation.grid) {
-          return _filesGridForType();
+          return state.criterion == SortingCriterion.byType
+              ? _filesGridForType(state)
+              : _filesGrid(state);
         } else {
           return _filesList(context, state);
         }
@@ -220,103 +229,13 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     );
   }
 
-  Widget _filesGrid() {
-    return LayoutBuilder(builder: (context, constrains) {
-      print('min width ${constrains.smallest.width}');
-
-      return Container(
-        child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-          bloc: _bloc,
-          builder: (blocContext, state) {
-            return GridView.builder(
-              itemCount: state.sortedFiles.length,
-              shrinkWrap: true,
-              controller: ScrollController(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constrains.smallest.width ~/ 110,
-                childAspectRatio: (1 / 1.22),
-                mainAxisSpacing: 15,
-              ),
-              itemBuilder: (context, index) {
-                Function() onTap;
-                var obj = state.sortedFiles[index];
-
-                Future<void> _onPointerDown(PointerDownEvent event) async {
-                  if (event.kind == PointerDeviceKind.mouse &&
-                      event.buttons == kSecondaryMouseButton) {}
-                }
-
-                if (obj is Folder) {
-                  onTap = () {
-                    print(obj);
-                    print("lol");
-                    widget.push(
-                      OpenedFolderView(
-                        currentFolder: obj,
-                        previousFolders: [
-                          ...state.previousFolders,
-                          state.currentFolder!
-                        ],
-                        pop: widget.pop,
-                        push: widget.push,
-                      ),
-                    );
-                  };
-                } else {
-                  onTap = () {
-                    print('file tapped');
-                  };
-                }
-
-                return GestureDetector(
-                    onTap: onTap,
-                    child: Listener(
-                      //   child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-                      //       builder: (context, state) {
-                      //     var controller = CustomPopupMenuController();
-                      //     return CustomPopupMenu(
-                      //       pressType: PressType.singleClick,
-                      //       barrierColor: Colors.transparent,
-                      //       showArrow: false,
-                      //       horizontalMargin: 110,
-                      //       verticalMargin: 0,
-                      //       controller: controller,
-                      //       menuBuilder: () {
-                      //         return FilesPopupMenuActions(
-                      //           theme: Theme.of(context),
-                      //           translate: translate,
-                      //           onTap: (action) {
-                      //             controller.hideMenu();
-                      //             if (action == FileAction.properties) {
-                      //               StateInfoContainer.of(context)
-                      //                   ?.setInfoObject(obj);
-                      //               controller.hideMenu();
-                      //             } else
-                      //               context
-                      //                   .read<OpenedFolderCubit>()
-                      //                   .onRecordActionChoosed(action, obj);
-                      //           },
-                      //         );
-                      //       },
-                      child: ObjectView(object: state.sortedFiles[index]),
-                      onPointerDown: _onPointerDown,
-                    ));
-                // }),
-
-                //),
-                //  );
-              },
-            );
-          },
-        ),
-      );
-    });
-  }
-
-  Widget _filesGridForType() {
+  Widget _filesGrid(OpenedFolderState state) {
     return Expanded(
-      child: LayoutBuilder(builder: (blocContext, constrains) {
-        return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+      child: LayoutBuilder(builder: (context, constrains) {
+        print('min width ${constrains.smallest.width}');
+
+        return Container(
+          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
             bloc: _bloc,
             builder: (context, state) {
               return GridView.builder(
@@ -332,10 +251,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   Function() onTap;
                   var obj = state.sortedFiles[index];
 
-                  // Future<void> _onPointerDown(PointerDownEvent event) async {
-                  //   if (event.kind == PointerDeviceKind.mouse &&
-                  //       event.buttons == kSecondaryMouseButton) {}
-                  // }
+                  Future<void> _onPointerDown(PointerDownEvent event) async {
+                    if (event.kind == PointerDeviceKind.mouse &&
+                        event.buttons == kSecondaryMouseButton) {
+                      print("right button click");
+                    }
+                  }
 
                   if (obj is Folder) {
                     onTap = () {
@@ -354,17 +275,171 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       );
                     };
                   } else {
-                    onTap = () => blocContext
-                        .read<OpenedFolderCubit>()
-                        .fileTapped(obj as Record);
+                    onTap = () {
+                      print('file tapped');
+                    };
                   }
+
                   return GestureDetector(
-                    onTap: onTap,
-                    child: ObjectView(object: state.sortedFiles[index]),
-                  );
+                      onTap: onTap,
+                      child: Listener(
+                        //   child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                        //       builder: (context, state) {
+                        //     var controller = CustomPopupMenuController();
+                        //     return CustomPopupMenu(
+                        //       pressType: PressType.singleClick,
+                        //       barrierColor: Colors.transparent,
+                        //       showArrow: false,
+                        //       horizontalMargin: 110,
+                        //       verticalMargin: 0,
+                        //       controller: controller,
+                        //       menuBuilder: () {
+                        //         return FilesPopupMenuActions(
+                        //           theme: Theme.of(context),
+                        //           translate: translate,
+                        //           onTap: (action) {
+                        //             controller.hideMenu();
+                        //             if (action == FileAction.properties) {
+                        //               StateInfoContainer.of(context)
+                        //                   ?.setInfoObject(obj);
+                        //               controller.hideMenu();
+                        //             } else
+                        //               context
+                        //                   .read<OpenedFolderCubit>()
+                        //                   .onRecordActionChoosed(action, obj);
+                        //           },
+                        //         );
+                        //       },
+                        child: ObjectView(object: state.sortedFiles[index]),
+                        onPointerDown: _onPointerDown,
+                      ));
+                  // }),
+
+                  //),
+                  //  );
                 },
               );
-            });
+            },
+          ),
+        );
+      }),
+    );
+  }
+
+  List<GridElement> _gridList(
+      OpenedFolderState state, BoxConstraints constrains) {
+    List<GridElement> grids = [];
+    state.groupedFiles.forEach((key, value) {
+      grids.add(
+        GridElement(
+            grid: GridView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: value.length,
+              primary: false,
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: constrains.smallest.width ~/ 110,
+                childAspectRatio: (1 / 1.1),
+              ),
+              itemBuilder: (context, index) {
+                List<BaseObject> files = value;
+
+                Function() onTap;
+                var obj = state.sortedFiles[index];
+
+                Future<void> _onPointerDown(PointerDownEvent event) async {
+                  if (event.kind == PointerDeviceKind.mouse &&
+                      event.buttons == kSecondaryMouseButton) {
+                    print("right button click");
+                  }
+                }
+
+                final object = files[index];
+
+                if (object is Folder) {
+                  onTap = () {
+                    print(obj);
+                    print("lol");
+                    widget.push(
+                      OpenedFolderView(
+                        currentFolder: object,
+                        previousFolders: [
+                          ...state.previousFolders,
+                          state.currentFolder!
+                        ],
+                        pop: widget.pop,
+                        push: widget.push,
+                      ),
+                    );
+                  };
+                } else {
+                  onTap = () {
+                    print('file tapped');
+                  };
+                }
+                return GestureDetector(
+                    onTap: onTap,
+                    child: Listener(
+                        onPointerDown: _onPointerDown,
+                        child: ObjectView(object: files[index])));
+              },
+            ),
+            type: key),
+      );
+    });
+    return grids;
+  }
+
+  Widget _filesGridForType(OpenedFolderState state) {
+    return Expanded(
+      child: LayoutBuilder(builder: (context, constrains) {
+        var grids = _gridList(state, constrains);
+
+        return ListView(
+          scrollDirection: Axis.vertical,
+          controller: ScrollController(),
+          // physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
+          children: List.generate(grids.length, (index) {
+            String type = grids[index].type;
+            switch (type) {
+              case 'folder':
+                type = translate.folder_dir;
+                break;
+              case 'jpg':
+                type = translate.photos;
+                break;
+              case 'txt':
+                type = translate.documents;
+                break;
+            }
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 0.0),
+                  child: Container(
+                    width: double.infinity,
+                    child: Text(
+                      type,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Theme.of(context).disabledColor,
+                        fontSize: 18,
+                        fontFamily: kNormalTextFontFamily,
+                      ),
+                    ),
+                  ),
+                ),
+                grids[index].grid,
+                Divider(
+                  height: 1.0,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                )
+              ],
+            );
+          }),
+        );
       }),
     );
   }
@@ -980,4 +1055,156 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
       ),
     );
   }
+}
+
+class GridFileElement extends StatefulWidget {
+  const GridFileElement({
+    Key? key,
+    // required this.widget,
+    required this.isSelectable,
+    required this.file,
+  }) : super(key: key);
+
+  // final GridItemWidget widget;
+  final BaseObject file;
+  final bool isSelectable;
+
+  @override
+  State<GridFileElement> createState() => _GridFileElementState();
+}
+
+class _GridFileElementState extends State<GridFileElement> {
+  @override
+  Widget build(BuildContext context) {
+    // bool hasThumbnail = false;
+    bool isFile = false;
+    String? type = '';
+    List<Widget> indicators = [Container()];
+    if (widget.file is Record) {
+      var record = widget.file as Record;
+      isFile = true;
+      // print(record.thumbnail?.first.publicUrl);
+      if (record.thumbnail != null &&
+              record.thumbnail!
+                  .isNotEmpty /*&&
+          record.thumbnail!.first.name!.contains('.')*/
+          ) {
+        type = FileAttribute().getFilesType(
+            record.name!.toLowerCase()); //record.thumbnail?.first.name;
+        // print(type);
+      }
+
+      if (record.loadPercent != null && record.loadPercent != 99) {
+        indicators = [
+          Visibility(
+            child: CircularProgressIndicator(
+              value: record.loadPercent! / 100,
+            ),
+          ),
+          CircularProgressIndicator.adaptive(),
+        ];
+      }
+    }
+
+    return LayoutBuilder(
+      builder: (context, constrains) => Material(
+        type: MaterialType.transparency,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              // height: 100,
+              width: constrains.minWidth - 17,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    // height: 100,
+                    width: constrains.minWidth - 17,
+                    child: isFile && type != 'image'
+                        ? type!.isNotEmpty
+                            ? Image.asset(
+                                'assets/file_icons/$type.png',
+                                fit: BoxFit.contain,
+                              )
+                            : Image.asset(
+                                'assets/file_icons/files.png',
+                                fit: BoxFit.contain,
+                              )
+                        : type == 'image'
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  (widget.file as Record)
+                                      .thumbnail!
+                                      .first
+                                      .publicUrl!,
+                                  fit: BoxFit.contain,
+                                ),
+                              )
+                            : Image.asset(
+                                'assets/file_icons/folder.png',
+                                fit: BoxFit.contain,
+                              ),
+                  ),
+                  Container(
+                    width: 100,
+                    // height: 100,
+                    alignment: Alignment.bottomCenter,
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Visibility(
+                      visible: widget.isSelectable,
+                      child: SvgPicture.asset(
+                        widget.file.isChoosed
+                            ? 'assets/media_page/choosed_icon.svg'
+                            : 'assets/media_page/unchoosed_icon.svg',
+                        alignment: Alignment.bottomCenter,
+                        height: 16,
+                        width: 16,
+                      ),
+                    ),
+                  ),
+                  ...indicators,
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.0),
+              child: Container(
+                child: Text(
+                  widget.file.name ?? 'name does not exist',
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Theme.of(context).textTheme.headline6?.color,
+                    fontSize: 14,
+                    fontFamily: kNormalTextFontFamily,
+                  ),
+                ),
+              ),
+            ),
+            Text(
+              DateFormat('dd.MM.yyyy').format(widget.file.createdAt ??
+                  DateTime.now()), //TODO remove this costil'
+              style: TextStyle(
+                decoration: TextDecoration.none,
+                color: Theme.of(context).disabledColor,
+                fontSize: 10,
+                fontFamily: kNormalTextFontFamily,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GridElement {
+  Widget grid;
+  String type;
+  GridElement({required this.grid, required this.type});
 }

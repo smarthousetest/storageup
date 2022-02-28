@@ -20,7 +20,6 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
-import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 //enum SortingDirection { neutral, up, down }
 enum ContextActionEnum {
@@ -447,7 +446,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
   FilesState _resetSortedList({
     required FilesState state,
   }) {
-    return state.copyWith(sortedFiles: state.allFiles);
+    return state.copyWith(sortedFiles: state.sortedFiles);
   }
 
   var re = RegExp(

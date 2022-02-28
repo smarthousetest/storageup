@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   SpaceBloc() : super(SpaceState()) {
@@ -19,12 +21,16 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
       }
+      if (event is DeleteLocation) {
+        await _mapDeleteLocation(event, state, emit);
+      }
     });
   }
   // final AuthenticationRepository _authenticationRepository =
   // getIt<AuthenticationRepository>();
 
   UserController _userController = getIt<UserController>();
+  late final DownloadLocationsRepository _repository;
 
   Future _mapSpacePageOpened(
     SpacePageOpened event,
@@ -32,7 +38,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     Emitter<SpaceState> emit,
   ) async {
     User? user = await _userController.getUser;
-    emit(state.copyWith(user: user));
+    _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+    final locationsInfo = _repository.getlocationsInfo;
+    emit(state.copyWith(user: user, locationsInfo: locationsInfo));
   }
 
   Future _mapRunSoft(
@@ -63,5 +71,21 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SaveDirPath event,
     SpaceState state,
     Emitter<SpaceState> emit,
-  ) {}
+  ) {
+    var countOfGb = event.countGb;
+    var path = event.pathDir;
+
+    _repository.createLocation(countOfGb: countOfGb, path: path);
+    var locationsInfo = _repository.getlocationsInfo;
+    emit(state.copyWith(locationsInfo: locationsInfo));
+  }
+
+  _mapDeleteLocation(
+    DeleteLocation event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) {
+    var idLocation = event.location.id;
+    _repository.deleteLocation(id: idLocation);
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
 abstract class SpaceEvent extends Equatable {
   const SpaceEvent();
@@ -24,5 +25,15 @@ class RunSoft extends SpaceEvent {
 }
 
 class SaveDirPath extends SpaceEvent {
-  const SaveDirPath();
+  String pathDir;
+  int countGb;
+  SaveDirPath({
+    required this.pathDir,
+    required this.countGb,
+  });
+}
+
+class DeleteLocation extends SpaceEvent {
+  DownloadLocation location;
+  DeleteLocation({required this.location});
 }

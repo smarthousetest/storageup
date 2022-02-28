@@ -14,6 +14,7 @@ class OpenedFolderState extends Equatable {
   final Map<String, List<BaseObject>> groupedFiles;
   final SortingCriterion criterion;
   final SortingDirection direction;
+  final String search;
 
   OpenedFolderState(
       {this.currentFolder,
@@ -23,6 +24,7 @@ class OpenedFolderState extends Equatable {
       this.criterion = SortingCriterion.byDateCreated,
       this.direction = SortingDirection.down,
       required this.previousFolders,
+      this.search = '',
       this.groupedFiles = const {},
       this.representation = FilesRepresentation.grid});
 
@@ -32,6 +34,7 @@ class OpenedFolderState extends Equatable {
     List<BaseObject>? sortedFiles,
     Map<String, List<BaseObject>>? groupedFiles,
     FormzStatus? status,
+    String? search,
     SortingDirection? direction,
     SortingCriterion? criterion,
     List<Folder>? previousFolders,
@@ -44,6 +47,7 @@ class OpenedFolderState extends Equatable {
       criterion: criterion ?? this.criterion,
       direction: direction ?? this.direction,
       objects: objects ?? this.objects,
+      search: search ?? this.search,
       sortedFiles: sortedFiles ?? this.sortedFiles,
       previousFolders: previousFolders ?? this.previousFolders,
       representation: representation ?? this.representation,
@@ -60,7 +64,8 @@ class OpenedFolderState extends Equatable {
         sortedFiles,
         criterion,
         direction,
-        status
+        status,
+        search
       ];
 }
 

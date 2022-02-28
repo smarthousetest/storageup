@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';

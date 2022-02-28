@@ -18,6 +18,11 @@ enum FileAction {
   properties,
 }
 
+enum KeeperAction {
+  delete,
+  change,
+}
+
 enum ErrorType {
   noInternet,
 }
