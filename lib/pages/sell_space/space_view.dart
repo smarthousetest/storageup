@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
@@ -11,6 +12,7 @@ import 'package:upstorage_desktop/utilites/autoupload/models/download_location.d
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'folder_list/keeper_info.dart';
 
 class SpaceSellPage extends StatefulWidget {
@@ -75,37 +77,51 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           return Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(23.0),
-                                  child: state.user.image,
+                                padding: EdgeInsets.only(
+                                  right: 20,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    StateContainer.of(context)
+                                        .changePage(ChoosedPage.settings);
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(23.0),
+                                      child: Container(child: state.user.image),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
-                                    child: Text(
-                                      state.user?.firstName ?? '',
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        color:
-                                            Theme.of(context).bottomAppBarColor,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    state.user?.email ?? '',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color:
-                                          Theme.of(context).bottomAppBarColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              (MediaQuery.of(context).size.width > 965)
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Text(
+                                            state.user?.firstName ?? '',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Theme.of(context)
+                                                  .bottomAppBarColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          state.user?.email ?? '',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .bottomAppBarColor,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
                             ],
                           );
                         }),

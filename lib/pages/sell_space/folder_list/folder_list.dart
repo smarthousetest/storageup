@@ -12,7 +12,6 @@ import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
-import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 enum FileOptions {
   share,
@@ -25,7 +24,7 @@ enum FileOptions {
   remove,
 }
 
-// 79313064863
+// 79313064863 не удалять
 class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();

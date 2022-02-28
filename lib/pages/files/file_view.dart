@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 import 'files_list/files_list.dart';
@@ -416,35 +418,48 @@ class _FilePageState extends State<FilePage> {
               builder: (context, state) {
                 return Row(
                   key: stickyKey,
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 10, left: 20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(23.0),
-                        child: state.user.image,
+                      padding: EdgeInsets.only(right: 20, left: 20),
+                      child: GestureDetector(
+                        onTap: () {
+                          StateContainer.of(context)
+                              .changePage(ChoosedPage.settings);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(23.0),
+                            child: Container(child: state.user.image),
+                          ),
+                        ),
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          state.user?.fullName ?? 'Александр',
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Theme.of(context).bottomAppBarColor,
-                          ),
-                        ),
-                        Text(
-                          state.user?.email ?? '',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).bottomAppBarColor,
-                          ),
-                        ),
-                      ],
-                    ),
+                    (MediaQuery.of(context).size.width > 966)
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  state.user?.firstName ?? 'Александр',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    color: Theme.of(context).bottomAppBarColor,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                state.user?.email ?? '',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Theme.of(context).bottomAppBarColor,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
                   ],
                 );
               },

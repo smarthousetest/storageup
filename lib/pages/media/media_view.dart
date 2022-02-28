@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
@@ -15,6 +16,7 @@ import 'package:upstorage_desktop/pages/media/media_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -110,37 +112,49 @@ class _MediaPageState extends State<MediaPage> {
                         return Row(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 20, left: 20),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(23.0),
-                                child: state.user.image,
+                              padding: EdgeInsets.only(right: 20, left: 20),
+                              child: GestureDetector(
+                                onTap: () {
+                                  StateContainer.of(context)
+                                      .changePage(ChoosedPage.settings);
+                                },
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(23.0),
+                                    child: Container(child: state.user.image),
+                                  ),
+                                ),
                               ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text(
-                                    state.user?.fullName ?? '',
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color:
-                                          Theme.of(context).bottomAppBarColor,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  state.user?.email ?? '',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).bottomAppBarColor,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            (MediaQuery.of(context).size.width > 965)
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        child: Text(
+                                          state.user?.firstName ?? '',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Theme.of(context)
+                                                .bottomAppBarColor,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        state.user?.email ?? '',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context)
+                                              .bottomAppBarColor,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
                           ],
                         );
                       }),
