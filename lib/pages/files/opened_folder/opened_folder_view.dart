@@ -31,7 +31,8 @@ class OpenedFolderView extends StatefulWidget {
 
   final Folder? currentFolder;
   final List<Folder> previousFolders;
-  final Function(Widget) push;
+  final void Function(
+      {required OpenedFolderView child, required String? folderId}) push;
   final Function(int) pop;
 
   @override
@@ -232,7 +233,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   Widget _filesGrid(OpenedFolderState state) {
     return Expanded(
       child: LayoutBuilder(builder: (context, constrains) {
-        print('min width ${constrains.smallest.width}');
+        // print('min width ${constrains.smallest.width}');
 
         return Container(
           child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
@@ -263,7 +264,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       print(obj);
                       print("lol");
                       widget.push(
-                        OpenedFolderView(
+                        child: OpenedFolderView(
                           currentFolder: obj,
                           previousFolders: [
                             ...state.previousFolders,
@@ -272,6 +273,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                           pop: widget.pop,
                           push: widget.push,
                         ),
+                        folderId: obj.id,
                       );
                     };
                   } else {
@@ -359,9 +361,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 if (object is Folder) {
                   onTap = () {
                     print(obj);
-                    print("lol");
                     widget.push(
-                      OpenedFolderView(
+                      child: OpenedFolderView(
                         currentFolder: object,
                         previousFolders: [
                           ...state.previousFolders,
@@ -370,6 +371,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                         pop: widget.pop,
                         push: widget.push,
                       ),
+                      folderId: obj.id,
                     );
                   };
                 } else {

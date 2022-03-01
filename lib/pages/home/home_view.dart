@@ -72,25 +72,45 @@ class _HomePageState extends State<HomePage> {
     DesktopWindow.resetMaxWindowSize();
   }
 
+  @override
+  void initState() {
+    infoPage = InfoPage();
+    filePage =
+        StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    likePage = LikePage();
+    spaceSellPage = SpaceSellPage();
+    finincePage = FinancePage();
+    settingsPage = SettingsPage();
+    mediaPage = MediaPage();
+    super.initState();
+  }
+
+  late Widget infoPage;
+  late Widget filePage;
+  late Widget likePage;
+  late Widget spaceSellPage;
+  late Widget finincePage;
+  late Widget settingsPage;
+  late Widget mediaPage;
+
   Widget getPage() {
     switch (StateContainer.of(context).choosedPage) {
       case ChoosedPage.home:
-        return InfoPage();
+        return infoPage;
       case ChoosedPage.file:
-        return StateInfoContainer(
-            child: StateSortedContainer(child: FilePage()));
+        return filePage;
       case ChoosedPage.like:
-        return LikePage();
+        return likePage;
       case ChoosedPage.sell_space:
-        return SpaceSellPage();
+        return spaceSellPage;
       case ChoosedPage.finance:
-        return FinancePage();
+        return finincePage;
       case ChoosedPage.settings:
-        return SettingsPage();
+        return settingsPage;
       case ChoosedPage.media:
-        return MediaPage();
+        return mediaPage;
       default:
-        return InfoPage();
+        return infoPage;
     }
   }
 
@@ -489,10 +509,12 @@ class _HomePageState extends State<HomePage> {
           //   action: userAction.action,
           //   result: [name],
           // );
+          final folderId = StateContainer.of(context).choosedFilesFolderId;
 
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
+                folderId: folderId,
               ));
         }
         break;
@@ -508,11 +530,35 @@ class _HomePageState extends State<HomePage> {
           //   result: [name],
           // );
 
+          final folderId = StateContainer.of(context).choosedMediaFolderId;
+
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
+                folderId: folderId,
               ));
         }
+        break;
+
+      case UserAction.uploadFiles:
+        final folderId = StateContainer.of(context).choosedFilesFolderId;
+        context.read<HomeBloc>().add(
+              HomeUserActionChoosed(
+                action: userAction.action,
+                values: userAction.result,
+                folderId: folderId,
+              ),
+            );
+        break;
+      case UserAction.uploadMedia:
+        final folderId = StateContainer.of(context).choosedMediaFolderId;
+        context.read<HomeBloc>().add(
+              HomeUserActionChoosed(
+                action: userAction.action,
+                values: userAction.result,
+                folderId: folderId,
+              ),
+            );
         break;
       default:
         context.read<HomeBloc>().add(

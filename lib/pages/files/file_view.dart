@@ -11,6 +11,7 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 import 'files_list/files_list.dart';
@@ -24,15 +25,16 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
-  var index = 0;
+
   FilePage();
 }
 
 class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
   S translate = getIt<S>();
+  var index = 0;
 
-  List<Widget> _opendedFolders = [];
+  List<OpenedFolderView> _opendedFolders = [];
   int _sortingTextFieldIndex = -1;
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
@@ -48,14 +50,11 @@ class _FilePageState extends State<FilePage> {
   @override
   void initState() {
     _opendedFolders.add(
-      Column(
-        children: [
-          OpenedFolderView(
-              currentFolder: null, //state.currentFolder!,
-              previousFolders: [],
-              pop: _pop,
-              push: _push),
-        ],
+      OpenedFolderView(
+        currentFolder: null, //state.currentFolder!,
+        previousFolders: [],
+        pop: _pop,
+        push: _push,
       ),
     );
     _initFilterList();
@@ -196,7 +195,7 @@ class _FilePageState extends State<FilePage> {
                     ),
                     Expanded(
                       child: IndexedStack(
-                        index: widget.index,
+                        index: index,
                         children: _opendedFolders,
                       ),
                     ),
@@ -503,11 +502,13 @@ class _FilePageState extends State<FilePage> {
     }
   }
 
-  void _push(Widget child) {
+  void _push({required OpenedFolderView child, required String? folderId}) {
     setState(() {
       _opendedFolders.add(child);
-      widget.index++;
+      index++;
     });
+
+    StateContainer.of(context).changeChoosedFilesFolderId(folderId);
   }
 
   void _pop(int countOfPop) {
@@ -515,10 +516,14 @@ class _FilePageState extends State<FilePage> {
       setState(() {
         if (_opendedFolders.length != 1) {
           _opendedFolders.removeLast();
-          widget.index--;
+          index--;
         }
       });
     }
+
+    final choosedFolder = _opendedFolders[index].currentFolder?.id;
+
+    StateContainer.of(context).changeChoosedFilesFolderId(choosedFolder);
   }
 
   Widget _recentFiles() {
@@ -798,11 +803,14 @@ class _FilePageState extends State<FilePage> {
                     description: translate.count_of_files(
                         state.currentFolder?.records?.length ?? 0),
                     onTap: () {
-                      _push(OpenedFolderView(
-                          currentFolder: state.currentFolder!,
-                          previousFolders: [],
-                          pop: _pop,
-                          push: _push));
+                      _push(
+                        child: OpenedFolderView(
+                            currentFolder: state.currentFolder!,
+                            previousFolders: [],
+                            pop: _pop,
+                            push: _push),
+                        folderId: null,
+                      );
                     },
                   );
                 } else {
@@ -814,7 +822,7 @@ class _FilePageState extends State<FilePage> {
                         translate.count_of_files(folder.records?.length ?? 0),
                     onTap: () {
                       setState(() {
-                        widget.index = 1;
+                        index = 1;
                         print(index - 1);
                       });
                     },
@@ -905,7 +913,7 @@ class _FilePageState extends State<FilePage> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              widget.index = 0;
+                              index = 0;
                             });
                           },
                           child: MouseRegion(
