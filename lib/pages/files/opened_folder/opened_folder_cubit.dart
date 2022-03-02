@@ -361,6 +361,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
+  void updateForCreateFolder() async {}
+
   Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
       SortingDirection direction, String sortText) async {
     // final allFiles = state.sortedFiles;

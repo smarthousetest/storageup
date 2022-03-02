@@ -22,12 +22,8 @@ class StateInfoContainer extends StatefulWidget {
 class StateInfoContainerState extends State<StateInfoContainer> {
   BaseObject? get object => _object;
   BaseObject? _object;
-  SortingCriterion _sortedCriterion = SortingCriterion.byType;
-  SortingCriterion get sortedCriterion => _sortedCriterion;
-  SortingDirection _direction = SortingDirection.neutral;
-  SortingDirection get direction => _direction;
-  String? _search;
-  String? get search => _search;
+  bool _open = false;
+  bool? get open => _open;
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +33,15 @@ class StateInfoContainerState extends State<StateInfoContainer> {
     );
   }
 
-  void newSortedCriterion(
-      SortingCriterion newSortedCriterion, SortingDirection direction) {
-    setState(() {
-      _sortedCriterion = newSortedCriterion;
-      _direction = direction;
-    });
-  }
-
   void setInfoObject(BaseObject? object) {
     setState(() {
       _object = object;
+    });
+  }
+
+  void openFile() {
+    setState(() {
+      _open = !_open;
     });
   }
 }

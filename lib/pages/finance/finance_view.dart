@@ -123,31 +123,36 @@ class _FinancePageState extends State<FinancePage> {
                               ),
                             ),
                             (MediaQuery.of(context).size.width > 965)
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5),
-                                        child: Text(
-                                          state.user?.firstName ?? '',
+                                ? Container(
+                                    constraints: BoxConstraints(maxWidth: 120),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Text(
+                                            state.user?.firstName ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Theme.of(context)
+                                                  .bottomAppBarColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          state.user?.email ?? '',
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 12,
                                             color: Theme.of(context)
                                                 .bottomAppBarColor,
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        state.user?.email ?? '',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Theme.of(context)
-                                              .bottomAppBarColor,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   )
                                 : Container(),
                           ],

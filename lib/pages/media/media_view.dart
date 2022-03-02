@@ -128,31 +128,36 @@ class _MediaPageState extends State<MediaPage> {
                               ),
                             ),
                             (MediaQuery.of(context).size.width > 965)
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5),
-                                        child: Text(
-                                          state.user?.firstName ?? '',
+                                ? Container(
+                                    constraints: BoxConstraints(maxWidth: 120),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Text(
+                                            state.user?.firstName ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Theme.of(context)
+                                                  .bottomAppBarColor,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          state.user?.email ?? '',
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 12,
                                             color: Theme.of(context)
                                                 .bottomAppBarColor,
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        state.user?.email ?? '',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Theme.of(context)
-                                              .bottomAppBarColor,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   )
                                 : Container(),
                           ],
@@ -606,45 +611,53 @@ class _MediaPageState extends State<MediaPage> {
                   }),
                   cells: [
                     DataCell(
-                      Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Image.asset(
-                            type.isNotEmpty
-                                ? 'assets/file_icons/${type}_s.png'
-                                : 'assets/file_icons/unexpected_s.png',
-                            fit: BoxFit.contain,
-                            height: 24,
-                            width: 24,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: Text(
-                              e.name ?? '',
-                              style: cellTextStyle,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          // Spacer(),
-                          BlocBuilder<MediaCubit, MediaState>(
-                            builder: (context, state) {
-                              return GestureDetector(
-                                onTap: () {
-                                  context.read<MediaCubit>().setFavorite(e);
-                                },
-                                child: Image.asset(
-                                  e.favorite
-                                      ? 'assets/file_page/favorite.png'
-                                      : 'assets/file_page/not_favorite.png',
-                                  height: 18,
-                                  width: 18,
+                      GestureDetector(
+                        onTap: () {
+                          context.read<MediaCubit>().fileTapped(e);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image.asset(
+                                type.isNotEmpty
+                                    ? 'assets/file_icons/${type}_s.png'
+                                    : 'assets/file_icons/unexpected_s.png',
+                                fit: BoxFit.contain,
+                                height: 24,
+                                width: 24,
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  e.name ?? '',
+                                  style: cellTextStyle,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              );
-                            },
-                          )
-                        ],
+                              ),
+                              // Spacer(),
+                              BlocBuilder<MediaCubit, MediaState>(
+                                builder: (context, state) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      context.read<MediaCubit>().setFavorite(e);
+                                    },
+                                    child: Image.asset(
+                                      e.favorite
+                                          ? 'assets/file_page/favorite.png'
+                                          : 'assets/file_page/not_favorite.png',
+                                      height: 18,
+                                      width: 18,
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     DataCell(

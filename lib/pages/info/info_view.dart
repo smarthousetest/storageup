@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
+import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/pages/info/info_bloc.dart';
 import 'package:upstorage_desktop/pages/info/info_event.dart';
 import 'package:upstorage_desktop/pages/info/info_state.dart';
@@ -124,27 +125,32 @@ class _InfoPageState extends State<InfoPage> {
               ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  state.user?.fullName ?? '',
+          Container(
+            constraints: BoxConstraints(maxWidth: 200),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    state.user?.firstName ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Theme.of(context).bottomAppBarColor,
+                    ),
+                  ),
+                ),
+                Text(
+                  state.user?.email ?? '',
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: 12,
                     color: Theme.of(context).bottomAppBarColor,
                   ),
                 ),
-              ),
-              Text(
-                state.user?.email ?? '',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).bottomAppBarColor,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       );

@@ -449,7 +449,9 @@ class _ButtonTemplateState extends State<FileInfoView> {
                             height: 42,
                             width: 260,
                             child: OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                StateInfoContainer.of(context)?.openFile();
+                              },
                               style: OutlinedButton.styleFrom(
                                 minimumSize: Size(double.maxFinite, 60),
                                 shape: RoundedRectangleBorder(

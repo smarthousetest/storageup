@@ -436,28 +436,34 @@ class _FilePageState extends State<FilePage> {
                       ),
                     ),
                     (MediaQuery.of(context).size.width > 966)
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Text(
-                                  state.user?.firstName ?? 'Александр',
+                        ? Container(
+                            constraints: BoxConstraints(maxWidth: 120),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    state.user?.firstName ?? 'Александр',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      color:
+                                          Theme.of(context).bottomAppBarColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  state.user?.email ?? '',
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 12,
                                     color: Theme.of(context).bottomAppBarColor,
                                   ),
                                 ),
-                              ),
-                              Text(
-                                state.user?.email ?? '',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Theme.of(context).bottomAppBarColor,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           )
                         : Container(),
                   ],
