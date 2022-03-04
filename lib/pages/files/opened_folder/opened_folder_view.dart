@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
@@ -15,6 +19,7 @@ import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
@@ -42,7 +47,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   S translate = getIt<S>();
   SortingDirection _direction = SortingDirection.down;
   var _bloc = OpenedFolderCubit();
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -235,96 +239,96 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         print('min width ${constrains.smallest.width}');
 
         return Container(
-          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-            bloc: _bloc,
-            builder: (context, state) {
-              return GridView.builder(
-                itemCount: state.sortedFiles.length,
-                shrinkWrap: true,
-                controller: ScrollController(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: constrains.smallest.width ~/ 110,
-                  childAspectRatio: (1 / 1.22),
-                  mainAxisSpacing: 15,
-                ),
-                itemBuilder: (context, index) {
-                  Function() onTap;
-                  var obj = state.sortedFiles[index];
+            child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                bloc: _bloc,
+                builder: (context, state) {
+                  var controller = CustomPopupMenuController();
+                  return GridView.builder(
+                    itemCount: state.sortedFiles.length,
+                    shrinkWrap: true,
+                    controller: ScrollController(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: constrains.smallest.width ~/ 110,
+                      childAspectRatio: (1 / 1.22),
+                      mainAxisSpacing: 15,
+                    ),
+                    itemBuilder: (context, index) {
+                      Function() onTap;
+                      var obj = state.sortedFiles[index];
 
-                  Future<void> _onPointerDown(PointerDownEvent event) async {
-                    if (event.kind == PointerDeviceKind.mouse &&
-                        event.buttons == kSecondaryMouseButton) {
-                      print("right button click");
-                    }
-                  }
+                      _onPointerDown(PointerDownEvent event) {
+                        if (event.kind == PointerDeviceKind.mouse &&
+                            event.buttons == kSecondaryMouseButton) {
+                          print("right button click");
+                          controller.showMenu();
+                          // return CustomPopupMenu(
+                          //     pressType: PressType.singleClick,
+                          //     barrierColor: Colors.transparent,
+                          //     showArrow: false,
+                          //     horizontalMargin: 110,
+                          //     verticalMargin: 0,
+                          //     controller: controller,
+                          //     menuBuilder: () {
+                          //       return FilesPopupMenuActions(
+                          //         theme: Theme.of(context),
+                          //         translate: translate,
+                          //         onTap: (action) {
+                          //           controller.hideMenu();
+                          //           if (action == FileAction.properties) {
+                          //             StateInfoContainer.of(context)
+                          //                 ?.setInfoObject(obj);
+                          //             controller.hideMenu();
+                          //           } else
+                          //             context
+                          //                 .read<OpenedFolderCubit>()
+                          //                 .onRecordActionChoosed(action, obj);
+                          //         },
+                          //       );
+                          //     },
+                          //     child:
+                          //         ObjectView(object: state.sortedFiles[index]));
+                        }
+                      }
 
-                  if (obj is Folder) {
-                    onTap = () {
-                      print(obj);
-                      print("lol");
-                      widget.push(
-                        OpenedFolderView(
-                          currentFolder: obj,
-                          previousFolders: [
-                            ...state.previousFolders,
-                            state.currentFolder!
-                          ],
-                          pop: widget.pop,
-                          push: widget.push,
-                        ),
+                      if (obj is Folder) {
+                        onTap = () {
+                          print(obj);
+                          print("lol");
+                          widget.push(
+                            OpenedFolderView(
+                              currentFolder: obj,
+                              previousFolders: [
+                                ...state.previousFolders,
+                                state.currentFolder!
+                              ],
+                              pop: widget.pop,
+                              push: widget.push,
+                            ),
+                          );
+                        };
+                      } else {
+                        onTap = () {
+                          print('file tapped');
+                          context
+                              .read<OpenedFolderCubit>()
+                              .fileTapped(obj as Record);
+                        };
+                      }
+
+                      return GestureDetector(
+                        onTap: onTap,
+                        child: Builder(builder: (context) {
+                          return Listener(
+                            onPointerDown: _onPointerDown,
+                            child: ObjectView(
+                              object: state.sortedFiles[index],
+                            ),
+                          );
+                        }),
                       );
-                    };
-                  } else {
-                    onTap = () {
-                      print('file tapped');
-                      context
-                          .read<OpenedFolderCubit>()
-                          .fileTapped(obj as Record);
-                    };
-                  }
-
-                  return GestureDetector(
-                      onTap: onTap,
-                      child: Listener(
-                        //   child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-                        //       builder: (context, state) {
-                        //     var controller = CustomPopupMenuController();
-                        //     return CustomPopupMenu(
-                        //       pressType: PressType.singleClick,
-                        //       barrierColor: Colors.transparent,
-                        //       showArrow: false,
-                        //       horizontalMargin: 110,
-                        //       verticalMargin: 0,
-                        //       controller: controller,
-                        //       menuBuilder: () {
-                        //         return FilesPopupMenuActions(
-                        //           theme: Theme.of(context),
-                        //           translate: translate,
-                        //           onTap: (action) {
-                        //             controller.hideMenu();
-                        //             if (action == FileAction.properties) {
-                        //               StateInfoContainer.of(context)
-                        //                   ?.setInfoObject(obj);
-                        //               controller.hideMenu();
-                        //             } else
-                        //               context
-                        //                   .read<OpenedFolderCubit>()
-                        //                   .onRecordActionChoosed(action, obj);
-                        //           },
-                        //         );
-                        //       },
-                        child: ObjectView(object: state.sortedFiles[index]),
-                        onPointerDown: _onPointerDown,
-                      ));
-                  // }),
-
-                  //),
-                  //  );
-                },
-              );
-            },
-          ),
-        );
+                    },
+                  );
+                }));
       }),
     );
   }
@@ -466,6 +470,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return Colors.transparent;
   }
 
+  void openFile() {}
+
   Widget _filesList(BuildContext context, OpenedFolderState state) {
     TextStyle style = TextStyle(
       color: Theme.of(context).textTheme.subtitle1?.color,
@@ -482,6 +488,33 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
+        eventBus.on().listen((event) {
+          var object = StateInfoContainer.of(context)?.object;
+          if (object is Folder) {
+            print(object);
+            print("lol");
+
+            widget.push(
+              OpenedFolderView(
+                currentFolder: object,
+                previousFolders: [
+                  ...state.previousFolders,
+                  state.currentFolder!
+                ],
+                pop: widget.pop,
+                push: widget.push,
+              ),
+            );
+            context
+                .read<OpenedFolderCubit>()
+                .changeRepresentation(FilesRepresentation.table);
+          } else {
+            context.read<OpenedFolderCubit>().fileTapped(object as Record);
+            print('file tapped');
+          }
+          //print(event.runtimeType);
+        });
+
         return Expanded(
           child: LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(
@@ -718,6 +751,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                     translate: translate,
                                     onTap: (action) {
                                       controller.hideMenu();
+                                      controller.dispose();
                                       if (action == FileAction.properties) {
                                         StateInfoContainer.of(context)
                                             ?.setInfoObject(element);

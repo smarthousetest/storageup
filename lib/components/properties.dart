@@ -1,4 +1,5 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
@@ -77,31 +79,36 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                 ),
                               ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text(
-                                    widget.user?.fullName ?? '',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color:
-                                          Theme.of(context).bottomAppBarColor,
+                            Container(
+                              constraints: BoxConstraints(maxWidth: 120),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text(
+                                      widget.user?.fullName ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color:
+                                            Theme.of(context).bottomAppBarColor,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  widget.user?.email ?? '',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
+                                  Text(
+                                    widget.user?.email ?? '',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -165,6 +172,8 @@ class _ButtonTemplateState extends State<FileInfoView> {
                           child: Center(
                             child: Text(
                               widget.object?.name ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: Theme.of(context).disabledColor,
                                 fontFamily: kNormalTextFontFamily,
@@ -450,7 +459,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                             width: 260,
                             child: OutlinedButton(
                               onPressed: () {
-                                StateInfoContainer.of(context)?.openFile();
+                                eventBus.fire(FileInfoView);
                               },
                               style: OutlinedButton.styleFrom(
                                 minimumSize: Size(double.maxFinite, 60),
