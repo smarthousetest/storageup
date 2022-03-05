@@ -7,9 +7,11 @@ import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/pages/info/info_bloc.dart';
 import 'package:upstorage_desktop/pages/info/info_event.dart';
 import 'package:upstorage_desktop/pages/info/info_state.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 import '../../constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
@@ -27,13 +29,17 @@ class _InfoPageState extends State<InfoPage> {
   ChoosedPage choosedPage = ChoosedPage.home;
   bool youRenting = false;
   bool lease = false;
-
+  double? _searchFieldWidth;
+  final double _rowSpasing = 20.0;
+  final double _rowPadding = 30.0;
   void changePage(ChoosedPage newPage) {
     setState(() {
       choosedPage = newPage;
     });
   }
 
+  final TextEditingController _searchingFieldController =
+      TextEditingController();
   S translate = getIt<S>();
 
   bool _canShowClose = true;
@@ -44,8 +50,15 @@ class _InfoPageState extends State<InfoPage> {
     });
   }
 
+  void _setWidthSearchFields(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    _searchFieldWidth =
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 320;
+  }
+
   @override
   Widget build(BuildContext context) {
+    _setWidthSearchFields(context);
     return BlocProvider(
       create: (context) => InfoBloc()..add(InfoPageOpened()),
       child: Expanded(
@@ -353,57 +366,6 @@ class _InfoPageState extends State<InfoPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: ElevatedButton(
-              onPressed: () {
-                print('Audio');
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-                padding: EdgeInsets.zero,
-                shadowColor: Color.fromARGB(5, 0, 0, 0),
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Container(
-                      height: 46,
-                      width: 46,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SvgPicture.asset('assets/home_page/music_r.svg'),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          "Аудио",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).disabledColor,
-                            fontFamily: kNormalTextFontFamily,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "15 файлов",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).shadowColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -566,16 +528,45 @@ class _InfoPageState extends State<InfoPage> {
                                 offset: Offset(1, 4))
                           ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(13.0),
-                          child: Align(
-                            alignment: FractionalOffset.centerLeft,
-                            child: Container(
-                                width: 20,
-                                height: 20,
-                                child: SvgPicture.asset(
-                                    "assets/file_page/search.svg")),
-                          ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Align(
+                                alignment: FractionalOffset.centerLeft,
+                                child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    child: SvgPicture.asset(
+                                        "assets/file_page/search.svg")),
+                              ),
+                            ),
+                            Container(
+                              width: _searchFieldWidth,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    StateContainer.of(context)
+                                        .changePage(ChoosedPage.file);
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Container(
+                                      child: Text(
+                                        translate.search,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color:
+                                              Theme.of(context).disabledColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -1342,12 +1333,7 @@ class _InfoPageState extends State<InfoPage> {
                   width: 200,
                   child: OutlinedButton(
                     onPressed: () async {
-                      var str = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return BlurMenuUpload();
-                        },
-                      );
+                      eventBusForUpload.fire(InfoPage);
                     },
                     style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.maxFinite, 60),

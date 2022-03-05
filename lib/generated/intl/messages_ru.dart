@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_file": MessageLookupByLibrary.simpleMessage("Удалить файлы"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Удалить навсегда"),
+        "deleting": MessageLookupByLibrary.simpleMessage("Удаление"),
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "earnings":
@@ -219,6 +220,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "properties": MessageLookupByLibrary.simpleMessage("Свойства"),
         "provisions":
             MessageLookupByLibrary.simpleMessage("1. Общие положения"),
+        "realy_delete": MessageLookupByLibrary.simpleMessage(
+            "Вы действительно хотите удалить?"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Причина удаления"),
         "recent": MessageLookupByLibrary.simpleMessage("Недавние"),

@@ -142,6 +142,7 @@
     "count_of_files": "{count} files",
     "change_photo": "Change photo",
     "delete": "Delete",
+    "deleting": "Deleting",
     "offer": "Advantageous offer - switch to an annual subscription",
     "payment": "Payment:",
     "canceled": "Canceled",
@@ -207,5 +208,6 @@
     "search": "Search",
     "finance": "Finance",
     "file_sorting": "File sorting",
-    "documents": "Documents"
+    "documents": "Documents",
+    "realy_delete": "Do you really want to delete?"
 }

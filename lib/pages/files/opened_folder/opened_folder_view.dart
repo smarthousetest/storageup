@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -261,32 +262,32 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                             event.buttons == kSecondaryMouseButton) {
                           print("right button click");
                           controller.showMenu();
-                          // return CustomPopupMenu(
-                          //     pressType: PressType.singleClick,
-                          //     barrierColor: Colors.transparent,
-                          //     showArrow: false,
-                          //     horizontalMargin: 110,
-                          //     verticalMargin: 0,
-                          //     controller: controller,
-                          //     menuBuilder: () {
-                          //       return FilesPopupMenuActions(
-                          //         theme: Theme.of(context),
-                          //         translate: translate,
-                          //         onTap: (action) {
-                          //           controller.hideMenu();
-                          //           if (action == FileAction.properties) {
-                          //             StateInfoContainer.of(context)
-                          //                 ?.setInfoObject(obj);
-                          //             controller.hideMenu();
-                          //           } else
-                          //             context
-                          //                 .read<OpenedFolderCubit>()
-                          //                 .onRecordActionChoosed(action, obj);
-                          //         },
-                          //       );
-                          //     },
-                          //     child:
-                          //         ObjectView(object: state.sortedFiles[index]));
+                          return CustomPopupMenu(
+                              pressType: PressType.singleClick,
+                              barrierColor: Colors.transparent,
+                              showArrow: false,
+                              horizontalMargin: 110,
+                              verticalMargin: 0,
+                              controller: controller,
+                              menuBuilder: () {
+                                return FilesPopupMenuActions(
+                                  theme: Theme.of(context),
+                                  translate: translate,
+                                  onTap: (action) {
+                                    controller.hideMenu();
+                                    if (action == FileAction.properties) {
+                                      StateInfoContainer.of(context)
+                                          ?.setInfoObject(obj);
+                                      controller.hideMenu();
+                                    } else
+                                      context
+                                          .read<OpenedFolderCubit>()
+                                          .onRecordActionChoosed(action, obj);
+                                  },
+                                );
+                              },
+                              child:
+                                  ObjectView(object: state.sortedFiles[index]));
                         }
                       }
 
@@ -751,17 +752,26 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                     translate: translate,
                                     onTap: (action) {
                                       controller.hideMenu();
-                                      controller.dispose();
                                       if (action == FileAction.properties) {
+                                        controller.hideMenu();
                                         StateInfoContainer.of(context)
                                             ?.setInfoObject(element);
-                                        controller.hideMenu();
                                       } else
+                                        controller.hideMenu();
+                                      var result = showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return BlurDelete();
+                                        },
+                                      );
+                                      eventBusDeleteFile.on().listen((event) {
                                         context
                                             .read<OpenedFolderCubit>()
                                             .onRecordActionChoosed(
-                                                action, element);
-                                      controller.hideMenu();
+                                              action,
+                                              element,
+                                            );
+                                      });
                                     },
                                   );
                                 },

@@ -1480,6 +1480,16 @@ class S {
     );
   }
 
+  /// `Deleting`
+  String get deleting {
+    return Intl.message(
+      'Deleting',
+      name: 'deleting',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Advantageous offer - switch to an annual subscription`
   String get offer {
     return Intl.message(
@@ -1851,6 +1861,16 @@ class S {
     return Intl.message(
       'Documents',
       name: 'documents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you really want to delete?`
+  String get realy_delete {
+    return Intl.message(
+      'Do you really want to delete?',
+      name: 'realy_delete',
       desc: '',
       args: [],
     );

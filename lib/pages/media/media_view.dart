@@ -17,6 +17,7 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -31,10 +32,22 @@ class _MediaPageState extends State<MediaPage> {
   bool ifGrid = true;
   S translate = getIt<S>();
   var _folderButtonSize = 140;
+  double? _searchFieldWidth;
+  final double _rowSpasing = 20.0;
+  final double _rowPadding = 30.0;
   var _folderListScrollController = ScrollController(keepScrollOffset: false);
+  final TextEditingController _searchingFieldController =
+      TextEditingController();
+
+  void _setWidthSearchFields(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    _searchFieldWidth =
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 320;
+  }
 
   @override
   Widget build(BuildContext context) {
+    _setWidthSearchFields(context);
     // if (dirs_list.isEmpty) _init(context);
     return BlocProvider<MediaCubit>(
       create: (_) => MediaCubit()..init(),
@@ -62,48 +75,54 @@ class _MediaPageState extends State<MediaPage> {
                                   offset: Offset(1, 4))
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(13.0),
-                            child: Align(
-                              alignment: FractionalOffset.centerLeft,
-                              child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: SvgPicture.asset(
-                                      "assets/file_page/search.svg")),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 46,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            //child: Padding(
-                            //padding: const EdgeInsets.only(right: 30),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color:
-                                              Color.fromARGB(25, 23, 69, 139),
-                                          blurRadius: 4,
-                                          offset: Offset(1, 4))
-                                    ]),
-                                child: Center(
-                                  child: SvgPicture.asset(
-                                      "assets/file_page/settings.svg"),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(13.0),
+                                child: Align(
+                                  alignment: FractionalOffset.centerLeft,
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: SvgPicture.asset(
+                                          "assets/file_page/search.svg")),
                                 ),
                               ),
-                            ),
+                              BlocBuilder<MediaCubit, MediaState>(
+                                  builder: (context, state) {
+                                return Container(
+                                  width: _searchFieldWidth,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Center(
+                                      child: TextField(
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color:
+                                              Theme.of(context).disabledColor,
+                                        ),
+                                        onChanged: (value) {
+                                          context
+                                              .read<MediaCubit>()
+                                              .mapSortedFieldChanged(value);
+                                        },
+                                        controller: _searchingFieldController,
+                                        decoration: InputDecoration.collapsed(
+                                          hintText: translate.search,
+                                          hintStyle: TextStyle(
+                                            fontSize: 16.0,
+                                            color:
+                                                Theme.of(context).disabledColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                     Container(

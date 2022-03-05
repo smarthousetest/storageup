@@ -9,7 +9,7 @@ import '../injection.dart';
 
 @Injectable()
 class AuthService {
-  static const BASE_URL = 'https://upstorage.net/api/auth';
+  static const BASE_URL = 'https://storageup.net/api/auth';
 
   final Dio _dio;
   AuthService(@Named('auth_dio') this._dio);

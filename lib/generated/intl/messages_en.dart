@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_file": MessageLookupByLibrary.simpleMessage("Delete file"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Delete permanently"),
+        "deleting": MessageLookupByLibrary.simpleMessage("Deleting"),
         "documents": MessageLookupByLibrary.simpleMessage("Documents"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
         "earnings":
@@ -219,6 +220,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "properties": MessageLookupByLibrary.simpleMessage("Properties"),
         "provisions":
             MessageLookupByLibrary.simpleMessage("1. General Provisions"),
+        "realy_delete": MessageLookupByLibrary.simpleMessage(
+            "Do you really want to delete?"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Reason for deletion"),
         "recent": MessageLookupByLibrary.simpleMessage("Recent"),

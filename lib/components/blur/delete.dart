@@ -1,20 +1,28 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurDelete extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  Blur blurItem;
-  BlurDelete({required this.blurItem});
+  //Blur blurItem;
+  BlurDelete();
 }
 
 class _ButtonTemplateState extends State<BlurDelete> {
+  S translate = getIt<S>();
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         width: 520,
-        height: 212,
+        height: 193,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -22,24 +30,31 @@ class _ButtonTemplateState extends State<BlurDelete> {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(60, 25, 0, 0),
+              padding: const EdgeInsets.fromLTRB(60, 30, 0, 0),
               child: Container(
-                width: 400,
-                height: 212,
+                width: 420,
+                height: 193,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Удаление',
+                      translate.deleting,
                       style: TextStyle(
                         fontSize: 20,
-                        fontFamily: 'Lato',
+                        fontFamily: kNormalTextFontFamily,
                         color: Color(0xff5F5F5F),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 25),
-                      child: Text('Вы действительно хотите удалить'),
+                      child: Text(
+                        translate.realy_delete,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: kNormalTextFontFamily,
+                          color: Theme.of(context).disabledColor,
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 26),
@@ -50,13 +65,15 @@ class _ButtonTemplateState extends State<BlurDelete> {
                           children: [
                             Container(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
                                 child: Text(
-                                  'Отмена',
+                                  translate.cancel,
                                   style: TextStyle(
                                     color: Color(0xff70BBF6),
                                     fontSize: 16,
-                                    fontFamily: 'Lato',
+                                    fontFamily: kNormalTextFontFamily,
                                   ),
                                 ),
                                 style: ElevatedButton.styleFrom(
@@ -76,13 +93,16 @@ class _ButtonTemplateState extends State<BlurDelete> {
                             Padding(
                               padding: const EdgeInsets.only(left: 20),
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  eventBusDeleteFile.fire(BlurDelete);
+                                  Navigator.pop(context);
+                                },
                                 child: Text(
-                                  'Удалить',
+                                  translate.delete,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
-                                    fontFamily: 'Lato',
+                                    fontFamily: kNormalTextFontFamily,
                                   ),
                                 ),
                                 style: ElevatedButton.styleFrom(
@@ -107,15 +127,19 @@ class _ButtonTemplateState extends State<BlurDelete> {
                 ),
               ),
             ),
-            Container(
-              width: 60,
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.close,
-                  color: Color(0xff70BBF6),
+            Align(
+              alignment: FractionalOffset.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20, right: 15),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: SvgPicture.asset("assets/file_page/close.svg"),
+                  ),
                 ),
-                onPressed: () {},
               ),
             ),
           ],

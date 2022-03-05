@@ -21,7 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           await _createFolder(event, emit);
           break;
         case UserAction.createAlbum:
-          await _cerateAlbum(event, emit);
+          await _createAlbum(event, emit);
           break;
         case UserAction.uploadMedia:
           await _uploadMedia(event, emit);
@@ -58,13 +58,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {
+    await _filesController.updateFilesList();
     var filesRootFolder = _filesController.getFilesRootFolder;
     if (event.values?.first != null && filesRootFolder != null) {
       _filesController.createFolder(event.values!.first!, filesRootFolder.id);
     }
   }
 
-  Future<void> _cerateAlbum(
+  Future<void> _createAlbum(
     HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {

@@ -20,6 +20,7 @@ import 'package:upstorage_desktop/pages/media/media_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
@@ -51,12 +52,12 @@ class _HomePageState extends State<HomePage> {
   Blur blurItem = Blur.rename;
 
   S translate = getIt<S>();
+
   void changePage(ChoosedPage newPage) {
-    // setState(() {
-    //   choosedPage = newPage;
-    // });
     StateContainer.of(context).changePage(newPage);
   }
+
+  bool isEventBusInited = false;
 
   bool setSize = false;
 
@@ -65,9 +66,6 @@ class _HomePageState extends State<HomePage> {
     var width = 960.0;
 
     DesktopWindow.setMinWindowSize(Size(width, height));
-
-    // var heightWindow = MediaQuery.of(context).size.height;
-    // var widthWindow = MediaQuery.of(context).size.width;
 
     DesktopWindow.resetMaxWindowSize();
   }
@@ -94,28 +92,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Widget getBlurItem() {
-    switch (blurItem) {
-      case Blur.none:
-        return Container();
-      case Blur.rename:
-        return BlurRename(
-            //blur_item: blur_item,
-            );
-      case Blur.delete:
-        return BlurDelete(
-          blurItem: blurItem,
-        );
-      // case Blur.create_album:
-      //   return BlurCreateAlbum(blur_item: blur_item,);
-      // case Blur.menu_upload:
-      //   return BlurMenuUpload(blur_item: blur_item,);
-      // case Blur.three_directory:
-      //   return BlurCreateThreeDirectory(blur_item: blur_item,);
-      default:
-        return Container();
-    }
-  }
+  // Widget getBlurItem() {
+  //   switch (blurItem) {
+  //     case Blur.none:
+  //       return Container();
+  //     case Blur.rename:
+  //       return BlurRename(
+  //           //blur_item: blur_item,
+  //           );
+  //     // case Blur.delete:
+  //     //   return BlurDelete(
+  //     //     blurItem: blurItem,
+  //     //   );
+  //     // case Blur.create_album:
+  //     //   return BlurCreateAlbum(blur_item: blur_item,);
+  //     // case Blur.menu_upload:
+  //     //   return BlurMenuUpload(blur_item: blur_item,);
+  //     // case Blur.three_directory:
+  //     //   return BlurCreateThreeDirectory(blur_item: blur_item,);
+  //     default:
+  //       return Container();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -132,9 +130,6 @@ class _HomePageState extends State<HomePage> {
           children: [
             Center(
               child: Container(
-                // width: 1480,
-                // height: 944,
-                // constraints: BoxConstraints(minWidth: 1320, maxWidth: 1920),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -186,24 +181,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            // Visibility(
-            //   visible: false,
-            //     child: Stack(
-            //   children: [
-            //     Positioned.fill(
-            //       child: BackdropFilter(
-            //         filter: ImageFilter.blur(
-            //           sigmaX: 5,
-            //           sigmaY: 5,
-            //         ),
-            //         child: Container(
-            //           color: Colors.black.withAlpha(25), // цвет не тут
-            //         ),
-            //       ),
-            //     ),
-            //     someWidget,
-            //   ],
-            // )),
           ],
         ),
       ),
@@ -361,6 +338,22 @@ class _HomePageState extends State<HomePage> {
       ),
       BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
+          if (!isEventBusInited) {
+            isEventBusInited = true;
+            eventBusForUpload.on().listen((event) {
+              var result = showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurMenuUpload();
+                },
+              ).then((result) {
+                if (result is AddMenuResult) {
+                  _processUserAction(context, result);
+                }
+              });
+            });
+          }
+
           return Padding(
             padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
             child: Container(
@@ -442,8 +435,6 @@ class _HomePageState extends State<HomePage> {
                   return BlurExit();
                 },
               );
-              // Navigator.pushNamedAndRemoveUntil(
-              //     context, AuthView.route, (route) => false);
             },
             child: MouseRegion(
               cursor: SystemMouseCursors.click,

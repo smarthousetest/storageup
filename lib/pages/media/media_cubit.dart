@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -86,6 +87,30 @@ class MediaCubit extends Cubit<MediaState> {
     _loadController.getState.unregisterObserver(_updateObserver);
 
     return super.close();
+  }
+
+  void mapSortedFieldChanged(String sortText) {
+    final allFiles = state.currentFolderRecords;
+
+    List<Record> sortedMedia = [];
+    var textLoverCase = sortText.toLowerCase();
+
+    allFiles.forEach((element) {
+      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
+          .format(element.createdAt!)
+          .toString()
+          .toLowerCase()
+          .contains(textLoverCase);
+      if ((element.createdAt != null && containsDate) ||
+          (element.name != null &&
+              element.name!.toLowerCase().contains(textLoverCase)) ||
+          (element.extension != null &&
+              element.extension!.toLowerCase().contains(textLoverCase))) {
+        sortedMedia.add(element);
+      }
+    });
+
+    emit(state.copyWith(currentFolderRecords: sortedMedia));
   }
 
   void _syncWithLoadController(List<Record> filesInFolder) async {
