@@ -176,6 +176,7 @@ class _FilePageState extends State<FilePage> {
               child: Container(
                 padding: EdgeInsets.all(_rowPadding),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       height: 46,

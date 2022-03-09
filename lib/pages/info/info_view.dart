@@ -3,15 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/pages/info/info_bloc.dart';
 import 'package:upstorage_desktop/pages/info/info_event.dart';
 import 'package:upstorage_desktop/pages/info/info_state.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 import '../../constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
@@ -213,7 +210,7 @@ class _InfoPageState extends State<InfoPage> {
             padding: const EdgeInsets.only(top: 20),
             child: ElevatedButton(
               onPressed: () {
-                print('Files');
+                StateContainer.of(context).changePage(ChoosedPage.file);
               },
               style: ElevatedButton.styleFrom(
                 primary: Colors.white,
@@ -231,7 +228,7 @@ class _InfoPageState extends State<InfoPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: SvgPicture.asset(
-                        'assets/home_page/files_r.svg',
+                        'assets/home_page/file.svg',
                         // height: 46,
                         // width: 46,
                       ),
@@ -268,7 +265,7 @@ class _InfoPageState extends State<InfoPage> {
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: ElevatedButton(
               onPressed: () {
-                print('Foto');
+                StateContainer.of(context).changePage(ChoosedPage.media);
               },
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,
@@ -319,7 +316,7 @@ class _InfoPageState extends State<InfoPage> {
             padding: const EdgeInsets.only(top: 20),
             child: ElevatedButton(
               onPressed: () {
-                print('Video');
+                StateContainer.of(context).changePage(ChoosedPage.media);
               },
               style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColor,

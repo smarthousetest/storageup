@@ -13,7 +13,6 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
-import 'folder_list/keeper_info.dart';
 
 class SpaceSellPage extends StatefulWidget {
 // final List<DownloadLocation> locationsInfo;
@@ -31,14 +30,24 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   }
 
   //final List<DownloadLocation> locationsInfo;
+  double? _searchFieldWidth;
   var index = 0;
-  double _currentSliderValue = 32;
   S translate = getIt<S>();
   String list = "";
   String dirPath = '';
   int countGbSpace = 0;
+  double _currentSliderValue = 32;
+  final double _rowSpasing = 20.0;
+  final double _rowPadding = 30.0;
+
+  void _setWidthSearchFields(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    _searchFieldWidth =
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 150;
+  }
 
   Widget build(BuildContext context) {
+    _setWidthSearchFields(context);
     return BlocProvider(
         create: (context) => SpaceBloc()..add(SpacePageOpened()),
         child: Expanded(
@@ -66,6 +75,46 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     color: Color.fromARGB(25, 23, 69, 139),
                                     blurRadius: 4,
                                     offset: Offset(1, 4))
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(13.0),
+                                  child: Align(
+                                    alignment: FractionalOffset.centerLeft,
+                                    child: Container(
+                                        width: 20,
+                                        height: 20,
+                                        child: SvgPicture.asset(
+                                            "assets/file_page/search.svg")),
+                                  ),
+                                ),
+                                Container(
+                                  width: _searchFieldWidth,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        StateContainer.of(context)
+                                            .changePage(ChoosedPage.file);
+                                      },
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Container(
+                                          child: Text(
+                                            translate.search,
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

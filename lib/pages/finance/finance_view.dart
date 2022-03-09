@@ -23,6 +23,15 @@ class _FinancePageState extends State<FinancePage> {
   var index = 0;
   List<GlobalKey> _keys = [];
   var pointedSubCardIndex = -1;
+  final double _rowSpasing = 20.0;
+  final double _rowPadding = 30.0;
+  double? _searchFieldWidth;
+
+  void _setWidthSearchFields(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    _searchFieldWidth =
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 150;
+  }
 
   @override
   void initState() {
@@ -34,6 +43,7 @@ class _FinancePageState extends State<FinancePage> {
   }
 
   Widget build(BuildContext context) {
+    _setWidthSearchFields(context);
     var decoration = () {
       return BoxDecoration(
         border: Border(
@@ -73,11 +83,10 @@ class _FinancePageState extends State<FinancePage> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 20),
+                        padding: const EdgeInsets.only(right: 30),
                         child: Container(
-                          height: 46,
                           decoration: BoxDecoration(
-                            color: theme.primaryColor,
+                            color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
@@ -86,16 +95,45 @@ class _FinancePageState extends State<FinancePage> {
                                   offset: Offset(1, 4))
                             ],
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(13.0),
-                            child: Align(
-                              alignment: FractionalOffset.centerLeft,
-                              child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  child: SvgPicture.asset(
-                                      "assets/file_page/search.svg")),
-                            ),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(13.0),
+                                child: Align(
+                                  alignment: FractionalOffset.centerLeft,
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: SvgPicture.asset(
+                                          "assets/file_page/search.svg")),
+                                ),
+                              ),
+                              Container(
+                                width: _searchFieldWidth,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      StateContainer.of(context)
+                                          .changePage(ChoosedPage.file);
+                                    },
+                                    child: MouseRegion(
+                                      cursor: SystemMouseCursors.click,
+                                      child: Container(
+                                        child: Text(
+                                          translate.search,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color:
+                                                Theme.of(context).disabledColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -107,7 +145,7 @@ class _FinancePageState extends State<FinancePage> {
                         return Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(right: 20, left: 10),
+                              padding: EdgeInsets.only(right: 20, left: 0),
                               child: GestureDetector(
                                 onTap: () {
                                   StateContainer.of(context)
