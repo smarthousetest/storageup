@@ -54,30 +54,32 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           widget.currentFolder,
           widget.previousFolders,
         ),
-      child: Container(
-        margin: EdgeInsets.only(top: 30),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Color.fromARGB(25, 23, 69, 139),
-                blurRadius: 4,
-                offset: Offset(1, 4))
-          ],
-        ),
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _pathSection(),
-            Divider(
-              color: Theme.of(context).dividerColor,
-            ),
-            _filesSection(),
-          ],
+      child: Expanded(
+        child: Container(
+          margin: EdgeInsets.only(top: 30),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4))
+            ],
+          ),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _pathSection(),
+              Divider(
+                color: Theme.of(context).dividerColor,
+              ),
+              _filesSection(),
+            ],
+          ),
         ),
       ),
     );
