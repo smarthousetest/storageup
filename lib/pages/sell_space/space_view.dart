@@ -18,6 +18,7 @@ class SpaceSellPage extends StatefulWidget {
 
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
+
   SpaceSellPage();
 }
 
@@ -468,17 +469,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Color(0xffE4E7ED))),
                       child: BlocBuilder<SpaceBloc, SpaceState>(
-                          builder: (context, state) {
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 15, top: 11),
-                          child: Text(
-                            list,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: Theme.of(context).disabledColor),
-                          ),
-                        );
-                      }),
+                        builder: (context, state) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 11),
+                            child: Text(
+                              list,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: Theme.of(context).disabledColor),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
@@ -491,13 +493,14 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           onPressed: () async {
                             String? path = await getFilesPaths();
                             print(path);
-                            setState(() {
-                              if (path != null) {
-                                dirPath = path;
-
-                                list = path;
-                              }
-                            });
+                            setState(
+                              () {
+                                if (path != null) {
+                                  dirPath = path;
+                                  list = path;
+                                }
+                              },
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
@@ -594,9 +597,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           max: 180,
                           value: _currentSliderValue,
                           onChanged: (double value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
+                            setState(
+                              () {
+                                _currentSliderValue = value;
+                              },
+                            );
                           },
                         ),
                       ),
@@ -768,8 +773,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             context.read<SpaceBloc>().add(SaveDirPath(
                                 pathDir: dirPath, countGb: countGbSpace));
                             index = 2;
-
-                            //context.read<SpaceBloc>().add(RunSoft());
+                            context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },
@@ -815,70 +819,75 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   offset: Offset(1, 4))
             ],
           ),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 20),
-                  child: Container(
-                    child: Text(
-                      translate.sell_space,
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: Theme.of(context).focusColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 100,
-                  child: Container(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 40, top: 20),
-                  child: Container(
-                    height: 30,
-                    width: 142,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          index = 1;
-                          print(index);
-                        });
-                      },
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: Size(double.maxFinite, 60),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        backgroundColor: Theme.of(context).splashColor,
-                      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40, top: 20),
+                    child: Container(
                       child: Text(
-                        translate.add_location,
+                        translate.sell_space,
+                        maxLines: 1,
                         style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).focusColor,
                           fontFamily: kNormalTextFontFamily,
-                          fontSize: 14,
+                          fontSize: 20,
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Expanded(child:
-                BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-              return Column(
-                children: [
-                  FolderList(
-                    state.locationsInfo,
-                  )
+                  Expanded(
+                    flex: 100,
+                    child: Container(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 40, top: 20),
+                    child: Container(
+                      height: 30,
+                      width: 142,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            index = 1;
+                            print(index);
+                          });
+                        },
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size(double.maxFinite, 60),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          backgroundColor: Theme.of(context).splashColor,
+                        ),
+                        child: Text(
+                          translate.add_location,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              );
-            }))
-          ]),
+              ),
+              Expanded(
+                child: BlocBuilder<SpaceBloc, SpaceState>(
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        FolderList(
+                          state.locationsInfo,
+                        )
+                      ],
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

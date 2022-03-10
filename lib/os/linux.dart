@@ -46,4 +46,9 @@ class Linux extends OsSpecifications {
     // TODO: implement createShortcuts
     throw UnimplementedError();
   }
+
+  @override
+  void startProcessDetach(String processName, bool hide, [List<String> args = const []]) {
+    // TODO: implement startProcessDetach
+  }
 }

@@ -59,23 +59,23 @@ class Windows extends OsSpecifications {
       case 'keeper':
         if (hide) {
           result = Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$hideKeeperName', []);
+              '$appDirPath${Platform.pathSeparator}$hideKeeperName', args);
         } else {
           result = Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$keeperName', []);
+              '$appDirPath${Platform.pathSeparator}$keeperName', args);
         }
         break;
       case 'storageup':
         result = Process.runSync(
-            '$appDirPath${Platform.pathSeparator}$storageupName', []);
+            '$appDirPath${Platform.pathSeparator}$storageupName', args);
         break;
       case 'ups_update':
         if (hide) {
           result = Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$hideUpdateName', []);
+              '$appDirPath${Platform.pathSeparator}$hideUpdateName', args);
         } else {
           result = Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$updateName', []);
+              '$appDirPath${Platform.pathSeparator}$updateName', args);
         }
         break;
     }
@@ -100,23 +100,23 @@ class Windows extends OsSpecifications {
       case 'keeper':
         if (hide) {
           Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$hideKeeperName', []);
+              '$appDirPath${Platform.pathSeparator}$hideKeeperName', args);
         } else {
           Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$keeperName', []);
+              '$appDirPath${Platform.pathSeparator}$keeperName', args);
         }
         break;
       case 'storageup':
         Process.runSync(
-            '$appDirPath${Platform.pathSeparator}$storageupName', []);
+            '$appDirPath${Platform.pathSeparator}$storageupName', args);
         break;
       case 'ups_update':
         if (hide) {
           Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$hideUpdateName', []);
+              '$appDirPath${Platform.pathSeparator}$hideUpdateName', args);
         } else {
           Process.runSync(
-              '$appDirPath${Platform.pathSeparator}$updateName', []);
+              '$appDirPath${Platform.pathSeparator}$updateName', args);
         }
         break;
     }

@@ -807,8 +807,8 @@ class _InfoPageState extends State<InfoPage> {
                                                   children: [
                                                     MyProgressIndicator(
                                                       percent: 35.0,
-                                                      color: Color(
-                                                          0xff59D7AB), // цвет индикатора
+                                                      color: Color(0xff59D7AB),
+                                                      // цвет индикатора
                                                       radius: 120,
                                                     ),
                                                     Padding(
@@ -1299,18 +1299,19 @@ class _InfoPageState extends State<InfoPage> {
         height: 419,
         // width: 726,
         child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Color.fromARGB(25, 23, 69, 139),
-                    blurRadius: 4,
-                    offset: Offset(1, 4))
-              ],
-            ),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4))
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Padding(
                 padding: const EdgeInsets.only(top: 19, left: 40),
                 child: Text(
@@ -1395,7 +1396,9 @@ class _InfoPageState extends State<InfoPage> {
                   ),
                 ),
               ])
-            ])),
+            ],
+          ),
+        ),
       ),
     );
   }
