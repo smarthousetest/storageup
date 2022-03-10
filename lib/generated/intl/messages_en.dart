@@ -127,6 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Confirmation of e-mail address"),
         "email_successfully": MessageLookupByLibrary.simpleMessage(
             "Your e-mail address has been successfully confirmed"),
+        "english": MessageLookupByLibrary.simpleMessage("English"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Enter password"),
         "exit": MessageLookupByLibrary.simpleMessage("Exit"),
@@ -240,6 +241,7 @@ class MessageLookup extends MessageLookupByLibrary {
             ", to reset your password, follow the link inside the letter"),
         "restore_password_before_email": MessageLookupByLibrary.simpleMessage(
             "A letter has been sent to your e-mail "),
+        "russian": MessageLookupByLibrary.simpleMessage("Russian"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "select": MessageLookupByLibrary.simpleMessage("Select"),

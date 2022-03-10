@@ -209,5 +209,7 @@
     "finance": "Finance",
     "file_sorting": "File sorting",
     "documents": "Documents",
-    "realy_delete": "Do you really want to delete?"
+    "realy_delete": "Do you really want to delete?",
+    "russian": "Russian",
+    "english": "English"
 }

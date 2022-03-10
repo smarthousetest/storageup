@@ -127,6 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Подтверждение e-mail адреса"),
         "email_successfully": MessageLookupByLibrary.simpleMessage(
             "Ваш e-mail адрес успешно подтверждён"),
+        "english": MessageLookupByLibrary.simpleMessage("Английский"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
         "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
@@ -241,6 +242,7 @@ class MessageLookup extends MessageLookupByLibrary {
             " отправлено письмо. Для восстановления пароля перейдите по ссылке внутри письма."),
         "restore_password_before_email":
             MessageLookupByLibrary.simpleMessage("На вашу электронную почту "),
+        "russian": MessageLookupByLibrary.simpleMessage("Русский"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
         "select": MessageLookupByLibrary.simpleMessage("Выбрать"),

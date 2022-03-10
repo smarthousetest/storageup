@@ -6,6 +6,8 @@ import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.
 
 class MediaState extends Equatable {
   final List<Record> currentFolderRecords;
+  final List<Record> sortedRecords;
+  final List<Record> allRecords;
   final List<Folder> albums;
   final Folder currentFolder;
   final FilesRepresentation representation;
@@ -14,6 +16,8 @@ class MediaState extends Equatable {
   MediaState({
     this.currentFolderRecords = const [],
     this.albums = const [],
+    this.sortedRecords = const [],
+    this.allRecords = const [],
     Folder? currentFolder,
     this.representation = FilesRepresentation.grid,
     this.user,
@@ -22,6 +26,8 @@ class MediaState extends Equatable {
   MediaState copyWith({
     List<Folder>? albums,
     Folder? currentFolder,
+    List<Record>? sortedRecords,
+    List<Record>? allRecords,
     List<Record>? currentFolderRecords,
     FilesRepresentation? representation,
     User? user,
@@ -30,12 +36,21 @@ class MediaState extends Equatable {
       albums: albums ?? this.albums,
       currentFolder: currentFolder ?? this.currentFolder,
       currentFolderRecords: currentFolderRecords ?? this.currentFolderRecords,
+      sortedRecords: sortedRecords ?? this.sortedRecords,
+      allRecords: allRecords ?? this.allRecords,
       representation: representation ?? this.representation,
       user: user ?? this.user,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [currentFolder, albums, currentFolderRecords, representation, user];
+  List<Object?> get props => [
+        currentFolder,
+        albums,
+        currentFolderRecords,
+        representation,
+        user,
+        sortedRecords,
+        allRecords,
+      ];
 }

@@ -31,6 +31,17 @@ class SettingsPasswordChanged extends SettingsEvent {
   List<Object?> get props => [oldPassword, newPassword];
 }
 
+class LanguageChanged extends SettingsEvent {
+  final String newLanguage;
+
+  LanguageChanged({
+    required this.newLanguage,
+  });
+
+  @override
+  List<Object?> get props => [newLanguage];
+}
+
 class SettingsLogOut extends SettingsEvent {
   const SettingsLogOut();
 }

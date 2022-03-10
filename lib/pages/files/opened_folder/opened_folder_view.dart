@@ -234,101 +234,103 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   }
 
   Widget _filesGrid(OpenedFolderState state) {
-    return LayoutBuilder(builder: (context, constrains) {
-      print('min width ${constrains.smallest.width}');
+    return Expanded(
+      child: LayoutBuilder(builder: (context, constrains) {
+        print('min width ${constrains.smallest.width}');
 
-      return Container(
-          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-              bloc: _bloc,
-              builder: (context, state) {
-                var controller = CustomPopupMenuController();
-                return GridView.builder(
-                  itemCount: state.sortedFiles.length,
-                  shrinkWrap: true,
-                  controller: ScrollController(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: constrains.smallest.width ~/ 110,
-                    childAspectRatio: (1 / 1.22),
-                    mainAxisSpacing: 15,
-                  ),
-                  itemBuilder: (context, index) {
-                    Function() onTap;
-                    var obj = state.sortedFiles[index];
+        return Container(
+            child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                bloc: _bloc,
+                builder: (context, state) {
+                  var controller = CustomPopupMenuController();
+                  return GridView.builder(
+                    itemCount: state.sortedFiles.length,
+                    shrinkWrap: true,
+                    controller: ScrollController(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: constrains.smallest.width ~/ 110,
+                      childAspectRatio: (1 / 1.22),
+                      mainAxisSpacing: 15,
+                    ),
+                    itemBuilder: (context, index) {
+                      Function() onTap;
+                      var obj = state.sortedFiles[index];
 
-                    _onPointerDown(PointerDownEvent event) {
-                      if (event.kind == PointerDeviceKind.mouse &&
-                          event.buttons == kSecondaryMouseButton) {
-                        print("right button click");
-                        controller.showMenu();
-                        return CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
-                            controller: controller,
-                            menuBuilder: () {
-                              return FilesPopupMenuActions(
-                                theme: Theme.of(context),
-                                translate: translate,
-                                onTap: (action) {
-                                  controller.hideMenu();
-                                  if (action == FileAction.properties) {
-                                    StateInfoContainer.of(context)
-                                        ?.setInfoObject(obj);
+                      _onPointerDown(PointerDownEvent event) {
+                        if (event.kind == PointerDeviceKind.mouse &&
+                            event.buttons == kSecondaryMouseButton) {
+                          print("right button click");
+                          controller.showMenu();
+                          return CustomPopupMenu(
+                              pressType: PressType.singleClick,
+                              barrierColor: Colors.transparent,
+                              showArrow: false,
+                              horizontalMargin: 110,
+                              verticalMargin: 0,
+                              controller: controller,
+                              menuBuilder: () {
+                                return FilesPopupMenuActions(
+                                  theme: Theme.of(context),
+                                  translate: translate,
+                                  onTap: (action) {
                                     controller.hideMenu();
-                                  } else
-                                    context
-                                        .read<OpenedFolderCubit>()
-                                        .onRecordActionChoosed(action, obj);
-                                },
-                              );
-                            },
-                            child:
-                                ObjectView(object: state.sortedFiles[index]));
+                                    if (action == FileAction.properties) {
+                                      StateInfoContainer.of(context)
+                                          ?.setInfoObject(obj);
+                                      controller.hideMenu();
+                                    } else
+                                      context
+                                          .read<OpenedFolderCubit>()
+                                          .onRecordActionChoosed(action, obj);
+                                  },
+                                );
+                              },
+                              child:
+                                  ObjectView(object: state.sortedFiles[index]));
+                        }
                       }
-                    }
 
-                    if (obj is Folder) {
-                      onTap = () {
-                        print(obj);
-                        print("lol");
-                        widget.push(
-                          OpenedFolderView(
-                            currentFolder: obj,
-                            previousFolders: [
-                              ...state.previousFolders,
-                              state.currentFolder!
-                            ],
-                            pop: widget.pop,
-                            push: widget.push,
-                          ),
-                        );
-                      };
-                    } else {
-                      onTap = () {
-                        print('file tapped');
-                        context
-                            .read<OpenedFolderCubit>()
-                            .fileTapped(obj as Record);
-                      };
-                    }
+                      if (obj is Folder) {
+                        onTap = () {
+                          print(obj);
+                          print("lol");
+                          widget.push(
+                            OpenedFolderView(
+                              currentFolder: obj,
+                              previousFolders: [
+                                ...state.previousFolders,
+                                state.currentFolder!
+                              ],
+                              pop: widget.pop,
+                              push: widget.push,
+                            ),
+                          );
+                        };
+                      } else {
+                        onTap = () {
+                          print('file tapped');
+                          context
+                              .read<OpenedFolderCubit>()
+                              .fileTapped(obj as Record);
+                        };
+                      }
 
-                    return GestureDetector(
-                      onTap: onTap,
-                      child: Builder(builder: (context) {
-                        return Listener(
-                          onPointerDown: _onPointerDown,
-                          child: ObjectView(
-                            object: state.sortedFiles[index],
-                          ),
-                        );
-                      }),
-                    );
-                  },
-                );
-              }));
-    });
+                      return GestureDetector(
+                        onTap: onTap,
+                        child: Builder(builder: (context) {
+                          return Listener(
+                            onPointerDown: _onPointerDown,
+                            child: ObjectView(
+                              object: state.sortedFiles[index],
+                            ),
+                          );
+                        }),
+                      );
+                    },
+                  );
+                }));
+      }),
+    );
   }
 
   List<GridElement> _gridList(
@@ -397,56 +399,58 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   }
 
   Widget _filesGridForType(OpenedFolderState state) {
-    return LayoutBuilder(builder: (context, constrains) {
-      var grids = _gridList(state, constrains);
+    return Expanded(
+      child: LayoutBuilder(builder: (context, constrains) {
+        var grids = _gridList(state, constrains);
 
-      return ListView(
-        scrollDirection: Axis.vertical,
-        controller: ScrollController(),
-        // physics: BouncingScrollPhysics(),
-        shrinkWrap: true,
-        children: List.generate(grids.length, (index) {
-          String type = grids[index].type;
-          switch (type) {
-            case 'folder':
-              type = translate.folder_dir;
-              break;
-            case 'jpg':
-              type = translate.photos;
-              break;
-            case 'txt':
-              type = translate.documents;
-              break;
-          }
-          return Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
-                child: Container(
-                  width: double.infinity,
-                  child: Text(
-                    type,
-                    maxLines: 1,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Theme.of(context).disabledColor,
-                      fontSize: 18,
-                      fontFamily: kNormalTextFontFamily,
+        return ListView(
+          scrollDirection: Axis.vertical,
+          controller: ScrollController(),
+          // physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
+          children: List.generate(grids.length, (index) {
+            String type = grids[index].type;
+            switch (type) {
+              case 'folder':
+                type = translate.folder_dir;
+                break;
+              case 'jpg':
+                type = translate.photos;
+                break;
+              case 'txt':
+                type = translate.documents;
+                break;
+            }
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 0.0),
+                  child: Container(
+                    width: double.infinity,
+                    child: Text(
+                      type,
+                      maxLines: 1,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Theme.of(context).disabledColor,
+                        fontSize: 18,
+                        fontFamily: kNormalTextFontFamily,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              grids[index].grid,
-              Divider(
-                height: 1.0,
-                color: Theme.of(context).colorScheme.onSecondary,
-              )
-            ],
-          );
-        }),
-      );
-    });
+                grids[index].grid,
+                Divider(
+                  height: 1.0,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                )
+              ],
+            );
+          }),
+        );
+      }),
+    );
   }
 
   Color _getDataRowColor(Set<MaterialState> states) {
@@ -672,10 +676,13 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                   width: 15,
                                 ),
                                 Expanded(
-                                  child: Text(
-                                    element.name ?? '',
-                                    style: cellTextStyle,
-                                    overflow: TextOverflow.ellipsis,
+                                  child: Container(
+                                    constraints: BoxConstraints(maxWidth: 150),
+                                    child: Text(
+                                      element.name ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: cellTextStyle,
+                                    ),
                                   ),
                                 ),
                                 // Spacer(),
@@ -705,9 +712,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                         ),
                       ),
                       DataCell(
-                        Text(
-                          type.isEmpty ? translate.foldr : type.toUpperCase(),
-                          style: cellTextStyle,
+                        Container(
+                          child: Text(
+                            type.isEmpty ? translate.foldr : type.toUpperCase(),
+                            overflow: TextOverflow.ellipsis,
+                            style: cellTextStyle,
+                          ),
                         ),
                       ),
                       DataCell(
@@ -856,7 +866,7 @@ class ObjectView extends StatelessWidget {
           ),
           Text(
             object.name ?? '',
-            maxLines: 2,
+            maxLines: 1,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(

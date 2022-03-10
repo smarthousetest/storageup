@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/change_password.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/main.dart';
 import 'package:upstorage_desktop/pages/settings/settings_bloc.dart';
 import 'package:upstorage_desktop/pages/settings/settings_event.dart';
 import 'package:upstorage_desktop/pages/settings/settings_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/blur/rename_name.dart';
 import 'package:upstorage_desktop/components/blur/delete_account.dart';
+import 'package:upstorage_desktop/utilites/language_locale.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 
@@ -689,58 +692,96 @@ class _SettingsPageState extends State<SettingsPage> {
                         color: Theme.of(context).disabledColor),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: SizedBox(
-                    width: 140,
-                    child: ButtonTheme(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            width: 1, color: Theme.of(context).dividerColor),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      alignedDropdown: true,
-                      child: DropdownButton(
-                        dropdownColor: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                        isExpanded: true,
-                        value: dropdownValue,
-                        icon: Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: SvgPicture.asset(
-                              "assets/file_page/array_down.svg"),
+                BlocBuilder<SettingsBloc, SettingsState>(
+                  builder: (context, state) {
+                    // String languageEn = '';
+                    // String languageRu = '';
+
+                    // switch (state.language) {
+                    //   case 'ru':
+                    //     language = translate.russian;
+                    //     break;
+                    //   default:
+                    //     language = translate.english;
+                    //     break;
+                    // }
+                    // if (Intl.systemLocale == 'en') {
+                    //   languageEn = translate.english;
+                    // } else {
+                    //   languageRu = translate.russian;
+                    // }
+
+                    var english =
+                        Intl.withLocale('en', () => translate.english);
+                    // state.language.contains('en') ? translate.english : translate.russian;
+                    var russian =
+                        Intl.withLocale('ru', () => translate.russian);
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: SizedBox(
+                        width: 140,
+                        child: ButtonTheme(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                width: 1,
+                                color: Theme.of(context).dividerColor),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          alignedDropdown: true,
+                          child: DropdownButton(
+                            dropdownColor: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                            isExpanded: true,
+                            value: dropdownValue,
+                            icon: Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: SvgPicture.asset(
+                                  "assets/file_page/array_down.svg"),
+                            ),
+                            underline: Container(
+                              height: 2,
+                              width: 140,
+                              color: Theme.of(context).dividerColor,
+                            ),
+                            style: TextStyle(
+                                color: Theme.of(context).disabledColor),
+                            elevation: 10,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownValue = newValue!;
+                                if (newValue == russian) {
+                                  context.read<SettingsBloc>().add(
+                                      LanguageChanged(newLanguage: RUSSIAN));
+                                  _changeLanguage(RUSSIAN);
+                                } else {
+                                  context.read<SettingsBloc>().add(
+                                      LanguageChanged(newLanguage: ENGLISH));
+                                  _changeLanguage(ENGLISH);
+                                }
+                                StateContainer.of(context).changeLocale(
+                                  Locale(
+                                    newValue == 'English' ? 'en' : 'ru',
+                                  ),
+                                );
+                              });
+                            },
+                            items: <String>[
+                              russian,
+                              english,
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Center(
+                                    child: Text(
+                                  value,
+                                )),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                        underline: Container(
-                          height: 2,
-                          width: 140,
-                          color: Theme.of(context).dividerColor,
-                        ),
-                        style:
-                            TextStyle(color: Theme.of(context).disabledColor),
-                        elevation: 10,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownValue = newValue!;
-                            StateContainer.of(context).changeLocale(
-                              Locale(
-                                dropdownValue == 'English' ? 'en' : 'ru',
-                              ),
-                            );
-                          });
-                        },
-                        items: <String>['Русский', 'English']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Center(
-                                child: Text(
-                              value,
-                            )),
-                          );
-                        }).toList(),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -816,6 +857,13 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     ]);
+  }
+
+  Future<void> _changeLanguage(String langCode) async {
+    Locale locale = await setLocale(langCode);
+
+    MyApp.setLocale(context, locale);
+    await Future.delayed(Duration(milliseconds: 500));
   }
 
   Widget regulations(BuildContext context) {

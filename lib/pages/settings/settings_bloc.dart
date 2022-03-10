@@ -11,6 +11,7 @@ import 'package:upstorage_desktop/pages/settings/settings_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/language_locale.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 import 'package:upstorage_desktop/utilites/services/auth_service.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
@@ -29,6 +30,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         await _changeProfilePic(state, emit);
       } else if (event is SettingsPasswordChanged) {
         await _changePassword(event, state, emit);
+      } else if (event is LanguageChanged) {
+        await _mapLanguageChanged(event, state, emit);
       }
     });
   }
@@ -47,8 +50,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     SettingsState state,
     Emitter<SettingsState> emit,
   ) async {
+    var locale = await getLocale();
     User? user = await _userController.getUser;
-    emit(state.copyWith(user: user));
+    emit(state.copyWith(user: user, language: locale.languageCode));
   }
 
   Future _mapSettingNameChanged(
@@ -65,6 +69,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       user: user,
       status: FormzStatus.submissionSuccess,
     ));
+  }
+
+  Future<SettingsState> _mapLanguageChanged(
+    LanguageChanged event,
+    SettingsState state,
+    Emitter<SettingsState> emit,
+  ) async {
+    return state.copyWith(language: event.newLanguage);
   }
 
   Future _changePassword(

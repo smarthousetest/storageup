@@ -1875,6 +1875,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Russian`
+  String get russian {
+    return Intl.message(
+      'Russian',
+      name: 'russian',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `English`
+  String get english {
+    return Intl.message(
+      'English',
+      name: 'english',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -69,6 +69,7 @@ class MediaCubit extends Cubit<MediaState> {
         albums: allMediaFolders,
         currentFolder: currentFolder,
         currentFolderRecords: currentFolder?.records,
+        allRecords: currentFolder?.records,
         user: user));
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
@@ -90,7 +91,8 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void mapSortedFieldChanged(String sortText) {
-    final allFiles = state.currentFolderRecords;
+    final tmpState = _resetSortedList(state: state);
+    final allFiles = tmpState.allRecords;
 
     List<Record> sortedMedia = [];
     var textLoverCase = sortText.toLowerCase();
@@ -111,6 +113,12 @@ class MediaCubit extends Cubit<MediaState> {
     });
 
     emit(state.copyWith(currentFolderRecords: sortedMedia));
+  }
+
+  MediaState _resetSortedList({
+    required MediaState state,
+  }) {
+    return state.copyWith(sortedRecords: state.allRecords);
   }
 
   void _syncWithLoadController(List<Record> filesInFolder) async {

@@ -22,7 +22,7 @@ class StateContainerState extends State<StateContainer> {
   var _choosedPage = ChoosedPage.home;
   var _locale = Locale('ru');
   ChoosedPage get choosedPage => _choosedPage;
-  Locale get loacale => _locale;
+  Locale get locale => _locale;
 
   @override
   Widget build(BuildContext context) {
