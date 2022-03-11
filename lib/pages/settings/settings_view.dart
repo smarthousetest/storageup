@@ -1,3 +1,4 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,8 @@ import 'package:upstorage_desktop/components/blur/delete_account.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
+
+import '../../models/enums.dart';
 
 enum FileOptions { changePhoto, remove }
 
@@ -247,6 +250,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  var controller = CustomPopupMenuController();
   Widget personalData(BuildContext context) {
     return ListView(controller: ScrollController(), children: [
       Padding(
@@ -279,130 +283,56 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 100, left: 124),
-            child: Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _isClicked
-                    ? Theme.of(context).dividerColor
-                    : Theme.of(context).cardColor,
-              ),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: PopupMenuButton<FileOptions>(
-                    offset: Offset(40, -80),
-                    iconSize: 20,
-                    elevation: 0,
-                    color: Theme.of(context).primaryColor,
-                    // padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          width: 1, color: Theme.of(context).dividerColor),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    icon: SvgPicture.asset(
+          CustomPopupMenu(
+            pressType: PressType.singleClick,
+            barrierColor: Colors.transparent,
+            showArrow: false,
+            horizontalMargin: -185,
+            verticalMargin: -100,
+            controller: controller,
+            menuBuilder: () {
+              return SettingsPopupMenuActions(
+                theme: Theme.of(context),
+                translate: translate,
+                onTap: (action) {
+                  controller.hideMenu();
+                  setState(() {
+                    _isClicked = true;
+                  });
+                  if (action == AvatarAction.changeAvatar) {
+                    controller.hideMenu();
+                    context
+                        .read<SettingsBloc>()
+                        .add(SettingsChangeProfileImage());
+                  }
+                  //  else
+                  //   controller.hideMenu();
+                },
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(top: 100, left: 124),
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _isClicked
+                      ? Theme.of(context).dividerColor
+                      : Theme.of(context).cardColor,
+                ),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: SvgPicture.asset(
                       "assets/file_page/photo.svg",
                       color: _isClicked
                           ? Theme.of(context).splashColor
                           : Theme.of(context).focusColor,
                     ),
-                    onSelected: (_) {
-                      setState(() {
-                        _isClicked = false;
-                      });
-                    },
-                    onCanceled: () {
-                      setState(() {
-                        _isClicked = false;
-                      });
-                    },
-                    itemBuilder: (BuildContext context) {
-                      setState(() {
-                        _isClicked = true;
-                      });
-                      return [
-                        PopupMenuItem<FileOptions>(
-                          height: 44,
-                          padding: EdgeInsets.zero,
-                          onTap: () {
-                            context
-                                .read<SettingsBloc>()
-                                .add(SettingsChangeProfileImage());
-                          },
-                          child: Container(
-                            width: 185,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/file_page/photo_change.svg',
-                                    height: 18,
-                                  ),
-                                  Container(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                    translate.change_photo,
-                                    style: TextStyle(
-                                      color: Theme.of(context).focusColor,
-                                      fontSize: 14,
-                                      fontFamily: kNormalTextFontFamily,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        // PopupMenuDivider(
-                        //   height: 1,
-                        // ),
-
-                        PopupMenuItem(
-                          padding: EdgeInsets.zero,
-                          child: Container(
-                            //width: 185,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .indicatorColor
-                                  .withAlpha(10),
-                              //borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/file_page/trash.svg',
-                                    height: 18,
-                                  ),
-                                  Container(
-                                    width: 15,
-                                  ),
-                                  Text(
-                                    translate.delete,
-                                    style: TextStyle(
-                                      color: Theme.of(context).indicatorColor,
-                                      fontSize: 14,
-                                      fontFamily: kNormalTextFontFamily,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      ];
-                    }),
+                  ),
+                ),
               ),
             ),
           ),
@@ -913,5 +843,143 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     ]);
+  }
+}
+
+class SettingsPopupMenuActions extends StatefulWidget {
+  SettingsPopupMenuActions(
+      {required this.theme,
+      required this.translate,
+      required this.onTap,
+      Key? key})
+      : super(key: key);
+
+  final ThemeData theme;
+  final S translate;
+  final Function(AvatarAction) onTap;
+  @override
+  _SettingsPopupMenuActionsState createState() =>
+      _SettingsPopupMenuActionsState();
+}
+
+class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
+  int ind = -1;
+  @override
+  Widget build(BuildContext context) {
+    var style = TextStyle(
+      fontFamily: kNormalTextFontFamily,
+      fontSize: 14,
+      color: Theme.of(context).disabledColor,
+    );
+    var mainColor = widget.theme.colorScheme.onSecondary;
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: mainColor,
+            spreadRadius: 3,
+            blurRadius: 3,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+          ),
+          child: IntrinsicWidth(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    print('change photo tapped ');
+                    // widget.onTap(AvatarAction.changeAvatar);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 0;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 0 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.zero,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/file_page/photo_change.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.change_photo,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                MouseRegion(
+                  onEnter: (event) {
+                    setState(() {
+                      ind = 1;
+                    });
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                      print('delete photo tapped ');
+                      // widget.onTap(AvatarAction.delete);
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 1
+                          ? widget.theme.indicatorColor.withOpacity(0.1)
+                          : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/trash.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/file_page/trash.svg',
+                            height: 20,
+                            color: widget.theme.indicatorColor,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.delete,
+                            style: style.copyWith(
+                                color: Theme.of(context).errorColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

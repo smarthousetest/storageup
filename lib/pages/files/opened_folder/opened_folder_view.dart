@@ -46,6 +46,16 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   S translate = getIt<S>();
   SortingDirection _direction = SortingDirection.down;
   var _bloc = OpenedFolderCubit();
+  List<CustomPopupMenuController> _popupControllers = [];
+
+  void _initiatingControllers(OpenedFolderState state) {
+    if (_popupControllers.isEmpty) {
+      state.objects.forEach((element) {
+        _popupControllers.add(CustomPopupMenuController());
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -89,6 +99,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
+        _initiatingControllers(state);
         return Row(
           // crossAxisAlignment: CrossAxisAlignment.baseline,
           // textBaseline: TextBaseline.alphabetic,
@@ -345,7 +356,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
               primary: false,
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constrains.smallest.width ~/ 110,
+                crossAxisCount: constrains.smallest.width ~/ 113.5,
                 childAspectRatio: (1 / 1.1),
               ),
               itemBuilder: (context, index) {
@@ -729,6 +740,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       DataCell(
                         Text(
                           filesize(element.size, translate, 1),
+                          maxLines: 1,
                           style: cellTextStyle,
                         ),
                       ),
@@ -742,40 +754,43 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                               BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
                             bloc: _bloc,
                             builder: (context, snapshot) {
-                              var controller = CustomPopupMenuController();
                               return CustomPopupMenu(
                                 pressType: PressType.singleClick,
                                 barrierColor: Colors.transparent,
                                 showArrow: false,
                                 horizontalMargin: 110,
                                 verticalMargin: 0,
-                                controller: controller,
+                                controller: _popupControllers[
+                                    state.sortedFiles.indexOf(element)],
                                 menuBuilder: () {
                                   return FilesPopupMenuActions(
                                     theme: Theme.of(context),
                                     translate: translate,
                                     onTap: (action) {
-                                      controller.hideMenu();
+                                      _popupControllers[state.sortedFiles
+                                              .indexOf(element)]
+                                          .hideMenu();
                                       if (action == FileAction.properties) {
-                                        controller.hideMenu();
+                                        // controller.hideMenu();
                                         StateInfoContainer.of(context)
                                             ?.setInfoObject(element);
-                                      } else
-                                        controller.hideMenu();
-                                      var result = showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return BlurDelete();
-                                        },
-                                      );
-                                      eventBusDeleteFile.on().listen((event) {
-                                        context
-                                            .read<OpenedFolderCubit>()
-                                            .onRecordActionChoosed(
-                                              action,
-                                              element,
-                                            );
-                                      });
+                                      } else {
+                                        //   controller.hideMenu();
+                                        var result = showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return BlurDelete();
+                                          },
+                                        );
+                                        eventBusDeleteFile.on().listen((event) {
+                                          context
+                                              .read<OpenedFolderCubit>()
+                                              .onRecordActionChoosed(
+                                                action,
+                                                element,
+                                              );
+                                        });
+                                      }
                                     },
                                   );
                                 },
@@ -864,15 +879,18 @@ class ObjectView extends StatelessWidget {
                   isFile ? (object as Record).loadPercent : null),
             ],
           ),
-          Text(
-            object.name ?? '',
-            maxLines: 1,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontFamily: kNormalTextFontFamily,
-              fontSize: 14,
-              color: Theme.of(context).disabledColor,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: Text(
+              object.name ?? '',
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+                color: Theme.of(context).disabledColor,
+              ),
             ),
           ),
         ],

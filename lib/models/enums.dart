@@ -18,6 +18,11 @@ enum FileAction {
   properties,
 }
 
+enum AvatarAction {
+  changeAvatar,
+  delete,
+}
+
 enum KeeperAction {
   delete,
   change,
