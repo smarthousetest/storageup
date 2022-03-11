@@ -35,6 +35,14 @@ class FolderList extends StatefulWidget {
 class _ButtonTemplateState extends State<FolderList> {
   // List<bool> ifFavoritesPressedList = [];
   // List<bool> isPopupMenuButtonClicked = [];
+  List<CustomPopupMenuController> _popupControllers = [];
+  void _initiatingControllers(SpaceState state) {
+    if (_popupControllers.isEmpty) {
+      widget.locationsInfo.forEach((element) {
+        _popupControllers.add(CustomPopupMenuController());
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,172 +74,178 @@ class _ButtonTemplateState extends State<FolderList> {
             SizedBox(
               width: double.infinity,
               child: DataTable(
-                columns: [
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.5,
-                      child: Text(
-                        translate.name,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.05,
-                      child: Text(
-                        translate.size,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.05,
-                      child: Text(
-                        translate.date,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.25,
-                      child: Text(
-                        translate.trust_level,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                ],
-                rows: List<DataRow>.generate(
-                  widget.locationsInfo.length,
-                  (int index) => DataRow(
-                    cells: [
-                      DataCell(
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/file_page/folder.svg',
-                              height: 24,
-                              width: 24,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              widget.locationsInfo[index].dirPath,
-                              maxLines: 1,
-                              style: cellTextStyle,
-                            ),
-                          ],
+                  columns: [
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.5,
+                        child: Text(
+                          translate.name,
+                          style: style,
                         ),
                       ),
-                      DataCell(
-                        Row(
-                          children: [
-                            Text(
-                              translate.gb(widget.locationsInfo[index].countGb),
-                              maxLines: 1,
-                              style: cellTextStyle,
-                            ),
-                          ],
+                    ),
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.05,
+                        child: Text(
+                          translate.size,
+                          style: style,
                         ),
                       ),
-                      DataCell(
-                        Row(
-                          children: [
-                            Text(
-                              DateFormat.yMd().format(DateTime.now()),
-                              //widget.keeperInfo[index].dateTime,
-                              maxLines: 1,
-                              style: cellTextStyle,
-                            ),
-                          ],
+                    ),
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.05,
+                        child: Text(
+                          translate.date,
+                          style: style,
                         ),
                       ),
-                      DataCell(
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            hoverColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                          ),
-                          child: Row(
+                    ),
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.25,
+                        child: Text(
+                          translate.trust_level,
+                          style: style,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: widget.locationsInfo.map((element) {
+                    return DataRow.byIndex(
+                      index: widget.locationsInfo.indexOf(element),
+                      cells: [
+                        DataCell(
+                          Row(
                             children: [
+                              SvgPicture.asset(
+                                'assets/file_page/folder.svg',
+                                height: 24,
+                                width: 24,
+                              ),
+                              SizedBox(width: 10),
                               Text(
-                                '70',
-                                //'${widget.keeperInfo[index].trustLevel}%',
+                                element.dirPath,
                                 maxLines: 1,
                                 style: cellTextStyle,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, right: 30),
-                                child: SizedBox(
-                                  width: 100,
-                                  child: MyProgressBar(
-                                    bgColor: Theme.of(context).dividerColor,
-                                    color: Theme.of(context).splashColor,
-                                    percent: 70,
-                                    // (widget.keeperInfo[index].trustLevel)!
-                                    //     .toDouble(),
-                                  ),
-                                ),
-                              ),
-                              // Expanded(
-                              //   flex: 1,
-                              //   child: Container(),
-                              // ),
-                              BlocBuilder<SpaceBloc, SpaceState>(
-                                // bloc: _bloc,
-                                builder: (context, snapshot) {
-                                  var controller = CustomPopupMenuController();
-                                  return CustomPopupMenu(
-                                    pressType: PressType.singleClick,
-                                    barrierColor: Colors.transparent,
-                                    showArrow: false,
-                                    horizontalMargin: 10,
-                                    verticalMargin: 0,
-                                    controller: controller,
-                                    menuBuilder: () {
-                                      return KeeperPopupMenuActions(
-                                        theme: Theme.of(context),
-                                        translate: translate,
-                                        onTap: (action) {
-                                          //controller.hideMenu();
-                                          if (action == KeeperAction.change) {
-                                            controller.hideMenu();
-                                          } else
-                                            controller.hideMenu();
-                                          context.read<SpaceBloc>().add(
-                                              DeleteLocation(
-                                                  location: widget
-                                                      .locationsInfo[index]));
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      height: 30,
-                                      width: 30,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/file_page/three_dots.svg',
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                        DataCell(
+                          Row(
+                            children: [
+                              Text(
+                                translate.gb(element.countGb),
+                                maxLines: 1,
+                                style: cellTextStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(
+                          Row(
+                            children: [
+                              Text(
+                                DateFormat.yMd().format(DateTime.now()),
+                                //widget.keeperInfo[index].dateTime,
+                                maxLines: 1,
+                                style: cellTextStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(
+                          Theme(
+                            data: Theme.of(context).copyWith(
+                              hoverColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '70',
+                                  //'${widget.keeperInfo[index].trustLevel}%',
+                                  maxLines: 1,
+                                  style: cellTextStyle,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 5, right: 30),
+                                  child: SizedBox(
+                                    width: 100,
+                                    child: MyProgressBar(
+                                      bgColor: Theme.of(context).dividerColor,
+                                      color: Theme.of(context).splashColor,
+                                      percent: 70,
+                                      // (widget.keeperInfo[index].trustLevel)!
+                                      //     .toDouble(),
+                                    ),
+                                  ),
+                                ),
+                                // Expanded(
+                                //   flex: 1,
+                                //   child: Container(),
+                                // ),
+                                BlocBuilder<SpaceBloc, SpaceState>(
+                                  // bloc: _bloc,
+                                  builder: (context, state) {
+                                    _initiatingControllers(state);
+                                    // var controller =
+                                    //     CustomPopupMenuController();
+                                    return CustomPopupMenu(
+                                      pressType: PressType.singleClick,
+                                      barrierColor: Colors.transparent,
+                                      showArrow: false,
+                                      horizontalMargin: 10,
+                                      verticalMargin: 0,
+                                      controller: _popupControllers[widget
+                                          .locationsInfo
+                                          .indexOf(element)],
+                                      menuBuilder: () {
+                                        return KeeperPopupMenuActions(
+                                          theme: Theme.of(context),
+                                          translate: translate,
+                                          onTap: (action) {
+                                            _popupControllers[widget
+                                                    .locationsInfo
+                                                    .indexOf(element)]
+                                                .hideMenu();
+                                            if (action == KeeperAction.change) {
+                                              //controller.hideMenu();
+                                            } else {
+                                              context.read<SpaceBloc>().add(
+                                                  DeleteLocation(
+                                                      location: element));
+                                            }
+                                            //controller.hideMenu();
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/file_page/three_dots.svg',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList()),
             ),
           ],
         ),
@@ -296,7 +310,9 @@ class _KeeperPopupMenuActionsState extends State<KeeperPopupMenuActions> {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: widget.onTap(KeeperAction.change),
+                  onTapDown: (_) {
+                    widget.onTap(KeeperAction.change);
+                  },
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
@@ -332,7 +348,7 @@ class _KeeperPopupMenuActionsState extends State<KeeperPopupMenuActions> {
                   height: 1,
                 ),
                 GestureDetector(
-                  onTap: () {
+                  onTapDown: (_) {
                     widget.onTap(KeeperAction.delete);
                   },
                   child: MouseRegion(

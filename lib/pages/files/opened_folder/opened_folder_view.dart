@@ -481,8 +481,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return Colors.transparent;
   }
 
-  void openFile() {}
-
   Widget _filesList(BuildContext context, OpenedFolderState state) {
     TextStyle style = TextStyle(
       color: Theme.of(context).textTheme.subtitle1?.color,

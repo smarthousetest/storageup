@@ -290,23 +290,24 @@ class _SettingsPageState extends State<SettingsPage> {
             horizontalMargin: -185,
             verticalMargin: -100,
             controller: controller,
+            // onTapDown: () {
+            //   setState(() {
+            //     _isClicked = true;
+            //   });
+            // },
             menuBuilder: () {
               return SettingsPopupMenuActions(
                 theme: Theme.of(context),
                 translate: translate,
                 onTap: (action) {
                   controller.hideMenu();
-                  setState(() {
-                    _isClicked = true;
-                  });
+
                   if (action == AvatarAction.changeAvatar) {
                     controller.hideMenu();
                     context
                         .read<SettingsBloc>()
                         .add(SettingsChangeProfileImage());
                   }
-                  //  else
-                  //   controller.hideMenu();
                 },
               );
             },
@@ -893,9 +894,9 @@ class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: () {
+                  onTapDown: (_) {
                     print('change photo tapped ');
-                    // widget.onTap(AvatarAction.changeAvatar);
+                    widget.onTap(AvatarAction.changeAvatar);
                   },
                   child: MouseRegion(
                     onEnter: (event) {
@@ -939,7 +940,7 @@ class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
                     });
                   },
                   child: GestureDetector(
-                    onTap: () {
+                    onTapDown: (_) {
                       print('delete photo tapped ');
                       // widget.onTap(AvatarAction.delete);
                     },
