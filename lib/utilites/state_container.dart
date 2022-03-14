@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 
@@ -24,6 +26,11 @@ class StateContainerState extends State<StateContainer> {
   ChoosedPage get choosedPage => _choosedPage;
   Locale get loacale => _locale;
 
+  String? _choosedFilesFolderId;
+  String? get choosedFilesFolderId => _choosedFilesFolderId;
+  String? _choosedMediaFolderId;
+  String? get choosedMediaFolderId => _choosedMediaFolderId;
+
   @override
   Widget build(BuildContext context) {
     return _InheritedStateContainer(
@@ -42,6 +49,19 @@ class StateContainerState extends State<StateContainer> {
     setState(() {
       _locale = newLocale;
     });
+  }
+
+  void changeChoosedMediaFolderId(String? folderId) {
+    setState(() {
+      _choosedMediaFolderId = folderId;
+    });
+  }
+
+  void changeChoosedFilesFolderId(String? folderId) {
+    setState(() {
+      _choosedFilesFolderId = folderId;
+    });
+    log('new folder id is $folderId');
   }
 }
 

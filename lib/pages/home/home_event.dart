@@ -13,9 +13,11 @@ class HomePageOpened extends HomeEvent {}
 class HomeUserActionChoosed extends HomeEvent {
   final UserAction action;
   final List<String?>? values;
+  final String? folderId;
 
   HomeUserActionChoosed({
     required this.action,
     this.values,
+    this.folderId,
   });
 }

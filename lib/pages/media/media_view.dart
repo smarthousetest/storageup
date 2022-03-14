@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +17,7 @@ import 'package:upstorage_desktop/pages/media/media_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilites/state_container.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -410,6 +413,11 @@ class _MediaPageState extends State<MediaPage> {
         onTap: () {
           print('folder tapped: ${album.name}');
           blocContext.read<MediaCubit>().changeFolder(album);
+
+          final mediaAlbumId = album.id == '-1' ? null : album.id;
+          StateContainer.of(context).changeChoosedMediaFolderId(mediaAlbumId);
+
+          log('${StateContainer.of(context).choosedMediaFolderId}');
         },
         child: Container(
           width: _folderButtonSize.toDouble(),
