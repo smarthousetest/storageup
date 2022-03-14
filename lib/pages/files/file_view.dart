@@ -33,6 +33,7 @@ class FilePage extends StatefulWidget {
 class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
   S translate = getIt<S>();
+  var index = 0;
 
   List<OpenedFolderView> _opendedFolders = [];
   int _sortingTextFieldIndex = -1;
@@ -549,7 +550,7 @@ class _FilePageState extends State<FilePage> {
   void _push({required OpenedFolderView child, required String? folderId}) {
     setState(() {
       _opendedFolders.add(child);
-      widget.index++;
+      index++;
     });
 
     StateContainer.of(context).changeChoosedFilesFolderId(folderId);
@@ -560,7 +561,7 @@ class _FilePageState extends State<FilePage> {
       setState(() {
         if (_opendedFolders.length != 1) {
           _opendedFolders.removeLast();
-          widget.index--;
+          index--;
         }
       });
     }
@@ -957,7 +958,7 @@ class _FilePageState extends State<FilePage> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              widget.index = 0;
+                              index = 0;
                             });
                           },
                           child: MouseRegion(

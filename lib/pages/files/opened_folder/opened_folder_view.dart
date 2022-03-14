@@ -346,7 +346,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                     object: state.sortedFiles[index])),
                           ),
                         ),
-                        // folderId: obj.id,
+                        //folderId: obj.id,
                       );
                     },
                   );

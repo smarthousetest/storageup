@@ -69,7 +69,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && folderId != null) {
       _filesController.createFolder(event.values!.first!, folderId);
     }
-    eventBusUpdateFolder.fire(HomeBloc());
   }
 
   Future<void> _createAlbum(
