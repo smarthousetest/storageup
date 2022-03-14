@@ -187,6 +187,7 @@ class _FinancePageState extends State<FinancePage> {
                                             fontSize: 12,
                                             color: Theme.of(context)
                                                 .bottomAppBarColor,
+                                            height: 1,
                                           ),
                                         ),
                                       ],

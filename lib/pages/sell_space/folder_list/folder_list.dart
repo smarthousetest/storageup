@@ -74,6 +74,8 @@ class _ButtonTemplateState extends State<FolderList> {
             SizedBox(
               width: double.infinity,
               child: DataTable(
+                  columnSpacing: 0,
+                  horizontalMargin: 0,
                   columns: [
                     DataColumn(
                       label: Container(
@@ -104,7 +106,7 @@ class _ButtonTemplateState extends State<FolderList> {
                     ),
                     DataColumn(
                       label: Container(
-                        width: constraints.maxWidth * 0.25,
+                        width: constraints.maxWidth * 0.1,
                         child: Text(
                           translate.trust_level,
                           style: style,
@@ -125,13 +127,12 @@ class _ButtonTemplateState extends State<FolderList> {
                                 width: 24,
                               ),
                               SizedBox(width: 10),
-                              Container(
-                                constraints: BoxConstraints(maxWidth: 400),
+                              SizedBox(
+                                width: constraints.maxWidth * 0.4,
                                 child: Text(
                                   element.dirPath,
-                                  overflow: TextOverflow.ellipsis,
-                                  //softWrap: true,
                                   maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: cellTextStyle,
                                 ),
                               ),
@@ -177,7 +178,7 @@ class _ButtonTemplateState extends State<FolderList> {
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.only(left: 5, right: 30),
+                                      const EdgeInsets.only(left: 5, right: 20),
                                   child: SizedBox(
                                     width: 100,
                                     child: MyProgressBar(

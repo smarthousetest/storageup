@@ -1289,102 +1289,102 @@ class _InfoPageState extends State<InfoPage> {
   Widget youLease(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 30, bottom: 30),
-      child: SizedBox(
-        height: 419,
-        // width: 726,
-        child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Color.fromARGB(25, 23, 69, 139),
-                    blurRadius: 4,
-                    offset: Offset(1, 4))
-              ],
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4))
+          ],
+        ),
+        child: SizedBox(
+          height: 422,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 19, left: 40),
+              child: Text(
+                translate.you_rent,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                ),
+              ),
             ),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 19, left: 40),
-                child: Text(
-                  translate.you_rent,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Theme.of(context).focusColor,
-                    fontFamily: kNormalTextFontFamily,
+            Padding(
+              padding: EdgeInsets.only(left: 40, top: 20, right: 40),
+              child: Divider(
+                height: 1,
+                color: Theme.of(context).dividerColor,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 30),
+              child: Container(
+                height: 42,
+                width: 200,
+                child: OutlinedButton(
+                  onPressed: () async {
+                    eventBusForUpload.fire(InfoPage);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.maxFinite, 60),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    backgroundColor: Theme.of(context).splashColor,
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 40, top: 20, right: 40),
-                child: Divider(
-                  height: 1,
-                  color: Theme.of(context).dividerColor,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 30),
-                child: Container(
-                  height: 42,
-                  width: 200,
-                  child: OutlinedButton(
-                    onPressed: () async {
-                      eventBusForUpload.fire(InfoPage);
-                    },
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: Theme.of(context).splashColor,
-                    ),
-                    child: Text(
-                      translate.upload,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 17,
-                      ),
+                  child: Text(
+                    translate.upload,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 17,
                     ),
                   ),
                 ),
               ),
-              Stack(children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 100),
-                    child: Container(
-                      child: SvgPicture.asset(
-                        'assets/file_page/badgesLease.svg',
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30),
+            ),
+            Stack(children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 100),
                   child: Container(
-                    height: 226,
-                    width: 726,
+                    child: SvgPicture.asset(
+                      'assets/file_page/badgesLease.svg',
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Container(
+                  height: 226,
+                  width: 726,
+                  child: Image.asset(
+                    'assets/file_page/background.png',
+                  ),
+                ),
+              ),
+              Align(
+                alignment: FractionalOffset.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 100),
+                  child: Container(
+                    height: 273,
+                    width: 300,
                     child: Image.asset(
-                      'assets/file_page/background.png',
+                      'assets/file_page/manLease.png',
                     ),
                   ),
                 ),
-                Align(
-                  alignment: FractionalOffset.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10, right: 100),
-                    child: Container(
-                      height: 273,
-                      width: 300,
-                      child: Image.asset(
-                        'assets/file_page/manLease.png',
-                      ),
-                    ),
-                  ),
-                ),
-              ])
-            ])),
+              ),
+            ])
+          ]),
+        ),
       ),
     );
   }

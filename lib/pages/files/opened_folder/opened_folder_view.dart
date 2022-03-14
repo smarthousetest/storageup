@@ -64,7 +64,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           widget.currentFolder,
           widget.previousFolders,
         ),
-      child: Expanded(
+      child: Positioned.fill(
         child: Container(
           margin: EdgeInsets.only(top: 30),
           decoration: BoxDecoration(
@@ -558,7 +558,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: DataTable(
-                columnSpacing: 25,
+                columnSpacing: 0,
                 dataRowColor:
                     MaterialStateProperty.resolveWith<Color?>(_getDataRowColor),
                 columns: [
@@ -573,7 +573,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   ),
                   DataColumn(
                     label: Container(
-                      width: constraints.maxWidth * 0.06,
+                      width: constraints.maxWidth * 0.15,
                       child: Text(
                         translate.format,
                         style: style,
@@ -582,7 +582,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   ),
                   DataColumn(
                     label: Container(
-                      width: constraints.maxWidth * 0.05,
+                      width: constraints.maxWidth * 0.15,
                       child: Text(
                         translate.date,
                         style: style,
@@ -591,7 +591,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   ),
                   DataColumn(
                     label: Container(
-                      width: constraints.maxWidth * 0.06,
+                      width: constraints.maxWidth * 0.1,
                       child: Text(
                         translate.size,
                         style: style,
@@ -600,9 +600,9 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   ),
                   DataColumn(
                     label: Container(
-                      width: constraints.maxWidth * 0.001,
+                      width: constraints.maxWidth * 0.1,
                       child: SizedBox(
-                        width: constraints.maxWidth * 0.001,
+                        width: constraints.maxWidth * 0.1,
                       ),
                     ),
                   ),
@@ -714,7 +714,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                 ),
                                 Expanded(
                                   child: Container(
-                                    constraints: BoxConstraints(maxWidth: 150),
+                                    width: constraints.maxWidth * 0.3,
                                     child: Text(
                                       element.name ?? '',
                                       overflow: TextOverflow.ellipsis,
@@ -723,25 +723,28 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                   ),
                                 ),
                                 // Spacer(),
-                                BlocBuilder<OpenedFolderCubit,
-                                    OpenedFolderState>(
-                                  bloc: _bloc,
-                                  builder: (context, state) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        context
-                                            .read<OpenedFolderCubit>()
-                                            .setFavorite(element);
-                                      },
-                                      child: Image.asset(
-                                        element.favorite
-                                            ? 'assets/file_page/favorite.png'
-                                            : 'assets/file_page/not_favorite.png',
-                                        height: 18,
-                                        width: 18,
-                                      ),
-                                    );
-                                  },
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: BlocBuilder<OpenedFolderCubit,
+                                      OpenedFolderState>(
+                                    bloc: _bloc,
+                                    builder: (context, state) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          context
+                                              .read<OpenedFolderCubit>()
+                                              .setFavorite(element);
+                                        },
+                                        child: Image.asset(
+                                          element.favorite
+                                              ? 'assets/file_page/favorite.png'
+                                              : 'assets/file_page/not_favorite.png',
+                                          height: 18,
+                                          width: 18,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 )
                               ],
                             ),
@@ -750,6 +753,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       ),
                       DataCell(
                         Container(
+                          padding: EdgeInsets.only(left: 5),
                           child: Text(
                             type.isEmpty ? translate.foldr : type.toUpperCase(),
                             overflow: TextOverflow.ellipsis,
