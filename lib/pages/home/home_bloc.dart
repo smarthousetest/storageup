@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -63,6 +64,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && filesRootFolder != null) {
       _filesController.createFolder(event.values!.first!, filesRootFolder.id);
     }
+    eventBusUpdateFolder.fire(HomeBloc());
   }
 
   Future<void> _createAlbum(
@@ -84,5 +86,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         await _loadController.uploadFile(filePath: event.values![i]);
       }
     }
+    //eventBusUpdateFolder.fire(HomeBloc());
   }
 }

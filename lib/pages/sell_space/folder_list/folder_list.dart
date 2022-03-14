@@ -219,13 +219,11 @@ class _ButtonTemplateState extends State<FolderList> {
                                                     .indexOf(element)]
                                                 .hideMenu();
                                             if (action == KeeperAction.change) {
-                                              //controller.hideMenu();
                                             } else {
                                               context.read<SpaceBloc>().add(
                                                   DeleteLocation(
                                                       location: element));
                                             }
-                                            //controller.hideMenu();
                                           },
                                         );
                                       },

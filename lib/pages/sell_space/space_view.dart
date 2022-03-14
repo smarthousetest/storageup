@@ -39,11 +39,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   double _currentSliderValue = 32;
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
+  GlobalKey nameWidthKey = GlobalKey();
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    _searchFieldWidth =
-        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 150;
+    final keyContext = nameWidthKey.currentContext;
+    //final box = keyContext?.findRenderObject() as RenderBox;
+    _searchFieldWidth = width - _rowPadding * 4 - 274 - 222;
   }
 
   Widget build(BuildContext context) {
@@ -124,6 +126,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         child: BlocBuilder<SpaceBloc, SpaceState>(
                             builder: (context, state) {
                           return Row(
+                            key: nameWidthKey,
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(
@@ -146,7 +149,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               (MediaQuery.of(context).size.width > 965)
                                   ? Container(
                                       constraints:
-                                          BoxConstraints(maxWidth: 120),
+                                          BoxConstraints(maxWidth: 110),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,

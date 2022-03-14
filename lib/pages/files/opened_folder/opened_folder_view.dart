@@ -50,7 +50,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
   void _initiatingControllers(OpenedFolderState state) {
     if (_popupControllers.isEmpty) {
-      state.objects.forEach((element) {
+      state.sortedFiles.forEach((element) {
         _popupControllers.add(CustomPopupMenuController());
       });
     }
@@ -100,6 +100,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
       bloc: _bloc,
       builder: (context, state) {
         _initiatingControllers(state);
+
         return Row(
           // crossAxisAlignment: CrossAxisAlignment.baseline,
           // textBaseline: TextBaseline.alphabetic,
@@ -265,7 +266,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                     itemBuilder: (context, index) {
                       Function() onTap;
                       var obj = state.sortedFiles[index];
-                      //var controller = CustomPopupMenuController();
+
+                      if (state.sortedFiles.length > _popupControllers.length) {
+                        _popupControllers = [];
+                        _initiatingControllers(state);
+                      }
                       _onPointerDown(PointerDownEvent event) {
                         if (event.kind == PointerDeviceKind.mouse &&
                             event.buttons == kSecondaryMouseButton) {
@@ -273,32 +278,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
                           _popupControllers[state.sortedFiles.indexOf(obj)]
                               .showMenu();
-                          // return CustomPopupMenu(
-                          //     pressType: PressType.singleClick,
-                          //     barrierColor: Colors.transparent,
-                          //     showArrow: false,
-                          //     horizontalMargin: 110,
-                          //     verticalMargin: 0,
-                          //     controller: controller,
-                          //     menuBuilder: () {
-                          //       return FilesPopupMenuActions(
-                          //         theme: Theme.of(context),
-                          //         translate: translate,
-                          //         onTap: (action) {
-                          //           controller.hideMenu();
-                          //           if (action == FileAction.properties) {
-                          //             StateInfoContainer.of(context)
-                          //                 ?.setInfoObject(obj);
-                          //             controller.hideMenu();
-                          //           } else
-                          //             context
-                          //                 .read<OpenedFolderCubit>()
-                          //                 .onRecordActionChoosed(action, obj);
-                          //         },
-                          //       );
-                          //     },
-                          //     child:
-                          //         ObjectView(object: state.sortedFiles[index]));
+                          //controller.showMenu();
                         }
                       }
 
@@ -392,11 +372,17 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
                 Function() onTap;
                 var obj = state.sortedFiles[index];
+                if (state.sortedFiles.length > _popupControllers.length) {
+                  _popupControllers = [];
+                  _initiatingControllers(state);
+                }
 
                 Future<void> _onPointerDown(PointerDownEvent event) async {
                   if (event.kind == PointerDeviceKind.mouse &&
                       event.buttons == kSecondaryMouseButton) {
                     //print("right button click");
+                    _popupControllers[state.sortedFiles.indexOf(obj)]
+                        .showMenu();
                   }
                 }
 
@@ -425,10 +411,43 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   };
                 }
                 return GestureDetector(
-                    onTap: onTap,
-                    child: Listener(
-                        onPointerDown: _onPointerDown,
-                        child: ObjectView(object: files[index])));
+                  behavior: HitTestBehavior.opaque,
+                  onTap: onTap,
+                  child: Listener(
+                    onPointerDown: _onPointerDown,
+                    behavior: HitTestBehavior.opaque,
+                    child: IgnorePointer(
+                      child: CustomPopupMenu(
+                          pressType: PressType.singleClick,
+                          barrierColor: Colors.transparent,
+                          showArrow: false,
+                          enablePassEvent: false,
+                          horizontalMargin: 110,
+                          verticalMargin: 0,
+                          controller:
+                              _popupControllers[state.sortedFiles.indexOf(obj)],
+                          menuBuilder: () {
+                            return FilesPopupMenuActions(
+                              theme: Theme.of(context),
+                              translate: translate,
+                              onTap: (action) {
+                                _popupControllers[
+                                        state.sortedFiles.indexOf(obj)]
+                                    .hideMenu();
+                                if (action == FileAction.properties) {
+                                  StateInfoContainer.of(context)
+                                      ?.setInfoObject(obj);
+                                } else
+                                  context
+                                      .read<OpenedFolderCubit>()
+                                      .onRecordActionChoosed(action, obj);
+                              },
+                            );
+                          },
+                          child: ObjectView(object: state.sortedFiles[index])),
+                    ),
+                  ),
+                );
               },
             ),
             type: key),
@@ -784,6 +803,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                               BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
                             bloc: _bloc,
                             builder: (context, snapshot) {
+                              if (state.sortedFiles.length >
+                                  _popupControllers.length) {
+                                _popupControllers = [];
+                                _initiatingControllers(state);
+                              }
                               return CustomPopupMenu(
                                 pressType: PressType.singleClick,
                                 barrierColor: Colors.transparent,

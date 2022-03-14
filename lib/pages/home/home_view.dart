@@ -4,10 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
-import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
-import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -472,7 +470,6 @@ class _HomePageState extends State<HomePage> {
                 action: userAction.action,
                 values: [name],
               ));
-          eventBusUpdateFolder.fire(HomePage());
         }
         break;
       case UserAction.createAlbum:
