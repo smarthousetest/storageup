@@ -9,6 +9,9 @@ import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 
+import '../../os/linux.dart';
+import '../../os/windows.dart';
+
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   SpaceBloc() : super(SpaceState()) {
     on<SpaceEvent>((event, emit) async {
@@ -48,23 +51,12 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
-    var result = Process.runSync(
-        'reg', ['query', 'HKCU\Software\StorageUp', '/v', 'DirPath']);
-    String dirPath = result.stdout.split(' ').last;
-    dirPath = dirPath.substring(0, dirPath.length - 4);
-    Process.runSync(
-        'powershell.exe',
-        [
-          'Start-Process',
-          '-WindowStyle',
-          'hidden',
-          '-FilePath',
-          '$dirPath\start_keeper.vbs',
-          dirPath,
-          'Путь до папки из FilePicker',
-          'Вес папки с ползунка'
-        ],
-        runInShell: true);
+    var os = (Platform.isWindows) ? Windows() : Linux();
+    os.killProcess('keeper.exe');
+    var appDirPath = os.getAppLocation();
+    if (appDirPath.isNotEmpty){
+      os.startProcessDetach('keeper', true, [state.locationsInfo.last.dirPath, (state.locationsInfo.last.countGb * 1024 * 1024 * 1024).toString()]);
+    }
   }
 
   _mapSaveDirPath(

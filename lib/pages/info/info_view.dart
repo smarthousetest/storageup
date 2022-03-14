@@ -801,8 +801,8 @@ class _InfoPageState extends State<InfoPage> {
                                                   children: [
                                                     MyProgressIndicator(
                                                       percent: 35.0,
-                                                      color: Color(
-                                                          0xff59D7AB), // цвет индикатора
+                                                      color: Color(0xff59D7AB),
+                                                      // цвет индикатора
                                                       radius: 120,
                                                     ),
                                                     Padding(

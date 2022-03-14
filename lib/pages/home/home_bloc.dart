@@ -50,7 +50,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     if (event.values != null) {
       for (int i = 0; i < event.values!.length; i++) {
-        await _loadController.uploadFile(filePath: event.values![i]);
+        await _loadController.uploadFile(
+            filePath: event.values![i], folderId: event.folderId);
       }
     }
   }
@@ -59,10 +60,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {
-    await _filesController.updateFilesList();
-    var filesRootFolder = _filesController.getFilesRootFolder;
-    if (event.values?.first != null && filesRootFolder != null) {
-      _filesController.createFolder(event.values!.first!, filesRootFolder.id);
+    String? folderId;
+    if (event.folderId == null) {
+      folderId = _filesController.getFilesRootFolder?.id;
+    } else {
+      folderId = event.folderId;
+    }
+    if (event.values?.first != null && folderId != null) {
+      _filesController.createFolder(event.values!.first!, folderId);
     }
     eventBusUpdateFolder.fire(HomeBloc());
   }
@@ -83,7 +88,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     if (event.values != null && event.values!.isNotEmpty) {
       for (int i = 0; i < event.values!.length; i++) {
-        await _loadController.uploadFile(filePath: event.values![i]);
+        await _loadController.uploadFile(
+            filePath: event.values![i], folderId: event.folderId);
       }
     }
     //eventBusUpdateFolder.fire(HomeBloc());

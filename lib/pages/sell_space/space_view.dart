@@ -19,6 +19,7 @@ class SpaceSellPage extends StatefulWidget {
 
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
+
   SpaceSellPage();
 }
 
@@ -543,17 +544,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Color(0xffE4E7ED))),
                       child: BlocBuilder<SpaceBloc, SpaceState>(
-                          builder: (context, state) {
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 15, top: 11),
-                          child: Text(
-                            list,
-                            maxLines: 1,
-                            style: TextStyle(
-                                color: Theme.of(context).disabledColor),
-                          ),
-                        );
-                      }),
+                        builder: (context, state) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 11),
+                            child: Text(
+                              list,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: Theme.of(context).disabledColor),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
@@ -566,13 +568,14 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           onPressed: () async {
                             String? path = await getFilesPaths();
                             print(path);
-                            setState(() {
-                              if (path != null) {
-                                dirPath = path;
-
-                                list = path;
-                              }
-                            });
+                            setState(
+                              () {
+                                if (path != null) {
+                                  dirPath = path;
+                                  list = path;
+                                }
+                              },
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
@@ -669,9 +672,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           max: 180,
                           value: _currentSliderValue,
                           onChanged: (double value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
+                            setState(
+                              () {
+                                _currentSliderValue = value;
+                              },
+                            );
                           },
                         ),
                       ),
@@ -843,8 +848,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             context.read<SpaceBloc>().add(SaveDirPath(
                                 pathDir: dirPath, countGb: countGbSpace));
                             index = 2;
-
-                            //context.read<SpaceBloc>().add(RunSoft());
+                            context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },

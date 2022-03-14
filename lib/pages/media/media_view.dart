@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
@@ -447,6 +449,11 @@ class _MediaPageState extends State<MediaPage> {
         onTap: () {
           print('folder tapped: ${album.name}');
           blocContext.read<MediaCubit>().changeFolder(album);
+
+          final mediaAlbumId = album.id == '-1' ? null : album.id;
+          StateContainer.of(context).changeChoosedMediaFolderId(mediaAlbumId);
+
+          log('${StateContainer.of(context).choosedMediaFolderId}');
         },
         child: Container(
           width: _folderButtonSize.toDouble(),

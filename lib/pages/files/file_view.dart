@@ -34,7 +34,7 @@ class _FilePageState extends State<FilePage> {
   bool ifGrid = true;
   S translate = getIt<S>();
 
-  List<Widget> _opendedFolders = [];
+  List<OpenedFolderView> _opendedFolders = [];
   int _sortingTextFieldIndex = -1;
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
@@ -51,10 +51,11 @@ class _FilePageState extends State<FilePage> {
   void initState() {
     _opendedFolders.add(
       OpenedFolderView(
-          currentFolder: null, //state.currentFolder!,
-          previousFolders: [],
-          pop: _pop,
-          push: _push),
+        currentFolder: null, //state.currentFolder!,
+        previousFolders: [],
+        pop: _pop,
+        push: _push,
+      ),
     );
     _initFilterList();
     super.initState();
@@ -545,11 +546,13 @@ class _FilePageState extends State<FilePage> {
     }
   }
 
-  void _push(Widget child) {
+  void _push({required OpenedFolderView child, required String? folderId}) {
     setState(() {
       _opendedFolders.add(child);
       widget.index++;
     });
+
+    StateContainer.of(context).changeChoosedFilesFolderId(folderId);
   }
 
   void _pop(int countOfPop) {
@@ -561,6 +564,10 @@ class _FilePageState extends State<FilePage> {
         }
       });
     }
+
+    final choosedFolder = _opendedFolders[widget.index].currentFolder?.id;
+
+    StateContainer.of(context).changeChoosedFilesFolderId(choosedFolder);
   }
 
   Widget _recentFiles() {
@@ -840,11 +847,14 @@ class _FilePageState extends State<FilePage> {
                     description: translate.count_of_files(
                         state.currentFolder?.records?.length ?? 0),
                     onTap: () {
-                      _push(OpenedFolderView(
-                          currentFolder: state.currentFolder!,
-                          previousFolders: [],
-                          pop: _pop,
-                          push: _push));
+                      _push(
+                        child: OpenedFolderView(
+                            currentFolder: state.currentFolder!,
+                            previousFolders: [],
+                            pop: _pop,
+                            push: _push),
+                        folderId: null,
+                      );
                     },
                   );
                 } else {
@@ -856,7 +866,7 @@ class _FilePageState extends State<FilePage> {
                         translate.count_of_files(folder.records?.length ?? 0),
                     onTap: () {
                       setState(() {
-                        widget.index = 1;
+                        index = 1;
                         print(index - 1);
                       });
                     },
