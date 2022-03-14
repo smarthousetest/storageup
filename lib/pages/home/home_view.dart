@@ -485,6 +485,7 @@ class _HomePageState extends State<HomePage> {
                 action: userAction.action,
                 values: [name],
               ));
+          eventBusUpdateFolder.fire(HomePage());
         }
         break;
       case UserAction.createAlbum:

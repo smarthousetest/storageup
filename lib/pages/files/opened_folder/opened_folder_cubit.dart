@@ -18,6 +18,7 @@ import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
@@ -95,6 +96,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
     var objects =
         await _filesController.getContentFromFolderById(currentFolder!.id);
+    eventBusUpdateFolder.on().listen((event) {
+      _update();
+      close();
+    });
 
     emit(
       state.copyWith(

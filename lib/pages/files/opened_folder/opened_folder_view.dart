@@ -253,7 +253,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
             child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
                 bloc: _bloc,
                 builder: (context, state) {
-                  var controller = CustomPopupMenuController();
                   return GridView.builder(
                     itemCount: state.sortedFiles.length,
                     shrinkWrap: true,
@@ -266,45 +265,46 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                     itemBuilder: (context, index) {
                       Function() onTap;
                       var obj = state.sortedFiles[index];
-
+                      //var controller = CustomPopupMenuController();
                       _onPointerDown(PointerDownEvent event) {
                         if (event.kind == PointerDeviceKind.mouse &&
                             event.buttons == kSecondaryMouseButton) {
                           print("right button click");
-                          controller.showMenu();
-                          return CustomPopupMenu(
-                              pressType: PressType.singleClick,
-                              barrierColor: Colors.transparent,
-                              showArrow: false,
-                              horizontalMargin: 110,
-                              verticalMargin: 0,
-                              controller: controller,
-                              menuBuilder: () {
-                                return FilesPopupMenuActions(
-                                  theme: Theme.of(context),
-                                  translate: translate,
-                                  onTap: (action) {
-                                    controller.hideMenu();
-                                    if (action == FileAction.properties) {
-                                      StateInfoContainer.of(context)
-                                          ?.setInfoObject(obj);
-                                      controller.hideMenu();
-                                    } else
-                                      context
-                                          .read<OpenedFolderCubit>()
-                                          .onRecordActionChoosed(action, obj);
-                                  },
-                                );
-                              },
-                              child:
-                                  ObjectView(object: state.sortedFiles[index]));
+
+                          _popupControllers[state.sortedFiles.indexOf(obj)]
+                              .showMenu();
+                          // return CustomPopupMenu(
+                          //     pressType: PressType.singleClick,
+                          //     barrierColor: Colors.transparent,
+                          //     showArrow: false,
+                          //     horizontalMargin: 110,
+                          //     verticalMargin: 0,
+                          //     controller: controller,
+                          //     menuBuilder: () {
+                          //       return FilesPopupMenuActions(
+                          //         theme: Theme.of(context),
+                          //         translate: translate,
+                          //         onTap: (action) {
+                          //           controller.hideMenu();
+                          //           if (action == FileAction.properties) {
+                          //             StateInfoContainer.of(context)
+                          //                 ?.setInfoObject(obj);
+                          //             controller.hideMenu();
+                          //           } else
+                          //             context
+                          //                 .read<OpenedFolderCubit>()
+                          //                 .onRecordActionChoosed(action, obj);
+                          //         },
+                          //       );
+                          //     },
+                          //     child:
+                          //         ObjectView(object: state.sortedFiles[index]));
                         }
                       }
 
                       if (obj is Folder) {
                         onTap = () {
                           print(obj);
-                          print("lol");
                           widget.push(
                             OpenedFolderView(
                               currentFolder: obj,
@@ -327,15 +327,43 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       }
 
                       return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: onTap,
-                        child: Builder(builder: (context) {
-                          return Listener(
-                            onPointerDown: _onPointerDown,
-                            child: ObjectView(
-                              object: state.sortedFiles[index],
-                            ),
-                          );
-                        }),
+                        child: Listener(
+                          onPointerDown: _onPointerDown,
+                          behavior: HitTestBehavior.opaque,
+                          child: IgnorePointer(
+                            child: CustomPopupMenu(
+                                pressType: PressType.singleClick,
+                                barrierColor: Colors.transparent,
+                                showArrow: false,
+                                enablePassEvent: false,
+                                horizontalMargin: 110,
+                                verticalMargin: 0,
+                                controller: _popupControllers[
+                                    state.sortedFiles.indexOf(obj)],
+                                menuBuilder: () {
+                                  return FilesPopupMenuActions(
+                                    theme: Theme.of(context),
+                                    translate: translate,
+                                    onTap: (action) {
+                                      _popupControllers[
+                                              state.sortedFiles.indexOf(obj)]
+                                          .hideMenu();
+                                      if (action == FileAction.properties) {
+                                        StateInfoContainer.of(context)
+                                            ?.setInfoObject(obj);
+                                      } else
+                                        context
+                                            .read<OpenedFolderCubit>()
+                                            .onRecordActionChoosed(action, obj);
+                                    },
+                                  );
+                                },
+                                child: ObjectView(
+                                    object: state.sortedFiles[index])),
+                          ),
+                        ),
                       );
                     },
                   );
@@ -368,7 +396,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 Future<void> _onPointerDown(PointerDownEvent event) async {
                   if (event.kind == PointerDeviceKind.mouse &&
                       event.buttons == kSecondaryMouseButton) {
-                    print("right button click");
+                    //print("right button click");
                   }
                 }
 

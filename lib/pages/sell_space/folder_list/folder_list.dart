@@ -77,7 +77,7 @@ class _ButtonTemplateState extends State<FolderList> {
                   columns: [
                     DataColumn(
                       label: Container(
-                        width: constraints.maxWidth * 0.5,
+                        width: constraints.maxWidth * 0.45,
                         child: Text(
                           translate.name,
                           style: style,
@@ -125,10 +125,15 @@ class _ButtonTemplateState extends State<FolderList> {
                                 width: 24,
                               ),
                               SizedBox(width: 10),
-                              Text(
-                                element.dirPath,
-                                maxLines: 1,
-                                style: cellTextStyle,
+                              Container(
+                                constraints: BoxConstraints(maxWidth: 400),
+                                child: Text(
+                                  element.dirPath,
+                                  overflow: TextOverflow.ellipsis,
+                                  //softWrap: true,
+                                  maxLines: 1,
+                                  style: cellTextStyle,
+                                ),
                               ),
                             ],
                           ),
