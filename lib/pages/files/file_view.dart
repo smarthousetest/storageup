@@ -26,7 +26,7 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
-  var index = 0;
+  //var index = 0;
   FilePage();
 }
 
@@ -210,8 +210,8 @@ class _FilePageState extends State<FilePage> {
                     Expanded(
                       child: IndexedStack(
                         sizing: StackFit.expand,
-                        key: ValueKey<int>(widget.index),
-                        index: widget.index,
+                        key: ValueKey<int>(index),
+                        index: index,
                         children: _opendedFolders,
                       ),
                     ),
@@ -566,7 +566,7 @@ class _FilePageState extends State<FilePage> {
       });
     }
 
-    final choosedFolder = _opendedFolders[widget.index].currentFolder?.id;
+    final choosedFolder = _opendedFolders[index].currentFolder?.id;
 
     StateContainer.of(context).changeChoosedFilesFolderId(choosedFolder);
   }
