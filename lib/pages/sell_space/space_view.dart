@@ -171,6 +171,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                               fontSize: 12,
                                               color: Theme.of(context)
                                                   .bottomAppBarColor,
+                                              height: 1,
                                             ),
                                           ),
                                         ],

@@ -50,15 +50,11 @@ class _FilePageState extends State<FilePage> {
   @override
   void initState() {
     _opendedFolders.add(
-      Column(
-        children: [
-          OpenedFolderView(
-              currentFolder: null, //state.currentFolder!,
-              previousFolders: [],
-              pop: _pop,
-              push: _push),
-        ],
-      ),
+      OpenedFolderView(
+          currentFolder: null, //state.currentFolder!,
+          previousFolders: [],
+          pop: _pop,
+          push: _push),
     );
     _initFilterList();
     super.initState();
@@ -154,7 +150,7 @@ class _FilePageState extends State<FilePage> {
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
       child: BlocListener<FilesBloc, FilesState>(
         listener: (context, state) {},
-        child: _filewView(context),
+        child: _fileView(context),
       ),
     );
   }
@@ -166,7 +162,7 @@ class _FilePageState extends State<FilePage> {
     context.read<FilesBloc>().add(FilesSortingClear());
   }
 
-  Widget _filewView(BuildContext context) {
+  Widget _fileView(BuildContext context) {
     return Expanded(
       child: Container(
         child: Row(
@@ -197,12 +193,34 @@ class _FilePageState extends State<FilePage> {
                         ],
                       ),
                     ),
+                    /* Expanded(
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 1200),
+                        transitionBuilder: (child, animation) => SizeTransition(
+                          sizeFactor: animation,
+                          child: IndexedStack(
+                            key: ValueKey<int>(widget.index),
+                            index: widget.index,
+                            children: _opendedFolders,
+                          ),
+                        ),
+                        child:*/
                     Expanded(
                       child: IndexedStack(
+                        sizing: StackFit.expand,
+                        key: ValueKey<int>(widget.index),
                         index: widget.index,
                         children: _opendedFolders,
                       ),
                     ),
+                    // ),
+                    // ),
+                    // Expanded(
+                    //   child: IndexedStack(
+                    //     index: widget.index,
+                    //     children: _opendedFolders,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -441,12 +459,13 @@ class _FilePageState extends State<FilePage> {
                             constraints: BoxConstraints(maxWidth: 120),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: Text(
-                                    state.user?.firstName ?? 'Александр',
+                                    state.user?.firstName ?? '',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 17,
@@ -461,6 +480,7 @@ class _FilePageState extends State<FilePage> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context).bottomAppBarColor,
+                                    height: 1,
                                   ),
                                 ),
                               ],

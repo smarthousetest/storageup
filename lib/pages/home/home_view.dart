@@ -122,65 +122,52 @@ class _HomePageState extends State<HomePage> {
       setSize = true;
     }
 
-    return BlocProvider(
-      create: (context) => HomeBloc()..add(HomePageOpened()),
-      child: Scaffold(
-        backgroundColor: Theme.of(context).cardColor,
-        body: Stack(
+    return Scaffold(
+      backgroundColor: Theme.of(context).cardColor,
+      body: BlocProvider(
+        create: (context) => HomeBloc()..add(HomePageOpened()),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 30, top: 30, bottom: 30),
-                      child: Container(
-                        width: 274,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Color.fromARGB(25, 23, 69, 139),
-                                blurRadius: 4,
-                                offset: Offset(1, 4))
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                              child: SvgPicture.asset(
-                                'assets/home_page/storage_title.svg',
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                              child: SvgPicture.asset(
-                                'assets/home_page/separator.svg',
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView(
-                                shrinkWrap: true,
-                                controller: ScrollController(),
-                                children: leftButtonsItem(),
-                              ),
-                            ),
-                            _logout(),
-                          ],
-                        ),
-                      ),
+            Container(
+              width: 274,
+              margin: const EdgeInsets.only(left: 30, top: 30, bottom: 30),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Color.fromARGB(25, 23, 69, 139),
+                      blurRadius: 4,
+                      offset: Offset(1, 4))
+                ],
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                    child: SvgPicture.asset(
+                      'assets/home_page/storage_title.svg',
                     ),
-                    getPage(),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                    child: SvgPicture.asset(
+                      'assets/home_page/separator.svg',
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      controller: ScrollController(),
+                      children: leftButtonsItem(),
+                    ),
+                  ),
+                  _logout(),
+                ],
               ),
             ),
+            getPage(),
           ],
         ),
       ),

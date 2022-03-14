@@ -57,6 +57,9 @@ class Folder extends BaseObject {
         fldrs?.add(Folder.fromJson(v));
       });
     }
+
+    final isCreatedAtProvided = (json['createdAt'] as String?) != null;
+    final isUpdatedAtProvided = (json['updatedAt'] as String?) != null;
     return Folder(
       size: json['size'] as int,
       id: json['_id'] as String? ?? 'root',
@@ -66,8 +69,12 @@ class Folder extends BaseObject {
       parentFolder: json['parentFolder'] as String?,
       createdBy: json['createdBy'] as String?,
       updatedBy: json['updatedBy'] as String?,
-      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
-      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? ''),
+      createdAt: isCreatedAtProvided
+          ? DateTime.tryParse(json['createdAt'] as String? ?? '')
+          : null,
+      updatedAt: isUpdatedAtProvided
+          ? DateTime.tryParse(json['updatedAt'] as String? ?? '')
+          : null,
       favorite: json['isFavorite'] as bool? ?? false,
       readOnly: json['readonly'] as bool?,
     );
