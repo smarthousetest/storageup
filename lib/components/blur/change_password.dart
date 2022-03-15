@@ -6,7 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
 class BlurChangePassword extends StatefulWidget {
   //ValueSetter? callback;
