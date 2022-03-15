@@ -17,6 +17,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
   S translate = getIt<S>();
   var myController = TextEditingController();
   bool canSave = false;
+  bool hintColor = true;
 
   @override
   void initState() {
@@ -75,9 +76,11 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: kNormalTextFontFamily,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
+                                  color: hintColor
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .onBackground
+                                      : Theme.of(context).errorColor,
                                 ),
                               ),
                             ),
@@ -97,16 +100,19 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                 autofocus: true,
                                 onChanged: (myController) {
                                   print(myController);
-                                  if (myController.isEmpty &&
+                                  myController = myController.trim();
+                                  if (myController.isEmpty ||
                                       myController.length <= 2) {
                                     setState(() {
                                       canSave = false;
+                                      hintColor = false;
                                     });
                                   }
                                   if (myController.isNotEmpty &&
                                       myController.length > 2) {
                                     setState(() {
                                       canSave = true;
+                                      hintColor = true;
                                     });
                                   }
                                 },
@@ -175,7 +181,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                       onPressed: () {
                                         canSave
                                             ? Navigator.pop(context,
-                                                myController.value.text)
+                                                myController.value.text.trim())
                                             : null;
                                         print(widget.name);
                                       },
