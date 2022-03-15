@@ -57,14 +57,26 @@ class DownloadLocationsRepository {
       id: lastKey != null ? lastKey + 1 : 0,
     );
 
-    _locationsBox.add(downloadLocation);
+    _locationsBox.put(
+      downloadLocation.id,
+      downloadLocation,
+    );
   }
 
   void changelocation({required DownloadLocation location}) {
-    _locationsBox.putAt(location.id, location);
+    _locationsBox.put(location.id, location);
   }
 
   Future<void> deleteLocation({required int id}) async {
+    // final Map<dynamic, DownloadLocation> mapKey = _locationsBox.toMap();
+    // dynamic deletingKey;
+    // mapKey.forEach((key, value) {
+    //   if (value.id == id) {
+    //     deletingKey = key;
+    //   }
+    // });
+    // if (deletingKey != null) {
     await _locationsBox.delete(id);
+    // }
   }
 }

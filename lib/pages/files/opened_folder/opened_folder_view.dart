@@ -170,6 +170,33 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
+        eventBus.on().listen((event) {
+          var object = StateInfoContainer.of(context)?.object;
+          if (object is Folder) {
+            print(object);
+            print("lol");
+
+            widget.push(
+              child: OpenedFolderView(
+                currentFolder: object,
+                previousFolders: [
+                  ...state.previousFolders,
+                  state.currentFolder!
+                ],
+                pop: widget.pop,
+                push: widget.push,
+              ),
+              folderId: object.id,
+            );
+            context
+                .read<OpenedFolderCubit>()
+                .changeRepresentation(FilesRepresentation.table);
+          } else {
+            context.read<OpenedFolderCubit>().fileTapped(object as Record);
+            print('file tapped');
+          }
+          //print(event.runtimeType);
+        });
         var searchText = StateSortedContainer.of(context).search;
 
         // if (state.search != searchText) {
@@ -547,34 +574,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
-        eventBus.on().listen((event) {
-          var object = StateInfoContainer.of(context)?.object;
-          if (object is Folder) {
-            print(object);
-            print("lol");
-
-            widget.push(
-              child: OpenedFolderView(
-                currentFolder: object,
-                previousFolders: [
-                  ...state.previousFolders,
-                  state.currentFolder!
-                ],
-                pop: widget.pop,
-                push: widget.push,
-              ),
-              folderId: object.id,
-            );
-            context
-                .read<OpenedFolderCubit>()
-                .changeRepresentation(FilesRepresentation.table);
-          } else {
-            context.read<OpenedFolderCubit>().fileTapped(object as Record);
-            print('file tapped');
-          }
-          //print(event.runtimeType);
-        });
-
         return Expanded(
           child: LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(

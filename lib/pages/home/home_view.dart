@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     spaceSellPage = SpaceSellPage();
     finincePage = FinancePage();
     settingsPage = SettingsPage();
-    mediaPage = MediaPage();
+    mediaPage = StateInfoContainer(child: MediaPage());
     super.initState();
   }
 

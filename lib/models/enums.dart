@@ -18,6 +18,11 @@ enum FileAction {
   properties,
 }
 
+enum MediaAction {
+  delete,
+  properties,
+}
+
 enum AvatarAction {
   changeAvatar,
   delete,

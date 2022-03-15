@@ -54,8 +54,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var os = (Platform.isWindows) ? Windows() : Linux();
     os.killProcess('keeper.exe');
     var appDirPath = os.getAppLocation();
-    if (appDirPath.isNotEmpty){
-      os.startProcessDetach('keeper', true, [state.locationsInfo.last.dirPath, (state.locationsInfo.last.countGb * 1024 * 1024 * 1024).toString()]);
+    if (appDirPath.isNotEmpty) {
+      os.startProcessDetach('keeper', true, [
+        state.locationsInfo.last.dirPath,
+        (state.locationsInfo.last.countGb * 1024 * 1024 * 1024).toString()
+      ]);
     }
   }
 
@@ -79,5 +82,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) {
     var idLocation = event.location.id;
     _repository.deleteLocation(id: idLocation);
+    var updateLocations = _repository.getlocationsInfo;
+    emit(state.copyWith(locationsInfo: updateLocations));
   }
 }
