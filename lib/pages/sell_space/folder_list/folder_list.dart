@@ -200,6 +200,11 @@ class _ButtonTemplateState extends State<FolderList> {
                                     _initiatingControllers(state);
                                     // var controller =
                                     //     CustomPopupMenuController();
+                                    if (widget.locationsInfo.length >
+                                        _popupControllers.length) {
+                                      _popupControllers = [];
+                                      _initiatingControllers(state);
+                                    }
                                     return CustomPopupMenu(
                                       pressType: PressType.singleClick,
                                       barrierColor: Colors.transparent,
