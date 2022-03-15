@@ -44,6 +44,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
 
+  @override
+  Future<void> close() async {
+    await eventBusUpdateFolder.streamController.close();
+
+    return super.close();
+  }
+
   Future<void> _uploadFiles(
     HomeUserActionChoosed event,
     Emitter<HomeState> emit,
@@ -69,6 +76,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && folderId != null) {
       _filesController.createFolder(event.values!.first!, folderId);
     }
+    eventBusUpdateFolder.fire(UpdateFolderEvent);
   }
 
   Future<void> _createAlbum(
@@ -94,3 +102,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     //eventBusUpdateFolder.fire(HomeBloc());
   }
 }
+
+class UpdateFolderEvent {}

@@ -66,7 +66,7 @@ class _ButtonTemplateState extends State<FolderList> {
     bool _isClicked = false;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 40),
       child: LayoutBuilder(
         builder: (context, constraints) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,6 +91,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         width: constraints.maxWidth * 0.05,
                         child: Text(
                           translate.size,
+                          overflow: TextOverflow.visible,
                           style: style,
                         ),
                       ),
@@ -100,6 +101,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         width: constraints.maxWidth * 0.05,
                         child: Text(
                           translate.date,
+                          overflow: TextOverflow.visible,
                           style: style,
                         ),
                       ),
@@ -109,6 +111,7 @@ class _ButtonTemplateState extends State<FolderList> {
                         width: constraints.maxWidth * 0.1,
                         child: Text(
                           translate.trust_level,
+                          overflow: TextOverflow.visible,
                           style: style,
                         ),
                       ),
