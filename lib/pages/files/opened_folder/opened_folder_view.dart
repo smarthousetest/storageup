@@ -48,11 +48,22 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   SortingDirection _direction = SortingDirection.down;
   var _bloc = OpenedFolderCubit();
   List<CustomPopupMenuController> _popupControllers = [];
+  List<CustomPopupMenuController> _popupControllersGrouped = [];
 
   void _initiatingControllers(OpenedFolderState state) {
     if (_popupControllers.isEmpty) {
       state.sortedFiles.forEach((element) {
         _popupControllers.add(CustomPopupMenuController());
+      });
+    }
+  }
+
+  void _initiatingControllersForGroupedFiles(OpenedFolderState state) {
+    if (_popupControllersGrouped.isEmpty) {
+      state.groupedFiles.values.forEach((element) {
+        element.forEach((element) {
+          _popupControllersGrouped.add(CustomPopupMenuController());
+        });
       });
     }
   }
@@ -362,10 +373,22 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                       if (action == FileAction.properties) {
                                         StateInfoContainer.of(context)
                                             ?.setInfoObject(obj);
-                                      } else
-                                        context
-                                            .read<OpenedFolderCubit>()
-                                            .onRecordActionChoosed(action, obj);
+                                      } else {
+                                        var result = showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return BlurDelete();
+                                          },
+                                        );
+                                        eventBusDeleteFile.on().listen((event) {
+                                          context
+                                              .read<OpenedFolderCubit>()
+                                              .onRecordActionChoosed(
+                                                action,
+                                                obj,
+                                              );
+                                        });
+                                      }
                                     },
                                   );
                                 },
@@ -384,6 +407,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
   List<GridElement> _gridList(
       OpenedFolderState state, BoxConstraints constrains) {
+    _initiatingControllersForGroupedFiles(state);
     List<GridElement> grids = [];
     state.groupedFiles.forEach((key, value) {
       grids.add(
@@ -401,7 +425,15 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 List<BaseObject> files = value;
 
                 Function() onTap;
-                var obj = state.sortedFiles[index];
+                var obj = value[index];
+
+                // for (var groupFiles in state.groupedFiles.values) {
+                //   var obj = [];
+                //   obj.add(groupFiles);
+                //   print(groupFiles);
+
+                // }
+
                 if (state.sortedFiles.length > _popupControllers.length) {
                   _popupControllers = [];
                   _initiatingControllers(state);
@@ -411,7 +443,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   if (event.kind == PointerDeviceKind.mouse &&
                       event.buttons == kSecondaryMouseButton) {
                     //print("right button click");
-                    _popupControllers[state.sortedFiles.indexOf(obj)]
+                    _popupControllersGrouped[state.sortedFiles
+                            .indexWhere((element) => element.id == obj.id)]
                         .showMenu();
                   }
                 }
@@ -454,27 +487,40 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                           enablePassEvent: false,
                           horizontalMargin: 110,
                           verticalMargin: 0,
-                          controller:
-                              _popupControllers[state.sortedFiles.indexOf(obj)],
+                          controller: _popupControllersGrouped[state.sortedFiles
+                              .indexWhere((element) => element.id == obj.id)],
                           menuBuilder: () {
                             return FilesPopupMenuActions(
                               theme: Theme.of(context),
                               translate: translate,
                               onTap: (action) {
-                                _popupControllers[
-                                        state.sortedFiles.indexOf(obj)]
+                                _popupControllersGrouped[state.sortedFiles
+                                        .indexWhere(
+                                            (element) => element.id == obj.id)]
                                     .hideMenu();
                                 if (action == FileAction.properties) {
                                   StateInfoContainer.of(context)
                                       ?.setInfoObject(obj);
-                                } else
-                                  context
-                                      .read<OpenedFolderCubit>()
-                                      .onRecordActionChoosed(action, obj);
+                                } else {
+                                  var result = showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return BlurDelete();
+                                    },
+                                  );
+                                  eventBusDeleteFile.on().listen((event) {
+                                    context
+                                        .read<OpenedFolderCubit>()
+                                        .onRecordActionChoosed(
+                                          action,
+                                          obj,
+                                        );
+                                  });
+                                }
                               },
                             );
                           },
-                          child: ObjectView(object: state.sortedFiles[index])),
+                          child: ObjectView(object: value[index])),
                     ),
                   ),
                 );
