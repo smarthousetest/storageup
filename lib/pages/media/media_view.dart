@@ -331,22 +331,27 @@ class _MediaPageState extends State<MediaPage> {
                                   child: BlocBuilder<MediaCubit, MediaState>(
                                     builder: (context, state) {
                                       _initiatingControllers(state);
-                                      return ListView(
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        controller: _folderListScrollController,
-                                        children: [
-                                          ...state.albums
-                                              .map(
-                                                (album) => _folderIcon(
-                                                  album,
-                                                  isChoosed: album.id ==
-                                                      state.currentFolder.id,
-                                                  blocContext: context,
-                                                ),
-                                              )
-                                              .toList(),
-                                        ],
+                                      return ScrollConfiguration(
+                                        behavior: MyCustomScrollBehavior(),
+                                        child: ListView(
+                                          shrinkWrap: true,
+                                          physics: ClampingScrollPhysics(),
+                                          scrollDirection: Axis.horizontal,
+                                          controller:
+                                              _folderListScrollController,
+                                          children: [
+                                            ...state.albums
+                                                .map(
+                                                  (album) => _folderIcon(
+                                                    album,
+                                                    isChoosed: album.id ==
+                                                        state.currentFolder.id,
+                                                    blocContext: context,
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ],
+                                        ),
                                       );
                                     },
                                   ),
@@ -1137,4 +1142,14 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
       ),
     );
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        //PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -49,6 +50,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   var _loadController = getIt<LoadController>();
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
+  StreamSubscription? updatePageSubscription;
   late Observer _updateObserver = Observer((e) {
     try {
       if (e is List<UploadFileInfo>) {
@@ -83,8 +85,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     _loadController.getState.unregisterObserver(_updateObserver);
-    eventBusUpdateFolder.streamController.close();
-
+    // eventBusUpdateFolder.streamController.close();
+    updatePageSubscription?.cancel();
     return super.close();
   }
 
@@ -99,10 +101,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var objects =
         await _filesController.getContentFromFolderById(currentFolder!.id);
 
-    eventBusUpdateFolder.on().listen((event) {
+    updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       _update();
-
-      //close();
     });
 
     emit(

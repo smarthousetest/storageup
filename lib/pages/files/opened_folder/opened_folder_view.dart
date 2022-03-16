@@ -5,6 +5,7 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -60,10 +61,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
   void _initiatingControllersForGroupedFiles(OpenedFolderState state) {
     if (_popupControllersGrouped.isEmpty) {
-      state.groupedFiles.values.forEach((element) {
-        element.forEach((element) {
-          _popupControllersGrouped.add(CustomPopupMenuController());
-        });
+      state.objects.forEach((element) {
+        _popupControllersGrouped.add(CustomPopupMenuController());
       });
     }
   }
@@ -112,7 +111,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
       bloc: _bloc,
       builder: (context, state) {
         _initiatingControllers(state);
-
+        _initiatingControllersForGroupedFiles(state);
         return Row(
           // crossAxisAlignment: CrossAxisAlignment.baseline,
           // textBaseline: TextBaseline.alphabetic,
@@ -253,12 +252,16 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           cursor: allPath.length == 0 || i == allPath.length - 1
               ? SystemMouseCursors.basic
               : SystemMouseCursors.click,
-          child: Text(
-            i == 0 ? translate.files : allPath[i]!.name!,
-            style: i == allPath.length - 1
-                ? textStyle.copyWith(
-                    color: Theme.of(context).textTheme.headline2?.color)
-                : textStyle,
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 120),
+            child: Text(
+              i == 0 ? translate.files : allPath[i]!.name!,
+              overflow: TextOverflow.ellipsis,
+              style: i == allPath.length - 1
+                  ? textStyle.copyWith(
+                      color: Theme.of(context).textTheme.headline2?.color)
+                  : textStyle,
+            ),
           ),
         ),
       );
@@ -366,7 +369,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                   return FilesPopupMenuActions(
                                     theme: Theme.of(context),
                                     translate: translate,
-                                    onTap: (action) {
+                                    onTap: (action) async {
                                       _popupControllers[
                                               state.sortedFiles.indexOf(obj)]
                                           .hideMenu();
@@ -374,20 +377,23 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                         StateInfoContainer.of(context)
                                             ?.setInfoObject(obj);
                                       } else {
-                                        var result = showDialog(
+                                        var result = await showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return BlurDelete();
                                           },
                                         );
-                                        eventBusDeleteFile.on().listen((event) {
+                                        if (result == true) {
                                           context
                                               .read<OpenedFolderCubit>()
                                               .onRecordActionChoosed(
                                                 action,
                                                 obj,
                                               );
-                                        });
+                                        }
+                                        // eventBusDeleteFile.on().listen((event) {
+
+                                        // });
                                       }
                                     },
                                   );
@@ -407,7 +413,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
 
   List<GridElement> _gridList(
       OpenedFolderState state, BoxConstraints constrains) {
-    _initiatingControllersForGroupedFiles(state);
+    print(state.sortedFiles.length);
+    print(_popupControllersGrouped.length);
     List<GridElement> grids = [];
     state.groupedFiles.forEach((key, value) {
       grids.add(
@@ -427,16 +434,9 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 Function() onTap;
                 var obj = value[index];
 
-                // for (var groupFiles in state.groupedFiles.values) {
-                //   var obj = [];
-                //   obj.add(groupFiles);
-                //   print(groupFiles);
-
-                // }
-
-                if (state.sortedFiles.length > _popupControllers.length) {
-                  _popupControllers = [];
-                  _initiatingControllers(state);
+                if (state.objects.length != _popupControllersGrouped.length) {
+                  _popupControllersGrouped = [];
+                  _initiatingControllersForGroupedFiles(state);
                 }
 
                 Future<void> _onPointerDown(PointerDownEvent event) async {
@@ -487,14 +487,14 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                           enablePassEvent: false,
                           horizontalMargin: 110,
                           verticalMargin: 0,
-                          controller: _popupControllersGrouped[state.sortedFiles
+                          controller: _popupControllersGrouped[state.objects
                               .indexWhere((element) => element.id == obj.id)],
                           menuBuilder: () {
                             return FilesPopupMenuActions(
                               theme: Theme.of(context),
                               translate: translate,
-                              onTap: (action) {
-                                _popupControllersGrouped[state.sortedFiles
+                              onTap: (action) async {
+                                _popupControllersGrouped[state.objects
                                         .indexWhere(
                                             (element) => element.id == obj.id)]
                                     .hideMenu();
@@ -502,20 +502,28 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                   StateInfoContainer.of(context)
                                       ?.setInfoObject(obj);
                                 } else {
-                                  var result = showDialog(
+                                  var result = await showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return BlurDelete();
                                     },
                                   );
-                                  eventBusDeleteFile.on().listen((event) {
+                                  if (result == true) {
                                     context
                                         .read<OpenedFolderCubit>()
                                         .onRecordActionChoosed(
                                           action,
                                           obj,
                                         );
-                                  });
+                                  }
+                                  // eventBusDeleteFile.on().listen((event) {
+                                  //   context
+                                  //       .read<OpenedFolderCubit>()
+                                  //       .onRecordActionChoosed(
+                                  //         action,
+                                  //         obj,
+                                  //       );
+                                  // });
                                 }
                               },
                             );

@@ -9,3 +9,5 @@ EventBus eventBusForUpload = new EventBus();
 EventBus eventBusDeleteFile = new EventBus();
 
 EventBus eventBusUpdateFolder = new EventBus();
+
+EventBus eventBusUpdateAlbum = new EventBus();

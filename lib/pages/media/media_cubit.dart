@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -15,6 +16,7 @@ import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
@@ -30,6 +32,7 @@ class MediaCubit extends Cubit<MediaState> {
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
   UserController _userController = getIt<UserController>();
+  StreamSubscription? updatePageSubscription;
 
   late var _updateObserver = Observer((e) {
     try {
@@ -77,6 +80,10 @@ class MediaCubit extends Cubit<MediaState> {
       allMedia.addAll(allMediaFolders[i].records!);
     }
     _syncWithLoadController(allMedia);
+
+    updatePageSubscription = eventBusUpdateAlbum.on().listen((event) {
+      _update();
+    });
   }
 
   @override
@@ -86,7 +93,7 @@ class MediaCubit extends Cubit<MediaState> {
     });
 
     _loadController.getState.unregisterObserver(_updateObserver);
-
+    updatePageSubscription?.cancel();
     return super.close();
   }
 

@@ -47,7 +47,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   Future<void> close() async {
-    await eventBusUpdateFolder.streamController.close();
+    //await eventBusUpdateFolder.streamController.close();
 
     return super.close();
   }
@@ -88,7 +88,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     var mediaRootFolderId = _filesController.getMediaRootFolderId();
     if (event.values?.first != null && mediaRootFolderId != null) {
-      _filesController.createFolder(event.values!.first!, mediaRootFolderId);
+      await _filesController.createFolder(
+          event.values!.first!, mediaRootFolderId);
+    }
+    if (event.choosedPage == ChoosedPage.media) {
+      eventBusUpdateAlbum.fire(UpdateAlbumEvent);
     }
   }
 
@@ -107,3 +111,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 }
 
 class UpdateFolderEvent {}
+
+class UpdateAlbumEvent {}
