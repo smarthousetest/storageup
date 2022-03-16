@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
@@ -74,9 +75,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       folderId = event.folderId;
     }
     if (event.values?.first != null && folderId != null) {
-      _filesController.createFolder(event.values!.first!, folderId);
+      await _filesController.createFolder(event.values!.first!, folderId);
     }
-    eventBusUpdateFolder.fire(UpdateFolderEvent);
+    if (event.choosedPage == ChoosedPage.file) {
+      eventBusUpdateFolder.fire(UpdateFolderEvent);
+    }
   }
 
   Future<void> _createAlbum(
