@@ -17,7 +17,6 @@ import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/pages/home/home_bloc.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
@@ -569,11 +568,19 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
     if (path.isNotEmpty) {
       var appPath = (await getApplicationSupportDirectory()).path;
-      var fullPathToFile = '$appPath/$path';
+      if (path.contains("()")) {
+        path.replaceAll(('('), '"("');
+        path.replaceAll((')'), '")"');
+      }
+      var fullPathToFile = "$appPath/$path";
       var isExisting = await File(fullPathToFile).exists();
-      if (isExisting) {
+      var isExistingSync = File(fullPathToFile).existsSync();
+      print(fullPathToFile);
+      if (isExisting && isExistingSync) {
         var res = await OpenFile.open(fullPathToFile);
         print(res.message);
+      } else {
+        _downloadFile(record.id);
       }
     } else {
       _downloadFile(record.id);

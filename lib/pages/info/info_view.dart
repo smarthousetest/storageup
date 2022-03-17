@@ -35,8 +35,6 @@ class _InfoPageState extends State<InfoPage> {
     });
   }
 
-  final TextEditingController _searchingFieldController =
-      TextEditingController();
   S translate = getIt<S>();
 
   bool _canShowClose = true;

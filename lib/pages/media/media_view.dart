@@ -622,6 +622,12 @@ class _MediaPageState extends State<MediaPage> {
               itemBuilder: (context, index) {
                 var record = state.currentFolderRecords[index];
 
+                if (state.currentFolderRecords.length >
+                    _popupControllers.length) {
+                  _popupControllers = [];
+                  _initiatingControllers(state);
+                }
+
                 _onPointerDown(PointerDownEvent event) {
                   if (event.kind == PointerDeviceKind.mouse &&
                       event.buttons == kSecondaryMouseButton) {
