@@ -868,7 +868,7 @@ class _MediaPageState extends State<MediaPage> {
                         ),
                         DataCell(
                           Text(
-                            filesize(e.size, translate, 1),
+                            fileSize(e.size, translate, 1),
                             style: cellTextStyle,
                           ),
                         ),

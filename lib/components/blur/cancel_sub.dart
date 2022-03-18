@@ -79,7 +79,7 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
                                             widget.choosedSubGb),
                                         style: textStyle),
                                     Text(
-                                        translate.filled_gb(filesize(
+                                        translate.filled_gb(fileSize(
                                             widget.filledGb, translate)),
                                         style: textStyle),
                                     Text(translate.will_be_deleted,

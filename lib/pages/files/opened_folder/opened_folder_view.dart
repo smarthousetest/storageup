@@ -845,7 +845,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       ),
                       DataCell(
                         Text(
-                          filesize(element.size, translate, 1),
+                          fileSize(element.size, translate, 1),
                           maxLines: 1,
                           style: cellTextStyle,
                         ),

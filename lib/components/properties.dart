@@ -209,7 +209,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        filesize(
+                                        fileSize(
                                             widget.object?.size, translate, 1),
                                         style: TextStyle(
                                           color: Theme.of(context)

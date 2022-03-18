@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:upstorage_desktop/models/folder.dart';
 
 import 'package:upstorage_desktop/models/user.dart';
 
@@ -18,6 +19,9 @@ class InfoState extends Equatable {
   final bool trashTab;
   final bool financeTab;
   final User? user;
+  final Folder? folder;
+  final Folder? rootFolders;
+  final List<Folder>? allMediaFolders;
 
   InfoState({
     this.usingSpace = 0,
@@ -35,6 +39,9 @@ class InfoState extends Equatable {
     this.trashTab = false,
     this.financeTab = false,
     this.user,
+    this.rootFolders,
+    this.folder,
+    this.allMediaFolders,
   });
 
   InfoState copyWith({
@@ -48,6 +55,9 @@ class InfoState extends Equatable {
     bool? filesTab,
     bool? mediaTab,
     User? user,
+    Folder? rootFolders,
+    Folder? folder,
+    List<Folder>? allMediaFolders,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -61,6 +71,9 @@ class InfoState extends Equatable {
       filesTab: filesTab ?? this.filesTab,
       mediaTab: mediaTab ?? this.mediaTab,
       user: user ?? this.user,
+      folder: folder ?? this.folder,
+      rootFolders: rootFolders ?? this.rootFolders,
+      allMediaFolders: allMediaFolders ?? this.allMediaFolders,
     );
   }
 
@@ -75,6 +88,9 @@ class InfoState extends Equatable {
         homeTab,
         filesTab,
         mediaTab,
-        user
+        user,
+        folder,
+        rootFolders,
+        allMediaFolders,
       ];
 }

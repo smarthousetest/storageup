@@ -63,7 +63,7 @@ extension UserProficeImage on User? {
   }
 }
 
-String filesize(dynamic size, S translate, [int round = 2]) {
+String fileSize(dynamic size, S translate, [int round = 2]) {
   /** 
    * [size] can be passed as number or as string
    *

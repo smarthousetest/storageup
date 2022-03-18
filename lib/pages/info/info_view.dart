@@ -165,204 +165,244 @@ class _InfoPageState extends State<InfoPage> {
     });
   }
 
-  Row _filledGbCount(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          '4,36 ГБ',
-          style: TextStyle(
-            color: Theme.of(context).bottomAppBarColor,
-            fontSize: 36,
-            fontFamily: kNormalTextFontFamily,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 11),
-          child: Text(
-            'из',
-            style: TextStyle(
-              color: Theme.of(context).shadowColor,
-              fontSize: 24,
-              fontFamily: kNormalTextFontFamily,
+  Widget _filledGbCount(BuildContext context) {
+    return BlocBuilder<InfoBloc, InfoState>(
+      builder: (context, state) {
+        // var filesFolderSize = state.rootFolders?.folders
+        //         ?.firstWhere((folder) => folder.name == 'Files')
+        //         .size ??
+        //     0;
+        // var mediaFolderSize = state.rootFolders?.folders
+        //         ?.firstWhere((folder) => folder.name == 'Media')
+        //         .size ??
+        //     0;
+        var allFolderSize = state.rootFolders?.size ?? 0;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              '${fileSize(allFolderSize, translate)}',
+              style: TextStyle(
+                color: Theme.of(context).bottomAppBarColor,
+                fontSize: 36,
+                fontFamily: kNormalTextFontFamily,
+              ),
             ),
-          ),
-        ),
-        Text(
-          '20 ГБ',
-          style: TextStyle(
-            color: Theme.of(context).shadowColor,
-            fontSize: 36,
-            fontFamily: kNormalTextFontFamily,
-          ),
-        ),
-      ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 11),
+              child: Text(
+                'из',
+                style: TextStyle(
+                  color: Theme.of(context).shadowColor,
+                  fontSize: 24,
+                  fontFamily: kNormalTextFontFamily,
+                ),
+              ),
+            ),
+            Text(
+              '20 ГБ',
+              style: TextStyle(
+                color: Theme.of(context).shadowColor,
+                fontSize: 36,
+                fontFamily: kNormalTextFontFamily,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  Expanded _progressDescription(BuildContext context) {
-    return Expanded(
-      child: ListView(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 20),
-            child: ElevatedButton(
-              onPressed: () {
-                StateContainer.of(context).changePage(ChoosedPage.file);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                padding: EdgeInsets.zero,
-                shadowColor: Color.fromARGB(5, 0, 0, 0), //
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SvgPicture.asset(
-                        'assets/home_page/file.svg',
-                        // height: 46,
-                        // width: 46,
-                      ),
-                    ),
+  Widget _progressDescription(BuildContext context) {
+    return BlocBuilder<InfoBloc, InfoState>(
+      builder: (context, state) {
+        var filesFolder = state.folder?.records?.length ?? 0;
+
+        var mediaFolder = state.rootFolders?.folders
+            ?.firstWhere((folder) => folder.name == 'Media')
+            .records
+            ?.length;
+
+        var countMediaFolderPhoto = state.allMediaFolders
+                ?.firstWhere((element) => element.name == translate.photos)
+                .records
+                ?.length ??
+            0;
+
+        var countMediaFolderVideo = state.allMediaFolders
+                ?.firstWhere((element) => element.name == translate.video)
+                .records
+                ?.length ??
+            0;
+        return Expanded(
+          child: ListView(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    StateContainer.of(context).changePage(ChoosedPage.file);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    padding: EdgeInsets.zero,
+                    shadowColor: Color.fromARGB(5, 0, 0, 0), //
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          "Файлы",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).disabledColor,
-                            fontFamily: kNormalTextFontFamily,
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/home_page/file.svg',
+                            // height: 46,
+                            // width: 46,
                           ),
                         ),
                       ),
-                      Text(
-                        "15 файлов",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).shadowColor,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              "Файлы",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).disabledColor,
+                                fontFamily: kNormalTextFontFamily,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            //"${(filesFolder?.records?.length ?? 0)} файлов",
+                            "${(filesFolder)} файлов",
+                            //"${(filesFolder)}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).shadowColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-            child: ElevatedButton(
-              onPressed: () {
-                StateContainer.of(context).changePage(ChoosedPage.media);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-                padding: EdgeInsets.zero,
-                shadowColor: Color.fromARGB(5, 0, 0, 0),
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Container(
-                      height: 46,
-                      width: 46,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SvgPicture.asset('assets/home_page/foto_r.svg'),
-                    ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    StateContainer.of(context).changePage(ChoosedPage.media);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                    padding: EdgeInsets.zero,
+                    shadowColor: Color.fromARGB(5, 0, 0, 0),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          "Фото",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).disabledColor,
-                            fontFamily: kNormalTextFontFamily,
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Container(
+                          height: 46,
+                          width: 46,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          child:
+                              SvgPicture.asset('assets/home_page/foto_r.svg'),
                         ),
                       ),
-                      Text(
-                        "15 файлов",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).shadowColor,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              "Фото",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).disabledColor,
+                                fontFamily: kNormalTextFontFamily,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${(countMediaFolderPhoto)} файлов",
+                            // 's',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).shadowColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: ElevatedButton(
-              onPressed: () {
-                StateContainer.of(context).changePage(ChoosedPage.media);
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-                padding: EdgeInsets.zero,
-                shadowColor: Color.fromARGB(5, 0, 0, 0),
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Container(
-                      height: 46,
-                      width: 46,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SvgPicture.asset('assets/home_page/video_r.svg'),
-                    ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: ElevatedButton(
+                  onPressed: () {
+                    StateContainer.of(context).changePage(ChoosedPage.media);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                    padding: EdgeInsets.zero,
+                    shadowColor: Color.fromARGB(5, 0, 0, 0),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          "Видео",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).disabledColor,
-                            fontFamily: kNormalTextFontFamily,
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Container(
+                          height: 46,
+                          width: 46,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          child:
+                              SvgPicture.asset('assets/home_page/video_r.svg'),
                         ),
                       ),
-                      Text(
-                        "15 файлов",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).shadowColor,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              "Видео",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).disabledColor,
+                                fontFamily: kNormalTextFontFamily,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${(countMediaFolderVideo)} файлов",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).shadowColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

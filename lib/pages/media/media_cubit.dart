@@ -187,7 +187,24 @@ class MediaCubit extends Cubit<MediaState> {
         var album = albums[i];
         var indexOfUploadingMedia =
             album.records?.indexWhere((record) => record.id == uploadingFileId);
-        if (indexOfUploadingMedia != null && indexOfUploadingMedia != -1) {
+
+        final uploadingObjectIndexFromLoadState = _loadController
+            .getState.uploadingFiles
+            .indexWhere((element) => element.id == uploadingFileId);
+
+        var isAllreadyLoaded = false;
+
+        if (uploadingObjectIndexFromLoadState != -1) {
+          final objectFromLoadState = _loadController
+              .getState.uploadingFiles[uploadingObjectIndexFromLoadState];
+
+          isAllreadyLoaded = objectFromLoadState.uploadPercent == 100 ||
+              objectFromLoadState.uploadPercent == -1;
+        }
+
+        if (indexOfUploadingMedia != null &&
+            indexOfUploadingMedia != -1 &&
+            !isAllreadyLoaded) {
           var newRecordsList = album.records!;
           newRecordsList[indexOfUploadingMedia] =
               newRecordsList[indexOfUploadingMedia].copyWith(loadPercent: 0);
@@ -390,6 +407,8 @@ class MediaCubit extends Cubit<MediaState> {
       if (isExisting) {
         var res = await OpenFile.open(fullPathToFile);
         print(res.message);
+      } else {
+        _downloadFile(record.id);
       }
     } else {
       _downloadFile(record.id);
