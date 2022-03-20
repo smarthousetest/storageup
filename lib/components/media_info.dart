@@ -1,11 +1,9 @@
 import 'package:cpp_native/file_typification/file_typification.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
@@ -13,21 +11,21 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
-class FileInfoView extends StatefulWidget {
-  BaseObject? object;
+class MediaInfoView extends StatefulWidget {
+  Record? record;
   User? user;
   GlobalKey? key;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  FileInfoView({required this.object, required this.user, required this.key});
+  MediaInfoView({this.record, required this.user, required this.key});
 }
 
-class _ButtonTemplateState extends State<FileInfoView> {
+class _ButtonTemplateState extends State<MediaInfoView> {
   S translate = getIt<S>();
   var setNull;
 
   Widget build(BuildContext context) {
-    var type = FileAttribute().getFilesType(widget.object!.name!.toLowerCase());
+    var type = FileAttribute().getFilesType(widget.record!.name!.toLowerCase());
 
     return Padding(
         padding: const EdgeInsets.only(right: 30, top: 30, bottom: 30, left: 0),
@@ -50,7 +48,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                       alignment: Alignment.topRight,
                       child: GestureDetector(
                         onTap: () {
-                          StateInfoContainer.of(context)?.setInfoObject(null);
+                          StateInfoContainer.of(context)?.setInfoRecord(null);
                         },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -138,7 +136,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                             child: Container(
                               width: 150,
                               height: 150,
-                              child: widget.object is Record && type != 'image'
+                              child: widget.record is Record && type != 'image'
                                   ? type.isNotEmpty
                                       ? Image.asset(
                                           'assets/file_icons/$type.png',
@@ -153,7 +151,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           child: Image.network(
-                                            (widget.object as Record)
+                                            (widget.record as Record)
                                                 .thumbnail!
                                                 .first
                                                 .publicUrl!,
@@ -171,7 +169,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                           padding: const EdgeInsets.only(top: 25),
                           child: Center(
                             child: Text(
-                              widget.object?.name ?? '',
+                              widget.record?.name ?? '',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -210,7 +208,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                       alignment: Alignment.centerRight,
                                       child: Text(
                                         fileSize(
-                                            widget.object?.size, translate, 1),
+                                            widget.record?.size, translate, 1),
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -243,8 +241,8 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                         child: Container(),
                                       ),
                                       Text(
-                                        widget.object is Record
-                                            ? widget.object!.extension
+                                        widget.record is Record
+                                            ? widget.record!.extension
                                                     ?.toUpperCase() ??
                                                 ''
                                             : translate.foldr,
@@ -285,7 +283,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          widget.object is Record
+                                          widget.record is Record
                                               ? type.toUpperCase()
                                               : translate.foldr,
                                           //textAlign: TextAlign.end,
@@ -325,7 +323,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                         alignment: Alignment.centerRight,
                                         child: Text(
                                           DateFormat('dd.MM.yyyy').format(
-                                              widget.object!.createdAt!),
+                                              widget.record!.createdAt!),
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -362,7 +360,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                         alignment: Alignment.centerRight,
                                         child: Text(
                                           DateFormat('dd.MM.yyyy').format(
-                                              widget.object!.updatedAt!),
+                                              widget.record!.updatedAt!),
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -398,7 +396,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                       Align(
                                         alignment: Alignment.centerRight,
                                         child: Text(
-                                          widget.object?.updatedBy ?? '',
+                                          widget.record?.updatedBy ?? '',
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -459,7 +457,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                             width: 260,
                             child: OutlinedButton(
                               onPressed: () {
-                                eventBus.fire(FileInfoView);
+                                eventBusMediaOpen.fire(MediaInfoView);
                               },
                               style: OutlinedButton.styleFrom(
                                 minimumSize: Size(double.maxFinite, 60),

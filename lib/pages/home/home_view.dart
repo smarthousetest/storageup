@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     spaceSellPage = SpaceSellPage();
     finincePage = FinancePage();
     settingsPage = SettingsPage();
-    mediaPage = MediaPage();
+    mediaPage = StateInfoContainer(child: MediaPage());
     super.initState();
   }
 
@@ -487,10 +487,13 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
+          var page = StateContainer.of(context).choosedPage;
+
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
+                choosedPage: page,
               ));
         }
         break;
@@ -507,11 +510,13 @@ class _HomePageState extends State<HomePage> {
           // );
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
+          var page = StateContainer.of(context).choosedPage;
 
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
+                choosedPage: page,
               ));
         }
         break;

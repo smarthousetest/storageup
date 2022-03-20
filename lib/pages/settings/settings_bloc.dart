@@ -100,6 +100,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     _filesController.clearAll();
     await _tokenRepository.setApiToken('');
+
     emit(state.copyWith(
       status: FormzStatus.submissionSuccess,
       needToLogout: true,

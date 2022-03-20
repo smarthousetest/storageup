@@ -4,19 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurDelete extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  //Blur blurItem;
   BlurDelete();
 }
 
 class _ButtonTemplateState extends State<BlurDelete> {
   S translate = getIt<S>();
+  bool delete = true;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -95,7 +94,7 @@ class _ButtonTemplateState extends State<BlurDelete> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   eventBusDeleteFile.fire(BlurDelete);
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, delete);
                                 },
                                 child: Text(
                                   translate.delete,

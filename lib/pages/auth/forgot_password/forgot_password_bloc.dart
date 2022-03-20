@@ -12,49 +12,48 @@ import 'forgot_password_state.dart';
 @Injectable()
 class ForgotPasswordBloc
     extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
-  ForgotPasswordBloc() : super(ForgotPasswordState());
+  ForgotPasswordBloc() : super(ForgotPasswordState()) {
+    on<ForgotPasswordEvent>((event, emit) async {
+      if (event is ForgotPasswordEmailChanged) {
+        _mapEmailChanged(event, state, emit);
+      } else if (event is ForgotPasswordConfirmed) {
+        await _mapSubmitted(event, state, emit);
+      }
+    });
+  }
+
   final AuthenticationRepository _authenticationRepository =
       getIt<AuthenticationRepository>();
 
-  @override
-  Stream<ForgotPasswordState> mapEventToState(
-      ForgotPasswordEvent event) async* {
-    if (event is ForgotPasswordEmailChanged) {
-      yield _mapEmailChanged(event, state);
-    } else if (event is ForgotPasswordConfirmed) {
-      yield* _mapSubmitted(event, state);
-    }
-  }
-
-  ForgotPasswordState _mapEmailChanged(
+  void _mapEmailChanged(
     ForgotPasswordEmailChanged event,
     ForgotPasswordState state,
+    Emitter<ForgotPasswordState> emit,
   ) {
     var email = Email.dirty(event.email, event.needValidation);
-    return state.copyWith(
-      email: email,
-      status: Formz.validate([email]),
-    );
+    //var formzEmail = Formz.validate([email]);
+    emit(state.copyWith(email: email, status: Formz.validate([email])));
   }
 
-  Stream<ForgotPasswordState> _mapSubmitted(
+  Future<void> _mapSubmitted(
     ForgotPasswordConfirmed event,
     ForgotPasswordState state,
-  ) async* {
-    yield state.copyWith(status: FormzStatus.submissionInProgress);
+    Emitter<ForgotPasswordState> emit,
+  ) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
     print('send email to restore password');
     try {
       final result = await _authenticationRepository.restorePassword(
           email: state.email.value);
       if (result == AuthenticationStatus.authenticated) {
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
+        emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } else {
-        yield state.copyWith(
+        emit(state.copyWith(
             status: FormzStatus.submissionFailure,
-            error: AuthError.wrongCredentials);
+            error: AuthError.wrongCredentials));
       }
     } on Exception catch (_) {
-      yield state.copyWith(status: FormzStatus.submissionFailure);
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
 }

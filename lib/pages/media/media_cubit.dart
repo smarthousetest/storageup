@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -15,6 +16,7 @@ import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
@@ -30,6 +32,7 @@ class MediaCubit extends Cubit<MediaState> {
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
   UserController _userController = getIt<UserController>();
+  StreamSubscription? updatePageSubscription;
 
   late var _updateObserver = Observer((e) {
     try {
@@ -77,6 +80,10 @@ class MediaCubit extends Cubit<MediaState> {
       allMedia.addAll(allMediaFolders[i].records!);
     }
     _syncWithLoadController(allMedia);
+
+    updatePageSubscription = eventBusUpdateAlbum.on().listen((event) {
+      _update();
+    });
   }
 
   @override
@@ -86,7 +93,7 @@ class MediaCubit extends Cubit<MediaState> {
     });
 
     _loadController.getState.unregisterObserver(_updateObserver);
-
+    updatePageSubscription?.cancel();
     return super.close();
   }
 
@@ -180,7 +187,24 @@ class MediaCubit extends Cubit<MediaState> {
         var album = albums[i];
         var indexOfUploadingMedia =
             album.records?.indexWhere((record) => record.id == uploadingFileId);
-        if (indexOfUploadingMedia != null && indexOfUploadingMedia != -1) {
+
+        final uploadingObjectIndexFromLoadState = _loadController
+            .getState.uploadingFiles
+            .indexWhere((element) => element.id == uploadingFileId);
+
+        var isAllreadyLoaded = false;
+
+        if (uploadingObjectIndexFromLoadState != -1) {
+          final objectFromLoadState = _loadController
+              .getState.uploadingFiles[uploadingObjectIndexFromLoadState];
+
+          isAllreadyLoaded = objectFromLoadState.uploadPercent == 100 ||
+              objectFromLoadState.uploadPercent == -1;
+        }
+
+        if (indexOfUploadingMedia != null &&
+            indexOfUploadingMedia != -1 &&
+            !isAllreadyLoaded) {
           var newRecordsList = album.records!;
           newRecordsList[indexOfUploadingMedia] =
               newRecordsList[indexOfUploadingMedia].copyWith(loadPercent: 0);
@@ -383,6 +407,8 @@ class MediaCubit extends Cubit<MediaState> {
       if (isExisting) {
         var res = await OpenFile.open(fullPathToFile);
         print(res.message);
+      } else {
+        _downloadFile(record.id);
       }
     } else {
       _downloadFile(record.id);
@@ -458,6 +484,16 @@ class MediaCubit extends Cubit<MediaState> {
       _downloadObservers.remove(observer);
     } catch (e) {
       log('MediaCubit -> _unregisterDownloadObserver: error $e');
+    }
+  }
+
+  void onActionDeleteChoosed(Record record) async {
+    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    var result = await _filesController.deleteObjects([record]);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
     }
   }
 

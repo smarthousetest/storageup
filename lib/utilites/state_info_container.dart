@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
+import 'package:upstorage_desktop/models/record.dart';
 
 class StateInfoContainer extends StatefulWidget {
   final Widget child;
@@ -22,6 +22,8 @@ class StateInfoContainer extends StatefulWidget {
 class StateInfoContainerState extends State<StateInfoContainer> {
   BaseObject? get object => _object;
   BaseObject? _object;
+  Record? get record => _record;
+  Record? _record;
   bool _open = false;
   bool? get open => _open;
 
@@ -33,17 +35,23 @@ class StateInfoContainerState extends State<StateInfoContainer> {
     );
   }
 
+  void setInfoRecord(Record? record) {
+    setState(() {
+      _record = record;
+    });
+  }
+
   void setInfoObject(BaseObject? object) {
     setState(() {
       _object = object;
     });
   }
 
-  void openFile() {
-    setState(() {
-      _open = !_open;
-    });
-  }
+  // void openFile() {
+  //   setState(() {
+  //     _open = !_open;
+  //   });
+  // }
 }
 
 class _InheritedStateInfoContainer extends InheritedWidget {

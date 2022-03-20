@@ -405,7 +405,7 @@ class _FilePageState extends State<FilePage> {
                   padding: const EdgeInsets.only(left: 10.0),
                   child: Center(
                     child: TextField(
-                      // autofocus: true,
+                      autofocus: true,
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Theme.of(context).disabledColor,

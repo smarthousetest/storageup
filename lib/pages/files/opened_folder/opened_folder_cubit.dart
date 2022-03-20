@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -48,6 +49,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   var _loadController = getIt<LoadController>();
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
+  StreamSubscription? updatePageSubscription;
   late Observer _updateObserver = Observer((e) {
     try {
       if (e is List<UploadFileInfo>) {
@@ -82,7 +84,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     _loadController.getState.unregisterObserver(_updateObserver);
-
+    // eventBusUpdateFolder.streamController.close();
+    updatePageSubscription?.cancel();
     return super.close();
   }
 
@@ -96,9 +99,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
     var objects =
         await _filesController.getContentFromFolderById(currentFolder!.id);
-    eventBusUpdateFolder.on().listen((event) {
+
+    updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       _update();
-      close();
     });
 
     emit(
@@ -565,11 +568,19 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
     if (path.isNotEmpty) {
       var appPath = (await getApplicationSupportDirectory()).path;
-      var fullPathToFile = '$appPath/$path';
+      if (path.contains("()")) {
+        path.replaceAll(('('), '"("');
+        path.replaceAll((')'), '")"');
+      }
+      var fullPathToFile = "$appPath/$path";
       var isExisting = await File(fullPathToFile).exists();
-      if (isExisting) {
+      var isExistingSync = File(fullPathToFile).existsSync();
+      print(fullPathToFile);
+      if (isExisting && isExistingSync) {
         var res = await OpenFile.open(fullPathToFile);
         print(res.message);
+      } else {
+        _downloadFile(record.id);
       }
     } else {
       _downloadFile(record.id);

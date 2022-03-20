@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
@@ -44,6 +45,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
 
+  @override
+  Future<void> close() async {
+    //await eventBusUpdateFolder.streamController.close();
+
+    return super.close();
+  }
+
   Future<void> _uploadFiles(
     HomeUserActionChoosed event,
     Emitter<HomeState> emit,
@@ -67,7 +75,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       folderId = event.folderId;
     }
     if (event.values?.first != null && folderId != null) {
-      _filesController.createFolder(event.values!.first!, folderId);
+      await _filesController.createFolder(event.values!.first!, folderId);
+    }
+    if (event.choosedPage == ChoosedPage.file) {
+      eventBusUpdateFolder.fire(UpdateFolderEvent);
     }
   }
 
@@ -77,7 +88,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     var mediaRootFolderId = _filesController.getMediaRootFolderId();
     if (event.values?.first != null && mediaRootFolderId != null) {
-      _filesController.createFolder(event.values!.first!, mediaRootFolderId);
+      await _filesController.createFolder(
+          event.values!.first!, mediaRootFolderId);
+    }
+    if (event.choosedPage == ChoosedPage.media) {
+      eventBusUpdateAlbum.fire(UpdateAlbumEvent);
     }
   }
 
@@ -94,3 +109,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     //eventBusUpdateFolder.fire(HomeBloc());
   }
 }
+
+class UpdateFolderEvent {}
+
+class UpdateAlbumEvent {}
