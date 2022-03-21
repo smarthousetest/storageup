@@ -223,7 +223,9 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
               ? _filesGridForType(state)
               : _filesGrid(state);
         } else {
-          return _filesList(context, state);
+          return state.criterion == SortingCriterion.byType
+              ? _filesListSortType(context, state)
+              : _filesList(context, state);
         }
       },
     );
@@ -694,29 +696,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                           .getFilesType(record.name!.toLowerCase());
                     }
                   }
-                  List<Widget> _uploadProgress(double? progress) {
-                    List<Widget> indicators = [Container()];
-                    if (progress != null) {
-                      print('creating indicators with progress: $progress');
-                      indicators = [
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            value: progress / 100,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CupertinoActivityIndicator(
-                            animating: true,
-                          ),
-                        ),
-                      ];
-                    }
-                    return indicators;
-                  }
 
                   return DataRow.byIndex(
                     index: state.sortedFiles.indexOf(element),
@@ -893,14 +872,14 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                             return BlurDelete();
                                           },
                                         );
-                                        eventBusDeleteFile.on().listen((event) {
+                                        if (result == true) {
                                           context
                                               .read<OpenedFolderCubit>()
                                               .onRecordActionChoosed(
                                                 action,
                                                 element,
                                               );
-                                        });
+                                        }
                                       }
                                     },
                                   );
@@ -931,6 +910,356 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         );
       },
     );
+  }
+
+  List<Widget> _uploadProgress(double? progress) {
+    List<Widget> indicators = [Container()];
+    if (progress != null) {
+      print('creating indicators with progress: $progress');
+      indicators = [
+        SizedBox(
+          height: 24,
+          width: 24,
+          child: CircularProgressIndicator(
+            value: progress / 100,
+          ),
+        ),
+        SizedBox(
+          height: 24,
+          width: 24,
+          child: CupertinoActivityIndicator(
+            animating: true,
+          ),
+        ),
+      ];
+    }
+    return indicators;
+  }
+
+  Widget _filesListSortType(BuildContext context, OpenedFolderState state) {
+    TextStyle style = TextStyle(
+      color: Theme.of(context).textTheme.subtitle1?.color,
+      fontSize: 14,
+      fontWeight: FontWeight.w700,
+      fontFamily: kNormalTextFontFamily,
+    );
+
+    return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+      bloc: _bloc,
+      builder: (context, state) {
+        return Expanded(
+          child: LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              controller: ScrollController(),
+              child: DataTable(
+                  decoration: BoxDecoration(
+                    //color: Colors.grey.shade100,
+
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  showBottomBorder: false,
+                  columnSpacing: 0,
+                  dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+                      _getDataRowColor),
+                  columns: [
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.5,
+                        child: Text(
+                          translate.name,
+                          style: style,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.15,
+                        child: Text(
+                          translate.format,
+                          style: style,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.15,
+                        child: Text(
+                          translate.date,
+                          style: style,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.1,
+                        child: Text(
+                          translate.size,
+                          style: style,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Container(
+                        width: constraints.maxWidth * 0.1,
+                        child: SizedBox(
+                          width: constraints.maxWidth * 0.1,
+                        ),
+                      ),
+                    ),
+                  ],
+                  rows: _buildGroupedFiles(state, constraints, context)),
+            );
+          }),
+        );
+      },
+    );
+  }
+
+  List<DataRow> _buildGroupedFiles(OpenedFolderState state,
+      BoxConstraints constraints, BuildContext context) {
+    var groupedObj = state.groupedFiles;
+    List<DataRow> keyFiles = [];
+    TextStyle cellTextStyle = TextStyle(
+      color: Theme.of(context).textTheme.subtitle1?.color,
+      fontSize: 14,
+      fontFamily: kNormalTextFontFamily,
+    );
+
+    groupedObj.entries.forEach((element) {
+      final lenght = element.value.length + 1;
+      for (var i = 0; i < lenght; i++) {
+        if (i == 0) {
+          var type = element.key;
+          switch (type) {
+            case 'folder':
+              type = translate.folder_dir;
+              break;
+            case 'jpg':
+              type = translate.photos;
+              break;
+            case 'txt':
+              type = translate.documents;
+              break;
+          }
+          keyFiles.add(DataRow(cells: [
+            DataCell(Text(
+              type,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontSize: 18,
+                fontFamily: kNormalTextFontFamily,
+              ),
+            )),
+            DataCell(Container()),
+            DataCell(Container()),
+            DataCell(Container()),
+            DataCell(Container()),
+          ]));
+        } else {
+          var obj = element.value[i - 1];
+          bool isFile = false;
+          String? type = '';
+          if (obj is Record) {
+            var record = obj;
+            isFile = true;
+            if (record.thumbnail != null && record.thumbnail!.isNotEmpty) {
+              type = FileAttribute().getFilesType(record.name!.toLowerCase());
+            }
+          }
+          keyFiles.add(DataRow(cells: [
+            DataCell(
+              GestureDetector(
+                onTap: () {
+                  // if (StateInfoContainer.of(context)?.open == true) {
+
+                  // }
+                  if (obj is Folder) {
+                    print(obj);
+                    print("lol");
+
+                    widget.push(
+                      child: OpenedFolderView(
+                        currentFolder: obj,
+                        previousFolders: [
+                          ...state.previousFolders,
+                          state.currentFolder!
+                        ],
+                        pop: widget.pop,
+                        push: widget.push,
+                      ),
+                      folderId: obj.id,
+                    );
+                    context
+                        .read<OpenedFolderCubit>()
+                        .changeRepresentation(FilesRepresentation.table);
+                  } else {
+                    context.read<OpenedFolderCubit>().fileTapped(obj as Record);
+                    print('file tapped');
+                  }
+                },
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Stack(
+                        children: [
+                          Image.asset(
+                            isFile
+                                ? type.isNotEmpty
+                                    ? 'assets/file_icons/${type}_s.png'
+                                    : 'assets/file_icons/unexpected_s.png'
+                                : 'assets/file_icons/folder.png',
+                            fit: BoxFit.contain,
+                            height: 24,
+                            width: 24,
+                          ),
+                          ...isFile && (obj as Record).loadPercent != null
+                              ? _uploadProgress(obj.loadPercent)
+                              : [],
+                        ],
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Expanded(
+                        child: Container(
+                          width: constraints.maxWidth * 0.3,
+                          child: Text(
+                            obj.name ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: cellTextStyle,
+                          ),
+                        ),
+                      ),
+                      // Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child:
+                            BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                          bloc: _bloc,
+                          builder: (context, state) {
+                            return GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<OpenedFolderCubit>()
+                                    .setFavorite(obj);
+                              },
+                              child: Image.asset(
+                                obj.favorite
+                                    ? 'assets/file_page/favorite.png'
+                                    : 'assets/file_page/not_favorite.png',
+                                height: 18,
+                                width: 18,
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            DataCell(
+              Container(
+                padding: EdgeInsets.only(left: 5),
+                child: Text(
+                  type.isEmpty ? translate.foldr : type.toUpperCase(),
+                  overflow: TextOverflow.ellipsis,
+                  style: cellTextStyle,
+                ),
+              ),
+            ),
+            DataCell(
+              Text(
+                DateFormat('dd.MM.yyyy').format(obj.createdAt!),
+                style: cellTextStyle,
+              ),
+            ),
+            DataCell(
+              Text(
+                fileSize(obj.size, translate, 1),
+                maxLines: 1,
+                style: cellTextStyle,
+              ),
+            ),
+            DataCell(
+              Theme(
+                data: Theme.of(context).copyWith(
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                ),
+                child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+                  bloc: _bloc,
+                  builder: (context, snapshot) {
+                    if (state.objects.length >
+                        _popupControllersGrouped.length) {
+                      _popupControllersGrouped = [];
+                      _initiatingControllersForGroupedFiles(state);
+                    }
+                    return CustomPopupMenu(
+                      pressType: PressType.singleClick,
+                      barrierColor: Colors.transparent,
+                      showArrow: false,
+                      horizontalMargin: 110,
+                      verticalMargin: 0,
+                      controller:
+                          _popupControllersGrouped[state.objects.indexOf(obj)],
+                      menuBuilder: () {
+                        return FilesPopupMenuActions(
+                          theme: Theme.of(context),
+                          translate: translate,
+                          onTap: (action) async {
+                            _popupControllersGrouped[state.objects.indexOf(obj)]
+                                .hideMenu();
+                            if (action == FileAction.properties) {
+                              StateInfoContainer.of(context)
+                                  ?.setInfoObject(obj);
+                            } else {
+                              var result = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return BlurDelete();
+                                },
+                              );
+                              if (result == true) {
+                                context
+                                    .read<OpenedFolderCubit>()
+                                    .onRecordActionChoosed(
+                                      action,
+                                      obj,
+                                    );
+                              }
+                            }
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/file_page/three_dots.svg',
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            )
+          ]));
+          //keyFiles.add(value);
+        }
+      }
+    });
+
+    return keyFiles;
   }
 }
 

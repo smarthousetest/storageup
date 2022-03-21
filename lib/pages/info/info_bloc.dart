@@ -28,7 +28,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     Emitter<InfoState> emit,
   ) async {
     await _filesController.updateFilesList();
-    var folder = await _filesController.getFilesRootFolder;
+    var folder = _filesController.getFilesRootFolder;
     var rootFolder = await _filesController.getRootFolder;
     var allMediaFolders = await _filesController.getMediaFolders(true);
 

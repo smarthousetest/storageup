@@ -34,10 +34,10 @@ class _MyProgressIndicator extends State<MyProgressBar> {
       //   child:Text("100 %"), //right content
       // ),
       percent: widget.percent / 100,
-      //barRadius: Radius.circular(24),
+      barRadius: Radius.circular(24),
       // 30/100 = 0.3
       // center: Text(widget.percent.toString() + "%"),
-      linearStrokeCap: LinearStrokeCap.roundAll,
+      //linearStrokeCap: LinearStrokeCap.roundAll,
       //make round cap at start and end both
       progressColor: widget.color,
       //percentage progress bar color

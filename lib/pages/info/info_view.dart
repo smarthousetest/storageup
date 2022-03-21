@@ -413,15 +413,15 @@ class _InfoPageState extends State<InfoPage> {
         height: 10,
         child: Stack(
           children: [
-            MyProgressBar(
-              percent: 75,
-              color: Color(0xffFFD75E),
-              bgColor: Theme.of(context).cardColor,
-            ),
+            // MyProgressBar(
+            //   percent: 75,
+            //   color: Color(0xffFFD75E),
+            //   bgColor: Theme.of(context).cardColor,
+            // ),
             MyProgressBar(
               percent: 50,
               color: Color(0xffFF847E),
-              bgColor: Color.fromARGB(0, 0, 0, 0),
+              bgColor: Theme.of(context).cardColor,
 
               ///
             ),
