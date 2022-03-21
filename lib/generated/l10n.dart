@@ -210,11 +210,41 @@ class S {
     );
   }
 
+  /// `You need to log in again`
+  String get notification_re_auth {
+    return Intl.message(
+      'You need to log in again',
+      name: 'notification_re_auth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Well`
+  String get good {
+    return Intl.message(
+      'Well',
+      name: 'good',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password must be more than 8 characters`
   String get wrong_password {
     return Intl.message(
       'Password must be more than 8 characters',
       name: 'wrong_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid password`
+  String get wrong_old_password {
+    return Intl.message(
+      'Invalid password',
+      name: 'wrong_old_password',
       desc: '',
       args: [],
     );
@@ -1005,6 +1035,16 @@ class S {
     return Intl.message(
       'The new password must be at least 8 characters long',
       name: 'new_password_8',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords don't match`
+  String get passwords_dont_match {
+    return Intl.message(
+      'Passwords don\'t match',
+      name: 'passwords_dont_match',
       desc: '',
       args: [],
     );

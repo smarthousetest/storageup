@@ -152,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
+        "good": MessageLookupByLibrary.simpleMessage("Хорошо"),
         "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
@@ -189,6 +190,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
+        "notification_re_auth": MessageLookupByLibrary.simpleMessage(
+            "Вам нужно снова зайти в аккаунт"),
         "offer": MessageLookupByLibrary.simpleMessage(
             "Выгодное предложение - переход на годовую подписку"),
         "old_password":
@@ -207,6 +210,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
+        "passwords_dont_match":
+            MessageLookupByLibrary.simpleMessage("Пароли не совпадают"),
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
         "pb": m9,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
@@ -306,6 +311,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Неверный e-mail или пароль!"),
         "wrong_email":
             MessageLookupByLibrary.simpleMessage("Введите корректный e-mail"),
+        "wrong_old_password":
+            MessageLookupByLibrary.simpleMessage("Неверный пароль"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Пароль должен содержать более 8 символов"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(

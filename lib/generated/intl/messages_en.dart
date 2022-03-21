@@ -151,6 +151,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Go to"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Go to authorization"),
+        "good": MessageLookupByLibrary.simpleMessage("Well"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
@@ -188,6 +189,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "You have no storage locations yet"),
         "nothing_on_email":
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
+        "notification_re_auth":
+            MessageLookupByLibrary.simpleMessage("You need to log in again"),
         "offer": MessageLookupByLibrary.simpleMessage(
             "Advantageous offer - switch to an annual subscription"),
         "old_password":
@@ -207,6 +210,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Password recovery"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "To recover your password, enter your email address in the field"),
+        "passwords_dont_match":
+            MessageLookupByLibrary.simpleMessage("Passwords don\'t match"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
         "pb": m9,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
@@ -302,6 +307,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid email or password!"),
         "wrong_email":
             MessageLookupByLibrary.simpleMessage("Please enter a valid email"),
+        "wrong_old_password":
+            MessageLookupByLibrary.simpleMessage("Invalid password"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Password must be more than 8 characters"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(

@@ -1,12 +1,16 @@
 import 'dart:ui';
-
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+
+import '../../utilites/services/auth_service.dart';
 
 class BlurChangePassword extends StatefulWidget {
   //ValueSetter? callback;
@@ -29,6 +33,35 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
 
   final _pass = TextEditingController();
   final _confirmPass = TextEditingController();
+  AuthService _authController = getIt<AuthService>();
+  bool canSaveNew = false;
+  bool canSaveConfirm = false;
+  bool wrongOldPass = true;
+  bool canSaveHint = true;
+  bool oldPassword = true;
+  bool hintBorder1 = true;
+  bool hintBorder2 = true;
+  bool hideText1 = true;
+  bool hideText2 = true;
+  bool hideText3 = true;
+
+  void _hider1() {
+    setState(() {
+      hideText1 = !hideText1;
+    });
+  }
+
+  void _hider2() {
+    setState(() {
+      hideText2 = !hideText2;
+    });
+  }
+
+  void _hider3() {
+    setState(() {
+      hideText3 = !hideText3;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +85,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
             Center(
               child: Container(
                 width: 520,
-                height: 374,
+                height: 420,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
@@ -63,12 +96,14 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                       padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
                       child: Container(
                         width: 400,
-                        height: 374,
+                        height: 420,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 0),
+                              padding: wrongOldPass
+                                  ? const EdgeInsets.only(top: 10)
+                                  : const EdgeInsets.only(top: 30),
                               child: Text(
                                 translate.change_Password,
                                 style: TextStyle(
@@ -79,10 +114,37 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 10),
+                              padding: wrongOldPass
+                                  ? const EdgeInsets.only(top: 0)
+                                  : const EdgeInsets.only(top: 20),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  wrongOldPass
+                                      ? ""
+                                      : translate.wrong_old_password,
+                                  style: TextStyle(
+                                    fontSize: wrongOldPass ? 0 : 14,
+                                    fontFamily: kNormalTextFontFamily,
+                                    color: Theme.of(context).errorColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
                               child: TextFormField(
+                                obscureText: hideText1,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.deny(
+                                      RegExp(r'[ ]')),
+                                ],
                                 controller: _oldPass,
-                                onChanged: (content) {},
+                                onChanged: (content) {
+                                  setState(() {
+                                    wrongOldPass = true;
+                                  });
+                                },
                                 style: TextStyle(
                                     color: Theme.of(context).disabledColor,
                                     fontSize: 14,
@@ -97,19 +159,37 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                         .headline1
                                         ?.color,
                                     fontFamily: kNormalTextFontFamily,
-                                    fontSize: 15,
+                                    fontSize: 14,
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
-                                        color: Theme.of(context).accentColor,
+                                        color: wrongOldPass
+                                            ? Theme.of(context).accentColor
+                                            : Theme.of(context).errorColor,
                                         width: 1.5),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
-                                        color: Color(0xffE4E7ED), width: 1.5),
+                                        color: wrongOldPass
+                                            ? Color(0xffE4E7ED)
+                                            : Theme.of(context).errorColor,
+                                        width: 1.5),
                                   ),
+                                  suffixIcon: InkWell(
+                                      onTap: _hider1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 25, vertical: 10.5),
+                                        child: Image(
+                                          width: 26.0,
+                                          height: 26.0,
+                                          image: AssetImage(hideText1
+                                              ? 'assets/hide_password.png'
+                                              : 'assets/show_password.png'),
+                                        ),
+                                      )),
                                 ),
                               ),
                             ),
@@ -124,7 +204,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.only(top: 5),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
@@ -132,9 +212,29 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: kNormalTextFontFamily,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
+                                    color: (hintBorder1 && hintBorder2)
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .onBackground
+                                        : Theme.of(context).errorColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: canSaveHint
+                                  ? const EdgeInsets.only(top: 0)
+                                  : const EdgeInsets.only(top: 10),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  canSaveHint
+                                      ? ""
+                                      : translate.passwords_dont_match,
+                                  style: TextStyle(
+                                    fontSize: canSaveHint ? 0 : 14,
+                                    fontFamily: kNormalTextFontFamily,
+                                    color: Theme.of(context).errorColor,
                                   ),
                                 ),
                               ),
@@ -146,6 +246,11 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                 child: Column(
                                   children: [
                                     TextFormField(
+                                      obscureText: hideText2,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.deny(
+                                            RegExp(r'[ ]')),
+                                      ],
                                       validator: (val) {
                                         if (val != null) {
                                           if (val.isEmpty) return 'Empty';
@@ -153,7 +258,32 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                         return null;
                                       },
                                       controller: _pass,
-                                      onChanged: (content) {},
+                                      onChanged: (content) {
+                                        print(_pass.text);
+                                        if (content.isEmpty ||
+                                            content.length < 8) {
+                                          setState(() {
+                                            canSaveHint = false;
+                                            hintBorder1 = false;
+                                            canSaveNew = false;
+                                          });
+                                        }
+                                        if (content.isNotEmpty &&
+                                            content.length >= 8) {
+                                          setState(() {
+                                            hintBorder1 = true;
+                                            canSaveNew = true;
+                                            canSaveHint = false;
+                                            canSaveConfirm = false;
+
+                                            if (_confirmPass.text ==
+                                                _pass.text) {
+                                              canSaveConfirm = true;
+                                              canSaveHint = true;
+                                            }
+                                          });
+                                        }
+                                      },
                                       style: TextStyle(
                                           color:
                                               Theme.of(context).disabledColor,
@@ -175,22 +305,48 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                           borderRadius:
                                               BorderRadius.circular(10.0),
                                           borderSide: BorderSide(
-                                              color:
-                                                  Theme.of(context).accentColor,
+                                              color: hintBorder1
+                                                  ? Theme.of(context)
+                                                      .accentColor
+                                                  : Theme.of(context)
+                                                      .errorColor,
                                               width: 1.5),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(10.0),
                                           borderSide: BorderSide(
-                                              color: Color(0xffE4E7ED),
+                                              color: hintBorder1
+                                                  ? Color(0xffE4E7ED)
+                                                  : Theme.of(context)
+                                                      .errorColor,
                                               width: 1.5),
                                         ),
+                                        suffixIcon: InkWell(
+                                            onTap: _hider2,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 25,
+                                                      vertical: 10.5),
+                                              child: Image(
+                                                width: 26.0,
+                                                height: 26.0,
+                                                image: AssetImage(hideText2
+                                                    ? 'assets/hide_password.png'
+                                                    : 'assets/show_password.png'),
+                                              ),
+                                            )),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10),
                                       child: TextFormField(
+                                        obscureText: hideText3,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.deny(
+                                              RegExp(r'[ ]')),
+                                        ],
                                         validator: (val) {
                                           if (val != null) {
                                             if (val.isEmpty) return 'Empty';
@@ -200,7 +356,29 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                           return null;
                                         },
                                         controller: _confirmPass,
-                                        onChanged: (content) {},
+                                        onChanged: (content) {
+                                          print(_confirmPass.text);
+                                          if (content.isEmpty ||
+                                              content.length < 8) {
+                                            setState(() {
+                                              hintBorder2 = false;
+                                              canSaveConfirm = false;
+                                              canSaveHint = false;
+                                            });
+                                          } else if (content.isNotEmpty &&
+                                              content.length >= 8) {
+                                            setState(() {
+                                              hintBorder2 = true;
+                                              canSaveHint = false;
+                                              canSaveConfirm = false;
+                                              if (_confirmPass.text ==
+                                                  _pass.text) {
+                                                canSaveConfirm = true;
+                                                canSaveHint = true;
+                                              }
+                                            });
+                                          }
+                                        },
                                         style: TextStyle(
                                             color:
                                                 Theme.of(context).disabledColor,
@@ -222,17 +400,38 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
                                             borderSide: BorderSide(
-                                                color: Theme.of(context)
-                                                    .accentColor,
+                                                color: hintBorder2
+                                                    ? Theme.of(context)
+                                                        .accentColor
+                                                    : Theme.of(context)
+                                                        .errorColor,
                                                 width: 1.5),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
                                             borderSide: BorderSide(
-                                                color: Color(0xffE4E7ED),
+                                                color: hintBorder2
+                                                    ? Color(0xffE4E7ED)
+                                                    : Theme.of(context)
+                                                        .errorColor,
                                                 width: 1.5),
                                           ),
+                                          suffixIcon: InkWell(
+                                              onTap: _hider3,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 25,
+                                                        vertical: 10.5),
+                                                child: Image(
+                                                  width: 26.0,
+                                                  height: 26.0,
+                                                  image: AssetImage(hideText3
+                                                      ? 'assets/hide_password.png'
+                                                      : 'assets/show_password.png'),
+                                                ),
+                                              )),
                                         ),
                                       ),
                                     ),
@@ -251,6 +450,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                       child: ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          null;
+                                          print(widget.key); //?????
                                         },
                                         child: Text(
                                           translate.cancel,
@@ -280,13 +481,38 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 20),
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          _form.currentState!.validate();
-                                          Navigator.pop(
+                                        onPressed: () async {
+                                          if (canSaveConfirm == true) {
+                                            _form.currentState!.validate();
+                                            final result = await _authController
+                                                .changePassword(
+                                              oldPassword: _oldPass.value.text,
+                                              newPassword:
+                                                  _confirmPass.value.text,
+                                            );
+                                            if (result ==
+                                                AuthenticationStatus
+                                                    .wrongPassword) {
+                                              setState(() {
+                                                wrongOldPass = false;
+                                              });
+                                            } else if (result ==
+                                                AuthenticationStatus
+                                                    .authenticated) {
+                                              setState(() {
+                                                wrongOldPass = true;
+                                                _showReAuthDialog();
+                                              });
+                                            } else {
+                                              _showErrorDialog();
+                                            }
+                                            /* Navigator.pop(                         
                                               context,
                                               ChangePasswordPopupResult(
                                                   _oldPass.value.text,
                                                   _confirmPass.value.text));
+                                                  */
+                                          }
                                         },
                                         child: Text(
                                           translate.save,
@@ -299,14 +525,19 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                         ),
                                         style: ElevatedButton.styleFrom(
                                           primary: // _form.currentState.validate()
-                                              Theme.of(context).splashColor,
+                                              canSaveNew && canSaveConfirm
+                                                  ? Theme.of(context)
+                                                      .splashColor
+                                                  : Theme.of(context)
+                                                      .canvasColor,
                                           // Theme.of(context).primaryColor,
                                           fixedSize: Size(240, 42),
                                           elevation: 0,
                                           side: BorderSide(
                                             style: BorderStyle.solid,
-                                            color:
-                                                Theme.of(context).splashColor,
+                                            color: canSaveNew && canSaveConfirm
+                                                ? Theme.of(context).splashColor
+                                                : Theme.of(context).canvasColor,
                                           ),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -344,5 +575,116 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
         ),
       ),
     );
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              translate.something_goes_wrong,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    translate.good,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: // _form.currentState.validate()
+                        Theme.of(context).splashColor,
+
+                    // Theme.of(context).primaryColor,
+                    fixedSize: Size(100, 42),
+                    elevation: 0,
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void _showReAuthDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              translate.notification_re_auth,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, AuthView.route, (route) => false);
+                  },
+                  child: Text(
+                    translate.good,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: // _form.currentState.validate()
+                        Theme.of(context).splashColor,
+
+                    // Theme.of(context).primaryColor,
+                    fixedSize: Size(100, 42),
+                    elevation: 0,
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
