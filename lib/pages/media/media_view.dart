@@ -34,7 +34,7 @@ class MediaPage extends StatefulWidget {
 
 List<Widget> dirsList = [];
 
-class _MediaPageState extends State<MediaPage> {
+class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   bool ifGrid = true;
   S translate = getIt<S>();
   var _folderButtonSize = 140;
@@ -477,7 +477,9 @@ class _MediaPageState extends State<MediaPage> {
                                   return Expanded(
                                     child: state.representation ==
                                             FilesRepresentation.grid
-                                        ? _filesGrid()
+                                        ? state.progress == true
+                                            ? _filesGrid()
+                                            : _progressIndicator(context)
                                         : _filesList(context, state),
                                   );
                                 },
@@ -495,6 +497,17 @@ class _MediaPageState extends State<MediaPage> {
                 ? Container()
                 : showViewFileInfo(),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _progressIndicator(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 1.6,
+      child: Center(
+        child: CupertinoActivityIndicator(
+          animating: true,
         ),
       ),
     );
@@ -604,7 +617,7 @@ class _MediaPageState extends State<MediaPage> {
       },
       builder: (blocContext, state) {
         return LayoutBuilder(builder: (context, constrains) {
-          print('min width ${constrains.smallest.width}');
+          // print('min width ${constrains.smallest.width}');
 
           return Container(
             // padding: EdgeInsets.symmetric(horizontal: 40),

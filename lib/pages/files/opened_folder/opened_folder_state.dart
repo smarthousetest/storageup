@@ -15,6 +15,7 @@ class OpenedFolderState extends Equatable {
   final SortingCriterion criterion;
   final SortingDirection direction;
   final String search;
+  final bool progress;
 
   OpenedFolderState(
       {this.currentFolder,
@@ -26,6 +27,7 @@ class OpenedFolderState extends Equatable {
       required this.previousFolders,
       this.search = '',
       this.groupedFiles = const {},
+      this.progress = false,
       this.representation = FilesRepresentation.grid});
 
   OpenedFolderState copyWith({
@@ -39,6 +41,7 @@ class OpenedFolderState extends Equatable {
     SortingCriterion? criterion,
     List<Folder>? previousFolders,
     FilesRepresentation? representation,
+    bool? progress,
   }) {
     return OpenedFolderState(
       currentFolder: currentFolder ?? this.currentFolder,
@@ -51,6 +54,7 @@ class OpenedFolderState extends Equatable {
       sortedFiles: sortedFiles ?? this.sortedFiles,
       previousFolders: previousFolders ?? this.previousFolders,
       representation: representation ?? this.representation,
+      progress: progress ?? this.progress,
     );
   }
 
@@ -65,7 +69,8 @@ class OpenedFolderState extends Equatable {
         criterion,
         direction,
         status,
-        search
+        search,
+        progress,
       ];
 }
 

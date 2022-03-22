@@ -43,12 +43,16 @@ class OpenedFolderView extends StatefulWidget {
   _OpenedFolderViewState createState() => _OpenedFolderViewState();
 }
 
-class _OpenedFolderViewState extends State<OpenedFolderView> {
+class _OpenedFolderViewState extends State<OpenedFolderView>
+    with TickerProviderStateMixin {
   S translate = getIt<S>();
   SortingDirection _direction = SortingDirection.down;
   var _bloc = OpenedFolderCubit();
   List<CustomPopupMenuController> _popupControllers = [];
   List<CustomPopupMenuController> _popupControllersGrouped = [];
+  Timer? timerForOpenFile;
+  int _startTimer = 5;
+  bool _isOpen = false;
 
   void _initiatingControllers(OpenedFolderState state) {
     if (_popupControllers.isEmpty) {
@@ -64,6 +68,31 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         _popupControllersGrouped.add(CustomPopupMenuController());
       });
     }
+  }
+
+  void startTimer() {
+    _isOpen = true;
+    const oneSec = const Duration(seconds: 1);
+    if (timerForOpenFile != null) {
+      timerForOpenFile?.cancel();
+      _startTimer = 5;
+    }
+    timerForOpenFile = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_startTimer == 0) {
+          setState(() {
+            timer.cancel();
+            _startTimer = 5;
+            _isOpen = false;
+          });
+        } else {
+          setState(() {
+            _startTimer--;
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -89,17 +118,34 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           ),
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _pathSection(),
-              Divider(
-                color: Theme.of(context).dividerColor,
-              ),
-              _filesSection(),
-            ],
+          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+            builder: (context, state) {
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _pathSection(),
+                  Divider(
+                    color: Theme.of(context).dividerColor,
+                  ),
+                  state.progress == true
+                      ? _filesSection()
+                      : _progressIndicator(context),
+                ],
+              );
+            },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _progressIndicator(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 1.9,
+      child: Center(
+        child: CupertinoActivityIndicator(
+          animating: true,
         ),
       ),
     );
@@ -183,7 +229,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
           var object = StateInfoContainer.of(context)?.object;
           if (object is Folder) {
             print(object);
-            print("lol");
 
             widget.push(
               child: OpenedFolderView(
@@ -201,8 +246,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                 .read<OpenedFolderCubit>()
                 .changeRepresentation(FilesRepresentation.table);
           } else {
-            context.read<OpenedFolderCubit>().fileTapped(object as Record);
             print('file tapped');
+            if (_isOpen == false) {
+              startTimer();
+              context.read<OpenedFolderCubit>().fileTapped(object as Record);
+            }
           }
           //print(event.runtimeType);
         });
@@ -221,7 +269,9 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
         if (state.representation == FilesRepresentation.grid) {
           return state.criterion == SortingCriterion.byType
               ? _filesGridForType(state)
-              : _filesGrid(state);
+              : // state.objects.isNotEmpty
+              _filesGrid(state);
+          //: Center(child: _progressIndicator(context));
         } else {
           return state.criterion == SortingCriterion.byType
               ? _filesListSortType(context, state)
@@ -291,7 +341,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
   Widget _filesGrid(OpenedFolderState state) {
     return Expanded(
       child: LayoutBuilder(builder: (context, constrains) {
-        // print('min width ${constrains.smallest.width}');
+        //print('min width ${constrains.smallest.width}');
 
         return Container(
             child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
@@ -344,9 +394,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                       } else {
                         onTap = () {
                           print('file tapped');
-                          context
-                              .read<OpenedFolderCubit>()
-                              .fileTapped(obj as Record);
+                          if (_isOpen == false) {
+                            startTimer();
+                            context
+                                .read<OpenedFolderCubit>()
+                                .fileTapped(obj as Record);
+                          }
                         };
                       }
 
@@ -470,7 +523,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                   };
                 } else {
                   onTap = () {
-                    context.read<OpenedFolderCubit>().fileTapped(obj as Record);
+                    if (_isOpen == false) {
+                      startTimer();
+                      context
+                          .read<OpenedFolderCubit>()
+                          .fileTapped(obj as Record);
+                    }
                     print('file tapped');
                   };
                 }
@@ -734,9 +792,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                                   .changeRepresentation(
                                       FilesRepresentation.table);
                             } else {
-                              context
-                                  .read<OpenedFolderCubit>()
-                                  .fileTapped(element as Record);
+                              if (_isOpen == false) {
+                                startTimer();
+                                context
+                                    .read<OpenedFolderCubit>()
+                                    .fileTapped(element as Record);
+                              }
                               print('file tapped');
                             }
                           },
@@ -1094,7 +1155,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView> {
                         .read<OpenedFolderCubit>()
                         .changeRepresentation(FilesRepresentation.table);
                   } else {
-                    context.read<OpenedFolderCubit>().fileTapped(obj as Record);
+                    if (_isOpen == false) {
+                      startTimer();
+                      context
+                          .read<OpenedFolderCubit>()
+                          .fileTapped(obj as Record);
+                    }
                     print('file tapped');
                   }
                 },

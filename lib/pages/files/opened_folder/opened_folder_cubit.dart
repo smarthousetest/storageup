@@ -50,6 +50,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
   StreamSubscription? updatePageSubscription;
+
   late Observer _updateObserver = Observer((e) {
     try {
       if (e is List<UploadFileInfo>) {
@@ -84,7 +85,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     _loadController.getState.unregisterObserver(_updateObserver);
-    // eventBusUpdateFolder.streamController.close();
+
     updatePageSubscription?.cancel();
     return super.close();
   }
@@ -103,6 +104,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       _update();
     });
+    late bool progress = true;
 
     emit(
       state.copyWith(
@@ -110,6 +112,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         objects: objects,
         sortedFiles: objects,
         previousFolders: previousFolders,
+        progress: progress,
       ),
     );
 
@@ -572,11 +575,12 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         path.replaceAll(('('), '"("');
         path.replaceAll((')'), '")"');
       }
+
       var fullPathToFile = "$appPath/$path";
       var isExisting = await File(fullPathToFile).exists();
-      var isExistingSync = File(fullPathToFile).existsSync();
+      //var isExistingSync = File(fullPathToFile).watch();
       print(fullPathToFile);
-      if (isExisting && isExistingSync) {
+      if (isExisting) {
         var res = await OpenFile.open(fullPathToFile);
         print(res.message);
       } else {

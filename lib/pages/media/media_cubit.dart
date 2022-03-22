@@ -68,12 +68,15 @@ class MediaCubit extends Cubit<MediaState> {
     var currentFolder =
         allMediaFolders?.firstWhere((element) => element.id == '-1');
     User? user = await _userController.getUser;
+    bool progress = true;
     emit(state.copyWith(
-        albums: allMediaFolders,
-        currentFolder: currentFolder,
-        currentFolderRecords: currentFolder?.records,
-        allRecords: currentFolder?.records,
-        user: user));
+      albums: allMediaFolders,
+      currentFolder: currentFolder,
+      currentFolderRecords: currentFolder?.records,
+      allRecords: currentFolder?.records,
+      user: user,
+      progress: progress,
+    ));
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
     for (int i = 1; i < allMediaFolders!.length; i++) {

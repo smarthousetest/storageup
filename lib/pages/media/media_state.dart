@@ -12,6 +12,7 @@ class MediaState extends Equatable {
   final Folder currentFolder;
   final FilesRepresentation representation;
   final User? user;
+  final bool progress;
 
   MediaState({
     this.currentFolderRecords = const [],
@@ -19,6 +20,7 @@ class MediaState extends Equatable {
     this.sortedRecords = const [],
     this.allRecords = const [],
     Folder? currentFolder,
+    this.progress = false,
     this.representation = FilesRepresentation.grid,
     this.user,
   }) : this.currentFolder = currentFolder ?? Folder.empty();
@@ -31,6 +33,7 @@ class MediaState extends Equatable {
     List<Record>? currentFolderRecords,
     FilesRepresentation? representation,
     User? user,
+    bool? progress,
   }) {
     return MediaState(
       albums: albums ?? this.albums,
@@ -40,6 +43,7 @@ class MediaState extends Equatable {
       allRecords: allRecords ?? this.allRecords,
       representation: representation ?? this.representation,
       user: user ?? this.user,
+      progress: progress ?? this.progress,
     );
   }
 
@@ -52,5 +56,6 @@ class MediaState extends Equatable {
         user,
         sortedRecords,
         allRecords,
+        progress,
       ];
 }
