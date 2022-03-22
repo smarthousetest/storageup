@@ -51,7 +51,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   List<CustomPopupMenuController> _popupControllers = [];
   List<CustomPopupMenuController> _popupControllersGrouped = [];
   Timer? timerForOpenFile;
-  int _startTimer = 5;
+  int _startTimer = 2;
   bool _isOpen = false;
 
   void _initiatingControllers(OpenedFolderState state) {
@@ -75,7 +75,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     const oneSec = const Duration(seconds: 1);
     if (timerForOpenFile != null) {
       timerForOpenFile?.cancel();
-      _startTimer = 5;
+      _startTimer = 2;
     }
     timerForOpenFile = new Timer.periodic(
       oneSec,
@@ -83,7 +83,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         if (_startTimer == 0) {
           setState(() {
             timer.cancel();
-            _startTimer = 5;
+            _startTimer = 2;
             _isOpen = false;
           });
         } else {
@@ -917,7 +917,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   return FilesPopupMenuActions(
                                     theme: Theme.of(context),
                                     translate: translate,
-                                    onTap: (action) {
+                                    onTap: (action) async {
                                       _popupControllers[state.sortedFiles
                                               .indexOf(element)]
                                           .hideMenu();
@@ -927,7 +927,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                             ?.setInfoObject(element);
                                       } else {
                                         //   controller.hideMenu();
-                                        var result = showDialog(
+                                        var result = await showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return BlurDelete();

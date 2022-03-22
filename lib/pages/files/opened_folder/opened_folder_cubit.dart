@@ -104,7 +104,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       _update();
     });
-    late bool progress = true;
+    bool progress = true;
 
     emit(
       state.copyWith(
