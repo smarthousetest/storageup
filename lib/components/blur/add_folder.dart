@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -14,6 +13,8 @@ class BlurAddFolder extends StatefulWidget {
 class _ButtonTemplateState extends State<BlurAddFolder> {
   S translate = getIt<S>();
   final myController = TextEditingController();
+  bool canSave = false;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -72,23 +73,43 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                 textAlignVertical: TextAlignVertical.bottom,
                                 textAlign: TextAlign.start,
                                 autofocus: true,
+                                onChanged: (myController) {
+                                  myController = myController.trim();
+
+                                  if (myController.length != 0)
+                                    setState(() {
+                                      canSave = true;
+                                    });
+                                  if (myController.length < 1)
+                                    setState(() {
+                                      canSave = false;
+                                    });
+                                },
                                 decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(left: 15, bottom: 21),
-                                  hoverColor: Theme.of(context).cardColor,
-                                  focusColor: Theme.of(context).cardColor,
-                                  fillColor: Theme.of(context).cardColor,
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                        color: Color(0xffE4E7ED), width: 0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(
-                                        color: Color(0xffE4E7ED), width: 0.0),
-                                  ),
-                                ),
+                                    contentPadding:
+                                        EdgeInsets.only(left: 15, bottom: 21),
+                                    hoverColor: Theme.of(context).cardColor,
+                                    focusColor: Theme.of(context).cardColor,
+                                    fillColor: Theme.of(context).cardColor,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                          color: Color(0xffE4E7ED), width: 0.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderSide: BorderSide(
+                                          color: Color(0xffE4E7ED), width: 0.0),
+                                    ),
+                                    hintText: translate.new_folder,
+                                    hintStyle: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline1
+                                          ?.color,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 14,
+                                    )),
                                 style: TextStyle(
                                   color: Theme.of(context).disabledColor,
                                   fontFamily: kNormalTextFontFamily,
@@ -136,8 +157,9 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                            context, myController.text);
+                                        if (canSave == true)
+                                          Navigator.pop(context,
+                                              myController.text.trim());
                                       },
                                       child: Text(
                                         translate.save,
@@ -148,13 +170,17 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Theme.of(context).splashColor,
+                                        primary: canSave
+                                            ? Theme.of(context).splashColor
+                                            : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
-                                          style: BorderStyle.solid,
-                                          color: Theme.of(context).splashColor,
-                                        ),
+                                            style: BorderStyle.solid,
+                                            color: canSave
+                                                ? Theme.of(context).splashColor
+                                                : Theme.of(context)
+                                                    .canvasColor),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),

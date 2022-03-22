@@ -1310,6 +1310,26 @@ class S {
     );
   }
 
+  /// `New album`
+  String get new_album {
+    return Intl.message(
+      'New album',
+      name: 'new_album',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New folder`
+  String get new_folder {
+    return Intl.message(
+      'New folder',
+      name: 'new_folder',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Upload to files`
   String get upload_to_files {
     return Intl.message(

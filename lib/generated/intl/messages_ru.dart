@@ -180,6 +180,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Получите больше пространства, поменяйте подписку!"),
         "move": MessageLookupByLibrary.simpleMessage("Переместить"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
+        "new_album": MessageLookupByLibrary.simpleMessage("Новый альбом"),
+        "new_folder": MessageLookupByLibrary.simpleMessage("Новая папка"),
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),

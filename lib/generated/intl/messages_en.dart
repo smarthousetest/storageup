@@ -179,6 +179,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Get more space change your subscription!"),
         "move": MessageLookupByLibrary.simpleMessage("Move"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "new_album": MessageLookupByLibrary.simpleMessage("New album"),
+        "new_folder": MessageLookupByLibrary.simpleMessage("New folder"),
         "new_password": MessageLookupByLibrary.simpleMessage("New password"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "The new password must be at least 8 characters long"),

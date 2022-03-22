@@ -125,6 +125,8 @@
     "create_folder": "Create folder",
     "create_a_folder": "Create a folder",
     "create_album": "Create album",
+    "new_album": "New album",
+    "new_folder": "New folder",
     "upload_to_files": "Upload to files",
     "upload_to_media": "Upload to media",
     "you_rent": "You are renting",

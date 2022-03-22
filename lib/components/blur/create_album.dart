@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurCreateAlbum extends StatefulWidget {
   @override
@@ -9,6 +12,9 @@ class BlurCreateAlbum extends StatefulWidget {
 
 class _ButtonTemplateState extends State<BlurCreateAlbum> {
   var _textController = TextEditingController();
+  S translate = getIt<S>();
+  bool canSave = false;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -32,10 +38,10 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Создание альбома',
+                        translate.create_album,
                         style: TextStyle(
                           fontSize: 20,
-                          fontFamily: 'Lato',
+                          fontFamily: kNormalTextFontFamily,
                           color: Color(0xff5F5F5F),
                         ),
                       ),
@@ -45,8 +51,8 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                           width: 400,
                           height: 36,
                           decoration: BoxDecoration(
-                            color: Color(0xffF7F9FB),
-                            borderRadius: BorderRadius.circular(5),
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           alignment: Alignment.center,
                           child: TextField(
@@ -54,20 +60,46 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                             textAlign: TextAlign.start,
                             autofocus: true,
                             controller: _textController,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)),
+                            onChanged: (_textController) {
+                              _textController = _textController.trim();
+
+                              if (_textController.length != 0)
+                                setState(() {
+                                  canSave = true;
+                                });
+                              if (_textController.length < 1)
+                                setState(() {
+                                  canSave = false;
+                                });
+                            },
+                            decoration: InputDecoration(
+                                contentPadding:
+                                    EdgeInsets.only(left: 15, bottom: 21),
+                                hoverColor: Theme.of(context).cardColor,
+                                focusColor: Theme.of(context).cardColor,
+                                fillColor: Theme.of(context).cardColor,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                      color: Color(0xffE4E7ED), width: 0.0),
                                 ),
-                                hintText: 'Новый альбом',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                      color: Color(0xffE4E7ED), width: 0.0),
+                                ),
+                                hintText: translate.new_album,
                                 hintStyle: TextStyle(
-                                  color: Color(0xff7D7D7D),
-                                  fontFamily: 'Lato',
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1
+                                      ?.color,
+                                  fontFamily: kNormalTextFontFamily,
                                   fontSize: 14,
                                 )),
                             style: TextStyle(
-                              color: Color(0xff7D7D7D),
-                              fontFamily: 'Lato',
+                              color: Theme.of(context).disabledColor,
+                              fontFamily: kNormalTextFontFamily,
                               fontSize: 14,
                             ),
                           ),
@@ -86,20 +118,20 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    'Отмена',
+                                    translate.cancel,
                                     style: TextStyle(
-                                      color: Color(0xff70BBF6),
+                                      color: Theme.of(context).splashColor,
                                       fontSize: 16,
-                                      fontFamily: 'Lato',
+                                      fontFamily: kNormalTextFontFamily,
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.white,
+                                    primary: Theme.of(context).cardColor,
                                     fixedSize: Size(140, 42),
                                     elevation: 0,
                                     side: BorderSide(
                                       style: BorderStyle.solid,
-                                      color: Color(0xff70BBF6),
+                                      color: Theme.of(context).splashColor,
                                     ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -111,26 +143,31 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                                 padding: const EdgeInsets.only(left: 20),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pop(
-                                      context,
-                                      _textController.value.text,
-                                    );
+                                    if (canSave == true)
+                                      Navigator.pop(
+                                        context,
+                                        _textController.value.text.trim(),
+                                      );
                                   },
                                   child: Text(
-                                    'Сохранить',
+                                    translate.save,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
-                                      fontFamily: 'Lato',
+                                      fontFamily: kNormalTextFontFamily,
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: Color(0xff70BBF6),
+                                    primary: canSave
+                                        ? Theme.of(context).splashColor
+                                        : Theme.of(context).canvasColor,
                                     fixedSize: Size(240, 42),
                                     elevation: 0,
                                     side: BorderSide(
                                       style: BorderStyle.solid,
-                                      color: Color(0xff70BBF6),
+                                      color: canSave
+                                          ? Theme.of(context).splashColor
+                                          : Theme.of(context).canvasColor,
                                     ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
