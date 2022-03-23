@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cpp_native/file_typification/file_typification.dart';
@@ -24,6 +25,8 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -42,10 +45,16 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   var _folderListScrollController = ScrollController(keepScrollOffset: false);
+  var _verticalFolderListScrollController =
+      ScrollController(keepScrollOffset: false);
   final TextEditingController _searchingFieldController =
       TextEditingController();
   GlobalKey propertiesWidthKey = GlobalKey();
   List<CustomPopupMenuController> _popupControllers = [];
+  Timer? timerForOpenFile;
+  int _startTimer = 1;
+  bool _isOpen = false;
+  var x;
 
   void _initiatingControllers(MediaState state) {
     if (_popupControllers.isEmpty) {
@@ -59,6 +68,31 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     final width = MediaQuery.of(context).size.width;
     _searchFieldWidth =
         width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 320;
+  }
+
+  void startTimer() {
+    _isOpen = true;
+    const oneSec = const Duration(seconds: 1);
+    if (timerForOpenFile != null) {
+      timerForOpenFile?.cancel();
+      _startTimer = 1;
+    }
+    timerForOpenFile = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_startTimer == 0) {
+          setState(() {
+            timer.cancel();
+            _startTimer = 1;
+            _isOpen = false;
+          });
+        } else {
+          setState(() {
+            _startTimer--;
+          });
+        }
+      },
+    );
   }
 
   @override
@@ -330,10 +364,33 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                   ),
                                   child: BlocBuilder<MediaCubit, MediaState>(
                                     builder: (context, state) {
+                                      //  _folderListScrollController.animateTo(
+                                      //       _verticalFolderListScrollController
+                                      //           .offset,
+                                      //       duration: Duration(milliseconds: 500),
+                                      //       curve: Curves.ease);
+
                                       _initiatingControllers(state);
-                                      return ScrollConfiguration(
-                                        behavior: MyCustomScrollBehavior(),
-                                        child: ListView(
+                                      return Stack(children: [
+                                        NotificationListener(
+                                          child: ListView(
+                                            shrinkWrap: true,
+                                            physics: ClampingScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            controller:
+                                                _verticalFolderListScrollController,
+                                          ),
+                                          onNotification: (t) {
+                                            setState(() {
+                                              x = _verticalFolderListScrollController
+                                                  .position.pixels;
+                                              print(x);
+                                            });
+                                            if (t is ScrollEndNotification) {}
+                                            return true;
+                                          },
+                                        ),
+                                        ListView(
                                           shrinkWrap: true,
                                           physics: ClampingScrollPhysics(),
                                           scrollDirection: Axis.horizontal,
@@ -352,7 +409,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                 .toList(),
                                           ],
                                         ),
-                                      );
+                                      ]);
                                     },
                                   ),
                                 ),
@@ -470,9 +527,12 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                   eventBusMediaOpen.on().listen((event) {
                                     var element =
                                         StateInfoContainer.of(context)?.record;
-                                    context
-                                        .read<MediaCubit>()
-                                        .fileTapped(element as Record);
+                                    if (_isOpen == false) {
+                                      startTimer();
+                                      context
+                                          .read<MediaCubit>()
+                                          .fileTapped(element as Record);
+                                    }
                                   });
                                   return Expanded(
                                     child: state.representation ==
@@ -500,6 +560,36 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Widget _photoOpen(BuildContext context, List<Record> record) {
+    return Container(
+        child: PhotoViewGallery.builder(
+      scrollPhysics: const BouncingScrollPhysics(),
+      builder: (BuildContext context, int index) {
+        return PhotoViewGalleryPageOptions(
+          imageProvider: AssetImage(record[index].thumbnail!.first.publicUrl!),
+          // initialScale: PhotoViewComputedScale.contained * 0.8,
+          // heroAttributes:
+          //     PhotoViewHeroAttributes(tag: record[index].name ?? ''),
+        );
+      },
+      itemCount: record.length,
+      loadingBuilder: (context, event) => Center(
+        child: Container(
+          width: 20.0,
+          height: 20.0,
+          // child: CircularProgressIndicator(
+          //   value: event == null
+          //       ? 0
+          //       : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+          // ),
+        ),
+      ),
+      //backgroundDecoration: widget.backgroundDecoration,
+      //pageController: widget.pageController,
+      //onPageChanged: onPageChanged,
+    ));
   }
 
   Widget _progressIndicator(BuildContext context) {
@@ -653,56 +743,63 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   }
                 }
 
-                return GestureDetector(
-                  onTap: () {
-                    blocContext
-                        .read<MediaCubit>()
-                        .fileTapped(state.currentFolderRecords[index]);
-                  },
-                  child: Listener(
-                    onPointerDown: _onPointerDown,
-                    behavior: HitTestBehavior.opaque,
-                    child: IgnorePointer(
-                      child: CustomPopupMenu(
-                          pressType: PressType.singleClick,
-                          barrierColor: Colors.transparent,
-                          showArrow: false,
-                          enablePassEvent: false,
-                          horizontalMargin: 110,
-                          verticalMargin: 0,
-                          controller: _popupControllers[
-                              state.currentFolderRecords.indexOf(record)],
-                          menuBuilder: () {
-                            return MediaPopupMenuActions(
-                              theme: Theme.of(context),
-                              translate: translate,
-                              onTap: (action) async {
-                                _popupControllers[state.currentFolderRecords
-                                        .indexOf(record)]
-                                    .hideMenu();
-                                if (action == MediaAction.properties) {
-                                  // controller.hideMenu();
-                                  StateInfoContainer.of(context)
-                                      ?.setInfoRecord(record);
-                                } else {
-                                  //   controller.hideMenu();
-                                  var result = await showDialog<bool>(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return BlurDelete();
-                                    },
-                                  );
-                                  if (result == true) {
-                                    context
-                                        .read<MediaCubit>()
-                                        .onActionDeleteChoosed(record);
+                return MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      _photoOpen(context, state.currentFolderRecords);
+                      // if (_isOpen == false) {
+                      //   startTimer();
+                      //   blocContext
+                      //       .read<MediaCubit>()
+                      //       .fileTapped(state.currentFolderRecords[index]);
+                      // }
+                    },
+                    child: Listener(
+                      onPointerDown: _onPointerDown,
+                      behavior: HitTestBehavior.opaque,
+                      child: IgnorePointer(
+                        child: CustomPopupMenu(
+                            pressType: PressType.singleClick,
+                            barrierColor: Colors.transparent,
+                            showArrow: false,
+                            enablePassEvent: false,
+                            horizontalMargin: 110,
+                            verticalMargin: 0,
+                            controller: _popupControllers[
+                                state.currentFolderRecords.indexOf(record)],
+                            menuBuilder: () {
+                              return MediaPopupMenuActions(
+                                theme: Theme.of(context),
+                                translate: translate,
+                                onTap: (action) async {
+                                  _popupControllers[state.currentFolderRecords
+                                          .indexOf(record)]
+                                      .hideMenu();
+                                  if (action == MediaAction.properties) {
+                                    // controller.hideMenu();
+                                    StateInfoContainer.of(context)
+                                        ?.setInfoRecord(record);
+                                  } else {
+                                    //   controller.hideMenu();
+                                    var result = await showDialog<bool>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return BlurDelete();
+                                      },
+                                    );
+                                    if (result == true) {
+                                      context
+                                          .read<MediaCubit>()
+                                          .onActionDeleteChoosed(record);
+                                    }
                                   }
-                                }
-                              },
-                            );
-                          },
-                          child: MediaGridElement(
-                              record: state.currentFolderRecords[index])),
+                                },
+                              );
+                            },
+                            child: MediaGridElement(
+                                record: state.currentFolderRecords[index])),
+                      ),
                     ),
                   ),
                 );
@@ -818,7 +915,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                         DataCell(
                           GestureDetector(
                             onTap: () {
-                              context.read<MediaCubit>().fileTapped(e);
+                              if (_isOpen == false) {
+                                startTimer();
+                                context.read<MediaCubit>().fileTapped(e);
+                              }
                             },
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
@@ -1161,14 +1261,4 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
       ),
     );
   }
-}
-
-class MyCustomScrollBehavior extends MaterialScrollBehavior {
-  // Override behavior methods and getters like dragDevices
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-        //PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        // etc.
-      };
 }

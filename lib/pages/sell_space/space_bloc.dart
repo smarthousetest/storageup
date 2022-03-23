@@ -46,6 +46,17 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(user: user, locationsInfo: locationsInfo));
   }
 
+  Future<void> _update(
+    Emitter<SpaceState> emit,
+    SpaceState state,
+  ) async {
+    //_repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+    final locationsInfo = _repository.getlocationsInfo;
+
+    emit(state.copyWith(locationsInfo: locationsInfo));
+    print('folders was updated');
+  }
+
   Future _mapRunSoft(
     RunSoft event,
     SpaceState state,
@@ -84,5 +95,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     _repository.deleteLocation(id: idLocation);
     var updateLocations = _repository.getlocationsInfo;
     emit(state.copyWith(locationsInfo: updateLocations));
+    _update(emit, state);
   }
 }

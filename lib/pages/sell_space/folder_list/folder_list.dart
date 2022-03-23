@@ -24,7 +24,6 @@ enum FileOptions {
   remove,
 }
 
-// 79313064863 не удалять
 class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
@@ -52,18 +51,12 @@ class _ButtonTemplateState extends State<FolderList> {
       fontWeight: FontWeight.w700,
       fontFamily: kNormalTextFontFamily,
     );
-    TextStyle redStyle = TextStyle(
-      color: Theme.of(context).indicatorColor,
-      fontSize: 14,
-      fontFamily: kNormalTextFontFamily,
-    );
     TextStyle cellTextStyle = TextStyle(
       color: Theme.of(context).textTheme.subtitle1?.color,
       fontSize: 14,
       fontFamily: kNormalTextFontFamily,
     );
     S translate = getIt<S>();
-    bool _isClicked = false;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),

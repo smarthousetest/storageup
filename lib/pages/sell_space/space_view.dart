@@ -193,15 +193,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               Expanded(
                 child: BlocBuilder<SpaceBloc, SpaceState>(
                     builder: (context, state) {
-                  var locInfo = state.locationsInfo;
-                  var notEmptyInfo;
-                  if (locInfo != null) {
-                    notEmptyInfo = locInfo;
-                  }
                   return IndexedStack(
+                    sizing: StackFit.expand,
+                    key: ValueKey<int>(index),
                     index: index,
                     children: [
-                      notEmptyInfo.isEmpty
+                      state.locationsInfo.isEmpty
                           ? Column(
                               children: [rentingAPlace(context)],
                             )

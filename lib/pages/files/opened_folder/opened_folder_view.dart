@@ -51,7 +51,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   List<CustomPopupMenuController> _popupControllers = [];
   List<CustomPopupMenuController> _popupControllersGrouped = [];
   Timer? timerForOpenFile;
-  int _startTimer = 2;
+  int _startTimer = 1;
+  var _indexObject = -1;
   bool _isOpen = false;
 
   void _initiatingControllers(OpenedFolderState state) {
@@ -75,7 +76,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     const oneSec = const Duration(seconds: 1);
     if (timerForOpenFile != null) {
       timerForOpenFile?.cancel();
-      _startTimer = 2;
+      _startTimer = 1;
     }
     timerForOpenFile = new Timer.periodic(
       oneSec,
@@ -83,7 +84,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         if (_startTimer == 0) {
           setState(() {
             timer.cancel();
-            _startTimer = 2;
+            _startTimer = 1;
+            _indexObject = -1;
             _isOpen = false;
           });
         } else {
@@ -393,8 +395,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         };
                       } else {
                         onTap = () {
-                          print('file tapped');
-                          if (_isOpen == false) {
+                          if (_indexObject != index) {
+                            setState(() {
+                              _indexObject = index;
+                            });
+                            print('file tapped');
                             startTimer();
                             context
                                 .read<OpenedFolderCubit>()
@@ -403,60 +408,63 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         };
                       }
 
-                      return GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: onTap,
-                        child: Listener(
-                          onPointerDown: _onPointerDown,
+                      return MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          child: IgnorePointer(
-                            child: CustomPopupMenu(
-                                pressType: PressType.singleClick,
-                                barrierColor: Colors.transparent,
-                                showArrow: false,
-                                enablePassEvent: false,
-                                horizontalMargin: 110,
-                                verticalMargin: 0,
-                                controller: _popupControllers[
-                                    state.sortedFiles.indexOf(obj)],
-                                menuBuilder: () {
-                                  return FilesPopupMenuActions(
-                                    theme: Theme.of(context),
-                                    translate: translate,
-                                    onTap: (action) async {
-                                      _popupControllers[
-                                              state.sortedFiles.indexOf(obj)]
-                                          .hideMenu();
-                                      if (action == FileAction.properties) {
-                                        StateInfoContainer.of(context)
-                                            ?.setInfoObject(obj);
-                                      } else {
-                                        var result = await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return BlurDelete();
-                                          },
-                                        );
-                                        if (result == true) {
-                                          context
-                                              .read<OpenedFolderCubit>()
-                                              .onRecordActionChoosed(
-                                                action,
-                                                obj,
-                                              );
-                                        }
-                                        // eventBusDeleteFile.on().listen((event) {
+                          onTap: onTap,
+                          child: Listener(
+                            onPointerDown: _onPointerDown,
+                            behavior: HitTestBehavior.opaque,
+                            child: IgnorePointer(
+                              child: CustomPopupMenu(
+                                  pressType: PressType.singleClick,
+                                  barrierColor: Colors.transparent,
+                                  showArrow: false,
+                                  enablePassEvent: false,
+                                  horizontalMargin: 110,
+                                  verticalMargin: 0,
+                                  controller: _popupControllers[
+                                      state.sortedFiles.indexOf(obj)],
+                                  menuBuilder: () {
+                                    return FilesPopupMenuActions(
+                                      theme: Theme.of(context),
+                                      translate: translate,
+                                      onTap: (action) async {
+                                        _popupControllers[
+                                                state.sortedFiles.indexOf(obj)]
+                                            .hideMenu();
+                                        if (action == FileAction.properties) {
+                                          StateInfoContainer.of(context)
+                                              ?.setInfoObject(obj);
+                                        } else {
+                                          var result = await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return BlurDelete();
+                                            },
+                                          );
+                                          if (result == true) {
+                                            context
+                                                .read<OpenedFolderCubit>()
+                                                .onRecordActionChoosed(
+                                                  action,
+                                                  obj,
+                                                );
+                                          }
+                                          // eventBusDeleteFile.on().listen((event) {
 
-                                        // });
-                                      }
-                                    },
-                                  );
-                                },
-                                child: ObjectView(
-                                    object: state.sortedFiles[index])),
+                                          // });
+                                        }
+                                      },
+                                    );
+                                  },
+                                  child: ObjectView(
+                                      object: state.sortedFiles[index])),
+                            ),
                           ),
+                          //folderId: obj.id,
                         ),
-                        //folderId: obj.id,
                       );
                     },
                   );
@@ -523,71 +531,77 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                   };
                 } else {
                   onTap = () {
-                    if (_isOpen == false) {
+                    if (_indexObject != index) {
+                      setState(() {
+                        _indexObject = index;
+                      });
+                      print('file tapped');
                       startTimer();
                       context
                           .read<OpenedFolderCubit>()
                           .fileTapped(obj as Record);
                     }
-                    print('file tapped');
                   };
                 }
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: onTap,
-                  child: Listener(
-                    onPointerDown: _onPointerDown,
+                return MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    child: IgnorePointer(
-                      child: CustomPopupMenu(
-                          pressType: PressType.singleClick,
-                          barrierColor: Colors.transparent,
-                          showArrow: false,
-                          enablePassEvent: false,
-                          horizontalMargin: 110,
-                          verticalMargin: 0,
-                          controller: _popupControllersGrouped[state.objects
-                              .indexWhere((element) => element.id == obj.id)],
-                          menuBuilder: () {
-                            return FilesPopupMenuActions(
-                              theme: Theme.of(context),
-                              translate: translate,
-                              onTap: (action) async {
-                                _popupControllersGrouped[state.objects
-                                        .indexWhere(
-                                            (element) => element.id == obj.id)]
-                                    .hideMenu();
-                                if (action == FileAction.properties) {
-                                  StateInfoContainer.of(context)
-                                      ?.setInfoObject(obj);
-                                } else {
-                                  var result = await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return BlurDelete();
-                                    },
-                                  );
-                                  if (result == true) {
-                                    context
-                                        .read<OpenedFolderCubit>()
-                                        .onRecordActionChoosed(
-                                          action,
-                                          obj,
-                                        );
+                    onTap: onTap,
+                    child: Listener(
+                      onPointerDown: _onPointerDown,
+                      behavior: HitTestBehavior.opaque,
+                      child: IgnorePointer(
+                        child: CustomPopupMenu(
+                            pressType: PressType.singleClick,
+                            barrierColor: Colors.transparent,
+                            showArrow: false,
+                            enablePassEvent: false,
+                            horizontalMargin: 110,
+                            verticalMargin: 0,
+                            controller: _popupControllersGrouped[state.objects
+                                .indexWhere((element) => element.id == obj.id)],
+                            menuBuilder: () {
+                              return FilesPopupMenuActions(
+                                theme: Theme.of(context),
+                                translate: translate,
+                                onTap: (action) async {
+                                  _popupControllersGrouped[state.objects
+                                          .indexWhere((element) =>
+                                              element.id == obj.id)]
+                                      .hideMenu();
+                                  if (action == FileAction.properties) {
+                                    StateInfoContainer.of(context)
+                                        ?.setInfoObject(obj);
+                                  } else {
+                                    var result = await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return BlurDelete();
+                                      },
+                                    );
+                                    if (result == true) {
+                                      context
+                                          .read<OpenedFolderCubit>()
+                                          .onRecordActionChoosed(
+                                            action,
+                                            obj,
+                                          );
+                                    }
+                                    // eventBusDeleteFile.on().listen((event) {
+                                    //   context
+                                    //       .read<OpenedFolderCubit>()
+                                    //       .onRecordActionChoosed(
+                                    //         action,
+                                    //         obj,
+                                    //       );
+                                    // });
                                   }
-                                  // eventBusDeleteFile.on().listen((event) {
-                                  //   context
-                                  //       .read<OpenedFolderCubit>()
-                                  //       .onRecordActionChoosed(
-                                  //         action,
-                                  //         obj,
-                                  //       );
-                                  // });
-                                }
-                              },
-                            );
-                          },
-                          child: ObjectView(object: value[index])),
+                                },
+                              );
+                            },
+                            child: ObjectView(object: value[index])),
+                      ),
                     ),
                   ),
                 );
@@ -771,6 +785,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                             // if (StateInfoContainer.of(context)?.open == true) {
 
                             // }
+                            var index = state.sortedFiles.indexOf(element);
                             if (element is Folder) {
                               print(element);
                               print("lol");
@@ -792,7 +807,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   .changeRepresentation(
                                       FilesRepresentation.table);
                             } else {
-                              if (_isOpen == false) {
+                              if (_indexObject != index) {
+                                setState(() {
+                                  _indexObject = index;
+                                });
+                                print('file tapped');
                                 startTimer();
                                 context
                                     .read<OpenedFolderCubit>()
@@ -1135,6 +1154,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                   // if (StateInfoContainer.of(context)?.open == true) {
 
                   // }
+                  var index = i;
                   if (obj is Folder) {
                     print(obj);
                     print("lol");
@@ -1155,13 +1175,16 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         .read<OpenedFolderCubit>()
                         .changeRepresentation(FilesRepresentation.table);
                   } else {
-                    if (_isOpen == false) {
+                    if (_indexObject != index) {
+                      setState(() {
+                        _indexObject = index;
+                      });
+                      print('file tapped');
                       startTimer();
                       context
                           .read<OpenedFolderCubit>()
                           .fileTapped(obj as Record);
                     }
-                    print('file tapped');
                   }
                 },
                 child: MouseRegion(
