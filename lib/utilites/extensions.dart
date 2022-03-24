@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -53,9 +54,13 @@ extension UserProficeImage on User? {
         ),
       );
     } else {
-      image = Image.asset(
-        'assets/home_page/man.jpg',
-        fit: BoxFit.cover,
+      image = Container(
+        height: 46,
+        width: 46,
+        child: SvgPicture.asset(
+          'assets/home_page/defoult_man.svg',
+          fit: BoxFit.fitHeight,
+        ),
       );
     }
 

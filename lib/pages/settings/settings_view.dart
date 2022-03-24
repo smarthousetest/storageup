@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/change_password.dart';
+import 'package:upstorage_desktop/components/blur/delete_avatar.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/main.dart';
@@ -15,7 +16,6 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/blur/rename_name.dart';
 import 'package:upstorage_desktop/components/blur/delete_account.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 
@@ -292,16 +292,11 @@ class _SettingsPageState extends State<SettingsPage> {
             horizontalMargin: -185,
             verticalMargin: -100,
             controller: controller,
-            // onTapDown: () {
-            //   setState(() {
-            //     _isClicked = true;
-            //   });
-            // },
             menuBuilder: () {
               return SettingsPopupMenuActions(
                 theme: Theme.of(context),
                 translate: translate,
-                onTap: (action) {
+                onTap: (action) async {
                   controller.hideMenu();
 
                   if (action == AvatarAction.changeAvatar) {
@@ -309,6 +304,19 @@ class _SettingsPageState extends State<SettingsPage> {
                     context
                         .read<SettingsBloc>()
                         .add(SettingsChangeProfileImage());
+                  } else {
+                    controller.hideMenu();
+                    var result = await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return BlurDeletePic();
+                      },
+                    );
+                    if (result) {
+                      context
+                          .read<SettingsBloc>()
+                          .add(SettingsDeleteProfileImage());
+                    }
                   }
                 },
               );
@@ -320,7 +328,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: 34,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _isClicked
+                  color: controller.menuIsShowing
                       ? Theme.of(context).dividerColor
                       : Theme.of(context).cardColor,
                 ),
@@ -330,7 +338,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(6.0),
                     child: SvgPicture.asset(
                       "assets/file_page/photo.svg",
-                      color: _isClicked
+                      color: controller.menuIsShowing
                           ? Theme.of(context).splashColor
                           : Theme.of(context).focusColor,
                     ),
@@ -951,7 +959,7 @@ class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
                   child: GestureDetector(
                     onTapDown: (_) {
                       print('delete photo tapped ');
-                      // widget.onTap(AvatarAction.delete);
+                      widget.onTap(AvatarAction.delete);
                     },
                     child: Container(
                       width: 190,

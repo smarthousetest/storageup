@@ -211,5 +211,7 @@
     "documents": "Documents",
     "realy_delete": "Do you really want to delete?",
     "russian": "Russian",
-    "english": "English"
+    "english": "English",
+    "delete_pic": "Removing a photo",
+    "really_delete_pic": "Do you really want to delete your profile picture?"
 }

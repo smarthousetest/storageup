@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_file": MessageLookupByLibrary.simpleMessage("Delete file"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Delete permanently"),
+        "delete_pic": MessageLookupByLibrary.simpleMessage("Removing a photo"),
         "deleting": MessageLookupByLibrary.simpleMessage("Deleting"),
         "documents": MessageLookupByLibrary.simpleMessage("Documents"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
@@ -221,6 +222,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "properties": MessageLookupByLibrary.simpleMessage("Properties"),
         "provisions":
             MessageLookupByLibrary.simpleMessage("1. General Provisions"),
+        "really_delete_pic": MessageLookupByLibrary.simpleMessage(
+            "Do you really want to delete your profile picture?"),
         "realy_delete": MessageLookupByLibrary.simpleMessage(
             "Do you really want to delete?"),
         "reason_deleting":

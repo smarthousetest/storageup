@@ -218,10 +218,10 @@ class _InfoPageState extends State<InfoPage> {
       builder: (context, state) {
         var filesFolder = state.folder?.records?.length ?? 0;
 
-        var mediaFolder = state.rootFolders?.folders
-            ?.firstWhere((folder) => folder.name == 'Media')
-            .records
-            ?.length;
+        // var mediaFolder = state.rootFolders?.folders
+        //     ?.firstWhere((folder) => folder.name == 'Media')
+        //     .records
+        //     ?.length;
 
         var countMediaFolderPhoto = state.allMediaFolders
                 ?.firstWhere((element) => element.name == translate.photos)

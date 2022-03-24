@@ -54,6 +54,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   Timer? timerForOpenFile;
   int _startTimer = 1;
   bool _isOpen = false;
+  var _indexObject = -1;
   var x;
 
   void _initiatingControllers(MediaState state) {
@@ -84,6 +85,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
           setState(() {
             timer.cancel();
             _startTimer = 1;
+            _indexObject = -1;
             _isOpen = false;
           });
         } else {
@@ -739,7 +741,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                     _popupControllers[
                             state.currentFolderRecords.indexOf(record)]
                         .showMenu();
-                    //controller.showMenu();
                   }
                 }
 
@@ -747,13 +748,16 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      _photoOpen(context, state.currentFolderRecords);
-                      // if (_isOpen == false) {
-                      //   startTimer();
-                      //   blocContext
-                      //       .read<MediaCubit>()
-                      //       .fileTapped(state.currentFolderRecords[index]);
-                      // }
+                      //_photoOpen(context, state.currentFolderRecords);
+                      if (_indexObject != index) {
+                        setState(() {
+                          _indexObject = index;
+                        });
+                        startTimer();
+                        blocContext
+                            .read<MediaCubit>()
+                            .fileTapped(state.currentFolderRecords[index]);
+                      }
                     },
                     child: Listener(
                       onPointerDown: _onPointerDown,
@@ -915,7 +919,11 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                         DataCell(
                           GestureDetector(
                             onTap: () {
-                              if (_isOpen == false) {
+                              var index = state.currentFolderRecords.indexOf(e);
+                              if (_indexObject != index) {
+                                setState(() {
+                                  _indexObject = index;
+                                });
                                 startTimer();
                                 context.read<MediaCubit>().fileTapped(e);
                               }

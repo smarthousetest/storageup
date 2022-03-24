@@ -426,6 +426,37 @@ class FilesService {
     }
   }
 
+  Future<ResponseStatus> deleteProfilePic({
+    required User user,
+  }) async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+
+      var data = {
+        'data': {
+          'firstName': user.firstName,
+          'lastName': user.lastName,
+          'phoneNumber': user.phoneNumber,
+          'avatars': []
+        }
+      };
+
+      var response = await Dio().put(
+        'https://storageup.net/api/auth/profile',
+        options: Options(headers: {'Authorization': ' Bearer $token'}),
+        data: data,
+      );
+
+      if (response.statusCode == 200)
+        return ResponseStatus.ok;
+      else
+        return ResponseStatus.failed;
+    } catch (e) {
+      print(e);
+      return ResponseStatus.failed;
+    }
+  }
+
   Future<String?> createRecord(File file) async {
     try {
       String? token = await _tokenRepository.getApiToken();

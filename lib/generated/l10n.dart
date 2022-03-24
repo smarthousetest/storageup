@@ -1895,6 +1895,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Removing a photo`
+  String get delete_pic {
+    return Intl.message(
+      'Removing a photo',
+      name: 'delete_pic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you really want to delete your profile picture?`
+  String get really_delete_pic {
+    return Intl.message(
+      'Do you really want to delete your profile picture?',
+      name: 'really_delete_pic',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
