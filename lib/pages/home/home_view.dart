@@ -2,6 +2,7 @@ import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
@@ -66,6 +67,61 @@ class _HomePageState extends State<HomePage> {
     DesktopWindow.setMinWindowSize(Size(width, height));
 
     DesktopWindow.resetMaxWindowSize();
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              translate.something_goes_wrong,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    translate.good,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: // _form.currentState.validate()
+                        Theme.of(context).splashColor,
+
+                    // Theme.of(context).primaryColor,
+                    fixedSize: Size(100, 42),
+                    elevation: 0,
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   @override
@@ -144,49 +200,57 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Theme.of(context).cardColor,
       body: BlocProvider(
         create: (context) => HomeBloc()..add(HomePageOpened()),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 274,
-              margin: const EdgeInsets.only(left: 30, top: 30, bottom: 30),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Color.fromARGB(25, 23, 69, 139),
-                      blurRadius: 4,
-                      offset: Offset(1, 4))
-                ],
+        child: BlocListener<HomeBloc, HomeState>(
+          listener: (context, state) {
+            // TODO: implement listener
+            if (state.status == FormzStatus.submissionFailure) {
+              _showErrorDialog();
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 274,
+                margin: const EdgeInsets.only(left: 30, top: 30, bottom: 30),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                      child: SvgPicture.asset(
+                        'assets/home_page/storage_title.svg',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                      child: SvgPicture.asset(
+                        'assets/home_page/separator.svg',
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        shrinkWrap: true,
+                        controller: ScrollController(),
+                        children: leftButtonsItem(),
+                      ),
+                    ),
+                    _logout(),
+                  ],
+                ),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                    child: SvgPicture.asset(
-                      'assets/home_page/storage_title.svg',
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                    child: SvgPicture.asset(
-                      'assets/home_page/separator.svg',
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      shrinkWrap: true,
-                      controller: ScrollController(),
-                      children: leftButtonsItem(),
-                    ),
-                  ),
-                  _logout(),
-                ],
-              ),
-            ),
-            getPage(),
-          ],
+              getPage(),
+            ],
+          ),
         ),
       ),
     );

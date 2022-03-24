@@ -1,11 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
+//import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -62,12 +63,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     String? folderId;
     if (event.folderId == null) {
+      try {
+        await _filesController.updateFilesList();
+      } catch (_) {}
       folderId = _filesController.getFilesRootFolder?.id;
     } else {
       folderId = event.folderId;
     }
     if (event.values?.first != null && folderId != null) {
-      _filesController.createFolder(event.values!.first!, folderId);
+      final result =
+          await _filesController.createFolder(event.values!.first!, folderId);
+      if (result != ResponseStatus.ok) {
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.pure));
+      }
+    } else if (folderId == null) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(state.copyWith(status: FormzStatus.pure));
     }
   }
 
@@ -77,7 +89,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     var mediaRootFolderId = _filesController.getMediaRootFolderId();
     if (event.values?.first != null && mediaRootFolderId != null) {
-      _filesController.createFolder(event.values!.first!, mediaRootFolderId);
+      final result = await _filesController.createFolder(
+          event.values!.first!, mediaRootFolderId);
+      if (result != ResponseStatus.ok) {
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.pure));
+      }
     }
   }
 

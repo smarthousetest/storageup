@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
 
 class HomeState extends Equatable {
   final double usingSpace;
@@ -15,6 +16,7 @@ class HomeState extends Equatable {
   final bool settingsTab;
   final bool trashTab;
   final bool financeTab;
+  final FormzStatus status;
 
   HomeState({
     this.usingSpace = 0,
@@ -31,6 +33,7 @@ class HomeState extends Equatable {
     this.settingsTab = false,
     this.trashTab = false,
     this.financeTab = false,
+    this.status = FormzStatus.pure,
   });
 
   HomeState copyWith({
@@ -43,6 +46,7 @@ class HomeState extends Equatable {
     bool? homeTab,
     bool? filesTab,
     bool? mediaTab,
+    FormzStatus? status,
   }) {
     return HomeState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -55,6 +59,7 @@ class HomeState extends Equatable {
       homeTab: homeTab ?? this.homeTab,
       filesTab: filesTab ?? this.filesTab,
       mediaTab: mediaTab ?? this.mediaTab,
+      status: status ?? FormzStatus.pure,
     );
   }
 
@@ -69,5 +74,6 @@ class HomeState extends Equatable {
         homeTab,
         filesTab,
         mediaTab,
+        status,
       ];
 }

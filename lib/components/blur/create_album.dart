@@ -15,6 +15,8 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
   S translate = getIt<S>();
   bool canSave = false;
 
+  String? get mediaRootFolderId => mediaRootFolderId;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -142,12 +144,15 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 20),
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    if (canSave == true)
+                                  onPressed: () async {
+                                    if (canSave == true) {
                                       Navigator.pop(
                                         context,
                                         _textController.value.text.trim(),
                                       );
+                                    } else {
+                                      null;
+                                    }
                                   },
                                   child: Text(
                                     translate.save,
@@ -201,5 +206,60 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
         ),
       ),
     );
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              translate.something_goes_wrong,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    translate.good,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: // _form.currentState.validate()
+                        Theme.of(context).splashColor,
+
+                    // Theme.of(context).primaryColor,
+                    fixedSize: Size(100, 42),
+                    elevation: 0,
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

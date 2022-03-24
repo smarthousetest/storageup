@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurAddFolder extends StatefulWidget {
@@ -156,10 +157,13 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
-                                      onPressed: () {
-                                        if (canSave == true)
+                                      onPressed: () async {
+                                        if (canSave == true) {
                                           Navigator.pop(context,
                                               myController.text.trim());
+                                        } else {
+                                          null;
+                                        }
                                       },
                                       child: Text(
                                         translate.save,
