@@ -87,7 +87,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {
-    var mediaRootFolderId = _filesController.getMediaRootFolderId();
+    String? mediaRootFolderId;
+    if (event.folderId == null) {
+      try {
+        await _filesController.updateFilesList();
+      } catch (_) {}
+      mediaRootFolderId = _filesController.getMediaRootFolderId();
+    } else {
+      mediaRootFolderId = event.folderId;
+    }
+    print(mediaRootFolderId);
+    //var mediaRootFolderId = await _filesController.getMediaRootFolderId();
     if (event.values?.first != null && mediaRootFolderId != null) {
       final result = await _filesController.createFolder(
           event.values!.first!, mediaRootFolderId);
@@ -95,6 +105,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
         emit(state.copyWith(status: FormzStatus.pure));
       }
+    } else if (mediaRootFolderId == null) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(state.copyWith(status: FormzStatus.pure));
     }
   }
 
