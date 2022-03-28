@@ -58,7 +58,7 @@ extension UserProficeImage on User? {
         height: 46,
         width: 46,
         child: SvgPicture.asset(
-          'assets/home_page/defoult_man.svg',
+          'assets/home_page/default_man.svg',
           fit: BoxFit.fitHeight,
         ),
       );

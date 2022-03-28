@@ -28,7 +28,7 @@ class Record extends BaseObject {
   // String? get updatedBy => super.updatedBy;
   // final String? extension;
   bool isChoosed;
-  final double? loadPercent;
+  double? loadPercent;
 
   Record({
     this.stored,

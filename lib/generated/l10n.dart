@@ -1915,6 +1915,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Install update`
+  String get install_update {
+    return Intl.message(
+      'Install update',
+      name: 'install_update',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

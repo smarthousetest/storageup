@@ -158,6 +158,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
         "info": MessageLookupByLibrary.simpleMessage("Свойства"),
+        "install_update":
+            MessageLookupByLibrary.simpleMessage("Установить обновление"),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),

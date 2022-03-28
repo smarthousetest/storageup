@@ -213,5 +213,6 @@
     "russian": "Russian",
     "english": "English",
     "delete_pic": "Removing a photo",
-    "really_delete_pic": "Do you really want to delete your profile picture?"
+    "really_delete_pic": "Do you really want to delete your profile picture?",
+    "install_update": "Install update"
 }

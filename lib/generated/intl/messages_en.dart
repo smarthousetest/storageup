@@ -156,6 +156,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
         "info": MessageLookupByLibrary.simpleMessage("Info"),
+        "install_update":
+            MessageLookupByLibrary.simpleMessage("Install update"),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),

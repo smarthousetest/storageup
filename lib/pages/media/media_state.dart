@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -13,6 +15,8 @@ class MediaState extends Equatable {
   final FilesRepresentation representation;
   final User? user;
   final bool progress;
+  final FormzStatus status;
+  final ErrorType? errorType;
 
   MediaState({
     this.currentFolderRecords = const [],
@@ -20,20 +24,24 @@ class MediaState extends Equatable {
     this.sortedRecords = const [],
     this.allRecords = const [],
     Folder? currentFolder,
+    this.status = FormzStatus.pure,
     this.progress = false,
     this.representation = FilesRepresentation.grid,
     this.user,
+    this.errorType,
   }) : this.currentFolder = currentFolder ?? Folder.empty();
 
   MediaState copyWith({
     List<Folder>? albums,
     Folder? currentFolder,
+    FormzStatus? status,
     List<Record>? sortedRecords,
     List<Record>? allRecords,
     List<Record>? currentFolderRecords,
     FilesRepresentation? representation,
     User? user,
     bool? progress,
+    ErrorType? errorType,
   }) {
     return MediaState(
       albums: albums ?? this.albums,
@@ -44,6 +52,8 @@ class MediaState extends Equatable {
       representation: representation ?? this.representation,
       user: user ?? this.user,
       progress: progress ?? this.progress,
+      status: status ?? this.status,
+      errorType: errorType,
     );
   }
 
@@ -57,5 +67,7 @@ class MediaState extends Equatable {
         sortedRecords,
         allRecords,
         progress,
+        errorType,
+        status,
       ];
 }
