@@ -41,7 +41,7 @@ dependencies:
 
   cpp_native:
     git:
-      url: ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git
+      url: https://gitlab.upstorage.net/us-core/cpp_native.git
   event_bus: ^2.0.0
   
 

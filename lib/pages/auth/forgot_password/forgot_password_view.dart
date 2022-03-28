@@ -185,14 +185,15 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         Navigator.pop(context);
       };
 
-    if (state.email.valid && state.email.value.isNotEmpty)
+    if (state.email.valid && state.email.value.isNotEmpty ||
+        state.error == AuthError.noInternet)
       return () {
         setState(() {
           context.read<ForgotPasswordBloc>().add(ForgotPasswordConfirmed());
         });
       };
     else
-      return null;
+      print('no inthernet');
   }
 
   // bool nothingOnEmail = false;
