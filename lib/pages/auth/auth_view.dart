@@ -1058,8 +1058,68 @@ class _AuthViewState extends State<AuthView> {
     });
   }
 
-  void _onForgotPasswordTapped() {
-    showDialog(context: context, builder: (context) => ForgotPasswordView());
+  Future<void> _onForgotPasswordTapped() async {
+    final ithernet = await AuthError.noInternet;
+    if (ithernet != AuthError.noInternet) {
+      showDialog(context: context, builder: (context) => ForgotPasswordView());
+    } else {
+      _showErrorDialog();
+    }
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              translate.something_goes_wrong,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    translate.good,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: // _form.currentState.validate()
+                        Theme.of(context).splashColor,
+
+                    // Theme.of(context).primaryColor,
+                    fixedSize: Size(100, 42),
+                    elevation: 0,
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Widget _registrationSuccessed(

@@ -152,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
+        "good": MessageLookupByLibrary.simpleMessage("Ок"),
         "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),

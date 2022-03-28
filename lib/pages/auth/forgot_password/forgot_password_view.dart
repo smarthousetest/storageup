@@ -121,6 +121,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   List<Widget> _body(ThemeData theme, ForgotPasswordState state) {
     if (state.status != FormzStatus.submissionSuccess)
       return _bodyRequest(theme);
+    //else if (state.status == AuthError.noInternet)
+    //return _showErrorDialog();
     else
       return _bodyResult(theme);
   }
@@ -158,11 +160,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
                   email: email, needValidation: true));
             }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            invalid: state.email.invalid && state.email.value.isNotEmpty ||
+            invalid: (state.email.invalid && state.email.value.isNotEmpty) ||
                 state.error == AuthError.wrongCredentials,
-            errorMessage: state.error == AuthError.wrongCredentials
-                ? translate.non_existent_email
-                : translate.wrong_email,
+            errorMessage: state.error == AuthError.noInternet
+                ? translate.something_goes_wrong
+                : state.error == AuthError.wrongCredentials
+                    ? translate.non_existent_email
+                    : translate.wrong_email,
             needErrorValidation: true,
             isPassword: false,
             horizontalPadding: 170,
@@ -185,15 +189,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         Navigator.pop(context);
       };
 
-    if (state.email.valid && state.email.value.isNotEmpty ||
-        state.error == AuthError.noInternet)
+    if (state.email.valid && state.email.value.isNotEmpty)
       return () {
         setState(() {
           context.read<ForgotPasswordBloc>().add(ForgotPasswordConfirmed());
         });
       };
-    else
-      print('no inthernet');
   }
 
   // bool nothingOnEmail = false;
