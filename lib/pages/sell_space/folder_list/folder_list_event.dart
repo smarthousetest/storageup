@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
-abstract class SpaceEvent extends Equatable {
-  const SpaceEvent();
+abstract class FolderListEvent extends Equatable {
+  const FolderListEvent();
   @override
   List<Object?> get props => [];
 }
@@ -16,19 +16,11 @@ abstract class SpaceEvent extends Equatable {
 //   List<Object?> get props => [itemName];
 // }
 
-class SpacePageOpened extends SpaceEvent {
-  const SpacePageOpened();
+class FolderListPageOpened extends FolderListEvent {
+  const FolderListPageOpened();
 }
 
-class RunSoft extends SpaceEvent {
-  const RunSoft();
-}
-
-class SaveDirPath extends SpaceEvent {
-  String pathDir;
-  int countGb;
-  SaveDirPath({
-    required this.pathDir,
-    required this.countGb,
-  });
+class DeleteLocation extends FolderListEvent {
+  DownloadLocation location;
+  DeleteLocation({required this.location});
 }

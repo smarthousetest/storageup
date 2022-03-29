@@ -57,7 +57,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   int _startTimer = 1;
   bool _isOpen = false;
   var _indexObject = -1;
-  late MediaListMoveToFolderSettings _args;
   var x;
 
   void _initiatingControllers(MediaState state) {
@@ -103,7 +102,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
-    // if (dirs_list.isEmpty) _init(context);
+    // _args = ModalRoute.of(context)!.settings.arguments
+    //     as MediaListMoveToFolderSettings;
+
     return BlocProvider<MediaCubit>(
       create: (_) => MediaCubit()..init(),
       child: Expanded(
@@ -748,26 +749,34 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
-  void _onTapItem(
-      List<BaseObject> media, BaseObject selectedMedia, BuildContext context) {
-    pushNewScreenWithRouteSettings(
-      context,
-      screen: MediaOpenPage(),
-      withNavBar: false,
-      settings: RouteSettings(
-        name: MediaOpenPage.route,
-        arguments: MediaOpenPageArgs(
-          media: media,
-          selectedMedia: selectedMedia,
-          selectedFolder: _args.openedFolder,
-        ),
-      ),
-    ).then((value) {
-      if (value == true) {
-        context.read<MediaCubit>();
-      }
-      setState(() {});
-    });
+  void _onTapItem(List<BaseObject> media, BaseObject selectedMedia,
+      BuildContext context, Folder? openedFolder) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return MediaOpenPage(
+            arguments: MediaOpenPageArgs(
+                media: media,
+                selectedMedia: selectedMedia,
+                selectedFolder: openedFolder),
+          );
+        });
+    // pushNewScreenWithRouteSettings(
+    //   context,
+    //   screen: MediaOpenPage(),
+    //   withNavBar: false,
+    //   settings: RouteSettings(
+    //     arguments: MediaOpenPageArgs(
+    //         media: media,
+    //         selectedMedia: selectedMedia,
+    //         selectedFolder: openedFolder),
+    //   ),
+    // ).then((value) {
+    //   if (value == true) {
+    //     context.read<MediaCubit>();
+    //   }
+    //   setState(() {});
+    // });
   }
 
   Widget _filesGrid() {
@@ -819,7 +828,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   child: GestureDetector(
                     onTap: () {
                       //_photoOpen(context, state.currentFolderRecords);
-                      _onTapItem(state.currentFolderRecords, record, context);
+                      _onTapItem(state.currentFolderRecords, record, context,
+                          state.currentFolder);
                       // if (_indexObject != index) {
                       //   setState(() {
                       //     _indexObject = index;
