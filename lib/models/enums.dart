@@ -11,6 +11,7 @@ enum AuthenticationStatus {
   wrongPassword,
   emailAllreadyRegistered,
   externalError,
+  noInternet,
 }
 
 enum FileAction {
