@@ -1925,6 +1925,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Name of storage location`
+  String get name_storage {
+    return Intl.message(
+      'Name of storage location',
+      name: 'name_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Path`
+  String get path {
+    return Intl.message(
+      'Path',
+      name: 'path',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -41,6 +41,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
+  final myController = TextEditingController();
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -51,6 +52,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
+
     return BlocProvider(
         create: (context) => SpaceBloc()..add(SpacePageOpened()),
         child: Expanded(
@@ -588,6 +590,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   }),
                 ],
               ),
+              _setName(context),
               Row(
                 children: [
                   Padding(
@@ -828,16 +831,20 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   width: 200,
                   child: BlocBuilder<SpaceBloc, SpaceState>(
                       builder: (context, state) {
-                    DownloadLocation locationsInfo;
+                    bool checkValidate =
+                        list.isEmpty && myController.text.isEmpty;
                     return OutlinedButton(
                       onPressed: () {
-                        if (list.isEmpty) {
+                        if (checkValidate) {
                           print('path null');
                         } else {
                           setState(() {
+                            var name = myController.text;
                             countGbSpace = _currentSliderValue.toInt();
                             context.read<SpaceBloc>().add(SaveDirPath(
-                                pathDir: dirPath, countGb: countGbSpace));
+                                pathDir: dirPath,
+                                countGb: countGbSpace,
+                                name: name));
                             index = 2;
                             context.read<SpaceBloc>().add(RunSoft());
                           });
@@ -847,7 +854,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         minimumSize: Size(double.maxFinite, 60),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: list.isEmpty
+                        backgroundColor: checkValidate
                             ? Theme.of(context).canvasColor
                             : Theme.of(context).splashColor,
                       ),
@@ -867,6 +874,85 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ]),
         ),
       ),
+    );
+  }
+
+  _setName(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 40, top: 26),
+          child: Row(children: [
+            Container(
+              child: Text(
+                translate.name_storage,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  child: SvgPicture.asset(
+                    'assets/file_page/prompt.svg',
+                  ),
+                ),
+              ),
+            ),
+          ]),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Container(
+                height: 42,
+                width: 350,
+                // decoration: BoxDecoration(
+                //     color: Theme.of(context).primaryColor,
+                //     borderRadius: BorderRadius.circular(10),
+                //     border: Border.all(color: Color(0xffE4E7ED))),
+                child: BlocBuilder<SpaceBloc, SpaceState>(
+                  builder: (context, state) {
+                    return TextField(
+                      controller: myController,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      textAlign: TextAlign.start,
+                      //autofocus: true,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 15, bottom: 21),
+                        hoverColor: Theme.of(context).cardColor,
+                        focusColor: Theme.of(context).cardColor,
+                        fillColor: Theme.of(context).cardColor,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: Theme.of(context).disabledColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
     );
   }
 

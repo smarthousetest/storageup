@@ -77,9 +77,18 @@ class _ButtonTemplateState extends State<FolderList> {
                       columns: [
                         DataColumn(
                           label: Container(
-                            width: constraints.maxWidth * 0.45,
+                            width: constraints.maxWidth * 0.05,
                             child: Text(
                               translate.name,
+                              style: style,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.45,
+                            child: Text(
+                              translate.path,
                               style: style,
                             ),
                           ),
@@ -120,14 +129,19 @@ class _ButtonTemplateState extends State<FolderList> {
                           index: state.locationsInfo.indexOf(element),
                           cells: [
                             DataCell(
+                              SizedBox(
+                                width: constraints.maxWidth * 0.07,
+                                child: Text(
+                                  element.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                            ),
+                            DataCell(
                               Row(
                                 children: [
-                                  SvgPicture.asset(
-                                    'assets/file_page/folder.svg',
-                                    height: 24,
-                                    width: 24,
-                                  ),
-                                  SizedBox(width: 10),
                                   SizedBox(
                                     width: constraints.maxWidth * 0.4,
                                     child: Text(

@@ -27,8 +27,10 @@ class RunSoft extends SpaceEvent {
 class SaveDirPath extends SpaceEvent {
   String pathDir;
   int countGb;
+  String name;
   SaveDirPath({
     required this.pathDir,
     required this.countGb,
+    required this.name,
   });
 }

@@ -181,6 +181,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Get more space change your subscription!"),
         "move": MessageLookupByLibrary.simpleMessage("Move"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "name_storage":
+            MessageLookupByLibrary.simpleMessage("Name of storage location"),
         "new_password": MessageLookupByLibrary.simpleMessage("New password"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "The new password must be at least 8 characters long"),
@@ -210,6 +212,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Password recovery"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "To recover your password, enter your email address in the field"),
+        "path": MessageLookupByLibrary.simpleMessage("Path"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
         "pb": m9,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(

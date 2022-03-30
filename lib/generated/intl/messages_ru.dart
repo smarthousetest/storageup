@@ -183,6 +183,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Получите больше пространства, поменяйте подписку!"),
         "move": MessageLookupByLibrary.simpleMessage("Переместить"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
+        "name_storage":
+            MessageLookupByLibrary.simpleMessage("Название места хранения"),
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),
@@ -211,6 +213,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
+        "path": MessageLookupByLibrary.simpleMessage("Путь"),
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
         "pb": m9,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
