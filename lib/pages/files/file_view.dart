@@ -62,55 +62,29 @@ class _FilePageState extends State<FilePage> {
     super.initState();
   }
 
-  Timer? _timer;
+  //Timer? _timer;
 
   void _prepareFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final keyContext = stickyKey.currentContext;
-    final keyInfoContext = propertiesWidthKey.currentContext;
+    //final keyContext = stickyKey.currentContext;
+    //final keyInfoContext = propertiesWidthKey.currentContext;
 
-    if (keyContext != null) {
-      _timer?.cancel();
-      _timer = null;
-      final box = keyContext.findRenderObject() as RenderBox;
-      if (StateInfoContainer.of(context)?.object != null) {
-        Future.delayed(Duration(seconds: 1), () {
-          _prepareFields(context);
+    if (StateInfoContainer.of(context)?.object != null) {
+      setState(() {
+        _searchFieldWidth =
+            width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 320 - 22;
+      });
+    } else {
+      if (MediaQuery.of(context).size.width < 967) {
+        setState(() {
+          _searchFieldWidth =
+              width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
         });
       } else
         setState(() {
-          _searchFieldWidth = width -
-              _rowSpasing * 3 -
-              30 * 3 -
-              _rowPadding * 2 -
-              274 -
-              box.size.width;
+          _searchFieldWidth =
+              width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
         });
-    } else if (keyInfoContext != null) {
-      // _timer?.cancel();
-      // _timer = null;
-
-      final box = keyInfoContext.findRenderObject() as RenderBox;
-      // var res = box.size.width;
-      setState(() {
-        _searchFieldWidth = width -
-            _rowSpasing * 3 -
-            30 * 3 -
-            _rowPadding * 2 -
-            274 -
-            box.size.width;
-      });
-    } else {
-      _searchFieldWidth =
-          width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
-      Future.delayed(Duration(seconds: 1), () {
-        _prepareFields(context);
-      });
-      // if (_timer == null) {
-      //   _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-      //     _prepareFields(context);
-      //   });
-      // }
     }
   }
 
@@ -458,7 +432,7 @@ class _FilePageState extends State<FilePage> {
                     ),
                     (MediaQuery.of(context).size.width > 966)
                         ? Container(
-                            constraints: BoxConstraints(maxWidth: 120),
+                            constraints: BoxConstraints(maxWidth: 95),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -532,8 +506,9 @@ class _FilePageState extends State<FilePage> {
       if (StateInfoContainer.of(context)?.object == null) {
         return Container();
       } else {
-        // _prepareFields(context);
+        _prepareFields(context);
         return BlocBuilder<FilesBloc, FilesState>(builder: (context, state) {
+          // _prepareFields(context);
           return Container(
               child: FileInfoView(
             key: propertiesWidthKey,
