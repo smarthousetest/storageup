@@ -443,9 +443,10 @@ class FilesService {
           'avatars': []
         }
       };
-
+      var path = kServerUrl;
+      path += '/api/auth/profile';
       var response = await Dio().put(
-        'https://storageup.net/api/auth/profile',
+        path,
         options: Options(headers: {'Authorization': ' Bearer $token'}),
         data: data,
       );
