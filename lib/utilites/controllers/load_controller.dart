@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/autoupload/autoupload_controller.dart';
@@ -44,9 +45,10 @@ class LoadController {
     print('initializing load controller');
     _autouploadController =
         await GetIt.instance.getAsync<AutouploadController>();
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+
     _cpp = await getInstanceCppNative(
-        documentsFolder: Directory.systemTemp,
-        baseUrl: kServerUrl.split('/').last);
+        documentsFolder: appDocDir, baseUrl: kServerUrl.split('/').last);
     _autouploadController?.listen(null).listen((event) async {
       try {
         var uploadMedia = event.value as UploadMedia;

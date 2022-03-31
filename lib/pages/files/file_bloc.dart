@@ -543,29 +543,29 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     }
   }
 
-  Future<void> _mapDownloadFile(
-    FileContextActionChoosed event,
-    FilesState state,
-    Emitter<FilesState> emit,
-  ) async {
-    var token = await _tokenRepository.getApiToken();
-    var recordId = event.file.id;
+  // Future<void> _mapDownloadFile(
+  //   FileContextActionChoosed event,
+  //   FilesState state,
+  //   Emitter<FilesState> emit,
+  // ) async {
+  //   var token = await _tokenRepository.getApiToken();
+  //   var recordId = event.file.id;
 
-    if (token != null) {
-      CppNative cpp = CppNative(documentsFolder: Directory.systemTemp);
-      await cpp.downloadFile(
-          recordID: recordId,
-          bearerToken: token,
-          callback: (file) async {
-            print(file.path);
-            var box = await Hive.openBox(kPathDBName);
-            box.put(recordId, file.path);
-          });
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } else {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
-  }
+  //   if (token != null) {
+  //     CppNative cpp = CppNative();
+  //     await cpp.downloadFile(
+  //         recordID: recordId,
+  //         bearerToken: token,
+  //         callback: (file) async {
+  //           print(file.path);
+  //           var box = await Hive.openBox(kPathDBName);
+  //           box.put(recordId, file.path);
+  //         });
+  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
+  //   } else {
+  //     emit(state.copyWith(status: FormzStatus.submissionFailure));
+  //   }
+  // }
 
   Future<void> _mapAddFolder(
     FilesState state,

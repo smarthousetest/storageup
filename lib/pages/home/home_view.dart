@@ -245,6 +245,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     _logout(),
+                    _update(),
                   ],
                 ),
               ),

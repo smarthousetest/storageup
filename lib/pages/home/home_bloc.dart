@@ -7,6 +7,7 @@ import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 //import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'home_event.dart';
@@ -81,6 +82,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && folderId != null) {
       final result =
           await _filesController.createFolder(event.values!.first!, folderId);
+      if (event.choosedPage == ChoosedPage.file) {
+        eventBusUpdateFolder.fire(UpdateFolderEvent);
+      }
+
       if (result != ResponseStatus.ok) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
         emit(state.copyWith(status: FormzStatus.pure));
@@ -109,6 +114,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && mediaRootFolderId != null) {
       final result = await _filesController.createFolder(
           event.values!.first!, mediaRootFolderId);
+      if (event.choosedPage == ChoosedPage.media) {
+        eventBusUpdateFolder.fire(UpdateAlbumEvent);
+      }
       if (result != ResponseStatus.ok) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
         emit(state.copyWith(status: FormzStatus.pure));
