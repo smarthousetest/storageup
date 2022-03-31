@@ -184,13 +184,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "Получите больше пространства, поменяйте подписку!"),
         "move": MessageLookupByLibrary.simpleMessage("Переместить"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
-<<<<<<< HEAD
         "new_album": MessageLookupByLibrary.simpleMessage("Новый альбом"),
         "new_folder": MessageLookupByLibrary.simpleMessage("Новая папка"),
-=======
         "name_storage":
             MessageLookupByLibrary.simpleMessage("Название места хранения"),
->>>>>>> add_deleting_avatars
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),
@@ -221,12 +218,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
-<<<<<<< HEAD
         "passwords_dont_match":
             MessageLookupByLibrary.simpleMessage("Пароли не совпадают"),
-=======
         "path": MessageLookupByLibrary.simpleMessage("Путь"),
->>>>>>> add_deleting_avatars
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
         "pb": m9,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
