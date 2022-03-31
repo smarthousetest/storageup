@@ -32,6 +32,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         await _changePassword(event, state, emit);
       } else if (event is LanguageChanged) {
         await _mapLanguageChanged(event, state, emit);
+      } else if (event is SettingsDeleteProfileImage) {
+        await _deleteAvatars(event, state, emit);
       }
     });
   }
@@ -105,6 +107,19 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       status: FormzStatus.submissionSuccess,
       needToLogout: true,
     ));
+  }
+
+  Future _deleteAvatars(
+    SettingsDeleteProfileImage event,
+    SettingsState state,
+    Emitter<SettingsState> emit,
+  ) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    var publicUrl = await _filesService.deleteProfilePic(user: state.user!);
+
+    User? user = await _userController.updateUser();
+    emit(state.copyWith(status: FormzStatus.submissionSuccess, user: user));
   }
 
   Future _changeProfilePic(

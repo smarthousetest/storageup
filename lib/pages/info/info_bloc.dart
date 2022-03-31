@@ -27,17 +27,17 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     InfoState state,
     Emitter<InfoState> emit,
   ) async {
+    User? user = await _userController.getUser;
     await _filesController.updateFilesList();
     var folder = _filesController.getFilesRootFolder;
-    var rootFolder = await _filesController.getRootFolder;
+    // var rootFolder = await _filesController.getRootFolder;
     var allMediaFolders = await _filesController.getMediaFolders(true);
 
-    User? user = await _userController.getUser;
     emit(state.copyWith(
       user: user,
       folder: folder,
       allMediaFolders: allMediaFolders,
-      rootFolders: rootFolder,
+      //rootFolders: rootFolder,
     ));
   }
 }

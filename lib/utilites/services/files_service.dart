@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/list.dart';
@@ -373,8 +374,10 @@ class FilesService {
           ]
         }
       };
+      var path = kServerUrl;
+      path += '/api/auth/profile';
       var response = await Dio().put(
-        'https://storageup.net/api/auth/profile',
+        path,
         options: Options(headers: {'Authorization': ' Bearer $token'}),
         data: data,
       );
@@ -423,6 +426,37 @@ class FilesService {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<ResponseStatus> deleteProfilePic({
+    required User user,
+  }) async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+
+      var data = {
+        'data': {
+          'firstName': user.firstName,
+          'lastName': user.lastName,
+          'phoneNumber': user.phoneNumber,
+          'avatars': []
+        }
+      };
+
+      var response = await Dio().put(
+        'https://storageup.net/api/auth/profile',
+        options: Options(headers: {'Authorization': ' Bearer $token'}),
+        data: data,
+      );
+
+      if (response.statusCode == 200)
+        return ResponseStatus.ok;
+      else
+        return ResponseStatus.failed;
+    } catch (e) {
+      print(e);
+      return ResponseStatus.failed;
     }
   }
 

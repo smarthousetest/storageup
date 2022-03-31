@@ -6,8 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
+import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_bloc.dart';
+import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
+import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -27,17 +28,18 @@ enum FileOptions {
 class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  List<DownloadLocation> locationsInfo;
-  FolderList(this.locationsInfo);
+
+  FolderList();
 }
 
 class _ButtonTemplateState extends State<FolderList> {
   // List<bool> ifFavoritesPressedList = [];
   // List<bool> isPopupMenuButtonClicked = [];
+  List<DownloadLocation> locationsInfo = [];
   List<CustomPopupMenuController> _popupControllers = [];
-  void _initiatingControllers(SpaceState state) {
+  void _initiatingControllers(FolderListState state) {
     if (_popupControllers.isEmpty) {
-      widget.locationsInfo.forEach((element) {
+      locationsInfo.forEach((element) {
         _popupControllers.add(CustomPopupMenuController());
       });
     }
@@ -58,202 +60,226 @@ class _ButtonTemplateState extends State<FolderList> {
     );
     S translate = getIt<S>();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: LayoutBuilder(
-        builder: (context, constraints) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: DataTable(
-                  columnSpacing: 0,
-                  horizontalMargin: 0,
-                  columns: [
-                    DataColumn(
-                      label: Container(
-                        width: constraints.maxWidth * 0.45,
-                        child: Text(
-                          translate.name,
-                          style: style,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Container(
-                        width: constraints.maxWidth * 0.05,
-                        child: Text(
-                          translate.size,
-                          overflow: TextOverflow.visible,
-                          style: style,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Container(
-                        width: constraints.maxWidth * 0.05,
-                        child: Text(
-                          translate.date,
-                          overflow: TextOverflow.visible,
-                          style: style,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Container(
-                        width: constraints.maxWidth * 0.1,
-                        child: Text(
-                          translate.trust_level,
-                          overflow: TextOverflow.visible,
-                          style: style,
-                        ),
-                      ),
-                    ),
-                  ],
-                  rows: widget.locationsInfo.map((element) {
-                    return DataRow.byIndex(
-                      index: widget.locationsInfo.indexOf(element),
-                      cells: [
-                        DataCell(
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/file_page/folder.svg',
-                                height: 24,
-                                width: 24,
-                              ),
-                              SizedBox(width: 10),
-                              SizedBox(
-                                width: constraints.maxWidth * 0.4,
-                                child: Text(
-                                  element.dirPath,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: cellTextStyle,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        DataCell(
-                          Row(
-                            children: [
-                              Text(
-                                translate.gb(element.countGb),
-                                maxLines: 1,
-                                style: cellTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                        DataCell(
-                          Row(
-                            children: [
-                              Text(
-                                DateFormat.yMd().format(DateTime.now()),
-                                //widget.keeperInfo[index].dateTime,
-                                maxLines: 1,
-                                style: cellTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                        DataCell(
-                          Theme(
-                            data: Theme.of(context).copyWith(
-                              hoverColor: Colors.transparent,
-                              splashColor: Colors.transparent,
+    return BlocProvider(
+      create: (context) => FolderListBloc()..add(FolderListPageOpened()),
+      child: BlocBuilder<FolderListBloc, FolderListState>(
+        builder: (context, state) {
+          locationsInfo = state.locationsInfo;
+          return LayoutBuilder(
+            builder: (context, constraints) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: DataTable(
+                      columnSpacing: 0,
+                      horizontalMargin: 0,
+                      columns: [
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.05,
+                            child: Text(
+                              translate.name,
+                              style: style,
                             ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '70',
-                                  //'${widget.keeperInfo[index].trustLevel}%',
-                                  maxLines: 1,
-                                  style: cellTextStyle,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 5, right: 20),
-                                  child: SizedBox(
-                                    width: 100,
-                                    child: MyProgressBar(
-                                      bgColor: Theme.of(context).dividerColor,
-                                      color: Theme.of(context).splashColor,
-                                      percent: 70,
-                                      // (widget.keeperInfo[index].trustLevel)!
-                                      //     .toDouble(),
-                                    ),
-                                  ),
-                                ),
-                                // Expanded(
-                                //   flex: 1,
-                                //   child: Container(),
-                                // ),
-                                BlocBuilder<SpaceBloc, SpaceState>(
-                                  // bloc: _bloc,
-                                  builder: (context, state) {
-                                    _initiatingControllers(state);
-                                    // var controller =
-                                    //     CustomPopupMenuController();
-                                    if (widget.locationsInfo.length >
-                                        _popupControllers.length) {
-                                      _popupControllers = [];
-                                      _initiatingControllers(state);
-                                    }
-                                    return CustomPopupMenu(
-                                      pressType: PressType.singleClick,
-                                      barrierColor: Colors.transparent,
-                                      showArrow: false,
-                                      horizontalMargin: 10,
-                                      verticalMargin: 0,
-                                      controller: _popupControllers[widget
-                                          .locationsInfo
-                                          .indexOf(element)],
-                                      menuBuilder: () {
-                                        return KeeperPopupMenuActions(
-                                          theme: Theme.of(context),
-                                          translate: translate,
-                                          onTap: (action) {
-                                            _popupControllers[widget
-                                                    .locationsInfo
-                                                    .indexOf(element)]
-                                                .hideMenu();
-                                            if (action == KeeperAction.change) {
-                                            } else {
-                                              context.read<SpaceBloc>().add(
-                                                  DeleteLocation(
-                                                      location: element));
-                                            }
-                                          },
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/file_page/three_dots.svg',
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.45,
+                            child: Text(
+                              translate.path,
+                              style: style,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.05,
+                            child: Text(
+                              translate.size,
+                              overflow: TextOverflow.visible,
+                              style: style,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.05,
+                            child: Text(
+                              translate.date,
+                              overflow: TextOverflow.visible,
+                              style: style,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.1,
+                            child: Text(
+                              translate.trust_level,
+                              overflow: TextOverflow.visible,
+                              style: style,
                             ),
                           ),
                         ),
                       ],
-                    );
-                  }).toList()),
+                      rows: state.locationsInfo.map((element) {
+                        return DataRow.byIndex(
+                          index: state.locationsInfo.indexOf(element),
+                          cells: [
+                            DataCell(
+                              SizedBox(
+                                width: constraints.maxWidth * 0.07,
+                                child: Text(
+                                  element.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: constraints.maxWidth * 0.4,
+                                    child: Text(
+                                      element.dirPath,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: cellTextStyle,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            DataCell(
+                              Row(
+                                children: [
+                                  Text(
+                                    translate.gb(element.countGb),
+                                    maxLines: 1,
+                                    style: cellTextStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            DataCell(
+                              Row(
+                                children: [
+                                  Text(
+                                    DateFormat.yMd().format(DateTime.now()),
+                                    //widget.keeperInfo[index].dateTime,
+                                    maxLines: 1,
+                                    style: cellTextStyle,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            DataCell(
+                              Theme(
+                                data: Theme.of(context).copyWith(
+                                  hoverColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '70',
+                                      //'${widget.keeperInfo[index].trustLevel}%',
+                                      maxLines: 1,
+                                      style: cellTextStyle,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 5, right: 20),
+                                      child: SizedBox(
+                                        width: 100,
+                                        child: MyProgressBar(
+                                          bgColor:
+                                              Theme.of(context).dividerColor,
+                                          color: Theme.of(context).splashColor,
+                                          percent: 70,
+                                          // (widget.keeperInfo[index].trustLevel)!
+                                          //     .toDouble(),
+                                        ),
+                                      ),
+                                    ),
+                                    // Expanded(
+                                    //   flex: 1,
+                                    //   child: Container(),
+                                    // ),
+                                    BlocBuilder<FolderListBloc,
+                                        FolderListState>(
+                                      // bloc: _bloc,
+                                      builder: (context, state) {
+                                        _initiatingControllers(state);
+                                        // var controller =
+                                        //     CustomPopupMenuController();
+                                        if (state.locationsInfo.length >
+                                            _popupControllers.length) {
+                                          _popupControllers = [];
+                                          _initiatingControllers(state);
+                                        }
+                                        return CustomPopupMenu(
+                                          pressType: PressType.singleClick,
+                                          barrierColor: Colors.transparent,
+                                          showArrow: false,
+                                          horizontalMargin: 10,
+                                          verticalMargin: 0,
+                                          controller: _popupControllers[state
+                                              .locationsInfo
+                                              .indexOf(element)],
+                                          menuBuilder: () {
+                                            return KeeperPopupMenuActions(
+                                              theme: Theme.of(context),
+                                              translate: translate,
+                                              onTap: (action) {
+                                                _popupControllers[state
+                                                        .locationsInfo
+                                                        .indexOf(element)]
+                                                    .hideMenu();
+                                                if (action ==
+                                                    KeeperAction.change) {
+                                                } else {
+                                                  context
+                                                      .read<FolderListBloc>()
+                                                      .add(DeleteLocation(
+                                                          location: element));
+                                                  setState(() {});
+                                                }
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 30,
+                                            width: 30,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/file_page/three_dots.svg',
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList()),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

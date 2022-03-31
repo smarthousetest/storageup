@@ -4,13 +4,13 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
-class BlurDelete extends StatefulWidget {
+class BlurDeletePic extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurDelete();
+  BlurDeletePic();
 }
 
-class _ButtonTemplateState extends State<BlurDelete> {
+class _ButtonTemplateState extends State<BlurDeletePic> {
   S translate = getIt<S>();
   bool delete = true;
   @override
@@ -34,7 +34,7 @@ class _ButtonTemplateState extends State<BlurDelete> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      translate.deleting,
+                      translate.delete_pic,
                       style: TextStyle(
                         fontSize: 20,
                         fontFamily: kNormalTextFontFamily,
@@ -44,7 +44,7 @@ class _ButtonTemplateState extends State<BlurDelete> {
                     Padding(
                       padding: const EdgeInsets.only(top: 25),
                       child: Text(
-                        translate.realy_delete,
+                        translate.really_delete_pic,
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: kNormalTextFontFamily,

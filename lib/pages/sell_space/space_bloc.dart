@@ -24,9 +24,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
       }
-      if (event is DeleteLocation) {
-        await _mapDeleteLocation(event, state, emit);
-      }
     });
   }
   // final AuthenticationRepository _authenticationRepository =
@@ -40,21 +37,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
+    //Hive.deleteFromDisk();
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
     emit(state.copyWith(user: user, locationsInfo: locationsInfo));
-  }
-
-  Future<void> _update(
-    Emitter<SpaceState> emit,
-    SpaceState state,
-  ) async {
-    //_repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
-    final locationsInfo = _repository.getlocationsInfo;
-
-    emit(state.copyWith(locationsInfo: locationsInfo));
-    print('folders was updated');
   }
 
   Future _mapRunSoft(
@@ -80,21 +67,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) {
     var countOfGb = event.countGb;
     var path = event.pathDir;
+    var name = event.name;
 
-    _repository.createLocation(countOfGb: countOfGb, path: path);
+    _repository.createLocation(countOfGb: countOfGb, path: path, name: name);
     var locationsInfo = _repository.getlocationsInfo;
     emit(state.copyWith(locationsInfo: locationsInfo));
-  }
-
-  _mapDeleteLocation(
-    DeleteLocation event,
-    SpaceState state,
-    Emitter<SpaceState> emit,
-  ) {
-    var idLocation = event.location.id;
-    _repository.deleteLocation(id: idLocation);
-    var updateLocations = _repository.getlocationsInfo;
-    emit(state.copyWith(locationsInfo: updateLocations));
-    _update(emit, state);
   }
 }

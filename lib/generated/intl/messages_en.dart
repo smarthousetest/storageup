@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_file": MessageLookupByLibrary.simpleMessage("Delete file"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Delete permanently"),
+        "delete_pic": MessageLookupByLibrary.simpleMessage("Removing a photo"),
         "deleting": MessageLookupByLibrary.simpleMessage("Deleting"),
         "documents": MessageLookupByLibrary.simpleMessage("Documents"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
@@ -156,6 +157,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
         "info": MessageLookupByLibrary.simpleMessage("Info"),
+        "install_update":
+            MessageLookupByLibrary.simpleMessage("Install update"),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
@@ -212,8 +215,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Password recovery"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "To recover your password, enter your email address in the field"),
-        "passwords_dont_match":
-            MessageLookupByLibrary.simpleMessage("Passwords don\'t match"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
         "pb": m9,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
@@ -228,6 +229,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "properties": MessageLookupByLibrary.simpleMessage("Properties"),
         "provisions":
             MessageLookupByLibrary.simpleMessage("1. General Provisions"),
+        "really_delete_pic": MessageLookupByLibrary.simpleMessage(
+            "Do you really want to delete your profile picture?"),
         "realy_delete": MessageLookupByLibrary.simpleMessage(
             "Do you really want to delete?"),
         "reason_deleting":

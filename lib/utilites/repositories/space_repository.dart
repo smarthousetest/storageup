@@ -11,8 +11,11 @@ class DownloadLocationsRepository {
 
   @factoryMethod
   static Future<DownloadLocationsRepository> create() async {
+    //Hive.deleteFromDisk();
     Hive.registerAdapter(DownloadLocationAdapter());
+
     final box = await Hive.openBox<DownloadLocation>(_downloadLocationsBoxName);
+
     return DownloadLocationsRepository._(locationsBox: box);
   }
 
@@ -43,7 +46,8 @@ class DownloadLocationsRepository {
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;
 
-  void createLocation({required String path, required int countOfGb}) {
+  void createLocation(
+      {required String path, required int countOfGb, required String name}) {
     var lastKey;
     try {
       lastKey = _locationsBox.keys.last;
@@ -55,6 +59,7 @@ class DownloadLocationsRepository {
       dirPath: path,
       countGb: countOfGb,
       id: lastKey != null ? lastKey + 1 : 0,
+      name: name,
     );
 
     _locationsBox.put(

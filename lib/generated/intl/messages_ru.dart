@@ -107,6 +107,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_file": MessageLookupByLibrary.simpleMessage("Удалить файлы"),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Удалить навсегда"),
+        "delete_pic":
+            MessageLookupByLibrary.simpleMessage("Удаление фотографии"),
         "deleting": MessageLookupByLibrary.simpleMessage("Удаление"),
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
@@ -157,6 +159,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
         "info": MessageLookupByLibrary.simpleMessage("Свойства"),
+        "install_update":
+            MessageLookupByLibrary.simpleMessage("Установить обновление"),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
@@ -180,8 +184,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Получите больше пространства, поменяйте подписку!"),
         "move": MessageLookupByLibrary.simpleMessage("Переместить"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
+<<<<<<< HEAD
         "new_album": MessageLookupByLibrary.simpleMessage("Новый альбом"),
         "new_folder": MessageLookupByLibrary.simpleMessage("Новая папка"),
+=======
+        "name_storage":
+            MessageLookupByLibrary.simpleMessage("Название места хранения"),
+>>>>>>> add_deleting_avatars
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),
@@ -212,8 +221,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Восстановление пароля"),
         "password_recovery_enter_email": MessageLookupByLibrary.simpleMessage(
             "Для восстановления пароля введите в поле адрес вашей электронной почты"),
+<<<<<<< HEAD
         "passwords_dont_match":
             MessageLookupByLibrary.simpleMessage("Пароли не совпадают"),
+=======
+        "path": MessageLookupByLibrary.simpleMessage("Путь"),
+>>>>>>> add_deleting_avatars
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
         "pb": m9,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
@@ -228,6 +241,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "properties": MessageLookupByLibrary.simpleMessage("Свойства"),
         "provisions":
             MessageLookupByLibrary.simpleMessage("1. Общие положения"),
+        "really_delete_pic": MessageLookupByLibrary.simpleMessage(
+            "Вы действительно хотите удалить фото профиля?"),
         "realy_delete": MessageLookupByLibrary.simpleMessage(
             "Вы действительно хотите удалить?"),
         "reason_deleting":

@@ -1955,6 +1955,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Removing a photo`
+  String get delete_pic {
+    return Intl.message(
+      'Removing a photo',
+      name: 'delete_pic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you really want to delete your profile picture?`
+  String get really_delete_pic {
+    return Intl.message(
+      'Do you really want to delete your profile picture?',
+      name: 'really_delete_pic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Install update`
+  String get install_update {
+    return Intl.message(
+      'Install update',
+      name: 'install_update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name of storage location`
+  String get name_storage {
+    return Intl.message(
+      'Name of storage location',
+      name: 'name_storage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Path`
+  String get path {
+    return Intl.message(
+      'Path',
+      name: 'path',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

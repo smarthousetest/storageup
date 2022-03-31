@@ -20,19 +20,22 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
       dirPath: fields[0] as String,
       countGb: fields[1] as int,
       id: fields[2] as int,
+      name: fields[3] == null ? '' : fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DownloadLocation obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.dirPath)
       ..writeByte(1)
       ..write(obj.countGb)
       ..writeByte(2)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(3)
+      ..write(obj.name);
   }
 
   @override

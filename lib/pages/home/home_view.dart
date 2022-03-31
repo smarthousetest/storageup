@@ -533,6 +533,47 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _update() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(10.0),
+            bottomLeft: Radius.circular(10.0)),
+        color: Theme.of(context).dividerColor,
+      ),
+      height: 50,
+      width: 274,
+      child: GestureDetector(
+        onTap: () async {},
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Align(
+            alignment: Alignment.center,
+            child: RichText(
+              text: TextSpan(
+                  style: TextStyle(
+                    color: Theme.of(context).splashColor,
+                    fontSize: 17,
+                    fontFamily: kNormalTextFontFamily,
+                  ),
+                  children: [
+                    WidgetSpan(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 9),
+                        child: SvgPicture.asset('assets/home_page/update.svg'),
+                      ),
+                    ),
+                    TextSpan(
+                      text: translate.install_update,
+                    ),
+                  ]),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _processUserAction(
     BuildContext context,
     AddMenuResult userAction,

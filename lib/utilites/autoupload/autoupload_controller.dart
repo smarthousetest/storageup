@@ -14,7 +14,7 @@ import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 @lazySingleton
 class AutouploadController {
   UploadMediaRepo _repo;
-  var native = CppNative();
+  var native = CppNative(documentsFolder: Directory.systemTemp);
 
   bool _isInProgress = false;
   bool _needToStop = false;

@@ -41,6 +41,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
+  final myController = TextEditingController();
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -51,6 +52,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
+
     return BlocProvider(
         create: (context) => SpaceBloc()..add(SpacePageOpened()),
         child: Expanded(
@@ -199,16 +201,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     index: index,
                     children: [
                       state.locationsInfo.isEmpty
-                          ? Column(
-                              children: [rentingAPlace(context)],
-                            )
+                          ? rentingAPlace(context)
                           : folderList(context),
                       Column(
                         children: [addSpace(context)],
                       ),
-                      Column(
-                        children: [folderList(context)],
-                      )
+                      folderList(context)
                     ],
                   );
                 }),
@@ -217,77 +215,131 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   }
 
   Widget rentingAPlace(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color.fromARGB(25, 23, 69, 139),
-                  blurRadius: 4,
-                  offset: Offset(1, 4))
-            ],
-          ),
-          // ListView(controller: ScrollController(), children: [
-          //   (MediaQuery.of(context).size.width > 1340)
-          //       ? Padding(
-          //           padding: const EdgeInsets.only(left: 558, top: 83),
-          //           child: Container(
-          //             child: Image.asset(
-          //               'assets/file_page/man+back.png',
-          //               //fit: BoxFit.fitWidth,
-          //             ),
-          //           ),
-          //         )
-          //       : Container(),
-          child: ListView(controller: ScrollController(), children: [
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20),
-                child: Container(
-                  child: Text(
-                    translate.sell_space,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 20,
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4))
+          ],
+        ),
+        // ListView(controller: ScrollController(), children: [
+        //   (MediaQuery.of(context).size.width > 1340)
+        //       ? Padding(
+        //           padding: const EdgeInsets.only(left: 558, top: 83),
+        //           child: Container(
+        //             child: Image.asset(
+        //               'assets/file_page/man+back.png',
+        //               //fit: BoxFit.fitWidth,
+        //             ),
+        //           ),
+        //         )
+        //       : Container(),
+        child: ListView(controller: ScrollController(), children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Container(
+                child: Text(
+                  translate.sell_space,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+              child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).dividerColor,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Container(
+                child: Text(
+                  translate.how_work,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Row(
+                children: [
+                  Container(
+                    child: Text(
+                      translate.rent_space + "\n" + translate.make_money,
+                      style: TextStyle(
+                        color: Theme.of(context).disabledColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
-                child: Container(
-                  height: 1,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Container(
+                child: Text(
+                  translate.select_folder +
+                      "\n" +
+                      translate.store_files +
+                      "\n" +
+                      translate.money,
+                  style: TextStyle(
+                    color: Theme.of(context).disabledColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20),
-                child: Container(
-                  child: Text(
-                    translate.how_work,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 18,
-                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Container(
+                child: Text(
+                  translate.money_two_step,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 15),
-                child: Row(
-                  children: [
-                    Container(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Row(
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        color: Color(0xff868FFF), shape: BoxShape.circle),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Container(
                       child: Text(
-                        translate.rent_space + "\n" + translate.make_money,
+                        translate.folder,
                         style: TextStyle(
                           color: Theme.of(context).disabledColor,
                           fontFamily: kNormalTextFontFamily,
@@ -295,158 +347,102 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  )
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 15),
-                child: Container(
-                  child: Text(
-                    translate.select_folder +
-                        "\n" +
-                        translate.store_files +
-                        "\n" +
-                        translate.money,
-                    style: TextStyle(
-                      color: Theme.of(context).disabledColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 14,
-                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 10),
+              child: Row(
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        color: Color(0xff868FFF), shape: BoxShape.circle),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20),
-                child: Container(
-                  child: Text(
-                    translate.money_two_step,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                          color: Color(0xff868FFF), shape: BoxShape.circle),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Container(
-                        child: Text(
-                          translate.folder,
-                          style: TextStyle(
-                            color: Theme.of(context).disabledColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 14,
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Container(
+                      child: Text(
+                        translate.size_of_space,
+                        style: TextStyle(
+                          color: Theme.of(context).disabledColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 14,
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 10),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                          color: Color(0xff868FFF), shape: BoxShape.circle),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Container(
-                        child: Text(
-                          translate.size_of_space,
-                          style: TextStyle(
-                            color: Theme.of(context).disabledColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Container(
+                child: Text(
+                  translate.upload_file + "\n" + translate.your_balance,
+                  style: TextStyle(
+                    color: Theme.of(context).disabledColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 15),
-                child: Container(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+              child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).dividerColor,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Container(
+                child: Text(
+                  translate.not_storage,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20, bottom: 30),
+              child: Container(
+                height: 42,
+                width: 200,
+                child: OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      index = 1;
+                      print(index);
+                    });
+                  },
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.maxFinite, 60),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    backgroundColor: Theme.of(context).splashColor,
+                  ),
                   child: Text(
-                    translate.upload_file + "\n" + translate.your_balance,
+                    translate.add_location,
                     style: TextStyle(
-                      color: Theme.of(context).disabledColor,
+                      color: Theme.of(context).primaryColor,
                       fontFamily: kNormalTextFontFamily,
-                      fontSize: 14,
+                      fontSize: 17,
                     ),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
-                child: Container(
-                  height: 1,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).dividerColor,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20),
-                child: Container(
-                  child: Text(
-                    translate.not_storage,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20, bottom: 30),
-                child: Container(
-                  height: 42,
-                  width: 200,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        index = 1;
-                        print(index);
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: Theme.of(context).splashColor,
-                    ),
-                    child: Text(
-                      translate.add_location,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ]),
+            ),
           ]),
-        ),
+        ]),
       ),
     );
   }
@@ -594,6 +590,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   }),
                 ],
               ),
+              _setName(context),
               Row(
                 children: [
                   Padding(
@@ -834,16 +831,20 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   width: 200,
                   child: BlocBuilder<SpaceBloc, SpaceState>(
                       builder: (context, state) {
-                    DownloadLocation locationsInfo;
+                    bool checkValidate =
+                        list.isEmpty && myController.text.isEmpty;
                     return OutlinedButton(
                       onPressed: () {
-                        if (list.isEmpty) {
+                        if (checkValidate) {
                           print('path null');
                         } else {
                           setState(() {
+                            var name = myController.text;
                             countGbSpace = _currentSliderValue.toInt();
                             context.read<SpaceBloc>().add(SaveDirPath(
-                                pathDir: dirPath, countGb: countGbSpace));
+                                pathDir: dirPath,
+                                countGb: countGbSpace,
+                                name: name));
                             index = 2;
                             context.read<SpaceBloc>().add(RunSoft());
                           });
@@ -853,7 +854,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         minimumSize: Size(double.maxFinite, 60),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: list.isEmpty
+                        backgroundColor: checkValidate
                             ? Theme.of(context).canvasColor
                             : Theme.of(context).splashColor,
                       ),
@@ -876,10 +877,89 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     );
   }
 
+  _setName(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 40, top: 26),
+          child: Row(children: [
+            Container(
+              child: Text(
+                translate.name_storage,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  child: SvgPicture.asset(
+                    'assets/file_page/prompt.svg',
+                  ),
+                ),
+              ),
+            ),
+          ]),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Container(
+                height: 42,
+                width: 350,
+                // decoration: BoxDecoration(
+                //     color: Theme.of(context).primaryColor,
+                //     borderRadius: BorderRadius.circular(10),
+                //     border: Border.all(color: Color(0xffE4E7ED))),
+                child: BlocBuilder<SpaceBloc, SpaceState>(
+                  builder: (context, state) {
+                    return TextField(
+                      controller: myController,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      textAlign: TextAlign.start,
+                      //autofocus: true,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 15, bottom: 21),
+                        hoverColor: Theme.of(context).cardColor,
+                        focusColor: Theme.of(context).cardColor,
+                        fillColor: Theme.of(context).cardColor,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: Theme.of(context).disabledColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
   Widget folderList(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(30),
+    return Positioned.fill(
       child: Container(
+        margin: EdgeInsets.all(30),
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
@@ -890,20 +970,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 offset: Offset(1, 4))
           ],
         ),
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 40, top: 20),
-                child: Container(
-                  child: Text(
-                    translate.sell_space,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 20,
-                    ),
+              Container(
+                child: Text(
+                  translate.sell_space,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 20,
                   ),
                 ),
               ),
@@ -911,31 +990,28 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 flex: 100,
                 child: Container(),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 40, top: 20),
-                child: Container(
-                  height: 30,
-                  width: 142,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        index = 1;
-                        print(index);
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      backgroundColor: Theme.of(context).splashColor,
-                    ),
-                    child: Text(
-                      translate.add_location,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 14,
-                      ),
+              Container(
+                height: 30,
+                width: 142,
+                child: OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      index = 1;
+                      print(index);
+                    });
+                  },
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.maxFinite, 60),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    backgroundColor: Theme.of(context).splashColor,
+                  ),
+                  child: Text(
+                    translate.add_location,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 14,
                     ),
                   ),
                 ),
@@ -943,12 +1019,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             ],
           ),
           BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-            return Column(
-              children: [
-                FolderList(
-                  state.locationsInfo,
-                )
-              ],
+            return Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Column(
+                children: [FolderList()],
+              ),
             );
           })
         ]),

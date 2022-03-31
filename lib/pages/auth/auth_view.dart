@@ -566,29 +566,29 @@ class _AuthViewState extends State<AuthView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: theme.primaryColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                theme.colorScheme.onBackground.withOpacity(0.5),
-                            blurRadius: 4,
-                          )
-                        ]),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Image.asset(
-                        'assets/auth/facebook.png',
-                        width: 27,
-                        height: 27,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 25.0,
-                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(15),
+                  //       color: theme.primaryColor,
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color:
+                  //               theme.colorScheme.onBackground.withOpacity(0.5),
+                  //           blurRadius: 4,
+                  //         )
+                  //       ]),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(12.0),
+                  //     child: Image.asset(
+                  //       'assets/auth/facebook.png',
+                  //       width: 27,
+                  //       height: 27,
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   width: 25.0,
+                  // ),
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),

@@ -9,15 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/media_info.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/pages/media/media_cubit.dart';
+import 'package:upstorage_desktop/pages/media/media_open/media_open_view.dart';
 import 'package:upstorage_desktop/pages/media/media_state.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -25,7 +28,6 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class MediaPage extends StatefulWidget {
@@ -54,6 +56,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   Timer? timerForOpenFile;
   int _startTimer = 1;
   bool _isOpen = false;
+  var _indexObject = -1;
   var x;
 
   void _initiatingControllers(MediaState state) {
@@ -84,6 +87,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
           setState(() {
             timer.cancel();
             _startTimer = 1;
+            _indexObject = -1;
             _isOpen = false;
           });
         } else {
@@ -98,7 +102,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
-    // if (dirs_list.isEmpty) _init(context);
+    // _args = ModalRoute.of(context)!.settings.arguments
+    //     as MediaListMoveToFolderSettings;
+
     return BlocProvider<MediaCubit>(
       create: (_) => MediaCubit()..init(),
       child: Expanded(
@@ -562,6 +568,51 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
+  // void _listener(BuildContext context, MediaState state) {
+  //   if (state.status == FormzStatus.valid) {
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return SuccessPupup(
+  //           buttonText: "translate.ok,",
+  //           middleText: "translate.added_to_album,",
+  //           onButtonTap: () => Navigator.of(context).popUntil(
+  //             (route) {
+  //               return route.settings.name == _args.nameOfRouteToBack;
+  //             },
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   } else if (state.status == FormzStatus.submissionFailure) {
+  //     if (state.errorType == ErrorType.noInternet) {
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) {
+  //           return SuccessPupup(
+  //             buttonText: "translate.ok",
+  //             middleText: "translate.no_internet",
+  //             isError: true,
+  //             onButtonTap: () => Navigator.pop(context),
+  //           );
+  //         },
+  //       );
+  //     } else if (state.errorType == ErrorType.technicalError) {
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) {
+  //           return SuccessPupup(
+  //             buttonText: "translate.ok",
+  //             middleText: "translate.technical_error",
+  //             isError: true,
+  //             onButtonTap: () => Navigator.pop(context),
+  //           );
+  //         },
+  //       );
+  //     }
+  //   }
+  // }
+
   Widget _photoOpen(BuildContext context, List<Record> record) {
     return Container(
         child: PhotoViewGallery.builder(
@@ -698,6 +749,36 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
+  void _onTapItem(List<BaseObject> media, BaseObject selectedMedia,
+      BuildContext context, Folder? openedFolder) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return MediaOpenPage(
+            arguments: MediaOpenPageArgs(
+                media: media,
+                selectedMedia: selectedMedia,
+                selectedFolder: openedFolder),
+          );
+        });
+    // pushNewScreenWithRouteSettings(
+    //   context,
+    //   screen: MediaOpenPage(),
+    //   withNavBar: false,
+    //   settings: RouteSettings(
+    //     arguments: MediaOpenPageArgs(
+    //         media: media,
+    //         selectedMedia: selectedMedia,
+    //         selectedFolder: openedFolder),
+    //   ),
+    // ).then((value) {
+    //   if (value == true) {
+    //     context.read<MediaCubit>();
+    //   }
+    //   setState(() {});
+    // });
+  }
+
   Widget _filesGrid() {
     return BlocBuilder<MediaCubit, MediaState>(
       buildWhen: (previous, current) {
@@ -739,7 +820,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                     _popupControllers[
                             state.currentFolderRecords.indexOf(record)]
                         .showMenu();
-                    //controller.showMenu();
                   }
                 }
 
@@ -747,8 +827,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      _photoOpen(context, state.currentFolderRecords);
-                      // if (_isOpen == false) {
+                      //_photoOpen(context, state.currentFolderRecords);
+                      _onTapItem(state.currentFolderRecords, record, context,
+                          state.currentFolder);
+                      // if (_indexObject != index) {
+                      //   setState(() {
+                      //     _indexObject = index;
+                      //   });
                       //   startTimer();
                       //   blocContext
                       //       .read<MediaCubit>()
@@ -915,7 +1000,11 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                         DataCell(
                           GestureDetector(
                             onTap: () {
-                              if (_isOpen == false) {
+                              var index = state.currentFolderRecords.indexOf(e);
+                              if (_indexObject != index) {
+                                setState(() {
+                                  _indexObject = index;
+                                });
                                 startTimer();
                                 context.read<MediaCubit>().fileTapped(e);
                               }
@@ -1261,4 +1350,18 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
       ),
     );
   }
+}
+
+class MediaListMoveToFolderSettings {
+  List<BaseObject>? selectedItems;
+  BaseObject? folderFrom;
+  BaseObject openedFolder;
+  String? nameOfRouteToBack;
+
+  MediaListMoveToFolderSettings({
+    required this.openedFolder,
+    this.folderFrom,
+    this.selectedItems,
+    this.nameOfRouteToBack,
+  });
 }

@@ -49,3 +49,7 @@ class SettingsLogOut extends SettingsEvent {
 class SettingsChangeProfileImage extends SettingsEvent {
   const SettingsChangeProfileImage();
 }
+
+class SettingsDeleteProfileImage extends SettingsEvent {
+  const SettingsDeleteProfileImage();
+}
