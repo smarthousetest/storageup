@@ -1,9 +1,7 @@
 import 'package:connectivity/connectivity.dart';
-import 'package:cpp_native/cpp_native.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
@@ -13,7 +11,6 @@ import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/file_event.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -541,29 +538,29 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     }
   }
 
-  Future<void> _mapDownloadFile(
-    FileContextActionChoosed event,
-    FilesState state,
-    Emitter<FilesState> emit,
-  ) async {
-    var token = await _tokenRepository.getApiToken();
-    var recordId = event.file.id;
+  // Future<void> _mapDownloadFile(
+  //   FileContextActionChoosed event,
+  //   FilesState state,
+  //   Emitter<FilesState> emit,
+  // ) async {
+  //   var token = await _tokenRepository.getApiToken();
+  //   var recordId = event.file.id;
 
-    if (token != null) {
-      CppNative cpp = CppNative();
-      await cpp.downloadFile(
-          recordID: recordId,
-          bearerToken: token,
-          callback: (file) async {
-            print(file.path);
-            var box = await Hive.openBox(kPathDBName);
-            box.put(recordId, file.path);
-          });
-      emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } else {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
-  }
+  //   if (token != null) {
+  //     CppNative cpp = CppNative();
+  //     await cpp.downloadFile(
+  //         recordID: recordId,
+  //         bearerToken: token,
+  //         callback: (file) async {
+  //           print(file.path);
+  //           var box = await Hive.openBox(kPathDBName);
+  //           box.put(recordId, file.path);
+  //         });
+  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
+  //   } else {
+  //     emit(state.copyWith(status: FormzStatus.submissionFailure));
+  //   }
+  // }
 
   Future<void> _mapAddFolder(
     FilesState state,

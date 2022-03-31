@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upstorage_desktop/main.dart';
@@ -14,7 +15,6 @@ import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 @lazySingleton
 class AutouploadController {
   UploadMediaRepo _repo;
-  var native = CppNative();
 
   bool _isInProgress = false;
   bool _needToStop = false;
@@ -149,7 +149,8 @@ class AutouploadController {
     try {
       var prefs = await SharedPreferences.getInstance();
       var isEnabled = prefs.getBool(kIsAutouploadEnabled);
-
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      var native = CppNative(documentsFolder: appDocDir);
       if (i == _unUploadedMediaIds.length || isEnabled != true) return;
 
       var uploadMedia = _repo.getUploadMedia(_unUploadedMediaIds[i]);
