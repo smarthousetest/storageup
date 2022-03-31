@@ -210,11 +210,41 @@ class S {
     );
   }
 
+  /// `You need to log in again`
+  String get notification_re_auth {
+    return Intl.message(
+      'You need to log in again',
+      name: 'notification_re_auth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Well`
+  String get good {
+    return Intl.message(
+      'Well',
+      name: 'good',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password must be more than 8 characters`
   String get wrong_password {
     return Intl.message(
       'Password must be more than 8 characters',
       name: 'wrong_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid password`
+  String get wrong_old_password {
+    return Intl.message(
+      'Invalid password',
+      name: 'wrong_old_password',
       desc: '',
       args: [],
     );
@@ -1010,6 +1040,16 @@ class S {
     );
   }
 
+  /// `Passwords don't match`
+  String get passwords_dont_match {
+    return Intl.message(
+      'Passwords don\'t match',
+      name: 'passwords_dont_match',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `New password`
   String get new_password {
     return Intl.message(
@@ -1265,6 +1305,26 @@ class S {
     return Intl.message(
       'Create album',
       name: 'create_album',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New album`
+  String get new_album {
+    return Intl.message(
+      'New album',
+      name: 'new_album',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New folder`
+  String get new_folder {
+    return Intl.message(
+      'New folder',
+      name: 'new_folder',
       desc: '',
       args: [],
     );
