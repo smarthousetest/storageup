@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
@@ -40,85 +41,90 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           child: Material(
             borderRadius: BorderRadius.circular(13),
             color: theme.primaryColor,
-            child: BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
-              builder: (context, state) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(top: 20.0, right: 20.0),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Image.asset(
-                            'assets/auth/close.png',
-                            width: 12,
-                            height: 12,
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus();
+              },
+              child: BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                builder: (context, state) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.only(top: 20.0, right: 20.0),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Image.asset(
+                              'assets/auth/close.png',
+                              width: 12,
+                              height: 12,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Center(
-                      child: Text(
-                        translate.password_recovery,
-                        style: TextStyle(
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 26.0,
-                          color: theme.disabledColor,
+                      Center(
+                        child: Text(
+                          translate.password_recovery,
+                          style: TextStyle(
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 26.0,
+                            color: theme.disabledColor,
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                      flex: 2,
-                    ),
-                    ..._body(theme, state),
-                    BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
-                      builder: (context, state) {
-                        return Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 245.0),
-                          child: OutlinedButton(
-                            onPressed: _buttonAction(state, context),
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)),
-                              // padding: EdgeInsets.symmetric(
-                              //   horizontal: 135,
-                              //   vertical: 20,
-                              // ),
-                              backgroundColor: state.email.invalid ||
-                                      state.email.value.isEmpty
-                                  ? theme.colorScheme.onPrimary
-                                  : theme.colorScheme.onSurface,
-                            ),
-                            child: Text(
-                              state.status == FormzStatus.submissionSuccess
-                                  ? translate.back_to_main
-                                  : translate.continue_button,
-                              style: TextStyle(
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17.0,
-                                color: theme.primaryColor,
+                      Expanded(
+                        child: Container(),
+                        flex: 2,
+                      ),
+                      ..._body(theme, state),
+                      BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                        builder: (context, state) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 245.0),
+                            child: OutlinedButton(
+                              onPressed: _buttonAction(state, context),
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: Size(double.maxFinite, 60),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                // padding: EdgeInsets.symmetric(
+                                //   horizontal: 135,
+                                //   vertical: 20,
+                                // ),
+                                backgroundColor: state.email.invalid ||
+                                        state.email.value.isEmpty
+                                    ? theme.colorScheme.onPrimary
+                                    : theme.colorScheme.onSurface,
+                              ),
+                              child: Text(
+                                state.status == FormzStatus.submissionSuccess
+                                    ? translate.back_to_main
+                                    : translate.continue_button,
+                                style: TextStyle(
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                  color: theme.primaryColor,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    Expanded(
-                      child: Container(),
-                      flex: 2,
-                    ),
-                  ],
-                );
-              },
+                          );
+                        },
+                      ),
+                      Expanded(
+                        child: Container(),
+                        flex: 2,
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -129,11 +135,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   List<Widget> _body(ThemeData theme, ForgotPasswordState state) {
     if (state.status != FormzStatus.submissionSuccess)
       return _bodyRequest(theme);
-    //else if (state.status == AuthError.noInternet)
-    //return _showErrorDialog();
     else
       return _bodyResult(theme);
   }
+
+  final node = FocusNode();
 
   List<Widget> _bodyRequest(ThemeData theme) {
     return [
@@ -157,25 +163,37 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
-          return CustomTextField(
-            autofocus: true,
-            hint: translate.email,
-            onChange: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
+          return RawKeyboardListener(
+            focusNode: FocusNode(),
+            onKey: (event) {
+              if (event.isKeyPressed(LogicalKeyboardKey.backspace) ||
+                  event.isKeyPressed(LogicalKeyboardKey.delete)) {
+                FocusScope.of(context).requestFocus(node);
+              }
             },
-            onFinishEditing: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
-            }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            invalid: (state.email.invalid && state.email.value.isNotEmpty) ||
-                state.error == AuthError.wrongCredentials,
-            errorMessage: state.error == AuthError.wrongCredentials
-                ? translate.non_existent_email
-                : translate.wrong_email,
-            needErrorValidation: true,
-            isPassword: false,
-            horizontalPadding: 170,
+            child: CustomTextField(
+              autofocus: true,
+              hint: translate.email,
+              focusNode: node,
+              onChange: (email) {
+                context.read<ForgotPasswordBloc>().add(
+                    ForgotPasswordEmailChanged(
+                        email: email, needValidation: true));
+              },
+              onFinishEditing: (email) {
+                context.read<ForgotPasswordBloc>().add(
+                    ForgotPasswordEmailChanged(
+                        email: email, needValidation: true));
+              }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+              invalid: (state.email.invalid && state.email.value.isNotEmpty) ||
+                  state.error == AuthError.wrongCredentials,
+              errorMessage: state.error == AuthError.wrongCredentials
+                  ? translate.non_existent_email
+                  : translate.wrong_email,
+              needErrorValidation: true,
+              isPassword: false,
+              horizontalPadding: 170,
+            ),
           );
         },
       ),
