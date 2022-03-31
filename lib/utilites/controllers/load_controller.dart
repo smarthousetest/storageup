@@ -44,7 +44,9 @@ class LoadController {
     print('initializing load controller');
     _autouploadController =
         await GetIt.instance.getAsync<AutouploadController>();
-    _cpp = await getInstanceCppNative(baseUrl: kServerUrl.split('/').last);
+    _cpp = await getInstanceCppNative(
+        documentsFolder: Directory.systemTemp,
+        baseUrl: kServerUrl.split('/').last);
     _autouploadController?.listen(null).listen((event) async {
       try {
         var uploadMedia = event.value as UploadMedia;

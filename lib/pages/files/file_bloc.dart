@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:file_picker/file_picker.dart';
@@ -550,7 +552,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     var recordId = event.file.id;
 
     if (token != null) {
-      CppNative cpp = CppNative();
+      CppNative cpp = CppNative(documentsFolder: Directory.systemTemp);
       await cpp.downloadFile(
           recordID: recordId,
           bearerToken: token,
