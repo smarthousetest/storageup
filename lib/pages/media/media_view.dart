@@ -613,36 +613,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   //   }
   // }
 
-  Widget _photoOpen(BuildContext context, List<Record> record) {
-    return Container(
-        child: PhotoViewGallery.builder(
-      scrollPhysics: const BouncingScrollPhysics(),
-      builder: (BuildContext context, int index) {
-        return PhotoViewGalleryPageOptions(
-          imageProvider: AssetImage(record[index].thumbnail!.first.publicUrl!),
-          // initialScale: PhotoViewComputedScale.contained * 0.8,
-          // heroAttributes:
-          //     PhotoViewHeroAttributes(tag: record[index].name ?? ''),
-        );
-      },
-      itemCount: record.length,
-      loadingBuilder: (context, event) => Center(
-        child: Container(
-          width: 20.0,
-          height: 20.0,
-          // child: CircularProgressIndicator(
-          //   value: event == null
-          //       ? 0
-          //       : event.cumulativeBytesLoaded / event.expectedTotalBytes,
-          // ),
-        ),
-      ),
-      //backgroundDecoration: widget.backgroundDecoration,
-      //pageController: widget.pageController,
-      //onPageChanged: onPageChanged,
-    ));
-  }
-
   Widget _progressIndicator(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height / 1.6,
@@ -828,17 +798,17 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   child: GestureDetector(
                     onTap: () {
                       //_photoOpen(context, state.currentFolderRecords);
-                      _onTapItem(state.currentFolderRecords, record, context,
-                          state.currentFolder);
-                      // if (_indexObject != index) {
-                      //   setState(() {
-                      //     _indexObject = index;
-                      //   });
-                      //   startTimer();
-                      //   blocContext
-                      //       .read<MediaCubit>()
-                      //       .fileTapped(state.currentFolderRecords[index]);
-                      // }
+                      // _onTapItem(state.currentFolderRecords, record, context,
+                      //     state.currentFolder);
+                      if (_indexObject != index) {
+                        setState(() {
+                          _indexObject = index;
+                        });
+                        startTimer();
+                        blocContext
+                            .read<MediaCubit>()
+                            .fileTapped(state.currentFolderRecords[index]);
+                      }
                     },
                     child: Listener(
                       onPointerDown: _onPointerDown,
