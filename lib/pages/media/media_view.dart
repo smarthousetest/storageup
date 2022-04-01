@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
@@ -698,6 +699,61 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
+  void _showErrorDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              translate.something_goes_wrong,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    translate.good,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: // _form.currentState.validate()
+                        Theme.of(context).splashColor,
+
+                    // Theme.of(context).primaryColor,
+                    fixedSize: Size(100, 42),
+                    elevation: 0,
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   Widget _filesGrid() {
     return BlocBuilder<MediaCubit, MediaState>(
       buildWhen: (previous, current) {
@@ -788,10 +844,14 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         return BlurDelete();
                                       },
                                     );
+                                    var res;
                                     if (result == true) {
-                                      context
+                                      res = await context
                                           .read<MediaCubit>()
                                           .onActionDeleteChoosed(record);
+                                    }
+                                    if (res == ResponseStatus.failed) {
+                                      _showErrorDialog();
                                     }
                                   }
                                 },

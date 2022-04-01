@@ -490,14 +490,20 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  void onActionDeleteChoosed(Record record) async {
+  Future<ResponseStatus?> onActionDeleteChoosed(Record record) async {
     //emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([record]);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
+      emit(state.copyWith(responseStatus: result));
+      return result;
+    } else if (result == ResponseStatus.failed) {
+      emit(state.copyWith(responseStatus: result));
+      return result;
     }
+    return result;
   }
 
   void _setRecordDownloading({

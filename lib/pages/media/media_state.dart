@@ -3,6 +3,7 @@ import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 
 class MediaState extends Equatable {
   final List<Record> currentFolderRecords;
@@ -13,6 +14,7 @@ class MediaState extends Equatable {
   final FilesRepresentation representation;
   final User? user;
   final bool progress;
+  final ResponseStatus? responseStatus;
 
   MediaState({
     this.currentFolderRecords = const [],
@@ -21,6 +23,7 @@ class MediaState extends Equatable {
     this.allRecords = const [],
     Folder? currentFolder,
     this.progress = false,
+    this.responseStatus,
     this.representation = FilesRepresentation.grid,
     this.user,
   }) : this.currentFolder = currentFolder ?? Folder.empty();
@@ -34,17 +37,18 @@ class MediaState extends Equatable {
     FilesRepresentation? representation,
     User? user,
     bool? progress,
+    ResponseStatus? responseStatus,
   }) {
     return MediaState(
-      albums: albums ?? this.albums,
-      currentFolder: currentFolder ?? this.currentFolder,
-      currentFolderRecords: currentFolderRecords ?? this.currentFolderRecords,
-      sortedRecords: sortedRecords ?? this.sortedRecords,
-      allRecords: allRecords ?? this.allRecords,
-      representation: representation ?? this.representation,
-      user: user ?? this.user,
-      progress: progress ?? this.progress,
-    );
+        albums: albums ?? this.albums,
+        currentFolder: currentFolder ?? this.currentFolder,
+        currentFolderRecords: currentFolderRecords ?? this.currentFolderRecords,
+        sortedRecords: sortedRecords ?? this.sortedRecords,
+        allRecords: allRecords ?? this.allRecords,
+        representation: representation ?? this.representation,
+        user: user ?? this.user,
+        progress: progress ?? this.progress,
+        responseStatus: responseStatus ?? this.responseStatus);
   }
 
   @override
@@ -57,5 +61,6 @@ class MediaState extends Equatable {
         sortedRecords,
         allRecords,
         progress,
+        responseStatus,
       ];
 }
