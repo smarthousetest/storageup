@@ -361,9 +361,14 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                       Function() onTap;
                       var obj = state.sortedFiles[index];
 
+                      // if (state.sortedFiles.length !=
+                      // _popupControllers.length) {
+                      // _popupControllers = [];
+                      // _initiatingControllers(state);
+                      // }
                       if (state.sortedFiles.length > _popupControllers.length) {
-                        _popupControllers = [];
-                        _initiatingControllers(state);
+                        final controller = CustomPopupMenuController();
+                        _popupControllers.add(controller);
                       }
                       _onPointerDown(PointerDownEvent event) {
                         if (event.kind == PointerDeviceKind.mouse &&
