@@ -227,6 +227,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
+        var searchText = StateSortedContainer.of(context).search;
         eventBus.on().listen((event) {
           var object = StateInfoContainer.of(context)?.object;
           if (object is Folder) {
@@ -256,8 +257,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           }
           //print(event.runtimeType);
         });
-        var searchText = StateSortedContainer.of(context).search;
-
         // if (state.search != searchText) {
         //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(
         //         searchText,

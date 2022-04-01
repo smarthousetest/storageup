@@ -459,7 +459,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                             width: 260,
                             child: OutlinedButton(
                               onPressed: () {
-                                eventBus.fire(FileInfoView);
+                                eventBus.fire(FileInfoViewEvent);
                               },
                               style: OutlinedButton.styleFrom(
                                 minimumSize: Size(double.maxFinite, 60),
@@ -482,3 +482,5 @@ class _ButtonTemplateState extends State<FileInfoView> {
             ])));
   }
 }
+
+class FileInfoViewEvent {}

@@ -131,6 +131,7 @@ class AuthService {
         return AuthenticationStatus.unauthenticated;
       }
     } on DioError catch (e) {
+      print(e);
       print('email verification failed');
       return AuthenticationStatus.unauthenticated;
     }
