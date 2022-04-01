@@ -93,7 +93,6 @@ class _ButtonTemplateState extends State<BlurDelete> {
                               padding: const EdgeInsets.only(left: 20),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  eventBusDeleteFile.fire(BlurDelete);
                                   Navigator.pop(context, delete);
                                 },
                                 child: Text(
