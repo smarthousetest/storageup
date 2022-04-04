@@ -220,6 +220,10 @@
     "english": "English",
     "delete_pic": "Removing a photo",
     "really_delete_pic": "Do you really want to delete your profile picture?",
+    "realy_delete_keeper": "Deleting a storage location",
+    "delete_keeper_text1": "Are you sure you want to delete the storage location?",
+    "delete_keeper_text2": "This action is irreversible.",
+    "delete_keeper_text3": "We will need to clean up the space on your computer, please do not exit the application.",
     "install_update": "Install update",
     "name_storage": "Name of storage location",
     "path": "Path"
