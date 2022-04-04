@@ -101,9 +101,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Padding(
-                              padding: wrongOldPass
-                                  ? const EdgeInsets.only(top: 10)
-                                  : const EdgeInsets.only(top: 30),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Text(
                                 translate.change_Password,
                                 style: TextStyle(
@@ -115,13 +113,13 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                             ),
                             Padding(
                               padding: wrongOldPass
-                                  ? const EdgeInsets.only(top: 0)
-                                  : const EdgeInsets.only(top: 20),
+                                  ? const EdgeInsets.only(top: 28)
+                                  : const EdgeInsets.only(top: 10),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
                                   wrongOldPass
-                                      ? ""
+                                      ? " "
                                       : translate.wrong_old_password,
                                   style: TextStyle(
                                     fontSize: wrongOldPass ? 0 : 14,
