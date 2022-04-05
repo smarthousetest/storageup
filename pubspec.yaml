@@ -16,29 +16,33 @@ dependencies:
 
   cupertino_icons: ^1.0.4
   intl: ^0.17.0
-  adaptive_theme: ^2.3.0
+  adaptive_theme: ^2.3.1
   flutter_svg: ^1.0.3
   flutter_bloc: ^8.0.1
   formz: ^0.4.1
   equatable: ^2.0.3
-  dio: ^4.0.4
+  dio: ^4.0.6
   get_it: ^7.2.0
   injectable: ^1.5.3
   persistent_bottom_nav_bar: ^4.0.2
-  permission_handler: ^9.1.0
+  permission_handler: ^9.2.0
   scrollable_positioned_list: ^0.2.3
-  hive: ^2.0.5
+  hive: ^2.1.0
   path_provider: ^2.0.9
   desktop_window: ^0.4.0
   shared_preferences: ^2.0.13
   shared_preferences_platform_interface: ^2.0.0
-  file_picker: ^4.4.0
-  image_picker: ^0.8.4+9
+  file_picker: ^4.5.1
+  image_picker: ^0.8.4+11
   percent_indicator: ^4.0.0
   connectivity: ^3.0.6
   custom_pop_up_menu: ^1.2.3+1
   open_file: ^3.2.1
   photo_view: ^0.13.0
+  os_specification:
+#    git:
+#      url: git@github.com:Fuxtrel/os_specification.git
+    path: C:\Users\a99so\IdeaProjects\os_specification
 
   cpp_native:
     git:
@@ -48,7 +52,7 @@ dependencies:
 
 dev_dependencies:
   injectable_generator:
-  build_runner: ^2.1.7
+  build_runner: ^2.1.8
   hive_generator: ^1.1.2
   flutter_test:
     sdk: flutter

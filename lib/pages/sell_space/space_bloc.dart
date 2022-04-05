@@ -8,9 +8,7 @@ import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
-
-import '../../os/linux.dart';
-import '../../os/windows.dart';
+import 'package:os_specification/os_specification.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   SpaceBloc() : super(SpaceState()) {
@@ -26,6 +24,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       }
     });
   }
+
   // final AuthenticationRepository _authenticationRepository =
   // getIt<AuthenticationRepository>();
 
@@ -50,14 +49,18 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     Emitter<SpaceState> emit,
   ) async {
     var os = (Platform.isWindows) ? Windows() : Linux();
-    os.killProcess('keeper.exe');
-    var appDirPath = os.getAppLocation();
-    if (appDirPath.isNotEmpty) {
-      os.startProcessDetach('keeper', true, [
-        state.locationsInfo.last.dirPath,
-        (state.locationsInfo.last.countGb * 1024 * 1024 * 1024).toString()
-      ]);
+    var keeperLocations = File('${os.appDirPath}keeper_locations');
+    if (keeperLocations.existsSync()) {
+      keeperLocations.deleteSync();
     }
+    keeperLocations.createSync();
+    var keeperLocationsSink = keeperLocations.openWrite(mode: FileMode.append);
+    state.locationsInfo.forEach((element) {
+      keeperLocationsSink.add('${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'.codeUnits);
+    });
+    await keeperLocationsSink.close();
+    // os.killProcess('keeper.exe');
+    os.startProcess('keeper', true, [state.locationsInfo.last.dirPath, (state.locationsInfo.last.countGb * 1024 * 1024 * 1024).toString()]);
   }
 
   _mapSaveDirPath(
