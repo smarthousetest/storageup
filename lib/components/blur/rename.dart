@@ -1,5 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/services/files_service.dart';
+import 'package:upstorage_desktop/generated/l10n.dart';
 
 class BlurRename extends StatefulWidget {
   @override
@@ -8,6 +12,8 @@ class BlurRename extends StatefulWidget {
 }
 
 class _ButtonTemplateState extends State<BlurRename> {
+  S translate = getIt<S>();
+  FilesService _filesService = getIt<FilesService>();
   final myController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -45,10 +51,10 @@ class _ButtonTemplateState extends State<BlurRename> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Переименовать',
+                            translate.rename,
                             style: TextStyle(
                               fontSize: 20,
-                              fontFamily: 'Lato',
+                              fontFamily: kNormalTextFontFamily,
                               color: Color(0xff5F5F5F),
                             ),
                           ),
@@ -75,12 +81,12 @@ class _ButtonTemplateState extends State<BlurRename> {
                                     hintText: 'Новое имя',
                                     hintStyle: TextStyle(
                                       color: Color(0xff7D7D7D),
-                                      fontFamily: 'Lato',
+                                      fontFamily: kNormalTextFontFamily,
                                       fontSize: 14,
                                     )),
                                 style: TextStyle(
                                   color: Color(0xff7D7D7D),
-                                  fontFamily: 'Lato',
+                                  fontFamily: kNormalTextFontFamily,
                                   fontSize: 14,
                                 ),
                               ),
@@ -95,22 +101,24 @@ class _ButtonTemplateState extends State<BlurRename> {
                                 children: [
                                   Container(
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                       child: Text(
-                                        'Отмена',
+                                        translate.cancel,
                                         style: TextStyle(
-                                          color: Color(0xff70BBF6),
+                                          color: Theme.of(context).splashColor,
                                           fontSize: 16,
-                                          fontFamily: 'Lato',
+                                          fontFamily: kNormalTextFontFamily,
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
+                                        primary: Theme.of(context).primaryColor,
                                         fixedSize: Size(140, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Color(0xff70BBF6),
+                                          color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -124,10 +132,10 @@ class _ButtonTemplateState extends State<BlurRename> {
                                     child: ElevatedButton(
                                       onPressed: () {
                                         Navigator.pop(
-                                            context, myController.text);
+                                            context, myController.text.trim());
                                       },
                                       child: Text(
-                                        'Сохранить',
+                                        translate.save,
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -165,7 +173,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                         Icons.close,
                         color: Color(0xff70BBF6),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
                 ],

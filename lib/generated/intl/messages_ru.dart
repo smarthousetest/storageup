@@ -249,6 +249,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "regulations":
             MessageLookupByLibrary.simpleMessage("Нормативные документы"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
+        "rename": MessageLookupByLibrary.simpleMessage("Переименовать"),
         "rent": MessageLookupByLibrary.simpleMessage("Сдать"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "Вы можете использовать свободное место на вашем жестком"),

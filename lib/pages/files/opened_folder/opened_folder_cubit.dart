@@ -151,7 +151,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         _onActionDeleteChoosed(object);
         break;
       case FileAction.properties:
-        //PropertiesView(object: object);
+        //&&&&&&&&&&&
+        break;
+      case FileAction.rename:
         break;
       default:
         print('default');

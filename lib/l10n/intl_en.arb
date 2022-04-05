@@ -222,5 +222,6 @@
     "really_delete_pic": "Do you really want to delete your profile picture?",
     "install_update": "Install update",
     "name_storage": "Name of storage location",
-    "path": "Path"
+    "path": "Path",
+    "rename": "Rename"
 }

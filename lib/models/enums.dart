@@ -16,6 +16,7 @@ enum AuthenticationStatus {
 enum FileAction {
   delete,
   properties,
+  rename,
 }
 
 enum MediaAction {

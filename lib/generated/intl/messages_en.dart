@@ -247,6 +247,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "registration": MessageLookupByLibrary.simpleMessage("Registration"),
         "regulations": MessageLookupByLibrary.simpleMessage("Regulations"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Remember me"),
+        "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "rent": MessageLookupByLibrary.simpleMessage("Rent"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "You can use free space on your hard"),

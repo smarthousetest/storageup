@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
+import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
@@ -437,6 +438,22 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                         if (action == FileAction.properties) {
                                           StateInfoContainer.of(context)
                                               ?.setInfoObject(obj);
+                                        } else if (action ==
+                                            FileAction.rename) {
+                                          var result = await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return BlurRename();
+                                            },
+                                          );
+                                          if (result == true) {
+                                            context
+                                                .read<OpenedFolderCubit>()
+                                                .onRecordActionChoosed(
+                                                  action,
+                                                  obj,
+                                                );
+                                          }
                                         } else {
                                           var result = await showDialog(
                                             context: context,
@@ -573,6 +590,13 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   if (action == FileAction.properties) {
                                     StateInfoContainer.of(context)
                                         ?.setInfoObject(obj);
+                                  } else if (action == FileAction.rename) {
+                                    var result = await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return BlurRename();
+                                      },
+                                    );
                                   } else {
                                     var result = await showDialog(
                                       context: context,
@@ -944,6 +968,13 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                         // controller.hideMenu();
                                         StateInfoContainer.of(context)
                                             ?.setInfoObject(element);
+                                      } else if (action == FileAction.rename) {
+                                        var result = await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return BlurRename();
+                                          },
+                                        );
                                       } else {
                                         //   controller.hideMenu();
                                         var result = await showDialog(
@@ -1306,6 +1337,21 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                             if (action == FileAction.properties) {
                               StateInfoContainer.of(context)
                                   ?.setInfoObject(obj);
+                            } else if (action == FileAction.rename) {
+                              var result = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return BlurRename();
+                                },
+                              );
+                              if (result == true) {
+                                context
+                                    .read<OpenedFolderCubit>()
+                                    .onRecordActionChoosed(
+                                      action,
+                                      obj,
+                                    );
+                              }
                             } else {
                               var result = await showDialog(
                                 context: context,
@@ -1601,6 +1647,46 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                 //   color: mainColor,
                 //   height: 1,
                 // ),
+
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.rename);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 3;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 3 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.zero,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/options/rename.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.rename,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
                 GestureDetector(
                   onTap: () {
                     widget.onTap(FileAction.properties);
@@ -1620,10 +1706,6 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Image.asset(
-                          //   'assets/file_page/file_options/info.png',
-                          //   height: 20,
-                          // ),
                           SvgPicture.asset(
                             'assets/options/info.svg',
                             height: 20,
