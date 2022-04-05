@@ -84,7 +84,7 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                             Container(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  Navigator.pop(context, false);
                                 },
                                 child: Text(
                                   translate.cancel,
@@ -150,7 +150,7 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                 padding: const EdgeInsets.only(top: 20, right: 22),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, false);
                   },
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
