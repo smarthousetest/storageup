@@ -40,9 +40,9 @@ dependencies:
   open_file: ^3.2.1
   photo_view: ^0.13.0
   os_specification:
-#    git:
-#      url: git@github.com:Fuxtrel/os_specification.git
-    path: C:\Users\a99so\IdeaProjects\os_specification
+    git:
+      url: git@github.com:Fuxtrel/os_specification.git
+#    path: C:\Users\a99so\IdeaProjects\os_specification
 
   cpp_native:
     git:
