@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
@@ -55,7 +56,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: kNormalTextFontFamily,
-                              color: Color(0xff5F5F5F),
+                              color: Theme.of(context).focusColor,
                             ),
                           ),
                           Padding(
@@ -64,7 +65,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                               width: 400,
                               height: 36,
                               decoration: BoxDecoration(
-                                color: Color(0xffF7F9FB),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               alignment: Alignment.center,
@@ -137,18 +138,18 @@ class _ButtonTemplateState extends State<BlurRename> {
                                       child: Text(
                                         translate.save,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Theme.of(context).primaryColor,
                                           fontSize: 16,
                                           fontFamily: 'Lato',
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Color(0xff70BBF6),
+                                        primary: Theme.of(context).splashColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Color(0xff70BBF6),
+                                          color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -166,18 +167,18 @@ class _ButtonTemplateState extends State<BlurRename> {
                     ),
                   ),
                   Container(
-                    width: 60,
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Color(0xff70BBF6),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                      width: 60,
+                      alignment: Alignment.topRight,
+                      padding: EdgeInsets.only(right: 15, top: 15),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child:
+                                SvgPicture.asset('assets/file_page/close.svg')),
+                      )),
                 ],
               ),
             ),
