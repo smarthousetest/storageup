@@ -26,15 +26,19 @@ class Linux extends OsSpecifications {
   }
 
   @override
-  int startProcess(String processName, bool hide, [List<String> args = const []]) {
+  int startProcess(String processName, bool hide,
+      [List<String> args = const []]) {
     late ProcessResult result;
-    if(hide){
-      result = Process.runSync('nohup', ['$appDirPath${Platform.pathSeparator}$keeperName &']);
-    }else{
-      result = Process.runSync('$appDirPath${Platform.pathSeparator}$keeperName', []);
+    if (hide) {
+      result = Process.runSync(
+          'nohup', ['$appDirPath${Platform.pathSeparator}$keeperName &']);
+    } else {
+      result = Process.runSync(
+          '$appDirPath${Platform.pathSeparator}$keeperName', []);
     }
     return result.exitCode;
   }
+
   //TODO: create method, registers app in linux
   @override
   int registerAppInOs(String appDirPath) {
@@ -48,7 +52,8 @@ class Linux extends OsSpecifications {
   }
 
   @override
-  void startProcessDetach(String processName, bool hide, [List<String> args = const []]) {
+  void startProcessDetach(String processName, bool hide,
+      [List<String> args = const []]) {
     // TODO: implement startProcessDetach
   }
 }

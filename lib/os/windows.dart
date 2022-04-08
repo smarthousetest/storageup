@@ -53,7 +53,8 @@ class Windows extends OsSpecifications {
   }
 
   @override
-  int startProcess(String processName, bool hide, [List<String> args = const []]) {
+  int startProcess(String processName, bool hide,
+      [List<String> args = const []]) {
     late ProcessResult result;
     switch (processName) {
       case 'keeper':
@@ -84,18 +85,25 @@ class Windows extends OsSpecifications {
 
   @override
   int registerAppInOs(String appDirPath) {
-    var result = Process.runSync('.${Platform.pathSeparator}install.bat', ['$appDirPath${Platform.pathSeparator}StorageUp${Platform.pathSeparator}']);
+    var result = Process.runSync('.${Platform.pathSeparator}install.bat', [
+      '$appDirPath${Platform.pathSeparator}StorageUp${Platform.pathSeparator}'
+    ]);
     return result.exitCode;
   }
 
   @override
   int createShortcuts(String appDirPath) {
-    var result = Process.runSync('powershell.exe', ['cscript', '.${Platform.pathSeparator}create_shortcuts.vbs', '$appDirPath${Platform.pathSeparator}StorageUp']);
+    var result = Process.runSync('powershell.exe', [
+      'cscript',
+      '.${Platform.pathSeparator}create_shortcuts.vbs',
+      '$appDirPath${Platform.pathSeparator}StorageUp'
+    ]);
     return result.exitCode;
   }
 
   @override
-  void startProcessDetach(String processName, bool hide, [List<String> args = const []]) {
+  void startProcessDetach(String processName, bool hide,
+      [List<String> args = const []]) {
     switch (processName) {
       case 'keeper':
         if (hide) {

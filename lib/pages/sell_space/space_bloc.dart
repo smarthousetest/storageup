@@ -8,6 +8,7 @@ import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
+import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 
 import '../../os/linux.dart';
 import '../../os/windows.dart';
@@ -31,6 +32,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
 
   UserController _userController = getIt<UserController>();
   late final DownloadLocationsRepository _repository;
+  final KeeperService _subscriptionService = getIt<KeeperService>();
 
   Future _mapSpacePageOpened(
     SpacePageOpened event,
@@ -41,7 +43,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
-    emit(state.copyWith(user: user, locationsInfo: locationsInfo));
+    var keeper = await _subscriptionService.getAllKeepers();
+    emit(state.copyWith(
+        user: user, locationsInfo: locationsInfo, keeper: keeper));
   }
 
   Future _mapRunSoft(
@@ -64,13 +68,18 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SaveDirPath event,
     SpaceState state,
     Emitter<SpaceState> emit,
-  ) {
+  ) async {
     var countOfGb = event.countGb;
     var path = event.pathDir;
     var name = event.name;
+    var id = await _subscriptionService.addNewKeeper(name, countOfGb);
+    if (id != null) {
+      _repository.createLocation(
+          countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+    }
 
-    _repository.createLocation(countOfGb: countOfGb, path: path, name: name);
     var locationsInfo = _repository.getlocationsInfo;
+
     emit(state.copyWith(locationsInfo: locationsInfo));
   }
 }

@@ -47,7 +47,10 @@ class DownloadLocationsRepository {
   //     _locationsInfo = locationsInfo;
 
   void createLocation(
-      {required String path, required int countOfGb, required String name}) {
+      {required String path,
+      required int countOfGb,
+      required String name,
+      required String idForCompare}) {
     var lastKey;
     try {
       lastKey = _locationsBox.keys.last;
@@ -60,6 +63,7 @@ class DownloadLocationsRepository {
       countGb: countOfGb,
       id: lastKey != null ? lastKey + 1 : 0,
       name: name,
+      idForCompare: idForCompare,
     );
 
     _locationsBox.put(

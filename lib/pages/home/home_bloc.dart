@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
@@ -10,6 +12,7 @@ import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 //import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/services/files_service.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
@@ -40,18 +43,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         Hive.init(value.path);
         print('Hive initialized');
       });
+      var upToDateVersion = await _filesService.getVersionApp();
+
+      String version = await _read();
+      emit(state.copyWith(
+        upToDateVersion: upToDateVersion,
+        version: version,
+      ));
     });
   }
-
+  final FilesService _filesService = getIt<FilesService>();
   var _loadController = getIt<LoadController>();
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
 
-  @override
-  Future<void> close() async {
-    //await eventBusUpdateFolder.streamController.close();
-
-    return super.close();
+  Future<String> _read() async {
+    String version;
+    try {
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final File file = File('${directory.path}/ui_version.txt');
+      version = await file.readAsString();
+      return version;
+    } catch (e) {
+      print("Couldn't read file");
+      return "Couldn't read file";
+    }
   }
 
   Future<void> _uploadFiles(

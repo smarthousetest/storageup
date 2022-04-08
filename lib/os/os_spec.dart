@@ -1,7 +1,8 @@
 abstract class OsSpecifications {
   int killProcess(String processName);
 
-  int startProcess(String processName, bool hide, [List<String> args = const []]);
+  int startProcess(String processName, bool hide,
+      [List<String> args = const []]);
 
   String getAppLocation();
 
@@ -11,5 +12,6 @@ abstract class OsSpecifications {
 
   int createShortcuts(String appDirPath);
 
-  void startProcessDetach(String processName, bool hide, [List<String> args = const []]);
+  void startProcessDetach(String processName, bool hide,
+      [List<String> args = const []]);
 }

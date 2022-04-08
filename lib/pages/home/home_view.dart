@@ -223,31 +223,36 @@ class _HomePageState extends State<HomePage> {
                         offset: Offset(1, 4))
                   ],
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                      child: SvgPicture.asset(
-                        'assets/home_page/storage_title.svg',
+                child:
+                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                        child: SvgPicture.asset(
+                          'assets/home_page/storage_title.svg',
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                      child: SvgPicture.asset(
-                        'assets/home_page/separator.svg',
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                        child: SvgPicture.asset(
+                          'assets/home_page/separator.svg',
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        controller: ScrollController(),
-                        children: leftButtonsItem(),
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          controller: ScrollController(),
+                          children: leftButtonsItem(),
+                        ),
                       ),
-                    ),
-                    _logout(),
-                    _update(),
-                  ],
-                ),
+                      _logout(),
+                      state.upToDateVersion != state.version
+                          ? _update()
+                          : Container(),
+                    ],
+                  );
+                }),
               ),
               getPage(),
             ],

@@ -17,6 +17,8 @@ class HomeState extends Equatable {
   final bool trashTab;
   final bool financeTab;
   final FormzStatus status;
+  final String? upToDateVersion;
+  final String? version;
 
   HomeState({
     this.usingSpace = 0,
@@ -34,6 +36,8 @@ class HomeState extends Equatable {
     this.trashTab = false,
     this.financeTab = false,
     this.status = FormzStatus.pure,
+    this.upToDateVersion,
+    this.version,
   });
 
   HomeState copyWith({
@@ -47,6 +51,8 @@ class HomeState extends Equatable {
     bool? filesTab,
     bool? mediaTab,
     FormzStatus? status,
+    String? upToDateVersion,
+    String? version,
   }) {
     return HomeState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -60,6 +66,8 @@ class HomeState extends Equatable {
       filesTab: filesTab ?? this.filesTab,
       mediaTab: mediaTab ?? this.mediaTab,
       status: status ?? FormzStatus.pure,
+      upToDateVersion: upToDateVersion ?? this.upToDateVersion,
+      version: version ?? this.version,
     );
   }
 
@@ -75,5 +83,7 @@ class HomeState extends Equatable {
         filesTab,
         mediaTab,
         status,
+        upToDateVersion,
+        version,
       ];
 }

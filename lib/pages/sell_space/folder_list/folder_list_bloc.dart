@@ -7,6 +7,9 @@ import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
+import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
+
+import '../../../utilites/services/keeper_service.dart';
 
 class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   FolderListBloc() : super(FolderListState()) {
@@ -24,6 +27,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
 
   UserController _userController = getIt<UserController>();
   late final DownloadLocationsRepository _repository;
+  final KeeperService _subscriptionService = getIt<KeeperService>();
 
   Future _mapSpacePageOpened(
     FolderListPageOpened event,
@@ -32,8 +36,10 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   ) async {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+    var keeper = await _subscriptionService.getAllKeepers();
     final locationsInfo = _repository.getlocationsInfo;
-    emit(state.copyWith(user: user, locationsInfo: locationsInfo));
+    emit(state.copyWith(
+        user: user, locationsInfo: locationsInfo, keeper: keeper));
   }
 
   Future<void> _update(
