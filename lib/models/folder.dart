@@ -1,7 +1,7 @@
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/record.dart';
 
-class Folder extends BaseObject {
+class Folder extends BaseObject /*implements ExtentionFind*/ {
   List<Record>? records;
   List<Folder>? folders;
   String? parentFolder;

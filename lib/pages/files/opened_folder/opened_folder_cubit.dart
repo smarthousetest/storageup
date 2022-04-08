@@ -150,9 +150,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       case FileAction.delete:
         _onActionDeleteChoosed(object);
         break;
-      case FileAction.properties:
-        //&&&&&&&&&&&
-        break;
       case FileAction.rename:
         break;
       default:
@@ -318,6 +315,19 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
+    }
+  }
+
+  void onActionRenameChoosed(BaseObject object, String newName) async {
+    var result = await _filesController.renameRecord(newName, object.id);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    } else {
+      result = await _filesController.renameFolder(newName, object.id);
+      if (result == ResponseStatus.ok) {
+        _update();
+      }
     }
   }
 

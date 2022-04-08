@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cpp_native/file_typification/file_typification.dart';
+import 'package:file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -440,19 +440,44 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                               ?.setInfoObject(obj);
                                         } else if (action ==
                                             FileAction.rename) {
-                                          var result = await showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return BlurRename();
-                                            },
-                                          );
-                                          if (result == true) {
-                                            context
-                                                .read<OpenedFolderCubit>()
-                                                .onRecordActionChoosed(
-                                                  action,
-                                                  obj,
-                                                );
+                                          if (obj is Folder) {
+                                            var result = await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                var fileName = obj.name ?? '';
+                                                return BlurRename(fileName);
+                                              },
+                                            );
+                                            if (result != null &&
+                                                result is String) {
+                                              result = result;
+                                              context
+                                                  .read<OpenedFolderCubit>()
+                                                  .onActionRenameChoosed(
+                                                      obj, result);
+                                            }
+                                          } else {
+                                            var fileExtention = FileAttribute()
+                                                .getFileExtension(
+                                                    obj.name ?? '');
+                                            var result = await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                var fileName = FileAttribute()
+                                                    .getFileName(
+                                                        obj.name ?? '');
+                                                return BlurRename(fileName);
+                                              },
+                                            );
+                                            if (result != null &&
+                                                result is String) {
+                                              result =
+                                                  result + '.' + fileExtention;
+                                              context
+                                                  .read<OpenedFolderCubit>()
+                                                  .onActionRenameChoosed(
+                                                      obj, result);
+                                            }
                                           }
                                         } else {
                                           var result = await showDialog(
@@ -594,9 +619,14 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                     var result = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return BlurRename();
+                                        return BlurRename(obj.name ?? '');
                                       },
                                     );
+                                    if (result != null && result is String) {
+                                      context
+                                          .read<OpenedFolderCubit>()
+                                          .onActionRenameChoosed(obj, result);
+                                    }
                                   } else {
                                     var result = await showDialog(
                                       context: context,
@@ -972,9 +1002,17 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                         var result = await showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return BlurRename();
+                                            return BlurRename(
+                                                element.name ?? '');
                                           },
                                         );
+                                        if (result != null &&
+                                            result is String) {
+                                          context
+                                              .read<OpenedFolderCubit>()
+                                              .onActionRenameChoosed(
+                                                  element, result);
+                                        }
                                       } else {
                                         //   controller.hideMenu();
                                         var result = await showDialog(
@@ -1341,16 +1379,15 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                               var result = await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return BlurRename();
+                                  var splited = obj.name?.split('.');
+                                  print(splited);
+                                  return BlurRename(obj.name ?? '');
                                 },
                               );
-                              if (result == true) {
+                              if (result != null && result is String) {
                                 context
                                     .read<OpenedFolderCubit>()
-                                    .onRecordActionChoosed(
-                                      action,
-                                      obj,
-                                    );
+                                    .onActionRenameChoosed(obj, result);
                               }
                             } else {
                               var result = await showDialog(

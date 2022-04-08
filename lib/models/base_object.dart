@@ -41,3 +41,7 @@ class BaseObject extends Equatable {
         favorite,
       ];
 }
+
+/*abstract class ExtentionFind {
+  String GetElementObjectFunction();
+}*/
