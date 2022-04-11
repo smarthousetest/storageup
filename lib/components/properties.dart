@@ -1,4 +1,4 @@
-import 'package:cpp_native/file_typification/file_typification.dart';
+import 'package:file_typification/file_typification.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
