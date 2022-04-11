@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +23,7 @@ import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
+import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 
 import '../../../constants.dart';
 
@@ -50,6 +52,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
   StreamSubscription? updatePageSubscription;
+  late final LatestFileRepository _repository;
 
   late Observer _updateObserver = Observer((e) {
     try {
@@ -105,6 +108,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       _update();
     });
     bool progress = true;
+    _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
     emit(
       state.copyWith(
@@ -565,8 +569,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> fileTapped(Record record) async {
+    _repository.addFile(file: record);
     var box = await Hive.openBox(kPathDBName);
-
     String path = box.get(record.id, defaultValue: '');
 
     if (path.isNotEmpty) {

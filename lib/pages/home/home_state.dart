@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:upstorage_desktop/models/base_object.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 
 class HomeState extends Equatable {
   final double usingSpace;
@@ -19,6 +21,7 @@ class HomeState extends Equatable {
   final FormzStatus status;
   final String? upToDateVersion;
   final String? version;
+  final List<LatestFile>? latestFile;
 
   HomeState({
     this.usingSpace = 0,
@@ -38,6 +41,7 @@ class HomeState extends Equatable {
     this.status = FormzStatus.pure,
     this.upToDateVersion,
     this.version,
+    this.latestFile,
   });
 
   HomeState copyWith({
@@ -53,6 +57,7 @@ class HomeState extends Equatable {
     FormzStatus? status,
     String? upToDateVersion,
     String? version,
+    List<LatestFile>? latestFile,
   }) {
     return HomeState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -68,6 +73,7 @@ class HomeState extends Equatable {
       status: status ?? FormzStatus.pure,
       upToDateVersion: upToDateVersion ?? this.upToDateVersion,
       version: version ?? this.version,
+      latestFile: latestFile ?? this.latestFile,
     );
   }
 
@@ -85,5 +91,6 @@ class HomeState extends Equatable {
         status,
         upToDateVersion,
         version,
+        latestFile,
       ];
 }

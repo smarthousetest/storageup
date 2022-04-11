@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,6 +13,7 @@ import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 //import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 import 'home_event.dart';
 import 'home_state.dart';
@@ -44,11 +46,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         print('Hive initialized');
       });
       var upToDateVersion = await _filesService.getVersionApp();
-
+      _repository = await GetIt.instance.getAsync<LatestFileRepository>();
+      var latestFile = await _repository.getLatestFile;
       String version = await _read();
       emit(state.copyWith(
         upToDateVersion: upToDateVersion,
         version: version,
+        latestFile: latestFile,
       ));
     });
   }
@@ -56,6 +60,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   var _loadController = getIt<LoadController>();
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
+  late final LatestFileRepository _repository;
 
   Future<String> _read() async {
     String version;
@@ -131,7 +136,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final result = await _filesController.createFolder(
           event.values!.first!, mediaRootFolderId);
       if (event.choosedPage == ChoosedPage.media) {
-        eventBusUpdateFolder.fire(UpdateAlbumEvent);
+        eventBusUpdateAlbum.fire(UpdateAlbumEvent);
       }
       if (result != ResponseStatus.ok) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));

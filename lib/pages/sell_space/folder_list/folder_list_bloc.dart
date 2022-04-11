@@ -7,7 +7,6 @@ import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
-import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
 
 import '../../../utilites/services/keeper_service.dart';
 

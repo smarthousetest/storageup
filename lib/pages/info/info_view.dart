@@ -421,7 +421,9 @@ class _InfoPageState extends State<InfoPage> {
         e = (allSpaceGb * (0.000000001));
 
         double percentFiles = ((e / currentSubSpace) * 100).toDouble();
-
+        if (percentFiles.isNaN) {
+          percentFiles = 0;
+        }
         return SizedBox(
           height: 10,
           child: Stack(

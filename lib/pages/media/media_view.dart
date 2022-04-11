@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:cpp_native/file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/media_info.dart';
