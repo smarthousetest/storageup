@@ -10,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/components/blur/rename.dart';
 
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -323,6 +324,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
+    } else if (result == ResponseStatus.declined) {
+      print('declained');
     } else {
       result = await _filesController.renameFolder(newName, object.id);
       if (result == ResponseStatus.ok) {

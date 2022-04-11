@@ -323,6 +323,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Неверный e-mail или пароль!"),
         "wrong_email":
             MessageLookupByLibrary.simpleMessage("Введите корректный e-mail"),
+        "wrong_filename": MessageLookupByLibrary.simpleMessage(
+            "Файл с таким имененем уже сушествует."),
         "wrong_old_password":
             MessageLookupByLibrary.simpleMessage("Неверный пароль"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(

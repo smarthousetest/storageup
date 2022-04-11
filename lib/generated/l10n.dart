@@ -2015,6 +2015,16 @@ class S {
       args: [],
     );
   }
+
+  /// `File with that name already exists.`
+  String get wrong_filename {
+    return Intl.message(
+      'File with that name already exists.',
+      name: 'wrong_filename',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

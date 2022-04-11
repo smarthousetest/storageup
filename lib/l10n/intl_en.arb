@@ -223,5 +223,6 @@
     "install_update": "Install update",
     "name_storage": "Name of storage location",
     "path": "Path",
-    "rename": "Rename"
+    "rename": "Rename",
+    "wrong_filename": "File with that name already exists."
 }

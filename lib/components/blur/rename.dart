@@ -68,6 +68,21 @@ class _ButtonTemplateState extends State<BlurRename> {
                               color: Theme.of(context).focusColor,
                             ),
                           ),
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Text(
+                                translate.wrong_filename,
+                                style: TextStyle(
+                                  fontSize: hintColor ? 0 : 14,
+                                  fontFamily: kNormalTextFontFamily,
+                                  color: hintColor
+                                      ? Colors.white
+                                      : Theme.of(context).errorColor,
+                                ),
+                              ),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 25),
                             child: Container(
@@ -88,14 +103,12 @@ class _ButtonTemplateState extends State<BlurRename> {
                                       myController.length < 1) {
                                     setState(() {
                                       canSave = false;
-                                      hintColor = false;
                                     });
                                   }
                                   if (myController.isNotEmpty &&
                                       myController.length >= 1) {
                                     setState(() {
                                       canSave = true;
-                                      hintColor = true;
                                     });
                                   }
                                 },
