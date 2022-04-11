@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:cpp_native/file_typification/file_typification.dart';
+import 'package:file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
