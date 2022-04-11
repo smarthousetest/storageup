@@ -836,6 +836,24 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                     // controller.hideMenu();
                                     StateInfoContainer.of(context)
                                         ?.setInfoRecord(record);
+                                  } else if (action == MediaAction.rename) {
+                                    var fileExtention = FileAttribute()
+                                        .getFileExtension(record.name ?? '');
+                                    var result = await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        var filename = FileAttribute()
+                                            .getFileName(record.name ?? '');
+                                        return BlurRename(filename);
+                                      },
+                                    );
+                                    if (result != null && result is String) {
+                                      result = result + '.' + fileExtention;
+                                      context
+                                          .read<MediaCubit>()
+                                          .onActionRenameChoosed(
+                                              record, result);
+                                    }
                                   } else {
                                     //   controller.hideMenu();
                                     var result = await showDialog<bool>(
@@ -1073,16 +1091,22 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         StateInfoContainer.of(context)
                                             ?.setInfoRecord(e);
                                       } else if (action == MediaAction.rename) {
-                                        var result = await showDialog<bool>(
+                                        var fileExtention = FileAttribute()
+                                            .getFileExtension(e.name ?? '');
+                                        var result = await showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return BlurRename(e.name);
+                                            var filename = FileAttribute()
+                                                .getFileName(e.name ?? '');
+                                            return BlurRename(filename);
                                           },
                                         );
-                                        if (result == true) {
+                                        if (result != null &&
+                                            result is String) {
+                                          result = result + '.' + fileExtention;
                                           context
                                               .read<MediaCubit>()
-                                              .onActionRenameChoosed(e);
+                                              .onActionRenameChoosed(e, result);
                                         }
                                       } else {
                                         //   controller.hideMenu();

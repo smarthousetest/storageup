@@ -500,14 +500,19 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  void onActionRenameChoosed(Record record) async {
-    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
-
-    //var result = await _filesController.renameRecord([record]);
-    //print(result);
-    //if (result == ResponseStatus.ok) {
-    //  _update();
-    //}
+  void onActionRenameChoosed(Record object, String newName) async {
+    var result = await _filesController.renameRecord(newName, object.id);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    } else if (result == ResponseStatus.declined) {
+      print('declained');
+    } else {
+      result = await _filesController.renameFolder(newName, object.id);
+      if (result == ResponseStatus.ok) {
+        _update();
+      }
+    }
   }
 
   void _setRecordDownloading({
