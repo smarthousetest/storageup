@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -500,13 +501,15 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  void onActionRenameChoosed(Record object, String newName) async {
+  Future<ErrorType?> onActionRenameChoosed(
+      Record object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
-    } else if (result == ResponseStatus.declined) {
+    } else if (result == ResponseStatus.notExecuted) {
       print('declained');
+      return ErrorType.alreadyExist;
     } else {
       result = await _filesController.renameFolder(newName, object.id);
       if (result == ResponseStatus.ok) {

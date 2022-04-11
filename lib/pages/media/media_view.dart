@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
@@ -844,15 +845,19 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       builder: (BuildContext context) {
                                         var filename = FileAttribute()
                                             .getFileName(record.name ?? '');
-                                        return BlurRename(filename);
+                                        return BlurRename(filename, true);
                                       },
                                     );
                                     if (result != null && result is String) {
                                       result = result + '.' + fileExtention;
-                                      context
+                                      final res = await context
                                           .read<MediaCubit>()
                                           .onActionRenameChoosed(
                                               record, result);
+                                      if (res == ErrorType.alreadyExist) {
+                                        _rename(blocContext, record, result,
+                                            fileExtention);
+                                      }
                                     }
                                   } else {
                                     //   controller.hideMenu();
@@ -883,6 +888,26 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         });
       },
     );
+  }
+
+  void _rename(BuildContext context, Record record, String name,
+      String extention) async {
+    String newName = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var filename = FileAttribute().getFileName(name);
+        return BlurRename(filename, false);
+      },
+    );
+    if (newName != null && newName is String) {
+      newName = newName + '.' + extention;
+      final res = await context
+          .read<MediaCubit>()
+          .onActionRenameChoosed(record, newName);
+      if (res == ErrorType.alreadyExist) {
+        _rename(context, record, newName, extention);
+      }
+    }
   }
 
   Widget _filesList(BuildContext context, MediaState state) {
@@ -1098,15 +1123,20 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           builder: (BuildContext context) {
                                             var filename = FileAttribute()
                                                 .getFileName(e.name ?? '');
-                                            return BlurRename(filename);
+                                            return BlurRename(filename, true);
                                           },
                                         );
                                         if (result != null &&
                                             result is String) {
                                           result = result + '.' + fileExtention;
-                                          context
+                                          final res = await context
                                               .read<MediaCubit>()
-                                              .onActionRenameChoosed(e, result);
+                                              .onActionRenameChoosed(
+                                                  record, result);
+                                          if (res == ErrorType.alreadyExist) {
+                                            _rename(context, e, result,
+                                                fileExtention);
+                                          }
                                         }
                                       } else {
                                         //   controller.hideMenu();

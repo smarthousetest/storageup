@@ -8,20 +8,22 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurRename extends StatefulWidget {
   var name;
+  bool hint;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurRename(this.name);
+  BlurRename(this.name, this.hint);
 }
 
 class _ButtonTemplateState extends State<BlurRename> {
   S translate = getIt<S>();
   var myController = TextEditingController();
   bool canSave = false;
-  bool hintColor = true;
+  bool hintColor = false;
 
   @override
   void initState() {
     myController = TextEditingController(text: widget.name);
+    hintColor = widget.hint;
     super.initState();
   }
 

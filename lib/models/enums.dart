@@ -37,6 +37,7 @@ enum KeeperAction {
 enum ErrorType {
   noInternet,
   technicalError,
+  alreadyExist,
 }
 
 enum Status {
