@@ -56,11 +56,17 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     keeperLocations.createSync();
     var keeperLocationsSink = keeperLocations.openWrite(mode: FileMode.append);
     state.locationsInfo.forEach((element) {
-      keeperLocationsSink.add('${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'.codeUnits);
+      keeperLocationsSink.add(
+          '${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'
+              .codeUnits);
     });
     await keeperLocationsSink.close();
-    // os.killProcess('keeper.exe');
-    os.startProcess('keeper', true, [state.locationsInfo.last.dirPath, (state.locationsInfo.last.countGb * 1024 * 1024 * 1024).toString()]);
+    String tmpPath = state.locationsInfo.last.dirPath;
+    tmpPath = tmpPath.replaceAll(' ', '*');
+    os.startProcess('keeper', true, [
+      '${tmpPath}',
+      ('${state.locationsInfo.last.countGb * 1024 * 1024 * 1024}').toString()
+    ]);
   }
 
   _mapSaveDirPath(
