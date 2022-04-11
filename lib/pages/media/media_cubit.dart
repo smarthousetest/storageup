@@ -500,6 +500,16 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
+  void onActionRenameChoosed(Record record) async {
+    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    //var result = await _filesController.renameRecord([record]);
+    //print(result);
+    //if (result == ResponseStatus.ok) {
+    //  _update();
+    //}
+  }
+
   void _setRecordDownloading({
     required String recordId,
     bool isDownloading = true,

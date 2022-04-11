@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
+import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/media_info.dart';
 import 'package:upstorage_desktop/constants.dart';
@@ -1071,6 +1072,18 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         // controller.hideMenu();
                                         StateInfoContainer.of(context)
                                             ?.setInfoRecord(e);
+                                      } else if (action == MediaAction.rename) {
+                                        var result = await showDialog<bool>(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return BlurRename(e.name);
+                                          },
+                                        );
+                                        if (result == true) {
+                                          context
+                                              .read<MediaCubit>()
+                                              .onActionRenameChoosed(e);
+                                        }
                                       } else {
                                         //   controller.hideMenu();
                                         var result = await showDialog<bool>(
@@ -1228,6 +1241,49 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
           child: IntrinsicWidth(
             child: Column(
               children: [
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(MediaAction.rename);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 3;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 3 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.zero,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/info.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/rename.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.rename,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
                 GestureDetector(
                   onTap: () {
                     widget.onTap(MediaAction.properties);

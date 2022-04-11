@@ -2005,6 +2005,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Rename`
+  String get rename {
+    return Intl.message(
+      'Rename',
+      name: 'rename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File winth that name already exists.`
+  String get wrong_filename {
+    return Intl.message(
+      'File winth that name already exists.',
+      name: 'wrong_filename',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

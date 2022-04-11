@@ -21,6 +21,7 @@ enum FileAction {
 enum MediaAction {
   delete,
   properties,
+  rename,
 }
 
 enum AvatarAction {
