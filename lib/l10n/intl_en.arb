@@ -222,5 +222,9 @@
     "really_delete_pic": "Do you really want to delete your profile picture?",
     "install_update": "Install update",
     "name_storage": "Name of storage location",
-    "path": "Path"
+    "path": "Path",
+    "confirm_email": "Confirm your e-mail!",
+    "you_cant_enter": "You can't log in, confirm your e-mail address.",
+    "we_send": "We have sent an email to",
+    "for_confirm": "To confirm, click on the link inside the email."
 }

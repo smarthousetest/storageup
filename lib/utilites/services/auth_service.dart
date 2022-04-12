@@ -34,6 +34,8 @@ class AuthService {
       _printDioError(e);
       if (e.response?.statusCode == 400)
         return AuthenticationStatus.wrongPassword;
+      else if (e.response?.statusCode == 403)
+        return AuthenticationStatus.notVerifiedEmail;
       else
         return AuthenticationStatus.unauthenticated;
     }

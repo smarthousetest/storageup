@@ -31,6 +31,7 @@ class AuthView extends StatefulWidget {
 class _AuthViewState extends State<AuthView> {
   bool _isSignIn = true;
   bool _isAnimationCompleted = true;
+  bool showNotConfirmedEmail = false;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
@@ -352,343 +353,496 @@ class _AuthViewState extends State<AuthView> {
 
   Widget _signInMain(ThemeData theme) {
     List<LogicalKeyboardKey> keys = [];
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        return RawKeyboardListener(
-          autofocus: true,
-          focusNode: FocusNode(),
-          onKey: (event) {
-            final key = event.logicalKey;
-            if (event is RawKeyDownEvent) {
-              if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
-                FocusScope.of(context).requestFocus(currentFocusNode);
-                print("login");
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.error == AuthError.noVerifiedEmail) {
+          showNotConfirmedEmail = true;
+        } else {
+          showNotConfirmedEmail = false;
+        }
+      },
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          return RawKeyboardListener(
+            autofocus: true,
+            focusNode: FocusNode(),
+            onKey: (event) {
+              final key = event.logicalKey;
+              if (event is RawKeyDownEvent) {
+                if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
+                  FocusScope.of(context).requestFocus(currentFocusNode);
+                  print("login");
+                }
+                setState(() {
+                  return keys.add(key);
+                });
               }
-              setState(() {
-                return keys.add(key);
-              });
-            }
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Container(),
-                flex: 3,
-              ),
-              // SizedBox(
-              //   height: 130,
-              // ),
-              Text(
-                translate.sign_in_to_account,
-                style: TextStyle(
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w400,
-                  color: theme.disabledColor,
-                ),
-              ),
-              // Expanded(
-              //   child: Container(),
-              // ),
-              SizedBox(height: 63),
-              RawKeyboardListener(
-                focusNode: FocusNode(),
-                onKey: (event) {
-                  if ((event.isKeyPressed(LogicalKeyboardKey.enter) ||
-                          event.logicalKey == LogicalKeyboardKey.tab) &&
-                      event is RawKeyDownEvent) {
-                    FocusScope.of(context).requestFocus(focusNodePasswordLog);
-                    print("mail");
-                  }
-                },
-                child: CustomTextField(
-                  autofocus: true,
-                  focusNode: focusNodeMailLog,
-                  hint: translate.email,
-                  errorMessage: translate.wrong_email,
-                  needErrorValidation: true,
-                  onChange: (email) {
-                    context.read<AuthBloc>().add(AuthLoginEmailChanged(
-                        email: email, needValidation: true));
-                  },
-                  onFinishEditing: (email) {
-                    context.read<AuthBloc>().add(AuthLoginEmailChanged(
-                        email: email, needValidation: true));
-                  },
-                  invalid: state.emailLogin.invalid &&
-                      state.emailLogin.value.isNotEmpty,
-                  isPassword: false,
-                ),
-              ),
-              RawKeyboardListener(
-                focusNode: FocusNode(),
-                onKey: (event) {
-                  if (event.isKeyPressed(LogicalKeyboardKey.enter) &&
-                      event is RawKeyDownEvent) {
-                    if (_isLoginFieldValid(state)) {
-                      context.read<AuthBloc>().add(AuthLoginConfirmed());
-                    }
-                    print("password");
-                  }
-                },
-                child: CustomTextField(
-                  focusNode: focusNodePasswordLog,
-                  hint: translate.password,
-                  errorMessage: translate.wrong_password,
-                  onChange: (password) {
-                    context.read<AuthBloc>().add(AuthLoginPasswordChanged(
-                          password: password,
-                          needValidation: true,
-                        ));
-                  },
-                  onFinishEditing: (password) {
-                    context.read<AuthBloc>().add(AuthLoginPasswordChanged(
-                          password: password,
-                          needValidation: true,
-                        ));
-                  },
-                  invalid: state.passwordLogin.invalid &&
-                      state.passwordLogin.value.isNotEmpty,
-                  isPassword: true,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 123,
-                  right: 120,
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      height: 23,
-                      width: 23,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(7.0),
-                        color: state.rememberMe
-                            ? theme.colorScheme.onSurface
-                            : theme.colorScheme.onPrimary,
-                      ),
-                      padding: EdgeInsets.all(1.5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6.0),
-                          color: theme.primaryColor,
+            },
+            child: showNotConfirmedEmail
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                        Expanded(
+                          child: Container(),
+                          flex: 3,
                         ),
-                        child: Checkbox(
-                          value: state.rememberMe,
-                          side: BorderSide(width: 1, color: Colors.transparent),
-                          splashRadius: 0,
-                          checkColor: theme.accentColor,
-                          activeColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0)),
-                          onChanged: (_) {
-                            context
-                                .read<AuthBloc>()
-                                .add(AuthRememberMeChanged());
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Text(
-                      translate.remember_me,
-                      style: TextStyle(
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 17,
-                        color: theme.disabledColor,
-                      ),
-                    ),
-                    Expanded(child: Container()),
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: _onForgotPasswordTapped,
-                        child: Text(
-                          translate.forgot_password,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 17,
-                            color: theme.splashColor,
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 190, right: 160, top: 100),
+                          child: Text(
+                            translate.confirm_email,
+                            style: TextStyle(
+                              color: theme.disabledColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 28.0,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 120),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        height: 1,
-                        endIndent: 10,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                    ),
-                    Text(
-                      translate.or_continue_with,
-                      style: TextStyle(
-                        fontSize: 17,
-                        height: 0.82,
-                        fontFamily: kNormalTextFontFamily,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        height: 1,
-                        indent: 10,
-                        color: theme.colorScheme.onBackground,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(15),
-                  //       color: theme.primaryColor,
-                  //       boxShadow: [
-                  //         BoxShadow(
-                  //           color:
-                  //               theme.colorScheme.onBackground.withOpacity(0.5),
-                  //           blurRadius: 4,
-                  //         )
-                  //       ]),
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(12.0),
-                  //     child: Image.asset(
-                  //       'assets/auth/facebook.png',
-                  //       width: 27,
-                  //       height: 27,
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   width: 25.0,
-                  // ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: theme.primaryColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                theme.colorScheme.onBackground.withOpacity(0.5),
-                            blurRadius: 4,
-                          )
-                        ]),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Image.asset(
-                        'assets/auth/google.png',
-                        width: 27,
-                        height: 27,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Expanded(
-                  child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 120),
-                child: Visibility(
-                  //TODO change this shit
-                  visible: state.status == FormzStatus.submissionFailure &&
-                      state.action == RequestedAction.login,
-                  child: Row(
+                        Expanded(
+                          child: Container(),
+                          flex: 2,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 120, top: 40),
+                          child: Column(
+                            children: [
+                              Text(
+                                translate.you_cant_enter,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: theme.disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 120, top: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                translate.we_send +
+                                    ' ' +
+                                    'ya.c-vasiliev@yandex.ru',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: theme.disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 120),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                translate.for_confirm,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: theme.disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 240, top: 97),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () => context
+                                  .read<AuthBloc>()
+                                  .add(AuthSendEmailVerify()),
+                              child: Text(
+                                translate.to_send_letter,
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                  color: theme.splashColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 110, top: 130),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _isSignIn = false;
+                              _changePage();
+                              showNotConfirmedEmail = false;
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 147,
+                                vertical: 25,
+                              ),
+                              primary: theme.splashColor,
+                              elevation: 1,
+                            ),
+                            child: Text(
+                              translate.go_to_authorization,
+                              style: TextStyle(
+                                color: theme.primaryColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(),
+                          flex: 3,
+                        ),
+                      ])
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(
-                        'assets/auth/error.png',
-                        height: 20,
+                      Expanded(
+                        child: Container(),
+                        flex: 3,
                       ),
-                      SizedBox(
-                        width: 5,
-                      ),
+                      // SizedBox(
+                      //   height: 130,
+                      // ),
                       Text(
-                        state.error == AuthError.wrongCredentials
-                            ? translate.wrong_cred
-                            : translate.something_goes_wrong,
+                        translate.sign_in_to_account,
                         style: TextStyle(
                           fontFamily: kNormalTextFontFamily,
-                          fontSize: 16,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w400,
                           color: theme.disabledColor,
                         ),
                       ),
+                      // Expanded(
+                      //   child: Container(),
+                      // ),
+                      SizedBox(height: 63),
+                      RawKeyboardListener(
+                        focusNode: FocusNode(),
+                        onKey: (event) {
+                          if ((event.isKeyPressed(LogicalKeyboardKey.enter) ||
+                                  event.logicalKey == LogicalKeyboardKey.tab) &&
+                              event is RawKeyDownEvent) {
+                            FocusScope.of(context)
+                                .requestFocus(focusNodePasswordLog);
+                            print("mail");
+                          }
+                        },
+                        child: CustomTextField(
+                          autofocus: true,
+                          focusNode: focusNodeMailLog,
+                          hint: translate.email,
+                          errorMessage: translate.wrong_email,
+                          needErrorValidation: true,
+                          onChange: (email) {
+                            context.read<AuthBloc>().add(AuthLoginEmailChanged(
+                                email: email, needValidation: true));
+                          },
+                          onFinishEditing: (email) {
+                            context.read<AuthBloc>().add(AuthLoginEmailChanged(
+                                email: email, needValidation: true));
+                          },
+                          invalid: state.emailLogin.invalid &&
+                              state.emailLogin.value.isNotEmpty,
+                          isPassword: false,
+                        ),
+                      ),
+                      RawKeyboardListener(
+                        focusNode: FocusNode(),
+                        onKey: (event) {
+                          if (event.isKeyPressed(LogicalKeyboardKey.enter) &&
+                              event is RawKeyDownEvent) {
+                            if (_isLoginFieldValid(state)) {
+                              context
+                                  .read<AuthBloc>()
+                                  .add(AuthLoginConfirmed());
+                            }
+                            print("password");
+                          }
+                        },
+                        child: CustomTextField(
+                          focusNode: focusNodePasswordLog,
+                          hint: translate.password,
+                          errorMessage: translate.wrong_password,
+                          onChange: (password) {
+                            context
+                                .read<AuthBloc>()
+                                .add(AuthLoginPasswordChanged(
+                                  password: password,
+                                  needValidation: true,
+                                ));
+                          },
+                          onFinishEditing: (password) {
+                            context
+                                .read<AuthBloc>()
+                                .add(AuthLoginPasswordChanged(
+                                  password: password,
+                                  needValidation: true,
+                                ));
+                          },
+                          invalid: state.passwordLogin.invalid &&
+                              state.passwordLogin.value.isNotEmpty,
+                          isPassword: true,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 123,
+                          right: 120,
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 23,
+                              width: 23,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7.0),
+                                color: state.rememberMe
+                                    ? theme.colorScheme.onSurface
+                                    : theme.colorScheme.onPrimary,
+                              ),
+                              padding: EdgeInsets.all(1.5),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6.0),
+                                  color: theme.primaryColor,
+                                ),
+                                child: Checkbox(
+                                  value: state.rememberMe,
+                                  side: BorderSide(
+                                      width: 1, color: Colors.transparent),
+                                  splashRadius: 0,
+                                  checkColor: theme.accentColor,
+                                  activeColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6.0)),
+                                  onChanged: (_) {
+                                    context
+                                        .read<AuthBloc>()
+                                        .add(AuthRememberMeChanged());
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Text(
+                              translate.remember_me,
+                              style: TextStyle(
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17,
+                                color: theme.disabledColor,
+                              ),
+                            ),
+                            Expanded(child: Container()),
+                            MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: _onForgotPasswordTapped,
+                                child: Text(
+                                  translate.forgot_password,
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    fontFamily: kNormalTextFontFamily,
+                                    fontSize: 17,
+                                    color: theme.splashColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 120),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                height: 1,
+                                endIndent: 10,
+                                color: theme.colorScheme.onBackground,
+                              ),
+                            ),
+                            Text(
+                              translate.or_continue_with,
+                              style: TextStyle(
+                                fontSize: 17,
+                                height: 0.82,
+                                fontFamily: kNormalTextFontFamily,
+                                color: theme.colorScheme.onBackground,
+                              ),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                height: 1,
+                                indent: 10,
+                                color: theme.colorScheme.onBackground,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(15),
+                          //       color: theme.primaryColor,
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           color:
+                          //               theme.colorScheme.onBackground.withOpacity(0.5),
+                          //           blurRadius: 4,
+                          //         )
+                          //       ]),
+                          //   child: Padding(
+                          //     padding: const EdgeInsets.all(12.0),
+                          //     child: Image.asset(
+                          //       'assets/auth/facebook.png',
+                          //       width: 27,
+                          //       height: 27,
+                          //     ),
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   width: 25.0,
+                          // ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: theme.primaryColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: theme.colorScheme.onBackground
+                                        .withOpacity(0.5),
+                                    blurRadius: 4,
+                                  )
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Image.asset(
+                                'assets/auth/google.png',
+                                width: 27,
+                                height: 27,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                          child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 120),
+                        child: Visibility(
+                          //TODO change this shit
+                          visible:
+                              state.status == FormzStatus.submissionFailure &&
+                                  state.action == RequestedAction.login,
+                          child: Row(
+                            children: [
+                              state.error != AuthError.noVerifiedEmail
+                                  ? Image.asset(
+                                      'assets/auth/error.png',
+                                      height: 20,
+                                    )
+                                  : SizedBox(
+                                      width: 5,
+                                    ),
+                              Text(
+                                state.error == AuthError.wrongCredentials
+                                    ? translate.wrong_cred
+                                    : state.error == AuthError.noVerifiedEmail
+                                        ? ''
+                                        : translate.something_goes_wrong,
+                                style: TextStyle(
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 16,
+                                  color: theme.disabledColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 120),
+                        child: Container(
+                          height: 60,
+                          child: OutlinedButton(
+                            focusNode: currentFocusNode,
+                            autofocus: true,
+                            onPressed: _isLoginFieldValid(state)
+                                ? () {
+                                    context
+                                        .read<AuthBloc>()
+                                        .add(AuthLoginConfirmed());
+                                  }
+                                : null,
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: Size(double.maxFinite, 60),
+                              shape: RoundedRectangleBorder(
+                                  // side: BorderSide(
+                                  //   color: Colors.transparent,
+                                  // ),
+                                  borderRadius: BorderRadius.circular(15)),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 135,
+                                vertical: 20,
+                              ),
+                              backgroundColor: _isLoginFieldValid(state)
+                                  ? theme.colorScheme.onSurface
+                                  : theme.colorScheme.onPrimary,
+                            ),
+                            child: Center(
+                                child: Text(
+                              translate.sign_in,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: theme.primaryColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17,
+                              ),
+                            )),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: 100,
+                      ),
                     ],
                   ),
-                ),
-              )),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 120),
-                child: Container(
-                  height: 60,
-                  child: OutlinedButton(
-                    focusNode: currentFocusNode,
-                    autofocus: true,
-                    onPressed: _isLoginFieldValid(state)
-                        ? () {
-                            context.read<AuthBloc>().add(AuthLoginConfirmed());
-                          }
-                        : null,
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(
-                          // side: BorderSide(
-                          //   color: Colors.transparent,
-                          // ),
-                          borderRadius: BorderRadius.circular(15)),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 135,
-                        vertical: 20,
-                      ),
-                      backgroundColor: _isLoginFieldValid(state)
-                          ? theme.colorScheme.onSurface
-                          : theme.colorScheme.onPrimary,
-                    ),
-                    child: Center(
-                        child: Text(
-                      translate.sign_in,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 17,
-                      ),
-                    )),
-                  ),
-                ),
-              ),
-
-              SizedBox(
-                height: 100,
-              ),
-            ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

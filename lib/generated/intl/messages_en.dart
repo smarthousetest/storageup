@@ -87,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
+        "confirm_email":
+            MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
         "count_of_files": m2,
@@ -139,6 +141,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "folder": MessageLookupByLibrary.simpleMessage("Select a folder"),
         "folder_dir": MessageLookupByLibrary.simpleMessage("Folder"),
         "foldr": MessageLookupByLibrary.simpleMessage("Folder"),
+        "for_confirm": MessageLookupByLibrary.simpleMessage(
+            "To confirm, click on the link inside the email."),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "format": MessageLookupByLibrary.simpleMessage("Format"),
@@ -309,6 +313,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "viewed": MessageLookupByLibrary.simpleMessage("Viewed"),
         "we_can_help":
             MessageLookupByLibrary.simpleMessage(", maybe we can help you."),
+        "we_send":
+            MessageLookupByLibrary.simpleMessage("We have sent an email to"),
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
@@ -323,6 +329,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Password must be more than 8 characters"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Username must be more than 2 characters"),
+        "you_cant_enter": MessageLookupByLibrary.simpleMessage(
+            "You can\'t log in, confirm your e-mail address."),
         "you_rent": MessageLookupByLibrary.simpleMessage("You are renting"),
         "you_turn_in": MessageLookupByLibrary.simpleMessage("You turn in"),
         "your_balance":

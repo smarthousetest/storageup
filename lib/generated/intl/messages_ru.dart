@@ -87,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
+        "confirm_email":
+            MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
         "count_of_files": m2,
@@ -141,6 +143,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "folder": MessageLookupByLibrary.simpleMessage("Выберите папку"),
         "folder_dir": MessageLookupByLibrary.simpleMessage("Папки"),
         "foldr": MessageLookupByLibrary.simpleMessage("Папка"),
+        "for_confirm": MessageLookupByLibrary.simpleMessage(
+            "Для подтверждения перейдите по ссылке внутри письма."),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Забыли пароль?"),
         "format": MessageLookupByLibrary.simpleMessage("Формат"),
@@ -314,6 +318,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "viewed": MessageLookupByLibrary.simpleMessage("Просмотрено"),
         "we_can_help": MessageLookupByLibrary.simpleMessage(
             ", возможно, мы сможем вам помочь."),
+        "we_send": MessageLookupByLibrary.simpleMessage(
+            "Мы отправили письмо на почту"),
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
@@ -328,6 +334,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Пароль должен содержать более 8 символов"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Имя пользователя должно содержать более 2 символов"),
+        "you_cant_enter": MessageLookupByLibrary.simpleMessage(
+            "Вы не можете войти, подтвердите свой e-mail адрес."),
         "you_rent": MessageLookupByLibrary.simpleMessage("Вы арендуете"),
         "you_turn_in": MessageLookupByLibrary.simpleMessage("Вы сдаете"),
         "your_balance":
