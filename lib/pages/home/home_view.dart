@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,8 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'home_bloc.dart';
 import 'home_state.dart';
@@ -75,8 +78,7 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return SimpleDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             title: Text(
               translate.something_goes_wrong,
               textAlign: TextAlign.center,
@@ -89,8 +91,7 @@ class _HomePageState extends State<HomePage> {
             ),
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(
-                    left: 200, right: 200, top: 30, bottom: 10),
+                padding: const EdgeInsets.only(left: 200, right: 200, top: 30, bottom: 10),
                 child: ElevatedButton(
                   onPressed: () async {
                     Navigator.pop(context);
@@ -110,9 +111,7 @@ class _HomePageState extends State<HomePage> {
                     // Theme.of(context).primaryColor,
                     fixedSize: Size(100, 42),
                     elevation: 0,
-                    side: BorderSide(
-                        style: BorderStyle.solid,
-                        color: Theme.of(context).splashColor),
+                    side: BorderSide(style: BorderStyle.solid, color: Theme.of(context).splashColor),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -127,8 +126,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     infoPage = InfoPage();
-    filePage =
-        StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    filePage = StateInfoContainer(child: StateSortedContainer(child: FilePage()));
     likePage = LikePage();
     spaceSellPage = SpaceSellPage();
     finincePage = FinancePage();
@@ -216,12 +214,7 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ],
+                  boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
                 ),
                 child: Column(
                   children: [
@@ -357,10 +350,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 14, top: 20),
                   child: Text(
                     "Доклад",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontFamily: kNormalTextFontFamily),
                   ),
                 ),
               ],
@@ -376,10 +366,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 14, top: 20),
                   child: Text(
                     "Документ",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontFamily: kNormalTextFontFamily),
                   ),
                 ),
               ],
@@ -395,10 +382,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(left: 14, top: 20),
                   child: Text(
                     "Иллюстрация",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontFamily: kNormalTextFontFamily),
                   ),
                 ),
               ],
@@ -431,7 +415,7 @@ class _HomePageState extends State<HomePage> {
               width: 214,
               child: ElevatedButton(
                 onPressed: () {
-                  var result = showDialog(
+                  showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return BlurMenuUpload();
@@ -499,7 +483,7 @@ class _HomePageState extends State<HomePage> {
           height: 24,
           child: GestureDetector(
             onTap: () async {
-              var str = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurExit();
@@ -537,15 +521,25 @@ class _HomePageState extends State<HomePage> {
   Widget _update() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(10.0),
-            bottomLeft: Radius.circular(10.0)),
+        borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
         color: Theme.of(context).dividerColor,
       ),
       height: 50,
       width: 274,
       child: GestureDetector(
-        onTap: () async {},
+        onTap: () async {
+          for (int i = 0; i < 100; i++) {
+            try {
+              var channel = IOWebSocketChannel.connect('ws://localhost:4000');
+              channel.sink.add('update');
+              await channel.sink.close();
+              await Future.delayed(Duration(milliseconds: 300));
+              exit(0);
+            } catch (e) {
+              print(e);
+            }
+          }
+        },
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Align(
