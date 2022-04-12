@@ -427,7 +427,7 @@ class _AuthViewState extends State<AuthView> {
                               Text(
                                 translate.we_send +
                                     ' ' +
-                                    'ya.c-vasiliev@yandex.ru',
+                                    state.emailLogin.value,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: theme.disabledColor,
