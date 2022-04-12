@@ -1138,6 +1138,7 @@ class _AuthViewState extends State<AuthView> {
         //     ),
         //   ),
         // ),
+        //forupload
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 120),
           child: Container(
