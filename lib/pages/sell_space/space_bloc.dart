@@ -61,10 +61,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
               .codeUnits);
     });
     await keeperLocationsSink.close();
-    String tmpPath = state.locationsInfo.last.dirPath;
-    tmpPath = tmpPath.replaceAll(' ', '*');
     os.startProcess('keeper', true, [
-      '${tmpPath}',
+      '${Uri.encodeFull(state.locationsInfo.last.dirPath)}',
       ('${state.locationsInfo.last.countGb * 1024 * 1024 * 1024}').toString()
     ]);
   }
