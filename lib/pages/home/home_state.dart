@@ -21,7 +21,7 @@ class HomeState extends Equatable {
   final FormzStatus status;
   final String? upToDateVersion;
   final String? version;
-  final List<LatestFile>? latestFile;
+  final List<LatestFile> latestFile;
 
   HomeState({
     this.usingSpace = 0,
@@ -41,7 +41,7 @@ class HomeState extends Equatable {
     this.status = FormzStatus.pure,
     this.upToDateVersion,
     this.version,
-    this.latestFile,
+    this.latestFile = const [],
   });
 
   HomeState copyWith({

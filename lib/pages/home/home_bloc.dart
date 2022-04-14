@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,14 +6,19 @@ import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
+import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 //import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 import 'home_event.dart';
@@ -55,12 +61,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         latestFile: latestFile,
       ));
     });
+    on<FileTapped>((event, emit) async {
+      await fileTapped(event);
+    });
   }
   final FilesService _filesService = getIt<FilesService>();
   var _loadController = getIt<LoadController>();
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
   late final LatestFileRepository _repository;
+  List<DownloadObserver> _downloadObservers = [];
 
   Future<String> _read() async {
     String version;
@@ -160,8 +170,124 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
     //eventBusUpdateFolder.fire(HomeBloc());
   }
+
+  Future<void> fileTapped(FileTapped event) async {
+    //_repository.addFile(latestFile: record);
+    var box = await Hive.openBox(kPathDBName);
+    String path = box.get(event.record.id, defaultValue: '');
+
+    if (path.isNotEmpty) {
+      var appPath = (await getApplicationSupportDirectory()).path;
+      if (path.contains("()")) {
+        path.replaceAll(('('), '"("');
+        path.replaceAll((')'), '")"');
+      }
+
+      var fullPathToFile = "$appPath/$path";
+      var isExisting = await File(fullPathToFile).exists();
+      //var isExistingSync = File(fullPathToFile).watch();
+      print(fullPathToFile);
+      if (isExisting) {
+        var res = await OpenFile.open(fullPathToFile);
+        print(res.message);
+      } else {
+        _downloadFile(event.record.id);
+      }
+    } else {
+      _downloadFile(event.record.id);
+    }
+  }
+
+  void _downloadFile(String recordId) async {
+    _loadController.downloadFile(fileId: recordId);
+    _registerDownloadObserver(recordId);
+    _setRecordDownloading(recordId: recordId);
+  }
+
+  void _registerDownloadObserver(String recordId) async {
+    var box = await Hive.openBox(kPathDBName);
+    var controllerState = _loadController.getState;
+    var downloadObserver = DownloadObserver(recordId, (value) async {
+      if (value is List<DownloadFileInfo>) {
+        var fileId = value.indexWhere((element) => element.id == recordId);
+
+        if (fileId != -1) {
+          var file = value[fileId];
+          if (file.endedWithException) {
+            _setRecordDownloading(
+              recordId: recordId,
+              isDownloading: false,
+            );
+
+            _unregisterDownloadObserver(recordId);
+          } else if (file.localPath.isNotEmpty) {
+            var path = file.localPath
+                .split('/')
+                .skipWhile((value) => value != 'downloads')
+                .join('/');
+            await box.put(file.id, path);
+
+            _setRecordDownloading(
+              recordId: recordId,
+              isDownloading: false,
+            );
+
+            var res = await OpenFile.open(file.localPath);
+            print(res.message);
+
+            _unregisterDownloadObserver(recordId);
+          }
+        }
+      }
+      // }
+    });
+
+    controllerState.registerObserver(
+      downloadObserver,
+    );
+
+    _downloadObservers.add(downloadObserver);
+  }
+
+  void _unregisterDownloadObserver(String recordId) async {
+    try {
+      final observer =
+          _downloadObservers.firstWhere((observer) => observer.id == recordId);
+
+      _loadController.getState.unregisterObserver(observer);
+
+      _downloadObservers.remove(observer);
+    } catch (e) {
+      log('OpenFolderCubit -> _unregisterDownloadObserver:', error: e);
+    }
+  }
+
+  void _setRecordDownloading({
+    required String recordId,
+    bool isDownloading = true,
+  }) {
+    try {
+      var currentRecordIndex = state.latestFile
+          .indexWhere((element) => element.latestFile.id == recordId);
+      var record = state.latestFile.map((e) => e.latestFile).toList();
+      var objects = [...record];
+      var currentRecord = objects[currentRecordIndex];
+      objects[currentRecordIndex] =
+          currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
+      //List<LatestFile> latestFile = [];
+
+      //emit(state.copyWith(latestFile: objects));
+    } catch (e) {
+      log('OpenFolderCubit -> _setRecordDownloading:', error: e);
+    }
+  }
 }
 
 class UpdateFolderEvent {}
 
 class UpdateAlbumEvent {}
+
+class DownloadObserver extends Observer {
+  String id;
+  DownloadObserver(this.id, Function(dynamic) onChange) : super(onChange);
+}

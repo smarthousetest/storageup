@@ -1,52 +1,42 @@
-// ignore_for_file: must_be_immutable
-
+import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/file.dart';
 
 import 'stored.dart';
 
-class Record extends BaseObject {
-  final List<Part>? stored;
-  // @override
-  // String? get id => super.id;
-  // @override
-  // String? get name => super.name;
-  String? path;
-  final int? numOfParts;
-  final List<File>? thumbnail;
-  final int? copyStatus;
-  // @override
-  // int? get size => super.size;
-  // @override
-  // String? get createdAt => super.createdAt;
-  // @override
-  // String? get createdBy => super.createdBy;
+part 'record.g.dart';
 
-  // @override
-  // String? get updatedAt => super.updatedAt;
-  // @override
-  // String? get updatedBy => super.updatedBy;
-  // final String? extension;
-  bool isChoosed;
-  double? loadPercent;
+@HiveType(typeId: 7)
+class Record extends BaseObject {
+  @HiveField(11)
+  String? path;
+
+  @HiveField(12)
+  final List<File>? thumbnail;
+
+  @HiveField(14)
+  String? mimeType;
 
   Record({
-    this.stored,
     required String id,
     String? name,
     this.path,
-    this.numOfParts,
     this.thumbnail,
     required int size,
-    this.copyStatus,
     bool favorite = false,
+    String? folder,
     String? createdBy,
     String? updatedBy,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? extension,
-    this.isChoosed = false,
-    this.loadPercent,
+    bool isChoosed = false,
+    double? loadPercent,
+    bool copiedToAppFolder = false,
+    bool endedWithException = false,
+    bool isInProgress = false,
+    required this.mimeType,
+    bool? isDownloading,
   }) : super(
           id: id,
           size: size,
@@ -58,57 +48,54 @@ class Record extends BaseObject {
           extension: extension,
           favorite: favorite,
           isChoosed: isChoosed,
+          loadPercent: loadPercent,
+          parentFolder: folder,
+          copiedToAppFolder: copiedToAppFolder,
+          endedWithException: endedWithException,
+          isInProgress: isInProgress,
+          isDownloading: isDownloading,
         );
 
   @override
   String toString() {
-    return 'Record(stored: $stored, id: $id, name: $name, path: $path, numOfParts: $numOfParts, thumbnail: $thumbnail, size: $size, copyStatus: $copyStatus, createdBy: $createdBy, updatedBy: $updatedBy, createdAt: $createdAt, updatedAt: $updatedAt, id: $id)';
+    return 'Record(id: $id, isChoosed: $isChoosed, name: $name, path: $path, thumbnail: $thumbnail, size: $size, createdBy: $createdBy, updatedBy: $updatedBy, createdAt: $createdAt, updatedAt: $updatedAt, id: $id)';
   }
 
   static Record fromJsonModel(Map<String, dynamic> json) =>
       Record.fromJson(json);
 
-  factory Record.empty() => Record(id: '', size: 0);
+  factory Record.empty() => Record(id: '', size: 0, mimeType: '');
 
   factory Record.fromJson(Map<String, dynamic> json) {
     var name = json['name'] as String?;
-    // List<File> thumbnail = [];
-    // if (json['thumbnail'] != null) {
-    //   json['thumbnail'].forEach((e) {
-    //     thumbnail.add(File.fromJson(e));
-    //   });
-    // }
-    // var
+
     return Record(
-        stored: (json['stored'] as List<dynamic>?)
-            ?.map((e) => Part.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        id: json['_id'] as String,
-        name: name,
-        path: json['path'] as String?,
-        numOfParts: json['numOfParts'] as int?,
-        thumbnail: (json['thumbnail'] as List<dynamic>?)
-            ?.map((e) => File.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        size: json['size'] as int,
-        copyStatus: json['copyStatus'] as int?,
-        createdBy: json['createdBy'] as String?,
-        updatedBy: json['updatedBy'] as String?,
-        createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
-        updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? ''),
-        favorite: json['isFavorite'] as bool,
-        extension: name?.split('.').last);
+      id: json['_id'] as String,
+      name: name,
+      path: json['path'] as String?,
+      // numOfParts: json['numOfParts'] as int?,
+      thumbnail: (json['thumbnail'] as List<dynamic>?)
+          ?.map((e) => File.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      size: json['size'] as int,
+      // copyStatus: json['copyStatus'] as int?,
+      createdBy: json['createdBy'] as String?,
+      updatedBy: json['updatedBy'] as String?,
+      folder: json['folder'] as String?,
+      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
+      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? ''),
+      favorite: json['favorite'] as bool? ?? false,
+      extension: name?.split('.').last,
+      mimeType: json['mime'] as String?,
+    );
   }
 
   Map<String, dynamic> toJson() => {
-        'stored': stored?.map((e) => e.toJson()).toList(),
         '_id': id,
         'name': name,
         'path': path,
-        'numOfParts': numOfParts,
         'thumbnail': thumbnail,
         'size': size,
-        'copyStatus': copyStatus,
         'createdBy': createdBy,
         'updatedBy': updatedBy,
         'createdAt': createdAt,
@@ -121,6 +108,7 @@ class Record extends BaseObject {
     String? path,
     int? numOfParts,
     List<File>? thumbnail,
+    String? folder,
     int? size,
     int? copyStatus,
     String? createdBy,
@@ -129,73 +117,44 @@ class Record extends BaseObject {
     DateTime? updatedAt,
     bool? isChoosed,
     double? loadPercent,
+    String? mimeType,
+    bool? isInProgress,
+    bool? copiedToAppFolder,
+    bool? endedWithException,
+    bool? favorite,
+    bool? isDownloading,
   }) {
     var extention =
         name != null ? name.split('.').last : this.name?.split('.').last;
     return Record(
-      stored: stored ?? this.stored,
       id: this.id,
       name: name ?? this.name,
       path: path ?? this.path,
-      numOfParts: numOfParts ?? this.numOfParts,
-      thumbnail: thumbnail ?? this.thumbnail,
       size: size ?? this.size,
-      copyStatus: copyStatus ?? this.copyStatus,
       createdBy: createdBy ?? this.createdBy,
       updatedBy: updatedBy ?? this.updatedBy,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       extension: extention ?? this.extension,
       isChoosed: isChoosed ?? this.isChoosed,
+      folder: folder ?? this.parentFolder,
       loadPercent: loadPercent,
+      mimeType: mimeType ?? this.mimeType,
+      copiedToAppFolder: copiedToAppFolder ?? this.copiedToAppFolder,
+      endedWithException: endedWithException ?? this.endedWithException,
+      isInProgress: isInProgress ?? this.isInProgress,
+      favorite: favorite ?? this.favorite,
+      isDownloading: isDownloading,
     );
   }
-
-  // @override
-  // bool operator ==(Object other) {
-  //   if (identical(other, this)) return true;
-  //   return other is Record &&
-  //       other.thumbnail == thumbnail &&
-  //       other.id == id &&
-  //       other.name == name &&
-  //       other.path == path &&
-  //       other.numOfParts == numOfParts &&
-  //       other.size == size &&
-  //       other.copyStatus == copyStatus &&
-  //       other.createdBy == createdBy &&
-  //       other.updatedBy == updatedBy &&
-  //       other.createdAt == createdAt &&
-  //       other.updatedAt == updatedAt &&
-  //       other.id == id &&
-  //       other.loadPercent == loadPercent &&
-  //       listEquals(other.stored, stored);
-  // }
-
-  // @override
-  // int get hashCode =>
-  //     stored.hashCode ^
-  //     id.hashCode ^
-  //     name.hashCode ^
-  //     path.hashCode ^
-  //     numOfParts.hashCode ^
-  //     thumbnail.hashCode ^
-  //     size.hashCode ^
-  //     copyStatus.hashCode ^
-  //     createdBy.hashCode ^
-  //     updatedBy.hashCode ^
-  //     createdAt.hashCode ^
-  //     updatedAt.hashCode ^
-  //     id.hashCode;
 
   @override
   List<Object?> get props => [
         ...super.props,
-        stored,
         path,
-        numOfParts,
         thumbnail,
-        copyStatus,
         loadPercent,
         isChoosed,
+        mimeType,
       ];
 }

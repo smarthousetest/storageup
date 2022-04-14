@@ -1,76 +1,72 @@
+import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/models/file.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 
-const _latestFileBoxName = 'latestFileBox';
+const _latestFileBoxName = 'donwnloadLocationsBox';
 
 @lazySingleton
 class LatestFileRepository {
-  late List<LatestFile> _fileInfo;
-  late Box<LatestFile> _fileBox;
+  late List<LatestFile> _latestFileInfo;
+  late Box<LatestFile> _latestFileBox;
 
   @factoryMethod
   static Future<LatestFileRepository> create() async {
     //Hive.deleteFromDisk();
+
     Hive.registerAdapter(LatestFileAdapter());
+    Hive.registerAdapter(RecordAdapter());
+    Hive.registerAdapter(FileAdapter());
+
+    WidgetsFlutterBinding.ensureInitialized();
+    final appPath = await getApplicationDocumentsDirectory();
+
+    Hive.init(appPath.path);
 
     final box = await Hive.openBox<LatestFile>(_latestFileBoxName);
 
-    return LatestFileRepository._(fileBox: box);
+    return LatestFileRepository._(latestFileBox: box);
   }
 
-  LatestFileRepository._({required Box<LatestFile> fileBox}) {
-    _fileBox = fileBox;
-    _fileInfo = _fileBox.values.toList();
+  LatestFileRepository._({required Box<LatestFile> latestFileBox}) {
+    _latestFileBox = latestFileBox;
+    _latestFileInfo = _latestFileBox.values.toList();
 
-    _fileBox.watch().listen((event) {
+    _latestFileBox.watch().listen((event) {
       final key = event.key;
       final value = event.value;
-
-      if (_fileInfo.any((element) => element.id == key)) {
-        final currentFileInfoIndex =
-            _fileInfo.indexWhere((element) => element.id == key);
-
-        if (event.deleted)
-          _fileInfo.removeAt(currentFileInfoIndex);
-        else
-          _fileInfo[currentFileInfoIndex] = value;
-      } else {
-        _fileInfo.add(value);
-      }
+      _latestFileInfo.add(value);
     });
   }
 
-  List<LatestFile> get getLatestFile => _fileInfo;
+  List<LatestFile> get getLatestFile => _latestFileInfo;
+
+  // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
+  //     _locationsInfo = locationsInfo;
 
   void addFile({
-    required Record file,
+    required Record latestFile,
   }) {
-    var lastKey;
-    try {
-      lastKey = _fileBox.keys.last;
-    } catch (e) {
-      lastKey = 0;
+    final latestFileInfo = LatestFile(
+      latestFile: latestFile,
+    );
+
+    if (_latestFileInfo.last.latestFile.id != latestFile.id ||
+        _latestFileInfo.isEmpty) {
+      _latestFileBox.add(
+        latestFileInfo,
+      );
     }
 
-    final latestFile = LatestFile(
-      latestFile: file,
-      id: lastKey != null ? lastKey + 1 : 0,
-    );
-
-    _fileBox.put(
-      latestFile.id,
-      latestFile,
-    );
+    if (_latestFileInfo.length > 3) {
+      deleteFile(id: _latestFileInfo[0].key);
+    }
   }
 
-  // void changelocation({required LatestFile location}) {
-  //   _fileBox.put(location.id, location);
-  // }
-
-  Future<void> deleteLocation({required int id}) async {
+  Future<void> deleteFile({required int id}) async {
     // final Map<dynamic, DownloadLocation> mapKey = _locationsBox.toMap();
     // dynamic deletingKey;
     // mapKey.forEach((key, value) {
@@ -79,7 +75,7 @@ class LatestFileRepository {
     //   }
     // });
     // if (deletingKey != null) {
-    await _fileBox.delete(id);
+    await _latestFileBox.delete(id);
     // }
   }
 }

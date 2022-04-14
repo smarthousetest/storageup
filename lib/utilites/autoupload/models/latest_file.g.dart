@@ -18,18 +18,15 @@ class LatestFileAdapter extends TypeAdapter<LatestFile> {
     };
     return LatestFile(
       latestFile: fields[0] as Record,
-      id: fields[1] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, LatestFile obj) {
     writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.latestFile)
       ..writeByte(1)
-      ..write(obj.id);
+      ..writeByte(0)
+      ..write(obj.latestFile);
   }
 
   @override

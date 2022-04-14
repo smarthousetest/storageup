@@ -1,4 +1,6 @@
 import 'package:desktop_window/desktop_window.dart';
+import 'package:file_typification/file_typification.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,7 +11,9 @@ import 'package:upstorage_desktop/components/blur/exit.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 import 'package:upstorage_desktop/pages/home/home_event.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
@@ -19,6 +23,7 @@ import 'package:upstorage_desktop/pages/media/media_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
@@ -335,82 +340,10 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 25, right: 75),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: Text(
-                translate.latest_file,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: kNormalTextFontFamily,
-                ),
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 40),
-                  child: SvgPicture.asset('assets/file_page/word.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, top: 20),
-                  child: Text(
-                    "Доклад",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 40),
-                  child: SvgPicture.asset('assets/file_page/word.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, top: 20),
-                  child: Text(
-                    "Документ",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 40),
-                  child: SvgPicture.asset('assets/file_page/pdf.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, top: 20),
-                  child: Text(
-                    "Иллюстрация",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+
+      BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+        return state.latestFile.isNotEmpty ? latestFile(context) : Container();
+      }),
       BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if (!isEventBusInited) {
@@ -492,6 +425,53 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     ];
+  }
+
+  Widget latestFile(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.only(
+          top: 25,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Text(
+                translate.latest_file,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: kNormalTextFontFamily,
+                ),
+              ),
+            ),
+            Container(
+              width: 250,
+              constraints: BoxConstraints(maxHeight: 150, minHeight: 50),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 40.0),
+                child: ListView(
+                  children: [
+                    ...state.latestFile.reversed.map((e) => MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<HomeBloc>()
+                                  .add(FileTapped(record: e.latestFile));
+                            },
+                            child: ObjectView(object: e)))),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _logout() {
@@ -660,5 +640,84 @@ class _HomePageState extends State<HomePage> {
               ),
             );
     }
+  }
+}
+
+class ObjectView extends StatelessWidget {
+  const ObjectView({Key? key, required this.object}) : super(key: key);
+  final LatestFile object;
+  @override
+  Widget build(BuildContext context) {
+    String? type = '';
+
+    var record = object.latestFile;
+    var isFile = true;
+    if (record.thumbnail != null && record.thumbnail!.isNotEmpty) {
+      type = FileAttribute().getFilesType(record.name!.toLowerCase());
+    }
+
+    return LayoutBuilder(
+      builder: (context, constrains) => Padding(
+        padding: const EdgeInsets.only(top: 23.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: 24,
+                  width: 24,
+                  child: Image.asset(
+                    type!.isNotEmpty
+                        ? 'assets/file_icons/${type}_s.png'
+                        : 'assets/file_icons/unexpected_s.png',
+                    fit: BoxFit.contain,
+                    height: 24,
+                    width: 24,
+                  ),
+                ),
+                ..._uploadProgress(isFile ? record.loadPercent : null),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Container(
+                constraints: BoxConstraints(maxWidth: 160.0),
+                child: Text(
+                  record.name ?? '',
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 17,
+                      color: Theme.of(context).colorScheme.onBackground,
+                      overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _uploadProgress(double? progress) {
+    List<Widget> indicators = [Container()];
+    if (progress != null) {
+      print('creating indicators with progress: $progress');
+      indicators = [
+        Visibility(
+          child: CircularProgressIndicator(
+            value: progress / 100,
+          ),
+        ),
+        CupertinoActivityIndicator(),
+      ];
+    }
+
+    return indicators;
   }
 }

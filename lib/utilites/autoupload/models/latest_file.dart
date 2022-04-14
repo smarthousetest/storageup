@@ -6,12 +6,9 @@ part 'latest_file.g.dart';
 class LatestFile extends HiveObject {
   @HiveField(0)
   Record latestFile;
-  @HiveField(1)
-  int id;
 
   LatestFile({
     required this.latestFile,
-    required this.id,
   });
 
   LatestFile copyWith({
@@ -19,12 +16,11 @@ class LatestFile extends HiveObject {
   }) {
     return LatestFile(
       latestFile: latestFile ?? this.latestFile,
-      id: id,
     );
   }
 
   @override
   String toString() {
-    return 'dirPath: $latestFile,  id: $id';
+    return 'latestFile: $latestFile';
   }
 }

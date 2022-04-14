@@ -1,41 +1,55 @@
+import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/record.dart';
+part 'folder.g.dart';
 
+@HiveType(typeId: 6)
 class Folder extends BaseObject {
+  @HiveField(11)
   List<Record>? records;
+  @HiveField(12)
   List<Folder>? folders;
-  String? parentFolder;
+  @HiveField(13)
   String? assetImage;
+  @HiveField(14)
   bool? readOnly;
 
-  Folder(
-      {this.records,
-      this.folders,
-      this.parentFolder,
-      required int size,
-      required String id,
-      bool favorite = false,
-      String? name,
-      String? createdBy,
-      String? updatedBy,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      this.assetImage,
-      required this.readOnly,
-      bool isChoosed = false})
-      : super(
-          id: id,
-          size: size,
-          createdAt: createdAt,
-          createdBy: createdBy,
-          name: name,
-          updatedAt: updatedAt,
-          updatedBy: updatedBy,
-          favorite: favorite,
-          isChoosed: isChoosed,
-        );
-
-  factory Folder.empty() => Folder(size: -1, id: '', readOnly: false);
+  Folder({
+    this.records,
+    this.folders,
+    String? parentFolder,
+    required int size,
+    required String id,
+    bool favorite = false,
+    String? name,
+    String? createdBy,
+    String? updatedBy,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    this.assetImage,
+    required this.readOnly,
+    bool isChoosed = false,
+    double? loadPercent,
+    bool? isDownloading,
+  }) : super(
+            id: id,
+            size: size,
+            createdAt: createdAt,
+            createdBy: createdBy,
+            name: name,
+            updatedAt: updatedAt,
+            updatedBy: updatedBy,
+            favorite: favorite,
+            isChoosed: isChoosed,
+            loadPercent: loadPercent,
+            parentFolder: parentFolder,
+            isDownloading: isDownloading);
+  factory Folder.empty() => Folder(
+        size: -1,
+        id: '',
+        readOnly: false,
+        parentFolder: '',
+      );
 
   @override
   String toString() {
@@ -57,24 +71,17 @@ class Folder extends BaseObject {
         fldrs?.add(Folder.fromJson(v));
       });
     }
-
-    final isCreatedAtProvided = (json['createdAt'] as String?) != null;
-    final isUpdatedAtProvided = (json['updatedAt'] as String?) != null;
     return Folder(
       size: json['size'] as int,
       id: json['_id'] as String? ?? 'root',
       name: json['name'] as String?,
       records: rcrds,
       folders: fldrs,
-      parentFolder: json['parentFolder'] as String?,
+      parentFolder: json['parentFolder'] as String? ?? 'root',
       createdBy: json['createdBy'] as String?,
       updatedBy: json['updatedBy'] as String?,
-      createdAt: isCreatedAtProvided
-          ? DateTime.tryParse(json['createdAt'] as String? ?? '')
-          : null,
-      updatedAt: isUpdatedAtProvided
-          ? DateTime.tryParse(json['updatedAt'] as String? ?? '')
-          : null,
+      createdAt: DateTime.tryParse(json['createdAt'] as String? ?? ''),
+      updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? ''),
       favorite: json['isFavorite'] as bool? ?? false,
       readOnly: json['readonly'] as bool?,
     );
@@ -99,7 +106,7 @@ class Folder extends BaseObject {
     int? size,
     String? id,
     String? name,
-    dynamic parentFolder,
+    String? parentFolder,
     String? tenant,
     String? createdBy,
     String? updatedBy,
@@ -109,6 +116,8 @@ class Folder extends BaseObject {
     String? assetImage,
     bool? readOnly,
     bool? isChoosed,
+    double? loadPercent,
+    bool? isDownloading,
   }) {
     return Folder(
       records: records ?? this.records,
@@ -125,7 +134,27 @@ class Folder extends BaseObject {
       assetImage: assetImage,
       readOnly: readOnly ?? this.readOnly,
       isChoosed: isChoosed ?? this.isChoosed,
+      loadPercent: loadPercent,
+      isDownloading: isDownloading,
     );
+  }
+
+  Folder toHiveModel() {
+    return Folder(
+        size: size,
+        id: id,
+        name: name,
+        parentFolder: parentFolder,
+        createdBy: createdBy,
+        updatedBy: updatedBy,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        favorite: favorite,
+        assetImage: assetImage,
+        readOnly: readOnly,
+        isChoosed: isChoosed,
+        loadPercent: loadPercent,
+        isDownloading: isDownloading);
   }
   // @override
   // BaseObject copyWith(
