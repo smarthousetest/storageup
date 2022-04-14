@@ -2,6 +2,7 @@ enum AuthError {
   wrongCredentials,
   emailAlreadyRegistered,
   noInternet,
+  noVerifiedEmail,
 }
 
 enum AuthenticationStatus {
@@ -11,6 +12,7 @@ enum AuthenticationStatus {
   wrongPassword,
   emailAllreadyRegistered,
   externalError,
+  notVerifiedEmail,
 }
 
 enum FileAction {

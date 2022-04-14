@@ -2005,6 +2005,46 @@ class S {
       args: [],
     );
   }
+
+  /// `Confirm your e-mail!`
+  String get confirm_email {
+    return Intl.message(
+      'Confirm your e-mail!',
+      name: 'confirm_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can't log in, confirm your e-mail address.`
+  String get you_cant_enter {
+    return Intl.message(
+      'You can\'t log in, confirm your e-mail address.',
+      name: 'you_cant_enter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We have sent an email to`
+  String get we_send {
+    return Intl.message(
+      'We have sent an email to',
+      name: 'we_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To confirm, click on the link inside the email.`
+  String get for_confirm {
+    return Intl.message(
+      'To confirm, click on the link inside the email.',
+      name: 'for_confirm',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
