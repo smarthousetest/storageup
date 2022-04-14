@@ -510,11 +510,6 @@ class MediaCubit extends Cubit<MediaState> {
     } else if (result == ResponseStatus.notExecuted) {
       print('declained');
       return ErrorType.alreadyExist;
-    } else {
-      result = await _filesController.renameFolder(newName, object.id);
-      if (result == ResponseStatus.ok) {
-        _update();
-      }
     }
   }
 

@@ -1117,12 +1117,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                             ?.setInfoRecord(e);
                                       } else if (action == MediaAction.rename) {
                                         var fileExtention = FileAttribute()
-                                            .getFileExtension(e.name ?? '');
+                                            .getFileExtension(
+                                                record.name ?? '');
                                         var result = await showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             var filename = FileAttribute()
-                                                .getFileName(e.name ?? '');
+                                                .getFileName(record.name ?? '');
                                             return BlurRename(filename, true);
                                           },
                                         );
@@ -1134,7 +1135,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                               .onActionRenameChoosed(
                                                   record, result);
                                           if (res == ErrorType.alreadyExist) {
-                                            _rename(context, e, result,
+                                            _rename(context, record, result,
                                                 fileExtention);
                                           }
                                         }
