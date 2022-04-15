@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 import 'package:upstorage_desktop/pages/home/home_event.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
@@ -342,14 +341,16 @@ class _HomePageState extends State<HomePage> {
       ),
 
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        return state.latestFile.isNotEmpty ? latestFile(context) : Container();
+        return state.objectsValueListenable != null
+            ? latestFile(context)
+            : Container();
       }),
       BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if (!isEventBusInited) {
             isEventBusInited = true;
             eventBusForUpload.on().listen((event) {
-              var result = showDialog(
+              showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurMenuUpload();
@@ -369,7 +370,7 @@ class _HomePageState extends State<HomePage> {
               width: 214,
               child: ElevatedButton(
                 onPressed: () {
-                  var result = showDialog(
+                  showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return BlurMenuUpload();
@@ -450,22 +451,31 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               width: 250,
-              constraints: BoxConstraints(maxHeight: 150, minHeight: 50),
               child: Padding(
                 padding: const EdgeInsets.only(left: 40.0),
-                child: ListView(
-                  children: [
-                    ...state.latestFile.reversed.map((e) => MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                            onTap: () {
-                              context
-                                  .read<HomeBloc>()
-                                  .add(FileTapped(record: e.latestFile));
-                            },
-                            child: ObjectView(object: e)))),
-                  ],
-                ),
+                child: ValueListenableBuilder<Box<LatestFile>>(
+                    valueListenable:
+                        Hive.box<LatestFile>('donwnloadLocationsBox')
+                            .listenable(),
+                    builder: (context, box, widget) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ...box.values
+                              .toList()
+                              .reversed
+                              .map((e) => MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        print(e.latestFile.name);
+                                        context.read<HomeBloc>().add(
+                                            FileTapped(record: e.latestFile));
+                                      },
+                                      child: ObjectView(object: e)))),
+                        ],
+                      );
+                    }),
               ),
             ),
           ],

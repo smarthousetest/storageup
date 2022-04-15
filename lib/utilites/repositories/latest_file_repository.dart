@@ -27,7 +27,7 @@ class LatestFileRepository {
     Hive.init(appPath.path);
 
     final box = await Hive.openBox<LatestFile>(_latestFileBoxName);
-
+    //box.deleteFromDisk();
     return LatestFileRepository._(latestFileBox: box);
   }
 
@@ -54,15 +54,15 @@ class LatestFileRepository {
       latestFile: latestFile,
     );
 
-    if (_latestFileInfo.last.latestFile.id != latestFile.id ||
-        _latestFileInfo.isEmpty) {
+    if (_latestFileInfo.isEmpty ||
+        (_latestFileInfo.last.latestFile.id != latestFile.id)) {
       _latestFileBox.add(
         latestFileInfo,
       );
     }
 
-    if (_latestFileInfo.length > 3) {
-      deleteFile(id: _latestFileInfo[0].key);
+    if (_latestFileBox.values.length > 3) {
+      deleteFile(id: _latestFileBox.values.toList()[0].key);
     }
   }
 
