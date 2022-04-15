@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
+import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
@@ -472,7 +473,7 @@ class _HomePageState extends State<HomePage> {
                                         context.read<HomeBloc>().add(
                                             FileTapped(record: e.latestFile));
                                       },
-                                      child: ObjectView(object: e)))),
+                                      child: LatestFileView(object: e)))),
                         ],
                       );
                     }),
@@ -665,8 +666,8 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ObjectView extends StatelessWidget {
-  const ObjectView({Key? key, required this.object}) : super(key: key);
+class LatestFileView extends StatelessWidget {
+  const LatestFileView({Key? key, required this.object}) : super(key: key);
   final LatestFile object;
   @override
   Widget build(BuildContext context) {

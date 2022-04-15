@@ -11,13 +11,12 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
-//import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
@@ -55,13 +54,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       var upToDateVersion = await _filesService.getVersionApp();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
       var latestFile = await _repository.getLatestFile;
-      // var listenable = _getObjectsBoxListenable(null);
+      var listenable = _getObjectsBoxListenable(null);
       String version = await _read();
       emit(state.copyWith(
         upToDateVersion: upToDateVersion,
         version: version,
         latestFile: latestFile,
-        //objectsValueListenable: listenable,
+        objectsValueListenable: listenable,
         //checkLatestFile: checkLatestFile,
       ));
     });
@@ -75,15 +74,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       getIt<FilesController>(instanceName: 'files_controller');
   late final LatestFileRepository _repository;
   List<DownloadObserver> _downloadObservers = [];
-  //late final Box<LatestFile> boxLatestFile;
+  Box<LatestFile>? boxLatestFile;
 
-  // ValueListenable<Box<LatestFile>> _getObjectsBoxListenable(
-  //   List<String>? objectsId,
-  // ) {
-  //   var listenable = boxLatestFile.listenable();
+  ValueListenable<Box<LatestFile>>? _getObjectsBoxListenable(
+    List<String>? objectsId,
+  ) {
+    var listenable = boxLatestFile?.listenable(keys: objectsId);
 
-  //   return listenable;
-  // }
+    return listenable;
+  }
 
   Future<String> _read() async {
     String version;
