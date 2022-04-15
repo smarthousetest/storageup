@@ -236,15 +236,18 @@ class FilesService {
         ),
       );
 
-      if (response.statusCode == 200)
+      if (response.statusCode == 200) {
         return ResponseStatus.ok;
-      else if (response.statusCode == 403) {
-        return ResponseStatus.notExecuted;
-      } else
+      } else {
         return ResponseStatus.failed;
+      }
     } on DioError catch (e) {
       print(e);
-      return ResponseStatus.notExecuted;
+      if (e.response?.statusCode == 403) {
+        return ResponseStatus.notExecuted;
+      } else {
+        return ResponseStatus.failed;
+      }
     }
   }
 

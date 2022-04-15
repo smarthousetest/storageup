@@ -510,6 +510,9 @@ class MediaCubit extends Cubit<MediaState> {
     } else if (result == ResponseStatus.notExecuted) {
       print('declained');
       return ErrorType.alreadyExist;
+    } else if (result == ResponseStatus.failed) {
+      print('declained');
+      return ErrorType.noInternet;
     }
   }
 
