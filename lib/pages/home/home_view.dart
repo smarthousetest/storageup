@@ -82,7 +82,8 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return SimpleDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             title: Text(
               translate.something_goes_wrong,
               textAlign: TextAlign.center,
@@ -95,7 +96,8 @@ class _HomePageState extends State<HomePage> {
             ),
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 200, right: 200, top: 30, bottom: 10),
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
                 child: ElevatedButton(
                   onPressed: () async {
                     Navigator.pop(context);
@@ -115,7 +117,9 @@ class _HomePageState extends State<HomePage> {
                     // Theme.of(context).primaryColor,
                     fixedSize: Size(100, 42),
                     elevation: 0,
-                    side: BorderSide(style: BorderStyle.solid, color: Theme.of(context).splashColor),
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -130,7 +134,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     infoPage = InfoPage();
-    filePage = StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    filePage =
+        StateInfoContainer(child: StateSortedContainer(child: FilePage()));
     likePage = LikePage();
     spaceSellPage = SpaceSellPage();
     finincePage = FinancePage();
@@ -218,7 +223,12 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
                 ),
                 child:
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
@@ -334,9 +344,7 @@ class _HomePageState extends State<HomePage> {
       ),
 
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        return state.objectsValueListenable != null
-            ? latestFile(context)
-            : Container();
+        return state.latestFile.isNotEmpty ? latestFile(context) : Container();
       }),
       BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
@@ -525,7 +533,9 @@ class _HomePageState extends State<HomePage> {
   Widget _update() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+        borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(10.0),
+            bottomLeft: Radius.circular(10.0)),
         color: Theme.of(context).dividerColor,
       ),
       height: 50,

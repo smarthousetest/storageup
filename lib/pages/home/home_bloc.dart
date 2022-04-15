@@ -56,13 +56,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       var upToDateVersion = await _filesService.getVersionApp();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
       var latestFile = await _repository.getLatestFile;
-      var listenable = _getObjectsBoxListenable(null);
+      // var listenable = _getObjectsBoxListenable(null);
       String version = await _read();
       emit(state.copyWith(
         upToDateVersion: upToDateVersion,
         version: version,
         latestFile: latestFile,
-        objectsValueListenable: listenable,
+        //objectsValueListenable: listenable,
         //checkLatestFile: checkLatestFile,
       ));
     });
@@ -76,15 +76,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       getIt<FilesController>(instanceName: 'files_controller');
   late final LatestFileRepository _repository;
   List<DownloadObserver> _downloadObservers = [];
-  late final Box<LatestFile> boxLatestFile;
+  //late final Box<LatestFile> boxLatestFile;
 
-  ValueListenable<Box<LatestFile>> _getObjectsBoxListenable(
-    List<String>? objectsId,
-  ) {
-    var listenable = boxLatestFile.listenable();
+  // ValueListenable<Box<LatestFile>> _getObjectsBoxListenable(
+  //   List<String>? objectsId,
+  // ) {
+  //   var listenable = boxLatestFile.listenable();
 
-    return listenable;
-  }
+  //   return listenable;
+  // }
 
   Future<String> _read() async {
     String version;

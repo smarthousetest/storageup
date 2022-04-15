@@ -9,6 +9,7 @@ import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   SpaceBloc() : super(SpaceState()) {
