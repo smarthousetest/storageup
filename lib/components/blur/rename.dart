@@ -8,20 +8,22 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurRename extends StatefulWidget {
   var name;
+  bool hint;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurRename(this.name);
+  BlurRename(this.name, this.hint);
 }
 
 class _ButtonTemplateState extends State<BlurRename> {
   S translate = getIt<S>();
   var myController = TextEditingController();
   bool canSave = false;
-  bool hintColor = true;
+  bool hintColor = false;
 
   @override
   void initState() {
     myController = TextEditingController(text: widget.name);
+    hintColor = widget.hint;
     super.initState();
   }
 
@@ -153,7 +155,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                                       child: Text(
                                         translate.cancel,
                                         style: TextStyle(
-                                          color: Theme.of(context).splashColor,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
                                           fontSize: 16,
                                           fontFamily: kNormalTextFontFamily,
                                         ),
@@ -164,7 +168,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Theme.of(context).splashColor,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -195,14 +201,18 @@ class _ButtonTemplateState extends State<BlurRename> {
                                       ),
                                       style: ElevatedButton.styleFrom(
                                         primary: canSave
-                                            ? Theme.of(context).splashColor
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
                                             : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
                                           color: canSave
-                                              ? Theme.of(context).splashColor
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
                                               : Theme.of(context).canvasColor,
                                         ),
                                         shape: RoundedRectangleBorder(

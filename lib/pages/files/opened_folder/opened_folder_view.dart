@@ -445,7 +445,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                               context: context,
                                               builder: (BuildContext context) {
                                                 var fileName = obj.name ?? '';
-                                                return BlurRename(fileName);
+                                                return BlurRename(
+                                                    fileName, true);
                                               },
                                             );
                                             if (result != null &&
@@ -466,7 +467,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                                 var fileName = FileAttribute()
                                                     .getFileName(
                                                         obj.name ?? '');
-                                                return BlurRename(fileName);
+                                                return BlurRename(
+                                                    fileName, true);
                                               },
                                             );
                                             if (result != null &&
@@ -621,7 +623,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                         context: context,
                                         builder: (BuildContext context) {
                                           var fileName = obj.name ?? '';
-                                          return BlurRename(fileName);
+                                          return BlurRename(fileName, true);
                                         },
                                       );
                                       if (result != null && result is String) {
@@ -638,7 +640,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                         builder: (BuildContext context) {
                                           var fileName = FileAttribute()
                                               .getFileName(obj.name ?? '');
-                                          return BlurRename(fileName);
+                                          return BlurRename(fileName, true);
                                         },
                                       );
                                       if (result != null && result is String) {
@@ -1025,7 +1027,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                             context: context,
                                             builder: (BuildContext context) {
                                               var fileName = element.name ?? '';
-                                              return BlurRename(fileName);
+                                              return BlurRename(fileName, true);
                                             },
                                           );
                                           if (result != null &&
@@ -1046,7 +1048,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                               var fileName = FileAttribute()
                                                   .getFileName(
                                                       element.name ?? '');
-                                              return BlurRename(fileName);
+                                              return BlurRename(fileName, true);
                                             },
                                           );
                                           if (result != null &&
@@ -1427,7 +1429,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   context: context,
                                   builder: (BuildContext context) {
                                     var fileName = obj.name ?? '';
-                                    return BlurRename(fileName);
+                                    return BlurRename(fileName, true);
                                   },
                                 );
                                 if (result != null && result is String) {
@@ -1444,7 +1446,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   builder: (BuildContext context) {
                                     var fileName = FileAttribute()
                                         .getFileName(obj.name ?? '');
-                                    return BlurRename(fileName);
+                                    return BlurRename(fileName, true);
                                   },
                                 );
                                 if (result != null && result is String) {
