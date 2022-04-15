@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/packet/packet.dart';
 import 'package:upstorage_desktop/models/subscription.dart';
 import 'package:upstorage_desktop/models/tariff.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -81,6 +82,31 @@ class SubscriptionService {
     } catch (e) {
       print(e);
       return ResponseStatus.failed;
+    }
+  }
+
+  Future<Packet?> getPacketInfo() async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+      if (token != null && token.isNotEmpty) {
+        var path = '/packet/current';
+
+        var response = await _dio.get(
+          path,
+          options: Options(headers: {'Authorization': ' Bearer $token'}),
+        );
+
+        if (response.statusCode == 200) {
+          // List<Packet> packetInfo = [];
+          // (response.data as List).forEach((element) {
+          //   packetInfo.add(Packet.fromMap(element));
+          // });
+          Packet packetInfo = Packet.fromMap(response.data);
+          return packetInfo;
+        }
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

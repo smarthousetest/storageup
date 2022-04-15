@@ -432,7 +432,8 @@ class _FilePageState extends State<FilePage> {
                     ),
                     (MediaQuery.of(context).size.width > 966)
                         ? Container(
-                            constraints: BoxConstraints(maxWidth: 95),
+                            constraints:
+                                BoxConstraints(maxWidth: 95, minWidth: 50),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,

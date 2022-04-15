@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
+import 'package:file_typification/file_typification.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
@@ -20,6 +23,7 @@ import 'package:upstorage_desktop/pages/media/media_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
@@ -216,31 +220,36 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                      child: SvgPicture.asset(
-                        'assets/home_page/storage_title.svg',
+                child:
+                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                        child: SvgPicture.asset(
+                          'assets/home_page/storage_title.svg',
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                      child: SvgPicture.asset(
-                        'assets/home_page/separator.svg',
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                        child: SvgPicture.asset(
+                          'assets/home_page/separator.svg',
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        controller: ScrollController(),
-                        children: leftButtonsItem(),
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          controller: ScrollController(),
+                          children: leftButtonsItem(),
+                        ),
                       ),
-                    ),
-                    _logout(),
-                    _update(),
-                  ],
-                ),
+                      _logout(),
+                      state.upToDateVersion != state.version
+                          ? _update()
+                          : Container(),
+                    ],
+                  );
+                }),
               ),
               getPage(),
             ],
@@ -323,79 +332,18 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 25, right: 75),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: Text(
-                translate.latest_file,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: kNormalTextFontFamily,
-                ),
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 40),
-                  child: SvgPicture.asset('assets/file_page/word.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, top: 20),
-                  child: Text(
-                    "Доклад",
-                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontFamily: kNormalTextFontFamily),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 40),
-                  child: SvgPicture.asset('assets/file_page/word.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, top: 20),
-                  child: Text(
-                    "Документ",
-                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontFamily: kNormalTextFontFamily),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 40),
-                  child: SvgPicture.asset('assets/file_page/pdf.svg'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, top: 20),
-                  child: Text(
-                    "Иллюстрация",
-                    style: TextStyle(color: Theme.of(context).colorScheme.onBackground, fontSize: 17, fontFamily: kNormalTextFontFamily),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+
+      BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+        return state.objectsValueListenable != null
+            ? latestFile(context)
+            : Container();
+      }),
       BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
           if (!isEventBusInited) {
             isEventBusInited = true;
             eventBusForUpload.on().listen((event) {
-              var result = showDialog(
+              showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurMenuUpload();
@@ -471,6 +419,62 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     ];
+  }
+
+  Widget latestFile(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.only(
+          top: 25,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Text(
+                translate.latest_file,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: kNormalTextFontFamily,
+                ),
+              ),
+            ),
+            Container(
+              width: 250,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 40.0),
+                child: ValueListenableBuilder<Box<LatestFile>>(
+                    valueListenable:
+                        Hive.box<LatestFile>('donwnloadLocationsBox')
+                            .listenable(),
+                    builder: (context, box, widget) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ...box.values
+                              .toList()
+                              .reversed
+                              .map((e) => MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        print(e.latestFile.name);
+                                        context.read<HomeBloc>().add(
+                                            FileTapped(record: e.latestFile));
+                                      },
+                                      child: ObjectView(object: e)))),
+                        ],
+                      );
+                    }),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _logout() {
@@ -649,5 +653,84 @@ class _HomePageState extends State<HomePage> {
               ),
             );
     }
+  }
+}
+
+class ObjectView extends StatelessWidget {
+  const ObjectView({Key? key, required this.object}) : super(key: key);
+  final LatestFile object;
+  @override
+  Widget build(BuildContext context) {
+    String? type = '';
+
+    var record = object.latestFile;
+    var isFile = true;
+    if (record.thumbnail != null && record.thumbnail!.isNotEmpty) {
+      type = FileAttribute().getFilesType(record.name!.toLowerCase());
+    }
+
+    return LayoutBuilder(
+      builder: (context, constrains) => Padding(
+        padding: const EdgeInsets.only(top: 23.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: 24,
+                  width: 24,
+                  child: Image.asset(
+                    type!.isNotEmpty
+                        ? 'assets/file_icons/${type}_s.png'
+                        : 'assets/file_icons/unexpected_s.png',
+                    fit: BoxFit.contain,
+                    height: 24,
+                    width: 24,
+                  ),
+                ),
+                ..._uploadProgress(isFile ? record.loadPercent : null),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Container(
+                constraints: BoxConstraints(maxWidth: 160.0),
+                child: Text(
+                  record.name ?? '',
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 17,
+                      color: Theme.of(context).colorScheme.onBackground,
+                      overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _uploadProgress(double? progress) {
+    List<Widget> indicators = [Container()];
+    if (progress != null) {
+      print('creating indicators with progress: $progress');
+      indicators = [
+        Visibility(
+          child: CircularProgressIndicator(
+            value: progress / 100,
+          ),
+        ),
+        CupertinoActivityIndicator(),
+      ];
+    }
+
+    return indicators;
   }
 }

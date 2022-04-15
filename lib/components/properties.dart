@@ -1,5 +1,5 @@
 import 'package:file_typification/file_typification.dart';
-import 'package:event_bus/event_bus.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -459,7 +459,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                             width: 260,
                             child: OutlinedButton(
                               onPressed: () {
-                                eventBus.fire(FileInfoView);
+                                eventBus.fire(FileInfoViewEvent);
                               },
                               style: OutlinedButton.styleFrom(
                                 minimumSize: Size(double.maxFinite, 60),
@@ -482,3 +482,5 @@ class _ButtonTemplateState extends State<FileInfoView> {
             ])));
   }
 }
+
+class FileInfoViewEvent {}

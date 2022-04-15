@@ -176,12 +176,14 @@ class _InfoPageState extends State<InfoPage> {
         //         ?.firstWhere((folder) => folder.name == 'Media')
         //         .size ??
         //     0;
-        var allFolderSize = state.rootFolders?.size ?? 0;
+        var allSpaceGb = state.packetInfo?.filledSpace ?? 0;
+        //var allFolderSize = state.rootFolders?.size ?? 0;
+        var currenSub = state.sub?.tariff?.spaceGb ?? 0;
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              '${fileSize(allFolderSize, translate)}',
+              '${fileSize(allSpaceGb, translate, 0)}',
               style: TextStyle(
                 color: Theme.of(context).bottomAppBarColor,
                 fontSize: 36,
@@ -200,7 +202,7 @@ class _InfoPageState extends State<InfoPage> {
               ),
             ),
             Text(
-              '20 ГБ',
+              translate.gb(currenSub),
               style: TextStyle(
                 color: Theme.of(context).shadowColor,
                 fontSize: 36,
@@ -217,6 +219,8 @@ class _InfoPageState extends State<InfoPage> {
     return BlocBuilder<InfoBloc, InfoState>(
       builder: (context, state) {
         var filesFolder = state.folder?.records?.length ?? 0;
+
+        // var sizeFolder = state.folder?.size ?? 0;
 
         // var mediaFolder = state.rootFolders?.folders
         //     ?.firstWhere((folder) => folder.name == 'Media')
@@ -409,39 +413,51 @@ class _InfoPageState extends State<InfoPage> {
   Padding _progressBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
-      child: SizedBox(
-        height: 10,
-        child: Stack(
-          children: [
-            // MyProgressBar(
-            //   percent: 75,
-            //   color: Color(0xffFFD75E),
-            //   bgColor: Theme.of(context).cardColor,
-            // ),
-            MyProgressBar(
-              percent: 50,
-              color: Color(0xffFF847E),
-              bgColor: Theme.of(context).cardColor,
+      child: BlocBuilder<InfoBloc, InfoState>(builder: (context, state) {
+        var currentSubSpace = state.sub?.tariff?.spaceGb ?? 0;
+        var allSpaceGb = state.packetInfo?.filledSpace ?? 0;
+        var e;
 
-              ///
-            ),
-            MyProgressBar(
-              percent: 30,
-              color: Color(0xff59D7AB),
-              bgColor: Color.fromARGB(0, 0, 0, 0),
+        e = (allSpaceGb * (0.000000001));
 
-              ///
-            ),
-            MyProgressBar(
-              percent: 15,
-              color: Color(0xff868FFF),
-              bgColor: Color.fromARGB(0, 0, 0, 0),
+        double percentFiles = ((e / currentSubSpace) * 100).toDouble();
+        if (percentFiles.isNaN) {
+          percentFiles = 0;
+        }
+        return SizedBox(
+          height: 10,
+          child: Stack(
+            children: [
+              // MyProgressBar(
+              //   percent: 75,
+              //   color: Color(0xffFFD75E),
+              //   bgColor: Theme.of(context).cardColor,
+              // ),
+              // MyProgressBar(
+              //   percent: 50,
+              //   color: Color(0xffFF847E),
+              //   bgColor: Theme.of(context).cardColor,
 
-              ///
-            ),
-          ],
-        ),
-      ),
+              //   ///
+              // ),
+              // MyProgressBar(
+              //   percent: 30,
+              //   color: Color(0xff59D7AB),
+              //   bgColor: Color.fromARGB(0, 0, 0, 0),
+
+              //   ///
+              // ),
+              MyProgressBar(
+                percent: percentFiles.ceilToDouble(),
+                color: Color(0xff868FFF),
+                bgColor: Theme.of(context).cardColor,
+
+                ///
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 

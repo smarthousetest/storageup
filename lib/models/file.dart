@@ -1,14 +1,30 @@
+import 'package:hive/hive.dart';
+
+part 'file.g.dart';
+
+@HiveType(typeId: 5)
 class File {
+  @HiveField(0)
   String? id;
+  @HiveField(1)
   String? createdAt;
+  @HiveField(2)
   String? updatedAt;
+  @HiveField(3)
   String? deletedAt;
+  @HiveField(4)
   String? createdBy;
+  @HiveField(5)
   String? updatedBy;
+  @HiveField(6)
   String? name;
+  @HiveField(7)
   int? sizeInBytes;
+  @HiveField(8)
   String? privateUrl;
+  @HiveField(9)
   String? publicUrl;
+  @HiveField(10)
   String? downloadUrl;
 
   File({

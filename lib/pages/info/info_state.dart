@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:upstorage_desktop/models/folder.dart';
+import 'package:upstorage_desktop/models/packet/packet.dart';
+import 'package:upstorage_desktop/models/subscription.dart';
 
 import 'package:upstorage_desktop/models/user.dart';
 
@@ -20,8 +22,10 @@ class InfoState extends Equatable {
   final bool financeTab;
   final User? user;
   final Folder? folder;
+  final Subscription? sub;
   final Folder? rootFolders;
   final List<Folder>? allMediaFolders;
+  final Packet? packetInfo;
 
   InfoState({
     this.usingSpace = 0,
@@ -38,10 +42,12 @@ class InfoState extends Equatable {
     this.settingsTab = false,
     this.trashTab = false,
     this.financeTab = false,
+    this.sub,
     this.user,
     this.rootFolders,
     this.folder,
     this.allMediaFolders,
+    this.packetInfo,
   });
 
   InfoState copyWith({
@@ -55,9 +61,11 @@ class InfoState extends Equatable {
     bool? filesTab,
     bool? mediaTab,
     User? user,
+    Subscription? sub,
     Folder? rootFolders,
     Folder? folder,
     List<Folder>? allMediaFolders,
+    Packet? packetInfo,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -72,8 +80,10 @@ class InfoState extends Equatable {
       mediaTab: mediaTab ?? this.mediaTab,
       user: user ?? this.user,
       folder: folder ?? this.folder,
+      sub: sub ?? this.sub,
       rootFolders: rootFolders ?? this.rootFolders,
       allMediaFolders: allMediaFolders ?? this.allMediaFolders,
+      packetInfo: packetInfo ?? this.packetInfo,
     );
   }
 
@@ -92,5 +102,7 @@ class InfoState extends Equatable {
         folder,
         rootFolders,
         allMediaFolders,
+        sub,
+        packetInfo,
       ];
 }

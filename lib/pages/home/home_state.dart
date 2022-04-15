@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:upstorage_desktop/models/base_object.dart';
+import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 
 class HomeState extends Equatable {
   final double usingSpace;
@@ -17,6 +21,11 @@ class HomeState extends Equatable {
   final bool trashTab;
   final bool financeTab;
   final FormzStatus status;
+  final String? upToDateVersion;
+  final String? version;
+  final List<LatestFile> latestFile;
+  final List<LatestFile> checkLatestFile;
+  final ValueListenable<Box<LatestFile>>? objectsValueListenable;
 
   HomeState({
     this.usingSpace = 0,
@@ -34,6 +43,11 @@ class HomeState extends Equatable {
     this.trashTab = false,
     this.financeTab = false,
     this.status = FormzStatus.pure,
+    this.upToDateVersion,
+    this.version,
+    this.objectsValueListenable,
+    this.latestFile = const [],
+    this.checkLatestFile = const [],
   });
 
   HomeState copyWith({
@@ -47,6 +61,11 @@ class HomeState extends Equatable {
     bool? filesTab,
     bool? mediaTab,
     FormzStatus? status,
+    String? upToDateVersion,
+    String? version,
+    List<LatestFile>? latestFile,
+    List<LatestFile>? checkLatestFile,
+    ValueListenable<Box<LatestFile>>? objectsValueListenable,
   }) {
     return HomeState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -60,6 +79,12 @@ class HomeState extends Equatable {
       filesTab: filesTab ?? this.filesTab,
       mediaTab: mediaTab ?? this.mediaTab,
       status: status ?? FormzStatus.pure,
+      upToDateVersion: upToDateVersion ?? this.upToDateVersion,
+      version: version ?? this.version,
+      objectsValueListenable:
+          objectsValueListenable ?? this.objectsValueListenable,
+      latestFile: latestFile ?? this.latestFile,
+      checkLatestFile: checkLatestFile ?? this.checkLatestFile,
     );
   }
 
@@ -75,5 +100,10 @@ class HomeState extends Equatable {
         filesTab,
         mediaTab,
         status,
+        upToDateVersion,
+        version,
+        latestFile,
+        checkLatestFile,
+        objectsValueListenable,
       ];
 }

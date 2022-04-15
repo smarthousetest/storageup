@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -226,6 +227,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
+        var searchText = StateSortedContainer.of(context).search;
         eventBus.on().listen((event) {
           var object = StateInfoContainer.of(context)?.object;
           if (object is Folder) {
@@ -255,8 +257,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           }
           //print(event.runtimeType);
         });
-        var searchText = StateSortedContainer.of(context).search;
-
         // if (state.search != searchText) {
         //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(
         //         searchText,
@@ -361,6 +361,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                       Function() onTap;
                       var obj = state.sortedFiles[index];
 
+                      // if (state.sortedFiles.length !=
+                      // _popupControllers.length) {
+                      // _popupControllers = [];
+                      // _initiatingControllers(state);
+                      // }
                       if (state.sortedFiles.length > _popupControllers.length) {
                         _popupControllers = [];
                         _initiatingControllers(state);

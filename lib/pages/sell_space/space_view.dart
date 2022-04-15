@@ -4,11 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -195,12 +195,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               Expanded(
                 child: BlocBuilder<SpaceBloc, SpaceState>(
                     builder: (context, state) {
+                  List<Keeper?> othersKeeper = [];
+                  if (state.keeper != null) {
+                    othersKeeper.addAll(state.keeper);
+                  }
                   return IndexedStack(
                     sizing: StackFit.expand,
                     key: ValueKey<int>(index),
                     index: index,
                     children: [
-                      state.locationsInfo.isEmpty
+                      state.locationsInfo.isEmpty || othersKeeper.isEmpty
                           ? rentingAPlace(context)
                           : folderList(context),
                       Column(
@@ -832,7 +836,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   child: BlocBuilder<SpaceBloc, SpaceState>(
                       builder: (context, state) {
                     bool checkValidate =
-                        list.isEmpty && myController.text.isEmpty;
+                        list.isEmpty && myController.text.isEmpty == false;
                     return OutlinedButton(
                       onPressed: () {
                         if (checkValidate) {
@@ -854,9 +858,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         minimumSize: Size(double.maxFinite, 60),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: checkValidate
-                            ? Theme.of(context).canvasColor
-                            : Theme.of(context).splashColor,
+                        backgroundColor:
+                            list.isEmpty && myController.value.text.isEmpty
+                                ? Theme.of(context).canvasColor
+                                : Theme.of(context).splashColor,
                       ),
                       child: Text(
                         translate.save,
