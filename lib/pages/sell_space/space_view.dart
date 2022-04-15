@@ -38,14 +38,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   String dirPath = '';
   int countGbSpace = 0;
   double _currentSliderValue = 32;
-  final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
   final myController = TextEditingController();
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final keyContext = nameWidthKey.currentContext;
     //final box = keyContext?.findRenderObject() as RenderBox;
     _searchFieldWidth = width - _rowPadding * 4 - 274 - 222;
   }
@@ -195,16 +193,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               Expanded(
                 child: BlocBuilder<SpaceBloc, SpaceState>(
                     builder: (context, state) {
-                  List<Keeper?> othersKeeper = [];
-                  if (state.keeper != null) {
-                    othersKeeper.addAll(state.keeper);
-                  }
+                  // List<Keeper?> othersKeeper = [];
+                  // if (state.keeper != null) {
+                  //   othersKeeper.addAll(state.keeper);
+                  // }
                   return IndexedStack(
                     sizing: StackFit.expand,
                     key: ValueKey<int>(index),
                     index: index,
                     children: [
-                      state.locationsInfo.isEmpty || othersKeeper.isEmpty
+                      state.locationsInfo.isEmpty || state.keeper.isEmpty
                           ? rentingAPlace(context)
                           : folderList(context),
                       Column(

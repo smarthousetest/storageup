@@ -254,7 +254,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               context.read<OpenedFolderCubit>().fileTapped(object as Record);
             }
           }
-          //print(event.runtimeType);
         });
         // if (state.search != searchText) {
         //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(

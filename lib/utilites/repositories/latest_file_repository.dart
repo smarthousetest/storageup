@@ -6,7 +6,7 @@ import 'package:upstorage_desktop/models/file.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 
-const _latestFileBoxName = 'donwnloadLocationsBox';
+const _latestFileBoxName = 'latestFileBox';
 
 @lazySingleton
 class LatestFileRepository {

@@ -456,8 +456,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 40.0),
                 child: ValueListenableBuilder<Box<LatestFile>>(
                     valueListenable:
-                        Hive.box<LatestFile>('donwnloadLocationsBox')
-                            .listenable(),
+                        Hive.box<LatestFile>('latestFileBox').listenable(),
                     builder: (context, box, widget) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

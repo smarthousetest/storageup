@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
-import 'package:cpp_native/cpp_native.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
@@ -15,12 +11,10 @@ import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_state.dart';
 import 'package:upstorage_desktop/pages/files/file_event.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
 
 //enum SortingDirection { neutral, up, down }
@@ -77,7 +71,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
 
   FilesController _controller;
   //Box  get _box async  => await Hive.openBox('file_path_db');
-  final TokenRepository _tokenRepository = getIt<TokenRepository>();
+  //final TokenRepository _tokenRepository = getIt<TokenRepository>();
   final LoadController _loadController = getIt<LoadController>();
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
