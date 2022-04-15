@@ -14,6 +14,7 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/file.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
@@ -440,45 +441,57 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                               ?.setInfoObject(obj);
                                         } else if (action ==
                                             FileAction.rename) {
-                                          if (obj is Folder) {
-                                            var result = await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                var fileName = obj.name ?? '';
-                                                return BlurRename(
-                                                    fileName, true);
-                                              },
-                                            );
-                                            if (result != null &&
-                                                result is String) {
-                                              result = result;
-                                              context
-                                                  .read<OpenedFolderCubit>()
-                                                  .onActionRenameChoosed(
-                                                      obj, result);
-                                            }
-                                          } else {
+                                          if (obj is Record) {
                                             var fileExtention = FileAttribute()
                                                 .getFileExtension(
                                                     obj.name ?? '');
                                             var result = await showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                var fileName = FileAttribute()
+                                                var filename = FileAttribute()
                                                     .getFileName(
                                                         obj.name ?? '');
                                                 return BlurRename(
-                                                    fileName, true);
+                                                    filename, true);
                                               },
                                             );
                                             if (result != null &&
-                                                result is String) {
+                                                result is String &&
+                                                result !=
+                                                    FileAttribute().getFileName(
+                                                        obj.name ?? '')) {
                                               result =
                                                   result + '.' + fileExtention;
-                                              context
+                                              final res = await context
                                                   .read<OpenedFolderCubit>()
-                                                  .onActionRenameChoosed(
+                                                  .onActionRenameChoosedFile(
                                                       obj, result);
+                                              if (res ==
+                                                  ErrorType.alreadyExist) {
+                                                _renameFile(context, obj,
+                                                    result, fileExtention);
+                                              }
+                                            }
+                                          } else {
+                                            var result = await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return BlurRename(
+                                                    obj.name, true);
+                                              },
+                                            );
+                                            if (result != null &&
+                                                result is String &&
+                                                result != obj.name) {
+                                              final res = await context
+                                                  .read<OpenedFolderCubit>()
+                                                  .onActionRenameChoosedFolder(
+                                                      obj, result);
+                                              if (res ==
+                                                  ErrorType.alreadyExist) {
+                                                _renameFolder(
+                                                    context, obj, result);
+                                              }
                                             }
                                           }
                                         } else {
@@ -515,6 +528,47 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 }));
       }),
     );
+  }
+
+  void _renameFile(BuildContext context, BaseObject record, String name,
+      String extention) async {
+    String newName = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var filename = FileAttribute().getFileName(name);
+        return BlurRename(filename, false);
+      },
+    );
+    if (newName != FileAttribute().getFileName(record.name ?? '')) {
+      newName = newName + '.' + extention;
+      final res = await context
+          .read<OpenedFolderCubit>()
+          .onActionRenameChoosedFile(record, newName);
+      if (res == ErrorType.alreadyExist) {
+        _renameFile(context, record, newName, extention);
+      }
+    }
+  }
+
+  void _renameFolder(
+    BuildContext context,
+    BaseObject folder,
+    String name,
+  ) async {
+    String newName = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BlurRename(name, false);
+      },
+    );
+    if (newName != folder.name) {
+      final res = await context
+          .read<OpenedFolderCubit>()
+          .onActionRenameChoosedFolder(folder, newName);
+      if (res == ErrorType.alreadyExist) {
+        _renameFolder(context, folder, newName);
+      }
+    }
   }
 
   List<GridElement> _gridList(
@@ -618,36 +672,49 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                     StateInfoContainer.of(context)
                                         ?.setInfoObject(obj);
                                   } else if (action == FileAction.rename) {
-                                    if (obj is Folder) {
-                                      var result = await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          var fileName = obj.name ?? '';
-                                          return BlurRename(fileName, true);
-                                        },
-                                      );
-                                      if (result != null && result is String) {
-                                        result = result;
-                                        context
-                                            .read<OpenedFolderCubit>()
-                                            .onActionRenameChoosed(obj, result);
-                                      }
-                                    } else {
+                                    if (obj is Record) {
                                       var fileExtention = FileAttribute()
                                           .getFileExtension(obj.name ?? '');
                                       var result = await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          var fileName = FileAttribute()
+                                          var filename = FileAttribute()
                                               .getFileName(obj.name ?? '');
-                                          return BlurRename(fileName, true);
+                                          return BlurRename(filename, true);
                                         },
                                       );
-                                      if (result != null && result is String) {
+                                      if (result != null &&
+                                          result is String &&
+                                          result !=
+                                              FileAttribute().getFileName(
+                                                  obj.name ?? '')) {
                                         result = result + '.' + fileExtention;
-                                        context
+                                        final res = await context
                                             .read<OpenedFolderCubit>()
-                                            .onActionRenameChoosed(obj, result);
+                                            .onActionRenameChoosedFile(
+                                                obj, result);
+                                        if (res == ErrorType.alreadyExist) {
+                                          _renameFile(context, obj, result,
+                                              fileExtention);
+                                        }
+                                      }
+                                    } else {
+                                      var result = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return BlurRename(obj.name, true);
+                                        },
+                                      );
+                                      if (result != null &&
+                                          result is String &&
+                                          result != obj.name) {
+                                        final res = await context
+                                            .read<OpenedFolderCubit>()
+                                            .onActionRenameChoosedFolder(
+                                                obj, result);
+                                        if (res == ErrorType.alreadyExist) {
+                                          _renameFolder(context, obj, result);
+                                        }
                                       }
                                     }
                                   } else {
@@ -1022,43 +1089,54 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                         StateInfoContainer.of(context)
                                             ?.setInfoObject(element);
                                       } else if (action == FileAction.rename) {
-                                        if (element is Folder) {
-                                          var result = await showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              var fileName = element.name ?? '';
-                                              return BlurRename(fileName, true);
-                                            },
-                                          );
-                                          if (result != null &&
-                                              result is String) {
-                                            result = result;
-                                            context
-                                                .read<OpenedFolderCubit>()
-                                                .onActionRenameChoosed(
-                                                    element, result);
-                                          }
-                                        } else {
+                                        if (element is Record) {
                                           var fileExtention = FileAttribute()
                                               .getFileExtension(
                                                   element.name ?? '');
                                           var result = await showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              var fileName = FileAttribute()
+                                              var filename = FileAttribute()
                                                   .getFileName(
                                                       element.name ?? '');
-                                              return BlurRename(fileName, true);
+                                              return BlurRename(filename, true);
                                             },
                                           );
                                           if (result != null &&
-                                              result is String) {
+                                              result is String &&
+                                              result !=
+                                                  FileAttribute().getFileName(
+                                                      element.name ?? '')) {
                                             result =
                                                 result + '.' + fileExtention;
-                                            context
+                                            final res = await context
                                                 .read<OpenedFolderCubit>()
-                                                .onActionRenameChoosed(
+                                                .onActionRenameChoosedFile(
                                                     element, result);
+                                            if (res == ErrorType.alreadyExist) {
+                                              _renameFile(context, element,
+                                                  result, fileExtention);
+                                            }
+                                          }
+                                        } else {
+                                          var result = await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return BlurRename(
+                                                  element.name, true);
+                                            },
+                                          );
+                                          if (result != null &&
+                                              result is String &&
+                                              result != element.name) {
+                                            final res = await context
+                                                .read<OpenedFolderCubit>()
+                                                .onActionRenameChoosedFolder(
+                                                    element, result);
+                                            if (res == ErrorType.alreadyExist) {
+                                              _renameFolder(
+                                                  context, element, result);
+                                            }
                                           }
                                         }
                                       } else {
@@ -1424,36 +1502,47 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                               StateInfoContainer.of(context)
                                   ?.setInfoObject(obj);
                             } else if (action == FileAction.rename) {
-                              if (obj is Folder) {
-                                var result = await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    var fileName = obj.name ?? '';
-                                    return BlurRename(fileName, true);
-                                  },
-                                );
-                                if (result != null && result is String) {
-                                  result = result;
-                                  context
-                                      .read<OpenedFolderCubit>()
-                                      .onActionRenameChoosed(obj, result);
-                                }
-                              } else {
+                              if (obj is Record) {
                                 var fileExtention = FileAttribute()
                                     .getFileExtension(obj.name ?? '');
                                 var result = await showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    var fileName = FileAttribute()
+                                    var filename = FileAttribute()
                                         .getFileName(obj.name ?? '');
-                                    return BlurRename(fileName, true);
+                                    return BlurRename(filename, true);
                                   },
                                 );
-                                if (result != null && result is String) {
+                                if (result != null &&
+                                    result is String &&
+                                    result !=
+                                        FileAttribute()
+                                            .getFileName(obj.name ?? '')) {
                                   result = result + '.' + fileExtention;
-                                  context
+                                  final res = await context
                                       .read<OpenedFolderCubit>()
-                                      .onActionRenameChoosed(obj, result);
+                                      .onActionRenameChoosedFile(obj, result);
+                                  if (res == ErrorType.alreadyExist) {
+                                    _renameFile(
+                                        context, obj, result, fileExtention);
+                                  }
+                                }
+                              } else {
+                                var result = await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return BlurRename(obj.name, true);
+                                  },
+                                );
+                                if (result != null &&
+                                    result is String &&
+                                    result != obj.name) {
+                                  final res = await context
+                                      .read<OpenedFolderCubit>()
+                                      .onActionRenameChoosedFolder(obj, result);
+                                  if (res == ErrorType.alreadyExist) {
+                                    _renameFolder(context, obj, result);
+                                  }
                                 }
                               }
                             } else {

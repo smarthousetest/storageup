@@ -319,18 +319,29 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  void onActionRenameChoosed(BaseObject object, String newName) async {
+  Future<ErrorType?> onActionRenameChoosedFile(
+      BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
-    } else if (result == ResponseStatus.declined) {
-      print('declained');
-    } else {
-      result = await _filesController.renameFolder(newName, object.id);
-      if (result == ResponseStatus.ok) {
-        _update();
-      }
+    } else if (result == ResponseStatus.notExecuted) {
+      return ErrorType.alreadyExist;
+    } else if (result == ResponseStatus.failed) {
+      return ErrorType.noInternet;
+    }
+  }
+
+  Future<ErrorType?> onActionRenameChoosedFolder(
+      BaseObject object, String newName) async {
+    var result = await _filesController.renameFolder(newName, object.id);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    } else if (result == ResponseStatus.notExecuted) {
+      return ErrorType.alreadyExist;
+    } else if (result == ResponseStatus.failed) {
+      return ErrorType.noInternet;
     }
   }
 
