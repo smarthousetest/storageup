@@ -848,7 +848,11 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         return BlurRename(filename, true);
                                       },
                                     );
-                                    if (result != null && result is String) {
+                                    if (result != null &&
+                                        result is String &&
+                                        result !=
+                                            FileAttribute().getFileName(
+                                                record.name ?? '')) {
                                       result = result + '.' + fileExtention;
                                       final res = await context
                                           .read<MediaCubit>()
@@ -899,7 +903,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         return BlurRename(filename, false);
       },
     );
-    if (newName != null && newName is String) {
+    if (newName != null &&
+        newName is String &&
+        newName != FileAttribute().getFileName(record.name ?? '')) {
       newName = newName + '.' + extention;
       final res = await context
           .read<MediaCubit>()
@@ -1128,7 +1134,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           },
                                         );
                                         if (result != null &&
-                                            result is String) {
+                                            result is String &&
+                                            result !=
+                                                FileAttribute().getFileName(
+                                                    record.name ?? '')) {
                                           result = result + '.' + fileExtention;
                                           final res = await context
                                               .read<MediaCubit>()
