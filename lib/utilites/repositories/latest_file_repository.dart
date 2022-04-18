@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/file.dart';
@@ -38,6 +40,9 @@ class LatestFileRepository {
     _latestFileBox.watch().listen((event) {
       final key = event.key;
       final value = event.value;
+      //  if(event ){
+
+      //  }
       _latestFileInfo.add(value);
     });
   }
@@ -46,6 +51,10 @@ class LatestFileRepository {
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;
+
+  ValueListenable<Box<LatestFile>> getLatestFilesValueListenable() {
+    return _latestFileBox.listenable();
+  }
 
   void addFile({
     required Record latestFile,

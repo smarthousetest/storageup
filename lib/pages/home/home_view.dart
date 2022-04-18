@@ -345,7 +345,10 @@ class _HomePageState extends State<HomePage> {
       ),
 
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        return state.latestFile.isNotEmpty ? latestFile(context) : Container();
+        return state.objectsValueListenable != null &&
+                state.objectsValueListenable!.value.values.isNotEmpty
+            ? latestFile(context)
+            : Container();
       }),
       BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
@@ -672,13 +675,9 @@ class LatestFileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? type = '';
-
     var record = object.latestFile;
     var isFile = true;
-    if (record.thumbnail != null && record.thumbnail!.isNotEmpty) {
-      type = FileAttribute().getFilesType(record.name!.toLowerCase());
-    }
-
+    type = FileAttribute().getFilesType(record.name!.toLowerCase());
     return LayoutBuilder(
       builder: (context, constrains) => Padding(
         padding: const EdgeInsets.only(top: 23.0),
@@ -711,7 +710,7 @@ class LatestFileView extends StatelessWidget {
                 child: Text(
                   record.name ?? '',
                   maxLines: 1,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       fontFamily: kNormalTextFontFamily,
