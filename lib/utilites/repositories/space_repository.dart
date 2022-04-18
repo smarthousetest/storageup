@@ -41,7 +41,7 @@ class DownloadLocationsRepository {
     });
   }
 
-  List<DownloadLocation> get getlocationsInfo => _locationsInfo;
+  List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;

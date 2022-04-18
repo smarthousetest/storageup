@@ -848,6 +848,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 countGb: countGbSpace,
                                 name: name));
                             index = 2;
+
                             context.read<SpaceBloc>().add(RunSoft());
                           });
                         }

@@ -18,7 +18,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         await _mapSpacePageOpened(event, state, emit);
       }
       if (event is RunSoft) {
-        await _mapRunSoft(event, state, emit);
+        await _mapRunSoft(state);
       }
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
@@ -48,9 +48,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   Future _mapRunSoft(
-    RunSoft event,
     SpaceState state,
-    Emitter<SpaceState> emit,
   ) async {
     var os = (Platform.isWindows) ? Windows() : Linux();
     var keeperLocations = File('${os.appDirPath}keeper_locations');
@@ -84,7 +82,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       _repository.createLocation(
           countOfGb: countOfGb, path: path, name: name, idForCompare: id);
     }
-
     var locationsInfo = _repository.getlocationsInfo;
 
     emit(state.copyWith(locationsInfo: locationsInfo));
