@@ -38,13 +38,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
-    //Hive.deleteFromDisk();
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
     var keeper = await _subscriptionService.getAllKeepers();
-    emit(state.copyWith(
-        user: user, locationsInfo: locationsInfo, keeper: keeper));
+    emit(state.copyWith(user: user, locationsInfo: locationsInfo, keeper: keeper));
   }
 
   Future _mapRunSoft(
@@ -58,9 +56,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     keeperLocations.createSync();
     var keeperLocationsSink = keeperLocations.openWrite(mode: FileMode.append);
     state.locationsInfo.forEach((element) {
-      keeperLocationsSink.add(
-          '${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'
-              .codeUnits);
+      keeperLocationsSink.add('${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'.codeUnits);
     });
     await keeperLocationsSink.close();
     os.startProcess('keeper', true, [

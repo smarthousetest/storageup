@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
@@ -848,8 +847,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 countGb: countGbSpace,
                                 name: name));
                             index = 2;
-
-                            context.read<SpaceBloc>().add(RunSoft());
+                            // context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },
