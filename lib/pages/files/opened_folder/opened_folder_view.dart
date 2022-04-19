@@ -1364,7 +1364,14 @@ class ObjectView extends StatelessWidget {
     if (object is Record) {
       var record = object as Record;
       isFile = true;
-      type = FileAttribute().getFilesType(record.name!.toLowerCase());
+
+      if (record.thumbnail != null &&
+              record.thumbnail!
+                  .isNotEmpty /*&&
+          record.thumbnail!.first.name!.contains('.')*/
+          ) {
+        type = FileAttribute().getFilesType(record.name!.toLowerCase());
+      }
     }
     return LayoutBuilder(
       builder: (context, constrains) => Column(
