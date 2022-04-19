@@ -77,15 +77,15 @@ class DownloadLocationsRepository {
   }
 
   Future<void> deleteLocation({required int id}) async {
-    // final Map<dynamic, DownloadLocation> mapKey = _locationsBox.toMap();
-    // dynamic deletingKey;
-    // mapKey.forEach((key, value) {
-    //   if (value.id == id) {
-    //     deletingKey = key;
-    //   }
-    // });
-    // if (deletingKey != null) {
-    await _locationsBox.delete(id);
-    // }
+    final Map<dynamic, DownloadLocation> mapKey = _locationsBox.toMap();
+    dynamic deletingKey;
+    mapKey.forEach((key, value) {
+      if (value.id == id) {
+        deletingKey = key;
+      }
+    });
+    if (deletingKey != null) {
+      await _locationsBox.delete(deletingKey);
+    }
   }
 }

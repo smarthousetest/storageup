@@ -1364,7 +1364,6 @@ class ObjectView extends StatelessWidget {
     if (object is Record) {
       var record = object as Record;
       isFile = true;
-
       type = FileAttribute().getFilesType(record.name!.toLowerCase());
     }
     return LayoutBuilder(
@@ -1379,7 +1378,7 @@ class ObjectView extends StatelessWidget {
                 height: 90,
                 width: 80,
                 child: isFile && type != 'image'
-                    ? type!.isNotEmpty
+                    ? type!.isNotEmpty && type != 'unexpected'
                         ? Image.asset(
                             'assets/file_icons/$type.png',
                             fit: BoxFit.contain,
