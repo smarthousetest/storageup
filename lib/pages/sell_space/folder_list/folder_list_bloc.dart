@@ -120,7 +120,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       'messageType': 'update_disconnect',
       'session': session,
     }));
-    await channel.sink.done;
+    // await channel.sink.done;
   }
 
   Future _getKeeperSession(String keeperId, Dio dio, String bearerToken) async {
