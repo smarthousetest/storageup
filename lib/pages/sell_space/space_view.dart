@@ -1020,14 +1020,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ],
           ),
-          BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-            return Padding(
+           Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: Column(
                 children: [FolderList()],
               ),
-            );
-          })
+            )
+
         ]),
       ),
     );

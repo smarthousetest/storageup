@@ -1,4 +1,5 @@
-import 'package:hive/hive.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
@@ -42,6 +43,8 @@ class DownloadLocationsRepository {
   }
 
   List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
+
+  ValueListenable<Box<DownloadLocation>> get getDownloadLocationsValueListenable => _locationsBox.listenable();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;

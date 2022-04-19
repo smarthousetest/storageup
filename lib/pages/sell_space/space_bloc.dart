@@ -79,7 +79,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           countOfGb: countOfGb, path: path, name: name, idForCompare: id);
     }
     var locationsInfo = _repository.getlocationsInfo;
+    final tmpState =state.copyWith(locationsInfo: locationsInfo);
+    emit(tmpState);
 
-    emit(state.copyWith(locationsInfo: locationsInfo));
+    _mapRunSoft(tmpState);
   }
 }

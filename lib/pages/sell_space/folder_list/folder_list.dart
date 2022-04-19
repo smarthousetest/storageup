@@ -124,9 +124,20 @@ class _ButtonTemplateState extends State<FolderList> {
                           ),
                         ),
                       ],
-                      rows: state.locationsInfo.map((element) {
+                      rows: locationsInfo.map((element) {
+                        _initiatingControllers(state);
+                        // var controller =
+                        //     CustomPopupMenuController();
+                        if (state.locationsInfo.length >
+                            _popupControllers.length) {
+                          _popupControllers = [];
+                          _initiatingControllers(state);
+                        }
+
+                        final indexOfElement = locationsInfo
+                            .indexOf(element);
                         return DataRow.byIndex(
-                          index: state.locationsInfo.indexOf(element),
+                          index: locationsInfo.indexOf(element),
                           cells: [
                             DataCell(
                               SizedBox(
@@ -210,35 +221,21 @@ class _ButtonTemplateState extends State<FolderList> {
                                     //   flex: 1,
                                     //   child: Container(),
                                     // ),
-                                    BlocBuilder<FolderListBloc,
-                                        FolderListState>(
-                                      // bloc: _bloc,
-                                      builder: (context, state) {
-                                        _initiatingControllers(state);
-                                        // var controller =
-                                        //     CustomPopupMenuController();
-                                        if (state.locationsInfo.length >
-                                            _popupControllers.length) {
-                                          _popupControllers = [];
-                                          _initiatingControllers(state);
-                                        }
-                                        return CustomPopupMenu(
+
+
+                                         CustomPopupMenu(
                                           pressType: PressType.singleClick,
                                           barrierColor: Colors.transparent,
                                           showArrow: false,
                                           horizontalMargin: 10,
                                           verticalMargin: 0,
-                                          controller: _popupControllers[state
-                                              .locationsInfo
-                                              .indexOf(element)],
+                                          controller: _popupControllers[indexOfElement],
                                           menuBuilder: () {
                                             return KeeperPopupMenuActions(
                                               theme: Theme.of(context),
                                               translate: translate,
                                               onTap: (action) {
-                                                _popupControllers[state
-                                                        .locationsInfo
-                                                        .indexOf(element)]
+                                                _popupControllers[indexOfElement]
                                                     .hideMenu();
                                                 if (action ==
                                                     KeeperAction.change) {
@@ -265,9 +262,8 @@ class _ButtonTemplateState extends State<FolderList> {
                                               ],
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+
                                   ],
                                 ),
                               ),

@@ -21,10 +21,12 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       if (event is FolderListPageOpened) {
         await _mapSpacePageOpened(event, state, emit);
       }
-      if (event is DeleteLocation) {
+      else if (event is DeleteLocation) {
         await _mapDeleteLocation(event, state, emit);
       }
+
     });
+    on<UpdateLocationsList>((event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
   }
 
   // final AuthenticationRepository _authenticationRepository =
@@ -43,8 +45,16 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     var keeper = await _subscriptionService.getAllKeepers();
     final locationsInfo = _repository.getlocationsInfo;
-    emit(state.copyWith(
-        user: user, locationsInfo: locationsInfo, keeper: keeper));
+    emit(state.copyWith(user: user, locationsInfo: locationsInfo, keeper: keeper));
+
+    _repository.getDownloadLocationsValueListenable.addListener(_listener);
+  }
+
+  void _listener() {
+    final info = _repository.getlocationsInfo;
+
+    if(!isClosed)
+    add(UpdateLocationsList(locations: info));
   }
 
   Future<void> _update(

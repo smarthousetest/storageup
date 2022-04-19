@@ -24,3 +24,12 @@ class DeleteLocation extends FolderListEvent {
   DownloadLocation location;
   DeleteLocation({required this.location});
 }
+
+class UpdateLocationsList extends FolderListEvent {
+  List<DownloadLocation> locations;
+
+  UpdateLocationsList({required this.locations});
+
+  @override
+  List<Object?> get props => [locations];
+}
