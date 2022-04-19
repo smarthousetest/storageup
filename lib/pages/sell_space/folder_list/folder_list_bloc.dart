@@ -140,7 +140,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         );
         if (response.data['online'] != 0) {
           await _disconnectKeeper(
-              'ws://${response.data['proxyIP']}${response.data['proxyPORT']}',
+              'ws://${response.data['proxyIP']}:${response.data['proxyPORT']}',
               response.data['session']);
         }
       } catch (e) {
