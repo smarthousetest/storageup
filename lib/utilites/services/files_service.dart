@@ -506,22 +506,15 @@ class FilesService {
     }
   }
 
-  Future<String?> getVersionApp() async {
-    try {
-      String? token = await _tokenRepository.getApiToken();
-
-      var path = 'http://upstorage.net:3001/apps/version/ui';
-
-      var response = await _dio.get(
-        path,
-        options: Options(headers: {'Authorization': ' Bearer $token'}),
-      );
-
-      if (response.statusCode == 200) {
+  Future<String?> getRemoteAppVersion() async {
+    for(int i = 0; i < 5; i++){
+      try {
+        var response = await _dio.get('http://upstorage.net/apps/version/ui');
         return response.data;
+      } catch (e) {
+        print(e);
       }
-    } catch (e) {
-      print(e);
     }
+    return null;
   }
 }

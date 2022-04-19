@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
@@ -31,8 +30,6 @@ import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-
 import 'home_bloc.dart';
 import 'home_state.dart';
 
@@ -135,11 +132,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     infoPage = InfoPage();
-    filePage =
-        StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    filePage = StateInfoContainer(child: StateSortedContainer(child: FilePage()));
     likePage = LikePage();
     spaceSellPage = SpaceSellPage();
-    finincePage = FinancePage();
+    financePage = FinancePage();
     settingsPage = SettingsPage();
     mediaPage = StateInfoContainer(child: MediaPage());
     super.initState();
@@ -149,7 +145,7 @@ class _HomePageState extends State<HomePage> {
   late Widget filePage;
   late Widget likePage;
   late Widget spaceSellPage;
-  late Widget finincePage;
+  late Widget financePage;
   late Widget settingsPage;
   late Widget mediaPage;
 
@@ -164,7 +160,7 @@ class _HomePageState extends State<HomePage> {
       case ChoosedPage.sell_space:
         return spaceSellPage;
       case ChoosedPage.finance:
-        return finincePage;
+        return financePage;
       case ChoosedPage.settings:
         return settingsPage;
       case ChoosedPage.media:

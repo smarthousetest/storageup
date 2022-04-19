@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
@@ -13,7 +11,6 @@ import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
@@ -23,6 +20,7 @@ import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.d
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 import 'home_event.dart';
 import 'home_state.dart';
+import 'package:os_specification/os_specification.dart';
 
 @Injectable()
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -51,14 +49,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         Hive.init(value.path);
         print('Hive initialized');
       });
-      var upToDateVersion = await _filesService.getVersionApp();
+      var remoteAppVersion = await _filesService.getRemoteAppVersion();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
-      String version = await _read();
+      String? localAppVersion = _getLocalAppVersion();
       emit(state.copyWith(
-        upToDateVersion: upToDateVersion,
-        version: version,
+        upToDateVersion: remoteAppVersion,
+        version: localAppVersion,
         latestFile: latestFile,
         objectsValueListenable: listenable,
         //checkLatestFile: checkLatestFile,
@@ -68,6 +66,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await fileTapped(event);
     });
   }
+
   final FilesService _filesService = getIt<FilesService>();
   var _loadController = getIt<LoadController>();
   var _filesController =
@@ -75,16 +74,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   late final LatestFileRepository _repository;
   List<DownloadObserver> _downloadObservers = [];
 
-  Future<String> _read() async {
-    String version;
-    try {
-      final Directory directory = await getApplicationDocumentsDirectory();
-      final File file = File('${directory.path}/ui_version.txt');
-      version = await file.readAsString();
-      return version;
-    } catch (e) {
-      print("Couldn't read file");
-      return "Couldn't read file";
+  String? _getLocalAppVersion() {
+    var os = (Platform.isWindows) ? Windows() : Linux();
+    var uiVersionFile = File('${os.appDirPath}ui_version.txt');
+    if (uiVersionFile.existsSync()) {
+      return (uiVersionFile.readAsStringSync()).trim();
+    } else {
+      return null;
     }
   }
 
@@ -292,5 +288,6 @@ class UpdateAlbumEvent {}
 
 class DownloadObserver extends Observer {
   String id;
+
   DownloadObserver(this.id, Function(dynamic) onChange) : super(onChange);
 }
