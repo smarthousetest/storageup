@@ -1388,12 +1388,9 @@ class ObjectView extends StatelessWidget {
                             fit: BoxFit.contain,
                           )
                     : type == 'image'
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              (object as Record).thumbnail!.first.publicUrl!,
-                              fit: BoxFit.contain,
-                            ),
+                        ? Image.asset(
+                            'assets/file_icons/image_default.png',
+                            fit: BoxFit.contain,
                           )
                         : Image.asset(
                             'assets/file_icons/folder.png',
