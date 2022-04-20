@@ -678,7 +678,7 @@ class LatestFileView extends StatelessWidget {
       builder: (context, constrains) => Padding(
         padding: const EdgeInsets.only(top: 23.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Stack(

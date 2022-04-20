@@ -775,10 +775,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
               itemBuilder: (context, index) {
                 var record = state.currentFolderRecords[index];
 
-                if (state.currentFolderRecords.length >
+                if (state.currentFolderRecords.length !=
                     _popupControllers.length) {
-                  _popupControllers = [];
-                  _initiatingControllers(state);
+                  final controller = CustomPopupMenuController();
+                  _popupControllers.add(controller);
                 }
 
                 _onPointerDown(PointerDownEvent event) {
@@ -1121,9 +1121,9 @@ class MediaGridElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var imageUrl = record.thumbnail!.first.publicUrl!;
+    var imageUrl = record.thumbnail?.first.publicUrl;
     Widget image;
-    if (imageUrl.isURL()) {
+    if (imageUrl != null && imageUrl.isURL()) {
       image = Image.network(
         record.thumbnail!.first.publicUrl!,
       );

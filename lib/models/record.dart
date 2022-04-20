@@ -137,6 +137,7 @@ class Record extends BaseObject {
       updatedAt: updatedAt ?? this.updatedAt,
       extension: extention ?? this.extension,
       isChoosed: isChoosed ?? this.isChoosed,
+      thumbnail: thumbnail ?? this.thumbnail,
       folder: folder ?? this.parentFolder,
       loadPercent: loadPercent,
       mimeType: mimeType ?? this.mimeType,

@@ -1365,7 +1365,13 @@ class ObjectView extends StatelessWidget {
       var record = object as Record;
       isFile = true;
 
-      type = FileAttribute().getFilesType(record.name!.toLowerCase());
+      if (record.thumbnail != null &&
+              record.thumbnail!
+                  .isNotEmpty /*&&
+          record.thumbnail!.first.name!.contains('.')*/
+          ) {
+        type = FileAttribute().getFilesType(record.name!.toLowerCase());
+      }
     }
     return LayoutBuilder(
       builder: (context, constrains) => Column(
@@ -1379,7 +1385,7 @@ class ObjectView extends StatelessWidget {
                 height: 90,
                 width: 80,
                 child: isFile && type != 'image'
-                    ? type!.isNotEmpty
+                    ? type!.isNotEmpty && type != 'unexpected'
                         ? Image.asset(
                             'assets/file_icons/$type.png',
                             fit: BoxFit.contain,
@@ -1389,12 +1395,9 @@ class ObjectView extends StatelessWidget {
                             fit: BoxFit.contain,
                           )
                     : type == 'image'
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              (object as Record).thumbnail!.first.publicUrl!,
-                              fit: BoxFit.contain,
-                            ),
+                        ? Image.asset(
+                            'assets/file_icons/image_default.png',
+                            fit: BoxFit.contain,
                           )
                         : Image.asset(
                             'assets/file_icons/folder.png',
