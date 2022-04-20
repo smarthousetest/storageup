@@ -107,6 +107,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Удалить аккаунт"),
         "delete_file": MessageLookupByLibrary.simpleMessage("Удалить файлы"),
+        "delete_keeper_text1": MessageLookupByLibrary.simpleMessage(
+            "Вы уверены, что хотите удалить место хранения? "),
+        "delete_keeper_text2":
+            MessageLookupByLibrary.simpleMessage("Данное действие необратимо."),
+        "delete_keeper_text3": MessageLookupByLibrary.simpleMessage(
+            "Нам будет необходимо провести очистку места на вашем компьютере, пожалуйста не выходите из приложения."),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Удалить навсегда"),
         "delete_pic":
@@ -243,6 +249,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Вы действительно хотите удалить фото профиля?"),
         "realy_delete": MessageLookupByLibrary.simpleMessage(
             "Вы действительно хотите удалить?"),
+        "realy_delete_keeper":
+            MessageLookupByLibrary.simpleMessage("Удаление места хранения"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Причина удаления"),
         "recent": MessageLookupByLibrary.simpleMessage("Недавние"),

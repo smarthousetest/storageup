@@ -107,6 +107,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Delete account"),
         "delete_file": MessageLookupByLibrary.simpleMessage("Delete file"),
+        "delete_keeper_text1": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete the storage location?"),
+        "delete_keeper_text2": MessageLookupByLibrary.simpleMessage(
+            "This action is irreversible."),
+        "delete_keeper_text3": MessageLookupByLibrary.simpleMessage(
+            "We will need to clean up the space on your computer, please do not exit the application."),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Delete permanently"),
         "delete_pic": MessageLookupByLibrary.simpleMessage("Removing a photo"),
@@ -242,6 +248,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Do you really want to delete your profile picture?"),
         "realy_delete": MessageLookupByLibrary.simpleMessage(
             "Do you really want to delete?"),
+        "realy_delete_keeper":
+            MessageLookupByLibrary.simpleMessage("Deleting a storage location"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Reason for deletion"),
         "recent": MessageLookupByLibrary.simpleMessage("Recent"),

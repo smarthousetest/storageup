@@ -13,6 +13,7 @@ import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
+import 'package:upstorage_desktop/components/blur/ceeper_delete_confirm.dart';
 
 enum FileOptions {
   share,
@@ -240,11 +241,29 @@ class _ButtonTemplateState extends State<FolderList> {
                                                 if (action ==
                                                     KeeperAction.change) {
                                                 } else {
-                                                  context
-                                                      .read<FolderListBloc>()
-                                                      .add(DeleteLocation(
-                                                          location: element));
-                                                  setState(() {});
+                                                  _popupControllers[state
+                                                          .locationsInfo
+                                                          .indexOf(element)]
+                                                      .hideMenu();
+                                                  var result = await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return BlurDeleteKeeper();
+                                                    },
+                                                  );
+                                                  if (result) {
+                                                    context
+                                                        .read<FolderListBloc>()
+                                                        .add(DeleteLocation(
+                                                            location: element));
+                                                    setState(() {});
+                                                  }
+                                                  // context
+                                                  // .read<FolderListBloc>()
+                                                  // .add(DeleteLocation(
+                                                  // location: element));
+                                                  // setState(() {});
                                                 }
                                               },
                                             );

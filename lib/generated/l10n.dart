@@ -1976,6 +1976,46 @@ class S {
     );
   }
 
+  /// `Deleting a storage location`
+  String get realy_delete_keeper {
+    return Intl.message(
+      'Deleting a storage location',
+      name: 'realy_delete_keeper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete the storage location?`
+  String get delete_keeper_text1 {
+    return Intl.message(
+      'Are you sure you want to delete the storage location?',
+      name: 'delete_keeper_text1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This action is irreversible.`
+  String get delete_keeper_text2 {
+    return Intl.message(
+      'This action is irreversible.',
+      name: 'delete_keeper_text2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We will need to clean up the space on your computer, please do not exit the application.`
+  String get delete_keeper_text3 {
+    return Intl.message(
+      'We will need to clean up the space on your computer, please do not exit the application.',
+      name: 'delete_keeper_text3',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Install update`
   String get install_update {
     return Intl.message(
