@@ -19,13 +19,14 @@ class _ButtonTemplateState extends State<BlurRename> {
   var myController = TextEditingController();
   bool canSave = false;
   bool hintColor = false;
-  FocusNode nodeFirst = FocusNode();
 
   @override
   void initState() {
     myController = TextEditingController(text: widget.name);
     hintColor = widget.hint;
     super.initState();
+    myController.selection =
+        TextSelection(baseOffset: 0, extentOffset: widget.name.length);
   }
 
   @override
@@ -98,7 +99,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                               alignment: Alignment.center,
                               child: TextFormField(
                                 controller: myController,
-                                focusNode: nodeFirst,
+                                autofocus: true,
                                 onChanged: (myController) {
                                   print(myController);
                                   myController = myController.trim();
