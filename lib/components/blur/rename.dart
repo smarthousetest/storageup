@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/pages/auth/models/name.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurRename extends StatefulWidget {
@@ -25,6 +26,8 @@ class _ButtonTemplateState extends State<BlurRename> {
     myController = TextEditingController(text: widget.name);
     hintColor = widget.hint;
     super.initState();
+    myController.selection =
+        TextSelection(baseOffset: 0, extentOffset: widget.name.length);
   }
 
   @override
