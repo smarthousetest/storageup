@@ -406,7 +406,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     builder: (context, state) {
                   return Text(
                     state.user?.firstName ?? '',
-                    style: TextStyle(color: Theme.of(context).disabledColor),
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: Theme.of(context).disabledColor,
+                        overflow: TextOverflow.ellipsis),
                   );
                 }),
               ),
