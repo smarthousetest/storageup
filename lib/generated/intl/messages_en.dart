@@ -259,6 +259,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "registration": MessageLookupByLibrary.simpleMessage("Registration"),
         "regulations": MessageLookupByLibrary.simpleMessage("Regulations"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Remember me"),
+        "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "rent": MessageLookupByLibrary.simpleMessage("Rent"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "You can use free space on your hard"),
@@ -331,6 +332,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid email or password!"),
         "wrong_email":
             MessageLookupByLibrary.simpleMessage("Please enter a valid email"),
+        "wrong_filename": MessageLookupByLibrary.simpleMessage(
+            "File winth that name already exists."),
         "wrong_old_password":
             MessageLookupByLibrary.simpleMessage("Invalid password"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(

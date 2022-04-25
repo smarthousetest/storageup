@@ -8,8 +8,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
+import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/media_info.dart';
 import 'package:upstorage_desktop/constants.dart';
@@ -834,6 +836,32 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                     // controller.hideMenu();
                                     StateInfoContainer.of(context)
                                         ?.setInfoRecord(record);
+                                  } else if (action == MediaAction.rename) {
+                                    var fileExtention = FileAttribute()
+                                        .getFileExtension(record.name ?? '');
+                                    var result = await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        var filename = FileAttribute()
+                                            .getFileName(record.name ?? '');
+                                        return BlurRename(filename, true);
+                                      },
+                                    );
+                                    if (result != null &&
+                                        result is String &&
+                                        result !=
+                                            FileAttribute().getFileName(
+                                                record.name ?? '')) {
+                                      result = result + '.' + fileExtention;
+                                      final res = await context
+                                          .read<MediaCubit>()
+                                          .onActionRenameChoosed(
+                                              record, result);
+                                      if (res == ErrorType.alreadyExist) {
+                                        _rename(blocContext, record, result,
+                                            fileExtention);
+                                      }
+                                    }
                                   } else {
                                     //   controller.hideMenu();
                                     var result = await showDialog<bool>(
@@ -863,6 +891,28 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         });
       },
     );
+  }
+
+  void _rename(BuildContext context, Record record, String name,
+      String extention) async {
+    String newName = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var filename = FileAttribute().getFileName(name);
+        return BlurRename(filename, false);
+      },
+    );
+    if (newName != null &&
+        newName is String &&
+        newName != FileAttribute().getFileName(record.name ?? '')) {
+      newName = newName + '.' + extention;
+      final res = await context
+          .read<MediaCubit>()
+          .onActionRenameChoosed(record, newName);
+      if (res == ErrorType.alreadyExist) {
+        _rename(context, record, newName, extention);
+      }
+    }
   }
 
   Widget _filesList(BuildContext context, MediaState state) {
@@ -1070,6 +1120,33 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         // controller.hideMenu();
                                         StateInfoContainer.of(context)
                                             ?.setInfoRecord(e);
+                                      } else if (action == MediaAction.rename) {
+                                        var fileExtention = FileAttribute()
+                                            .getFileExtension(
+                                                record.name ?? '');
+                                        var result = await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            var filename = FileAttribute()
+                                                .getFileName(record.name ?? '');
+                                            return BlurRename(filename, true);
+                                          },
+                                        );
+                                        if (result != null &&
+                                            result is String &&
+                                            result !=
+                                                FileAttribute().getFileName(
+                                                    record.name ?? '')) {
+                                          result = result + '.' + fileExtention;
+                                          final res = await context
+                                              .read<MediaCubit>()
+                                              .onActionRenameChoosed(
+                                                  record, result);
+                                          if (res == ErrorType.alreadyExist) {
+                                            _rename(context, record, result,
+                                                fileExtention);
+                                          }
+                                        }
                                       } else {
                                         //   controller.hideMenu();
                                         var result = await showDialog<bool>(
@@ -1227,6 +1304,49 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
           child: IntrinsicWidth(
             child: Column(
               children: [
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(MediaAction.rename);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 3;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 3 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.zero,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/info.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/rename.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.rename,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
                 GestureDetector(
                   onTap: () {
                     widget.onTap(MediaAction.properties);

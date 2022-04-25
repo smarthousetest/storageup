@@ -23,6 +23,7 @@ enum FileAction {
 enum MediaAction {
   delete,
   properties,
+  rename,
 }
 
 enum AvatarAction {
@@ -38,6 +39,7 @@ enum KeeperAction {
 enum ErrorType {
   noInternet,
   technicalError,
+  alreadyExist,
 }
 
 enum Status {
