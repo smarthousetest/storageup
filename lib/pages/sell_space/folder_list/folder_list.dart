@@ -2,18 +2,15 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
+import 'package:upstorage_desktop/components/custom_arc_indicator.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/components/custom_progress_bar.dart';
-import 'package:upstorage_desktop/components/blur/ceeper_delete_confirm.dart';
 
 enum FileOptions {
   share,
@@ -46,252 +43,116 @@ class _ButtonTemplateState extends State<FolderList> {
     }
   }
 
+  S translate = getIt<S>();
+
   @override
   Widget build(BuildContext context) {
-    TextStyle style = TextStyle(
-      color: Theme.of(context).textTheme.subtitle1?.color,
-      fontSize: 14,
-      fontWeight: FontWeight.w700,
-      fontFamily: kNormalTextFontFamily,
-    );
-    TextStyle cellTextStyle = TextStyle(
-      color: Theme.of(context).textTheme.subtitle1?.color,
-      fontSize: 14,
-      fontFamily: kNormalTextFontFamily,
-    );
-    S translate = getIt<S>();
-
     return BlocProvider(
-      create: (context) => FolderListBloc()..add(FolderListPageOpened()),
-      child: BlocBuilder<FolderListBloc, FolderListState>(
-        builder: (context, state) {
+        create: (context) => FolderListBloc()..add(FolderListPageOpened()),
+        child: BlocBuilder<FolderListBloc, FolderListState>(
+            builder: (context, state) {
           locationsInfo = state.locationsInfo;
-          return LayoutBuilder(
-            builder: (context, constraints) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: DataTable(
-                      columnSpacing: 0,
-                      horizontalMargin: 0,
-                      columns: [
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.05,
-                            child: Text(
-                              translate.name,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.45,
-                            child: Text(
-                              translate.path,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.05,
-                            child: Text(
-                              translate.size,
-                              overflow: TextOverflow.visible,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.05,
-                            child: Text(
-                              translate.date,
-                              overflow: TextOverflow.visible,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.1,
-                            child: Text(
-                              translate.trust_level,
-                              overflow: TextOverflow.visible,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: locationsInfo.map((element) {
-                        _initiatingControllers(state);
-                        // var controller =
-                        //     CustomPopupMenuController();
-                        if (state.locationsInfo.length >
-                            _popupControllers.length) {
-                          _popupControllers = [];
-                          _initiatingControllers(state);
-                        }
-
-                        final indexOfElement = locationsInfo.indexOf(element);
-                        return DataRow.byIndex(
-                          index: locationsInfo.indexOf(element),
-                          cells: [
-                            DataCell(
-                              SizedBox(
-                                width: constraints.maxWidth * 0.07,
-                                child: Text(
-                                  element.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: cellTextStyle,
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: constraints.maxWidth * 0.4,
-                                    child: Text(
-                                      element.dirPath,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: cellTextStyle,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  Text(
-                                    translate.gb(element.countGb),
-                                    maxLines: 1,
-                                    style: cellTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  Text(
-                                    DateFormat.yMd().format(DateTime.now()),
-                                    //widget.keeperInfo[index].dateTime,
-                                    maxLines: 1,
-                                    style: cellTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            DataCell(
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  hoverColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '70',
-                                      //'${widget.keeperInfo[index].trustLevel}%',
-                                      maxLines: 1,
-                                      style: cellTextStyle,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5, right: 20),
-                                      child: SizedBox(
-                                        width: 100,
-                                        child: MyProgressBar(
-                                          bgColor:
-                                              Theme.of(context).dividerColor,
-                                          color: Theme.of(context).splashColor,
-                                          percent: 70,
-                                          // (widget.keeperInfo[index].trustLevel)!
-                                          //     .toDouble(),
-                                        ),
-                                      ),
-                                    ),
-                                    // Expanded(
-                                    //   flex: 1,
-                                    //   child: Container(),
-                                    // ),
-
-                                    CustomPopupMenu(
-                                      pressType: PressType.singleClick,
-                                      barrierColor: Colors.transparent,
-                                      showArrow: false,
-                                      horizontalMargin: 10,
-                                      verticalMargin: 0,
-                                      controller:
-                                          _popupControllers[indexOfElement],
-                                      menuBuilder: () {
-                                        return KeeperPopupMenuActions(
-                                          theme: Theme.of(context),
-                                          translate: translate,
-                                          onTap: (action) async {
-                                            _popupControllers[indexOfElement]
-                                                .hideMenu();
-                                            if (action == KeeperAction.change) {
-                                            } else {
-                                              _popupControllers[state
-                                                      .locationsInfo
-                                                      .indexOf(element)]
-                                                  .hideMenu();
-                                              var result = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurDeleteKeeper();
-                                                },
-                                              );
-                                              if (result) {
-                                                context
-                                                    .read<FolderListBloc>()
-                                                    .add(DeleteLocation(
-                                                        location: element));
-                                                setState(() {});
-                                              }
-                                              // context
-                                              // .read<FolderListBloc>()
-                                              // .add(DeleteLocation(
-                                              // location: element));
-                                              // setState(() {});
-                                            }
-                                          },
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/file_page/three_dots.svg',
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList()),
-                ),
-              ],
-            ),
+          return Column(
+            // controller: ScrollController(),
+            // shrinkWrap: true,
+            // scrollDirection: Axis.vertical,
+            children: [
+              _thisKeeper(context, state),
+            ],
           );
-        },
+        }));
+  }
+
+  Widget _thisKeeper(
+    BuildContext context,
+    FolderListState state,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          child: Text(
+            translate.this_computer,
+            maxLines: 1,
+            style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        GridView.builder(
+          shrinkWrap: true,
+          itemCount: state.locationsInfo.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            mainAxisExtent: 345,
+            crossAxisCount: 2,
+            //maxCrossAxisExtent: 354,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          itemBuilder: (context, index) {
+            var location = state.locationsInfo[index];
+            return _keeperInfo(context, location);
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _keeperInfo(BuildContext context, DownloadLocation location) {
+    return Container(
+      width: 354,
+      height: 345,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 2,
+        ),
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              constraints: BoxConstraints(maxWidth: 200),
+              child: Text(
+                location.name,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Container(
+              constraints: BoxConstraints(maxWidth: 310),
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                location.dirPath,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Container(
+              child: CircularArc(
+                value: 70,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

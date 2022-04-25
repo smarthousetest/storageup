@@ -974,7 +974,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         ),
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
           Row(
             children: [
               Container(
@@ -1020,13 +1020,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ],
           ),
-           Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                children: [FolderList()],
-              ),
-            )
-
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: ListView(
+              controller: ScrollController(),
+              shrinkWrap: true,
+              children: [
+                ClipRect(child: FolderList()),
+              ],
+            ),
+          ),
         ]),
       ),
     );

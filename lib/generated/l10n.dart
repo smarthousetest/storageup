@@ -2085,6 +2085,16 @@ class S {
       args: [],
     );
   }
+
+  /// `This computer`
+  String get this_computer {
+    return Intl.message(
+      'This computer',
+      name: 'this_computer',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

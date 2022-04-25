@@ -305,6 +305,7 @@ class MessageLookup extends MessageLookupByLibrary {
             " и даю согласие на обработку моих персональных данных"),
         "term_of_use_before":
             MessageLookupByLibrary.simpleMessage("Я принимаю условия "),
+        "this_computer": MessageLookupByLibrary.simpleMessage("Этот компьютер"),
         "to_send_letter":
             MessageLookupByLibrary.simpleMessage("Отправить письмо еще раз"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Уровень доверия"),
