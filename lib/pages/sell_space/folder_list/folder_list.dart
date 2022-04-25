@@ -135,8 +135,7 @@ class _ButtonTemplateState extends State<FolderList> {
                           _initiatingControllers(state);
                         }
 
-                        final indexOfElement = locationsInfo
-                            .indexOf(element);
+                        final indexOfElement = locationsInfo.indexOf(element);
                         return DataRow.byIndex(
                           index: locationsInfo.indexOf(element),
                           cells: [
@@ -223,66 +222,64 @@ class _ButtonTemplateState extends State<FolderList> {
                                     //   child: Container(),
                                     // ),
 
-
-                                         CustomPopupMenu(
-                                          pressType: PressType.singleClick,
-                                          barrierColor: Colors.transparent,
-                                          showArrow: false,
-                                          horizontalMargin: 10,
-                                          verticalMargin: 0,
-                                          controller: _popupControllers[indexOfElement],
-                                          menuBuilder: () {
-                                            return KeeperPopupMenuActions(
-                                              theme: Theme.of(context),
-                                              translate: translate,
-                                              onTap: (action) {
-                                                _popupControllers[indexOfElement]
-                                                    .hideMenu();
-                                                if (action ==
-                                                    KeeperAction.change) {
-                                                } else {
-                                                  _popupControllers[state
-                                                          .locationsInfo
-                                                          .indexOf(element)]
-                                                      .hideMenu();
-                                                  var result = await showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return BlurDeleteKeeper();
-                                                    },
-                                                  );
-                                                  if (result) {
-                                                    context
-                                                        .read<FolderListBloc>()
-                                                        .add(DeleteLocation(
-                                                            location: element));
-                                                    setState(() {});
-                                                  }
-                                                  // context
-                                                  // .read<FolderListBloc>()
-                                                  // .add(DeleteLocation(
-                                                  // location: element));
-                                                  // setState(() {});
-                                                }
-                                              },
-                                            );
+                                    CustomPopupMenu(
+                                      pressType: PressType.singleClick,
+                                      barrierColor: Colors.transparent,
+                                      showArrow: false,
+                                      horizontalMargin: 10,
+                                      verticalMargin: 0,
+                                      controller:
+                                          _popupControllers[indexOfElement],
+                                      menuBuilder: () {
+                                        return KeeperPopupMenuActions(
+                                          theme: Theme.of(context),
+                                          translate: translate,
+                                          onTap: (action) async {
+                                            _popupControllers[indexOfElement]
+                                                .hideMenu();
+                                            if (action == KeeperAction.change) {
+                                            } else {
+                                              _popupControllers[state
+                                                      .locationsInfo
+                                                      .indexOf(element)]
+                                                  .hideMenu();
+                                              var result = await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return BlurDeleteKeeper();
+                                                },
+                                              );
+                                              if (result) {
+                                                context
+                                                    .read<FolderListBloc>()
+                                                    .add(DeleteLocation(
+                                                        location: element));
+                                                setState(() {});
+                                              }
+                                              // context
+                                              // .read<FolderListBloc>()
+                                              // .add(DeleteLocation(
+                                              // location: element));
+                                              // setState(() {});
+                                            }
                                           },
-                                          child: Container(
-                                            height: 30,
-                                            width: 30,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                SvgPicture.asset(
-                                                  'assets/file_page/three_dots.svg',
-                                                ),
-                                              ],
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/file_page/three_dots.svg',
                                             ),
-                                          ),
+                                          ],
                                         ),
-
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
