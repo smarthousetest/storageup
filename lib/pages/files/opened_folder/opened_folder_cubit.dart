@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
-
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
@@ -149,13 +145,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //emit(state.copyWith(sortedFiles: sortedFiles));
   }
 
+  //TODO check what is it
   // void onRecordActionChoosed(FileAction action, BaseObject object) {
   //   switch (action) {
   //     case FileAction.delete:
   //       _onActionDeleteChoosed(object);
   //       break;
-  //     case FileAction.properties:
-  //       //PropertiesView(object: object);
+  //     case FileAction.rename:
   //       break;
   //     default:
   //       print('default');
@@ -327,6 +323,32 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       return result;
     }
     return result;
+  }
+
+  Future<ErrorType?> onActionRenameChoosedFile(
+      BaseObject object, String newName) async {
+    var result = await _filesController.renameRecord(newName, object.id);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    } else if (result == ResponseStatus.notExecuted) {
+      return ErrorType.alreadyExist;
+    } else if (result == ResponseStatus.failed) {
+      return ErrorType.noInternet;
+    }
+  }
+
+  Future<ErrorType?> onActionRenameChoosedFolder(
+      BaseObject object, String newName) async {
+    var result = await _filesController.renameFolder(newName, object.id);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    } else if (result == ResponseStatus.notExecuted) {
+      return ErrorType.alreadyExist;
+    } else if (result == ResponseStatus.failed) {
+      return ErrorType.noInternet;
+    }
   }
 
   void _syncWithLoadController() async {
@@ -577,6 +599,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   Future<void> fileTapped(Record record) async {
     _repository.addFile(latestFile: record);
     var box = await Hive.openBox(kPathDBName);
+
     String path = box.get(record.id, defaultValue: '');
 
     if (path.isNotEmpty) {

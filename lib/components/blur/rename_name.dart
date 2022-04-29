@@ -133,12 +133,14 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
-                                        color: Color(0xffE4E7ED), width: 0.0),
+                                        color: Theme.of(context).cardColor,
+                                        width: 0.0),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
-                                        color: Color(0xffE4E7ED), width: 0.0),
+                                        color: Theme.of(context).cardColor,
+                                        width: 0.0),
                                   ),
                                 ),
                               ),

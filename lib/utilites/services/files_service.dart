@@ -210,9 +210,13 @@ class FilesService {
         return ResponseStatus.ok;
       else
         return ResponseStatus.failed;
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
-      return ResponseStatus.failed;
+      if (e.response?.statusCode == 403) {
+        return ResponseStatus.notExecuted;
+      } else {
+        return ResponseStatus.failed;
+      }
     }
   }
 

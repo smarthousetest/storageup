@@ -78,3 +78,7 @@ class BaseObject extends Equatable {
         isDownloading,
       ];
 }
+
+/*abstract class ExtentionFind {
+  String GetElementObjectFunction();
+}*/
