@@ -87,6 +87,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Check your internet connection and try again."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
@@ -139,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Enter password"),
+        "error": MessageLookupByLibrary.simpleMessage("Error"),
         "exit": MessageLookupByLibrary.simpleMessage("Exit"),
         "file_sorting": MessageLookupByLibrary.simpleMessage("File sorting"),
         "files": MessageLookupByLibrary.simpleMessage("Files"),
@@ -210,6 +213,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("You need to log in again"),
         "offer": MessageLookupByLibrary.simpleMessage(
             "Advantageous offer - switch to an annual subscription"),
+        "ok": MessageLookupByLibrary.simpleMessage("Ok"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Enter your old password"),
         "open": MessageLookupByLibrary.simpleMessage("Open"),
@@ -278,6 +282,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Choose storage location"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Renting a place"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "The connection to the server cannot be established."),
         "set_size": MessageLookupByLibrary.simpleMessage("Set storage size"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
@@ -288,7 +294,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "size_of_space": MessageLookupByLibrary.simpleMessage(
             "Specify the size of the space for rent"),
         "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
-            "Something went wrong. Try again later"),
+            "Something went wrong. Please repeat a little later."),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
