@@ -5,10 +5,10 @@ import 'package:get_it/get_it.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
-import 'package:os_specification/os_specification.dart';
 import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {

@@ -1061,10 +1061,10 @@ class S {
   }
 
   /// `Repeat new password`
-  String get repeat_passsword {
+  String get repeat_password {
     return Intl.message(
       'Repeat new password',
-      name: 'repeat_passsword',
+      name: 'repeat_password',
       desc: '',
       args: [],
     );
@@ -1075,16 +1075,6 @@ class S {
     return Intl.message(
       'Enter your old password',
       name: 'old_password',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ok`
-  String get good {
-    return Intl.message(
-      'Ok',
-      name: 'good',
       desc: '',
       args: [],
     );

@@ -385,7 +385,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               left: 15, bottom: 8),
-                                          hintText: translate.repeat_passsword,
+                                          hintText: translate.repeat_password,
                                           hintStyle: TextStyle(
                                             color: Theme.of(context)
                                                 .textTheme
