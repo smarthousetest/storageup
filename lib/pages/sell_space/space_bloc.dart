@@ -11,6 +11,8 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 
+import '../../utilites/repositories/token_repository.dart';
+
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   SpaceBloc() : super(SpaceState()) {
     on<SpaceEvent>((event, emit) async {
@@ -42,8 +44,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
     var keeper = await _subscriptionService.getAllKeepers();
-    emit(state.copyWith(
-        user: user, locationsInfo: locationsInfo, keeper: keeper));
+    emit(state.copyWith(user: user, locationsInfo: locationsInfo, keeper: keeper));
   }
 
   Future _mapRunSoft(
@@ -57,15 +58,18 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     keeperLocations.createSync();
     var keeperLocationsSink = keeperLocations.openWrite(mode: FileMode.append);
     state.locationsInfo.forEach((element) {
-      keeperLocationsSink.add(
-          '${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'
-              .codeUnits);
+      keeperLocationsSink.add('${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'.codeUnits);
     });
     await keeperLocationsSink.close();
-    os.startProcess('keeper', true, [
-      '${Uri.encodeFull(state.locationsInfo.last.dirPath)}',
-      ('${state.locationsInfo.last.countGb * 1024 * 1024 * 1024}').toString()
-    ]);
+    var bearerToken = await TokenRepository().getApiToken();
+    if (bearerToken != null) {
+      os.startProcess('keeper', true, [
+        Uri.encodeFull(state.locationsInfo.last.dirPath),
+        '${state.locationsInfo.last.countGb * 1024 * 1024 * 1024}',
+        bearerToken,
+        Uri.encodeFull(state.locationsInfo.last.name),
+      ]);
+    }
   }
 
   _mapSaveDirPath(
@@ -78,8 +82,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var name = event.name;
     var id = await _subscriptionService.addNewKeeper(name, countOfGb);
     if (id != null) {
-      _repository.createLocation(
-          countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+      _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
     }
     var locationsInfo = _repository.getlocationsInfo;
     final tmpState = state.copyWith(locationsInfo: locationsInfo);
