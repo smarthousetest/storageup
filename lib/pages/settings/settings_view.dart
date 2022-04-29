@@ -2,6 +2,7 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/change_password.dart';
 import 'package:upstorage_desktop/components/blur/delete_avatar.dart';
@@ -252,6 +253,61 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void _showErrorDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            title: Text(
+              translate.something_goes_wrong,
+              textAlign: TextAlign.center,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
+            ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 200, right: 200, top: 30, bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    translate.good,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontFamily: kNormalTextFontFamily,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: // _form.currentState.validate()
+                        Theme.of(context).splashColor,
+
+                    // Theme.of(context).primaryColor,
+                    fixedSize: Size(100, 42),
+                    elevation: 0,
+                    side: BorderSide(
+                        style: BorderStyle.solid,
+                        color: Theme.of(context).splashColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   var controller = CustomPopupMenuController();
   Widget personalData(BuildContext context) {
     return ListView(controller: ScrollController(), children: [
@@ -269,86 +325,87 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
-        return Stack(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 13, left: 40),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(60),
-              child: Container(
-                width: 120,
-                height: 120,
-                child: state.user.image,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+      BlocListener<SettingsBloc, SettingsState>(
+        listener: (context, state) {
+          if (state.status == FormzStatus.submissionFailure) {
+            _showErrorDialog();
+          }
+        },
+        child:
+            BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
+          return Stack(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 13, left: 40),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(60),
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  child: state.user.image,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
             ),
-          ),
-          CustomPopupMenu(
-            pressType: PressType.singleClick,
-            barrierColor: Colors.transparent,
-            showArrow: false,
-            horizontalMargin: -185,
-            verticalMargin: -100,
-            controller: controller,
-            menuBuilder: () {
-              return SettingsPopupMenuActions(
-                theme: Theme.of(context),
-                translate: translate,
-                onTap: (action) async {
-                  controller.hideMenu();
-
-                  if (action == AvatarAction.changeAvatar) {
+            CustomPopupMenu(
+              pressType: PressType.singleClick,
+              barrierColor: Colors.transparent,
+              showArrow: false,
+              horizontalMargin: -185,
+              verticalMargin: -100,
+              controller: controller,
+              // onTapDown: () {
+              //   setState(() {
+              //     _isClicked = true;
+              //   });
+              // },
+              menuBuilder: () {
+                return SettingsPopupMenuActions(
+                  theme: Theme.of(context),
+                  translate: translate,
+                  onTap: (action) {
                     controller.hideMenu();
-                    context
-                        .read<SettingsBloc>()
-                        .add(SettingsChangeProfileImage());
-                  } else {
-                    controller.hideMenu();
-                    var result = await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return BlurDeletePic();
-                      },
-                    );
-                    if (result) {
+                    //var res;
+                    if (action == AvatarAction.changeAvatar) {
+                      controller.hideMenu();
+                      // res =
                       context
                           .read<SettingsBloc>()
-                          .add(SettingsDeleteProfileImage());
+                          .add(SettingsChangeProfileImage());
                     }
-                  }
-                },
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 100, left: 124),
-              child: Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: controller.menuIsShowing
-                      ? Theme.of(context).dividerColor
-                      : Theme.of(context).cardColor,
-                ),
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: SvgPicture.asset(
-                      "assets/file_page/photo.svg",
-                      color: controller.menuIsShowing
-                          ? Theme.of(context).splashColor
-                          : Theme.of(context).focusColor,
+                  },
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 100, left: 124),
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _isClicked
+                        ? Theme.of(context).dividerColor
+                        : Theme.of(context).cardColor,
+                  ),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: SvgPicture.asset(
+                        "assets/file_page/photo.svg",
+                        color: _isClicked
+                            ? Theme.of(context).splashColor
+                            : Theme.of(context).focusColor,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ]);
-      }),
+          ]);
+        }),
+      ),
       Row(
         children: [
           Padding(

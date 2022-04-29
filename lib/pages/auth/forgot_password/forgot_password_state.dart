@@ -10,11 +10,10 @@ class ForgotPasswordState extends Equatable {
 
   final AuthError? error;
 
-  ForgotPasswordState({
-    this.email = const Email.pure(),
-    this.status = FormzStatus.pure,
-    this.error,
-  });
+  ForgotPasswordState(
+      {this.email = const Email.pure(),
+      this.status = FormzStatus.pure,
+      this.error});
 
   ForgotPasswordState copyWith({
     Email? email,

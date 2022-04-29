@@ -1080,6 +1080,16 @@ class S {
     );
   }
 
+  /// `Ok`
+  String get good {
+    return Intl.message(
+      'Ok',
+      name: 'good',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Account deleting`
   String get accaunt_deleting {
     return Intl.message(

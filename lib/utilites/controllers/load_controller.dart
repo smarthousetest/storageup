@@ -46,7 +46,6 @@ class LoadController {
     _autouploadController =
         await GetIt.instance.getAsync<AutouploadController>();
     Directory appDocDir = await getApplicationDocumentsDirectory();
-
     _cpp = await getInstanceCppNative(
         documentsFolder: appDocDir, baseUrl: kServerUrl.split('/').last);
     _autouploadController?.listen(null).listen((event) async {

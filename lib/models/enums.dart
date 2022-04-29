@@ -13,6 +13,7 @@ enum AuthenticationStatus {
   emailAllreadyRegistered,
   externalError,
   notVerifiedEmail,
+  noInternet,
 }
 
 enum FileAction {

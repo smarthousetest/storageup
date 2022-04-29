@@ -102,6 +102,7 @@
     "new_password": "New password",
     "repeat_passsword": "Repeat new password",
     "old_password": "Enter your old password",
+    "good": "Ok",
     "accaunt_deleting": "Account deleting",
     "permanently_delete": "Are you sure you want to permanently delete your account",
     "in_StorageUp": "in StorageUp?",

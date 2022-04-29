@@ -5,6 +5,7 @@ import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 
 class MediaState extends Equatable {
   final List<Record> currentFolderRecords;
@@ -17,6 +18,7 @@ class MediaState extends Equatable {
   final bool progress;
   final FormzStatus status;
   final ErrorType? errorType;
+  final ResponseStatus? responseStatus;
 
   MediaState({
     this.currentFolderRecords = const [],
@@ -26,6 +28,7 @@ class MediaState extends Equatable {
     Folder? currentFolder,
     this.status = FormzStatus.pure,
     this.progress = false,
+    this.responseStatus,
     this.representation = FilesRepresentation.grid,
     this.user,
     this.errorType,
@@ -42,6 +45,7 @@ class MediaState extends Equatable {
     User? user,
     bool? progress,
     ErrorType? errorType,
+    ResponseStatus? responseStatus,
   }) {
     return MediaState(
       albums: albums ?? this.albums,
@@ -54,6 +58,7 @@ class MediaState extends Equatable {
       progress: progress ?? this.progress,
       status: status ?? this.status,
       errorType: errorType,
+      responseStatus: responseStatus ?? this.responseStatus,
     );
   }
 
@@ -69,5 +74,6 @@ class MediaState extends Equatable {
         progress,
         errorType,
         status,
+        responseStatus,
       ];
 }

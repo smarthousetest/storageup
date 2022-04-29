@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 
@@ -16,6 +17,7 @@ class OpenedFolderState extends Equatable {
   final SortingDirection direction;
   final String search;
   final bool progress;
+  final ResponseStatus? responseStatus;
 
   OpenedFolderState(
       {this.currentFolder,
@@ -25,6 +27,7 @@ class OpenedFolderState extends Equatable {
       this.criterion = SortingCriterion.byDateCreated,
       this.direction = SortingDirection.down,
       required this.previousFolders,
+      this.responseStatus,
       this.search = '',
       this.groupedFiles = const {},
       this.progress = false,
@@ -41,21 +44,22 @@ class OpenedFolderState extends Equatable {
     SortingCriterion? criterion,
     List<Folder>? previousFolders,
     FilesRepresentation? representation,
+    ResponseStatus? responseStatus,
     bool? progress,
   }) {
     return OpenedFolderState(
-      currentFolder: currentFolder ?? this.currentFolder,
-      groupedFiles: groupedFiles ?? this.groupedFiles,
-      status: status ?? this.status,
-      criterion: criterion ?? this.criterion,
-      direction: direction ?? this.direction,
-      objects: objects ?? this.objects,
-      search: search ?? this.search,
-      sortedFiles: sortedFiles ?? this.sortedFiles,
-      previousFolders: previousFolders ?? this.previousFolders,
-      representation: representation ?? this.representation,
-      progress: progress ?? this.progress,
-    );
+        currentFolder: currentFolder ?? this.currentFolder,
+        groupedFiles: groupedFiles ?? this.groupedFiles,
+        status: status ?? this.status,
+        criterion: criterion ?? this.criterion,
+        direction: direction ?? this.direction,
+        objects: objects ?? this.objects,
+        search: search ?? this.search,
+        sortedFiles: sortedFiles ?? this.sortedFiles,
+        previousFolders: previousFolders ?? this.previousFolders,
+        representation: representation ?? this.representation,
+        progress: progress ?? this.progress,
+        responseStatus: responseStatus ?? this.responseStatus);
   }
 
   @override
@@ -71,6 +75,7 @@ class OpenedFolderState extends Equatable {
         status,
         search,
         progress,
+        responseStatus,
       ];
 }
 

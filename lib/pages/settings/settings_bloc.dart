@@ -151,11 +151,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
             user: user,
             status: FormzStatus.submissionSuccess,
           ));
-        } else
+        } else if (result == ResponseStatus.declined)
           emit(state.copyWith(status: FormzStatus.submissionFailure));
+        return result;
       } else
         emit(state.copyWith(status: FormzStatus.submissionFailure));
     } else
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
   }
 }

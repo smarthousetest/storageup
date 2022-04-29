@@ -149,18 +149,18 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //emit(state.copyWith(sortedFiles: sortedFiles));
   }
 
-  void onRecordActionChoosed(FileAction action, BaseObject object) {
-    switch (action) {
-      case FileAction.delete:
-        _onActionDeleteChoosed(object);
-        break;
-      case FileAction.properties:
-        //PropertiesView(object: object);
-        break;
-      default:
-        print('default');
-    }
-  }
+  // void onRecordActionChoosed(FileAction action, BaseObject object) {
+  //   switch (action) {
+  //     case FileAction.delete:
+  //       _onActionDeleteChoosed(object);
+  //       break;
+  //     case FileAction.properties:
+  //       //PropertiesView(object: object);
+  //       break;
+  //     default:
+  //       print('default');
+  //   }
+  // }
 
   Future<void> mapFileSortingByCriterion() async {
     OpenedFolderState newState = _clearGroupedMap(state);
@@ -313,14 +313,20 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     return a.compareTo(b);
   }
 
-  void _onActionDeleteChoosed(BaseObject object) async {
+  Future<ResponseStatus?> onActionDeleteChoosed(BaseObject object) async {
     //emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([object]);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
+      emit(state.copyWith(responseStatus: result));
+      return result;
+    } else if (result == ResponseStatus.failed) {
+      emit(state.copyWith(responseStatus: result));
+      return result;
     }
+    return result;
   }
 
   void _syncWithLoadController() async {
