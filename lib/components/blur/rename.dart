@@ -213,11 +213,6 @@ class _ButtonTemplateState extends State<BlurRename> {
                                         side: BorderSide(
                                           style: BorderStyle.solid,
                                           color: canSave
-                                              ? Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface
-                                              : Theme.of(context).canvasColor,
-                                          color: canSave
                                               ? Theme.of(context).splashColor
                                               : Theme.of(context).canvasColor,
                                         ),

@@ -146,17 +146,17 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   //TODO check what is it
-  // void onRecordActionChoosed(FileAction action, BaseObject object) {
-  //   switch (action) {
-  //     case FileAction.delete:
-  //       _onActionDeleteChoosed(object);
-  //       break;
-  //     case FileAction.rename:
-  //       break;
-  //     default:
-  //       print('default');
-  //   }
-  // }
+  void onRecordActionChoosed(FileAction action, BaseObject object) {
+    switch (action) {
+      case FileAction.delete:
+        onActionDeleteChoosed(object);
+        break;
+      case FileAction.rename:
+        break;
+      default:
+        print('default');
+    }
+  }
 
   Future<void> mapFileSortingByCriterion() async {
     OpenedFolderState newState = _clearGroupedMap(state);
