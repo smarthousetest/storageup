@@ -11,6 +11,7 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 
+import '../../constants.dart';
 import '../../utilites/repositories/token_repository.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
@@ -58,14 +59,14 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     keeperLocations.createSync();
     var keeperLocationsSink = keeperLocations.openWrite(mode: FileMode.append);
     state.locationsInfo.forEach((element) {
-      keeperLocationsSink.add('${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'.codeUnits);
+      keeperLocationsSink.add('${element.dirPath}|${element.countGb * GB}\n'.codeUnits);
     });
     await keeperLocationsSink.close();
     var bearerToken = await TokenRepository().getApiToken();
     if (bearerToken != null) {
       os.startProcess('keeper', true, [
         Uri.encodeFull(state.locationsInfo.last.dirPath),
-        '${state.locationsInfo.last.countGb * 1024 * 1024 * 1024}',
+        '${state.locationsInfo.last.countGb * GB}',
         bearerToken,
         Uri.encodeFull(state.locationsInfo.last.name),
       ]);
