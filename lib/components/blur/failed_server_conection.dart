@@ -12,7 +12,6 @@ class BlurFailedServerConnection extends StatefulWidget {
 
 class _ButtonTemplateState extends State<BlurFailedServerConnection> {
   S translate = getIt<S>();
-  bool delete = true;
   @override
   Widget build(BuildContext context) {
     return Center(

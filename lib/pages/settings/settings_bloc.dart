@@ -117,8 +117,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var publicUrl = await _filesService.deleteProfilePic(user: state.user!);
-
     User? user = await _userController.updateUser();
+    if (publicUrl.name == "failed") {
+      emit(state.copyWith(status: FormzStatus.submissionFailure, user: user));
+    }
+    if (publicUrl.name == "noInternet") {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled, user: user));
+    }
     emit(state.copyWith(status: FormzStatus.submissionSuccess, user: user));
   }
 
@@ -154,7 +159,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         } else
           emit(state.copyWith(status: FormzStatus.submissionFailure));
       } else
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        // emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
     } else
       emit(state.copyWith(status: FormzStatus.submissionFailure));
   }

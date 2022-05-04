@@ -13,6 +13,7 @@ enum AuthenticationStatus {
   emailAllreadyRegistered,
   externalError,
   notVerifiedEmail,
+  noInternet,
 }
 
 enum FileAction {
@@ -62,6 +63,7 @@ enum ResponseStatus {
   declined,
   failed,
   notExecuted,
+  noInternet,
 }
 
 Status? mapJsonToStatus(String? json) {

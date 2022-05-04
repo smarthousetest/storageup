@@ -2,9 +2,12 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/change_password.dart';
 import 'package:upstorage_desktop/components/blur/delete_avatar.dart';
+import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/main.dart';
@@ -269,86 +272,106 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
-        return Stack(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 13, left: 40),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(60),
-              child: Container(
-                width: 120,
-                height: 120,
-                child: state.user.image,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+      BlocListener<SettingsBloc, SettingsState>(
+        listener: (context, state) async {
+          if (state.status == FormzStatus.submissionFailure) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurSomethingGoesWrong();
+              },
+            );
+          } else if (state.status == FormzStatus.submissionCanceled) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurFailedServerConnection();
+              },
+            );
+          }
+        },
+        child:
+            BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
+          return Stack(children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 13, left: 40),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(60),
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  child: state.user.image,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
             ),
-          ),
-          CustomPopupMenu(
-            pressType: PressType.singleClick,
-            barrierColor: Colors.transparent,
-            showArrow: false,
-            horizontalMargin: -185,
-            verticalMargin: -100,
-            controller: controller,
-            menuBuilder: () {
-              return SettingsPopupMenuActions(
-                theme: Theme.of(context),
-                translate: translate,
-                onTap: (action) async {
-                  controller.hideMenu();
+            CustomPopupMenu(
+              pressType: PressType.singleClick,
+              barrierColor: Colors.transparent,
+              showArrow: false,
+              horizontalMargin: -185,
+              verticalMargin: -100,
+              controller: controller,
+              menuBuilder: () {
+                return SettingsPopupMenuActions(
+                  theme: Theme.of(context),
+                  translate: translate,
+                  onTap: (action) async {
+                    controller.hideMenu();
 
-                  if (action == AvatarAction.changeAvatar) {
-                    controller.hideMenu();
-                    context
-                        .read<SettingsBloc>()
-                        .add(SettingsChangeProfileImage());
-                  } else {
-                    controller.hideMenu();
-                    var result = await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return BlurDeletePic();
-                      },
-                    );
-                    if (result) {
+                    if (action == AvatarAction.changeAvatar) {
+                      controller.hideMenu();
                       context
                           .read<SettingsBloc>()
-                          .add(SettingsDeleteProfileImage());
+                          .add(SettingsChangeProfileImage());
+                    } else {
+                      controller.hideMenu();
+                      var result = await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return BlurDeletePic();
+                        },
+                      );
+                      if (result) {
+                        context
+                            .read<SettingsBloc>()
+                            .add(SettingsDeleteProfileImage());
+                      }
                     }
-                  }
-                },
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 100, left: 124),
-              child: Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: controller.menuIsShowing
-                      ? Theme.of(context).dividerColor
-                      : Theme.of(context).cardColor,
-                ),
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: SvgPicture.asset(
-                      "assets/file_page/photo.svg",
-                      color: controller.menuIsShowing
-                          ? Theme.of(context).splashColor
-                          : Theme.of(context).focusColor,
+                  },
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 100, left: 124),
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller.menuIsShowing
+                        ? Theme.of(context).dividerColor
+                        : Theme.of(context).cardColor,
+                  ),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: SvgPicture.asset(
+                        "assets/file_page/photo.svg",
+                        color: controller.menuIsShowing
+                            ? Theme.of(context).splashColor
+                            : Theme.of(context).focusColor,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ]);
-      }),
+          ]);
+        }),
+      ),
       Row(
         children: [
           Padding(

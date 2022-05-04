@@ -83,8 +83,16 @@ class AuthService {
     } on DioError catch (e) {
       if (e.response?.statusCode == 400)
         return AuthenticationStatus.wrongPassword;
-      else
+      else if (e.response?.statusCode == 401)
         return AuthenticationStatus.unauthenticated;
+      else if (e.response?.statusCode == 403 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504)
+        return AuthenticationStatus.externalError;
+      else
+        return AuthenticationStatus.noInternet;
     }
   }
 
@@ -205,6 +213,8 @@ class AuthService {
       print(e);
       if (e.response?.statusCode == 401)
         return AuthenticationStatus.unauthenticated;
+      else if (e.response?.statusCode == null)
+        return AuthenticationStatus.noInternet;
       else
         return AuthenticationStatus.externalError;
     }
