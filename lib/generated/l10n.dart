@@ -2096,6 +2096,16 @@ class S {
     );
   }
 
+  /// `Other copmuters`
+  String get other_computers {
+    return Intl.message(
+      'Other copmuters',
+      name: 'other_computers',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Level of trust`
   String get level_of_confidence {
     return Intl.message(
@@ -2211,6 +2221,16 @@ class S {
     return Intl.message(
       'Off',
       name: 'off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `It is possible to restart keeper locally`
+  String get reboot_keeper {
+    return Intl.message(
+      'It is possible to restart keeper locally',
+      name: 'reboot_keeper',
       desc: '',
       args: [],
     );

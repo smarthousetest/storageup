@@ -226,6 +226,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "options": MessageLookupByLibrary.simpleMessage("Options"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("or continue with"),
+        "other_computers":
+            MessageLookupByLibrary.simpleMessage("Other copmuters"),
         "other_sub":
             MessageLookupByLibrary.simpleMessage("Other subscriptions"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
@@ -263,6 +265,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Reason for deletion"),
         "reboot": MessageLookupByLibrary.simpleMessage("Reboot"),
+        "reboot_keeper": MessageLookupByLibrary.simpleMessage(
+            "It is possible to restart keeper locally"),
         "recent": MessageLookupByLibrary.simpleMessage("Recent"),
         "register": MessageLookupByLibrary.simpleMessage("Register now"),
         "register_complete":

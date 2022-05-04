@@ -14,6 +14,9 @@ import 'package:upstorage_desktop/utilites/autoupload/models/download_location.d
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
+import '../../../components/blur/ceeper_delete_confirm.dart';
+import '../../../models/keeper/keeper.dart';
+
 enum FileOptions {
   share,
   move,
@@ -45,6 +48,8 @@ class _ButtonTemplateState extends State<FolderList> {
     }
   }
 
+  var controller = CustomPopupMenuController();
+
   S translate = getIt<S>();
 
   @override
@@ -53,13 +58,22 @@ class _ButtonTemplateState extends State<FolderList> {
         create: (context) => FolderListBloc()..add(FolderListPageOpened()),
         child: BlocBuilder<FolderListBloc, FolderListState>(
             builder: (context, state) {
+          _initiatingControllers(state);
           locationsInfo = state.locationsInfo;
           return Column(
             // controller: ScrollController(),
             // shrinkWrap: true,
             // scrollDirection: Axis.vertical,
             children: [
-              _thisKeeper(context, state),
+              state.locationsInfo.isNotEmpty
+                  ? _thisKeeper(context, state)
+                  : Container(),
+              state.keeper != null && state.keeper!.isNotEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: _otherKeeper(context, state),
+                    )
+                  : Container(),
             ],
           );
         }));
@@ -103,10 +117,15 @@ class _ButtonTemplateState extends State<FolderList> {
                 crossAxisCount: countOnElementsInRow,
                 mainAxisExtent: 345,
                 mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
               ),
               itemBuilder: (context, index) {
                 var location = state.locationsInfo[index];
-                return _keeperInfo(context, location);
+                //var keeper = state.keeper![index];
+                return _keeperInfo(
+                  context,
+                  location,
+                );
               },
             );
           },
@@ -115,81 +134,125 @@ class _ButtonTemplateState extends State<FolderList> {
     );
   }
 
-  Widget _keeperInfo(BuildContext context, DownloadLocation location) {
-    return Center(
-      child: Container(
-        width: 354,
-        height: 345,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).dividerColor,
-            width: 2,
-          ),
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(12),
+  Widget _keeperInfo(
+    BuildContext context,
+    DownloadLocation location,
+  ) {
+    return Container(
+      width: 354,
+      height: 345,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 2,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    constraints: BoxConstraints(maxWidth: 200),
-                    child: Text(
-                      location.name,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Theme.of(context).focusColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 18,
-                      ),
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  constraints: BoxConstraints(maxWidth: 200),
+                  child: Text(
+                    location.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).focusColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 18,
                     ),
-                  ),
-                  Spacer(),
-                  Container(
-                    height: 29,
-                    width: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/space_sell/dots.svg',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                constraints: BoxConstraints(maxWidth: 310),
-                padding: const EdgeInsets.only(top: 6),
-                child: Text(
-                  location.dirPath,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontFamily: kNormalTextFontFamily,
-                    fontSize: 14,
                   ),
                 ),
+                Spacer(),
+                BlocBuilder<FolderListBloc, FolderListState>(
+                    builder: (context, state) {
+                  if (state.locationsInfo.length != _popupControllers.length) {
+                    final controller = CustomPopupMenuController();
+                    _popupControllers.add(controller);
+                  }
+                  return CustomPopupMenu(
+                    pressType: PressType.singleClick,
+                    barrierColor: Colors.transparent,
+                    showArrow: false,
+                    horizontalMargin: 10,
+                    verticalMargin: 0,
+                    controller: _popupControllers[
+                        state.locationsInfo.indexOf(location)],
+                    menuBuilder: () {
+                      return KeeperPopupMenuActions(
+                        theme: Theme.of(context),
+                        translate: translate,
+                        onTap: (action) async {
+                          _popupControllers[
+                                  state.locationsInfo.indexOf(location)]
+                              .hideMenu();
+                          if (action == KeeperAction.change) {
+                          } else {
+                            var result = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return BlurDeleteKeeper();
+                              },
+                            );
+                            if (result) {
+                              context
+                                  .read<FolderListBloc>()
+                                  .add(DeleteLocation(location: location));
+                              setState(() {});
+                            }
+                          }
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 29,
+                      width: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/space_sell/dots.svg',
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+            Container(
+              constraints: BoxConstraints(maxWidth: 310),
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                location.dirPath,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _keeperIndicator(context, location),
-                  _keeperProperties(context, location),
-                ],
-              ),
-            ],
-          ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _keeperIndicator(context, location, null),
+                _keeperProperties(context, location),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _keeperIndicator(BuildContext context, DownloadLocation location) {
+  Widget _keeperIndicator(
+      BuildContext context, DownloadLocation? location, Keeper? keeper) {
     return Container(
       width: 140,
       padding: const EdgeInsets.only(left: 20.0, top: 10),
@@ -199,7 +262,7 @@ class _ButtonTemplateState extends State<FolderList> {
             children: [
               Container(
                 child: CircularArc(
-                  value: 40,
+                  value: 80,
                 ),
               ),
             ],
@@ -306,7 +369,7 @@ class _ButtonTemplateState extends State<FolderList> {
   Widget _keeperProperties(BuildContext context, DownloadLocation location) {
     return Container(
       width: 167,
-      padding: const EdgeInsets.only(left: 40.0, top: 15),
+      padding: const EdgeInsets.only(left: 45.0, top: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -425,6 +488,242 @@ class _ButtonTemplateState extends State<FolderList> {
               fontFamily: kNormalTextFontFamily,
               fontSize: 14,
               decoration: TextDecoration.underline,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _otherKeeper(
+    BuildContext context,
+    FolderListState state,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          child: Text(
+            translate.other_computers,
+            maxLines: 1,
+            style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        LayoutBuilder(
+          builder: (context, constrains) {
+            var countOnElementsInRow = constrains.maxWidth ~/ 354;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
+            final actualElementsWidth = countOnElementsInRow * 354;
+            if (actualElementsWidth > elementsWidthWithoutSpacing) {
+              countOnElementsInRow--;
+            }
+            return GridView.builder(
+              shrinkWrap: true,
+              itemCount: state.keeper?.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: countOnElementsInRow,
+                mainAxisExtent: 345,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
+              ),
+              itemBuilder: (context, index) {
+                var keeper = state.keeper![index];
+                return _otherKeeperInfo(context, keeper);
+              },
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _otherKeeperInfo(BuildContext context, Keeper keeper) {
+    return Container(
+      width: 354,
+      height: 345,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 2,
+        ),
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              constraints: BoxConstraints(maxWidth: 200),
+              child: Text(
+                keeper.name!,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Container(
+              constraints: BoxConstraints(maxWidth: 310),
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                'Path',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _keeperIndicator(context, null, keeper),
+                _otherKeeperProperties(context, keeper),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _otherKeeperProperties(BuildContext context, Keeper keeper) {
+    return Container(
+      width: 190,
+      padding: const EdgeInsets.only(left: 45.0, top: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+            alignment: FractionalOffset.centerLeft,
+            child: Text(
+              translate.downloating,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: 98,
+            height: 28,
+            decoration: BoxDecoration(
+              color: Theme.of(context).selectedRowColor,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "• ${translate.active}",
+                style: TextStyle(
+                  color: Color(0xFF25B885),
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            translate.loading,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: 119,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: Theme.of(context).canvasColor,
+                width: 1.5,
+              ),
+            ),
+            child: Center(
+                child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/space_sell/refresh.svg',
+                ),
+                Text(
+                  translate.reboot,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).canvasColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            )),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            translate.ern_pay_day,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            "0 Р",
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).textTheme.headline2?.color,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 30,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            translate.reboot_keeper,
+            maxLines: 2,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
             ),
           ),
         ],

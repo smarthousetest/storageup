@@ -26,15 +26,16 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(50, 0, 0, 0),
               child: Container(
                 width: 400,
                 height: 200,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      translate.realy_delete_keeper,
+                      translate.deleting,
+                      textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 20,
                         fontFamily: kNormalTextFontFamily,
@@ -42,7 +43,7 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 90, top: 25),
+                      padding: const EdgeInsets.only(top: 25),
                       child: Text(
                         translate.delete_keeper_text1,
                         style: TextStyle(
@@ -52,15 +53,12 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 205),
-                      child: Text(
-                        translate.delete_keeper_text2,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontFamily: kNormalTextFontFamily,
-                          color: Theme.of(context).disabledColor,
-                        ),
+                    Text(
+                      translate.delete_keeper_text2,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: kNormalTextFontFamily,
+                        color: Theme.of(context).disabledColor,
                       ),
                     ),
                     Padding(
@@ -74,71 +72,72 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25),
-                      child: Container(
-                        width: 420,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: Text(
-                                  translate.cancel,
-                                  style: TextStyle(
-                                    color: Color(0xff70BBF6),
-                                    fontSize: 16,
-                                    fontFamily: kNormalTextFontFamily,
+                    Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text(
+                                      translate.cancel,
+                                      style: TextStyle(
+                                        color: Theme.of(context).disabledColor,
+                                        fontSize: 16,
+                                        fontFamily: kNormalTextFontFamily,
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Theme.of(context).cardColor,
+                                      fixedSize: Size(130, 42),
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
-                                  fixedSize: Size(140, 42),
-                                  elevation: 0,
-                                  side: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: Color(0xff70BBF6),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, delete);
+                                    },
+                                    child: Text(
+                                      translate.delete,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontFamily: kNormalTextFontFamily,
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Color(0xffFF847E),
+                                      fixedSize: Size(115, 42),
+                                      elevation: 0,
+                                      side: BorderSide(
+                                        style: BorderStyle.solid,
+                                        color: Color(0xffFF847E),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context, delete);
-                                },
-                                child: Text(
-                                  translate.delete,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontFamily: kNormalTextFontFamily,
-                                  ),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffFF847E),
-                                  fixedSize: Size(240, 42),
-                                  elevation: 0,
-                                  side: BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: Color(0xffFF847E),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     )
                   ],
                 ),

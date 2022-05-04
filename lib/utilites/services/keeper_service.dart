@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
-import 'package:upstorage_desktop/models/list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
@@ -31,6 +29,7 @@ class KeeperService {
           (response.data as List).forEach((element) {
             allKeeper.add(Keeper.fromMap(element));
           });
+          print(allKeeper);
           return allKeeper;
         }
       }

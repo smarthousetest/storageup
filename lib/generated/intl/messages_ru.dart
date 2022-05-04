@@ -228,6 +228,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "options": MessageLookupByLibrary.simpleMessage("Параметры "),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
+        "other_computers":
+            MessageLookupByLibrary.simpleMessage("Другие компьютеры"),
         "other_sub": MessageLookupByLibrary.simpleMessage("Другие подписки"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Наш тариф предполагает оплату 0,2 ₽/день за 1 ГБ сданного пространства"),
@@ -264,6 +266,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Причина удаления"),
         "reboot": MessageLookupByLibrary.simpleMessage("Перезагрузка"),
+        "reboot_keeper": MessageLookupByLibrary.simpleMessage(
+            "Перезапустить кипер возможно локально"),
         "recent": MessageLookupByLibrary.simpleMessage("Недавние"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "register_complete":

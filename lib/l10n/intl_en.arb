@@ -232,6 +232,7 @@
     "we_send": "We have sent an email to",
     "for_confirm": "To confirm, click on the link inside the email.",
     "this_computer": "This computer",
+    "other_computers": "Other copmuters",
     "level_of_confidence": "Level of trust",
     "space": "Space",
     "downloating": "Downloating",
@@ -243,5 +244,6 @@
     "restart_keeper": "You need to restart keeper",
     "learn_more": "Learn more",
     "on": "On",
-    "off": "Off"
+    "off": "Off",
+    "reboot_keeper": "It is possible to restart keeper locally"
 }

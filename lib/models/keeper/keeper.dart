@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 class Keeper extends Equatable {
   final String? id;
   final String? idi;
+  final String? name;
   final int? online;
   final int? rating;
   final int? space;
@@ -13,6 +14,7 @@ class Keeper extends Equatable {
   const Keeper({
     this.id,
     this.idi,
+    this.name,
     this.online,
     this.rating,
     this.space,
@@ -22,6 +24,7 @@ class Keeper extends Equatable {
   factory Keeper.fromMap(Map<String, dynamic> data) => Keeper(
         id: data['id'] as String?,
         idi: data['_id'] as String?,
+        name: data['name'] as String?,
         online: data['online'] as int?,
         rating: data['rating'] as int?,
         space: data['space'] as int?,
@@ -31,6 +34,7 @@ class Keeper extends Equatable {
   Map<String, dynamic> toMap() => {
         'id': id,
         '_id': idi,
+        'name': name,
         'online': online,
         'rating': rating,
         'space': space,
@@ -52,6 +56,7 @@ class Keeper extends Equatable {
   Keeper copyWith({
     String? id,
     String? idi,
+    String? name,
     int? online,
     int? rating,
     int? space,
@@ -60,6 +65,7 @@ class Keeper extends Equatable {
     return Keeper(
       id: id ?? this.id,
       idi: idi ?? this.idi,
+      name: name ?? this.name,
       online: online ?? this.online,
       rating: rating ?? this.rating,
       space: space ?? this.space,
@@ -72,6 +78,7 @@ class Keeper extends Equatable {
     return [
       id,
       idi,
+      name,
       online,
       rating,
       space,
