@@ -2095,6 +2095,126 @@ class S {
       args: [],
     );
   }
+
+  /// `Level of trust`
+  String get level_of_confidence {
+    return Intl.message(
+      'Level of trust',
+      name: 'level_of_confidence',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Space`
+  String get space {
+    return Intl.message(
+      'Space',
+      name: 'space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Downloating`
+  String get downloating {
+    return Intl.message(
+      'Downloating',
+      name: 'downloating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get active {
+    return Intl.message(
+      'Active',
+      name: 'active',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inactive`
+  String get inactive {
+    return Intl.message(
+      'Inactive',
+      name: 'inactive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading`
+  String get loading {
+    return Intl.message(
+      'Loading',
+      name: 'loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reboot`
+  String get reboot {
+    return Intl.message(
+      'Reboot',
+      name: 'reboot',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earning pay day`
+  String get ern_pay_day {
+    return Intl.message(
+      'Earning pay day',
+      name: 'ern_pay_day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You need to restart keeper`
+  String get restart_keeper {
+    return Intl.message(
+      'You need to restart keeper',
+      name: 'restart_keeper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Learn more`
+  String get learn_more {
+    return Intl.message(
+      'Learn more',
+      name: 'learn_more',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On`
+  String get on {
+    return Intl.message(
+      'On',
+      name: 'on',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Off`
+  String get off {
+    return Intl.message(
+      'Off',
+      name: 'off',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

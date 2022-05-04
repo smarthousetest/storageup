@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +15,7 @@ import 'utilites/state_container.dart';
 
 void main() async {
   await configureInjection();
+  //HttpOverrides.global = MyHttpOverrides();
   runApp(new StateContainer(child: new MyApp()));
 }
 
@@ -89,5 +92,14 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

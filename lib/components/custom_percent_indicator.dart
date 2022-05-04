@@ -4,11 +4,13 @@ import 'dart:math' as math;
 
 import 'package:vector_math/vector_math.dart';
 
-class ArcIndicator extends CustomPainter {
+import '../constants.dart';
+
+class PercentIndicator extends CustomPainter {
   final bool isBackGround;
   final Color color;
   final double? value;
-  ArcIndicator(
+  PercentIndicator(
       {required this.isBackGround, required this.color, required this.value});
 
   @override
@@ -39,15 +41,15 @@ class ArcIndicator extends CustomPainter {
   }
 }
 
-class CircularArc extends StatefulWidget {
+class PercentArc extends StatefulWidget {
   double value;
-  CircularArc({required this.value, Key? key}) : super(key: key);
+  PercentArc({required this.value, Key? key}) : super(key: key);
 
   @override
-  _CircularArc createState() => _CircularArc();
+  _PercentArc createState() => _PercentArc();
 }
 
-class _CircularArc extends State<CircularArc>
+class _PercentArc extends State<PercentArc>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
@@ -72,27 +74,34 @@ class _CircularArc extends State<CircularArc>
   Widget build(BuildContext context) {
     return Container(
       width: 140,
-      height: 75,
+      height: 60,
       child: Stack(
         children: [
           CustomPaint(
               //size: Size(100, 100),
-              painter: ArcIndicator(
+              painter: PercentIndicator(
                   isBackGround: false,
                   color: Theme.of(context).canvasColor,
                   value: null)),
           CustomPaint(
               //size: Size(100, 100),
-              painter: ArcIndicator(
+              painter: PercentIndicator(
                   isBackGround: false,
                   color: Theme.of(context).splashColor,
                   value: (widget.value * 3.14) / 100)),
           Align(
             alignment: FractionalOffset.center,
-            child: SvgPicture.asset(
-              'assets/space_sell/smail_fun.svg',
-              // width: 70,
-              // height: 56,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 0.0, top: 10),
+              child: Text(
+                "${widget.value.toInt()}%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).splashColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 26,
+                ),
+              ),
             ),
           ),
         ],

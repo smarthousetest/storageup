@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/custom_arc_indicator.dart';
+import 'package:upstorage_desktop/components/custom_percent_indicator.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -11,6 +12,7 @@ import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 enum FileOptions {
   share,
@@ -88,9 +90,9 @@ class _ButtonTemplateState extends State<FolderList> {
         GridView.builder(
           shrinkWrap: true,
           itemCount: state.locationsInfo.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             mainAxisExtent: 345,
-            crossAxisCount: 2,
+            maxCrossAxisExtent: 620,
             //maxCrossAxisExtent: 354,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
@@ -121,17 +123,34 @@ class _ButtonTemplateState extends State<FolderList> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              constraints: BoxConstraints(maxWidth: 200),
-              child: Text(
-                location.name,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Theme.of(context).focusColor,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 18,
+            Row(
+              children: [
+                Container(
+                  constraints: BoxConstraints(maxWidth: 200),
+                  child: Text(
+                    location.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).focusColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
-              ),
+                Spacer(),
+                Container(
+                  height: 29,
+                  width: 30,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/space_sell/dots.svg',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
             Container(
               constraints: BoxConstraints(maxWidth: 310),
@@ -146,13 +165,258 @@ class _ButtonTemplateState extends State<FolderList> {
                 ),
               ),
             ),
-            Container(
-              child: CircularArc(
-                value: 70,
-              ),
-            )
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _keeperIndicator(context, location),
+                _keeperProperties(context, location),
+              ],
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _keeperIndicator(BuildContext context, DownloadLocation location) {
+    return Container(
+      width: 140,
+      padding: const EdgeInsets.only(left: 20.0, top: 10),
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Container(
+                child: CircularArc(
+                  value: 40,
+                ),
+              ),
+            ],
+          ),
+          // SizedBox(
+          //   height: 5,
+          // ),
+          Align(
+            alignment: FractionalOffset.center,
+            child: Text(
+              translate.level_of_confidence,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "85%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.headline2?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                " из 100%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.subtitle1?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Stack(
+              children: [
+                Container(
+                  child: PercentArc(
+                    value: 70,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Align(
+            alignment: FractionalOffset.center,
+            child: Text(
+              translate.space,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "30Гб",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.headline2?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                " из 100Гб",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.subtitle1?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _keeperProperties(BuildContext context, DownloadLocation location) {
+    return Container(
+      width: 167,
+      padding: const EdgeInsets.only(left: 40.0, top: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+            alignment: FractionalOffset.centerLeft,
+            child: Text(
+              translate.downloating,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: 98,
+            height: 28,
+            decoration: BoxDecoration(
+              color: Theme.of(context).selectedRowColor,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "• ${translate.active}",
+                style: TextStyle(
+                  color: Color(0xFF25B885),
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            translate.loading,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              FlutterSwitch(
+                value: true,
+                height: 20.0,
+                width: 40.0,
+                onToggle: (value) {},
+                toggleSize: 16,
+                padding: 2,
+                activeColor: Theme.of(context).splashColor,
+                inactiveColor: Theme.of(context).hintColor,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: Text(
+                  translate.on,
+                  //textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).disabledColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            translate.ern_pay_day,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            "0 Р",
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).textTheme.headline2?.color,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 30,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            translate.learn_more,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).splashColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ],
       ),
     );
   }

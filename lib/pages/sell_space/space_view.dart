@@ -201,7 +201,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     key: ValueKey<int>(index),
                     index: index,
                     children: [
-                      state.locationsInfo.isEmpty || state.keeper.isEmpty
+                      state.locationsInfo.isEmpty
                           ? rentingAPlace(context)
                           : folderList(context),
                       Column(
@@ -974,63 +974,60 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         ),
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Row(
-            children: [
-              Container(
-                child: Text(
-                  translate.sell_space,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Theme.of(context).focusColor,
-                    fontFamily: kNormalTextFontFamily,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 100,
-                child: Container(),
-              ),
-              Container(
-                height: 30,
-                width: 142,
-                child: OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      index = 1;
-                      print(index);
-                    });
-                  },
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    backgroundColor: Theme.of(context).splashColor,
-                  ),
+        child: SingleChildScrollView(
+          controller: ScrollController(),
+          child: Column(mainAxisSize: MainAxisSize.max, children: [
+            Row(
+              children: [
+                Container(
                   child: Text(
-                    translate.add_location,
+                    translate.sell_space,
+                    maxLines: 1,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).focusColor,
                       fontFamily: kNormalTextFontFamily,
-                      fontSize: 14,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ListView(
-              controller: ScrollController(),
-              shrinkWrap: true,
-              children: [
-                ClipRect(child: FolderList()),
+                Expanded(
+                  flex: 100,
+                  child: Container(),
+                ),
+                Container(
+                  height: 30,
+                  width: 142,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        index = 1;
+                        print(index);
+                      });
+                    },
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(double.maxFinite, 60),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      backgroundColor: Theme.of(context).splashColor,
+                    ),
+                    child: Text(
+                      translate.add_location,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        ]),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: FolderList(),
+            ),
+          ]),
+        ),
       ),
     );
   }

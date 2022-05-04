@@ -7,6 +7,7 @@ final kLightTheme = ThemeData.light().copyWith(
   indicatorColor: Color(0xFFFF847E),
   primaryColor: Color(0xFFFFFFFF),
   disabledColor: Color(0xFF7D7D7D),
+  selectedRowColor: Color(0xFFCEF3E6),
   hintColor: Color(0xFFEDEDED),
   errorColor: Color(0xFFFF786F),
   shadowColor: Color(0xffC4C4C4),
