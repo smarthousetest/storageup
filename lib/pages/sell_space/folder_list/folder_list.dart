@@ -17,7 +17,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 enum FileOptions {
   share,
   move,
-  double,
+  double, //???
   toFavorites,
   download,
   rename,
@@ -87,19 +87,28 @@ class _ButtonTemplateState extends State<FolderList> {
         SizedBox(
           height: 15,
         ),
-        GridView.builder(
-          shrinkWrap: true,
-          itemCount: state.locationsInfo.length,
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            mainAxisExtent: 345,
-            maxCrossAxisExtent: 620,
-            //maxCrossAxisExtent: 354,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-          ),
-          itemBuilder: (context, index) {
-            var location = state.locationsInfo[index];
-            return _keeperInfo(context, location);
+        LayoutBuilder(
+          builder: (context, constrains) {
+            var countOnElementsInRow = constrains.maxWidth ~/ 354;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
+            final actualElementsWidth = countOnElementsInRow * 354;
+            if (actualElementsWidth > elementsWidthWithoutSpacing) {
+              countOnElementsInRow--;
+            }
+            return GridView.builder(
+              shrinkWrap: true,
+              itemCount: state.locationsInfo.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: countOnElementsInRow,
+                mainAxisExtent: 345,
+                mainAxisSpacing: 20,
+              ),
+              itemBuilder: (context, index) {
+                var location = state.locationsInfo[index];
+                return _keeperInfo(context, location);
+              },
+            );
           },
         )
       ],
@@ -107,72 +116,74 @@ class _ButtonTemplateState extends State<FolderList> {
   }
 
   Widget _keeperInfo(BuildContext context, DownloadLocation location) {
-    return Container(
-      width: 354,
-      height: 345,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).dividerColor,
-          width: 2,
+    return Center(
+      child: Container(
+        width: 354,
+        height: 345,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+            width: 2,
+          ),
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(12),
         ),
-        color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  constraints: BoxConstraints(maxWidth: 200),
-                  child: Text(
-                    location.name,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 18,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    constraints: BoxConstraints(maxWidth: 200),
+                    child: Text(
+                      location.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Theme.of(context).focusColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                ),
-                Spacer(),
-                Container(
-                  height: 29,
-                  width: 30,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/space_sell/dots.svg',
-                      ),
-                    ],
+                  Spacer(),
+                  Container(
+                    height: 29,
+                    width: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/space_sell/dots.svg',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                constraints: BoxConstraints(maxWidth: 310),
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  location.dirPath,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
                   ),
                 ),
-              ],
-            ),
-            Container(
-              constraints: BoxConstraints(maxWidth: 310),
-              padding: const EdgeInsets.only(top: 6),
-              child: Text(
-                location.dirPath,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 14,
-                ),
               ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _keeperIndicator(context, location),
-                _keeperProperties(context, location),
-              ],
-            ),
-          ],
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _keeperIndicator(context, location),
+                  _keeperProperties(context, location),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
