@@ -6,6 +6,8 @@ import 'package:upstorage_desktop/models/list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
+import '../../constants.dart';
+
 @Injectable()
 class KeeperService {
   final Dio _dio = getIt<Dio>(instanceName: 'record_dio');
@@ -40,29 +42,24 @@ class KeeperService {
   }
 
   Future<String?> addNewKeeper(String name, int countGb) async {
-    try {
-      String? token = await _tokenRepository.getApiToken();
-
-      var path = '/keeper';
-
-      var data = {
-        'data': {
-          'name': name,
-          "space": countGb,
-        }
-      };
-
-      var response = await _dio.post(
-        path,
-        options: Options(headers: {'Authorization': ' Bearer $token'}),
-        data: data,
-      );
-
-      if (response.statusCode == 200) {
-        return response.data['id'];
+    for(int i = 0; i < 5; i++){
+      try {
+        String? token = await _tokenRepository.getApiToken();
+        var response = await _dio.post(
+          '/keeper',
+          options: Options(headers: {'Authorization': ' Bearer $token'}),
+          data: {
+            'data': {
+              'name': name,
+              "space": countGb * GB,
+            }
+          },
+        );
+          return response.data['id'];
+      } on DioError catch (e) {
+        print(e);
       }
-    } catch (e) {
-      print(e);
     }
+    return null;
   }
 }
