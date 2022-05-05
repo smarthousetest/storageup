@@ -389,7 +389,7 @@ class _AuthViewState extends State<AuthView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 190, right: 160, top: 100),
+                              left: 190, right: 160, top: 73),
                           child: Text(
                             translate.confirm_email,
                             style: TextStyle(
@@ -398,10 +398,6 @@ class _AuthViewState extends State<AuthView> {
                               fontSize: 28.0,
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Container(),
-                          flex: 2,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 120, top: 40),
@@ -476,7 +472,7 @@ class _AuthViewState extends State<AuthView> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 110, top: 130),
+                          padding: const EdgeInsets.only(left: 110, top: 131),
                           child: ElevatedButton(
                             onPressed: () {
                               _isSignIn = false;
