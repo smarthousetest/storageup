@@ -19,9 +19,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       if (event is SpacePageOpened) {
         await _mapSpacePageOpened(event, state, emit);
       }
-      if (event is RunSoft) {
-        await _mapRunSoft(state, event);
-      }
+      // if (event is RunSoft) {
+      //   await _mapRunSoft(state, event);
+      // }
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
       }
@@ -49,7 +49,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
 
   Future _mapRunSoft(
     SpaceState state,
-    RunSoft event,
+    String keeperId,
   ) async {
     var os = (Platform.isWindows) ? Windows() : Linux();
     var keeperLocations = File('${os.appDirPath}keeper_locations');
@@ -62,10 +62,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       keeperLocationsSink.add('${element.dirPath}|${element.countGb * GB}\n'.codeUnits);
     });
     await keeperLocationsSink.close();
-    _writeKeeperId('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt', event.keeperId);
+    _writeKeeperId('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt', keeperId);
     var bearerToken = await TokenRepository().getApiToken();
     if (bearerToken != null) {
       os.startProcess('keeper', [
+        domainName,
         Uri.encodeFull(state.locationsInfo.last.dirPath),
         '${state.locationsInfo.last.countGb * GB}',
         bearerToken,
@@ -93,10 +94,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       var locationsInfo = _repository.getlocationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
-      add(RunSoft(tmpState, id));
+      // add(RunSoft(tmpState, id));
+      _mapRunSoft(tmpState, id);
     }
 
-
-    // _mapRunSoft(tmpState, id);
   }
 }
