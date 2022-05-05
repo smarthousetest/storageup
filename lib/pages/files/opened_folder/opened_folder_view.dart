@@ -6,8 +6,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
+import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
@@ -104,37 +107,56 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           widget.currentFolder,
           widget.previousFolders,
         ),
-      child: Positioned.fill(
-        child: Container(
-          margin: EdgeInsets.only(top: 30),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color.fromARGB(25, 23, 69, 139),
-                  blurRadius: 4,
-                  offset: Offset(1, 4))
-            ],
-          ),
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-            builder: (context, state) {
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _pathSection(),
-                  Divider(
-                    color: Theme.of(context).dividerColor,
-                  ),
-                  state.progress == true
-                      ? _filesSection()
-                      : _progressIndicator(context),
-                ],
-              );
-            },
+      child: BlocListener<OpenedFolderCubit, OpenedFolderState>(
+        listener: (context, state) async {
+          if (state.status == FormzStatus.submissionFailure) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurSomethingGoesWrong();
+              },
+            );
+          } else if (state.status == FormzStatus.submissionCanceled) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurFailedServerConnection();
+              },
+            );
+          }
+        },
+        child: Positioned.fill(
+          child: Container(
+            margin: EdgeInsets.only(top: 30),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Color.fromARGB(25, 23, 69, 139),
+                    blurRadius: 4,
+                    offset: Offset(1, 4))
+              ],
+            ),
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+            child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
+              builder: (context, state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _pathSection(),
+                    Divider(
+                      color: Theme.of(context).dividerColor,
+                    ),
+                    state.progress == true
+                        ? _filesSection()
+                        : _progressIndicator(context),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

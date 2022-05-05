@@ -116,8 +116,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         eventBusUpdateFolder.fire(UpdateFolderEvent);
       }
 
-      if (result != ResponseStatus.ok) {
+      if (result == ResponseStatus.failed) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.pure));
+      } else if (result == ResponseStatus.noInternet) {
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
         emit(state.copyWith(status: FormzStatus.pure));
       }
     } else if (folderId == null) {
@@ -147,8 +150,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (event.choosedPage == ChoosedPage.media) {
         eventBusUpdateAlbum.fire(UpdateAlbumEvent);
       }
-      if (result != ResponseStatus.ok) {
+      if (result == ResponseStatus.failed) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.pure));
+      } else if (result == ResponseStatus.noInternet) {
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
         emit(state.copyWith(status: FormzStatus.pure));
       }
     } else if (mediaRootFolderId == null) {

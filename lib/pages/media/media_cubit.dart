@@ -77,6 +77,7 @@ class MediaCubit extends Cubit<MediaState> {
       allRecords: currentFolder?.records,
       user: user,
       progress: progress,
+      status: FormzStatus.pure,
     ));
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
@@ -123,7 +124,8 @@ class MediaCubit extends Cubit<MediaState> {
       }
     });
 
-    emit(state.copyWith(currentFolderRecords: sortedMedia));
+    emit(state.copyWith(
+        currentFolderRecords: sortedMedia, status: FormzStatus.pure));
   }
 
   MediaState _resetSortedList({
@@ -156,7 +158,8 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void changeRepresentation(FilesRepresentation representation) {
-    emit(state.copyWith(representation: representation));
+    emit(state.copyWith(
+        representation: representation, status: FormzStatus.pure));
   }
 
   void setFavorite(Record object) async {
@@ -225,6 +228,7 @@ class MediaCubit extends Cubit<MediaState> {
           albums: newAlbumList,
           currentFolder: currentFolder,
           currentFolderRecords: currentFolder.records,
+          status: FormzStatus.pure,
         ),
       );
     }
@@ -492,17 +496,22 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void onActionDeleteChoosed(Record record) async {
-    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([record]);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
+    } else if (result == ResponseStatus.noInternet) {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
 
   Future<ErrorType?> onActionRenameChoosed(
       Record object, String newName) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
     if (result == ResponseStatus.ok) {
@@ -512,7 +521,9 @@ class MediaCubit extends Cubit<MediaState> {
       return ErrorType.alreadyExist;
     } else if (result == ResponseStatus.failed) {
       print('declained');
-      return ErrorType.noInternet;
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
   }
 
@@ -549,6 +560,7 @@ class MediaCubit extends Cubit<MediaState> {
       albums: albums,
       currentFolder: currentFolder,
       currentFolderRecords: currentFolder.records,
+      status: FormzStatus.pure,
     ));
   }
 
@@ -557,6 +569,7 @@ class MediaCubit extends Cubit<MediaState> {
       state.copyWith(
         currentFolder: newFolder,
         currentFolderRecords: newFolder.records,
+        status: FormzStatus.pure,
       ),
     );
   }

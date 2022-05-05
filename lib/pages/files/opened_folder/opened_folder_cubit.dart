@@ -126,6 +126,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   List<BaseObject> mapSortedFieldChanged(String sortText) {
+    emit(state.copyWith(status: FormzStatus.pure));
     final allFiles = state.objects;
 
     List<BaseObject> sortedFiles = [];
@@ -150,6 +151,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   void onRecordActionChoosed(FileAction action, BaseObject object) {
+    emit(state.copyWith(status: FormzStatus.pure));
     switch (action) {
       case FileAction.delete:
         _onActionDeleteChoosed(object);
@@ -163,6 +165,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> mapFileSortingByCriterion() async {
+    emit(state.copyWith(status: FormzStatus.pure));
     OpenedFolderState newState = _clearGroupedMap(state);
     var criterion = newState.criterion;
     var direction = newState.direction;
@@ -260,9 +263,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       //   return a.size == null ? 0 : 1;
     });
     if (direction == SortingDirection.down) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(
+          sortedFiles: sortedFiles.reversed.toList(),
+          status: FormzStatus.pure));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(sortedFiles: sortedFiles, status: FormzStatus.pure));
     }
   }
 
@@ -314,12 +319,16 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   void _onActionDeleteChoosed(BaseObject object) async {
-    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([object]);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
+    } else if (result == ResponseStatus.noInternet) {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
 
@@ -365,7 +374,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   // }
 
   void changeRepresentation(FilesRepresentation representation) {
-    emit(state.copyWith(representation: representation));
+    emit(state.copyWith(
+        representation: representation, status: FormzStatus.pure));
   }
 
   void setFavorite(BaseObject object) async {

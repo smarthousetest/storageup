@@ -65,8 +65,16 @@ class FilesService {
       return ResponseStatus.notExecuted;
     } on DioError catch (e) {
       print(e);
-
-      return ResponseStatus.failed;
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 403 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.failed;
+      } else {
+        return ResponseStatus.noInternet;
+      }
     }
   }
 
@@ -96,8 +104,16 @@ class FilesService {
       return ResponseStatus.notExecuted;
     } on DioError catch (e) {
       print(e);
-
-      return ResponseStatus.failed;
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 403 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.failed;
+      } else {
+        return ResponseStatus.noInternet;
+      }
     }
   }
 
@@ -159,9 +175,18 @@ class FilesService {
         return ResponseStatus.ok;
       else
         return ResponseStatus.failed;
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
-      return ResponseStatus.failed;
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 403 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.failed;
+      } else {
+        return ResponseStatus.noInternet;
+      }
     }
   }
 
@@ -243,10 +268,16 @@ class FilesService {
       }
     } on DioError catch (e) {
       print(e);
-      if (e.response?.statusCode == 403) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.failed;
+      } else if (e.response?.statusCode == 403) {
         return ResponseStatus.notExecuted;
       } else {
-        return ResponseStatus.failed;
+        return ResponseStatus.noInternet;
       }
     }
   }

@@ -10,7 +10,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
+import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -74,65 +76,11 @@ class _HomePageState extends State<HomePage> {
     DesktopWindow.resetMaxWindowSize();
   }
 
-  void _showErrorDialog() {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            title: Text(
-              translate.something_goes_wrong,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: kNormalTextFontFamily,
-                color: Theme.of(context).focusColor,
-              ),
-            ),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 200, right: 200, top: 30, bottom: 10),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    translate.good,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 16,
-                      fontFamily: kNormalTextFontFamily,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: // _form.currentState.validate()
-                        Theme.of(context).splashColor,
-
-                    // Theme.of(context).primaryColor,
-                    fixedSize: Size(100, 42),
-                    elevation: 0,
-                    side: BorderSide(
-                        style: BorderStyle.solid,
-                        color: Theme.of(context).splashColor),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
-  }
-
   @override
   void initState() {
     infoPage = InfoPage();
-    filePage = StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    filePage =
+        StateInfoContainer(child: StateSortedContainer(child: FilePage()));
     likePage = LikePage();
     spaceSellPage = SpaceSellPage();
     financePage = FinancePage();
@@ -205,10 +153,21 @@ class _HomePageState extends State<HomePage> {
       body: BlocProvider(
         create: (context) => HomeBloc()..add(HomePageOpened()),
         child: BlocListener<HomeBloc, HomeState>(
-          listener: (context, state) {
-            // TODO: implement listener
+          listener: (context, state) async {
             if (state.status == FormzStatus.submissionFailure) {
-              _showErrorDialog();
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurSomethingGoesWrong();
+                },
+              );
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurFailedServerConnection();
+                },
+              );
             }
           },
           child: Row(

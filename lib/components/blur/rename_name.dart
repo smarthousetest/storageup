@@ -200,7 +200,8 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                                 return BlurSomethingGoesWrong();
                                               },
                                             );
-                                          } else {
+                                          } else if (result ==
+                                              AuthenticationStatus.noInternet) {
                                             await showDialog(
                                               context: context,
                                               builder: (BuildContext context) {

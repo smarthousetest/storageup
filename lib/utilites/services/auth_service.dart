@@ -53,7 +53,15 @@ class AuthService {
       }
     } on DioError catch (e) {
       _printDioError(e);
-      return AuthenticationStatus.unauthenticated;
+      if (e.response?.statusCode == 400) {
+        return AuthenticationStatus.unauthenticated;
+      } else if (e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504)
+        return AuthenticationStatus.externalError;
+      else
+        return AuthenticationStatus.noInternet;
     }
   }
 

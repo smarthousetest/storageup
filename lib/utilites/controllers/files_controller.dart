@@ -181,10 +181,19 @@ class FilesController {
     } else if (foldersResult != null && recordsResult == null) {
       return foldersResult;
     } else {
-      return recordsResult == ResponseStatus.ok &&
-              foldersResult == ResponseStatus.ok
-          ? ResponseStatus.ok
-          : ResponseStatus.failed;
+      if (recordsResult == ResponseStatus.ok &&
+          foldersResult == ResponseStatus.ok) {
+        return ResponseStatus.ok;
+      } else if (recordsResult == ResponseStatus.noInternet &&
+          foldersResult == ResponseStatus.noInternet) {
+        return ResponseStatus.noInternet;
+      } else {
+        return ResponseStatus.failed;
+      }
+      // return recordsResult == ResponseStatus.ok &&
+      //         foldersResult == ResponseStatus.ok
+      //     ? ResponseStatus.ok
+      //     : ResponseStatus.failed;
     }
   }
 
