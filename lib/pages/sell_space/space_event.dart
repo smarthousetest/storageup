@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
 abstract class SpaceEvent extends Equatable {
@@ -21,7 +23,9 @@ class SpacePageOpened extends SpaceEvent {
 }
 
 class RunSoft extends SpaceEvent {
-  const RunSoft();
+  final String keeperId;
+  final SpaceState state;
+  const RunSoft(this.state, this.keeperId);
 }
 
 class SaveDirPath extends SpaceEvent {

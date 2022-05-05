@@ -10,7 +10,6 @@ import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
-
 import '../../constants.dart';
 import '../../utilites/repositories/token_repository.dart';
 
@@ -21,7 +20,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         await _mapSpacePageOpened(event, state, emit);
       }
       if (event is RunSoft) {
-        await _mapRunSoft(state);
+        await _mapRunSoft(state, event);
       }
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
@@ -50,6 +49,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
 
   Future _mapRunSoft(
     SpaceState state,
+    RunSoft event,
   ) async {
     var os = (Platform.isWindows) ? Windows() : Linux();
     var keeperLocations = File('${os.appDirPath}keeper_locations');
@@ -62,15 +62,21 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       keeperLocationsSink.add('${element.dirPath}|${element.countGb * GB}\n'.codeUnits);
     });
     await keeperLocationsSink.close();
+    _writeKeeperId('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt', event.keeperId);
     var bearerToken = await TokenRepository().getApiToken();
     if (bearerToken != null) {
-      os.startProcess('keeper', true, [
+      os.startProcess('keeper', [
         Uri.encodeFull(state.locationsInfo.last.dirPath),
         '${state.locationsInfo.last.countGb * GB}',
         bearerToken,
         Uri.encodeFull(state.locationsInfo.last.name),
       ]);
     }
+  }
+
+  void _writeKeeperId(String path, String keeper_id){
+    File(path).createSync(recursive: true);
+    File(path).writeAsStringSync(keeper_id);
   }
 
   _mapSaveDirPath(
@@ -84,11 +90,13 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var id = await _subscriptionService.addNewKeeper(name, countOfGb);
     if (id != null) {
       _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+      var locationsInfo = _repository.getlocationsInfo;
+      final tmpState = state.copyWith(locationsInfo: locationsInfo);
+      emit(tmpState);
+      add(RunSoft(tmpState, id));
     }
-    var locationsInfo = _repository.getlocationsInfo;
-    final tmpState = state.copyWith(locationsInfo: locationsInfo);
-    emit(tmpState);
 
-    _mapRunSoft(tmpState);
+
+    // _mapRunSoft(tmpState, id);
   }
 }
