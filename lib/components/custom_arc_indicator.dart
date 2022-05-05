@@ -68,6 +68,42 @@ class _CircularArc extends State<CircularArc>
           });
   }
 
+  SvgPicture _smail(double value) {
+    if (value >= 0 && value <= 15) {
+      return SvgPicture.asset(
+        'assets/space_sell/smail_sad.svg',
+      );
+    } else if (value >= 15 && value <= 45) {
+      return SvgPicture.asset(
+        'assets/space_sell/smail_okey.svg',
+      );
+    } else if (value >= 45 && value <= 80) {
+      return SvgPicture.asset(
+        'assets/space_sell/smail_normal.svg',
+      );
+    } else if (value >= 80 && value <= 100) {
+      return SvgPicture.asset(
+        'assets/space_sell/smail_fun.svg',
+      );
+    }
+    return SvgPicture.asset(
+      'assets/space_sell/smail_normal.svg',
+    );
+  }
+
+  Color _colorIndicator(double value) {
+    if (value >= 0 && value <= 15) {
+      return Color(0xFFFFD75E);
+    } else if (value >= 15 && value <= 45) {
+      return Color(0xFF59D7AB);
+    } else if (value >= 45 && value <= 80) {
+      return Theme.of(context).splashColor;
+    } else if (value >= 80 && value <= 100) {
+      return Color(0xFF868FFF);
+    }
+    return Theme.of(context).splashColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,15 +121,11 @@ class _CircularArc extends State<CircularArc>
               //size: Size(100, 100),
               painter: ArcIndicator(
                   isBackGround: false,
-                  color: Theme.of(context).splashColor,
+                  color: _colorIndicator(widget.value),
                   value: (widget.value * 3.14) / 100)),
           Align(
             alignment: FractionalOffset.center,
-            child: SvgPicture.asset(
-              'assets/space_sell/smail_fun.svg',
-              // width: 70,
-              // height: 56,
-            ),
+            child: _smail(widget.value),
           ),
         ],
       ),

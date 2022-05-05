@@ -2235,6 +2235,16 @@ class S {
       args: [],
     );
   }
+
+  /// ` of 100%`
+  String get of_percent {
+    return Intl.message(
+      ' of 100%',
+      name: 'of_percent',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

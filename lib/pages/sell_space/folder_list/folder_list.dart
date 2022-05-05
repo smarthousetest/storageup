@@ -17,17 +17,6 @@ import 'package:flutter_switch/flutter_switch.dart';
 import '../../../components/blur/ceeper_delete_confirm.dart';
 import '../../../models/keeper/keeper.dart';
 
-enum FileOptions {
-  share,
-  move,
-  double, //???
-  toFavorites,
-  download,
-  rename,
-  info,
-  remove,
-}
-
 class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
@@ -65,10 +54,10 @@ class _ButtonTemplateState extends State<FolderList> {
             // shrinkWrap: true,
             // scrollDirection: Axis.vertical,
             children: [
-              state.locationsInfo.isNotEmpty
+              state.localKeeper.isNotEmpty
                   ? _thisKeeper(context, state)
                   : Container(),
-              state.keeper != null && state.keeper!.isNotEmpty
+              state.serverKeeper.isNotEmpty
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: _otherKeeper(context, state),
@@ -112,7 +101,7 @@ class _ButtonTemplateState extends State<FolderList> {
             }
             return GridView.builder(
               shrinkWrap: true,
-              itemCount: state.locationsInfo.length,
+              itemCount: state.localKeeper.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: countOnElementsInRow,
                 mainAxisExtent: 345,
@@ -120,11 +109,10 @@ class _ButtonTemplateState extends State<FolderList> {
                 crossAxisSpacing: 20,
               ),
               itemBuilder: (context, index) {
-                var location = state.locationsInfo[index];
-                //var keeper = state.keeper![index];
+                var keeper = state.localKeeper[index];
                 return _keeperInfo(
                   context,
-                  location,
+                  keeper,
                 );
               },
             );
@@ -136,7 +124,7 @@ class _ButtonTemplateState extends State<FolderList> {
 
   Widget _keeperInfo(
     BuildContext context,
-    DownloadLocation location,
+    Keeper keeper,
   ) {
     return Container(
       width: 354,
@@ -159,7 +147,7 @@ class _ButtonTemplateState extends State<FolderList> {
                 Container(
                   constraints: BoxConstraints(maxWidth: 200),
                   child: Text(
-                    location.name,
+                    keeper.name!,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Theme.of(context).focusColor,
@@ -181,15 +169,14 @@ class _ButtonTemplateState extends State<FolderList> {
                     showArrow: false,
                     horizontalMargin: 10,
                     verticalMargin: 0,
-                    controller: _popupControllers[
-                        state.locationsInfo.indexOf(location)],
+                    controller:
+                        _popupControllers[state.localKeeper.indexOf(keeper)],
                     menuBuilder: () {
                       return KeeperPopupMenuActions(
                         theme: Theme.of(context),
                         translate: translate,
                         onTap: (action) async {
-                          _popupControllers[
-                                  state.locationsInfo.indexOf(location)]
+                          _popupControllers[state.localKeeper.indexOf(keeper)]
                               .hideMenu();
                           if (action == KeeperAction.change) {
                           } else {
@@ -200,11 +187,18 @@ class _ButtonTemplateState extends State<FolderList> {
                               },
                             );
                             if (result) {
+                              late DownloadLocation deleteKeeper;
+                              state.locationsInfo.forEach((element) {
+                                if (element.idForCompare == keeper.id) {
+                                  deleteKeeper = element;
+                                }
+                              });
                               context
                                   .read<FolderListBloc>()
-                                  .add(DeleteLocation(location: location));
-                              setState(() {});
+                                  .add(DeleteLocation(location: deleteKeeper));
                             }
+                            await context.read<FolderListBloc>().stream.first;
+                            setState(() {});
                           }
                         },
                       );
@@ -229,7 +223,7 @@ class _ButtonTemplateState extends State<FolderList> {
               constraints: BoxConstraints(maxWidth: 310),
               padding: const EdgeInsets.only(top: 6),
               child: Text(
-                location.dirPath,
+                keeper.name!,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
@@ -241,8 +235,9 @@ class _ButtonTemplateState extends State<FolderList> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _keeperIndicator(context, location, null),
-                _keeperProperties(context, location),
+                _keeperIndicator(context, keeper),
+                // Spacer(),
+                _keeperProperties(context, keeper),
               ],
             ),
           ],
@@ -251,8 +246,7 @@ class _ButtonTemplateState extends State<FolderList> {
     );
   }
 
-  Widget _keeperIndicator(
-      BuildContext context, DownloadLocation? location, Keeper? keeper) {
+  Widget _keeperIndicator(BuildContext context, Keeper? keeper) {
     return Container(
       width: 140,
       padding: const EdgeInsets.only(left: 20.0, top: 10),
@@ -262,7 +256,7 @@ class _ButtonTemplateState extends State<FolderList> {
             children: [
               Container(
                 child: CircularArc(
-                  value: 80,
+                  value: keeper?.rating?.toDouble() ?? 0,
                 ),
               ),
             ],
@@ -289,7 +283,7 @@ class _ButtonTemplateState extends State<FolderList> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "85%",
+                "${keeper?.rating ?? 0}%",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.headline2?.color,
@@ -298,7 +292,7 @@ class _ButtonTemplateState extends State<FolderList> {
                 ),
               ),
               Text(
-                " из 100%",
+                translate.of_percent,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.subtitle1?.color,
@@ -314,8 +308,10 @@ class _ButtonTemplateState extends State<FolderList> {
               children: [
                 Container(
                   child: PercentArc(
-                    value: 70,
-                  ),
+                      value: 100 /
+                          (keeper!.space! /
+                              (keeper.space! - keeper.availableSpace!)
+                                  .toDouble())),
                 ),
               ],
             ),
@@ -342,7 +338,7 @@ class _ButtonTemplateState extends State<FolderList> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "30Гб",
+                translate.gb((keeper.space! - keeper.availableSpace!)),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.headline2?.color,
@@ -351,7 +347,7 @@ class _ButtonTemplateState extends State<FolderList> {
                 ),
               ),
               Text(
-                " из 100Гб",
+                " из ${translate.gb(keeper.space!)}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.subtitle1?.color,
@@ -366,7 +362,7 @@ class _ButtonTemplateState extends State<FolderList> {
     );
   }
 
-  Widget _keeperProperties(BuildContext context, DownloadLocation location) {
+  Widget _keeperProperties(BuildContext context, Keeper keeper) {
     return Container(
       width: 167,
       padding: const EdgeInsets.only(left: 45.0, top: 15),
@@ -528,7 +524,7 @@ class _ButtonTemplateState extends State<FolderList> {
             }
             return GridView.builder(
               shrinkWrap: true,
-              itemCount: state.keeper?.length,
+              itemCount: state.serverKeeper.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: countOnElementsInRow,
                 mainAxisExtent: 345,
@@ -536,7 +532,7 @@ class _ButtonTemplateState extends State<FolderList> {
                 crossAxisSpacing: 20,
               ),
               itemBuilder: (context, index) {
-                var keeper = state.keeper![index];
+                var keeper = state.serverKeeper[index];
                 return _otherKeeperInfo(context, keeper);
               },
             );
@@ -591,7 +587,7 @@ class _ButtonTemplateState extends State<FolderList> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _keeperIndicator(context, null, keeper),
+                _keeperIndicator(context, keeper),
                 _otherKeeperProperties(context, keeper),
               ],
             ),

@@ -289,8 +289,8 @@ class _SettingsPageState extends State<SettingsPage> {
             pressType: PressType.singleClick,
             barrierColor: Colors.transparent,
             showArrow: false,
-            horizontalMargin: -185,
-            verticalMargin: -100,
+            horizontalMargin: -180,
+            verticalMargin: 0,
             controller: controller,
             menuBuilder: () {
               return SettingsPopupMenuActions(

@@ -245,5 +245,6 @@
     "learn_more": "Learn more",
     "on": "On",
     "off": "Off",
-    "reboot_keeper": "It is possible to restart keeper locally"
+    "reboot_keeper": "It is possible to restart keeper locally",
+    "of_percent": " of 100%"
 }

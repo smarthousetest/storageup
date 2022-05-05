@@ -323,6 +323,59 @@ class FilesService {
     }
   }
 
+  Future<ResponseStatus> setRecentFile(String id, DateTime time) async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+
+      var data = {
+        'accessDate': time,
+      };
+
+      var response = await _dio.post(
+        '/record/$id/accessDateCommit',
+        options: Options(headers: {'Authorization': ' Bearer $token'}),
+        data: data,
+      );
+
+      if (response.statusCode == 200)
+        return ResponseStatus.ok;
+      else
+        return ResponseStatus.failed;
+    } catch (e) {
+      print(e);
+      return ResponseStatus.failed;
+    }
+  }
+
+  Future<List<Record>?> getRecentsRecords() async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+      if (token != null && token.isNotEmpty) {
+        final response = await _dio.get(
+          '/record/recents',
+          options: Options(headers: {'Authorization': ' Bearer $token'}),
+        );
+
+        if (response.statusCode == 200) {
+          //final body = Keeper.fromJson(response);
+          List<Record> recents = [];
+          (response.data as List).forEach((element) {
+            recents.add(Record.fromJson(element));
+          });
+          return recents;
+        }
+        // ResponseList<Record> parsedResponse = ResponseList.fromJson(
+        //   response.data,
+        //   Record.fromJsonModel,
+        // );
+        // return parsedResponse.rows;
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<ResponseStatus> moveToFolder({
     required String folderId,
     List<String>? records,
@@ -507,7 +560,7 @@ class FilesService {
   }
 
   Future<String?> getRemoteAppVersion() async {
-    for(int i = 0; i < 5; i++){
+    for (int i = 0; i < 5; i++) {
       try {
         var response = await _dio.get('http://upstorage.net/apps/version/ui');
         return response.data;

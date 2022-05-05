@@ -218,6 +218,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "notification_re_auth": MessageLookupByLibrary.simpleMessage(
             "Вам нужно снова зайти в аккаунт"),
+        "of_percent": MessageLookupByLibrary.simpleMessage(" из 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Выкл"),
         "offer": MessageLookupByLibrary.simpleMessage(
             "Выгодное предложение - переход на годовую подписку"),

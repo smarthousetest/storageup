@@ -835,19 +835,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     bool checkValidate =
                         list.isEmpty && myController.text.isEmpty == false;
                     return OutlinedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (checkValidate) {
                           print('path null');
                         } else {
+                          var name = myController.text;
+                          countGbSpace = _currentSliderValue.toInt();
+                          context.read<SpaceBloc>().add(SaveDirPath(
+                              pathDir: dirPath,
+                              countGb: countGbSpace,
+                              name: name));
+                          await context.read<SpaceBloc>().stream.first;
                           setState(() {
-                            var name = myController.text;
-                            countGbSpace = _currentSliderValue.toInt();
-                            context.read<SpaceBloc>().add(SaveDirPath(
-                                pathDir: dirPath,
-                                countGb: countGbSpace,
-                                name: name));
                             index = 2;
-                            // context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },
@@ -972,11 +972,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 offset: Offset(1, 4))
           ],
         ),
-        alignment: Alignment.center,
+        //alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: SingleChildScrollView(
           controller: ScrollController(),
-          child: Column(mainAxisSize: MainAxisSize.max, children: [
+          child: Column(children: [
             Row(
               children: [
                 Container(

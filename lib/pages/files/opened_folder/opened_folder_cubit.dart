@@ -570,6 +570,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> fileTapped(Record record) async {
     _repository.addFile(latestFile: record);
+    _filesController.setRecentFile(record, DateTime.now());
     var box = await Hive.openBox(kPathDBName);
     String path = box.get(record.id, defaultValue: '');
 

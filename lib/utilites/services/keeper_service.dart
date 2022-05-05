@@ -29,7 +29,6 @@ class KeeperService {
           (response.data as List).forEach((element) {
             allKeeper.add(Keeper.fromMap(element));
           });
-          print(allKeeper);
           return allKeeper;
         }
       }

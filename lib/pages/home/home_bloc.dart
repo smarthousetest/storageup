@@ -53,6 +53,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
+      var recentsFile = await _filesService.getRecentsRecords();
       String? localAppVersion = _getLocalAppVersion();
       emit(state.copyWith(
         upToDateVersion: remoteAppVersion,
