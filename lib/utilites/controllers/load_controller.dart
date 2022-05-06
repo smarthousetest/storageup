@@ -214,6 +214,7 @@ class LoadController {
     } catch (e, sw) {
       print('_processUploadCallback error: $e \nstack trace: $sw');
       _processNextFileUpload();
+      //попробовать вернуть что-то здесь
     }
   }
 
