@@ -22,7 +22,7 @@
     "wrong_email": "Please enter a valid email",
     "wrong_cred": "Invalid email or password!",
     "wrong_username": "Username must be more than 2 characters",
-    "something_goes_wrong": "Something went wrong. Try again later",
+    "something_goes_wrong": "Something went wrong. Please repeat a little later.",
     "already_registered_email": "User with this Email is already registered",
     "restore_password_before_email": "A letter has been sent to your e-mail ",
     "restore_password_after_email": ", to reset your password, follow the link inside the letter",
@@ -233,5 +233,9 @@
     "we_send": "We have sent an email to",
     "for_confirm": "To confirm, click on the link inside the email.",
     "rename": "Rename",
-    "wrong_filename": "File winth that name already exists."
+    "wrong_filename": "File winth that name already exists.",
+    "error": "Error",
+    "server_connection_error": "The connection to the server cannot be established.",
+    "check_ethernet_connection": "Check your internet connection and try again.",
+    "ok": "Ok"
 }

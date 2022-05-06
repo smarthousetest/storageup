@@ -212,10 +212,16 @@ class FilesService {
         return ResponseStatus.failed;
     } on DioError catch (e) {
       print(e);
-      if (e.response?.statusCode == 403) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.failed;
+      } else if (e.response?.statusCode == 403) {
         return ResponseStatus.notExecuted;
       } else {
-        return ResponseStatus.failed;
+        return ResponseStatus.noInternet;
       }
     }
   }
@@ -247,10 +253,16 @@ class FilesService {
       }
     } on DioError catch (e) {
       print(e);
-      if (e.response?.statusCode == 403) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.failed;
+      } else if (e.response?.statusCode == 403) {
         return ResponseStatus.notExecuted;
       } else {
-        return ResponseStatus.failed;
+        return ResponseStatus.noInternet;
       }
     }
   }
@@ -516,7 +528,7 @@ class FilesService {
   }
 
   Future<String?> getRemoteAppVersion() async {
-    for(int i = 0; i < 5; i++){
+    for (int i = 0; i < 5; i++) {
       try {
         var response = await _dio.get('https://upstorage.net/apps/version/ui');
         return response.data;

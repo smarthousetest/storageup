@@ -280,10 +280,10 @@ class S {
     );
   }
 
-  /// `Something went wrong. Try again later`
+  /// `Something went wrong. Please repeat a little later.`
   String get something_goes_wrong {
     return Intl.message(
-      'Something went wrong. Try again later',
+      'Something went wrong. Please repeat a little later.',
       name: 'something_goes_wrong',
       desc: '',
       args: [],
@@ -2111,6 +2111,46 @@ class S {
     return Intl.message(
       'File winth that name already exists.',
       name: 'wrong_filename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get error {
+    return Intl.message(
+      'Error',
+      name: 'error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The connection to the server cannot be established.`
+  String get server_connection_error {
+    return Intl.message(
+      'The connection to the server cannot be established.',
+      name: 'server_connection_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your internet connection and try again.`
+  String get check_ethernet_connection {
+    return Intl.message(
+      'Check your internet connection and try again.',
+      name: 'check_ethernet_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get ok {
+    return Intl.message(
+      'Ok',
+      name: 'ok',
       desc: '',
       args: [],
     );

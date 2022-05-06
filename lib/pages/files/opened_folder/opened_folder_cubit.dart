@@ -229,7 +229,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     if (direction == SortingDirection.down) {
-      emit(state.copyWith(groupedFiles: groupedFiles));
+      emit(state.copyWith(
+        groupedFiles: groupedFiles,
+        status: FormzStatus.pure,
+      ));
     } else {
       emit(state.copyWith(
         groupedFiles:
@@ -256,9 +259,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       //   return a.size == null ? 0 : 1;
     });
     if (direction == SortingDirection.down) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles.reversed.toList(),
+        status: FormzStatus.pure,
+      ));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles,
+        status: FormzStatus.pure,
+      ));
     }
   }
 
@@ -274,9 +283,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         return a.name == null ? 0 : 1;
     });
     if (direction == SortingDirection.up) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles.reversed.toList(),
+        status: FormzStatus.pure,
+      ));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles,
+        status: FormzStatus.pure,
+      ));
     }
   }
 
@@ -296,9 +311,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //mapSortedFieldChanged(state.search);
 
     if (direction == SortingDirection.down) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles.reversed.toList(),
+        status: FormzStatus.pure,
+      ));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles,
+        status: FormzStatus.pure,
+      ));
     }
   }
 
@@ -310,16 +331,20 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<ResponseStatus?> onActionDeleteChoosed(BaseObject object) async {
-    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([object]);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
-      emit(state.copyWith(responseStatus: result));
+      emit(state.copyWith(
+        responseStatus: result,
+      ));
       return result;
     } else if (result == ResponseStatus.failed) {
-      emit(state.copyWith(responseStatus: result));
+      emit(state.copyWith(
+        responseStatus: result,
+      ));
       return result;
     }
     return result;
@@ -334,7 +359,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else if (result == ResponseStatus.notExecuted) {
       return ErrorType.alreadyExist;
     } else if (result == ResponseStatus.failed) {
-      return ErrorType.noInternet;
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
   }
 
@@ -347,7 +374,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else if (result == ResponseStatus.notExecuted) {
       return ErrorType.alreadyExist;
     } else if (result == ResponseStatus.failed) {
-      return ErrorType.noInternet;
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
   }
 
@@ -393,7 +422,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   // }
 
   void changeRepresentation(FilesRepresentation representation) {
-    emit(state.copyWith(representation: representation));
+    emit(state.copyWith(
+      representation: representation,
+      status: FormzStatus.pure,
+    ));
   }
 
   void setFavorite(BaseObject object) async {
@@ -432,6 +464,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       criterion: criterion,
       direction: direction,
       search: sortText,
+      status: FormzStatus.pure,
     ));
   }
 
@@ -449,6 +482,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
     emit(state.copyWith(
       objects: objects,
+      status: FormzStatus.pure,
     ));
 
     mapFileSortingByCriterion();
@@ -700,7 +734,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       var currentRecord = objects[currentRecordIndex] as Record;
       objects[currentRecordIndex] =
           currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
-      emit(state.copyWith(objects: objects));
+      emit(state.copyWith(
+        objects: objects,
+        status: FormzStatus.pure,
+      ));
     } catch (e) {
       log('OpenFolderCubit -> _setRecordDownloading:', error: e);
     }
