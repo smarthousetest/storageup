@@ -164,7 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
-        "good": MessageLookupByLibrary.simpleMessage("Хорошо"),
+        "good": MessageLookupByLibrary.simpleMessage("Ок"),
         "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
@@ -265,7 +265,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rent": MessageLookupByLibrary.simpleMessage("Сдать"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "Вы можете использовать свободное место на вашем жестком"),
-        "repeat_passsword":
+        "repeat_password":
             MessageLookupByLibrary.simpleMessage("Повторите новый пароль"),
         "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
             " отправлено письмо. Для восстановления пароля перейдите по ссылке внутри письма."),
@@ -331,6 +331,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Мы отправили письмо на почту"),
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
+        "well": MessageLookupByLibrary.simpleMessage("Хорошо"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "пространства, будут удалены без возможности восстановления."),
         "wrong_cred":
