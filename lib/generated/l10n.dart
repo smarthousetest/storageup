@@ -2115,6 +2115,16 @@ class S {
       args: [],
     );
   }
+
+  /// `The file name must not contain the following characters: \/:*?"<>|`
+  String get wrong_symbvols {
+    return Intl.message(
+      'The file name must not contain the following characters: \\/:*?"<>|',
+      name: 'wrong_symbvols',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

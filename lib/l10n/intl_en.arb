@@ -233,5 +233,6 @@
     "we_send": "We have sent an email to",
     "for_confirm": "To confirm, click on the link inside the email.",
     "rename": "Rename",
-    "wrong_filename": "File winth that name already exists."
+    "wrong_filename": "File winth that name already exists.",
+    "wrong_symbvols": "The file name must not contain the following characters: \\/:*?\"<>|"
 }
