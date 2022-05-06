@@ -345,7 +345,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Пароль должен содержать более 8 символов"),
         "wrong_symbvols": MessageLookupByLibrary.simpleMessage(
-            "Имя файла не должно содержать следующих знаков: \\/:*?\"<>|"),
+            "Имя файла не должно содержать следующих знаков: /:*?\"<>|"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Имя пользователя должно содержать более 2 символов"),
         "you_cant_enter": MessageLookupByLibrary.simpleMessage(
