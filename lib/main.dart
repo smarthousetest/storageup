@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,11 +9,13 @@ import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
+import 'constants.dart';
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
 import 'utilites/state_container.dart';
 
 void main() async {
+  writeToFileDomainName();
   await configureInjection();
   runApp(new StateContainer(child: new MyApp()));
 }
@@ -25,10 +29,10 @@ class MyApp extends StatefulWidget {
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
     state?.setLocale(newLocale);
   }
-  // static void setLocale(BuildContext context, Locale newLocale) {
-  //   _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
-  //   state?.setLocale(newLocale);
-  // }
+// static void setLocale(BuildContext context, Locale newLocale) {
+//   _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+//   state?.setLocale(newLocale);
+// }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -39,7 +43,9 @@ class _MyAppState extends State<MyApp> {
       );
     });
   }
+
   Locale? _locale;
+
   setLocale(Locale locale) {
     setState(() {
       _locale = locale;
@@ -90,4 +96,16 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+void writeToFileDomainName() {
+  var os = Platform.isWindows ? Windows() : Linux();
+  if(os.appDirPath.isEmpty){
+    os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
+  }
+  var domainNameFile = File('${os.appDirPath}domainName');
+  if (!domainNameFile.existsSync()) {
+    domainNameFile.createSync(recursive: true);
+  }
+  domainNameFile.writeAsStringSync(domainName);
 }
