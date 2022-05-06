@@ -234,5 +234,5 @@
     "for_confirm": "To confirm, click on the link inside the email.",
     "rename": "Rename",
     "wrong_filename": "File winth that name already exists.",
-    "wrong_symbvols": "The file name must not contain the following characters: \/:*?\"<>|"
+    "wrong_symbvols": "The file name must not contain the following characters: \\/:*?\"<>|"
 }
