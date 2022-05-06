@@ -61,9 +61,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                     padding: const EdgeInsets.fromLTRB(60, 25, 0, 0),
                     child: Container(
                       width: 400,
-                      height: 212,
+                      height: 190,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             translate.rename,
@@ -73,23 +73,25 @@ class _ButtonTemplateState extends State<BlurRename> {
                               color: Theme.of(context).focusColor,
                             ),
                           ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: Text(
-                                translate.wrong_filename,
-                                style: TextStyle(
-                                  fontSize: hintColor ? 0 : 14,
-                                  fontFamily: kNormalTextFontFamily,
-                                  color: hintColor
-                                      ? Colors.white
-                                      : Theme.of(context).errorColor,
-                                ),
+                          Padding(
+                            padding: hintColor
+                                ? EdgeInsets.only(top: 0)
+                                : EdgeInsets.only(top: 20),
+                            child: Text(
+                              translate.wrong_filename,
+                              style: TextStyle(
+                                fontSize: hintColor ? 0 : 14,
+                                fontFamily: kNormalTextFontFamily,
+                                color: hintColor
+                                    ? Colors.white
+                                    : Theme.of(context).errorColor,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 25),
+                            padding: hintColor
+                                ? EdgeInsets.only(top: 42)
+                                : EdgeInsets.only(top: 5),
                             child: Container(
                               width: 400,
                               height: 36,
@@ -104,6 +106,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                                 onChanged: (myController) {
                                   print(myController);
                                   myController = myController.trim();
+
                                   if (myController.isEmpty ||
                                       myController.length < 1) {
                                     setState(() {
@@ -144,7 +147,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 26),
+                            padding: const EdgeInsets.only(top: 25),
                             child: Container(
                               width: 400,
                               child: Row(
