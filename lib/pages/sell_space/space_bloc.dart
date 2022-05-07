@@ -59,25 +59,46 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     keeperLocations.createSync();
     var keeperLocationsSink = keeperLocations.openWrite(mode: FileMode.append);
     state.locationsInfo.forEach((element) {
-      keeperLocationsSink.add('${element.dirPath}|${element.countGb * GB}\n'.codeUnits);
+      keeperLocationsSink.add('${element.dirPath}\n'.codeUnits);
     });
     await keeperLocationsSink.close();
     _writeKeeperId('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt', keeperId);
     var bearerToken = await TokenRepository().getApiToken();
     if (bearerToken != null) {
+
+      _writeKeeperName(state);
+      _writeKeeperMemorySize(state);
+
       os.startProcess('keeper', [
         domainName,
         Uri.encodeFull(state.locationsInfo.last.dirPath),
-        '${state.locationsInfo.last.countGb * GB}',
         bearerToken,
-        Uri.encodeFull(state.locationsInfo.last.name),
       ]);
     }
   }
 
-  void _writeKeeperId(String path, String keeper_id){
-    File(path).createSync(recursive: true);
-    File(path).writeAsStringSync(keeper_id);
+  void _writeKeeperName(SpaceState state){
+    var keeperNameFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
+    if(!keeperNameFile.existsSync()){
+      keeperNameFile.createSync(recursive: true);
+    }
+    keeperNameFile.writeAsStringSync(state.locationsInfo.last.name);
+  }
+
+  void _writeKeeperMemorySize(SpaceState state){
+    var keeperMemorySizeFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
+    if(!keeperMemorySizeFile.existsSync()){
+      keeperMemorySizeFile.createSync(recursive: true);
+    }
+    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+  }
+
+  void _writeKeeperId(String keeperIdFilePath, String keeper_id){
+    var keeperIdFile = File(keeperIdFilePath);
+    if(!keeperIdFile.existsSync()){
+      keeperIdFile.createSync(recursive: true);
+    }
+    keeperIdFile.writeAsStringSync(keeper_id);
   }
 
   _mapSaveDirPath(
