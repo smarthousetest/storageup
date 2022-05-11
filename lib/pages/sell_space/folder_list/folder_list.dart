@@ -113,9 +113,8 @@ class _ButtonTemplateState extends State<FolderList> {
                   itemBuilder: (context, index) {
                     var keeper = state.localKeeper[index];
                     var localPath = state.localPath[index];
-                    // keeperOnOff = keeper.online == 0;
-                    var keeperOnOff = state.sleepStatus;
-                    return _keeperInfo(context, keeper, localPath, keeperOnOff);
+
+                    return _keeperInfo(context, keeper, localPath);
                   },
                 );
               },
@@ -127,7 +126,10 @@ class _ButtonTemplateState extends State<FolderList> {
   }
 
   Widget _keeperInfo(
-      BuildContext context, Keeper keeper, String localPath, bool keeperOnOff) {
+    BuildContext context,
+    Keeper keeper,
+    String localPath,
+  ) {
     return Container(
       width: 354,
       height: 345,
@@ -239,7 +241,7 @@ class _ButtonTemplateState extends State<FolderList> {
               children: [
                 _keeperIndicator(context, keeper),
                 // Spacer(),
-                _keeperProperties(context, keeper, keeperOnOff),
+                _keeperProperties(context, keeper),
               ],
             ),
           ],
@@ -365,7 +367,9 @@ class _ButtonTemplateState extends State<FolderList> {
   }
 
   Widget _keeperProperties(
-      BuildContext context, Keeper keeper, bool keeperOnOff) {
+    BuildContext context,
+    Keeper keeper,
+  ) {
     return Container(
       width: 167,
       padding: const EdgeInsets.only(left: 45.0, top: 15),
@@ -392,7 +396,7 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: keeper.online == 0
+              color: keeper.sleepStatus == false
                   ? Theme.of(context).selectedRowColor
                   : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
@@ -400,11 +404,11 @@ class _ButtonTemplateState extends State<FolderList> {
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                keeper.online == 0
+                keeper.sleepStatus == false
                     ? "• ${translate.active}"
                     : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: keeper.online == 0
+                  color: keeper.sleepStatus == false
                       ? Color(0xFF25B885)
                       : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,
@@ -431,26 +435,34 @@ class _ButtonTemplateState extends State<FolderList> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FlutterSwitch(
-                value: keeperOnOff,
-                height: 20.0,
-                width: 40.0,
-                onToggle: (value) {
-                  setState(() {
-                    context
-                        .read<FolderListBloc>()
-                        .add(SleepStatus(keeper: keeper));
-                  });
+              BlocBuilder<FolderListBloc, FolderListState>(
+                builder: (context, state) {
+                  var valueSwitch = keeper.sleepStatus;
+                  ;
+                  if (valueSwitch != null) {
+                    valueSwitch = !valueSwitch;
+                  }
+
+                  return FlutterSwitch(
+                    value: valueSwitch ?? true,
+                    height: 20.0,
+                    width: 40.0,
+                    onToggle: (_) {
+                      context
+                          .read<FolderListBloc>()
+                          .add(SleepStatus(keeper: keeper));
+                    },
+                    toggleSize: 16,
+                    padding: 2,
+                    activeColor: Theme.of(context).splashColor,
+                    inactiveColor: Theme.of(context).canvasColor,
+                  );
                 },
-                toggleSize: 16,
-                padding: 2,
-                activeColor: Theme.of(context).splashColor,
-                inactiveColor: Theme.of(context).canvasColor,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 5.0),
                 child: Text(
-                  keeper.online == 0 ? translate.on : translate.off,
+                  keeper.sleepStatus == false ? translate.on : translate.off,
                   //textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,

@@ -545,7 +545,11 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         ? state.progress == true
                                             ? _filesGrid()
                                             : _progressIndicator(context)
-                                        : _filesList(context, state),
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            child: _filesList(context, state),
+                                          ),
                                   );
                                 },
                               )
@@ -902,7 +906,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
             scrollDirection: Axis.vertical,
             controller: ScrollController(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 0),
               child: Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),

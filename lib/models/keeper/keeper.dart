@@ -11,6 +11,7 @@ class Keeper extends Equatable {
   final int? space;
   final int? availableSpace;
   final String? dirPath;
+  final bool? sleepStatus;
 
   const Keeper({
     this.id,
@@ -20,6 +21,7 @@ class Keeper extends Equatable {
     this.space,
     this.availableSpace,
     this.dirPath,
+    this.sleepStatus,
   });
 
   factory Keeper.fromMap(Map<String, dynamic> data) => Keeper(
@@ -29,6 +31,7 @@ class Keeper extends Equatable {
         rating: data['rating'] as int?,
         space: data['space'] as int?,
         availableSpace: data['availableSpace'] as int?,
+        sleepStatus: data['sleepStatus'] as bool?,
       );
 
   Map<String, dynamic> toMap() => {
@@ -38,6 +41,7 @@ class Keeper extends Equatable {
         'rating': rating,
         'space': space,
         'availableSpace': availableSpace,
+        'sleepStatus': sleepStatus,
       };
 
   /// `dart:convert`
@@ -60,6 +64,7 @@ class Keeper extends Equatable {
     int? space,
     int? availableSpace,
     String? dirPath,
+    bool? sleepStatus,
   }) {
     return Keeper(
       id: id ?? this.id,
@@ -69,6 +74,7 @@ class Keeper extends Equatable {
       space: space ?? this.space,
       availableSpace: availableSpace ?? this.availableSpace,
       dirPath: dirPath ?? this.dirPath,
+      sleepStatus: sleepStatus ?? this.sleepStatus,
     );
   }
 
@@ -82,6 +88,7 @@ class Keeper extends Equatable {
       space,
       availableSpace,
       dirPath,
+      sleepStatus,
     ];
   }
 }

@@ -101,12 +101,33 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     SleepStatus event,
   ) async {
     var keeperId = event.keeper.id;
-    var sleepStatus;
+
     if (keeperId != null) {
-      sleepStatus = await _keeperService.changeSleepStatus(keeperId);
+      await _keeperService.changeSleepStatus(keeperId);
     }
+
+    var keeper = await _keeperService.getAllKeepers();
+    final locationsInfo = _repository.getlocationsInfo;
+
+    List<Keeper> localKepper = [];
+    List<Keeper> serverKeeper = [];
+    List<String> localPath = [];
+
+    keeper?.forEach((element) {
+      if (locationsInfo.any((info) => info.idForCompare == element.id)) {
+        localKepper.add(element);
+        //// need add dirPath in keeper
+        locationsInfo.forEach((element) {
+          localPath.add(element.dirPath);
+        });
+      } else {
+        serverKeeper.add(element);
+      }
+    });
     emit(state.copyWith(
-      sleepStatus: sleepStatus,
+      localKeeper: localKepper.reversed.toList(),
+      serverKeeper: serverKeeper,
+      localPath: localPath.reversed.toList(),
     ));
   }
 
