@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
-
-import '../../constants.dart';
+import 'package:upstorage_desktop/constants.dart';
 
 @Injectable()
 class KeeperService {
@@ -38,6 +36,7 @@ class KeeperService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<String?> addNewKeeper(String name, int countGb) async {
@@ -79,5 +78,6 @@ class KeeperService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 }

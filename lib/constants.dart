@@ -5,7 +5,7 @@ const int PADDING_SIZE = 30;
 const int HEIGHT_TOP_FIND_BLOCK = 46;
 const int HEIGHT_BOTTOM_BLOCK = 372;
 const kPathDBName = 'file_path_db';
-const kServerUrl = 'https://upstorage.net';
+const kServerUrl = 'https://storageup.net';
 var domainName = kServerUrl.split('//').last;
 //Shared Prefs constants
 const kIsFirstOpeningApp = 'is_first_opening_app';

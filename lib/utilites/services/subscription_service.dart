@@ -34,6 +34,7 @@ class SubscriptionService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<List<Tariff>?> getAllTariffs() async {
@@ -57,6 +58,7 @@ class SubscriptionService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<ResponseStatus?> changeSubscription(String currentSub) async {
@@ -108,5 +110,6 @@ class SubscriptionService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 }

@@ -37,6 +37,7 @@ class FilesService {
       print(e);
       return null;
     }
+    return null;
   }
 
   Future<ResponseStatus?> deleteRecords(List<String> recordsIds) async {
@@ -117,6 +118,7 @@ class FilesService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<Folder?> getFolderById(String id) async {
@@ -137,6 +139,7 @@ class FilesService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<ResponseStatus> createFolder(
@@ -383,6 +386,7 @@ class FilesService {
       print(e);
       return null;
     }
+    return null;
   }
 
   Future<ResponseStatus> moveToFolder({
@@ -489,6 +493,7 @@ class FilesService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<ResponseStatus> deleteProfilePic({

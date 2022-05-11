@@ -5,7 +5,7 @@ import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/models/enums.dart';
+
 
 class MediaState extends Equatable {
   final List<Record> currentFolderRecords;
