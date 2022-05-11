@@ -44,7 +44,8 @@ class DownloadLocationsRepository {
 
   List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
 
-  ValueListenable<Box<DownloadLocation>> get getDownloadLocationsValueListenable => _locationsBox.listenable();
+  ValueListenable<Box<DownloadLocation>>
+      get getDownloadLocationsValueListenable => _locationsBox.listenable();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;

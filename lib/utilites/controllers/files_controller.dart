@@ -60,6 +60,10 @@ class FilesController {
       return _service.setRecordFavorite(object.id, isFavorite);
   }
 
+  Future<ResponseStatus> setRecentFile(BaseObject object, DateTime time) {
+    return _service.setRecentFile(object.id, time);
+  }
+
   Future<Folder?> getAlbum(String id) async {
     var folders = _mediaRepo.getMedia();
     Folder? choosedFolder =
@@ -82,6 +86,10 @@ class FilesController {
 
   Future<ResponseStatus> deleteFolder(String id) {
     return _service.deleteFolder(id);
+  }
+
+  Future<List<Record>?> getRecentFiles() {
+    return _service.getRecentsRecords();
   }
 
   Future<Folder?> getFolderById(String id) async {

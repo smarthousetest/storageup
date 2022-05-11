@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
-import 'package:upstorage_desktop/models/list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
@@ -61,5 +60,24 @@ class KeeperService {
       }
     }
     return null;
+  }
+
+  Future<bool?> changeSleepStatus(String id) async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+
+      var response = await _dio.get(
+        '/keeper/$id/change/sleepStatus',
+        options: Options(headers: {'Authorization': ' Bearer $token'}),
+      );
+
+      if (response.statusCode == 200) {
+        print(response);
+        return response.data['sleepStatus'];
+      } else
+        return response.data;
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -17,6 +17,7 @@ import 'utilites/state_container.dart';
 void main() async {
   writeToFileDomainName();
   await configureInjection();
+  //HttpOverrides.global = MyHttpOverrides();
   runApp(new StateContainer(child: new MyApp()));
 }
 

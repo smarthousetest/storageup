@@ -132,7 +132,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     infoPage = InfoPage();
-    filePage = StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    filePage =
+        StateInfoContainer(child: StateSortedContainer(child: FilePage()));
     likePage = LikePage();
     spaceSellPage = SpaceSellPage();
     financePage = FinancePage();
@@ -461,18 +462,16 @@ class _HomePageState extends State<HomePage> {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ...box.values
-                              .toList()
-                              .reversed
-                              .map((e) => MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        print(e.latestFile.name);
-                                        context.read<HomeBloc>().add(
-                                            FileTapped(record: e.latestFile));
-                                      },
-                                      child: LatestFileView(object: e)))),
+                          ...box.values.toList().take(3).map((e) => MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    print(e.latestFile.name);
+                                    context
+                                        .read<HomeBloc>()
+                                        .add(FileTapped(record: e.latestFile));
+                                  },
+                                  child: LatestFileView(object: e)))),
                         ],
                       );
                     }),

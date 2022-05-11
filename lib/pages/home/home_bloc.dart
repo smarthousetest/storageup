@@ -51,14 +51,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       });
       var remoteAppVersion = await _filesService.getRemoteAppVersion();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
+
+      var recentsFile = await _filesService.getRecentsRecords();
+      if (recentsFile != null) {
+        recentsFile.forEach((element) {
+          _repository.addFile(latestFile: element);
+        });
+      }
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
+
       String? localAppVersion = _getLocalAppVersion();
       emit(state.copyWith(
         upToDateVersion: remoteAppVersion,
         version: localAppVersion,
         latestFile: latestFile,
         objectsValueListenable: listenable,
+        //recentFile: recentsFile,
         //checkLatestFile: checkLatestFile,
       ));
     });

@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  vector_math: any
+
 
   cupertino_icons: ^1.0.4
   intl: ^0.17.0
@@ -21,6 +23,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   formz: ^0.4.1
   equatable: ^2.0.3
+  flutter_switch: ^0.3.2
   dio: ^4.0.6
   get_it: ^7.2.0
   injectable: ^1.5.3
@@ -75,6 +78,7 @@ flutter:
     - assets/file_page/file_options/
     - assets/file_icons/
     - assets/options/
+    - assets/space_sell/
 
   fonts:
     - family: Noto Sans

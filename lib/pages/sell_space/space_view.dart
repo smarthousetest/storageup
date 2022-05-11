@@ -201,7 +201,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     key: ValueKey<int>(index),
                     index: index,
                     children: [
-                      state.locationsInfo.isEmpty || state.keeper.isEmpty
+                      state.locationsInfo.isEmpty
                           ? rentingAPlace(context)
                           : folderList(context),
                       Column(
@@ -835,19 +835,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     bool checkValidate =
                         list.isEmpty && myController.text.isEmpty == false;
                     return OutlinedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (checkValidate) {
                           print('path null');
                         } else {
+                          var name = myController.text;
+                          countGbSpace = _currentSliderValue.toInt();
+                          context.read<SpaceBloc>().add(SaveDirPath(
+                              pathDir: dirPath,
+                              countGb: countGbSpace,
+                              name: name));
+                          await context.read<SpaceBloc>().stream.first;
                           setState(() {
-                            var name = myController.text;
-                            countGbSpace = _currentSliderValue.toInt();
-                            context.read<SpaceBloc>().add(SaveDirPath(
-                                pathDir: dirPath,
-                                countGb: countGbSpace,
-                                name: name));
                             index = 2;
-                            // context.read<SpaceBloc>().add(RunSoft());
                           });
                         }
                       },
@@ -972,62 +972,62 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 offset: Offset(1, 4))
           ],
         ),
-        alignment: Alignment.center,
+        //alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            children: [
-              Container(
-                child: Text(
-                  translate.sell_space,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: Theme.of(context).focusColor,
-                    fontFamily: kNormalTextFontFamily,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 100,
-                child: Container(),
-              ),
-              Container(
-                height: 30,
-                width: 142,
-                child: OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      index = 1;
-                      print(index);
-                    });
-                  },
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    backgroundColor: Theme.of(context).splashColor,
-                  ),
+        child: SingleChildScrollView(
+          controller: ScrollController(),
+          child: Column(children: [
+            Row(
+              children: [
+                Container(
                   child: Text(
-                    translate.add_location,
+                    translate.sell_space,
+                    maxLines: 1,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).focusColor,
                       fontFamily: kNormalTextFontFamily,
-                      fontSize: 14,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-           Padding(
+                Expanded(
+                  flex: 100,
+                  child: Container(),
+                ),
+                Container(
+                  height: 30,
+                  width: 142,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        index = 1;
+                        print(index);
+                      });
+                    },
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: Size(double.maxFinite, 60),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      backgroundColor: Theme.of(context).splashColor,
+                    ),
+                    child: Text(
+                      translate.add_location,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
               padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                children: [FolderList()],
-              ),
-            )
-
-        ]),
+              child: FolderList(),
+            ),
+          ]),
+        ),
       ),
     );
   }

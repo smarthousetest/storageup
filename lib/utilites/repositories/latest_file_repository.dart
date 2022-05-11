@@ -40,10 +40,18 @@ class LatestFileRepository {
     _latestFileBox.watch().listen((event) {
       final key = event.key;
       final value = event.value;
-      //  if(event ){
 
-      //  }
-      _latestFileInfo.add(value);
+      if (_latestFileInfo.any((element) => element.latestFile.id == key)) {
+        final currentLocationInfoIndex = _latestFileInfo
+            .indexWhere((element) => element.latestFile.id == key);
+
+        if (event.deleted)
+          _latestFileInfo.removeAt(currentLocationInfoIndex);
+        else
+          _latestFileInfo[currentLocationInfoIndex] = value;
+      } else {
+        _latestFileInfo.add(value);
+      }
     });
   }
 
@@ -59,18 +67,16 @@ class LatestFileRepository {
   void addFile({
     required Record latestFile,
   }) {
+    //_latestFileBox.clear();
     final latestFileInfo = LatestFile(
       latestFile: latestFile,
     );
 
-    if (_latestFileInfo.isEmpty ||
-        (_latestFileInfo.last.latestFile.id != latestFile.id)) {
-      _latestFileBox.add(
-        latestFileInfo,
-      );
-    }
+    _latestFileBox.add(
+      latestFileInfo,
+    );
 
-    if (_latestFileBox.values.length > 3) {
+    if (_latestFileBox.values.length > 5) {
       deleteFile(id: _latestFileBox.values.toList()[0].key);
     }
   }

@@ -352,30 +352,36 @@ class _SettingsPageState extends State<SettingsPage> {
               pressType: PressType.singleClick,
               barrierColor: Colors.transparent,
               showArrow: false,
-              horizontalMargin: -185,
-              verticalMargin: -100,
+              horizontalMargin: -180,
+              verticalMargin: 0,
               controller: controller,
-              // onTapDown: () {
-              //   setState(() {
-              //     _isClicked = true;
-              //   });
-              // },
               menuBuilder: () {
                 return SettingsPopupMenuActions(
-                  theme: Theme.of(context),
-                  translate: translate,
-                  onTap: (action) {
-                    controller.hideMenu();
-                    //var res;
-                    if (action == AvatarAction.changeAvatar) {
+                    theme: Theme.of(context),
+                    translate: translate,
+                    onTap: (action) async {
                       controller.hideMenu();
-                      // res =
-                      context
-                          .read<SettingsBloc>()
-                          .add(SettingsChangeProfileImage());
-                    }
-                  },
-                );
+
+                      if (action == AvatarAction.changeAvatar) {
+                        controller.hideMenu();
+                        context
+                            .read<SettingsBloc>()
+                            .add(SettingsChangeProfileImage());
+                      } else {
+                        controller.hideMenu();
+                        var result = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return BlurDeletePic();
+                          },
+                        );
+                        if (result) {
+                          context
+                              .read<SettingsBloc>()
+                              .add(SettingsChangeProfileImage());
+                        }
+                      }
+                    });
               },
               child: Padding(
                 padding: const EdgeInsets.only(top: 100, left: 124),

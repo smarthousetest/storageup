@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
@@ -20,13 +21,14 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     on<FolderListEvent>((event, emit) async {
       if (event is FolderListPageOpened) {
         await _mapSpacePageOpened(event, state, emit);
-      }
-      else if (event is DeleteLocation) {
+      } else if (event is DeleteLocation) {
         await _mapDeleteLocation(event, state, emit);
+      } else if (event is SleepStatus) {
+        await _sleepStatusKeeper(emit, state, event);
       }
-
     });
-    on<UpdateLocationsList>((event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
+    on<UpdateLocationsList>(
+        (event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
   }
 
   // final AuthenticationRepository _authenticationRepository =
@@ -34,7 +36,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
 
   UserController _userController = getIt<UserController>();
   late final DownloadLocationsRepository _repository;
-  final KeeperService _subscriptionService = getIt<KeeperService>();
+  final KeeperService _keeperService = getIt<KeeperService>();
 
   Future _mapSpacePageOpened(
     FolderListPageOpened event,
@@ -43,9 +45,33 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   ) async {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
-    var keeper = await _subscriptionService.getAllKeepers();
+    var keeper = await _keeperService.getAllKeepers();
     final locationsInfo = _repository.getlocationsInfo;
-    emit(state.copyWith(user: user, locationsInfo: locationsInfo, keeper: keeper));
+
+    List<Keeper> localKepper = [];
+    List<Keeper> serverKeeper = [];
+    List<String> localPath = [];
+
+    keeper?.forEach((element) {
+      if (locationsInfo.any((info) => info.idForCompare == element.id)) {
+        localKepper.add(element);
+        //// need add dirPath in keeper
+        locationsInfo.forEach((element) {
+          localPath.add(element.dirPath);
+        });
+      } else {
+        serverKeeper.add(element);
+      }
+    });
+
+    emit(state.copyWith(
+      user: user,
+      locationsInfo: locationsInfo,
+      keeper: keeper,
+      localKeeper: localKepper.reversed.toList(),
+      serverKeeper: serverKeeper,
+      localPath: localPath.reversed.toList(),
+    ));
 
     _repository.getDownloadLocationsValueListenable.addListener(_listener);
   }
@@ -53,19 +79,56 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   void _listener() {
     final info = _repository.getlocationsInfo;
 
-    if(!isClosed)
-    add(UpdateLocationsList(locations: info));
+    if (!isClosed) add(UpdateLocationsList(locations: info));
   }
 
-  Future<void> _update(
+  _update(
     Emitter<FolderListState> emit,
     FolderListState state,
   ) async {
     //_repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
 
-    emit(state.copyWith(locationsInfo: locationsInfo));
+    emit(state.copyWith(
+      locationsInfo: locationsInfo,
+    ));
     print('folders was updated');
+  }
+
+  _sleepStatusKeeper(
+    Emitter<FolderListState> emit,
+    FolderListState state,
+    SleepStatus event,
+  ) async {
+    var keeperId = event.keeper.id;
+
+    if (keeperId != null) {
+      await _keeperService.changeSleepStatus(keeperId);
+    }
+
+    var keeper = await _keeperService.getAllKeepers();
+    final locationsInfo = _repository.getlocationsInfo;
+
+    List<Keeper> localKepper = [];
+    List<Keeper> serverKeeper = [];
+    List<String> localPath = [];
+
+    keeper?.forEach((element) {
+      if (locationsInfo.any((info) => info.idForCompare == element.id)) {
+        localKepper.add(element);
+        //// need add dirPath in keeper
+        locationsInfo.forEach((element) {
+          localPath.add(element.dirPath);
+        });
+      } else {
+        serverKeeper.add(element);
+      }
+    });
+    emit(state.copyWith(
+      localKeeper: localKepper.reversed.toList(),
+      serverKeeper: serverKeeper,
+      localPath: localPath.reversed.toList(),
+    ));
   }
 
   _mapDeleteLocation(
@@ -76,13 +139,34 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     var idLocation = event.location.id;
     await _repository.deleteLocation(id: idLocation);
     var updateLocations = _repository.getlocationsInfo;
+    var keeper = await _keeperService.getAllKeepers();
+    List<Keeper> localKepper = [];
+    List<Keeper> serverKeeper = [];
+
+    keeper?.forEach((element) {
+      if (updateLocations.any((info) => info.idForCompare == element.id)) {
+        localKepper.add(element);
+      } else {
+        serverKeeper.add(element);
+      }
+    });
+
     var tmpState = state.copyWith(locationsInfo: updateLocations);
-    emit(state.copyWith(locationsInfo: updateLocations));
+
+    emit(state.copyWith(
+        locationsInfo: updateLocations,
+        localKeeper: localKepper,
+        serverKeeper: serverKeeper));
+
     await _deleteKeeper(event, tmpState, emit);
-    _update(emit, state);
+    //_update(emit, state);
   }
 
-  Future _deleteKeeper(DeleteLocation event, FolderListState state,Emitter<FolderListState> emit,) async {
+  Future _deleteKeeper(
+    DeleteLocation event,
+    FolderListState state,
+    Emitter<FolderListState> emit,
+  ) async {
     String? bearerToken = await TokenRepository().getApiToken();
     var os = (Platform.isWindows) ? Windows() : Linux();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
@@ -96,30 +180,43 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       return;
     }
     String keeperId = '';
-    if (File('${keeperLocations[event.location.id - 1].split('|').first}${Platform.pathSeparator}keeper_id.txt').existsSync()) {
-      keeperId = File('${keeperLocations[event.location.id - 1].split('|').first}${Platform.pathSeparator}keeper_id.txt').readAsStringSync().trim();
+    if (File(
+            '${keeperLocations[event.location.id - 1].split('|').first}${Platform.pathSeparator}keeper_id.txt')
+        .existsSync()) {
+      keeperId = File(
+              '${keeperLocations[event.location.id - 1].split('|').first}${Platform.pathSeparator}keeper_id.txt')
+          .readAsStringSync()
+          .trim();
     }
-    if(bearerToken != null){
+    if (bearerToken != null) {
       await _getKeeperSession(keeperId, dio, bearerToken);
       try {
-        await dio.delete('/keeper', queryParameters: {'ids[]': keeperId}, options: Options(headers: {'Authorization': 'Bearer $bearerToken'}));
+        await dio.delete('/keeper',
+            queryParameters: {'ids[]': keeperId},
+            options:
+                Options(headers: {'Authorization': 'Bearer $bearerToken'}));
       } catch (e) {
         print('Keeper does not exist');
       }
     }
-    if(Directory(keeperLocations[event.location.id - 1].split('|').first).existsSync()) {
-      Directory(keeperLocations[event.location.id - 1].split('|').first).deleteSync(recursive: true);
+    if (Directory(keeperLocations[event.location.id - 1].split('|').first)
+        .existsSync()) {
+      Directory(keeperLocations[event.location.id - 1].split('|').first)
+          .deleteSync(recursive: true);
     }
     if (keeperLocationsFile.existsSync()) {
       keeperLocationsFile.deleteSync();
       keeperLocationsFile.createSync();
     }
-    var keeperLocationsSink = keeperLocationsFile.openWrite(mode: FileMode.append);
-    for(var element in state.locationsInfo) {
-      keeperLocationsSink.add('${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'.codeUnits);
-    };
+    var keeperLocationsSink =
+        keeperLocationsFile.openWrite(mode: FileMode.append);
+    for (var element in state.locationsInfo) {
+      keeperLocationsSink.add(
+          '${element.dirPath}|${element.countGb * (1024 * 1024 * 1024)}\n'
+              .codeUnits);
+    }
+    ;
     await keeperLocationsSink.close();
-
 
     emit(state.copyWith(locationsInfo: _repository.getlocationsInfo));
   }

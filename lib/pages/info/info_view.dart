@@ -129,7 +129,14 @@ class _InfoPageState extends State<InfoPage> {
               // width: 46,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(23),
-                child: state.user.image,
+                child: GestureDetector(
+                    onTap: () {
+                      StateContainer.of(context)
+                          .changePage(ChoosedPage.settings);
+                    },
+                    child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: state.user.image)),
               ),
             ),
           ),
@@ -186,14 +193,15 @@ class _InfoPageState extends State<InfoPage> {
               '${fileSize(allSpaceGb, translate, 0)}',
               style: TextStyle(
                 color: Theme.of(context).bottomAppBarColor,
-                fontSize: 36,
+                fontSize: 28,
                 fontFamily: kNormalTextFontFamily,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 11),
+              padding: const EdgeInsets.only(left: 11, right: 11, top: 10),
               child: Text(
                 'из',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).shadowColor,
                   fontSize: 24,
@@ -205,7 +213,7 @@ class _InfoPageState extends State<InfoPage> {
               translate.gb(currenSub),
               style: TextStyle(
                 color: Theme.of(context).shadowColor,
-                fontSize: 36,
+                fontSize: 28,
                 fontFamily: kNormalTextFontFamily,
               ),
             ),

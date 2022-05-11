@@ -2,29 +2,20 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
+import 'package:upstorage_desktop/components/custom_arc_indicator.dart';
+import 'package:upstorage_desktop/components/custom_percent_indicator.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/components/custom_progress_bar.dart';
-import 'package:upstorage_desktop/components/blur/ceeper_delete_confirm.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
-enum FileOptions {
-  share,
-  move,
-  double,
-  toFavorites,
-  download,
-  rename,
-  info,
-  remove,
-}
+import '../../../components/blur/ceeper_delete_confirm.dart';
+import '../../../models/keeper/keeper.dart';
 
 class FolderList extends StatefulWidget {
   @override
@@ -36,7 +27,7 @@ class FolderList extends StatefulWidget {
 class _ButtonTemplateState extends State<FolderList> {
   // List<bool> ifFavoritesPressedList = [];
   // List<bool> isPopupMenuButtonClicked = [];
-  List<DownloadLocation> locationsInfo = [];
+  List<Keeper> locationsInfo = [];
   List<CustomPopupMenuController> _popupControllers = [];
   void _initiatingControllers(FolderListState state) {
     if (_popupControllers.isEmpty) {
@@ -46,252 +37,709 @@ class _ButtonTemplateState extends State<FolderList> {
     }
   }
 
+  var controller = CustomPopupMenuController();
+
+  S translate = getIt<S>();
+
   @override
   Widget build(BuildContext context) {
-    TextStyle style = TextStyle(
-      color: Theme.of(context).textTheme.subtitle1?.color,
-      fontSize: 14,
-      fontWeight: FontWeight.w700,
-      fontFamily: kNormalTextFontFamily,
-    );
-    TextStyle cellTextStyle = TextStyle(
-      color: Theme.of(context).textTheme.subtitle1?.color,
-      fontSize: 14,
-      fontFamily: kNormalTextFontFamily,
-    );
-    S translate = getIt<S>();
-
     return BlocProvider(
-      create: (context) => FolderListBloc()..add(FolderListPageOpened()),
-      child: BlocBuilder<FolderListBloc, FolderListState>(
-        builder: (context, state) {
-          locationsInfo = state.locationsInfo;
-          return LayoutBuilder(
-            builder: (context, constraints) => Column(
+        create: (context) => FolderListBloc()..add(FolderListPageOpened()),
+        child: BlocBuilder<FolderListBloc, FolderListState>(
+            builder: (context, state) {
+          _initiatingControllers(state);
+          locationsInfo = state.localKeeper;
+          return Column(
+            // controller: ScrollController(),
+            // shrinkWrap: true,
+            // scrollDirection: Axis.vertical,
+            children: [
+              state.localKeeper.isNotEmpty
+                  ? _thisKeeper(context, state)
+                  : Container(),
+              state.serverKeeper.isNotEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: _otherKeeper(context, state),
+                    )
+                  : Container(),
+            ],
+          );
+        }));
+  }
+
+  Widget _thisKeeper(
+    BuildContext context,
+    FolderListState state,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          child: Text(
+            translate.this_computer,
+            maxLines: 1,
+            style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        LayoutBuilder(
+          builder: (context, constrains) {
+            var countOnElementsInRow = constrains.maxWidth ~/ 354;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
+            final actualElementsWidth = countOnElementsInRow * 354;
+            if (actualElementsWidth > elementsWidthWithoutSpacing) {
+              countOnElementsInRow--;
+            }
+            return BlocBuilder<FolderListBloc, FolderListState>(
+              builder: (context, state) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.localKeeper.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: countOnElementsInRow,
+                    mainAxisExtent: 345,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                  ),
+                  itemBuilder: (context, index) {
+                    var keeper = state.localKeeper[index];
+                    var localPath = state.localPath[index];
+
+                    return _keeperInfo(context, keeper, localPath);
+                  },
+                );
+              },
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _keeperInfo(
+    BuildContext context,
+    Keeper keeper,
+    String localPath,
+  ) {
+    return Container(
+      width: 354,
+      height: 345,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 2,
+        ),
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  constraints: BoxConstraints(maxWidth: 200),
+                  child: Text(
+                    keeper.name!,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).focusColor,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                Spacer(),
+                BlocBuilder<FolderListBloc, FolderListState>(
+                    builder: (context, state) {
+                  if (state.localKeeper.length != _popupControllers.length) {
+                    final controller = CustomPopupMenuController();
+                    _popupControllers.add(controller);
+                  }
+                  return CustomPopupMenu(
+                    pressType: PressType.singleClick,
+                    barrierColor: Colors.transparent,
+                    showArrow: false,
+                    horizontalMargin: 10,
+                    verticalMargin: 0,
+                    controller:
+                        _popupControllers[state.localKeeper.indexOf(keeper)],
+                    menuBuilder: () {
+                      return KeeperPopupMenuActions(
+                        theme: Theme.of(context),
+                        translate: translate,
+                        onTap: (action) async {
+                          _popupControllers[state.localKeeper.indexOf(keeper)]
+                              .hideMenu();
+                          if (action == KeeperAction.change) {
+                          } else {
+                            var result = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return BlurDeleteKeeper();
+                              },
+                            );
+                            if (result) {
+                              late DownloadLocation deleteKeeper;
+                              state.locationsInfo.forEach((element) {
+                                if (element.idForCompare == keeper.id) {
+                                  deleteKeeper = element;
+                                }
+                              });
+                              context
+                                  .read<FolderListBloc>()
+                                  .add(DeleteLocation(location: deleteKeeper));
+                            }
+                            await context.read<FolderListBloc>().stream.first;
+                            setState(() {});
+                          }
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 29,
+                      width: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/space_sell/dots.svg',
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+            Container(
+              constraints: BoxConstraints(maxWidth: 310),
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(
+                localPath,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: DataTable(
-                      columnSpacing: 0,
-                      horizontalMargin: 0,
-                      columns: [
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.05,
-                            child: Text(
-                              translate.name,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.45,
-                            child: Text(
-                              translate.path,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.05,
-                            child: Text(
-                              translate.size,
-                              overflow: TextOverflow.visible,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.05,
-                            child: Text(
-                              translate.date,
-                              overflow: TextOverflow.visible,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Container(
-                            width: constraints.maxWidth * 0.1,
-                            child: Text(
-                              translate.trust_level,
-                              overflow: TextOverflow.visible,
-                              style: style,
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: locationsInfo.map((element) {
-                        _initiatingControllers(state);
-                        // var controller =
-                        //     CustomPopupMenuController();
-                        if (state.locationsInfo.length >
-                            _popupControllers.length) {
-                          _popupControllers = [];
-                          _initiatingControllers(state);
-                        }
+                _keeperIndicator(context, keeper),
+                // Spacer(),
+                _keeperProperties(context, keeper),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-                        final indexOfElement = locationsInfo.indexOf(element);
-                        return DataRow.byIndex(
-                          index: locationsInfo.indexOf(element),
-                          cells: [
-                            DataCell(
-                              SizedBox(
-                                width: constraints.maxWidth * 0.07,
-                                child: Text(
-                                  element.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: cellTextStyle,
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: constraints.maxWidth * 0.4,
-                                    child: Text(
-                                      element.dirPath,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: cellTextStyle,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  Text(
-                                    translate.gb(element.countGb),
-                                    maxLines: 1,
-                                    style: cellTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  Text(
-                                    DateFormat.yMd().format(DateTime.now()),
-                                    //widget.keeperInfo[index].dateTime,
-                                    maxLines: 1,
-                                    style: cellTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            DataCell(
-                              Theme(
-                                data: Theme.of(context).copyWith(
-                                  hoverColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '70',
-                                      //'${widget.keeperInfo[index].trustLevel}%',
-                                      maxLines: 1,
-                                      style: cellTextStyle,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5, right: 20),
-                                      child: SizedBox(
-                                        width: 100,
-                                        child: MyProgressBar(
-                                          bgColor:
-                                              Theme.of(context).dividerColor,
-                                          color: Theme.of(context).splashColor,
-                                          percent: 70,
-                                          // (widget.keeperInfo[index].trustLevel)!
-                                          //     .toDouble(),
-                                        ),
-                                      ),
-                                    ),
-                                    // Expanded(
-                                    //   flex: 1,
-                                    //   child: Container(),
-                                    // ),
-
-                                    CustomPopupMenu(
-                                      pressType: PressType.singleClick,
-                                      barrierColor: Colors.transparent,
-                                      showArrow: false,
-                                      horizontalMargin: 10,
-                                      verticalMargin: 0,
-                                      controller:
-                                          _popupControllers[indexOfElement],
-                                      menuBuilder: () {
-                                        return KeeperPopupMenuActions(
-                                          theme: Theme.of(context),
-                                          translate: translate,
-                                          onTap: (action) async {
-                                            _popupControllers[indexOfElement]
-                                                .hideMenu();
-                                            if (action == KeeperAction.change) {
-                                            } else {
-                                              _popupControllers[state
-                                                      .locationsInfo
-                                                      .indexOf(element)]
-                                                  .hideMenu();
-                                              var result = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurDeleteKeeper();
-                                                },
-                                              );
-                                              if (result) {
-                                                context
-                                                    .read<FolderListBloc>()
-                                                    .add(DeleteLocation(
-                                                        location: element));
-                                                setState(() {});
-                                              }
-                                              // context
-                                              // .read<FolderListBloc>()
-                                              // .add(DeleteLocation(
-                                              // location: element));
-                                              // setState(() {});
-                                            }
-                                          },
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/file_page/three_dots.svg',
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList()),
+  Widget _keeperIndicator(BuildContext context, Keeper? keeper) {
+    return Container(
+      width: 140,
+      padding: const EdgeInsets.only(left: 20.0, top: 10),
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Container(
+                child: CircularArc(
+                  value: keeper?.rating?.toDouble() ?? 0,
+                ),
+              ),
+            ],
+          ),
+          // SizedBox(
+          //   height: 5,
+          // ),
+          Align(
+            alignment: FractionalOffset.center,
+            child: Text(
+              translate.level_of_confidence,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "${keeper?.rating ?? 0}%",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.headline2?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                translate.of_percent,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.subtitle1?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Stack(
+              children: [
+                Container(
+                  child: PercentArc(
+                      value: 100 /
+                          (keeper!.space! /
+                              (keeper.space! - keeper.availableSpace!)
+                                  .toDouble())),
                 ),
               ],
             ),
-          );
-        },
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Align(
+            alignment: FractionalOffset.center,
+            child: Text(
+              translate.space,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                translate.gb((keeper.space! - keeper.availableSpace!)),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.headline2?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                " из ${translate.gb(keeper.space!)}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.subtitle1?.color,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _keeperProperties(
+    BuildContext context,
+    Keeper keeper,
+  ) {
+    return Container(
+      width: 167,
+      padding: const EdgeInsets.only(left: 45.0, top: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+            alignment: FractionalOffset.centerLeft,
+            child: Text(
+              translate.downloating,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: 98,
+            height: 28,
+            decoration: BoxDecoration(
+              color: keeper.sleepStatus == false
+                  ? Theme.of(context).selectedRowColor
+                  : Color(0xFFFFE0DE),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                keeper.sleepStatus == false
+                    ? "• ${translate.active}"
+                    : "• ${translate.inactive}",
+                style: TextStyle(
+                  color: keeper.sleepStatus == false
+                      ? Color(0xFF25B885)
+                      : Theme.of(context).indicatorColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            translate.loading,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              BlocBuilder<FolderListBloc, FolderListState>(
+                builder: (context, state) {
+                  var valueSwitch = keeper.sleepStatus;
+                  ;
+                  if (valueSwitch != null) {
+                    valueSwitch = !valueSwitch;
+                  }
+
+                  return FlutterSwitch(
+                    value: valueSwitch ?? true,
+                    height: 20.0,
+                    width: 40.0,
+                    onToggle: (_) {
+                      context
+                          .read<FolderListBloc>()
+                          .add(SleepStatus(keeper: keeper));
+                    },
+                    toggleSize: 16,
+                    padding: 2,
+                    activeColor: Theme.of(context).splashColor,
+                    inactiveColor: Theme.of(context).canvasColor,
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: Text(
+                  keeper.sleepStatus == false ? translate.on : translate.off,
+                  //textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).disabledColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            translate.ern_pay_day,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            "0 Р",
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).textTheme.headline2?.color,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 30,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            translate.learn_more,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).splashColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _otherKeeper(
+    BuildContext context,
+    FolderListState state,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          child: Text(
+            translate.other_computers,
+            maxLines: 1,
+            style: TextStyle(
+              color: Theme.of(context).focusColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        LayoutBuilder(
+          builder: (context, constrains) {
+            var countOnElementsInRow = constrains.maxWidth ~/ 354;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
+            final actualElementsWidth = countOnElementsInRow * 354;
+            if (actualElementsWidth > elementsWidthWithoutSpacing) {
+              countOnElementsInRow--;
+            }
+            return GridView.builder(
+              shrinkWrap: true,
+              itemCount: state.serverKeeper.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: countOnElementsInRow,
+                mainAxisExtent: 345,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
+              ),
+              itemBuilder: (context, index) {
+                var keeper = state.serverKeeper[index];
+                return _otherKeeperInfo(context, keeper);
+              },
+            );
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _otherKeeperInfo(BuildContext context, Keeper keeper) {
+    return Container(
+      width: 354,
+      height: 345,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).dividerColor,
+          width: 2,
+        ),
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20.0, left: 20, bottom: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              constraints: BoxConstraints(maxWidth: 200),
+              child: Text(
+                keeper.name!,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _keeperIndicator(context, keeper),
+                _otherKeeperProperties(context, keeper),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _otherKeeperProperties(BuildContext context, Keeper keeper) {
+    return Container(
+      width: 190,
+      padding: const EdgeInsets.only(left: 45.0, top: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Align(
+            alignment: FractionalOffset.centerLeft,
+            child: Text(
+              translate.downloating,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Theme.of(context).disabledColor,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: 98,
+            height: 28,
+            decoration: BoxDecoration(
+              color: Theme.of(context).selectedRowColor,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "• ${translate.active}",
+                style: TextStyle(
+                  color: Color(0xFF25B885),
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            translate.loading,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: 119,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: Theme.of(context).canvasColor,
+                width: 1.5,
+              ),
+            ),
+            child: Center(
+                child: Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/space_sell/refresh.svg',
+                ),
+                Text(
+                  translate.reboot,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Theme.of(context).canvasColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            )),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Text(
+            translate.ern_pay_day,
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).disabledColor,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            "0 Р",
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).textTheme.headline2?.color,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 30,
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            translate.reboot_keeper,
+            maxLines: 2,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontFamily: kNormalTextFontFamily,
+              fontSize: 14,
+            ),
+          ),
+        ],
       ),
     );
   }
