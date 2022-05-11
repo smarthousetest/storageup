@@ -14,9 +14,8 @@ import 'package:upstorage_desktop/utilites/autoupload/models/download_location.d
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-
-import '../../../components/blur/ceeper_delete_confirm.dart';
-import '../../../models/keeper/keeper.dart';
+import 'package:upstorage_desktop/components/blur/ceeper_delete_confirm.dart';
+import 'package:upstorage_desktop/models/keeper/keeper.dart';
 
 class FolderList extends StatefulWidget {
   @override
@@ -339,28 +338,33 @@ class _ButtonTemplateState extends State<FolderList> {
           SizedBox(
             height: 5,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                fileSize(keeper.space! - keeper.availableSpace!, translate),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.headline2?.color,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 16,
+          Container(
+            constraints: BoxConstraints(maxWidth: 300),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  fileSize(1/*keeper.space! - *//*keeper.availableSpace! / GB*/, translate),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.headline2?.color,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              Text(
-                " из ${fileSize(keeper.space!, translate)}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).textTheme.subtitle1?.color,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 16,
+                Text(
+                  " из ${fileSize(keeper.space!, translate)}",
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.subtitle1?.color,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
