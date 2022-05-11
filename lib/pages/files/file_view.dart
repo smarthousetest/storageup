@@ -440,7 +440,7 @@ class _FilePageState extends State<FilePage> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: Text(
-                                    state.user?.firstName ?? '',
+                                    state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 17,
@@ -450,7 +450,7 @@ class _FilePageState extends State<FilePage> {
                                   ),
                                 ),
                                 Text(
-                                  state.user?.email ?? '',
+                                  state.user?.email ?? 'email',
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 12,
