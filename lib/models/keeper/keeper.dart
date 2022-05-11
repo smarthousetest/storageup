@@ -10,6 +10,7 @@ class Keeper extends Equatable {
   final int? rating;
   final int? space;
   final int? availableSpace;
+  final String? dirPath;
 
   const Keeper({
     this.id,
@@ -18,6 +19,7 @@ class Keeper extends Equatable {
     this.rating,
     this.space,
     this.availableSpace,
+    this.dirPath,
   });
 
   factory Keeper.fromMap(Map<String, dynamic> data) => Keeper(
@@ -57,6 +59,7 @@ class Keeper extends Equatable {
     int? rating,
     int? space,
     int? availableSpace,
+    String? dirPath,
   }) {
     return Keeper(
       id: id ?? this.id,
@@ -65,6 +68,7 @@ class Keeper extends Equatable {
       rating: rating ?? this.rating,
       space: space ?? this.space,
       availableSpace: availableSpace ?? this.availableSpace,
+      dirPath: dirPath ?? this.dirPath,
     );
   }
 
@@ -77,6 +81,7 @@ class Keeper extends Equatable {
       rating,
       space,
       availableSpace,
+      dirPath,
     ];
   }
 }

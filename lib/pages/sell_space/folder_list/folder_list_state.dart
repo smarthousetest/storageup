@@ -9,6 +9,8 @@ class FolderListState extends Equatable {
   final List<Keeper>? keeper;
   final List<Keeper> localKeeper;
   final List<Keeper> serverKeeper;
+  final List<String> localPath;
+  final bool sleepStatus;
 
   FolderListState({
     this.user,
@@ -16,6 +18,8 @@ class FolderListState extends Equatable {
     this.keeper,
     this.localKeeper = const [],
     this.serverKeeper = const [],
+    this.localPath = const [],
+    this.sleepStatus = true,
   });
 
   FolderListState copyWith({
@@ -24,6 +28,8 @@ class FolderListState extends Equatable {
     List<Keeper>? keeper,
     List<Keeper>? localKeeper,
     List<Keeper>? serverKeeper,
+    List<String>? localPath,
+    bool? sleepStatus,
   }) {
     return FolderListState(
       user: user ?? this.user,
@@ -31,6 +37,8 @@ class FolderListState extends Equatable {
       keeper: keeper ?? this.keeper,
       localKeeper: localKeeper ?? this.localKeeper,
       serverKeeper: serverKeeper ?? this.serverKeeper,
+      localPath: localPath ?? this.localPath,
+      sleepStatus: sleepStatus ?? this.sleepStatus,
     );
   }
 
@@ -41,5 +49,7 @@ class FolderListState extends Equatable {
         keeper,
         localKeeper,
         serverKeeper,
+        localPath,
+        sleepStatus,
       ];
 }

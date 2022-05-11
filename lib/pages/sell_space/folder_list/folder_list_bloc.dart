@@ -23,6 +23,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         await _mapSpacePageOpened(event, state, emit);
       } else if (event is DeleteLocation) {
         await _mapDeleteLocation(event, state, emit);
+      } else if (event is SleepStatus) {
+        await _sleepStatusKeeper(emit, state, event);
       }
     });
     on<UpdateLocationsList>(
@@ -34,7 +36,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
 
   UserController _userController = getIt<UserController>();
   late final DownloadLocationsRepository _repository;
-  final KeeperService _subscriptionService = getIt<KeeperService>();
+  final KeeperService _keeperService = getIt<KeeperService>();
 
   Future _mapSpacePageOpened(
     FolderListPageOpened event,
@@ -43,25 +45,33 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   ) async {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
-    var keeper = await _subscriptionService.getAllKeepers();
+    var keeper = await _keeperService.getAllKeepers();
     final locationsInfo = _repository.getlocationsInfo;
 
     List<Keeper> localKepper = [];
     List<Keeper> serverKeeper = [];
+    List<String> localPath = [];
 
     keeper?.forEach((element) {
       if (locationsInfo.any((info) => info.idForCompare == element.id)) {
         localKepper.add(element);
+        //// need add dirPath in keeper
+        locationsInfo.forEach((element) {
+          localPath.add(element.dirPath);
+        });
       } else {
         serverKeeper.add(element);
       }
     });
+
     emit(state.copyWith(
-        user: user,
-        locationsInfo: locationsInfo,
-        keeper: keeper,
-        localKeeper: localKepper,
-        serverKeeper: serverKeeper));
+      user: user,
+      locationsInfo: locationsInfo,
+      keeper: keeper,
+      localKeeper: localKepper.reversed.toList(),
+      serverKeeper: serverKeeper,
+      localPath: localPath.reversed.toList(),
+    ));
 
     _repository.getDownloadLocationsValueListenable.addListener(_listener);
   }
@@ -85,6 +95,21 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     print('folders was updated');
   }
 
+  _sleepStatusKeeper(
+    Emitter<FolderListState> emit,
+    FolderListState state,
+    SleepStatus event,
+  ) async {
+    var keeperId = event.keeper.id;
+    var sleepStatus;
+    if (keeperId != null) {
+      sleepStatus = await _keeperService.changeSleepStatus(keeperId);
+    }
+    emit(state.copyWith(
+      sleepStatus: sleepStatus,
+    ));
+  }
+
   _mapDeleteLocation(
     DeleteLocation event,
     FolderListState state,
@@ -93,7 +118,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     var idLocation = event.location.id;
     await _repository.deleteLocation(id: idLocation);
     var updateLocations = _repository.getlocationsInfo;
-    var keeper = await _subscriptionService.getAllKeepers();
+    var keeper = await _keeperService.getAllKeepers();
     List<Keeper> localKepper = [];
     List<Keeper> serverKeeper = [];
 
@@ -113,7 +138,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         serverKeeper: serverKeeper));
 
     await _deleteKeeper(event, tmpState, emit);
-    _update(emit, state);
+    //_update(emit, state);
   }
 
   Future _deleteKeeper(

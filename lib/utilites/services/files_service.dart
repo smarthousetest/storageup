@@ -328,7 +328,7 @@ class FilesService {
       String? token = await _tokenRepository.getApiToken();
 
       var data = {
-        'accessDate': time,
+        'accessDate': time.toString(),
       };
 
       var response = await _dio.post(

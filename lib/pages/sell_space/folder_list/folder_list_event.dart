@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
 abstract class FolderListEvent extends Equatable {
@@ -18,6 +19,11 @@ abstract class FolderListEvent extends Equatable {
 
 class FolderListPageOpened extends FolderListEvent {
   const FolderListPageOpened();
+}
+
+class SleepStatus extends FolderListEvent {
+  Keeper keeper;
+  SleepStatus({required this.keeper});
 }
 
 class DeleteLocation extends FolderListEvent {

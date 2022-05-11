@@ -865,6 +865,23 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
+  Color _getDataRowColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+      MaterialState.error,
+      MaterialState.scrolledUnder,
+      MaterialState.selected,
+    };
+
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    //return Colors.green; // Use the default value.
+    return Colors.transparent;
+  }
+
   Widget _filesList(BuildContext context, MediaState state) {
     TextStyle style = TextStyle(
       color: Theme.of(context).textTheme.subtitle1?.color,
@@ -890,8 +907,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: DataTable(
-                  columnSpacing: 25,
+                  columnSpacing: 0,
                   showCheckboxColumn: false,
+                  dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+                      _getDataRowColor),
                   columns: [
                     DataColumn(
                       label: Container(
@@ -904,7 +923,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                     ),
                     DataColumn(
                       label: Container(
-                        width: constraints.maxWidth * 0.06,
+                        width: constraints.maxWidth * 0.15,
                         child: Text(
                           translate.format,
                           style: style,
@@ -913,7 +932,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                     ),
                     DataColumn(
                       label: Container(
-                        width: constraints.maxWidth * 0.05,
+                        width: constraints.maxWidth * 0.15,
                         child: Text(
                           translate.date,
                           style: style,
@@ -922,7 +941,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                     ),
                     DataColumn(
                       label: Container(
-                        width: constraints.maxWidth * 0.06,
+                        width: constraints.maxWidth * 0.1,
                         child: Text(
                           translate.size,
                           style: style,
@@ -931,9 +950,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                     ),
                     DataColumn(
                       label: Container(
-                        width: constraints.maxWidth * 0.001,
+                        width: constraints.maxWidth * 0.1,
                         child: SizedBox(
-                          width: constraints.maxWidth * 0.001,
+                          width: constraints.maxWidth * 0.1,
                         ),
                       ),
                     ),
@@ -995,30 +1014,36 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                     width: 15,
                                   ),
                                   Expanded(
-                                    child: Text(
-                                      e.name ?? '',
-                                      style: cellTextStyle,
-                                      overflow: TextOverflow.ellipsis,
+                                    child: Container(
+                                      width: constraints.maxWidth * 0.3,
+                                      child: Text(
+                                        e.name ?? '',
+                                        style: cellTextStyle,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ),
                                   // Spacer(),
-                                  BlocBuilder<MediaCubit, MediaState>(
-                                    builder: (context, state) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .read<MediaCubit>()
-                                              .setFavorite(e);
-                                        },
-                                        child: Image.asset(
-                                          e.favorite
-                                              ? 'assets/file_page/favorite.png'
-                                              : 'assets/file_page/not_favorite.png',
-                                          height: 18,
-                                          width: 18,
-                                        ),
-                                      );
-                                    },
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10.0),
+                                    child: BlocBuilder<MediaCubit, MediaState>(
+                                      builder: (context, state) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            context
+                                                .read<MediaCubit>()
+                                                .setFavorite(e);
+                                          },
+                                          child: Image.asset(
+                                            e.favorite
+                                                ? 'assets/file_page/favorite.png'
+                                                : 'assets/file_page/not_favorite.png',
+                                            height: 18,
+                                            width: 18,
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   )
                                 ],
                               ),
@@ -1026,9 +1051,15 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           ),
                         ),
                         DataCell(
-                          Text(
-                            type.isEmpty ? translate.foldr : type.toUpperCase(),
-                            style: cellTextStyle,
+                          Container(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              type.isEmpty
+                                  ? translate.foldr
+                                  : type.toUpperCase(),
+                              overflow: TextOverflow.ellipsis,
+                              style: cellTextStyle,
+                            ),
                           ),
                         ),
                         DataCell(
@@ -1040,6 +1071,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                         DataCell(
                           Text(
                             fileSize(e.size, translate, 1),
+                            maxLines: 1,
                             style: cellTextStyle,
                           ),
                         ),

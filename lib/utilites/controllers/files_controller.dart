@@ -88,6 +88,10 @@ class FilesController {
     return _service.deleteFolder(id);
   }
 
+  Future<List<Record>?> getRecentFiles() {
+    return _service.getRecentsRecords();
+  }
+
   Future<Folder?> getFolderById(String id) async {
     return _service.getFolderById(id);
   }
