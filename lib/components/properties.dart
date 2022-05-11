@@ -1,5 +1,4 @@
 import 'package:file_typification/file_typification.dart';
-import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -169,16 +168,15 @@ class _ButtonTemplateState extends State<FileInfoView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
-                          child: Center(
-                            child: Text(
-                              widget.object?.name ?? '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Theme.of(context).disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17,
-                              ),
+                          child: Text(
+                            widget.object?.name ?? '',
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Theme.of(context).disabledColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 17,
                             ),
                           ),
                         ),

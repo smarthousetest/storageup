@@ -279,7 +279,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rent": MessageLookupByLibrary.simpleMessage("Rent"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "You can use free space on your hard"),
-        "repeat_passsword":
+        "repeat_password":
             MessageLookupByLibrary.simpleMessage("Repeat new password"),
         "restart_keeper":
             MessageLookupByLibrary.simpleMessage("You need to restart keeper"),

@@ -117,6 +117,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       if (locationsInfo.any((info) => info.idForCompare == element.id)) {
         localKepper.add(element);
         //// need add dirPath in keeper
+
         locationsInfo.forEach((element) {
           localPath.add(element.dirPath);
         });
@@ -155,7 +156,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
 
     emit(state.copyWith(
         locationsInfo: updateLocations,
-        localKeeper: localKepper,
+        localKeeper: localKepper.reversed.toList(),
         serverKeeper: serverKeeper));
 
     await _deleteKeeper(event, tmpState, emit);

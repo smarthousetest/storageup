@@ -297,7 +297,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                               .headline1
                                               ?.color,
                                           fontFamily: kNormalTextFontFamily,
-                                          fontSize: 15,
+                                          fontSize: 14,
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius:
@@ -392,7 +392,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                                 .headline1
                                                 ?.color,
                                             fontFamily: kNormalTextFontFamily,
-                                            fontSize: 15,
+                                            fontSize: 14,
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:

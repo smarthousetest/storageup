@@ -281,7 +281,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "rent": MessageLookupByLibrary.simpleMessage("Сдать"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "Вы можете использовать свободное место на вашем жестком"),
-        "repeat_passsword":
+        "repeat_password":
             MessageLookupByLibrary.simpleMessage("Повторите новый пароль"),
         "restart_keeper": MessageLookupByLibrary.simpleMessage(
             "Необходимо перезапустить кипер"),

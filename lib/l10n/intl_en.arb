@@ -100,7 +100,7 @@
     "new_password_8": "The new password must be at least 8 characters long",
     "passwords_dont_match": "Passwords don't match",
     "new_password": "New password",
-    "repeat_passsword": "Repeat new password",
+    "repeat_password": "Repeat new password",
     "old_password": "Enter your old password",
     "accaunt_deleting": "Account deleting",
     "permanently_delete": "Are you sure you want to permanently delete your account",

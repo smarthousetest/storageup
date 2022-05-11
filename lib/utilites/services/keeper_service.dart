@@ -41,7 +41,7 @@ class KeeperService {
   }
 
   Future<String?> addNewKeeper(String name, int countGb) async {
-    for(int i = 0; i < 5; i++){
+    for (int i = 0; i < 5; i++) {
       try {
         String? token = await _tokenRepository.getApiToken();
         var response = await _dio.post(
@@ -54,7 +54,7 @@ class KeeperService {
             }
           },
         );
-          return response.data['id'];
+        return response.data['id'];
       } on DioError catch (e) {
         print(e);
       }

@@ -11,6 +11,7 @@ import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_bloc.
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
@@ -342,7 +343,7 @@ class _ButtonTemplateState extends State<FolderList> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                translate.gb((keeper.space! - keeper.availableSpace!)),
+                fileSize(keeper.space! - keeper.availableSpace!, translate),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.headline2?.color,
@@ -351,7 +352,7 @@ class _ButtonTemplateState extends State<FolderList> {
                 ),
               ),
               Text(
-                " из ${translate.gb(keeper.space!)}",
+                " из ${fileSize(keeper.space!, translate)}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.subtitle1?.color,
