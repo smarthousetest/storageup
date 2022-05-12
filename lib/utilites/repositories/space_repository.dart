@@ -16,7 +16,7 @@ class DownloadLocationsRepository {
     Hive.registerAdapter(DownloadLocationAdapter());
 
     final box = await Hive.openBox<DownloadLocation>(_downloadLocationsBoxName);
-    //box.deleteFromDisk();
+    // box.deleteFromDisk();
     return DownloadLocationsRepository._(locationsBox: box);
   }
 

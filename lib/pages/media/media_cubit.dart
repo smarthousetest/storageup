@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -21,7 +20,7 @@ import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
-import '../../constants.dart';
+import 'package:upstorage_desktop/constants.dart';
 import 'media_state.dart';
 
 class MediaCubit extends Cubit<MediaState> {
@@ -520,6 +519,7 @@ class MediaCubit extends Cubit<MediaState> {
       print('declained');
       return ErrorType.noInternet;
     }
+    return null;
   }
 
   void _setRecordDownloading({

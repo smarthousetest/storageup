@@ -336,6 +336,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else if (result == ResponseStatus.failed) {
       return ErrorType.noInternet;
     }
+    return null;
   }
 
   Future<ErrorType?> onActionRenameChoosedFolder(
@@ -349,6 +350,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else if (result == ResponseStatus.failed) {
       return ErrorType.noInternet;
     }
+    return null;
   }
 
   void _syncWithLoadController() async {

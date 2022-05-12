@@ -148,7 +148,7 @@ class _InfoPageState extends State<InfoPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    state.user?.firstName ?? '',
+                    state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 17,

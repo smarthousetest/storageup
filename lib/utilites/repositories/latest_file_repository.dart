@@ -49,7 +49,9 @@ class LatestFileRepository {
         else
           _latestFileInfo[currentLocationInfoIndex] = value;
       } else {
-        _latestFileInfo.add(value);
+        if(value != null) {
+          _latestFileInfo.add(value);
+        }
       }
     });
   }

@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
+
 
 abstract class SpaceEvent extends Equatable {
   const SpaceEvent();
