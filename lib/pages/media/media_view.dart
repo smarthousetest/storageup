@@ -225,13 +225,16 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                 constraints: BoxConstraints(
                                                     maxWidth: 120),
                                                 child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Padding(
                                                       padding: const EdgeInsets
                                                               .symmetric(
-                                                          vertical: 5),
+                                                          vertical:
+                                                              3), //5 gives owerflow use 3 can't see diff
                                                       child: Text(
                                                         state.user?.firstName ??
                                                             '',
