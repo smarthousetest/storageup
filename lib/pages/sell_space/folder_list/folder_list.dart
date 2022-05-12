@@ -192,7 +192,7 @@ class _ButtonTemplateState extends State<FolderList> {
                               },
                             );
                             if (result) {
-                              late DownloadLocation deleteKeeper;
+                              var deleteKeeper;
                               state.locationsInfo.forEach((element) {
                                 if (element.idForCompare == keeper.id) {
                                   deleteKeeper = element;
