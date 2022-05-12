@@ -123,9 +123,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                                 onChanged: (myController) {
                                   print(myController);
                                   myController = myController.trim();
-                                  bool check = myController.contains(
-                                      RegExp(r'[\\/:*?\"<>|]'), 0);
-                                  if (check == true &&
+                                  if (myController.contains(
+                                              RegExp(r'[\\/:*?\"<>|]'), 0) ==
+                                          true &&
                                       myController.isNotEmpty) {
                                     setState(() {
                                       hintSymbvols = false;
