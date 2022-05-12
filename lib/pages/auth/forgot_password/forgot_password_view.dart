@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -27,104 +28,111 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     var theme = Theme.of(context);
     return BlocProvider(
       create: (context) => getIt<ForgotPasswordBloc>(),
-      child: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
-        listener: (context, state) {
-          if (state.error == AuthError.noInternet) {
-            _showErrorDialog();
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 230,
-            vertical: 150,
-          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 230,
+          vertical: 150,
+        ),
+        child: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
+          listener: (context, state) async {
+            if (state.status == FormzStatus.submissionFailure) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurSomethingGoesWrong();
+                },
+              );
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurFailedServerConnection();
+                },
+              );
+            }
+          },
           child: Material(
             borderRadius: BorderRadius.circular(13),
             color: theme.primaryColor,
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus();
+            child: BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+              builder: (context, state) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(top: 20.0, right: 20.0),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Image.asset(
+                            'assets/auth/close.png',
+                            width: 12,
+                            height: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        translate.password_recovery,
+                        style: TextStyle(
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 26.0,
+                          color: theme.disabledColor,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
+                      flex: 2,
+                    ),
+                    ..._body(theme, state),
+                    BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                      builder: (context, state) {
+                        return Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 245.0),
+                          child: OutlinedButton(
+                            onPressed: _buttonAction(state, context),
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: Size(double.maxFinite, 60),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              // padding: EdgeInsets.symmetric(
+                              //   horizontal: 135,
+                              //   vertical: 20,
+                              // ),
+                              backgroundColor: state.email.invalid ||
+                                      state.email.value.isEmpty
+                                  ? theme.colorScheme.onPrimary
+                                  : theme.colorScheme.onSurface,
+                            ),
+                            child: Text(
+                              state.status == FormzStatus.submissionSuccess
+                                  ? translate.back_to_main
+                                  : translate.continue_button,
+                              style: TextStyle(
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17.0,
+                                color: theme.primaryColor,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    Expanded(
+                      child: Container(),
+                      flex: 2,
+                    ),
+                  ],
+                );
               },
-              child: BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
-                builder: (context, state) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          padding: EdgeInsets.only(top: 20.0, right: 20.0),
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Image.asset(
-                              'assets/auth/close.png',
-                              width: 12,
-                              height: 12,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          translate.password_recovery,
-                          style: TextStyle(
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 26.0,
-                            color: theme.disabledColor,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                        flex: 2,
-                      ),
-                      ..._body(theme, state),
-                      BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
-                        builder: (context, state) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 245.0),
-                            child: OutlinedButton(
-                              onPressed: _buttonAction(state, context),
-                              style: OutlinedButton.styleFrom(
-                                minimumSize: Size(double.maxFinite, 60),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                // padding: EdgeInsets.symmetric(
-                                //   horizontal: 135,
-                                //   vertical: 20,
-                                // ),
-                                backgroundColor: state.email.invalid ||
-                                        state.email.value.isEmpty
-                                    ? theme.colorScheme.onPrimary
-                                    : theme.colorScheme.onSurface,
-                              ),
-                              child: Text(
-                                state.status == FormzStatus.submissionSuccess
-                                    ? translate.back_to_main
-                                    : translate.continue_button,
-                                style: TextStyle(
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 17.0,
-                                  color: theme.primaryColor,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      Expanded(
-                        child: Container(),
-                        flex: 2,
-                      ),
-                    ],
-                  );
-                },
-              ),
             ),
           ),
         ),
@@ -138,8 +146,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     else
       return _bodyResult(theme);
   }
-
-  final node = FocusNode();
 
   List<Widget> _bodyRequest(ThemeData theme) {
     return [
@@ -163,37 +169,25 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
-          return RawKeyboardListener(
-            focusNode: FocusNode(),
-            onKey: (event) {
-              if (event.isKeyPressed(LogicalKeyboardKey.backspace) ||
-                  event.isKeyPressed(LogicalKeyboardKey.delete)) {
-                FocusScope.of(context).requestFocus(node);
-              }
+          return CustomTextField(
+            autofocus: true,
+            hint: translate.email,
+            onChange: (email) {
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                  email: email, needValidation: true));
             },
-            child: CustomTextField(
-              autofocus: true,
-              hint: translate.email,
-              focusNode: node,
-              onChange: (email) {
-                context.read<ForgotPasswordBloc>().add(
-                    ForgotPasswordEmailChanged(
-                        email: email, needValidation: true));
-              },
-              onFinishEditing: (email) {
-                context.read<ForgotPasswordBloc>().add(
-                    ForgotPasswordEmailChanged(
-                        email: email, needValidation: true));
-              }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-              invalid: (state.email.invalid && state.email.value.isNotEmpty) ||
-                  state.error == AuthError.wrongCredentials,
-              errorMessage: state.error == AuthError.wrongCredentials
-                  ? translate.non_existent_email
-                  : translate.wrong_email,
-              needErrorValidation: true,
-              isPassword: false,
-              horizontalPadding: 170,
-            ),
+            onFinishEditing: (email) {
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                  email: email, needValidation: true));
+            }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            invalid: state.email.invalid && state.email.value.isNotEmpty ||
+                state.error == AuthError.wrongCredentials,
+            errorMessage: state.error == AuthError.wrongCredentials
+                ? translate.non_existent_email
+                : translate.wrong_email,
+            needErrorValidation: true,
+            isPassword: false,
+            horizontalPadding: 170,
           );
         },
       ),
@@ -219,6 +213,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           context.read<ForgotPasswordBloc>().add(ForgotPasswordConfirmed());
         });
       };
+    else
+      return null;
   }
 
   // bool nothingOnEmail = false;
@@ -287,60 +283,5 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         flex: 3,
       ),
     ];
-  }
-
-  void _showErrorDialog() {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            title: Text(
-              translate.something_goes_wrong,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: kNormalTextFontFamily,
-                color: Theme.of(context).focusColor,
-              ),
-            ),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 200, right: 200, top: 30, bottom: 10),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    translate.good,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 16,
-                      fontFamily: kNormalTextFontFamily,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: // _form.currentState.validate()
-                        Theme.of(context).splashColor,
-
-                    // Theme.of(context).primaryColor,
-                    fixedSize: Size(100, 42),
-                    elevation: 0,
-                    side: BorderSide(
-                        style: BorderStyle.solid,
-                        color: Theme.of(context).splashColor),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
   }
 }

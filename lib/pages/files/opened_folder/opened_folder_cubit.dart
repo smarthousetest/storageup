@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
+
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
@@ -122,6 +126,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   List<BaseObject> mapSortedFieldChanged(String sortText) {
+    emit(state.copyWith(status: FormzStatus.pure));
     final allFiles = state.objects;
 
     List<BaseObject> sortedFiles = [];
@@ -145,13 +150,14 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //emit(state.copyWith(sortedFiles: sortedFiles));
   }
 
-  //TODO check what is it
   void onRecordActionChoosed(FileAction action, BaseObject object) {
+    emit(state.copyWith(status: FormzStatus.pure));
     switch (action) {
       case FileAction.delete:
-        onActionDeleteChoosed(object);
+        _onActionDeleteChoosed(object);
         break;
-      case FileAction.rename:
+      case FileAction.properties:
+        //PropertiesView(object: object);
         break;
       default:
         print('default');
@@ -159,6 +165,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> mapFileSortingByCriterion() async {
+    emit(state.copyWith(status: FormzStatus.pure));
     OpenedFolderState newState = _clearGroupedMap(state);
     var criterion = newState.criterion;
     var direction = newState.direction;
@@ -256,9 +263,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       //   return a.size == null ? 0 : 1;
     });
     if (direction == SortingDirection.down) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(
+          sortedFiles: sortedFiles.reversed.toList(),
+          status: FormzStatus.pure));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(sortedFiles: sortedFiles, status: FormzStatus.pure));
     }
   }
 
@@ -309,48 +318,18 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     return a.compareTo(b);
   }
 
-  Future<ResponseStatus?> onActionDeleteChoosed(BaseObject object) async {
-    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+  void _onActionDeleteChoosed(BaseObject object) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([object]);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
-      emit(state.copyWith(responseStatus: result));
-      return result;
-    } else if (result == ResponseStatus.failed) {
-      emit(state.copyWith(responseStatus: result));
-      return result;
+    } else if (result == ResponseStatus.noInternet) {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
-    return result;
-  }
-
-  Future<ErrorType?> onActionRenameChoosedFile(
-      BaseObject object, String newName) async {
-    var result = await _filesController.renameRecord(newName, object.id);
-    print(result);
-    if (result == ResponseStatus.ok) {
-      _update();
-    } else if (result == ResponseStatus.notExecuted) {
-      return ErrorType.alreadyExist;
-    } else if (result == ResponseStatus.failed) {
-      return ErrorType.noInternet;
-    }
-    return null;
-  }
-
-  Future<ErrorType?> onActionRenameChoosedFolder(
-      BaseObject object, String newName) async {
-    var result = await _filesController.renameFolder(newName, object.id);
-    print(result);
-    if (result == ResponseStatus.ok) {
-      _update();
-    } else if (result == ResponseStatus.notExecuted) {
-      return ErrorType.alreadyExist;
-    } else if (result == ResponseStatus.failed) {
-      return ErrorType.noInternet;
-    }
-    return null;
   }
 
   void _syncWithLoadController() async {
@@ -395,7 +374,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   // }
 
   void changeRepresentation(FilesRepresentation representation) {
-    emit(state.copyWith(representation: representation));
+    emit(state.copyWith(
+        representation: representation, status: FormzStatus.pure));
   }
 
   void setFavorite(BaseObject object) async {
@@ -599,17 +579,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> fileTapped(Record record) async {
-    await _filesController.setRecentFile(record, DateTime.now());
-    var recentsFile = await _filesController.getRecentFiles();
-
-    if (recentsFile != null) {
-      recentsFile.forEach((element) {
-        _repository.addFile(latestFile: element);
-      });
-    }
-
+    _repository.addFile(latestFile: record);
     var box = await Hive.openBox(kPathDBName);
-
     String path = box.get(record.id, defaultValue: '');
 
     if (path.isNotEmpty) {

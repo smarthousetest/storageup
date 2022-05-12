@@ -64,6 +64,7 @@ enum ResponseStatus {
   declined,
   failed,
   notExecuted,
+  noInternet,
 }
 
 Status? mapJsonToStatus(String? json) {

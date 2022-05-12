@@ -768,20 +768,24 @@ class _AuthViewState extends State<AuthView> {
                                   ? Image.asset(
                                       'assets/auth/error.png',
                                       height: 20,
+                                      width: 20,
                                     )
                                   : SizedBox(
                                       width: 5,
                                     ),
-                              Text(
-                                state.error == AuthError.wrongCredentials
-                                    ? translate.wrong_cred
-                                    : state.error == AuthError.noVerifiedEmail
-                                        ? ''
-                                        : translate.something_goes_wrong,
-                                style: TextStyle(
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 16,
-                                  color: theme.disabledColor,
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  state.error == AuthError.wrongCredentials
+                                      ? translate.wrong_cred
+                                      : state.error == AuthError.noVerifiedEmail
+                                          ? ''
+                                          : translate.something_goes_wrong,
+                                  style: TextStyle(
+                                    fontFamily: kNormalTextFontFamily,
+                                    fontSize: 16,
+                                    color: theme.disabledColor,
+                                  ),
                                 ),
                               ),
                             ],
@@ -1087,6 +1091,7 @@ class _AuthViewState extends State<AuthView> {
                     Image.asset(
                       'assets/auth/error.png',
                       height: 20,
+                      width: 20,
                     ),
                     SizedBox(
                       width: 5,

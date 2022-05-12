@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -20,7 +21,7 @@ import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
-import 'package:upstorage_desktop/constants.dart';
+import '../../constants.dart';
 import 'media_state.dart';
 
 class MediaCubit extends Cubit<MediaState> {
@@ -76,6 +77,7 @@ class MediaCubit extends Cubit<MediaState> {
       allRecords: currentFolder?.records,
       user: user,
       progress: progress,
+      status: FormzStatus.pure,
     ));
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
@@ -122,7 +124,8 @@ class MediaCubit extends Cubit<MediaState> {
       }
     });
 
-    emit(state.copyWith(currentFolderRecords: sortedMedia));
+    emit(state.copyWith(
+        currentFolderRecords: sortedMedia, status: FormzStatus.pure));
   }
 
   MediaState _resetSortedList({
@@ -155,7 +158,8 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void changeRepresentation(FilesRepresentation representation) {
-    emit(state.copyWith(representation: representation));
+    emit(state.copyWith(
+        representation: representation, status: FormzStatus.pure));
   }
 
   void setFavorite(Record object) async {
@@ -224,6 +228,7 @@ class MediaCubit extends Cubit<MediaState> {
           albums: newAlbumList,
           currentFolder: currentFolder,
           currentFolderRecords: currentFolder.records,
+          status: FormzStatus.pure,
         ),
       );
     }
@@ -490,24 +495,23 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  Future<ResponseStatus?> onActionDeleteChoosed(Record record) async {
-    //emit(state.copyWith(status: FormzStatus.submissionInProgress));
+  void onActionDeleteChoosed(Record record) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([record]);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
-      emit(state.copyWith(responseStatus: result));
-      return result;
-    } else if (result == ResponseStatus.failed) {
-      emit(state.copyWith(responseStatus: result));
-      return result;
+    } else if (result == ResponseStatus.noInternet) {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
-    return result;
   }
 
   Future<ErrorType?> onActionRenameChoosed(
       Record object, String newName) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
     if (result == ResponseStatus.ok) {
@@ -517,9 +521,10 @@ class MediaCubit extends Cubit<MediaState> {
       return ErrorType.alreadyExist;
     } else if (result == ResponseStatus.failed) {
       print('declained');
-      return ErrorType.noInternet;
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
-    return null;
   }
 
   void _setRecordDownloading({
@@ -555,6 +560,7 @@ class MediaCubit extends Cubit<MediaState> {
       albums: albums,
       currentFolder: currentFolder,
       currentFolderRecords: currentFolder.records,
+      status: FormzStatus.pure,
     ));
   }
 
@@ -563,6 +569,7 @@ class MediaCubit extends Cubit<MediaState> {
       state.copyWith(
         currentFolder: newFolder,
         currentFolderRecords: newFolder.records,
+        status: FormzStatus.pure,
       ),
     );
   }

@@ -47,14 +47,17 @@ class ForgotPasswordBloc
           email: state.email.value);
       if (result == AuthenticationStatus.authenticated) {
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
-      } else if (result == AuthenticationStatus.unauthenticated) {
+      } else if (result == AuthenticationStatus.noInternet) {
         emit(state.copyWith(
-            status: FormzStatus.submissionFailure,
-            error: AuthError.wrongCredentials));
+            status: FormzStatus.submissionCanceled,
+            error: AuthError.noInternet));
+      } else if (result == AuthenticationStatus.externalError) {
+        emit(state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ));
       } else {
         emit(state.copyWith(
-            status: FormzStatus.submissionFailure,
-            error: AuthError.noInternet));
+            status: FormzStatus.pure, error: AuthError.wrongCredentials));
       }
     } on Exception catch (_) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
