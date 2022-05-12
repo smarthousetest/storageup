@@ -88,6 +88,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Проверьте соединение с Интернетом и повторите попытку."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
@@ -143,6 +145,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
         "ern_pay_day": MessageLookupByLibrary.simpleMessage("Заработок в день"),
+        "error": MessageLookupByLibrary.simpleMessage("Ошибка"),
         "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
         "file_sorting":
             MessageLookupByLibrary.simpleMessage("Сортировка файлов"),
@@ -222,6 +225,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("Выкл"),
         "offer": MessageLookupByLibrary.simpleMessage(
             "Выгодное предложение - переход на годовую подписку"),
+        "ok": MessageLookupByLibrary.simpleMessage("Ок"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Введите старый пароль"),
         "on": MessageLookupByLibrary.simpleMessage("Вкл"),
@@ -298,6 +302,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Выберите место хранения"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Сдача места"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "Не удаётся установить соединение с сервером."),
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
@@ -309,7 +315,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "size_of_space": MessageLookupByLibrary.simpleMessage(
             "Укажите размер места под аренду"),
         "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
-            "Что-то пошло не так. Попробуйте позднее"),
+            "Что-то пошло не так. Повторите, пожалуйста, чуть позже."),
         "space": MessageLookupByLibrary.simpleMessage("Пространство"),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
