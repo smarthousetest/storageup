@@ -17,11 +17,11 @@ class KeeperService {
     try {
       String? token = await _tokenRepository.getApiToken();
       if (token != null && token.isNotEmpty) {
-        var path = '/keeper/own';
-
         var response = await _dio.get(
-          path,
-          options: Options(headers: {'Authorization': ' Bearer $token'}),
+          '/keeper/own',
+          options: Options(headers: {
+            'Authorization': ' Bearer $token',
+          }),
         );
 
         if (response.statusCode == 200) {
