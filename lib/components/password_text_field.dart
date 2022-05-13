@@ -35,7 +35,7 @@ class PasswordTextField extends StatefulWidget {
   final bool isPassword;
   final bool needErrorValidation;
   final double horizontalPadding;
-  List<TextInputFormatter>? inputFormatters;
+  final List<TextInputFormatter>? inputFormatters;
   @override
   _PasswordTextFieldState createState() => _PasswordTextFieldState(isPassword);
 }

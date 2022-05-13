@@ -92,6 +92,7 @@ class _MyAppState extends State<MyApp> {
                 settings: settings,
               );
           }
+          return null;
         },
       ),
     );

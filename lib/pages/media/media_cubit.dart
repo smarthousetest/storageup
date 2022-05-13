@@ -495,7 +495,7 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  void onActionDeleteChoosed(Record record) async {
+  void onActionDeleteChosen(Record record) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([record]);
@@ -509,7 +509,7 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChoosed(
+  Future<ErrorType?> onActionRenameChosen(
       Record object, String newName) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     var result = await _filesController.renameRecord(newName, object.id);
@@ -517,14 +517,15 @@ class MediaCubit extends Cubit<MediaState> {
     if (result == ResponseStatus.ok) {
       _update();
     } else if (result == ResponseStatus.notExecuted) {
-      print('declained');
+      print('declined');
       return ErrorType.alreadyExist;
     } else if (result == ResponseStatus.failed) {
-      print('declained');
+      print('declined');
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
   void _setRecordDownloading({

@@ -96,7 +96,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     child: GestureDetector(
                                       onTap: () {
                                         StateContainer.of(context)
-                                            .changePage(ChoosedPage.file);
+                                            .changePage(ChosenPage.file);
                                       },
                                       child: MouseRegion(
                                         cursor: SystemMouseCursors.click,
@@ -132,7 +132,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 child: GestureDetector(
                                   onTap: () {
                                     StateContainer.of(context)
-                                        .changePage(ChoosedPage.settings);
+                                        .changePage(ChosenPage.settings);
                                   },
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,

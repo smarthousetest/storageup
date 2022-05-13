@@ -12,7 +12,7 @@ import '../../models/enums.dart';
 import '../../utilites/services/auth_service.dart';
 
 class BlurRenameName extends StatefulWidget {
-  String name;
+  final String name;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   BlurRenameName(this.name);

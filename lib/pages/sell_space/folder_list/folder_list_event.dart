@@ -22,17 +22,17 @@ class FolderListPageOpened extends FolderListEvent {
 }
 
 class SleepStatus extends FolderListEvent {
-  Keeper keeper;
+  final Keeper keeper;
   SleepStatus({required this.keeper});
 }
 
 class DeleteLocation extends FolderListEvent {
-  DownloadLocation location;
+  final DownloadLocation location;
   DeleteLocation({required this.location});
 }
 
 class UpdateLocationsList extends FolderListEvent {
-  List<DownloadLocation> locations;
+  final List<DownloadLocation> locations;
 
   UpdateLocationsList({required this.locations});
 

@@ -23,14 +23,14 @@ class InfoPage extends StatefulWidget {
 }
 
 class _InfoPageState extends State<InfoPage> {
-  ChoosedPage choosedPage = ChoosedPage.home;
+  ChosenPage choosedPage = ChosenPage.home;
   bool youRenting = false;
   bool lease = false;
   double? _searchFieldWidth;
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
 
-  void changePage(ChoosedPage newPage) {
+  void changePage(ChosenPage newPage) {
     setState(() {
       choosedPage = newPage;
     });
@@ -126,7 +126,7 @@ class _InfoPageState extends State<InfoPage> {
                 borderRadius: BorderRadius.circular(23),
                 child: GestureDetector(
                     onTap: () {
-                      StateContainer.of(context).changePage(ChoosedPage.settings);
+                      StateContainer.of(context).changePage(ChosenPage.settings);
                     },
                     child: MouseRegion(cursor: SystemMouseCursors.click, child: state.user.image)),
               ),
@@ -239,7 +239,7 @@ class _InfoPageState extends State<InfoPage> {
                 padding: const EdgeInsets.only(top: 20),
                 child: ElevatedButton(
                   onPressed: () {
-                    StateContainer.of(context).changePage(ChoosedPage.file);
+                    StateContainer.of(context).changePage(ChosenPage.file);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
@@ -296,7 +296,7 @@ class _InfoPageState extends State<InfoPage> {
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                 child: ElevatedButton(
                   onPressed: () {
-                    StateContainer.of(context).changePage(ChoosedPage.media);
+                    StateContainer.of(context).changePage(ChosenPage.media);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
@@ -348,7 +348,7 @@ class _InfoPageState extends State<InfoPage> {
                 padding: const EdgeInsets.only(top: 20),
                 child: ElevatedButton(
                   onPressed: () {
-                    StateContainer.of(context).changePage(ChoosedPage.media);
+                    StateContainer.of(context).changePage(ChosenPage.media);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
@@ -511,7 +511,7 @@ class _InfoPageState extends State<InfoPage> {
                     width: 230,
                     child: OutlinedButton(
                       onPressed: () {
-                        StateContainer.of(context).changePage(ChoosedPage.finance);
+                        StateContainer.of(context).changePage(ChosenPage.finance);
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
@@ -578,7 +578,7 @@ class _InfoPageState extends State<InfoPage> {
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    StateContainer.of(context).changePage(ChoosedPage.file);
+                                    StateContainer.of(context).changePage(ChosenPage.file);
                                   },
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
@@ -611,7 +611,7 @@ class _InfoPageState extends State<InfoPage> {
                                   borderRadius: BorderRadius.circular(23.0),
                                   child: GestureDetector(
                                     onTap: () {
-                                      StateContainer.of(context).changePage(ChoosedPage.settings);
+                                      StateContainer.of(context).changePage(ChosenPage.settings);
                                     },
                                     child: BlocBuilder<InfoBloc, InfoState>(builder: (context, state) {
                                       return MouseRegion(
@@ -1126,7 +1126,7 @@ class _InfoPageState extends State<InfoPage> {
             width: 200,
             child: OutlinedButton(
               onPressed: () {
-                StateContainer.of(context).changePage(ChoosedPage.sell_space);
+                StateContainer.of(context).changePage(ChosenPage.sell_space);
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(double.maxFinite, 60),

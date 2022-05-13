@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
-import 'package:vector_math/vector_math.dart';
 
 import '../constants.dart';
 
@@ -42,7 +40,7 @@ class PercentIndicator extends CustomPainter {
 }
 
 class PercentArc extends StatefulWidget {
-  double value;
+  final double value;
   PercentArc({required this.value, Key? key}) : super(key: key);
 
   @override

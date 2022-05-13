@@ -121,7 +121,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && folderId != null) {
       final result =
           await _filesController.createFolder(event.values!.first!, folderId);
-      if (event.choosedPage == ChoosedPage.file) {
+      if (event.choosedPage == ChosenPage.file) {
         eventBusUpdateFolder.fire(UpdateFolderEvent);
       }
 
@@ -156,7 +156,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && mediaRootFolderId != null) {
       final result = await _filesController.createFolder(
           event.values!.first!, mediaRootFolderId);
-      if (event.choosedPage == ChoosedPage.media) {
+      if (event.choosedPage == ChosenPage.media) {
         eventBusUpdateAlbum.fire(UpdateAlbumEvent);
       }
       if (result == ResponseStatus.failed) {

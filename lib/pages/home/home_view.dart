@@ -54,12 +54,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ChoosedPage choosedPage = ChoosedPage.home;
+  ChosenPage choosedPage = ChosenPage.home;
   Blur blurItem = Blur.rename;
 
   S translate = getIt<S>();
 
-  void changePage(ChoosedPage newPage) {
+  void changePage(ChosenPage newPage) {
     StateContainer.of(context).changePage(newPage);
   }
 
@@ -99,19 +99,19 @@ class _HomePageState extends State<HomePage> {
 
   Widget getPage() {
     switch (StateContainer.of(context).choosedPage) {
-      case ChoosedPage.home:
+      case ChosenPage.home:
         return infoPage;
-      case ChoosedPage.file:
+      case ChosenPage.file:
         return filePage;
-      case ChoosedPage.like:
+      case ChosenPage.like:
         return likePage;
-      case ChoosedPage.sell_space:
+      case ChosenPage.sell_space:
         return spaceSellPage;
-      case ChoosedPage.finance:
+      case ChosenPage.finance:
         return financePage;
-      case ChoosedPage.settings:
+      case ChosenPage.settings:
         return settingsPage;
-      case ChoosedPage.media:
+      case ChosenPage.media:
         return mediaPage;
       default:
         return infoPage;
@@ -230,25 +230,25 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/home.svg",
         title: translate.home,
-        page: ChoosedPage.home,
+        page: ChosenPage.home,
         onTap: () {
-          changePage(ChoosedPage.home);
+          changePage(ChosenPage.home);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/files.svg",
         title: translate.files,
-        page: ChoosedPage.file,
+        page: ChosenPage.file,
         onTap: () {
-          changePage(ChoosedPage.file);
+          changePage(ChosenPage.file);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/media.svg",
         title: translate.media,
-        page: ChoosedPage.media,
+        page: ChosenPage.media,
         onTap: () {
-          changePage(ChoosedPage.media);
+          changePage(ChosenPage.media);
         },
       ),
       // CustomMenuButton(
@@ -262,25 +262,25 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/sell_space.svg",
         title: translate.sell_space,
-        page: ChoosedPage.sell_space,
+        page: ChosenPage.sell_space,
         onTap: () {
-          changePage(ChoosedPage.sell_space);
+          changePage(ChosenPage.sell_space);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/finance.svg",
         title: translate.finance,
-        page: ChoosedPage.finance,
+        page: ChosenPage.finance,
         onTap: () {
-          changePage(ChoosedPage.finance);
+          changePage(ChosenPage.finance);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
         title: translate.settings,
-        page: ChoosedPage.settings,
+        page: ChosenPage.settings,
         onTap: () {
-          changePage(ChoosedPage.settings);
+          changePage(ChosenPage.settings);
         },
       ),
       // CustomMenuButton(

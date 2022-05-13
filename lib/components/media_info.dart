@@ -12,9 +12,9 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 class MediaInfoView extends StatefulWidget {
-  Record? record;
-  User? user;
-  GlobalKey? key;
+  final Record? record;
+  final User? user;
+  final GlobalKey? key;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   MediaInfoView({this.record, required this.user, required this.key});

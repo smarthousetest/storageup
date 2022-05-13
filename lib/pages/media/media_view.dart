@@ -205,7 +205,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                             padding: EdgeInsets.only(right: 20, left: 20),
                                             child: GestureDetector(
                                               onTap: () {
-                                                StateContainer.of(context).changePage(ChoosedPage.settings);
+                                                StateContainer.of(context).changePage(ChosenPage.settings);
                                               },
                                               child: MouseRegion(
                                                 cursor: SystemMouseCursors.click,
@@ -787,7 +787,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         result != FileAttribute().getFileName(record.name ?? '')) {
                                       result = result + '.' + fileExtention;
                                       final res =
-                                          await context.read<MediaCubit>().onActionRenameChoosed(record, result);
+                                          await context.read<MediaCubit>().onActionRenameChosen(record, result);
                                       if (res == ErrorType.alreadyExist) {
                                         _rename(blocContext, record, result, fileExtention);
                                       }
@@ -801,7 +801,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       },
                                     );
                                     if (result == true) {
-                                      context.read<MediaCubit>().onActionDeleteChoosed(record);
+                                      context.read<MediaCubit>().onActionDeleteChosen(record);
                                     }
                                   }
                                 },
@@ -828,9 +828,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         return BlurRename(filename, false);
       },
     );
-    if (newName != null && newName is String && newName != FileAttribute().getFileName(record.name ?? '')) {
+    if (newName != FileAttribute().getFileName(record.name ?? '')) {
       newName = newName + '.' + extention;
-      final res = await context.read<MediaCubit>().onActionRenameChoosed(record, newName);
+      final res = await context.read<MediaCubit>().onActionRenameChosen(record, newName);
       if (res == ErrorType.alreadyExist) {
         _rename(context, record, newName, extention);
       }
@@ -1042,7 +1042,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           result != FileAttribute().getFileName(record.name ?? '')) {
                                         result = result + '.' + fileExtention;
                                         final res =
-                                            await context.read<MediaCubit>().onActionRenameChoosed(record, result);
+                                            await context.read<MediaCubit>().onActionRenameChosen(record, result);
                                         if (res == ErrorType.alreadyExist) {
                                           _rename(context, record, result, fileExtention);
                                         }
@@ -1056,7 +1056,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         },
                                       );
                                       if (result == true) {
-                                        context.read<MediaCubit>().onActionDeleteChoosed(e);
+                                        context.read<MediaCubit>().onActionDeleteChosen(e);
                                       }
                                     }
                                   });

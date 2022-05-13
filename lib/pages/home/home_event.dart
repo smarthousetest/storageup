@@ -21,7 +21,7 @@ class HomeUserActionChoosed extends HomeEvent {
   final UserAction action;
   final List<String?>? values;
   final String? folderId;
-  final ChoosedPage? choosedPage;
+  final ChosenPage? choosedPage;
 
   HomeUserActionChoosed({
     required this.action,

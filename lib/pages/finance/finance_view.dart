@@ -115,7 +115,7 @@ class _FinancePageState extends State<FinancePage> {
                                   child: GestureDetector(
                                     onTap: () {
                                       StateContainer.of(context)
-                                          .changePage(ChoosedPage.file);
+                                          .changePage(ChosenPage.file);
                                     },
                                     child: MouseRegion(
                                       cursor: SystemMouseCursors.click,
@@ -149,7 +149,7 @@ class _FinancePageState extends State<FinancePage> {
                               child: GestureDetector(
                                 onTap: () {
                                   StateContainer.of(context)
-                                      .changePage(ChoosedPage.settings);
+                                      .changePage(ChosenPage.settings);
                                 },
                                 child: MouseRegion(
                                   cursor: SystemMouseCursors.click,
