@@ -307,7 +307,7 @@ class _ButtonTemplateState extends State<FolderList> {
               children: [
                 Container(
                   child:
-                      PercentArc(value: 100 / (keeper!.space! / (keeper.space! - keeper.availableSpace!).toDouble())),
+                      PercentArc(value: (100 / (keeper!.space! / (keeper.space! - keeper.availableSpace!).toDouble())) ?? 0),
                 ),
               ],
             ),

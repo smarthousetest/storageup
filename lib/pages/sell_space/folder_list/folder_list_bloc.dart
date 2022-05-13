@@ -139,6 +139,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     var idLocation = event.location.id;
     await _repository.deleteLocation(id: idLocation);
     var updateLocations = _repository.getlocationsInfo;
+
+    var tmpState = state.copyWith(locationsInfo: updateLocations);
+    await _deleteKeeper(event, tmpState, emit);
     var keeper = await _keeperService.getAllKeepers();
     List<Keeper> localKeeper = [];
     List<Keeper> serverKeeper = [];
@@ -153,9 +156,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       }
     }
     print('Прошёл до конца');
-    var tmpState = state.copyWith(locationsInfo: updateLocations);
-
-    await _deleteKeeper(event, tmpState, emit);
     emit(state.copyWith(
         locationsInfo: updateLocations, localKeeper: localKeeper.reversed.toList(), serverKeeper: serverKeeper));
 
@@ -179,8 +179,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       return;
     }
     String keeperId = '';
-    if (File('${keeperLocations[event.location.id - 1]}${Platform.pathSeparator}keeper_id.txt').existsSync()) {
-      keeperId = File('${keeperLocations[event.location.id - 1]}${Platform.pathSeparator}keeper_id.txt')
+    print('№ ${event.location.id}');
+    if (File('${keeperLocations[event.location.id]}${Platform.pathSeparator}keeper_id.txt').existsSync()) {
+      keeperId = File('${keeperLocations[event.location.id]}${Platform.pathSeparator}keeper_id.txt')
           .readAsStringSync()
           .trim();
     }
@@ -193,8 +194,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         print('Keeper does not exist');
       }
     }
-    if (Directory(keeperLocations[event.location.id - 1]).existsSync()) {
-      Directory(keeperLocations[event.location.id - 1]).deleteSync(recursive: true);
+
+    if (Directory(keeperLocations[event.location.id]).existsSync()) {
+      Directory(keeperLocations[event.location.id]).deleteSync(recursive: true);
     }
     if (keeperLocationsFile.existsSync()) {
       keeperLocationsFile..deleteSync()..createSync();

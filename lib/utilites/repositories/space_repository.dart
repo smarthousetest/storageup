@@ -59,8 +59,7 @@ class DownloadLocationsRepository {
     try {
       lastKey = _locationsBox.keys.last;
     } catch (e) {
-      lastKey = 0;
-    }
+      }
 
     final downloadLocation = DownloadLocation(
       dirPath: path,
