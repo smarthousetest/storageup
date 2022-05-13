@@ -71,6 +71,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
               (file) => file.isInProgress && file.downloadPercent == -1);
           _setRecordDownloading(recordId: file.id);
         }
+        if (downloadingFilesList
+            .any((file) => file.endedWithException == true)) {
+          emit(state.copyWith(status: FormzStatus.submissionFailure));
+        }
       }
     } catch (e) {
       log('OpenFolderCubit -> _updateObserver:', error: e);
