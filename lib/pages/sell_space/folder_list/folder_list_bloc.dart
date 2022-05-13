@@ -54,7 +54,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     keeper?.forEach((element) {
       if (locationsInfo.any((info) => info.idForCompare == element.id)) {
         localKeeper.add(element);
-        //// need add dirPath in keeper
+        /// need add dirPath in keeper
         locationsInfo.forEach((element) {
           localPath.add(element.dirPath);
         });
@@ -115,7 +115,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     keeper?.forEach((element) {
       if (locationsInfo.any((info) => info.idForCompare == element.id)) {
         localKeeper.add(element);
-        //// need add dirPath in keeper
+        /// need add dirPath in keeper
 
         locationsInfo.forEach((element) {
           localPath.add(element.dirPath);
