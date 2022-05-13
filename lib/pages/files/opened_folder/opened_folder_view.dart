@@ -26,6 +26,8 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 
+import '../../../utilites/state_container.dart';
+
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({
     Key? key,

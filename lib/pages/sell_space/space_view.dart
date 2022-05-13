@@ -155,7 +155,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 5),
                                             child: Text(
-                                              state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
+                                              state.user?.firstName ??
+                                                  state.user?.email
+                                                      ?.split('@')
+                                                      .first ??
+                                                  'Name',
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontSize: 17,
@@ -833,7 +837,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         list.isNotEmpty && myController.text.isNotEmpty;
                     return OutlinedButton(
                       onPressed: () async {
-                        if (checkValidate) {
+                        if (checkValidate == false) {
                           print('path null');
                         } else {
                           var name = myController.text;

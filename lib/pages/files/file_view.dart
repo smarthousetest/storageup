@@ -123,7 +123,15 @@ class _FilePageState extends State<FilePage> {
     return BlocProvider(
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
       child: BlocListener<FilesBloc, FilesState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          setState(() {
+            var folderId = state.currentFolder;
+            if (folderId != null) {
+              StateContainer.of(context)
+                  .changeChoosedFilesFolderId(folderId.id);
+            }
+          });
+        },
         child: _fileView(context),
       ),
     );
@@ -440,7 +448,9 @@ class _FilePageState extends State<FilePage> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: Text(
-                                    state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
+                                    state.user?.firstName ??
+                                        state.user?.email?.split('@').first ??
+                                        'Name',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 17,

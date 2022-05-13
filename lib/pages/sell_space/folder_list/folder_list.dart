@@ -192,15 +192,16 @@ class _ButtonTemplateState extends State<FolderList> {
                               },
                             );
                             if (result) {
-                              DownloadLocation? deleteKeeper;
-                              for(var element in state.locationsInfo) {
+                              var deleteKeeper;
+                              for (var element in state.locationsInfo) {
                                 if (element.idForCompare == keeper.id) {
                                   deleteKeeper = element;
                                   break;
                                 }
                               }
-                              if(deleteKeeper != null) {
-                                context.read<FolderListBloc>().add(DeleteLocation(location: deleteKeeper));
+                              if (deleteKeeper != null) {
+                                context.read<FolderListBloc>().add(
+                                    DeleteLocation(location: deleteKeeper));
                               }
                             }
                             //await context.read<FolderListBloc>().stream.first;
@@ -651,15 +652,21 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: Theme.of(context).selectedRowColor,
+              color: keeper.online == 1
+                  ? Theme.of(context).selectedRowColor
+                  : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                "• ${translate.active}",
+                keeper.online == 1
+                    ? "• ${translate.active}"
+                    : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: Color(0xFF25B885),
+                  color: keeper.online == 1
+                      ? Color(0xFF25B885)
+                      : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 14,
                 ),
