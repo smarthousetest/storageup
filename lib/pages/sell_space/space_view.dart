@@ -201,7 +201,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     key: ValueKey<int>(index),
                     index: index,
                     children: [
-                      state.locationsInfo.isEmpty
+                      state.keeper.isEmpty
                           ? rentingAPlace(context)
                           : folderList(context),
                       Column(
@@ -833,7 +833,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   child: BlocBuilder<SpaceBloc, SpaceState>(
                       builder: (context, state) {
                     bool checkValidate =
-                        list.isEmpty && myController.text.isEmpty == false;
+                        list.isNotEmpty && myController.text.isNotEmpty;
                     return OutlinedButton(
                       onPressed: () async {
                         if (checkValidate) {

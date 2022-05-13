@@ -101,35 +101,35 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     SleepStatus event,
   ) async {
     var keeperId = event.keeper.id;
-
-    if (keeperId != null) {
-      await _keeperService.changeSleepStatus(keeperId);
-    }
-
-    var keeper = await _keeperService.getAllKeepers();
-    final locationsInfo = _repository.getlocationsInfo;
-
-    List<Keeper> localKepper = [];
-    List<Keeper> serverKeeper = [];
-    List<String> localPath = [];
-
-    keeper?.forEach((element) {
-      if (locationsInfo.any((info) => info.idForCompare == element.id)) {
-        localKepper.add(element);
-        //// need add dirPath in keeper
-
-        locationsInfo.forEach((element) {
-          localPath.add(element.dirPath);
-        });
-      } else {
-        serverKeeper.add(element);
+    if (event.keeper.online == 1) {
+      if (keeperId != null) {
+        await _keeperService.changeSleepStatus(keeperId);
       }
-    });
-    emit(state.copyWith(
-      localKeeper: localKepper.reversed.toList(),
-      serverKeeper: serverKeeper,
-      localPath: localPath.reversed.toList(),
-    ));
+      var keeper = await _keeperService.getAllKeepers();
+      final locationsInfo = _repository.getlocationsInfo;
+
+      List<Keeper> localKepper = [];
+      List<Keeper> serverKeeper = [];
+      List<String> localPath = [];
+
+      keeper?.forEach((element) {
+        if (locationsInfo.any((info) => info.idForCompare == element.id)) {
+          localKepper.add(element);
+          //// need add dirPath in keeper
+
+          locationsInfo.forEach((element) {
+            localPath.add(element.dirPath);
+          });
+        } else {
+          serverKeeper.add(element);
+        }
+      });
+      emit(state.copyWith(
+        localKeeper: localKepper.reversed.toList(),
+        serverKeeper: serverKeeper,
+        localPath: localPath.reversed.toList(),
+      ));
+    }
   }
 
   _mapDeleteLocation(

@@ -30,7 +30,7 @@ class _FinancePageState extends State<FinancePage> {
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     _searchFieldWidth =
-        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 150;
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 172;
   }
 
   @override

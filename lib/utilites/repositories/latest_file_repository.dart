@@ -49,7 +49,7 @@ class LatestFileRepository {
         else
           _latestFileInfo[currentLocationInfoIndex] = value;
       } else {
-        if(value != null) {
+        if (value != null) {
           _latestFileInfo.add(value);
         }
       }
