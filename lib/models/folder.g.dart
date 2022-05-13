@@ -30,7 +30,7 @@ class FolderAdapter extends TypeAdapter<Folder> {
       updatedAt: fields[6] as DateTime?,
       assetImage: fields[13] as String?,
       readOnly: fields[14] as bool?,
-      isChoosed: fields[8] as bool,
+      isChosen: fields[8] as bool,
       loadPercent: fields[10] as double?,
       isDownloading: fields[20] as bool?,
     )

@@ -21,9 +21,9 @@ class StateContainer extends StatefulWidget {
 }
 
 class StateContainerState extends State<StateContainer> {
-  var _choosedPage = ChoosedPage.home;
+  var _choosedPage = ChosenPage.home;
   var _locale = Locale('ru');
-  ChoosedPage get choosedPage => _choosedPage;
+  ChosenPage get choosedPage => _choosedPage;
   Locale get locale => _locale;
 
   String? _choosedFilesFolderId;
@@ -39,7 +39,7 @@ class StateContainerState extends State<StateContainer> {
     );
   }
 
-  void changePage(ChoosedPage newPage) {
+  void changePage(ChosenPage newPage) {
     setState(() {
       _choosedPage = newPage;
     });

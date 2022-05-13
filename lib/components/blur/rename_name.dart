@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -10,7 +12,7 @@ import '../../models/enums.dart';
 import '../../utilites/services/auth_service.dart';
 
 class BlurRenameName extends StatefulWidget {
-  String name;
+  final String name;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   BlurRenameName(this.name);
@@ -188,16 +190,27 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         final result =
                                             await _authController.changeName(
                                                 name: myController.value.text);
-                                        if (canSave == true) {
+                                        if (canSave) {
                                           Navigator.pop(context,
                                               myController.value.text.trim());
-                                          if (result !=
+                                          if (result ==
                                               AuthenticationStatus
-                                                  .authenticated) {
-                                            _showErrorDialog();
+                                                  .externalError) {
+                                            await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return BlurSomethingGoesWrong();
+                                              },
+                                            );
+                                          } else if (result ==
+                                              AuthenticationStatus.noInternet) {
+                                            await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return BlurFailedServerConnection();
+                                              },
+                                            );
                                           }
-                                        } else {
-                                          null;
                                         }
                                         print(widget.name);
                                       },

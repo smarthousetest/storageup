@@ -33,7 +33,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final bool needErrorValidation;
   final double horizontalPadding;
-  List<TextInputFormatter>? inputFormatters;
+  final List<TextInputFormatter>? inputFormatters;
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState(isPassword);
 }

@@ -768,20 +768,24 @@ class _AuthViewState extends State<AuthView> {
                                   ? Image.asset(
                                       'assets/auth/error.png',
                                       height: 20,
+                                      width: 20,
                                     )
                                   : SizedBox(
                                       width: 5,
                                     ),
-                              Text(
-                                state.error == AuthError.wrongCredentials
-                                    ? translate.wrong_cred
-                                    : state.error == AuthError.noVerifiedEmail
-                                        ? ''
-                                        : translate.something_goes_wrong,
-                                style: TextStyle(
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 16,
-                                  color: theme.disabledColor,
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  state.error == AuthError.wrongCredentials
+                                      ? translate.wrong_cred
+                                      : state.error == AuthError.noVerifiedEmail
+                                          ? ''
+                                          : translate.something_goes_wrong,
+                                  style: TextStyle(
+                                    fontFamily: kNormalTextFontFamily,
+                                    fontSize: 16,
+                                    color: theme.disabledColor,
+                                  ),
                                 ),
                               ),
                             ],
@@ -857,7 +861,7 @@ class _AuthViewState extends State<AuthView> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return state.status.isSubmissionSuccess
-            ? _registrationSuccessed(theme, context, state)
+            ? _registrationSuccess(theme, context, state)
             : _registrationInProgress(theme, context, state);
       },
     );
@@ -953,7 +957,6 @@ class _AuthViewState extends State<AuthView> {
                 event is RawKeyDownEvent) {
               if (_isRegisterFieldsValid(state)) {
                 context.read<AuthBloc>().add(AuthRegisterConfirmed());
-                print('fewwfew');
               }
             }
           },
@@ -1087,6 +1090,7 @@ class _AuthViewState extends State<AuthView> {
                     Image.asset(
                       'assets/auth/error.png',
                       height: 20,
+                      width: 20,
                     ),
                     SizedBox(
                       width: 5,
@@ -1134,7 +1138,6 @@ class _AuthViewState extends State<AuthView> {
         //     ),
         //   ),
         // ),
-        //forupload
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 120),
           child: Container(
@@ -1213,7 +1216,7 @@ class _AuthViewState extends State<AuthView> {
     showDialog(context: context, builder: (context) => ForgotPasswordView());
   }
 
-  Widget _registrationSuccessed(
+  Widget _registrationSuccess(
       ThemeData theme, BuildContext context, AuthState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

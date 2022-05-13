@@ -10,7 +10,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
+import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -52,12 +54,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ChoosedPage choosedPage = ChoosedPage.home;
+  ChosenPage choosedPage = ChosenPage.home;
   Blur blurItem = Blur.rename;
 
   S translate = getIt<S>();
 
-  void changePage(ChoosedPage newPage) {
+  void changePage(ChosenPage newPage) {
     StateContainer.of(context).changePage(newPage);
   }
 
@@ -72,61 +74,6 @@ class _HomePageState extends State<HomePage> {
     DesktopWindow.setMinWindowSize(Size(width, height));
 
     DesktopWindow.resetMaxWindowSize();
-  }
-
-  void _showErrorDialog() {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            title: Text(
-              translate.something_goes_wrong,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: kNormalTextFontFamily,
-                color: Theme.of(context).focusColor,
-              ),
-            ),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 200, right: 200, top: 30, bottom: 10),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    translate.good,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 16,
-                      fontFamily: kNormalTextFontFamily,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: // _form.currentState.validate()
-                        Theme.of(context).splashColor,
-
-                    // Theme.of(context).primaryColor,
-                    fixedSize: Size(100, 42),
-                    elevation: 0,
-                    side: BorderSide(
-                        style: BorderStyle.solid,
-                        color: Theme.of(context).splashColor),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
   }
 
   @override
@@ -152,19 +99,19 @@ class _HomePageState extends State<HomePage> {
 
   Widget getPage() {
     switch (StateContainer.of(context).choosedPage) {
-      case ChoosedPage.home:
+      case ChosenPage.home:
         return infoPage;
-      case ChoosedPage.file:
+      case ChosenPage.file:
         return filePage;
-      case ChoosedPage.like:
+      case ChosenPage.like:
         return likePage;
-      case ChoosedPage.sell_space:
+      case ChosenPage.sell_space:
         return spaceSellPage;
-      case ChoosedPage.finance:
+      case ChosenPage.finance:
         return financePage;
-      case ChoosedPage.settings:
+      case ChosenPage.settings:
         return settingsPage;
-      case ChoosedPage.media:
+      case ChosenPage.media:
         return mediaPage;
       default:
         return infoPage;
@@ -206,10 +153,21 @@ class _HomePageState extends State<HomePage> {
       body: BlocProvider(
         create: (context) => HomeBloc()..add(HomePageOpened()),
         child: BlocListener<HomeBloc, HomeState>(
-          listener: (context, state) {
-            // TODO: implement listener
+          listener: (context, state) async {
             if (state.status == FormzStatus.submissionFailure) {
-              _showErrorDialog();
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurSomethingGoesWrong();
+                },
+              );
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurFailedServerConnection();
+                },
+              );
             }
           },
           child: Row(
@@ -272,25 +230,25 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/home.svg",
         title: translate.home,
-        page: ChoosedPage.home,
+        page: ChosenPage.home,
         onTap: () {
-          changePage(ChoosedPage.home);
+          changePage(ChosenPage.home);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/files.svg",
         title: translate.files,
-        page: ChoosedPage.file,
+        page: ChosenPage.file,
         onTap: () {
-          changePage(ChoosedPage.file);
+          changePage(ChosenPage.file);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/media.svg",
         title: translate.media,
-        page: ChoosedPage.media,
+        page: ChosenPage.media,
         onTap: () {
-          changePage(ChoosedPage.media);
+          changePage(ChosenPage.media);
         },
       ),
       // CustomMenuButton(
@@ -304,25 +262,25 @@ class _HomePageState extends State<HomePage> {
       CustomMenuButton(
         icon: "assets/home_page/sell_space.svg",
         title: translate.sell_space,
-        page: ChoosedPage.sell_space,
+        page: ChosenPage.sell_space,
         onTap: () {
-          changePage(ChoosedPage.sell_space);
+          changePage(ChosenPage.sell_space);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/finance.svg",
         title: translate.finance,
-        page: ChoosedPage.finance,
+        page: ChosenPage.finance,
         onTap: () {
-          changePage(ChoosedPage.finance);
+          changePage(ChosenPage.finance);
         },
       ),
       CustomMenuButton(
         icon: "assets/home_page/gear.svg",
         title: translate.settings,
-        page: ChoosedPage.settings,
+        page: ChosenPage.settings,
         onTap: () {
-          changePage(ChoosedPage.settings);
+          changePage(ChosenPage.settings);
         },
       ),
       // CustomMenuButton(

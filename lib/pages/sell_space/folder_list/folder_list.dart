@@ -192,15 +192,16 @@ class _ButtonTemplateState extends State<FolderList> {
                               },
                             );
                             if (result) {
-                              var deleteKeeper;
-                              state.locationsInfo.forEach((element) {
+                              DownloadLocation? deleteKeeper;
+                              for(var element in state.locationsInfo) {
                                 if (element.idForCompare == keeper.id) {
                                   deleteKeeper = element;
+                                  break;
                                 }
-                              });
-                              context
-                                  .read<FolderListBloc>()
-                                  .add(DeleteLocation(location: deleteKeeper));
+                              }
+                              if(deleteKeeper != null) {
+                                context.read<FolderListBloc>().add(DeleteLocation(location: deleteKeeper));
+                              }
                             }
                             //await context.read<FolderListBloc>().stream.first;
                             setState(() {});

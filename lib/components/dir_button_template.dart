@@ -8,11 +8,11 @@ import 'package:upstorage_desktop/constants.dart';
 class CustomDirButton extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  String name;
-  TextEditingController? dirName;
-  Function()? onTap;
-  String description;
-  bool readonly;
+  final String name;
+  // TextEditingController? dirName;
+  final Function()? onTap;
+  final String description;
+  final bool readonly;
   CustomDirButton({
     required this.name,
     this.onTap,

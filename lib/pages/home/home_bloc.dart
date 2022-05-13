@@ -61,10 +61,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
 
-      String? localAppVersion = _getLocalAppVersion();
+      // String? localAppVersion = _getLocalAppVersion();
       emit(state.copyWith(
         upToDateVersion: remoteAppVersion,
-        version: localAppVersion,
+        // version: localAppVersion,
         latestFile: latestFile,
         objectsValueListenable: listenable,
         //recentFile: recentsFile,
@@ -121,12 +121,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && folderId != null) {
       final result =
           await _filesController.createFolder(event.values!.first!, folderId);
-      if (event.choosedPage == ChoosedPage.file) {
+      if (event.choosedPage == ChosenPage.file) {
         eventBusUpdateFolder.fire(UpdateFolderEvent);
       }
 
-      if (result != ResponseStatus.ok) {
+      if (result == ResponseStatus.failed) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.pure));
+      } else if (result == ResponseStatus.noInternet) {
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
         emit(state.copyWith(status: FormzStatus.pure));
       }
     } else if (folderId == null) {
@@ -153,11 +156,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && mediaRootFolderId != null) {
       final result = await _filesController.createFolder(
           event.values!.first!, mediaRootFolderId);
-      if (event.choosedPage == ChoosedPage.media) {
+      if (event.choosedPage == ChosenPage.media) {
         eventBusUpdateAlbum.fire(UpdateAlbumEvent);
       }
-      if (result != ResponseStatus.ok) {
+      if (result == ResponseStatus.failed) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.pure));
+      } else if (result == ResponseStatus.noInternet) {
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
         emit(state.copyWith(status: FormzStatus.pure));
       }
     } else if (mediaRootFolderId == null) {

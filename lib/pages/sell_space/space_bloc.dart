@@ -44,8 +44,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
     var keeper = await _subscriptionService.getAllKeepers();
-    emit(state.copyWith(
-        user: user, locationsInfo: locationsInfo, keeper: keeper));
+    emit(state.copyWith(user: user, locationsInfo: locationsInfo, keeper: keeper));
   }
 
   Future _mapRunSoft(
@@ -63,9 +62,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       keeperLocationsSink.add('${element.dirPath}\n'.codeUnits);
     });
     await keeperLocationsSink.close();
-    _writeKeeperId(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt',
-        keeperId);
+    _writeKeeperId('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt', keeperId);
     var bearerToken = await TokenRepository().getApiToken();
     if (bearerToken != null) {
       _writeKeeperName(state);
@@ -80,8 +77,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
+    var keeperNameFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -89,13 +85,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile
-        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperIdFilePath, String keeper_id) {
@@ -116,8 +110,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var name = event.name;
     var id = await _subscriptionService.addNewKeeper(name, countOfGb);
     if (id != null) {
-      _repository.createLocation(
-          countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+      _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
       var locationsInfo = _repository.getlocationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);

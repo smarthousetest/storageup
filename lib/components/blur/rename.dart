@@ -1,15 +1,13 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/auth/models/name.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurRename extends StatefulWidget {
-  var name;
-  bool hint;
+  final name;
+  final bool hint;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   BlurRename(this.name, this.hint);

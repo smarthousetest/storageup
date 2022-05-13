@@ -59,7 +59,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
         _mapDiscardSelecting(state, emit);
       } else if (event is FilesMoveHere) {
         await _mapMoveHere(state, emit);
-      } else if (event is FilesDeleteChoosed) {
+      } else if (event is FilesDeleteChosen) {
         await _mapDeleteChoosed(state, emit);
       } else if (event is FilesNoInternet) {
         _mapNoInternet(state, emit);

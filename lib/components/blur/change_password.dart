@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
@@ -257,7 +259,6 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                       },
                                       controller: _pass,
                                       onChanged: (content) {
-                                        print(_pass.text);
                                         if (content.isEmpty ||
                                             content.length < 8) {
                                           setState(() {
@@ -355,7 +356,6 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                         },
                                         controller: _confirmPass,
                                         onChanged: (content) {
-                                          print(_confirmPass.text);
                                           if (content.isEmpty ||
                                               content.length < 8) {
                                             setState(() {
@@ -501,8 +501,26 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                                 wrongOldPass = true;
                                                 _showReAuthDialog();
                                               });
+                                            } else if (result ==
+                                                AuthenticationStatus
+                                                    .unauthenticated) {
+                                              Navigator.pop(context);
+                                              await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return BlurSomethingGoesWrong();
+                                                },
+                                              );
                                             } else {
-                                              _showErrorDialog();
+                                              Navigator.pop(context);
+                                              await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return BlurFailedServerConnection();
+                                                },
+                                              );
                                             }
                                             /* Navigator.pop(                         
                                               context,
@@ -573,61 +591,6 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
         ),
       ),
     );
-  }
-
-  void _showErrorDialog() {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            title: Text(
-              translate.something_goes_wrong,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: kNormalTextFontFamily,
-                color: Theme.of(context).focusColor,
-              ),
-            ),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 200, right: 200, top: 30, bottom: 10),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    translate.good,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 16,
-                      fontFamily: kNormalTextFontFamily,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: // _form.currentState.validate()
-                        Theme.of(context).splashColor,
-
-                    // Theme.of(context).primaryColor,
-                    fixedSize: Size(100, 42),
-                    elevation: 0,
-                    side: BorderSide(
-                        style: BorderStyle.solid,
-                        color: Theme.of(context).splashColor),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
   }
 
   void _showReAuthDialog() {

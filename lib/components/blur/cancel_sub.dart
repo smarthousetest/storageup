@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -7,12 +6,12 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurCancelSub extends StatefulWidget {
-  var choosedSubGb;
-  DateTime dateTime;
-  var filledGb;
+  final chosenSubGb;
+  final DateTime dateTime;
+  final filledGb;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurCancelSub(this.choosedSubGb, this.dateTime, this.filledGb);
+  BlurCancelSub(this.chosenSubGb, this.dateTime, this.filledGb);
 }
 
 class _ButtonTemplateState extends State<BlurCancelSub> {
@@ -76,7 +75,7 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
                                   children: [
                                     Text(
                                         translate.cancel_sub(widget.dateTime,
-                                            widget.choosedSubGb),
+                                            widget.chosenSubGb),
                                         style: textStyle),
                                     Text(
                                         translate.filled_gb(fileSize(

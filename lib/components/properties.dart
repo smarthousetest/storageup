@@ -13,9 +13,9 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 class FileInfoView extends StatefulWidget {
-  BaseObject? object;
-  User? user;
-  GlobalKey? key;
+  final BaseObject? object;
+  final User? user;
+  final GlobalKey? key;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   FileInfoView({required this.object, required this.user, required this.key});

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
-import 'package:vector_math/vector_math.dart';
 
 class ArcIndicator extends CustomPainter {
   final bool isBackGround;
@@ -40,7 +39,7 @@ class ArcIndicator extends CustomPainter {
 }
 
 class CircularArc extends StatefulWidget {
-  double value;
+  final double value;
   CircularArc({required this.value, Key? key}) : super(key: key);
 
   @override

@@ -26,7 +26,7 @@ class MediaOpenPage extends StatefulWidget {
     Key? key,
     required this.arguments,
   }) : super(key: key);
-  MediaOpenPageArgs arguments;
+  final MediaOpenPageArgs arguments;
   @override
   _MediaOpenPageState createState() => _MediaOpenPageState();
 }

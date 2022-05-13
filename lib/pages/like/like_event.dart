@@ -7,7 +7,7 @@ abstract class LikeEvent extends Equatable {
 }
 
 class LikeSearchFieldChanged extends LikeEvent {
-  String itemName;
+  final String itemName;
   LikeSearchFieldChanged(this.itemName);
 
   @override

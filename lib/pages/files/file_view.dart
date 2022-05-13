@@ -417,7 +417,7 @@ class _FilePageState extends State<FilePage> {
                       child: GestureDetector(
                         onTap: () {
                           StateContainer.of(context)
-                              .changePage(ChoosedPage.settings);
+                              .changePage(ChosenPage.settings);
                         },
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,

@@ -28,7 +28,7 @@ class Folder extends BaseObject {
     DateTime? updatedAt,
     this.assetImage,
     required this.readOnly,
-    bool isChoosed = false,
+    bool isChosen = false,
     double? loadPercent,
     bool? isDownloading,
   }) : super(
@@ -40,7 +40,7 @@ class Folder extends BaseObject {
             updatedAt: updatedAt,
             updatedBy: updatedBy,
             favorite: favorite,
-            isChoosed: isChoosed,
+            isChoosed: isChosen,
             loadPercent: loadPercent,
             parentFolder: parentFolder,
             isDownloading: isDownloading);
@@ -57,11 +57,11 @@ class Folder extends BaseObject {
   }
 
   factory Folder.fromJson(Map<String, dynamic> json) {
-    List<Record>? rcrds;
+    List<Record>? records;
     if (json['records'] != null) {
-      rcrds = [];
+      records = [];
       json['records'].forEach((v) {
-        rcrds?.add(Record.fromJson(v));
+        records?.add(Record.fromJson(v));
       });
     }
     List<Folder>? fldrs;
@@ -75,7 +75,7 @@ class Folder extends BaseObject {
       size: json['size'] as int,
       id: json['_id'] as String? ?? 'root',
       name: json['name'] as String?,
-      records: rcrds,
+      records: records,
       folders: fldrs,
       parentFolder: json['parentFolder'] as String? ?? 'root',
       createdBy: json['createdBy'] as String?,
@@ -133,7 +133,7 @@ class Folder extends BaseObject {
       favorite: favorite ?? this.favorite,
       assetImage: assetImage,
       readOnly: readOnly ?? this.readOnly,
-      isChoosed: isChoosed ?? this.isChoosed,
+      isChosen: isChoosed ?? this.isChoosed,
       loadPercent: loadPercent,
       isDownloading: isDownloading,
     );
@@ -152,7 +152,7 @@ class Folder extends BaseObject {
         favorite: favorite,
         assetImage: assetImage,
         readOnly: readOnly,
-        isChoosed: isChoosed,
+        isChosen: isChoosed,
         loadPercent: loadPercent,
         isDownloading: isDownloading);
   }

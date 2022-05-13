@@ -131,9 +131,9 @@ class FilesDiscardSelecting extends FilesEvent {
   FilesDiscardSelecting();
 }
 
-class FilesDeleteChoosed extends FilesEvent {
-  List<BaseObject> choosedObjects;
-  FilesDeleteChoosed({required this.choosedObjects});
+class FilesDeleteChosen extends FilesEvent {
+  final List<BaseObject> chosenObjects;
+  FilesDeleteChosen({required this.chosenObjects});
   @override
-  List<Object?> get props => [choosedObjects];
+  List<Object?> get props => [chosenObjects];
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 
-enum ChoosedPage {
+enum ChosenPage {
   home,
   file,
   keeper,
@@ -16,8 +16,8 @@ enum ChoosedPage {
 
 class CustomMenuButton extends StatefulWidget {
   final String icon, title;
-  Function() onTap;
-  final ChoosedPage page;
+  final Function() onTap;
+  final ChosenPage page;
 
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
