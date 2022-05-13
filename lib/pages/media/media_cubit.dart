@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
@@ -57,6 +58,10 @@ class MediaCubit extends Cubit<MediaState> {
           );
 
           _setRecordDownloading(recordId: file.id);
+        }
+        if (downloadingFilesList.any(
+            (file) => file.errorReason == ErrorReason.noInternetConnection)) {
+          emit(state.copyWith(status: FormzStatus.submissionFailure));
         }
       }
     } catch (e) {
