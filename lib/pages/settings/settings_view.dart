@@ -428,7 +428,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: BlocBuilder<SettingsBloc, SettingsState>(
                     builder: (context, state) {
                   return Text(
-                    state.user?.firstName ?? '',
+                    state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
                     maxLines: 1,
                     style: TextStyle(
                         color: Theme.of(context).disabledColor,

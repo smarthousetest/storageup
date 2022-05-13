@@ -83,7 +83,7 @@ class _FinancePageState extends State<FinancePage> {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 30),
+                        padding: const EdgeInsets.only(right: 23),
                         child: Container(
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
@@ -145,7 +145,7 @@ class _FinancePageState extends State<FinancePage> {
                         return Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(right: 20, left: 0),
+                              padding: EdgeInsets.only(right: 20),
                               child: GestureDetector(
                                 onTap: () {
                                   StateContainer.of(context)
@@ -171,7 +171,7 @@ class _FinancePageState extends State<FinancePage> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 5),
                                           child: Text(
-                                            state.user?.firstName ?? '',
+                                            state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               fontSize: 17,

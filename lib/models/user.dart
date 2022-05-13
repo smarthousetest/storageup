@@ -48,7 +48,7 @@ class User {
     emailVerified = json['emailVerified'];
     sId = json['_id'];
     email = json['email'];
-    firstName = json['firstName'];
+    firstName = json['firstName'] ?? email?.split('@').first;
     fullName = json['fullName'];
     if (json['avatars'] != null) {
       avatars = [];

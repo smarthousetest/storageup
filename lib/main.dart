@@ -66,7 +66,6 @@ class _MyAppState extends State<MyApp> {
       //dark: kDarkTheme,
       initial: AdaptiveThemeMode.light,
       builder: (light, dark) => MaterialApp(
-        title: 'Flutter Demo',
         darkTheme: dark,
         theme: light,
         locale: StateContainer.of(context).locale,

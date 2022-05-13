@@ -53,9 +53,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return BlocProvider(
         create: (context) => SpaceBloc()..add(SpacePageOpened()),
         child: Expanded(
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-            //   child:
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -158,7 +155,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 5),
                                             child: Text(
-                                              state.user?.firstName ?? '',
+                                              state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontSize: 17,

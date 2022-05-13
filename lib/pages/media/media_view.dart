@@ -30,7 +30,6 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -49,10 +48,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   var _folderListScrollController = ScrollController(keepScrollOffset: false);
-  var _verticalFolderListScrollController =
-      ScrollController(keepScrollOffset: false);
-  final TextEditingController _searchingFieldController =
-      TextEditingController();
+  var _verticalFolderListScrollController = ScrollController(keepScrollOffset: false);
+  final TextEditingController _searchingFieldController = TextEditingController();
   GlobalKey propertiesWidthKey = GlobalKey();
   List<CustomPopupMenuController> _popupControllers = [];
   Timer? timerForOpenFile;
@@ -71,8 +68,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    _searchFieldWidth =
-        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 320;
+    _searchFieldWidth = width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 320;
   }
 
   void startTimer() {
@@ -153,10 +149,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow: <BoxShadow>[
                                       BoxShadow(
-                                          color:
-                                              Color.fromARGB(25, 23, 69, 139),
-                                          blurRadius: 4,
-                                          offset: Offset(1, 4))
+                                          color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
                                     ],
                                   ),
                                   child: Row(
@@ -164,44 +157,33 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       Padding(
                                         padding: const EdgeInsets.all(13.0),
                                         child: Align(
-                                          alignment:
-                                              FractionalOffset.centerLeft,
+                                          alignment: FractionalOffset.centerLeft,
                                           child: Container(
                                               width: 20,
                                               height: 20,
-                                              child: SvgPicture.asset(
-                                                  "assets/file_page/search.svg")),
+                                              child: SvgPicture.asset("assets/file_page/search.svg")),
                                         ),
                                       ),
-                                      BlocBuilder<MediaCubit, MediaState>(
-                                          builder: (context, state) {
+                                      BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
                                         return Container(
                                           width: _searchFieldWidth,
                                           child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0),
+                                            padding: const EdgeInsets.only(left: 10.0),
                                             child: Center(
                                               child: TextField(
                                                 style: TextStyle(
                                                   fontSize: 16.0,
-                                                  color: Theme.of(context)
-                                                      .disabledColor,
+                                                  color: Theme.of(context).disabledColor,
                                                 ),
                                                 onChanged: (value) {
-                                                  context
-                                                      .read<MediaCubit>()
-                                                      .mapSortedFieldChanged(
-                                                          value);
+                                                  context.read<MediaCubit>().mapSortedFieldChanged(value);
                                                 },
-                                                controller:
-                                                    _searchingFieldController,
-                                                decoration:
-                                                    InputDecoration.collapsed(
+                                                controller: _searchingFieldController,
+                                                decoration: InputDecoration.collapsed(
                                                   hintText: translate.search,
                                                   hintStyle: TextStyle(
                                                     fontSize: 16.0,
-                                                    color: Theme.of(context)
-                                                        .disabledColor,
+                                                    color: Theme.of(context).disabledColor,
                                                   ),
                                                 ),
                                               ),
@@ -216,74 +198,60 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                             ),
                             StateInfoContainer.of(context)?.record == null
                                 ? Container(
-                                    child: BlocBuilder<MediaCubit, MediaState>(
-                                        builder: (context, state) {
+                                    child: BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
                                       return Row(
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 20, left: 20),
+                                            padding: EdgeInsets.only(right: 20, left: 20),
                                             child: GestureDetector(
                                               onTap: () {
-                                                StateContainer.of(context)
-                                                    .changePage(
-                                                        ChoosedPage.settings);
+                                                StateContainer.of(context).changePage(ChoosedPage.settings);
                                               },
                                               child: MouseRegion(
-                                                cursor:
-                                                    SystemMouseCursors.click,
+                                                cursor: SystemMouseCursors.click,
                                                 child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          23.0),
-                                                  child: Container(
-                                                      child: state.user.image),
+                                                  borderRadius: BorderRadius.circular(23.0),
+                                                  child: Container(child: state.user.image),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          (MediaQuery.of(context).size.width >
-                                                  965)
+                                          (MediaQuery.of(context).size.width > 965)
                                               ? Container(
-                                                  constraints: BoxConstraints(
-                                                      maxWidth: 120),
+                                                  constraints: BoxConstraints(maxWidth: 120),
                                                   child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 5),
-                                                        child: Text(
-                                                          state.user
-                                                                  ?.firstName ??
-                                                              state.user?.email
-                                                                  ?.split('@')
-                                                                  .first ??
-                                                              'Name',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 17,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .bottomAppBarColor,
+                                                      Expanded(
+                                                        flex: 5,
+                                                        child: Container(),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 23,
+                                                        child: Container(
+                                                          height: 23,
+                                                          child: Text(
+                                                            state.user?.firstName ??
+                                                                state.user?.email?.split('@').first ??
+                                                                'Name',
+                                                            overflow: TextOverflow.ellipsis,
+                                                            style: TextStyle(
+                                                              fontSize: 17,
+                                                              color: Theme.of(context).bottomAppBarColor,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
+                                                      Expanded(
+                                                        flex: 5,
+                                                        child: Container(),
+                                                      ),
                                                       Text(
-                                                        state.user?.email ??
-                                                            'email',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
+                                                        state.user?.email ?? 'email',
+                                                        overflow: TextOverflow.ellipsis,
                                                         style: TextStyle(
                                                           fontSize: 12,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .bottomAppBarColor,
+                                                          color: Theme.of(context).bottomAppBarColor,
                                                         ),
                                                       ),
                                                     ],
@@ -308,10 +276,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Color.fromARGB(25, 23, 69, 139),
-                                  blurRadius: 4,
-                                  offset: Offset(1, 4))
+                              BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
                             ],
                           ),
                           child: Padding(
@@ -340,57 +305,42 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         height: 30,
                                         child: RawMaterialButton(
                                           onPressed: () {
-                                            _folderListScrollController
-                                                .animateTo(
-                                                    _folderListScrollController
-                                                            .offset -
-                                                        _folderButtonSize,
-                                                    duration: Duration(
-                                                        milliseconds: 500),
-                                                    curve: Curves.ease);
+                                            _folderListScrollController.animateTo(
+                                                _folderListScrollController.offset - _folderButtonSize,
+                                                duration: Duration(milliseconds: 500),
+                                                curve: Curves.ease);
                                           },
-                                          fillColor:
-                                              Theme.of(context).primaryColor,
+                                          fillColor: Theme.of(context).primaryColor,
                                           child: Icon(
                                             Icons.arrow_back_ios_rounded,
-                                            color:
-                                                Theme.of(context).splashColor,
+                                            color: Theme.of(context).splashColor,
                                             size: 20.0,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                                            borderRadius: BorderRadius.circular(5),
                                           ),
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
+                                        padding: const EdgeInsets.only(left: 15),
                                         child: Container(
                                           width: 30,
                                           height: 30,
                                           child: RawMaterialButton(
                                             onPressed: () {
-                                              _folderListScrollController
-                                                  .animateTo(
-                                                      _folderListScrollController
-                                                              .offset +
-                                                          _folderButtonSize,
-                                                      duration: Duration(
-                                                          milliseconds: 500),
-                                                      curve: Curves.ease);
+                                              _folderListScrollController.animateTo(
+                                                  _folderListScrollController.offset + _folderButtonSize,
+                                                  duration: Duration(milliseconds: 500),
+                                                  curve: Curves.ease);
                                             },
-                                            fillColor:
-                                                Theme.of(context).primaryColor,
+                                            fillColor: Theme.of(context).primaryColor,
                                             child: Icon(
                                               Icons.arrow_forward_ios,
-                                              color:
-                                                  Theme.of(context).splashColor,
+                                              color: Theme.of(context).splashColor,
                                               size: 20.0,
                                             ),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
+                                              borderRadius: BorderRadius.circular(5),
                                             ),
                                           ),
                                         ),
@@ -418,13 +368,11 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                               shrinkWrap: true,
                                               physics: ClampingScrollPhysics(),
                                               scrollDirection: Axis.vertical,
-                                              controller:
-                                                  _verticalFolderListScrollController,
+                                              controller: _verticalFolderListScrollController,
                                             ),
                                             onNotification: (t) {
                                               setState(() {
-                                                x = _verticalFolderListScrollController
-                                                    .position.pixels;
+                                                x = _verticalFolderListScrollController.position.pixels;
                                                 print(x);
                                               });
                                               if (t is ScrollEndNotification) {}
@@ -435,16 +383,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                             shrinkWrap: true,
                                             physics: ClampingScrollPhysics(),
                                             scrollDirection: Axis.horizontal,
-                                            controller:
-                                                _folderListScrollController,
+                                            controller: _folderListScrollController,
                                             children: [
                                               ...state.albums
                                                   .map(
                                                     (album) => _folderIcon(
                                                       album,
-                                                      isChoosed: album.id ==
-                                                          state
-                                                              .currentFolder.id,
+                                                      isChoosed: album.id == state.currentFolder.id,
                                                       blocContext: context,
                                                     ),
                                                   )
@@ -469,10 +414,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                               color: Theme.of(context).primaryColor,
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 23, 69, 139),
-                                    blurRadius: 4,
-                                    offset: Offset(1, 4))
+                                BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
                               ],
                             ),
                             alignment: Alignment.center,
@@ -480,11 +422,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(40, 20, 30, 0),
+                                  padding: const EdgeInsets.fromLTRB(40, 20, 30, 0),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       BlocBuilder<MediaCubit, MediaState>(
                                         builder: (context, state) {
@@ -493,10 +433,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                               state.currentFolder.name ?? ':(',
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .focusColor,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
+                                                color: Theme.of(context).focusColor,
+                                                fontFamily: kNormalTextFontFamily,
                                                 fontSize: 20,
                                               ),
                                             ),
@@ -507,26 +445,17 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         flex: 821,
                                         child: Container(),
                                       ),
-                                      BlocBuilder<MediaCubit, MediaState>(
-                                          builder: (context, state) {
+                                      BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
                                         return IconButton(
                                           padding: EdgeInsets.zero,
                                           iconSize: 30,
                                           onPressed: () {
-                                            context
-                                                .read<MediaCubit>()
-                                                .changeRepresentation(
-                                                    FilesRepresentation.table);
+                                            context.read<MediaCubit>().changeRepresentation(FilesRepresentation.table);
                                           },
-                                          icon: SvgPicture.asset(
-                                              'assets/file_page/list.svg',
-                                              color: state.representation ==
-                                                      FilesRepresentation.table
-                                                  ? Theme.of(context)
-                                                      .splashColor
-                                                  : Theme.of(context)
-                                                      .toggleButtonsTheme
-                                                      .color),
+                                          icon: SvgPicture.asset('assets/file_page/list.svg',
+                                              color: state.representation == FilesRepresentation.table
+                                                  ? Theme.of(context).splashColor
+                                                  : Theme.of(context).toggleButtonsTheme.color),
                                         );
                                       }),
                                       BlocBuilder<MediaCubit, MediaState>(
@@ -534,23 +463,15 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           return IconButton(
                                             iconSize: 30,
                                             onPressed: () {
-                                              context
-                                                  .read<MediaCubit>()
-                                                  .changeRepresentation(
-                                                      FilesRepresentation.grid);
+                                              context.read<MediaCubit>().changeRepresentation(FilesRepresentation.grid);
                                             },
-                                            icon: SvgPicture.asset(
-                                                'assets/file_page/block.svg',
+                                            icon: SvgPicture.asset('assets/file_page/block.svg',
                                                 // width: 30,
                                                 // height: 30,
                                                 //colorBlendMode: BlendMode.softLight,
-                                                color: state.representation ==
-                                                        FilesRepresentation.grid
-                                                    ? Theme.of(context)
-                                                        .splashColor
-                                                    : Theme.of(context)
-                                                        .toggleButtonsTheme
-                                                        .color),
+                                                color: state.representation == FilesRepresentation.grid
+                                                    ? Theme.of(context).splashColor
+                                                    : Theme.of(context).toggleButtonsTheme.color),
                                           );
                                         },
                                       ),
@@ -559,8 +480,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                 ),
                                 ifGrid
                                     ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 40),
+                                        padding: const EdgeInsets.symmetric(horizontal: 40),
                                         child: Divider(
                                           height: 1,
                                           color: Theme.of(context).dividerColor,
@@ -570,26 +490,19 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                 BlocBuilder<MediaCubit, MediaState>(
                                   builder: (context, state) {
                                     eventBusMediaOpen.on().listen((event) {
-                                      var element =
-                                          StateInfoContainer.of(context)
-                                              ?.record;
+                                      var element = StateInfoContainer.of(context)?.record;
                                       if (_isOpen == false) {
                                         startTimer();
-                                        context
-                                            .read<MediaCubit>()
-                                            .fileTapped(element as Record);
+                                        context.read<MediaCubit>().fileTapped(element as Record);
                                       }
                                     });
                                     return Expanded(
-                                      child: state.representation ==
-                                              FilesRepresentation.grid
+                                      child: state.representation == FilesRepresentation.grid
                                           ? state.progress == true
                                               ? _filesGrid()
                                               : _progressIndicator(context)
                                           : Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
+                                              padding: const EdgeInsets.symmetric(horizontal: 20),
                                               child: _filesList(context, state),
                                             ),
                                     );
@@ -604,9 +517,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              StateInfoContainer.of(context)?.record == null
-                  ? Container()
-                  : showViewFileInfo(),
+              StateInfoContainer.of(context)?.record == null ? Container() : showViewFileInfo(),
             ],
           ),
         ),
@@ -679,9 +590,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         return BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
           return Container(
               child: MediaInfoView(
-                  key: propertiesWidthKey,
-                  user: state.user,
-                  record: StateInfoContainer.of(context)?.record));
+                  key: propertiesWidthKey, user: state.user, record: StateInfoContainer.of(context)?.record));
         });
       }
     } catch (e) {
@@ -726,9 +635,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               width: 2,
-              color: isChoosed
-                  ? activeColor
-                  : Theme.of(context).buttonTheme.colorScheme!.primary,
+              color: isChoosed ? activeColor : Theme.of(context).buttonTheme.colorScheme!.primary,
             ),
           ),
           child: Column(
@@ -765,16 +672,12 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
-  void _onTapItem(List<BaseObject> media, BaseObject selectedMedia,
-      BuildContext context, Folder? openedFolder) {
+  void _onTapItem(List<BaseObject> media, BaseObject selectedMedia, BuildContext context, Folder? openedFolder) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return MediaOpenPage(
-            arguments: MediaOpenPageArgs(
-                media: media,
-                selectedMedia: selectedMedia,
-                selectedFolder: openedFolder),
+            arguments: MediaOpenPageArgs(media: media, selectedMedia: selectedMedia, selectedFolder: openedFolder),
           );
         });
     // pushNewScreenWithRouteSettings(
@@ -798,8 +701,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   Widget _filesGrid() {
     return BlocBuilder<MediaCubit, MediaState>(
       buildWhen: (previous, current) {
-        var needToUpdate =
-            previous.currentFolderRecords != current.currentFolderRecords;
+        var needToUpdate = previous.currentFolderRecords != current.currentFolderRecords;
         return needToUpdate;
       },
       builder: (blocContext, state) {
@@ -822,20 +724,16 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
               itemBuilder: (context, index) {
                 var record = state.currentFolderRecords[index];
 
-                if (state.currentFolderRecords.length !=
-                    _popupControllers.length) {
+                if (state.currentFolderRecords.length != _popupControllers.length) {
                   final controller = CustomPopupMenuController();
                   _popupControllers.add(controller);
                 }
 
                 _onPointerDown(PointerDownEvent event) {
-                  if (event.kind == PointerDeviceKind.mouse &&
-                      event.buttons == kSecondaryMouseButton) {
+                  if (event.kind == PointerDeviceKind.mouse && event.buttons == kSecondaryMouseButton) {
                     print("right button click");
 
-                    _popupControllers[
-                            state.currentFolderRecords.indexOf(record)]
-                        .showMenu();
+                    _popupControllers[state.currentFolderRecords.indexOf(record)].showMenu();
                   }
                 }
 
@@ -851,9 +749,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           _indexObject = index;
                         });
                         startTimer();
-                        blocContext
-                            .read<MediaCubit>()
-                            .fileTapped(state.currentFolderRecords[index]);
+                        blocContext.read<MediaCubit>().fileTapped(state.currentFolderRecords[index]);
                       }
                     },
                     child: Listener(
@@ -867,44 +763,33 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                             enablePassEvent: false,
                             horizontalMargin: 110,
                             verticalMargin: 0,
-                            controller: _popupControllers[
-                                state.currentFolderRecords.indexOf(record)],
+                            controller: _popupControllers[state.currentFolderRecords.indexOf(record)],
                             menuBuilder: () {
                               return MediaPopupMenuActions(
                                 theme: Theme.of(context),
                                 translate: translate,
                                 onTap: (action) async {
-                                  _popupControllers[state.currentFolderRecords
-                                          .indexOf(record)]
-                                      .hideMenu();
+                                  _popupControllers[state.currentFolderRecords.indexOf(record)].hideMenu();
                                   if (action == MediaAction.properties) {
                                     // controller.hideMenu();
-                                    StateInfoContainer.of(context)
-                                        ?.setInfoRecord(record);
+                                    StateInfoContainer.of(context)?.setInfoRecord(record);
                                   } else if (action == MediaAction.rename) {
-                                    var fileExtention = FileAttribute()
-                                        .getFileExtension(record.name ?? '');
+                                    var fileExtention = FileAttribute().getFileExtension(record.name ?? '');
                                     var result = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        var filename = FileAttribute()
-                                            .getFileName(record.name ?? '');
+                                        var filename = FileAttribute().getFileName(record.name ?? '');
                                         return BlurRename(filename, true);
                                       },
                                     );
                                     if (result != null &&
                                         result is String &&
-                                        result !=
-                                            FileAttribute().getFileName(
-                                                record.name ?? '')) {
+                                        result != FileAttribute().getFileName(record.name ?? '')) {
                                       result = result + '.' + fileExtention;
-                                      final res = await context
-                                          .read<MediaCubit>()
-                                          .onActionRenameChoosed(
-                                              record, result);
+                                      final res =
+                                          await context.read<MediaCubit>().onActionRenameChoosed(record, result);
                                       if (res == ErrorType.alreadyExist) {
-                                        _rename(blocContext, record, result,
-                                            fileExtention);
+                                        _rename(blocContext, record, result, fileExtention);
                                       }
                                     }
                                   } else {
@@ -916,16 +801,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       },
                                     );
                                     if (result == true) {
-                                      context
-                                          .read<MediaCubit>()
-                                          .onActionDeleteChoosed(record);
+                                      context.read<MediaCubit>().onActionDeleteChoosed(record);
                                     }
                                   }
                                 },
                               );
                             },
-                            child: MediaGridElement(
-                                record: state.currentFolderRecords[index])),
+                            child: MediaGridElement(record: state.currentFolderRecords[index])),
                       ),
                     ),
                   ),
@@ -938,8 +820,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
-  void _rename(BuildContext context, Record record, String name,
-      String extention) async {
+  void _rename(BuildContext context, Record record, String name, String extention) async {
     String newName = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -947,13 +828,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         return BlurRename(filename, false);
       },
     );
-    if (newName != null &&
-        newName is String &&
-        newName != FileAttribute().getFileName(record.name ?? '')) {
+    if (newName != null && newName is String && newName != FileAttribute().getFileName(record.name ?? '')) {
       newName = newName + '.' + extention;
-      final res = await context
-          .read<MediaCubit>()
-          .onActionRenameChoosed(record, newName);
+      final res = await context.read<MediaCubit>().onActionRenameChoosed(record, newName);
       if (res == ErrorType.alreadyExist) {
         _rename(context, record, newName, extention);
       }
@@ -980,8 +857,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
             scrollDirection: Axis.vertical,
             controller: ScrollController(),
             child: Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: DataTable(
                 columnSpacing: 25,
                 showCheckboxColumn: false,
@@ -1034,18 +910,15 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                 rows: state.currentFolderRecords.map((e) {
                   String? type = '';
                   bool isFile = false;
-                  if (state.currentFolderRecords.length >
-                      _popupControllers.length) {
+                  if (state.currentFolderRecords.length > _popupControllers.length) {
                     _popupControllers = [];
                     _initiatingControllers(state);
                   }
 
                   var record = e;
                   isFile = true;
-                  if (record.thumbnail != null &&
-                      record.thumbnail!.isNotEmpty) {
-                    type = FileAttribute()
-                        .getFilesType(record.name!.toLowerCase());
+                  if (record.thumbnail != null && record.thumbnail!.isNotEmpty) {
+                    type = FileAttribute().getFilesType(record.name!.toLowerCase());
                   }
 
                   return DataRow.byIndex(
@@ -1098,9 +971,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                   builder: (context, state) {
                                     return GestureDetector(
                                       onTap: () {
-                                        context
-                                            .read<MediaCubit>()
-                                            .setFavorite(e);
+                                        context.read<MediaCubit>().setFavorite(e);
                                       },
                                       child: Image.asset(
                                         e.favorite
@@ -1147,44 +1018,33 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                             showArrow: false,
                             horizontalMargin: 110,
                             verticalMargin: 0,
-                            controller: _popupControllers[
-                                state.currentFolderRecords.indexOf(e)],
+                            controller: _popupControllers[state.currentFolderRecords.indexOf(e)],
                             menuBuilder: () {
                               return MediaPopupMenuActions(
                                   theme: Theme.of(context),
                                   translate: translate,
                                   onTap: (action) async {
-                                    _popupControllers[state.currentFolderRecords
-                                            .indexOf(e)]
-                                        .hideMenu();
+                                    _popupControllers[state.currentFolderRecords.indexOf(e)].hideMenu();
                                     if (action == MediaAction.properties) {
                                       // controller.hideMenu();
-                                      StateInfoContainer.of(context)
-                                          ?.setInfoRecord(e);
+                                      StateInfoContainer.of(context)?.setInfoRecord(e);
                                     } else if (action == MediaAction.rename) {
-                                      var fileExtention = FileAttribute()
-                                          .getFileExtension(record.name ?? '');
+                                      var fileExtention = FileAttribute().getFileExtension(record.name ?? '');
                                       var result = await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          var filename = FileAttribute()
-                                              .getFileName(record.name ?? '');
+                                          var filename = FileAttribute().getFileName(record.name ?? '');
                                           return BlurRename(filename, true);
                                         },
                                       );
                                       if (result != null &&
                                           result is String &&
-                                          result !=
-                                              FileAttribute().getFileName(
-                                                  record.name ?? '')) {
+                                          result != FileAttribute().getFileName(record.name ?? '')) {
                                         result = result + '.' + fileExtention;
-                                        final res = await context
-                                            .read<MediaCubit>()
-                                            .onActionRenameChoosed(
-                                                record, result);
+                                        final res =
+                                            await context.read<MediaCubit>().onActionRenameChoosed(record, result);
                                         if (res == ErrorType.alreadyExist) {
-                                          _rename(context, record, result,
-                                              fileExtention);
+                                          _rename(context, record, result, fileExtention);
                                         }
                                       }
                                     } else {
@@ -1196,9 +1056,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         },
                                       );
                                       if (result == true) {
-                                        context
-                                            .read<MediaCubit>()
-                                            .onActionDeleteChoosed(e);
+                                        context.read<MediaCubit>().onActionDeleteChoosed(e);
                                       }
                                     }
                                   });
@@ -1299,22 +1157,20 @@ class MediaGridElement extends StatelessWidget {
 }
 
 class MediaPopupMenuActions extends StatefulWidget {
-  MediaPopupMenuActions(
-      {required this.theme,
-      required this.translate,
-      required this.onTap,
-      Key? key})
+  MediaPopupMenuActions({required this.theme, required this.translate, required this.onTap, Key? key})
       : super(key: key);
 
   final ThemeData theme;
   final S translate;
   final Function(MediaAction) onTap;
+
   @override
   _MediaPopupMenuActionsState createState() => _MediaPopupMenuActionsState();
 }
 
 class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
   int ind = -1;
+
   @override
   Widget build(BuildContext context) {
     var style = TextStyle(
@@ -1442,9 +1298,7 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1
-                          ? widget.theme.indicatorColor.withOpacity(0.1)
-                          : null,
+                      color: ind == 1 ? widget.theme.indicatorColor.withOpacity(0.1) : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1463,8 +1317,7 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
                           ),
                           Text(
                             widget.translate.delete,
-                            style: style.copyWith(
-                                color: Theme.of(context).errorColor),
+                            style: style.copyWith(color: Theme.of(context).errorColor),
                           ),
                         ],
                       ),
