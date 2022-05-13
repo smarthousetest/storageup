@@ -59,9 +59,12 @@ class MediaCubit extends Cubit<MediaState> {
 
           _setRecordDownloading(recordId: file.id);
         }
-        if (downloadingFilesList.any(
-            (file) => file.errorReason == ErrorReason.noInternetConnection)) {
+
+        if (downloadingFilesList.last.endedWithException == true &&
+            downloadingFilesList.last.errorReason ==
+                ErrorReason.noInternetConnection) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
+          emit(state.copyWith(status: FormzStatus.pure));
         }
       }
     } catch (e) {
@@ -82,6 +85,7 @@ class MediaCubit extends Cubit<MediaState> {
       allRecords: currentFolder?.records,
       user: user,
       progress: progress,
+      status: FormzStatus.pure,
     ));
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
@@ -128,7 +132,8 @@ class MediaCubit extends Cubit<MediaState> {
       }
     });
 
-    emit(state.copyWith(currentFolderRecords: sortedMedia));
+    emit(state.copyWith(
+        currentFolderRecords: sortedMedia, status: FormzStatus.pure));
   }
 
   MediaState _resetSortedList({
@@ -161,7 +166,10 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void changeRepresentation(FilesRepresentation representation) {
-    emit(state.copyWith(representation: representation));
+    emit(state.copyWith(
+      representation: representation,
+      status: FormzStatus.pure,
+    ));
   }
 
   void setFavorite(Record object) async {
@@ -503,10 +511,16 @@ class MediaCubit extends Cubit<MediaState> {
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
-      emit(state.copyWith(responseStatus: result));
+      emit(state.copyWith(
+        responseStatus: result,
+        status: FormzStatus.pure,
+      ));
       return result;
     } else if (result == ResponseStatus.failed) {
-      emit(state.copyWith(responseStatus: result));
+      emit(state.copyWith(
+        responseStatus: result,
+        status: FormzStatus.pure,
+      ));
       return result;
     }
     return result;
@@ -560,6 +574,7 @@ class MediaCubit extends Cubit<MediaState> {
       albums: albums,
       currentFolder: currentFolder,
       currentFolderRecords: currentFolder.records,
+      status: FormzStatus.pure,
     ));
   }
 
