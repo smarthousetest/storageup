@@ -861,7 +861,7 @@ class _AuthViewState extends State<AuthView> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return state.status.isSubmissionSuccess
-            ? _registrationSuccessed(theme, context, state)
+            ? _registrationSuccess(theme, context, state)
             : _registrationInProgress(theme, context, state);
       },
     );
@@ -957,7 +957,6 @@ class _AuthViewState extends State<AuthView> {
                 event is RawKeyDownEvent) {
               if (_isRegisterFieldsValid(state)) {
                 context.read<AuthBloc>().add(AuthRegisterConfirmed());
-                print('fewwfew');
               }
             }
           },
@@ -1139,7 +1138,6 @@ class _AuthViewState extends State<AuthView> {
         //     ),
         //   ),
         // ),
-        //forupload
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 120),
           child: Container(
@@ -1218,7 +1216,7 @@ class _AuthViewState extends State<AuthView> {
     showDialog(context: context, builder: (context) => ForgotPasswordView());
   }
 
-  Widget _registrationSuccessed(
+  Widget _registrationSuccess(
       ThemeData theme, BuildContext context, AuthState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
