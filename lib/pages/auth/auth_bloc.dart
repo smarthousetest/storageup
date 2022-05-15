@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:upstorage_desktop/pages/auth/models/email.dart';
 import 'package:upstorage_desktop/pages/auth/models/name.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -155,6 +159,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     print(state.status.isValidated);
     if (state.status.isValidated) {
+      //DBCrypt dBCrypt = DBCrypt();
+      // var plainPwd = state.passwordLogin.value;
+      // var hashedPassword =
+      //     new DBCrypt().hashpw(plainPwd, new DBCrypt().gensalt());
+      // var os = (Platform.isWindows) ? Windows() : Linux();
+      // var hashPassword = File('${os.appDirPath}/hash');
+      // if (hashPassword.existsSync()) {
+      //   hashPassword.writeAsString(hashedPassword);
+      // } else {
+      //   await hashPassword.create(recursive: true);
+      //   hashPassword.writeAsString(hashedPassword);
+      // }
+
       emit(state.copyWith(
           status: FormzStatus.submissionInProgress,
           action: RequestedAction.login));

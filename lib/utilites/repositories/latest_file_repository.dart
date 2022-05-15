@@ -56,7 +56,7 @@ class LatestFileRepository {
     });
   }
 
-  List<LatestFile> get getLatestFile => _latestFileInfo;
+  List<LatestFile> get getLatestFile => _latestFileBox.values.toList();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;
@@ -65,21 +65,17 @@ class LatestFileRepository {
     return _latestFileBox.listenable();
   }
 
-  void addFile({
-    required Record latestFile,
-  }) {
-    //_latestFileBox.clear();
-    final latestFileInfo = LatestFile(
-      latestFile: latestFile,
-    );
+  Future<void> addFiles({
+    required List<Record> latestFile,
+  }) async {
+    final List<LatestFile> latestFileInfo =
+        latestFile.map((e) => LatestFile(latestFile: e)).toList();
 
-    _latestFileBox.add(
+    await _latestFileBox.clear();
+
+    _latestFileBox.addAll(
       latestFileInfo,
     );
-
-    if (_latestFileBox.values.length > 5) {
-      deleteFile(id: _latestFileBox.values.toList()[0].key);
-    }
   }
 
   Future<void> deleteFile({required int id}) async {

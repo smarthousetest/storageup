@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 
-
 class ArcIndicator extends CustomPainter {
   final bool isBackGround;
   final Color color;
@@ -74,11 +73,11 @@ class _CircularArc extends State<CircularArc>
       );
     } else if (value >= 15 && value <= 45) {
       return SvgPicture.asset(
-        'assets/space_sell/smail_okey.svg',
+        'assets/space_sell/smail_normal.svg',
       );
     } else if (value >= 45 && value <= 80) {
       return SvgPicture.asset(
-        'assets/space_sell/smail_normal.svg',
+        'assets/space_sell/smail_okey.svg',
       );
     } else if (value >= 80 && value <= 100) {
       return SvgPicture.asset(
@@ -122,9 +121,13 @@ class _CircularArc extends State<CircularArc>
                   isBackGround: false,
                   color: _colorIndicator(widget.value),
                   value: (widget.value * 3.14) / 100)),
-          Align(
-            alignment: FractionalOffset.center,
-            child: _smail(widget.value),
+          Container(
+            //padding: const EdgeInsets.only(right: 30.0),
+            margin: const EdgeInsets.only(right: 5.0),
+            child: Align(
+              alignment: FractionalOffset.center,
+              child: _smail(widget.value),
+            ),
           ),
         ],
       ),

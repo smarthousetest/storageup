@@ -8,8 +8,10 @@ import 'package:upstorage_desktop/components/dir_button_template.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/folder.dart';
+import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
+import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
@@ -119,6 +121,25 @@ class _FilePageState extends State<FilePage> {
   @override
   Widget build(BuildContext context) {
     // if (dirs_list.isEmpty) _init(context);
+
+    eventBus.on().listen((event) {
+      var object = StateInfoContainer.of(context)?.object;
+      if (object is Folder) {
+        print(object);
+        _push(
+          child: OpenedFolderView(
+            currentFolder: object,
+            previousFolders: [object],
+            pop: _pop,
+            push: _push,
+          ),
+          folderId: object.id,
+        );
+      } else {
+        print('file tapped');
+        //context.read<FilesBloc>().fileTapped(object as Record);
+      }
+    });
     _prepareFields(context);
     return BlocProvider(
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),

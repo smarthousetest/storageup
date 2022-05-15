@@ -10,7 +10,6 @@ import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -316,7 +315,7 @@ class _ButtonTemplateState extends State<FolderList> {
                 Container(
                   child: PercentArc(
                       value: 100 /
-                          (keeper!.space! / (keeper.usedSpace!).toDouble())),
+                          (keeper!.space! / (keeper.usedSpace!.toDouble()))),
                 ),
               ],
             ),
@@ -340,12 +339,12 @@ class _ButtonTemplateState extends State<FolderList> {
             height: 5,
           ),
           Container(
-            constraints: BoxConstraints(maxWidth: 300),
+            constraints: BoxConstraints(maxWidth: 170),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  fileSize(keeper.usedSpace!, translate),
+                  fileSize(keeper.usedSpace, translate),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -402,7 +401,7 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: keeper.sleepStatus == false && keeper.online == 1
+              color: keeper.online == 1
                   ? Theme.of(context).selectedRowColor
                   : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
@@ -410,11 +409,11 @@ class _ButtonTemplateState extends State<FolderList> {
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                keeper.sleepStatus == false && keeper.online == 1
+                keeper.online == 1
                     ? "• ${translate.active}"
                     : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: keeper.sleepStatus == false && keeper.online == 1
+                  color: keeper.online == 1
                       ? Color(0xFF25B885)
                       : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,

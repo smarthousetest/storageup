@@ -251,34 +251,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       bloc: _bloc,
       builder: (context, state) {
         var searchText = StateSortedContainer.of(context).search;
-        eventBus.on().listen((event) {
-          var object = StateInfoContainer.of(context)?.object;
-          if (object is Folder) {
-            print(object);
 
-            widget.push(
-              child: OpenedFolderView(
-                currentFolder: object,
-                previousFolders: [
-                  ...state.previousFolders,
-                  state.currentFolder!
-                ],
-                pop: widget.pop,
-                push: widget.push,
-              ),
-              folderId: object.id,
-            );
-            context
-                .read<OpenedFolderCubit>()
-                .changeRepresentation(FilesRepresentation.table);
-          } else {
-            print('file tapped');
-            if (_isOpen == false) {
-              startTimer();
-              context.read<OpenedFolderCubit>().fileTapped(object as Record);
-            }
-          }
-        });
         // if (state.search != searchText) {
         //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(
         //         searchText,

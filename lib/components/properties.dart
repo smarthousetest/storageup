@@ -168,15 +168,17 @@ class _ButtonTemplateState extends State<FileInfoView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 25),
-                          child: Text(
-                            widget.object?.name ?? '',
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Theme.of(context).disabledColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 17,
+                          child: Center(
+                            child: Text(
+                              widget.object?.name ?? '',
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17,
+                              ),
                             ),
                           ),
                         ),
