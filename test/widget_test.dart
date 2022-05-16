@@ -1,30 +1,39 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 
-import 'package:upstorage_desktop/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  group('Path check', (){
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    test('Path with "OneDrive" part', (){
+      var result = PathCheck.doPathCorrect('C:\\Users\\99som\\OneDrive\\>:C<5=BK\\tmp2');
+      expect(result, 'C:\\Users\\99som\\tmp2');
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('Path without "OneDrive" part', (){
+      var result = PathCheck.doPathCorrect('C:\\Users\\99som\\tmp2');
+      expect(result, 'C:\\Users\\99som\\tmp2');
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('Path with "Program Files" part', (){
+      var result = PathCheck.doPathCorrect('C:\\Program Files\\Users\\99som\\tmp2');
+      expect(result, 'C:\\tmp2');
+    });
+
+    test('Path without "Program Files" part', (){
+      var result = PathCheck.doPathCorrect('C:\\Users\\99som\\tmp2');
+      expect(result, 'C:\\Users\\99som\\tmp2');
+    });
+
+    test('Path with "Program Files (x86)" part', (){
+      var result = PathCheck.doPathCorrect('C:\\Program Files (x86)\\Users\\99som\\tmp2');
+      expect(result, 'C:\\tmp2');
+    });
+
+    test('Path without "Program Files (x86)" part', (){
+      var result = PathCheck.doPathCorrect('C:\\Users\\99som\\tmp2');
+      expect(result, 'C:\\Users\\99som\\tmp2');
+    });
+
   });
 }
