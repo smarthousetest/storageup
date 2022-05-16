@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
@@ -155,7 +156,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         }
       }
     }
-    print('Прошёл до конца');
     emit(state.copyWith(
         locationsInfo: updateLocations, localKeeper: localKeeper.reversed.toList(), serverKeeper: serverKeeper));
 
@@ -170,20 +170,13 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     String? bearerToken = await TokenRepository().getApiToken();
     var os = (Platform.isWindows) ? Windows() : Linux();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
-    var keeperLocationsFile = File('${os.appDirPath}keeper_locations');
-    List<String> keeperLocations = [];
-    if (keeperLocationsFile.existsSync()) {
-      keeperLocations = keeperLocationsFile.readAsLinesSync();
-    }
-    if (keeperLocations.isEmpty) {
-      return;
-    }
+    var box = await Hive.openBox('keeper_data');
+    String keeperDir = await box.get(event.location.id.toString());
+    await box.delete(event.location.id.toString());
     String keeperId = '';
-    print('№ ${event.location.id}');
-    if (File('${keeperLocations[event.location.id]}${Platform.pathSeparator}keeper_id.txt').existsSync()) {
-      keeperId = File('${keeperLocations[event.location.id]}${Platform.pathSeparator}keeper_id.txt')
-          .readAsStringSync()
-          .trim();
+    var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
+    if (keeperIdFile.existsSync()) {
+      keeperId = keeperIdFile.readAsStringSync().trim();
     }
     if (bearerToken != null) {
       await _getKeeperSession(keeperId, dio, bearerToken);
@@ -195,18 +188,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       }
     }
 
-    if (Directory(keeperLocations[event.location.id]).existsSync()) {
-      Directory(keeperLocations[event.location.id]).deleteSync(recursive: true);
+    if (Directory(keeperDir).existsSync()) {
+      Directory(keeperDir).deleteSync(recursive: true);
     }
-    if (keeperLocationsFile.existsSync()) {
-      keeperLocationsFile..deleteSync()..createSync();
-    }
-    var keeperLocationsSink = keeperLocationsFile.openWrite(mode: FileMode.append);
-    for (var element in state.locationsInfo) {
-      keeperLocationsSink.add('${element.dirPath}\n'.codeUnits);
-    }
-    await keeperLocationsSink.close();
-    //TODO Не изменяется список локальных киперов
     emit(state.copyWith(locationsInfo: _repository.getlocationsInfo));
   }
 
