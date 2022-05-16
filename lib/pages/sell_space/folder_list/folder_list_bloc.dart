@@ -13,7 +13,6 @@ import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:os_specification/os_specification.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 
@@ -55,6 +54,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     keeper?.forEach((element) {
       if (locationsInfo.any((info) => info.idForCompare == element.id)) {
         localKeeper.add(element);
+
         /// need add dirPath in keeper
         locationsInfo.forEach((element) {
           localPath.add(element.dirPath);
@@ -108,27 +108,31 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       var keeper = await _keeperService.getAllKeepers();
       final locationsInfo = _repository.getlocationsInfo;
 
-    List<Keeper> localKeeper = [];
-    List<Keeper> serverKeeper = [];
-    List<String> localPath = [];
+      List<Keeper> localKeeper = [];
+      List<Keeper> serverKeeper = [];
+      List<String> localPath = [];
 
-    keeper?.forEach((element) {
-      if (locationsInfo.any((info) => info.idForCompare == element.id)) {
-        localKeeper.add(element);
-        /// need add dirPath in keeper
+      keeper?.forEach((element) {
+        if (locationsInfo.any((info) => info.idForCompare == element.id)) {
+          localKeeper.add(element);
 
-        locationsInfo.forEach((element) {
-          localPath.add(element.dirPath);
-        });
-      } else {
-        serverKeeper.add(element);
-      }
-    });
-    emit(state.copyWith(
-      localKeeper: localKeeper.reversed.toList(),
-      serverKeeper: serverKeeper,
-      localPath: localPath.reversed.toList(),
-    ));
+          /// need add dirPath in keeper
+
+          locationsInfo.forEach((element) {
+            localPath.add(element.dirPath);
+          });
+        } else {
+          serverKeeper.add(element);
+        }
+      });
+      emit(
+        state.copyWith(
+          localKeeper: localKeeper.reversed.toList(),
+          serverKeeper: serverKeeper,
+          localPath: localPath.reversed.toList(),
+        ),
+      );
+    }
   }
 
   _mapDeleteLocation(
@@ -146,7 +150,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     List<Keeper> localKeeper = [];
     List<Keeper> serverKeeper = [];
 
-    if(keeper != null){
+    if (keeper != null) {
       for (var element in keeper) {
         if (updateLocations.any((info) => info.idForCompare == element.id)) {
           localKeeper.add(element);
@@ -155,8 +159,13 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         }
       }
     }
-    emit(state.copyWith(
-        locationsInfo: updateLocations, localKeeper: localKeeper.reversed.toList(), serverKeeper: serverKeeper));
+    emit(
+      state.copyWith(
+        locationsInfo: updateLocations,
+        localKeeper: localKeeper.reversed.toList(),
+        serverKeeper: serverKeeper,
+      ),
+    );
 
     // _update(emit, state);
   }
@@ -167,7 +176,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     Emitter<FolderListState> emit,
   ) async {
     String? bearerToken = await TokenRepository().getApiToken();
-    var os = (Platform.isWindows) ? Windows() : Linux();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
     var box = await Hive.openBox('keeper_data');
     String keeperDir = await box.get(event.location.id.toString());
@@ -180,8 +188,15 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     if (bearerToken != null) {
       await _getKeeperSession(keeperId, dio, bearerToken);
       try {
-        await dio.delete('/keeper',
-            queryParameters: {'ids[]': keeperId}, options: Options(headers: {'Authorization': 'Bearer $bearerToken'}));
+        await dio.delete(
+          '/keeper',
+          queryParameters: {'ids[]': keeperId},
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $bearerToken',
+            },
+          ),
+        );
       } catch (e) {
         print('Keeper does not exist');
       }
@@ -195,10 +210,12 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
 
   Future _disconnectKeeper(String proxyUrl, String session) async {
     var channel = IOWebSocketChannel.connect(proxyUrl);
-    channel.sink.add(json.encode({
-      'messageType': 'update_disconnect',
-      'session': session,
-    }));
+    channel.sink.add(
+      json.encode({
+        'messageType': 'update_disconnect',
+        'session': session,
+      }),
+    );
     // await channel.sink.done;
   }
 
