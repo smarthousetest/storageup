@@ -29,8 +29,7 @@ class DownloadLocationsRepository {
       final value = event.value;
 
       if (_locationsInfo.any((element) => element.id == key)) {
-        final currentLocationInfoIndex =
-            _locationsInfo.indexWhere((element) => element.id == key);
+        final currentLocationInfoIndex = _locationsInfo.indexWhere((element) => element.id == key);
 
         if (event.deleted)
           _locationsInfo.removeAt(currentLocationInfoIndex);
@@ -44,23 +43,21 @@ class DownloadLocationsRepository {
 
   List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
 
-  ValueListenable<Box<DownloadLocation>>
-      get getDownloadLocationsValueListenable => _locationsBox.listenable();
+  ValueListenable<Box<DownloadLocation>> get getDownloadLocationsValueListenable => _locationsBox.listenable();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;
 
-  void createLocation(
-      {required String path,
-      required int countOfGb,
-      required String name,
-      required String idForCompare}) {
+  int createLocation({
+    required String path,
+    required int countOfGb,
+    required String name,
+    required String idForCompare,
+  }) {
     var lastKey;
     try {
       lastKey = _locationsBox.keys.last;
-    } catch (e) {
-      lastKey = 0;
-    }
+    } catch (e) {}
 
     final downloadLocation = DownloadLocation(
       dirPath: path,
@@ -74,6 +71,7 @@ class DownloadLocationsRepository {
       downloadLocation.id,
       downloadLocation,
     );
+    return downloadLocation.id;
   }
 
   void changelocation({required DownloadLocation location}) {

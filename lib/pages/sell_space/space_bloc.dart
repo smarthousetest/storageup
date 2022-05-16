@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
@@ -19,9 +20,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       if (event is SpacePageOpened) {
         await _mapSpacePageOpened(event, state, emit);
       }
-      // if (event is RunSoft) {
-      //   await _mapRunSoft(state, event);
-      // }
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
       }
@@ -52,16 +50,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     String keeperId,
   ) async {
     var os = (Platform.isWindows) ? Windows() : Linux();
-    var keeperLocations = File('${os.appDirPath}keeper_locations');
-    if (keeperLocations.existsSync()) {
-      keeperLocations.deleteSync();
-    }
-    keeperLocations.createSync();
-    var keeperLocationsSink = keeperLocations.openWrite(mode: FileMode.append);
-    state.locationsInfo.forEach((element) {
-      keeperLocationsSink.add('${element.dirPath}\n'.codeUnits);
-    });
-    await keeperLocationsSink.close();
     _writeKeeperId('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt', keeperId);
     var bearerToken = await TokenRepository().getApiToken();
     if (bearerToken != null) {
@@ -110,12 +98,16 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var name = event.name;
     var id = await _subscriptionService.addNewKeeper(name, countOfGb);
     if (id != null) {
-      _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+      int keeperDataId = _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
       var locationsInfo = _repository.getlocationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
       // add(RunSoft(tmpState, id));
+      var box = await Hive.openBox('keeper_data');
+      await box.put(keeperDataId.toString(), path);
       _mapRunSoft(tmpState, id);
     }
   }
 }
+
+
