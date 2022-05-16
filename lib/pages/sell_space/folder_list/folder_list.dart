@@ -253,6 +253,15 @@ class _ButtonTemplateState extends State<FolderList> {
   }
 
   Widget _keeperIndicator(BuildContext context, Keeper? keeper) {
+    var percentSpace;
+    var keeperAllSapce = keeper?.space;
+    var usedSpace = keeper?.usedSpace;
+    if (keeper != null && keeperAllSapce != null && usedSpace != null) {
+      percentSpace = 100 / (keeperAllSapce / (usedSpace.toDouble()));
+    } else {
+      percentSpace = 0;
+    }
+
     return Container(
       width: 140,
       padding: const EdgeInsets.only(left: 20.0, top: 10),
@@ -313,10 +322,9 @@ class _ButtonTemplateState extends State<FolderList> {
             child: Stack(
               children: [
                 Container(
-                  child: PercentArc(
-                      value: 100 /
-                          (keeper!.space! / (keeper.usedSpace!.toDouble()))),
-                ),
+                    child: PercentArc(
+                  value: percentSpace,
+                )),
               ],
             ),
           ),
@@ -344,7 +352,7 @@ class _ButtonTemplateState extends State<FolderList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  fileSize(keeper.usedSpace, translate),
+                  fileSize(usedSpace, translate),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -354,7 +362,7 @@ class _ButtonTemplateState extends State<FolderList> {
                   ),
                 ),
                 Text(
-                  " из ${fileSize(keeper.space!, translate)}",
+                  " из ${fileSize(keeperAllSapce, translate)}",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
