@@ -29,7 +29,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     });
     on<UpdateLocationsList>((event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
   }
-
   // final AuthenticationRepository _authenticationRepository =
   // getIt<AuthenticationRepository>();
 

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/upload_media.dart';
+import 'package:os_specification/os_specification.dart';
 
 import 'models/upload_state.dart';
 
@@ -8,8 +8,8 @@ class UploadMediaRepo {
   late Box<UploadMedia> _box;
 
   Future<UploadMediaRepo> init() async {
-    var pathBD = await getApplicationSupportDirectory();
-    Hive.init(pathBD.path);
+    var os = OsSpecifications.getOs();
+    Hive.init(os.appDirPath);
     Hive.registerAdapter(AutouploadStateAdapter());
     Hive.registerAdapter(UploadMediaAdapter());
     _box = await Hive.openBox('files_hashes');

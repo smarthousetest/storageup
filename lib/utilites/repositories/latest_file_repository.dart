@@ -1,3 +1,4 @@
+// import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/file.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
+import 'package:os_specification/os_specification.dart';
 
 const _latestFileBoxName = 'latestFileBox';
 
@@ -23,9 +25,8 @@ class LatestFileRepository {
     Hive.registerAdapter(FileAdapter());
 
     WidgetsFlutterBinding.ensureInitialized();
-    final appPath = await getApplicationDocumentsDirectory();
-
-    Hive.init(appPath.path);
+    var os = OsSpecifications.getOs();
+    Hive.init(os.appDirPath);
 
     final box = await Hive.openBox<LatestFile>(_latestFileBoxName);
     //box.deleteFromDisk();
