@@ -41,6 +41,7 @@ class MediaPage extends StatefulWidget {
 List<Widget> dirsList = [];
 
 class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
+  bool youSeePopUp = false;
   bool ifGrid = true;
   S translate = getIt<S>();
   var _folderButtonSize = 140;
@@ -110,20 +111,24 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
       create: (_) => MediaCubit()..init(),
       child: BlocListener<MediaCubit, MediaState>(
         listener: (context, state) async {
-          if (state.status == FormzStatus.submissionFailure) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurSomethingGoesWrong();
-              },
-            );
-          } else if (state.status == FormzStatus.submissionCanceled) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurFailedServerConnection();
-              },
-            );
+          if (youSeePopUp == false) {
+            if (state.status == FormzStatus.submissionFailure) {
+              youSeePopUp = true;
+              youSeePopUp = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurSomethingGoesWrong(youSeePopUp);
+                },
+              );
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              youSeePopUp = true;
+              youSeePopUp = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurFailedServerConnection(youSeePopUp);
+                },
+              );
+            }
           }
         },
         child: Expanded(
@@ -247,44 +252,38 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                   constraints: BoxConstraints(
                                                       maxWidth: 120),
                                                   child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Expanded(
-                                                        flex: 5,
-                                                        child: Container(),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 23,
-                                                        child: Container(
-                                                          height: 23,
-                                                          child: Text(
-                                                            state.user
-                                                                    ?.firstName ??
-                                                                state
-                                                                    .user?.email
-                                                                    ?.split('@')
-                                                                    .first ??
-                                                                'Name',
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: TextStyle(
-                                                              fontSize: 17,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .bottomAppBarColor,
-                                                            ),
+                                                      Padding(
+                                                        padding: const EdgeInsets
+                                                                .symmetric(
+                                                            vertical:
+                                                                3), //5 gives owerflow use 3 can't see diff
+                                                        child: Text(
+                                                          state.user
+                                                                  ?.firstName ??
+                                                              state.user?.email
+                                                                  ?.split('@')
+                                                                  .first ??
+                                                              'Name',
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            fontSize: 17,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .bottomAppBarColor,
                                                           ),
                                                         ),
                                                       ),
-                                                      Expanded(
-                                                        flex: 5,
-                                                        child: Container(),
-                                                      ),
                                                       Text(
-                                                        state.user?.email ??
+                                                        state.user?.email
+                                                                ?.split('@')
+                                                                .first ??
                                                             'email',
                                                         overflow: TextOverflow
                                                             .ellipsis,

@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/autoupload/autoupload_controller.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/upload_media.dart';
@@ -214,6 +215,7 @@ class LoadController {
     } catch (e, sw) {
       print('_processUploadCallback error: $e \nstack trace: $sw');
       _processNextFileUpload();
+      //попробовать вернуть что-то здесь
     }
   }
 
@@ -339,6 +341,8 @@ class LoadController {
             localPath: value.path,
             isInProgress: false,
             downloadPercent: 100,
+            endedWithException: false,
+            errorReason: null,
           );
 
           filesList[fileIndex] = record;
@@ -358,6 +362,8 @@ class LoadController {
             localPath: value.filePath,
             isInProgress: true,
             downloadPercent: value.percent,
+            endedWithException: false,
+            errorReason: null,
           );
 
           filesList[fileIndex] = record;
@@ -374,11 +380,11 @@ class LoadController {
         var fileIndex = filesList.indexWhere((element) => element.id == fileId);
         if (fileIndex != -1) {
           var record = filesList[fileIndex].copyWith(
-            localPath: null,
-            isInProgress: false,
-            downloadPercent: -1,
-            endedWithException: true,
-          );
+              localPath: null,
+              isInProgress: false,
+              downloadPercent: -1,
+              endedWithException: true,
+              errorReason: value.errorReason);
 
           filesList[fileIndex] = record;
           // filesList.firstWhere((element) => element.id == fileId)
@@ -396,6 +402,8 @@ class LoadController {
           var record = filesList[fileIndex].copyWith(
             isInProgress: false,
             downloadPercent: -1,
+            endedWithException: false,
+            errorReason: null,
           );
 
           filesList[fileIndex] = record;

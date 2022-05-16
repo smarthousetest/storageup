@@ -16,7 +16,7 @@
     "term_of_use": "User Agreement",
     "term_of_use_after": " and give my consent to the processing of my personal data",
     "notification_re_auth": "You need to log in again",
-    "good": "Well",
+    "well": "Well",
     "wrong_password": "Password must be more than 8 characters",
     "wrong_old_password": "Invalid password",
     "wrong_email": "Please enter a valid email",

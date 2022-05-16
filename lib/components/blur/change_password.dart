@@ -509,7 +509,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return BlurSomethingGoesWrong();
+                                                  return BlurSomethingGoesWrong(
+                                                      true);
                                                 },
                                               );
                                             } else {
@@ -518,7 +519,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return BlurFailedServerConnection();
+                                                  return BlurFailedServerConnection(
+                                                      true);
                                                 },
                                               );
                                             }
@@ -621,7 +623,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                         context, AuthView.route, (route) => false);
                   },
                   child: Text(
-                    translate.good,
+                    translate.ok,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 16,

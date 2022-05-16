@@ -221,10 +221,10 @@ class S {
   }
 
   /// `Well`
-  String get good {
+  String get well {
     return Intl.message(
       'Well',
-      name: 'good',
+      name: 'well',
       desc: '',
       args: [],
     );

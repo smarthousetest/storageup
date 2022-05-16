@@ -168,7 +168,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Go to"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Go to authorization"),
-        "good": MessageLookupByLibrary.simpleMessage("Well"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
@@ -352,6 +351,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("We have sent an email to"),
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
+        "well": MessageLookupByLibrary.simpleMessage("Well"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "spaces will be deleted without the possibility of recovery."),
         "wrong_cred":
