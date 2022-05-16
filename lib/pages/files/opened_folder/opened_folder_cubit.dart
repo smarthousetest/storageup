@@ -50,6 +50,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   List<DownloadObserver> _downloadObservers = [];
   StreamSubscription? updatePageSubscription;
   late final LatestFileRepository _repository;
+  late String idTappedFile;
 
   late Observer _updateObserver = Observer((e) {
     try {
@@ -72,9 +73,21 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
               (file) => file.isInProgress && file.downloadPercent == -1);
           _setRecordDownloading(recordId: file.id);
         }
-        if (downloadingFilesList
-            .any((file) => file.endedWithException == true)) {
+        if (downloadingFilesList.any((file) =>
+            file.endedWithException == true &&
+            file.errorReason == ErrorReason.noInternetConnection &&
+            file.downloadPercent == -1 &&
+            file.isInProgress == false &&
+            file.id == idTappedFile)) {
+          emit(state.copyWith(status: FormzStatus.submissionCanceled));
+          emit(state.copyWith(status: FormzStatus.pure));
+        } else if (downloadingFilesList.any((file) =>
+            file.endedWithException == true &&
+            file.downloadPercent == -1 &&
+            file.isInProgress == false &&
+            file.id == idTappedFile)) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
+          emit(state.copyWith(status: FormzStatus.pure));
         }
       }
     } catch (e) {
@@ -640,7 +653,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var box = await Hive.openBox(kPathDBName);
 
     String path = box.get(record.id, defaultValue: '');
-
+    idTappedFile = record.id;
     if (path.isNotEmpty) {
       var appPath = (await getApplicationSupportDirectory()).path;
       if (path.contains("()")) {

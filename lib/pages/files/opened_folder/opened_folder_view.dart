@@ -58,6 +58,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   int _startTimer = 1;
   var _indexObject = -1;
   bool _isOpen = false;
+  bool youSeePopUp = false;
 
   void _initiatingControllers(OpenedFolderState state) {
     if (_popupControllers.isEmpty) {
@@ -111,20 +112,24 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         ),
       child: BlocListener<OpenedFolderCubit, OpenedFolderState>(
         listener: (context, state) async {
-          if (state.status == FormzStatus.submissionFailure) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurSomethingGoesWrong();
-              },
-            );
-          } else if (state.status == FormzStatus.submissionCanceled) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurFailedServerConnection();
-              },
-            );
+          if (youSeePopUp == false) {
+            if (state.status == FormzStatus.submissionFailure) {
+              youSeePopUp = true;
+              youSeePopUp = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurSomethingGoesWrong(youSeePopUp);
+                },
+              );
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              youSeePopUp = true;
+              youSeePopUp = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurFailedServerConnection(youSeePopUp);
+                },
+              );
+            }
           }
         },
         child: Positioned.fill(

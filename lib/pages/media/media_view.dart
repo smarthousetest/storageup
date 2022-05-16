@@ -43,6 +43,7 @@ class MediaPage extends StatefulWidget {
 List<Widget> dirsList = [];
 
 class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
+  bool youSeePopUp = false;
   bool ifGrid = true;
   S translate = getIt<S>();
   var _folderButtonSize = 140;
@@ -112,20 +113,24 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
       create: (_) => MediaCubit()..init(),
       child: BlocListener<MediaCubit, MediaState>(
         listener: (context, state) async {
-          if (state.status == FormzStatus.submissionFailure) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurSomethingGoesWrong();
-              },
-            );
-          } else if (state.status == FormzStatus.submissionCanceled) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurFailedServerConnection();
-              },
-            );
+          if (youSeePopUp == false) {
+            if (state.status == FormzStatus.submissionFailure) {
+              youSeePopUp = true;
+              youSeePopUp = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurSomethingGoesWrong(youSeePopUp);
+                },
+              );
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              youSeePopUp = true;
+              youSeePopUp = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurFailedServerConnection(youSeePopUp);
+                },
+              );
+            }
           }
         },
         child: Expanded(

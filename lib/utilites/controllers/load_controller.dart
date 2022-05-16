@@ -342,6 +342,7 @@ class LoadController {
             isInProgress: false,
             downloadPercent: 100,
             endedWithException: false,
+            errorReason: null,
           );
 
           filesList[fileIndex] = record;
@@ -362,6 +363,7 @@ class LoadController {
             isInProgress: true,
             downloadPercent: value.percent,
             endedWithException: false,
+            errorReason: null,
           );
 
           filesList[fileIndex] = record;
@@ -382,7 +384,7 @@ class LoadController {
               isInProgress: false,
               downloadPercent: -1,
               endedWithException: true,
-              errorReason: ErrorReason.noInternetConnection);
+              errorReason: value.errorReason);
 
           filesList[fileIndex] = record;
           // filesList.firstWhere((element) => element.id == fileId)
@@ -401,6 +403,7 @@ class LoadController {
             isInProgress: false,
             downloadPercent: -1,
             endedWithException: false,
+            errorReason: null,
           );
 
           filesList[fileIndex] = record;
