@@ -253,11 +253,11 @@ class _ButtonTemplateState extends State<FolderList> {
   }
 
   Widget _keeperIndicator(BuildContext context, Keeper? keeper) {
-    var percentSpace;
+    double percentSpace;
     var keeperAllSapce = keeper?.space;
     var usedSpace = keeper?.usedSpace;
     if (keeper != null && keeperAllSapce != null && usedSpace != null) {
-      percentSpace = 100 / (keeperAllSapce / (usedSpace.toDouble()));
+      percentSpace = 100 / (keeperAllSapce / (usedSpace)).toDouble();
     } else {
       percentSpace = 0;
     }
