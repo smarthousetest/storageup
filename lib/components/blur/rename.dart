@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -18,6 +19,7 @@ class _ButtonTemplateState extends State<BlurRename> {
   var myController = TextEditingController();
   bool canSave = false;
   bool hintColor = false;
+  bool hintSymbvols = true;
 
   @override
   void initState() {
@@ -59,9 +61,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                     padding: const EdgeInsets.fromLTRB(60, 25, 0, 0),
                     child: Container(
                       width: 400,
-                      height: 212,
+                      height: 190,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             translate.rename,
@@ -71,23 +73,40 @@ class _ButtonTemplateState extends State<BlurRename> {
                               color: Theme.of(context).focusColor,
                             ),
                           ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: Text(
-                                translate.wrong_filename,
-                                style: TextStyle(
-                                  fontSize: hintColor ? 0 : 14,
-                                  fontFamily: kNormalTextFontFamily,
-                                  color: hintColor
-                                      ? Colors.white
-                                      : Theme.of(context).errorColor,
-                                ),
+                          Padding(
+                            padding: hintColor
+                                ? EdgeInsets.only(top: 0)
+                                : EdgeInsets.only(top: 20),
+                            child: Text(
+                              translate.wrong_filename,
+                              style: TextStyle(
+                                fontSize: hintColor ? 0 : 14,
+                                fontFamily: kNormalTextFontFamily,
+                                color: hintColor
+                                    ? Colors.white
+                                    : Theme.of(context).errorColor,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 25),
+                            padding: hintSymbvols
+                                ? EdgeInsets.only(top: 0)
+                                : EdgeInsets.only(top: 20),
+                            child: Text(
+                              translate.wrong_symbvols,
+                              style: TextStyle(
+                                fontSize: hintSymbvols ? 0 : 14,
+                                fontFamily: kNormalTextFontFamily,
+                                color: hintSymbvols
+                                    ? Colors.white
+                                    : Theme.of(context).errorColor,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: hintColor && hintSymbvols
+                                ? EdgeInsets.only(top: 42)
+                                : EdgeInsets.only(top: 5),
                             child: Container(
                               width: 400,
                               height: 36,
@@ -102,16 +121,23 @@ class _ButtonTemplateState extends State<BlurRename> {
                                 onChanged: (myController) {
                                   print(myController);
                                   myController = myController.trim();
-                                  if (myController.isEmpty ||
-                                      myController.length < 1) {
+                                  if (myController.contains(
+                                              RegExp(r'[\\/:*?\"<>|]'), 0) ==
+                                          true &&
+                                      myController.isNotEmpty) {
                                     setState(() {
+                                      hintSymbvols = false;
                                       canSave = false;
                                     });
-                                  }
-                                  if (myController.isNotEmpty &&
-                                      myController.length >= 1) {
+                                  } else if (myController.isNotEmpty) {
                                     setState(() {
+                                      hintSymbvols = true;
                                       canSave = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      hintSymbvols = true;
+                                      canSave = false;
                                     });
                                   }
                                 },
@@ -142,7 +168,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 26),
+                            padding: const EdgeInsets.only(top: 25),
                             child: Container(
                               width: 400,
                               child: Row(

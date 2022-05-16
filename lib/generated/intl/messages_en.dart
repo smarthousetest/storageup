@@ -364,6 +364,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid password"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Password must be more than 8 characters"),
+        "wrong_symbvols": MessageLookupByLibrary.simpleMessage(
+            "The file name must not contain the following characters: \\/:*?\"<>|"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Username must be more than 2 characters"),
         "you_cant_enter": MessageLookupByLibrary.simpleMessage(

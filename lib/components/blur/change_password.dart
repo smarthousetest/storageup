@@ -400,7 +400,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                             borderSide: BorderSide(
                                                 color: hintBorder2
                                                     ? Theme.of(context)
-                                                        .accentColor
+                                                        .colorScheme
+                                                        .secondary
                                                     : Theme.of(context)
                                                         .errorColor,
                                                 width: 1.5),

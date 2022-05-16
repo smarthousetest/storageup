@@ -1080,6 +1080,16 @@ class S {
     );
   }
 
+  /// `Ok`
+  String get good {
+    return Intl.message(
+      'Ok',
+      name: 'good',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Account deleting`
   String get accaunt_deleting {
     return Intl.message(
@@ -2301,6 +2311,16 @@ class S {
     return Intl.message(
       'Ok',
       name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The file name must not contain the following characters: \/:*?"<>|`
+  String get wrong_symbvols {
+    return Intl.message(
+      'The file name must not contain the following characters: \\/:*?"<>|',
+      name: 'wrong_symbvols',
       desc: '',
       args: [],
     );
