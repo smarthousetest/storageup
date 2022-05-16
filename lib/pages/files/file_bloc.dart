@@ -1,9 +1,16 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
@@ -16,6 +23,9 @@ import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
+
+import '../../constants.dart';
+import '../../utilites/repositories/latest_file_repository.dart';
 
 //enum SortingDirection { neutral, up, down }
 enum ContextActionEnum {
@@ -65,6 +75,8 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
         _mapNoInternet(state, emit);
       } else if (event is FileRename) {
         await _mapRename(event, state, emit);
+      } else if (event is FileTapped) {
+        await _fileTapped(event, emit, state);
       }
     });
   }
@@ -76,6 +88,10 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
   List<UploadObserver> _listeners = [];
+  List<DownloadObserver> _downloadObservers = [];
+  var _filesController =
+      getIt<FilesController>(instanceName: 'files_controller');
+  late final LatestFileRepository _repository;
 
   Future<void> _mapFilesPageOpened(
     FilesState state,
@@ -88,6 +104,8 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
       var files = await _controller.getFiles();
       var currentFolder = _controller.getFilesRootFolder;
       var user = _userRepository.getUser;
+      _repository = await GetIt.instance.getAsync<LatestFileRepository>();
+
       print(files?.length);
       print(currentFolder?.name);
       emit(
@@ -704,6 +722,122 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     }
   }
 
+  Future<void> _fileTapped(
+    FileTapped event,
+    Emitter<FilesState> emit,
+    FilesState state,
+  ) async {
+    await _filesController.setRecentFile(event.record, DateTime.now());
+    var recentsFile = await _filesController.getRecentFiles();
+    if (recentsFile != null) {
+      await _repository.addFiles(latestFile: recentsFile);
+    }
+
+    var box = await Hive.openBox(kPathDBName);
+    String path = box.get(event.record.id, defaultValue: '');
+
+    if (path.isNotEmpty) {
+      var appPath = (await getApplicationSupportDirectory()).path;
+      if (path.contains("()")) {
+        path.replaceAll(('('), '"("');
+        path.replaceAll((')'), '")"');
+      }
+
+      var fullPathToFile = "$appPath/$path";
+      var isExisting = await File(fullPathToFile).exists();
+      //var isExistingSync = File(fullPathToFile).watch();
+      print(fullPathToFile);
+      if (isExisting) {
+        var res = await OpenFile.open(fullPathToFile);
+        print(res.message);
+      } else {
+        _downloadFile(event.record.id, emit);
+      }
+    } else {
+      _downloadFile(event.record.id, emit);
+    }
+  }
+
+  void _downloadFile(String recordId, Emitter<FilesState> emit) async {
+    _loadController.downloadFile(fileId: recordId);
+    _registerDownloadObserver(recordId, emit);
+    //_setRecordDownloading(recordId: recordId, emit: emit);
+  }
+
+  void _registerDownloadObserver(
+      String recordId, Emitter<FilesState> emit) async {
+    var box = await Hive.openBox(kPathDBName);
+    var controllerState = _loadController.getState;
+    var downloadObserver = DownloadObserver(recordId, (value) async {
+      if (value is List<DownloadFileInfo>) {
+        var fileId = value.indexWhere((element) => element.id == recordId);
+
+        if (fileId != -1) {
+          var file = value[fileId];
+          if (file.endedWithException) {
+            // _setRecordDownloading(
+            //     recordId: recordId, isDownloading: false, emit: emit);
+
+            _unregisterDownloadObserver(recordId);
+          } else if (file.localPath.isNotEmpty) {
+            var path = file.localPath
+                .split('/')
+                .skipWhile((value) => value != 'downloads')
+                .join('/');
+            await box.put(file.id, path);
+
+            // _setRecordDownloading(
+            //     recordId: recordId, isDownloading: false, emit: emit);
+
+            var res = await OpenFile.open(file.localPath);
+            print(res.message);
+
+            _unregisterDownloadObserver(recordId);
+          }
+        }
+      }
+      // }
+    });
+
+    controllerState.registerObserver(
+      downloadObserver,
+    );
+
+    _downloadObservers.add(downloadObserver);
+  }
+
+  void _unregisterDownloadObserver(String recordId) async {
+    try {
+      final observer =
+          _downloadObservers.firstWhere((observer) => observer.id == recordId);
+
+      _loadController.getState.unregisterObserver(observer);
+
+      _downloadObservers.remove(observer);
+    } catch (e) {
+      log('OpenFolderCubit -> _unregisterDownloadObserver:', error: e);
+    }
+  }
+
+  void _setRecordDownloading({
+    required String recordId,
+    bool isDownloading = true,
+    required Emitter<FilesState> emit,
+  }) {
+    try {
+      var currentRecordIndex =
+          state.allFiles.indexWhere((element) => element.id == recordId);
+
+      var objects = [...state.allFiles];
+      var currentRecord = objects[currentRecordIndex] as Record;
+      objects[currentRecordIndex] =
+          currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
+      emit(state.copyWith(allFiles: objects));
+    } catch (e) {
+      log('FilesBloc -> _setRecordDownloading:', error: e);
+    }
+  }
+
   void _mapNoInternet(FilesState state, Emitter<FilesState> emit) {
     emit(state.copyWith(
       status: FormzStatus.submissionFailure,
@@ -749,4 +883,10 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
 class UploadObserver extends Observer {
   String id;
   UploadObserver(this.id, Function(dynamic) onChange) : super(onChange);
+}
+
+class DownloadObserver extends Observer {
+  String id;
+
+  DownloadObserver(this.id, Function(dynamic) onChange) : super(onChange);
 }

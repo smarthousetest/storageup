@@ -1,7 +1,9 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:file_typification/file_typification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/dir_button_template.dart';
@@ -15,6 +17,8 @@ import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
+import '../../models/base_object.dart';
+import '../../models/user.dart';
 import 'files_list/files_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -122,24 +126,10 @@ class _FilePageState extends State<FilePage> {
   Widget build(BuildContext context) {
     // if (dirs_list.isEmpty) _init(context);
 
-    eventBus.on().listen((event) {
-      var object = StateInfoContainer.of(context)?.object;
-      if (object is Folder) {
-        print(object);
-        _push(
-          child: OpenedFolderView(
-            currentFolder: object,
-            previousFolders: [object],
-            pop: _pop,
-            push: _push,
-          ),
-          folderId: object.id,
-        );
-      } else {
-        print('file tapped');
-        //context.read<FilesBloc>().fileTapped(object as Record);
-      }
-    });
+    // eventBus.on().listen((event) {
+    //   var object = StateInfoContainer.of(context)?.object;
+
+    // });
     _prepareFields(context);
     return BlocProvider(
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
@@ -540,10 +530,12 @@ class _FilePageState extends State<FilePage> {
         return BlocBuilder<FilesBloc, FilesState>(builder: (context, state) {
           // _prepareFields(context);
           return Container(
-              child: FileInfoView(
-            key: propertiesWidthKey,
-            user: state.user,
-            object: StateInfoContainer.of(context)?.object,
+              child: _properies(
+            context,
+            state,
+            StateInfoContainer.of(context)?.object,
+            state.user,
+            propertiesWidthKey,
           ));
         });
       }
@@ -576,370 +568,14 @@ class _FilePageState extends State<FilePage> {
     StateContainer.of(context).changeChoosedFilesFolderId(choosedFolder);
   }
 
-  Widget _recentFiles() {
-    return Expanded(child: BlocBuilder<FilesBloc, FilesState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 30, bottom: 30),
-              child: Container(
-                height: 224,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 30,
-                        child: Row(
-                          children: [
-                            Text(
-                              translate.folder_dir,
-                              style: TextStyle(
-                                color: Theme.of(context).focusColor,
-                                fontSize: 20,
-                                fontFamily: kNormalTextFontFamily,
-                              ),
-                            ),
-                            Expanded(
-                              flex: 861,
-                              child: SizedBox(),
-                            ),
-                            Container(
-                              width: 30,
-                              height: 30,
-                              child: RawMaterialButton(
-                                onPressed: () {},
-                                fillColor: Theme.of(context).primaryColor,
-                                child: Icon(
-                                  Icons.arrow_back_ios_rounded,
-                                  color: Theme.of(context).splashColor,
-                                  size: 20.0,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: Container(
-                                width: 30,
-                                height: 30,
-                                child: RawMaterialButton(
-                                  onPressed: () {},
-                                  fillColor: Theme.of(context).primaryColor,
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Theme.of(context).splashColor,
-                                    size: 20.0,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      _foldersSection(context)
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 30, right: 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Color.fromARGB(25, 23, 69, 139),
-                          blurRadius: 4,
-                          offset: Offset(1, 4))
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(40, 20, 30, 0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 100,
-                              child: Text(
-                                translate.recent,
-                                style: TextStyle(
-                                  color: Theme.of(context).focusColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 821,
-                              child: Container(),
-                            ),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              iconSize: 30,
-                              onPressed: () {
-                                setState(() {
-                                  ifGrid = false;
-                                });
-                                print('ifGrid is $ifGrid');
-                              },
-                              icon: SvgPicture.asset(
-                                  'assets/file_page/list.svg',
-                                  color: ifGrid
-                                      ? Theme.of(context)
-                                          .toggleButtonsTheme
-                                          .color
-                                      : Theme.of(context).splashColor),
-                            ),
-                            IconButton(
-                              iconSize: 30,
-                              onPressed: () {
-                                setState(() {
-                                  ifGrid = true;
-                                });
-                                print('ifGrid is ');
-                              },
-                              icon: SvgPicture.asset(
-                                  'assets/file_page/block.svg',
-                                  color: ifGrid
-                                      ? Theme.of(context).splashColor
-                                      : Theme.of(context)
-                                          .toggleButtonsTheme
-                                          .color),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ifGrid
-                          ? Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 40),
-                              child: Divider(
-                                height: 1,
-                                color: Theme.of(context).dividerColor,
-                              ),
-                            )
-                          : Container(),
-                      Expanded(
-                        child: ifGrid ? _filesGrid(context) : FilesList(),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ],
-        );
-      },
-    ));
-  }
+  Widget _properies(BuildContext context, FilesState state, BaseObject? object,
+      User? user, GlobalKey? key) {
+    var type = FileAttribute().getFilesType(object!.name!.toLowerCase());
 
-  Widget _foldersSection(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    return Expanded(
-      child: Padding(
-          padding: const EdgeInsets.only(top: 25),
-          child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 31),
-                  child: Container(
-                    width: 130,
-                    height: 130,
-                    child: BlocBuilder<FilesBloc, FilesState>(
-                      builder: (context, state) {
-                        return Listener(
-                          child: OutlinedButton(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  child: SvgPicture.asset(
-                                    'assets/home_page/add_folder.svg',
-                                    height: 46,
-                                    width: 46,
-                                  ),
-                                ),
-                                Text(
-                                  translate.create_a_folder,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: kNormalTextFontFamily,
-                                    color: Theme.of(context).disabledColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () async {
-                              var str = await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return BlurAddFolder();
-                                },
-                              );
-                              print(str);
-                              if (str is String)
-                                context.read<FilesBloc>().add(FileAddFolder(
-                                    name: str,
-                                    parentFolderId: state.currentFolder?.id));
-                            },
-                            style: OutlinedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  width: 2,
-                                  color: Theme.of(context).dividerColor,
-                                ),
-                              ),
-                              elevation: 0,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                _expandedSection(theme),
-              ])),
-    );
-  }
-
-  Widget _expandedSection(ThemeData theme) {
-    return Container(
-      child: BlocBuilder<FilesBloc, FilesState>(
-        builder: (context, state) {
-          if (state.currentFolder != null) {
-            var folders =
-                state.allFiles.where((item) => item is Folder).toList();
-            return ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: folders.length + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return CustomDirButton(
-                    name: translate.all_files,
-                    readonly: true,
-                    description: translate.count_of_files(
-                        state.currentFolder?.records?.length ?? 0),
-                    onTap: () {
-                      _push(
-                        child: OpenedFolderView(
-                            currentFolder: state.currentFolder!,
-                            previousFolders: [],
-                            pop: _pop,
-                            push: _push),
-                        folderId: null,
-                      );
-                    },
-                  );
-                } else {
-                  var folder = folders[index - 1] as Folder;
-                  return CustomDirButton(
-                    name: folder.name!,
-                    readonly: false,
-                    description:
-                        translate.count_of_files(folder.records?.length ?? 0),
-                    onTap: () {
-                      setState(() {
-                        index = 1;
-                        print(index - 1);
-                      });
-                    },
-                  );
-                }
-              },
-            );
-          } else {
-            return Container();
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _filesGrid(BuildContext context) {
-    // var path = '';
-    // var dir = Directory(path);
-    // var isExist = dir.existsSync();
-
-    return LayoutBuilder(builder: (context, constrains) {
-      var crossAxisCount = constrains.minWidth ~/ 160;
-      return GridView.count(
-        crossAxisCount: crossAxisCount,
-        padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
-        crossAxisSpacing: 56,
-        children: List.generate(17, (index) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: constrains.minWidth / crossAxisCount,
-                height: constrains.minWidth / crossAxisCount * 1.3,
-                color: Theme.of(context).primaryColor,
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      child: Image.asset('assets/test_img/1.jpg'),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Text(
-                        '1.jpg',
-                        style: TextStyle(
-                          color: Theme.of(context).disabledColor,
-                          fontSize: 14,
-                          fontFamily: kNormalTextFontFamily,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }),
-      );
-    });
-  }
-
-  Widget openFolder(BuildContext context) {
-    return Expanded(
-      child: BlocBuilder<FilesBloc, FilesState>(builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 30, top: 30),
-          child: Container(
+    return Padding(
+        padding: const EdgeInsets.only(right: 30, top: 30, bottom: 30, left: 0),
+        child: Container(
+            width: 320,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               borderRadius: BorderRadius.circular(10),
@@ -950,98 +586,466 @@ class _FilePageState extends State<FilePage> {
                     offset: Offset(1, 4))
               ],
             ),
-            alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 20, 30, 0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              index = 0;
-                            });
-                          },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
+            child: ListView(controller: ScrollController(), children: [
+              Padding(
+                  padding: EdgeInsets.only(right: 17, top: 17),
+                  child: Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          StateInfoContainer.of(context)?.setInfoObject(null);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            child:
+                                SvgPicture.asset('assets/file_page/close.svg'),
+                          ),
+                        ),
+                      ))),
+              Padding(
+                  padding: const EdgeInsets.only(
+                      right: 30.0, left: 30, bottom: 30, top: 5),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Container(
+                                height: 46,
+                                width: 46,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(23),
+                                  child: user.image,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              constraints: BoxConstraints(maxWidth: 120),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text(
+                                      user?.fullName ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color:
+                                            Theme.of(context).bottomAppBarColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    user?.email ?? '',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: Divider(
+                            height: 1,
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 0),
+                          child: Center(
                             child: Text(
-                              translate.files + " / ",
+                              translate.properties,
                               style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
+                                color: Theme.of(context).focusColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 20,
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Text(
-                        state.currentFolder?.name ?? "",
-                        style: TextStyle(
-                          color: Theme.of(context).focusColor,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 20,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: Center(
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              child: object is Record && type != 'image'
+                                  ? type.isNotEmpty
+                                      ? Image.asset(
+                                          'assets/file_icons/$type.png',
+                                          fit: BoxFit.contain,
+                                        )
+                                      : Image.asset(
+                                          'assets/file_icons/files.png',
+                                          fit: BoxFit.contain,
+                                        )
+                                  : type == 'image'
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.network(
+                                            (object as Record)
+                                                .thumbnail!
+                                                .first
+                                                .publicUrl!,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        )
+                                      : Image.asset(
+                                          'assets/file_icons/folder.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                            ),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 821,
-                        child: Container(),
-                      ),
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        iconSize: 30,
-                        onPressed: () {
-                          setState(() {
-                            ifGrid = false;
-                          });
-                          print('ifGrid is $ifGrid');
-                        },
-                        icon: SvgPicture.asset('assets/file_page/list.svg',
-                            color: ifGrid
-                                ? Theme.of(context).toggleButtonsTheme.color
-                                : Theme.of(context).splashColor),
-                      ),
-                      IconButton(
-                        iconSize: 30,
-                        onPressed: () {
-                          setState(() {
-                            ifGrid = true;
-                          });
-                          print('ifGrid is $ifGrid');
-                        },
-                        icon: SvgPicture.asset('assets/file_page/block.svg',
-                            color: ifGrid
-                                ? Theme.of(context).splashColor
-                                : Theme.of(context).toggleButtonsTheme.color),
-                      ),
-                    ],
-                  ),
-                ),
-                ifGrid
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Divider(
-                          height: 1,
-                          color: Theme.of(context).dividerColor,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: Center(
+                            child: Text(
+                              object.name ?? '',
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
                         ),
-                      )
-                    : Container(),
-                Expanded(
-                  child: ifGrid ? _filesGrid(context) : FilesList(),
-                )
-              ],
-            ),
-          ),
-        );
-      }),
-    );
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 0, top: 25, right: 0),
+                          child: Container(
+                            width: 260,
+                            child: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      translate.size,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                        fontFamily: kNormalTextFontFamily,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 100,
+                                      child: Container(),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        fileSize(object.size, translate, 1),
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 18),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        translate.type,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 100,
+                                        child: Container(),
+                                      ),
+                                      Text(
+                                        object is Record
+                                            ? object.extension?.toUpperCase() ??
+                                                ''
+                                            : translate.foldr,
+                                        // type.isEmpty
+                                        //     ? translate.foldr
+                                        //     : type.toUpperCase(),
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 18),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        translate.format,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 100,
+                                        child: Container(),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          object is Record
+                                              ? type.toUpperCase()
+                                              : translate.foldr,
+                                          //textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 18),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        translate.created,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 100,
+                                        child: Container(),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          DateFormat('dd.MM.yyyy')
+                                              .format(object.createdAt!),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 18),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        translate.changed,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 100,
+                                        child: Container(),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          DateFormat('dd.MM.yyyy')
+                                              .format(object.updatedAt!),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 18),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        translate.viewed,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 100,
+                                        child: Container(),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          object.updatedBy ?? '',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 18),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        translate.location,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 100,
+                                        child: Container(),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "папка «Документы»",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 0, top: 25, bottom: 30),
+                          child: Container(
+                            height: 42,
+                            width: 260,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                //eventBus.fire(FileInfoViewEvent);
+                                if (object is Folder) {
+                                  var folders = _opendedFolders[index];
+                                  print(object);
+                                  _push(
+                                    child: OpenedFolderView(
+                                      currentFolder: object,
+                                      previousFolders: [
+                                        ...folders.previousFolders,
+                                        object
+                                      ],
+                                      pop: _pop,
+                                      push: _push,
+                                    ),
+                                    folderId: object.id,
+                                  );
+                                } else {
+                                  print('file tapped in properies');
+                                  context.read<FilesBloc>().add(
+                                      FileTapped(record: object as Record));
+                                }
+                              },
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: Size(double.maxFinite, 60),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: Theme.of(context).splashColor,
+                              ),
+                              child: Text(
+                                translate.open,
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ])),
+            ])));
   }
 }
+
+class FileInfoViewEvent {}
 
 class SortingMenuActions extends StatefulWidget {
   SortingMenuActions(

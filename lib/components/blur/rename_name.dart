@@ -187,10 +187,11 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        final result =
-                                            await _authController.changeName(
-                                                name: myController.value.text);
                                         if (canSave) {
+                                          final result =
+                                              await _authController.changeName(
+                                                  name: myController.value.text
+                                                      .trim());
                                           Navigator.pop(context,
                                               myController.value.text.trim());
                                           if (result ==

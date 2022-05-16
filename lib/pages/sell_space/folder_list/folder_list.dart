@@ -352,7 +352,7 @@ class _ButtonTemplateState extends State<FolderList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  fileSize(usedSpace, translate),
+                  usedSpace != null ? fileSize(usedSpace, translate) : "null",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -600,7 +600,7 @@ class _ButtonTemplateState extends State<FolderList> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 20.0, left: 20, bottom: 11),
+        padding: const EdgeInsets.only(top: 20.0, left: 20, bottom: 9),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
