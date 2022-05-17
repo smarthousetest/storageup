@@ -221,10 +221,10 @@ class S {
   }
 
   /// `Well`
-  String get good {
+  String get well {
     return Intl.message(
       'Well',
-      name: 'good',
+      name: 'well',
       desc: '',
       args: [],
     );
@@ -1075,6 +1075,16 @@ class S {
     return Intl.message(
       'Enter your old password',
       name: 'old_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get good {
+    return Intl.message(
+      'Ok',
+      name: 'good',
       desc: '',
       args: [],
     );
@@ -2301,6 +2311,16 @@ class S {
     return Intl.message(
       'Ok',
       name: 'ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The file name must not contain the following characters: \/:*?"<>|`
+  String get wrong_symbvols {
+    return Intl.message(
+      'The file name must not contain the following characters: \\/:*?"<>|',
+      name: 'wrong_symbvols',
       desc: '',
       args: [],
     );

@@ -5,9 +5,10 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class BlurSomethingGoesWrong extends StatefulWidget {
+  bool youSeePopUp;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurSomethingGoesWrong();
+  BlurSomethingGoesWrong(this.youSeePopUp);
 }
 
 class _ButtonTemplateState extends State<BlurSomethingGoesWrong> {
@@ -65,7 +66,7 @@ class _ButtonTemplateState extends State<BlurSomethingGoesWrong> {
                               Container(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                    Navigator.pop(context, false);
                                   },
                                   child: Text(
                                     translate.ok,
@@ -104,7 +105,7 @@ class _ButtonTemplateState extends State<BlurSomethingGoesWrong> {
                   padding: const EdgeInsets.only(top: 20, right: 15),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pop(context, false);
                     },
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,

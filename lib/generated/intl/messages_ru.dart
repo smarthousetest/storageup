@@ -170,7 +170,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
-        "good": MessageLookupByLibrary.simpleMessage("Хорошо"),
         "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
@@ -357,6 +356,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Мы отправили письмо на почту"),
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
+        "well": MessageLookupByLibrary.simpleMessage("Хорошо"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "пространства, будут удалены без возможности восстановления."),
         "wrong_cred":
@@ -369,6 +369,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Неверный пароль"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Пароль должен содержать более 8 символов"),
+        "wrong_symbvols": MessageLookupByLibrary.simpleMessage(
+            "Имя файла не должно содержать следующих знаков: \\/:*?\"<>|"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Имя пользователя должно содержать более 2 символов"),
         "you_cant_enter": MessageLookupByLibrary.simpleMessage(

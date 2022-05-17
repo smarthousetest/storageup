@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:formz/formz.dart';
@@ -53,6 +53,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   List<DownloadObserver> _downloadObservers = [];
   StreamSubscription? updatePageSubscription;
   late final LatestFileRepository _repository;
+  late String idTappedFile;
 
   late Observer _updateObserver = Observer((e) {
     try {
@@ -74,6 +75,22 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           final file = downloadingFilesList.firstWhere(
               (file) => file.isInProgress && file.downloadPercent == -1);
           _setRecordDownloading(recordId: file.id);
+        }
+        if (downloadingFilesList.any((file) =>
+            file.endedWithException == true &&
+            file.errorReason == ErrorReason.noInternetConnection &&
+            file.downloadPercent == -1 &&
+            file.isInProgress == false &&
+            file.id == idTappedFile)) {
+          emit(state.copyWith(status: FormzStatus.submissionCanceled));
+          emit(state.copyWith(status: FormzStatus.pure));
+        } else if (downloadingFilesList.any((file) =>
+            file.endedWithException == true &&
+            file.downloadPercent == -1 &&
+            file.isInProgress == false &&
+            file.id == idTappedFile)) {
+          emit(state.copyWith(status: FormzStatus.submissionFailure));
+          emit(state.copyWith(status: FormzStatus.pure));
         }
       }
     } catch (e) {
@@ -236,7 +253,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     if (direction == SortingDirection.down) {
-      emit(state.copyWith(groupedFiles: groupedFiles));
+      emit(state.copyWith(
+        groupedFiles: groupedFiles,
+        status: FormzStatus.pure,
+      ));
     } else {
       emit(state.copyWith(
         groupedFiles:
@@ -264,10 +284,14 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
     if (direction == SortingDirection.down) {
       emit(state.copyWith(
-          sortedFiles: sortedFiles.reversed.toList(),
-          status: FormzStatus.pure));
+        sortedFiles: sortedFiles.reversed.toList(),
+        status: FormzStatus.pure,
+      ));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles, status: FormzStatus.pure));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles,
+        status: FormzStatus.pure,
+      ));
     }
   }
 
@@ -283,9 +307,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         return a.name == null ? 0 : 1;
     });
     if (direction == SortingDirection.up) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles.reversed.toList(),
+        status: FormzStatus.pure,
+      ));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles,
+        status: FormzStatus.pure,
+      ));
     }
   }
 
@@ -305,9 +335,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //mapSortedFieldChanged(state.search);
 
     if (direction == SortingDirection.down) {
-      emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles.reversed.toList(),
+        status: FormzStatus.pure,
+      ));
     } else {
-      emit(state.copyWith(sortedFiles: sortedFiles));
+      emit(state.copyWith(
+        sortedFiles: sortedFiles,
+        status: FormzStatus.pure,
+      ));
     }
   }
 
@@ -329,6 +365,36 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     } else {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
+
+  Future<ErrorType?> onActionRenameChoosedFile(
+      BaseObject object, String newName) async {
+    var result = await _filesController.renameRecord(newName, object.id);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    } else if (result == ResponseStatus.notExecuted) {
+      return ErrorType.alreadyExist;
+    } else if (result == ResponseStatus.failed) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    }
+  }
+
+  Future<ErrorType?> onActionRenameChoosedFolder(
+      BaseObject object, String newName) async {
+    var result = await _filesController.renameFolder(newName, object.id);
+    print(result);
+    if (result == ResponseStatus.ok) {
+      _update();
+    } else if (result == ResponseStatus.notExecuted) {
+      return ErrorType.alreadyExist;
+    } else if (result == ResponseStatus.failed) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } else {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
   }
 
@@ -375,7 +441,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(
-        representation: representation, status: FormzStatus.pure));
+      representation: representation,
+      status: FormzStatus.pure,
+    ));
   }
 
   void setFavorite(BaseObject object) async {
@@ -414,6 +482,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       criterion: criterion,
       direction: direction,
       search: sortText,
+      status: FormzStatus.pure,
     ));
   }
 
@@ -431,6 +500,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
     emit(state.copyWith(
       objects: objects,
+      status: FormzStatus.pure,
     ));
 
     mapFileSortingByCriterion();
@@ -582,7 +652,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     _repository.addFile(latestFile: record);
     var box = await Hive.openBox(kPathDBName);
     String path = box.get(record.id, defaultValue: '');
-
+    idTappedFile = record.id;
     if (path.isNotEmpty) {
       var appPath = (await getApplicationSupportDirectory()).path;
       if (path.contains("()")) {
@@ -681,7 +751,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       var currentRecord = objects[currentRecordIndex] as Record;
       objects[currentRecordIndex] =
           currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
-      emit(state.copyWith(objects: objects));
+      emit(state.copyWith(
+        objects: objects,
+        status: FormzStatus.pure,
+      ));
     } catch (e) {
       log('OpenFolderCubit -> _setRecordDownloading:', error: e);
     }

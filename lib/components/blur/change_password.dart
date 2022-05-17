@@ -400,7 +400,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                             borderSide: BorderSide(
                                                 color: hintBorder2
                                                     ? Theme.of(context)
-                                                        .accentColor
+                                                        .colorScheme
+                                                        .secondary
                                                     : Theme.of(context)
                                                         .errorColor,
                                                 width: 1.5),
@@ -509,7 +510,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return BlurSomethingGoesWrong();
+                                                  return BlurSomethingGoesWrong(
+                                                      true);
                                                 },
                                               );
                                             } else {
@@ -518,7 +520,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return BlurFailedServerConnection();
+                                                  return BlurFailedServerConnection(
+                                                      true);
                                                 },
                                               );
                                             }
@@ -621,7 +624,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                         context, AuthView.route, (route) => false);
                   },
                   child: Text(
-                    translate.good,
+                    translate.ok,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 16,

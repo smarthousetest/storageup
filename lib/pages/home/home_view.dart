@@ -158,14 +158,14 @@ class _HomePageState extends State<HomePage> {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong();
+                  return BlurSomethingGoesWrong(true);
                 },
               );
             } else if (state.status == FormzStatus.submissionCanceled) {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurFailedServerConnection();
+                  return BlurFailedServerConnection(true);
                 },
               );
             }

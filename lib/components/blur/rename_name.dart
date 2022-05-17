@@ -187,10 +187,11 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        final result =
-                                            await _authController.changeName(
-                                                name: myController.value.text);
                                         if (canSave) {
+                                          final result =
+                                              await _authController.changeName(
+                                                  name:
+                                                      myController.value.text);
                                           Navigator.pop(context,
                                               myController.value.text.trim());
                                           if (result ==
@@ -199,7 +200,8 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                             await showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                return BlurSomethingGoesWrong();
+                                                return BlurSomethingGoesWrong(
+                                                    true);
                                               },
                                             );
                                           } else if (result ==
@@ -207,7 +209,8 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                             await showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                return BlurFailedServerConnection();
+                                                return BlurFailedServerConnection(
+                                                    true);
                                               },
                                             );
                                           }
@@ -269,60 +272,5 @@ class _ButtonTemplateState extends State<BlurRenameName> {
         ],
       ),
     );
-  }
-
-  void _showErrorDialog() {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            title: Text(
-              translate.something_goes_wrong,
-              textAlign: TextAlign.center,
-              softWrap: true,
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: kNormalTextFontFamily,
-                color: Theme.of(context).focusColor,
-              ),
-            ),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 200, right: 200, top: 30, bottom: 10),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    translate.good,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 16,
-                      fontFamily: kNormalTextFontFamily,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: // _form.currentState.validate()
-                        Theme.of(context).splashColor,
-
-                    // Theme.of(context).primaryColor,
-                    fixedSize: Size(100, 42),
-                    elevation: 0,
-                    side: BorderSide(
-                        style: BorderStyle.solid,
-                        color: Theme.of(context).splashColor),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        });
   }
 }

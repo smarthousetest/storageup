@@ -50,7 +50,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
         print('Hive initialized');
       });
-      var remoteAppVersion = await _filesService.getRemoteAppVersion();
+      // var remoteAppVersion = await _filesService.getRemoteAppVersion();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
       var recentsFile = await _filesService.getRecentsRecords();
@@ -64,7 +64,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       // String? localAppVersion = _getLocalAppVersion();
       emit(state.copyWith(
-        upToDateVersion: remoteAppVersion,
+        // upToDateVersion: remoteAppVersion,
         // version: localAppVersion,
         latestFile: latestFile,
         objectsValueListenable: listenable,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
@@ -34,6 +35,7 @@ class MediaCubit extends Cubit<MediaState> {
   List<DownloadObserver> _downloadObservers = [];
   UserController _userController = getIt<UserController>();
   StreamSubscription? updatePageSubscription;
+  late String idTappedFile;
 
   late var _updateObserver = Observer((e) {
     try {
@@ -57,6 +59,23 @@ class MediaCubit extends Cubit<MediaState> {
           );
 
           _setRecordDownloading(recordId: file.id);
+        }
+
+        if (downloadingFilesList.any((file) =>
+            file.endedWithException == true &&
+            file.errorReason == ErrorReason.noInternetConnection &&
+            file.downloadPercent == -1 &&
+            file.isInProgress == false &&
+            file.id == idTappedFile)) {
+          emit(state.copyWith(status: FormzStatus.submissionCanceled));
+          emit(state.copyWith(status: FormzStatus.pure));
+        } else if (downloadingFilesList.any((file) =>
+            file.endedWithException == true &&
+            file.downloadPercent == -1 &&
+            file.isInProgress == false &&
+            file.id == idTappedFile)) {
+          emit(state.copyWith(status: FormzStatus.submissionFailure));
+          emit(state.copyWith(status: FormzStatus.pure));
         }
       }
     } catch (e) {
@@ -159,7 +178,9 @@ class MediaCubit extends Cubit<MediaState> {
 
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(
-        representation: representation, status: FormzStatus.pure));
+      representation: representation,
+      status: FormzStatus.pure,
+    ));
   }
 
   void setFavorite(Record object) async {
@@ -407,7 +428,7 @@ class MediaCubit extends Cubit<MediaState> {
     var box = await Hive.openBox(kPathDBName);
 
     String path = box.get(record.id, defaultValue: '');
-
+    idTappedFile = record.id;
     if (path.isNotEmpty) {
       var appPath = (await getApplicationSupportDirectory()).path;
       var fullPathToFile = '$appPath/$path';
