@@ -283,7 +283,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    translate.good,
+                    translate.ok,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 16,

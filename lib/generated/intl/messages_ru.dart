@@ -50,6 +50,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accaunt_deleting":
             MessageLookupByLibrary.simpleMessage("Удаление аккаунта"),
+        "active": MessageLookupByLibrary.simpleMessage("Активен"),
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
@@ -87,6 +88,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Проверьте соединение с Интернетом и повторите попытку."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
@@ -107,6 +110,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Удалить аккаунт"),
         "delete_file": MessageLookupByLibrary.simpleMessage("Удалить файлы"),
+        "delete_keeper_text1": MessageLookupByLibrary.simpleMessage(
+            "Вы уверены, что хотите удалить место хранения? "),
+        "delete_keeper_text2":
+            MessageLookupByLibrary.simpleMessage("Данное действие необратимо."),
+        "delete_keeper_text3": MessageLookupByLibrary.simpleMessage(
+            "Нам будет необходимо провести очистку места на вашем компьютере, пожалуйста не выходите из приложения."),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Удалить навсегда"),
         "delete_pic":
@@ -114,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleting": MessageLookupByLibrary.simpleMessage("Удаление"),
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
+        "downloating": MessageLookupByLibrary.simpleMessage("Скачивание"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Ваш заработок составит"),
         "email": MessageLookupByLibrary.simpleMessage("E-mail"),
@@ -134,6 +144,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "english": MessageLookupByLibrary.simpleMessage("Английский"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Введите пароль"),
+        "ern_pay_day": MessageLookupByLibrary.simpleMessage("Заработок в день"),
+        "error": MessageLookupByLibrary.simpleMessage("Ошибка"),
         "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
         "file_sorting":
             MessageLookupByLibrary.simpleMessage("Сортировка файлов"),
@@ -158,16 +170,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Перейти"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Перейти к авторизации"),
-        "good": MessageLookupByLibrary.simpleMessage("Хорошо"),
         "home": MessageLookupByLibrary.simpleMessage("Главная"),
         "how_work": MessageLookupByLibrary.simpleMessage("Как это работает?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("в StorageUp?"),
+        "inactive": MessageLookupByLibrary.simpleMessage("Не активен"),
         "info": MessageLookupByLibrary.simpleMessage("Свойства"),
         "install_update":
             MessageLookupByLibrary.simpleMessage("Установить обновление"),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
+        "learn_more": MessageLookupByLibrary.simpleMessage("Узнать подробнее"),
+        "level_of_confidence":
+            MessageLookupByLibrary.simpleMessage("Уровень доверия"),
+        "loading": MessageLookupByLibrary.simpleMessage("Загрузка"),
         "location": MessageLookupByLibrary.simpleMessage("Расположение"),
         "mail": MessageLookupByLibrary.simpleMessage("Почта"),
         "make_money": MessageLookupByLibrary.simpleMessage(
@@ -204,14 +220,20 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "notification_re_auth": MessageLookupByLibrary.simpleMessage(
             "Вам нужно снова зайти в аккаунт"),
+        "of_percent": MessageLookupByLibrary.simpleMessage(" из 100%"),
+        "off": MessageLookupByLibrary.simpleMessage("Выкл"),
         "offer": MessageLookupByLibrary.simpleMessage(
             "Выгодное предложение - переход на годовую подписку"),
+        "ok": MessageLookupByLibrary.simpleMessage("Ок"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Введите старый пароль"),
+        "on": MessageLookupByLibrary.simpleMessage("Вкл"),
         "open": MessageLookupByLibrary.simpleMessage("Открыть"),
         "options": MessageLookupByLibrary.simpleMessage("Параметры "),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("или продолжить с"),
+        "other_computers":
+            MessageLookupByLibrary.simpleMessage("Другие компьютеры"),
         "other_sub": MessageLookupByLibrary.simpleMessage("Другие подписки"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
             "Наш тариф предполагает оплату 0,2 ₽/день за 1 ГБ сданного пространства"),
@@ -243,8 +265,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Вы действительно хотите удалить фото профиля?"),
         "realy_delete": MessageLookupByLibrary.simpleMessage(
             "Вы действительно хотите удалить?"),
+        "realy_delete_keeper":
+            MessageLookupByLibrary.simpleMessage("Удаление места хранения"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Причина удаления"),
+        "reboot": MessageLookupByLibrary.simpleMessage("Перезагрузка"),
+        "reboot_keeper": MessageLookupByLibrary.simpleMessage(
+            "Перезапустить кипер возможно локально"),
         "recent": MessageLookupByLibrary.simpleMessage("Недавние"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "register_complete":
@@ -253,11 +280,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "regulations":
             MessageLookupByLibrary.simpleMessage("Нормативные документы"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
+        "rename": MessageLookupByLibrary.simpleMessage("Переименовать"),
         "rent": MessageLookupByLibrary.simpleMessage("Сдать"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "Вы можете использовать свободное место на вашем жестком"),
-        "repeat_passsword":
+        "repeat_password":
             MessageLookupByLibrary.simpleMessage("Повторите новый пароль"),
+        "restart_keeper": MessageLookupByLibrary.simpleMessage(
+            "Необходимо перезапустить кипер"),
         "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
             " отправлено письмо. Для восстановления пароля перейдите по ссылке внутри письма."),
         "restore_password_before_email":
@@ -271,6 +301,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Выберите место хранения"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Сдача места"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "Не удаётся установить соединение с сервером."),
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
@@ -282,7 +314,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "size_of_space": MessageLookupByLibrary.simpleMessage(
             "Укажите размер места под аренду"),
         "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
-            "Что-то пошло не так. Попробуйте позднее"),
+            "Что-то пошло не так. Повторите, пожалуйста, чуть позже."),
+        "space": MessageLookupByLibrary.simpleMessage("Пространство"),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
@@ -297,6 +330,7 @@ class MessageLookup extends MessageLookupByLibrary {
             " и даю согласие на обработку моих персональных данных"),
         "term_of_use_before":
             MessageLookupByLibrary.simpleMessage("Я принимаю условия "),
+        "this_computer": MessageLookupByLibrary.simpleMessage("Этот компьютер"),
         "to_send_letter":
             MessageLookupByLibrary.simpleMessage("Отправить письмо еще раз"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Уровень доверия"),
@@ -322,16 +356,21 @@ class MessageLookup extends MessageLookupByLibrary {
             "Мы отправили письмо на почту"),
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
+        "well": MessageLookupByLibrary.simpleMessage("Хорошо"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "пространства, будут удалены без возможности восстановления."),
         "wrong_cred":
             MessageLookupByLibrary.simpleMessage("Неверный e-mail или пароль!"),
         "wrong_email":
             MessageLookupByLibrary.simpleMessage("Введите корректный e-mail"),
+        "wrong_filename": MessageLookupByLibrary.simpleMessage(
+            "Файл с таким именем уже существует."),
         "wrong_old_password":
             MessageLookupByLibrary.simpleMessage("Неверный пароль"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Пароль должен содержать более 8 символов"),
+        "wrong_symbvols": MessageLookupByLibrary.simpleMessage(
+            "Имя файла не должно содержать следующих знаков: \\/:*?\"<>|"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Имя пользователя должно содержать более 2 символов"),
         "you_cant_enter": MessageLookupByLibrary.simpleMessage(

@@ -221,10 +221,10 @@ class S {
   }
 
   /// `Well`
-  String get good {
+  String get well {
     return Intl.message(
       'Well',
-      name: 'good',
+      name: 'well',
       desc: '',
       args: [],
     );
@@ -280,10 +280,10 @@ class S {
     );
   }
 
-  /// `Something went wrong. Try again later`
+  /// `Something went wrong. Please repeat a little later.`
   String get something_goes_wrong {
     return Intl.message(
-      'Something went wrong. Try again later',
+      'Something went wrong. Please repeat a little later.',
       name: 'something_goes_wrong',
       desc: '',
       args: [],
@@ -1061,10 +1061,10 @@ class S {
   }
 
   /// `Repeat new password`
-  String get repeat_passsword {
+  String get repeat_password {
     return Intl.message(
       'Repeat new password',
-      name: 'repeat_passsword',
+      name: 'repeat_password',
       desc: '',
       args: [],
     );
@@ -1976,6 +1976,46 @@ class S {
     );
   }
 
+  /// `Deleting a storage location`
+  String get realy_delete_keeper {
+    return Intl.message(
+      'Deleting a storage location',
+      name: 'realy_delete_keeper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete the storage location?`
+  String get delete_keeper_text1 {
+    return Intl.message(
+      'Are you sure you want to delete the storage location?',
+      name: 'delete_keeper_text1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This action is irreversible.`
+  String get delete_keeper_text2 {
+    return Intl.message(
+      'This action is irreversible.',
+      name: 'delete_keeper_text2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We will need to clean up the space on your computer, please do not exit the application.`
+  String get delete_keeper_text3 {
+    return Intl.message(
+      'We will need to clean up the space on your computer, please do not exit the application.',
+      name: 'delete_keeper_text3',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Install update`
   String get install_update {
     return Intl.message(
@@ -2041,6 +2081,236 @@ class S {
     return Intl.message(
       'To confirm, click on the link inside the email.',
       name: 'for_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rename`
+  String get rename {
+    return Intl.message(
+      'Rename',
+      name: 'rename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The file name must not contain the following characters: \/:*?"<>|`
+  String get wrong_symbvols {
+    return Intl.message(
+      'The file name must not contain the following characters: \\/:*?"<>|',
+      name: 'wrong_symbvols',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File winth that name already exists.`
+  String get wrong_filename {
+    return Intl.message(
+      'File winth that name already exists.',
+      name: 'wrong_filename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This computer`
+  String get this_computer {
+    return Intl.message(
+      'This computer',
+      name: 'this_computer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other copmuters`
+  String get other_computers {
+    return Intl.message(
+      'Other copmuters',
+      name: 'other_computers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Level of trust`
+  String get level_of_confidence {
+    return Intl.message(
+      'Level of trust',
+      name: 'level_of_confidence',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Space`
+  String get space {
+    return Intl.message(
+      'Space',
+      name: 'space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Downloating`
+  String get downloating {
+    return Intl.message(
+      'Downloating',
+      name: 'downloating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Active`
+  String get active {
+    return Intl.message(
+      'Active',
+      name: 'active',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inactive`
+  String get inactive {
+    return Intl.message(
+      'Inactive',
+      name: 'inactive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading`
+  String get loading {
+    return Intl.message(
+      'Loading',
+      name: 'loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reboot`
+  String get reboot {
+    return Intl.message(
+      'Reboot',
+      name: 'reboot',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earning pay day`
+  String get ern_pay_day {
+    return Intl.message(
+      'Earning pay day',
+      name: 'ern_pay_day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You need to restart keeper`
+  String get restart_keeper {
+    return Intl.message(
+      'You need to restart keeper',
+      name: 'restart_keeper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Learn more`
+  String get learn_more {
+    return Intl.message(
+      'Learn more',
+      name: 'learn_more',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `On`
+  String get on {
+    return Intl.message(
+      'On',
+      name: 'on',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Off`
+  String get off {
+    return Intl.message(
+      'Off',
+      name: 'off',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `It is possible to restart keeper locally`
+  String get reboot_keeper {
+    return Intl.message(
+      'It is possible to restart keeper locally',
+      name: 'reboot_keeper',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` of 100%`
+  String get of_percent {
+    return Intl.message(
+      ' of 100%',
+      name: 'of_percent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error`
+  String get error {
+    return Intl.message(
+      'Error',
+      name: 'error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The connection to the server cannot be established.`
+  String get server_connection_error {
+    return Intl.message(
+      'The connection to the server cannot be established.',
+      name: 'server_connection_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your internet connection and try again.`
+  String get check_ethernet_connection {
+    return Intl.message(
+      'Check your internet connection and try again.',
+      name: 'check_ethernet_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get ok {
+    return Intl.message(
+      'Ok',
+      name: 'ok',
       desc: '',
       args: [],
     );

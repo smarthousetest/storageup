@@ -40,6 +40,14 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     var rootFolder = await _filesController.getRootFolder;
     //print(sub);
     // print(allSub);
+    if (sub == null && allSub == null) {
+      emit(state.copyWith(
+        user: user,
+        sub: sub,
+        allSub: allSub,
+        rootFolders: rootFolder,
+      ));
+    }
     emit(state.copyWith(
         user: user, sub: sub, allSub: allSub, rootFolders: rootFolder));
   }

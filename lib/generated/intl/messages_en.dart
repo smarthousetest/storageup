@@ -51,6 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "accaunt_deleting":
             MessageLookupByLibrary.simpleMessage("Account deleting"),
+        "active": MessageLookupByLibrary.simpleMessage("Active"),
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Active subscription"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
@@ -87,6 +88,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Check your internet connection and try again."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
@@ -107,12 +110,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_account":
             MessageLookupByLibrary.simpleMessage("Delete account"),
         "delete_file": MessageLookupByLibrary.simpleMessage("Delete file"),
+        "delete_keeper_text1": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete the storage location?"),
+        "delete_keeper_text2": MessageLookupByLibrary.simpleMessage(
+            "This action is irreversible."),
+        "delete_keeper_text3": MessageLookupByLibrary.simpleMessage(
+            "We will need to clean up the space on your computer, please do not exit the application."),
         "delete_permanently":
             MessageLookupByLibrary.simpleMessage("Delete permanently"),
         "delete_pic": MessageLookupByLibrary.simpleMessage("Removing a photo"),
         "deleting": MessageLookupByLibrary.simpleMessage("Deleting"),
         "documents": MessageLookupByLibrary.simpleMessage("Documents"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
+        "downloating": MessageLookupByLibrary.simpleMessage("Downloating"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Your earnings will be"),
         "email": MessageLookupByLibrary.simpleMessage("E-mail"),
@@ -133,6 +143,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "enter_password":
             MessageLookupByLibrary.simpleMessage("Enter password"),
+        "ern_pay_day": MessageLookupByLibrary.simpleMessage("Earning pay day"),
+        "error": MessageLookupByLibrary.simpleMessage("Error"),
         "exit": MessageLookupByLibrary.simpleMessage("Exit"),
         "file_sorting": MessageLookupByLibrary.simpleMessage("File sorting"),
         "files": MessageLookupByLibrary.simpleMessage("Files"),
@@ -156,16 +168,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "go_to": MessageLookupByLibrary.simpleMessage("Go to"),
         "go_to_authorization":
             MessageLookupByLibrary.simpleMessage("Go to authorization"),
-        "good": MessageLookupByLibrary.simpleMessage("Well"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "how_work": MessageLookupByLibrary.simpleMessage("How it works?"),
         "in_StorageUp": MessageLookupByLibrary.simpleMessage("in StorageUp?"),
+        "inactive": MessageLookupByLibrary.simpleMessage("Inactive"),
         "info": MessageLookupByLibrary.simpleMessage("Info"),
         "install_update":
             MessageLookupByLibrary.simpleMessage("Install update"),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
+        "learn_more": MessageLookupByLibrary.simpleMessage("Learn more"),
+        "level_of_confidence":
+            MessageLookupByLibrary.simpleMessage("Level of trust"),
+        "loading": MessageLookupByLibrary.simpleMessage("Loading"),
         "location": MessageLookupByLibrary.simpleMessage("Location"),
         "mail": MessageLookupByLibrary.simpleMessage("Mail"),
         "make_money": MessageLookupByLibrary.simpleMessage(
@@ -202,14 +218,20 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "notification_re_auth":
             MessageLookupByLibrary.simpleMessage("You need to log in again"),
+        "of_percent": MessageLookupByLibrary.simpleMessage(" of 100%"),
+        "off": MessageLookupByLibrary.simpleMessage("Off"),
         "offer": MessageLookupByLibrary.simpleMessage(
             "Advantageous offer - switch to an annual subscription"),
+        "ok": MessageLookupByLibrary.simpleMessage("Ok"),
         "old_password":
             MessageLookupByLibrary.simpleMessage("Enter your old password"),
+        "on": MessageLookupByLibrary.simpleMessage("On"),
         "open": MessageLookupByLibrary.simpleMessage("Open"),
         "options": MessageLookupByLibrary.simpleMessage("Options"),
         "or_continue_with":
             MessageLookupByLibrary.simpleMessage("or continue with"),
+        "other_computers":
+            MessageLookupByLibrary.simpleMessage("Other copmuters"),
         "other_sub":
             MessageLookupByLibrary.simpleMessage("Other subscriptions"),
         "our_tariff": MessageLookupByLibrary.simpleMessage(
@@ -242,8 +264,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Do you really want to delete your profile picture?"),
         "realy_delete": MessageLookupByLibrary.simpleMessage(
             "Do you really want to delete?"),
+        "realy_delete_keeper":
+            MessageLookupByLibrary.simpleMessage("Deleting a storage location"),
         "reason_deleting":
             MessageLookupByLibrary.simpleMessage("Reason for deletion"),
+        "reboot": MessageLookupByLibrary.simpleMessage("Reboot"),
+        "reboot_keeper": MessageLookupByLibrary.simpleMessage(
+            "It is possible to restart keeper locally"),
         "recent": MessageLookupByLibrary.simpleMessage("Recent"),
         "register": MessageLookupByLibrary.simpleMessage("Register now"),
         "register_complete":
@@ -251,11 +278,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "registration": MessageLookupByLibrary.simpleMessage("Registration"),
         "regulations": MessageLookupByLibrary.simpleMessage("Regulations"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Remember me"),
+        "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "rent": MessageLookupByLibrary.simpleMessage("Rent"),
         "rent_space": MessageLookupByLibrary.simpleMessage(
             "You can use free space on your hard"),
-        "repeat_passsword":
+        "repeat_password":
             MessageLookupByLibrary.simpleMessage("Repeat new password"),
+        "restart_keeper":
+            MessageLookupByLibrary.simpleMessage("You need to restart keeper"),
         "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
             ", to reset your password, follow the link inside the letter"),
         "restore_password_before_email": MessageLookupByLibrary.simpleMessage(
@@ -269,6 +299,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Choose storage location"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Renting a place"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "The connection to the server cannot be established."),
         "set_size": MessageLookupByLibrary.simpleMessage("Set storage size"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
@@ -279,7 +311,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "size_of_space": MessageLookupByLibrary.simpleMessage(
             "Specify the size of the space for rent"),
         "something_goes_wrong": MessageLookupByLibrary.simpleMessage(
-            "Something went wrong. Try again later"),
+            "Something went wrong. Please repeat a little later."),
+        "space": MessageLookupByLibrary.simpleMessage("Space"),
         "still_dont_have_account": MessageLookupByLibrary.simpleMessage(
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
@@ -293,6 +326,7 @@ class MessageLookup extends MessageLookupByLibrary {
             " and give my consent to the processing of my personal data"),
         "term_of_use_before":
             MessageLookupByLibrary.simpleMessage("I accept the terms "),
+        "this_computer": MessageLookupByLibrary.simpleMessage("This computer"),
         "to_send_letter":
             MessageLookupByLibrary.simpleMessage("Send email again"),
         "trust_level": MessageLookupByLibrary.simpleMessage("Trust level"),
@@ -317,16 +351,21 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("We have sent an email to"),
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
+        "well": MessageLookupByLibrary.simpleMessage("Well"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "spaces will be deleted without the possibility of recovery."),
         "wrong_cred":
             MessageLookupByLibrary.simpleMessage("Invalid email or password!"),
         "wrong_email":
             MessageLookupByLibrary.simpleMessage("Please enter a valid email"),
+        "wrong_filename": MessageLookupByLibrary.simpleMessage(
+            "File winth that name already exists."),
         "wrong_old_password":
             MessageLookupByLibrary.simpleMessage("Invalid password"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Password must be more than 8 characters"),
+        "wrong_symbvols": MessageLookupByLibrary.simpleMessage(
+            "The file name must not contain the following characters: \\/:*?\"<>|"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(
             "Username must be more than 2 characters"),
         "you_cant_enter": MessageLookupByLibrary.simpleMessage(

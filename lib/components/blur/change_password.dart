@@ -385,7 +385,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.only(
                                               left: 15, bottom: 8),
-                                          hintText: translate.repeat_passsword,
+                                          hintText: translate.repeat_password,
                                           hintStyle: TextStyle(
                                             color: Theme.of(context)
                                                 .textTheme
@@ -602,7 +602,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    translate.good,
+                    translate.ok,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 16,
@@ -658,7 +658,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                         context, AuthView.route, (route) => false);
                   },
                   child: Text(
-                    translate.good,
+                    translate.ok,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 16,

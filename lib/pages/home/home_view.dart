@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    translate.good,
+                    translate.ok,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 16,
@@ -132,7 +132,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     infoPage = InfoPage();
-    filePage = StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    filePage =
+        StateInfoContainer(child: StateSortedContainer(child: FilePage()));
     likePage = LikePage();
     spaceSellPage = SpaceSellPage();
     financePage = FinancePage();
