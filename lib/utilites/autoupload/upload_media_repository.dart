@@ -9,7 +9,7 @@ class UploadMediaRepo {
 
   Future<UploadMediaRepo> init() async {
     var os = OsSpecifications.getOs();
-    Hive.init(os.appDirPath);
+    Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
     Hive.registerAdapter(AutouploadStateAdapter());
     Hive.registerAdapter(UploadMediaAdapter());
     _box = await Hive.openBox('files_hashes');

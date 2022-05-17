@@ -47,7 +47,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomePageOpened>((event, emit) async {
       getApplicationSupportDirectory().then((value) {
         var os = OsSpecifications.getOs();
-        Hive.init(os.appDirPath);
+        Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
         print('Hive initialized');
       });
       var remoteAppVersion = await _filesService.getRemoteAppVersion();

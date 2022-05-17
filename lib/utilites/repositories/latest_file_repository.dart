@@ -26,7 +26,7 @@ class LatestFileRepository {
 
     WidgetsFlutterBinding.ensureInitialized();
     var os = OsSpecifications.getOs();
-    Hive.init(os.appDirPath);
+    Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
 
     final box = await Hive.openBox<LatestFile>(_latestFileBoxName);
     //box.deleteFromDisk();
