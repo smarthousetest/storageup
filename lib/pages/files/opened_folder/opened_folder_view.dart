@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
+import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
@@ -434,8 +435,39 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                                 state.sortedFiles.indexOf(obj)]
                                             .hideMenu();
                                         if (action == FileAction.properties) {
-                                          StateInfoContainer.of(context)
-                                              ?.setInfoObject(obj);
+                                          // StateInfoContainer.of(context)
+                                          //     ?.setInfoObject(obj);
+
+                                          var res = await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return FileInfoView(
+                                                    object: obj,
+                                                    user: state.user);
+                                              });
+                                          if (res) {
+                                            if (obj is Folder) {
+                                              print(obj);
+                                              widget.push(
+                                                child: OpenedFolderView(
+                                                  currentFolder: obj,
+                                                  previousFolders: [
+                                                    ...state.previousFolders,
+                                                    state.currentFolder!
+                                                  ],
+                                                  pop: widget.pop,
+                                                  push: widget.push,
+                                                ),
+                                                folderId: obj.id,
+                                              );
+                                            } else {
+                                              print('file tapped in properies');
+
+                                              context
+                                                  .read<OpenedFolderCubit>()
+                                                  .fileTapped(obj as Record);
+                                            }
+                                          }
                                         } else {
                                           var result = await showDialog(
                                             context: context,
@@ -570,8 +602,36 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                               element.id == obj.id)]
                                       .hideMenu();
                                   if (action == FileAction.properties) {
-                                    StateInfoContainer.of(context)
-                                        ?.setInfoObject(obj);
+                                    // StateInfoContainer.of(context)
+                                    //     ?.setInfoObject(obj);
+                                    var res = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return FileInfoView(
+                                              object: obj, user: state.user);
+                                        });
+                                    if (res) {
+                                      if (obj is Folder) {
+                                        print(obj);
+                                        widget.push(
+                                          child: OpenedFolderView(
+                                            currentFolder: obj,
+                                            previousFolders: [
+                                              ...state.previousFolders,
+                                              state.currentFolder!
+                                            ],
+                                            pop: widget.pop,
+                                            push: widget.push,
+                                          ),
+                                          folderId: obj.id,
+                                        );
+                                      } else {
+                                        print('file tapped in properies');
+                                        context
+                                            .read<OpenedFolderCubit>()
+                                            .fileTapped(obj as Record);
+                                      }
+                                    }
                                   } else {
                                     var result = await showDialog(
                                       context: context,
@@ -940,9 +1000,36 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                               .indexOf(element)]
                                           .hideMenu();
                                       if (action == FileAction.properties) {
-                                        // controller.hideMenu();
-                                        StateInfoContainer.of(context)
-                                            ?.setInfoObject(element);
+                                        var res = await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return FileInfoView(
+                                                  object: element,
+                                                  user: state.user);
+                                            });
+                                        if (res) {
+                                          if (element is Folder) {
+                                            print(element);
+                                            widget.push(
+                                              child: OpenedFolderView(
+                                                currentFolder: element,
+                                                previousFolders: [
+                                                  ...state.previousFolders,
+                                                  state.currentFolder!
+                                                ],
+                                                pop: widget.pop,
+                                                push: widget.push,
+                                              ),
+                                              folderId: element.id,
+                                            );
+                                          } else {
+                                            print('file tapped in properies');
+
+                                            context
+                                                .read<OpenedFolderCubit>()
+                                                .fileTapped(element as Record);
+                                          }
+                                        }
                                       } else {
                                         //   controller.hideMenu();
                                         var result = await showDialog(
@@ -1303,8 +1390,37 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                             _popupControllersGrouped[state.objects.indexOf(obj)]
                                 .hideMenu();
                             if (action == FileAction.properties) {
-                              StateInfoContainer.of(context)
-                                  ?.setInfoObject(obj);
+                              // StateInfoContainer.of(context)
+                              //     ?.setInfoObject(obj);
+                              var res = await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return FileInfoView(
+                                        object: obj, user: state.user);
+                                  });
+                              if (res) {
+                                if (obj is Folder) {
+                                  print(obj);
+                                  widget.push(
+                                    child: OpenedFolderView(
+                                      currentFolder: obj,
+                                      previousFolders: [
+                                        ...state.previousFolders,
+                                        state.currentFolder!
+                                      ],
+                                      pop: widget.pop,
+                                      push: widget.push,
+                                    ),
+                                    folderId: obj.id,
+                                  );
+                                } else {
+                                  print('file tapped in properies');
+
+                                  context
+                                      .read<OpenedFolderCubit>()
+                                      .fileTapped(obj as Record);
+                                }
+                              }
                             } else {
                               var result = await showDialog(
                                 context: context,

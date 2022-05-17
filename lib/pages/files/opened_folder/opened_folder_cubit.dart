@@ -26,6 +26,7 @@ import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 
 import '../../../constants.dart';
+import '../../../utilites/repositories/user_repository.dart';
 
 enum ContextActionEnum {
   share,
@@ -53,6 +54,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   List<DownloadObserver> _downloadObservers = [];
   StreamSubscription? updatePageSubscription;
   late final LatestFileRepository _repository;
+  final UserRepository _userRepository =
+      getIt<UserRepository>(instanceName: 'user_repo');
 
   late Observer _updateObserver = Observer((e) {
     try {
@@ -107,6 +110,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       _update();
     });
+    var user = _userRepository.getUser;
     bool progress = true;
     _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
@@ -116,6 +120,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         objects: objects,
         sortedFiles: objects,
         previousFolders: previousFolders,
+        user: user,
         progress: progress,
       ),
     );
