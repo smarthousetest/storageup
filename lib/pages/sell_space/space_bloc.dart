@@ -42,7 +42,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.getlocationsInfo;
     var keeper = await _subscriptionService.getAllKeepers();
-    emit(state.copyWith(user: user, locationsInfo: locationsInfo, keeper: keeper));
+    emit(state.copyWith(
+        user: user, locationsInfo: locationsInfo, keeper: keeper));
   }
 
   Future _mapRunSoft(
