@@ -425,43 +425,53 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         //       curve: Curves.ease);
 
                                         _initiatingControllers(state);
-                                        return ScrollConfiguration(
-                                          behavior:
-                                              ScrollConfiguration.of(context)
-                                                  .copyWith(
-                                            dragDevices: {
-                                              PointerDeviceKind.mouse,
-                                              PointerDeviceKind.touch,
-                                            },
-                                          ),
-                                          child: ListView.builder(
-                                            shrinkWrap: true,
-                                            physics: ClampingScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: state.albums.length,
-                                            controller:
-                                                _folderListScrollController,
-                                            itemBuilder: (context, index) {
-                                              return Row(
-                                                children: [
-                                                  ...state.albums
-                                                      .map(
-                                                        (album) => _folderIcon(
-                                                          album,
-                                                          isChoosed: album.id ==
-                                                              state
-                                                                  .currentFolder
-                                                                  .id,
-                                                          blocContext: context,
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                                ],
-                                              );
-                                            },
-                                            // children: [
+                                        return Scrollbar(
+                                          //thumbVisibility: true,
+                                          scrollbarOrientation:
+                                              ScrollbarOrientation.top,
+                                          controller:
+                                              _folderListScrollController,
+                                          child: ScrollConfiguration(
+                                            behavior:
+                                                ScrollConfiguration.of(context)
+                                                    .copyWith(
+                                              dragDevices: {
+                                                PointerDeviceKind.touch,
+                                                PointerDeviceKind.mouse,
+                                              },
+                                            ),
+                                            child: SingleChildScrollView(
+                                                // shrinkWrap: true,
+                                                physics:
+                                                    ClampingScrollPhysics(),
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                controller:
+                                                    _folderListScrollController,
+                                                child: Row(
+                                                  children: [
+                                                    ...state.albums
+                                                        .map(
+                                                          (album) =>
+                                                              _folderIcon(
+                                                            album,
+                                                            isChoosed: album
+                                                                    .id ==
+                                                                state
+                                                                    .currentFolder
+                                                                    .id,
+                                                            blocContext:
+                                                                context,
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ],
+                                                )
 
-                                            // ],
+                                                // children: [
+
+                                                // ],
+                                                ),
                                           ),
                                         );
                                       },
@@ -1491,14 +1501,6 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
       ),
     );
   }
-}
-
-class MyCustomScrollBehavior extends MaterialScrollBehavior {
-  // Override behavior methods and getters like dragDevices
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.mouse,
-      };
 }
 
 class MediaListMoveToFolderSettings {

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
+import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
@@ -55,7 +56,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 30, right: 10, bottom: 22),
+            padding: EdgeInsets.only(top: 22, right: 10, bottom: 22),
             child: Align(
               alignment: FractionalOffset.centerRight,
               child: Container(
@@ -170,15 +171,19 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                             type != 'image'
                                         ? type.isNotEmpty
                                             ? Image.asset(
-                                                'assets/file_icons/\\\$type.png',
+                                                'assets/file_icons/$type.png',
                                                 fit: BoxFit.contain,
                                               )
                                             : Image.asset(
                                                 'assets/file_icons/files.png',
                                                 fit: BoxFit.contain,
                                               )
-                                        : type == 'image'
-                                            ? ClipRRect(
+                                        : widget.object is Folder
+                                            ? Image.asset(
+                                                'assets/file_icons/folder.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                            : ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                                 child: Image.network(
@@ -188,10 +193,6 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                                       .publicUrl!,
                                                   fit: BoxFit.contain,
                                                 ),
-                                              )
-                                            : Image.asset(
-                                                'assets/file_icons/folder.png',
-                                                fit: BoxFit.contain,
                                               ),
                                   ),
                                 ),

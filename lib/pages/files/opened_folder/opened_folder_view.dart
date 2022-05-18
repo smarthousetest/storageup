@@ -187,7 +187,15 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           // crossAxisAlignment: CrossAxisAlignment.baseline,
           // textBaseline: TextBaseline.alphabetic,
           children: [
+            // ListView(
+            //   shrinkWrap: true,
+            //   controller: ScrollController(),
+            //   scrollDirection: Axis.horizontal,
+            //   physics: ClampingScrollPhysics(),
+            //   children: [
             _pathRow(state.previousFolders, state.currentFolder),
+            //   ],
+            // ),
             Spacer(),
             StateSortedContainer.of(context).sortedActionButton
                 ? IconButton(
@@ -362,7 +370,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                       // _popupControllers = [];
                       // _initiatingControllers(state);
                       // }
-                      if (state.sortedFiles.length > _popupControllers.length) {
+                      if (state.sortedFiles.length !=
+                          _popupControllers.length) {
                         final controller = CustomPopupMenuController();
                         _popupControllers.add(controller);
                       }
