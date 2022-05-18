@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cpp_native/cpp_native.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -101,7 +102,7 @@ class _MyAppState extends State<MyApp> {
 
 void writeToFileDomainName() {
   var os = Platform.isWindows ? Windows() : Linux();
-  if(os.appDirPath.isEmpty){
+  if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
   var domainNameFile = File('${os.appDirPath}domainName');
@@ -109,4 +110,14 @@ void writeToFileDomainName() {
     domainNameFile.createSync(recursive: true);
   }
   domainNameFile.writeAsStringSync(domainName);
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

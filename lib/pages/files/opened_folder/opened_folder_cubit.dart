@@ -26,6 +26,7 @@ import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 
 import '../../../constants.dart';
+import '../../../utilites/repositories/user_repository.dart';
 
 enum ContextActionEnum {
   share,
@@ -54,6 +55,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   StreamSubscription? updatePageSubscription;
   late final LatestFileRepository _repository;
   late String idTappedFile;
+  final UserRepository _userRepository =
+      getIt<UserRepository>(instanceName: 'user_repo');
 
   late Observer _updateObserver = Observer((e) {
     try {
@@ -124,6 +127,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       _update();
     });
+    var user = _userRepository.getUser;
     bool progress = true;
     _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
@@ -133,6 +137,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         objects: objects,
         sortedFiles: objects,
         previousFolders: previousFolders,
+        user: user,
         progress: progress,
       ),
     );
@@ -649,7 +654,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> fileTapped(Record record) async {
-    _repository.addFile(latestFile: record);
+    await _filesController.setRecentFile(record, DateTime.now());
+    var recentsFile = await _filesController.getRecentFiles();
+    if (recentsFile != null) {
+      // recentsFile.forEach((element) {
+      await _repository.addFiles(latestFile: recentsFile);
+      // });
+    }
+    //_repository.addFile(latestFile: record);
+
     var box = await Hive.openBox(kPathDBName);
     String path = box.get(record.id, defaultValue: '');
     idTappedFile = record.id;

@@ -45,6 +45,11 @@ class FileSortingByCriterion extends FilesEvent {
   List<Object?> get props => [criterion];
 }
 
+class FileTapped extends FilesEvent {
+  final Record record;
+  FileTapped({required this.record});
+}
+
 class FileContextActionChoosed extends FilesEvent {
   final BaseObject file;
   final ContextActionEnum action;

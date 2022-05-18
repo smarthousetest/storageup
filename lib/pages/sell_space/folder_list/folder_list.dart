@@ -192,7 +192,7 @@ class _ButtonTemplateState extends State<FolderList> {
                               },
                             );
                             if (result) {
-                              DownloadLocation? deleteKeeper;
+                              var deleteKeeper;
                               for (var element in state.locationsInfo) {
                                 if (element.idForCompare == keeper.id) {
                                   deleteKeeper = element;
@@ -254,6 +254,15 @@ class _ButtonTemplateState extends State<FolderList> {
   }
 
   Widget _keeperIndicator(BuildContext context, Keeper? keeper) {
+    double percentSpace;
+    var keeperAllSapce = keeper?.space;
+    var usedSpace = keeper?.usedSpace;
+    if (keeper != null && keeperAllSapce != null && usedSpace != null) {
+      percentSpace = 100 / (keeperAllSapce / (usedSpace)).toDouble();
+    } else {
+      percentSpace = 0;
+    }
+
     return Container(
       width: 140,
       padding: const EdgeInsets.only(left: 20.0, top: 10),
@@ -314,12 +323,9 @@ class _ButtonTemplateState extends State<FolderList> {
             child: Stack(
               children: [
                 Container(
-                  child: PercentArc(
-                      value: (100 /
-                          (keeper!.space! /
-                              (keeper.space! - keeper.availableSpace!)
-                                  .toDouble()))),
-                ),
+                    child: PercentArc(
+                  value: percentSpace,
+                )),
               ],
             ),
           ),
@@ -342,12 +348,12 @@ class _ButtonTemplateState extends State<FolderList> {
             height: 5,
           ),
           Container(
-            constraints: BoxConstraints(maxWidth: 300),
+            constraints: BoxConstraints(maxWidth: 170),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  fileSize(keeper.usedSpace!, translate),
+                  usedSpace != null ? fileSize(usedSpace, translate) : "null",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -357,7 +363,7 @@ class _ButtonTemplateState extends State<FolderList> {
                   ),
                 ),
                 Text(
-                  " из ${fileSize(keeper.space!, translate)}",
+                  " из ${fileSize(keeperAllSapce, translate)}",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -404,7 +410,7 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: keeper.sleepStatus == false && keeper.online == 1
+              color: keeper.online == 1
                   ? Theme.of(context).selectedRowColor
                   : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
@@ -412,11 +418,11 @@ class _ButtonTemplateState extends State<FolderList> {
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                keeper.sleepStatus == false && keeper.online == 1
+                keeper.online == 1
                     ? "• ${translate.active}"
                     : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: keeper.sleepStatus == false && keeper.online == 1
+                  color: keeper.online == 1
                       ? Color(0xFF25B885)
                       : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,
@@ -595,7 +601,7 @@ class _ButtonTemplateState extends State<FolderList> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 20.0, left: 20, bottom: 11),
+        padding: const EdgeInsets.only(top: 20.0, left: 20, bottom: 9),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -422,46 +422,55 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         //       curve: Curves.ease);
 
                                         _initiatingControllers(state);
-                                        return Stack(children: [
-                                          NotificationListener(
-                                            child: ListView(
-                                              shrinkWrap: true,
-                                              physics: ClampingScrollPhysics(),
-                                              scrollDirection: Axis.vertical,
-                                              controller:
-                                                  _verticalFolderListScrollController,
+                                        return Scrollbar(
+                                          //thumbVisibility: true,
+                                          scrollbarOrientation:
+                                              ScrollbarOrientation.top,
+                                          controller:
+                                              _folderListScrollController,
+                                          child: ScrollConfiguration(
+                                            behavior:
+                                                ScrollConfiguration.of(context)
+                                                    .copyWith(
+                                              dragDevices: {
+                                                PointerDeviceKind.touch,
+                                                PointerDeviceKind.mouse,
+                                              },
                                             ),
-                                            onNotification: (t) {
-                                              setState(() {
-                                                x = _verticalFolderListScrollController
-                                                    .position.pixels;
-                                                print(x);
-                                              });
-                                              if (t is ScrollEndNotification) {}
-                                              return true;
-                                            },
+                                            child: SingleChildScrollView(
+                                                // shrinkWrap: true,
+                                                physics:
+                                                    ClampingScrollPhysics(),
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                controller:
+                                                    _folderListScrollController,
+                                                child: Row(
+                                                  children: [
+                                                    ...state.albums
+                                                        .map(
+                                                          (album) =>
+                                                              _folderIcon(
+                                                            album,
+                                                            isChoosed: album
+                                                                    .id ==
+                                                                state
+                                                                    .currentFolder
+                                                                    .id,
+                                                            blocContext:
+                                                                context,
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ],
+                                                )
+
+                                                // children: [
+
+                                                // ],
+                                                ),
                                           ),
-                                          ListView(
-                                            shrinkWrap: true,
-                                            physics: ClampingScrollPhysics(),
-                                            scrollDirection: Axis.horizontal,
-                                            controller:
-                                                _folderListScrollController,
-                                            children: [
-                                              ...state.albums
-                                                  .map(
-                                                    (album) => _folderIcon(
-                                                      album,
-                                                      isChoosed: album.id ==
-                                                          state
-                                                              .currentFolder.id,
-                                                      blocContext: context,
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                            ],
-                                          ),
-                                        ]);
+                                        );
                                       },
                                     ),
                                   ),

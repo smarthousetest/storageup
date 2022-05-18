@@ -55,9 +55,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       var recentsFile = await _filesService.getRecentsRecords();
       if (recentsFile != null) {
-        recentsFile.forEach((element) {
-          _repository.addFile(latestFile: element);
-        });
+        // recentsFile.forEach((element) {
+        await _repository.addFiles(latestFile: recentsFile);
+        // });
       }
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();

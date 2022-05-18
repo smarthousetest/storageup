@@ -190,8 +190,8 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         if (canSave) {
                                           final result =
                                               await _authController.changeName(
-                                                  name:
-                                                      myController.value.text);
+                                                  name: myController.value.text
+                                                      .trim());
                                           Navigator.pop(context,
                                               myController.value.text.trim());
                                           if (result ==
