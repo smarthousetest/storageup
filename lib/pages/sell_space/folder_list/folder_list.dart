@@ -46,7 +46,8 @@ class _ButtonTemplateState extends State<FolderList> {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => FolderListBloc()..add(FolderListPageOpened()),
-        child: BlocBuilder<FolderListBloc, FolderListState>(builder: (context, state) {
+        child: BlocBuilder<FolderListBloc, FolderListState>(
+            builder: (context, state) {
           _initiatingControllers(state);
           locationsInfo = state.localKeeper;
           return Column(
@@ -93,7 +94,8 @@ class _ButtonTemplateState extends State<FolderList> {
         LayoutBuilder(
           builder: (context, constrains) {
             var countOnElementsInRow = constrains.maxWidth ~/ 354;
-            final elementsWidthWithoutSpacing = constrains.maxWidth - countOnElementsInRow * 20;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
             final actualElementsWidth = countOnElementsInRow * 354;
             if (actualElementsWidth > elementsWidthWithoutSpacing) {
               countOnElementsInRow--;
@@ -160,7 +162,8 @@ class _ButtonTemplateState extends State<FolderList> {
                   ),
                 ),
                 Spacer(),
-                BlocBuilder<FolderListBloc, FolderListState>(builder: (context, state) {
+                BlocBuilder<FolderListBloc, FolderListState>(
+                    builder: (context, state) {
                   if (state.localKeeper.length != _popupControllers.length) {
                     final controller = CustomPopupMenuController();
                     _popupControllers.add(controller);
@@ -171,13 +174,15 @@ class _ButtonTemplateState extends State<FolderList> {
                     showArrow: false,
                     horizontalMargin: 10,
                     verticalMargin: 0,
-                    controller: _popupControllers[state.localKeeper.indexOf(keeper)],
+                    controller:
+                        _popupControllers[state.localKeeper.indexOf(keeper)],
                     menuBuilder: () {
                       return KeeperPopupMenuActions(
                         theme: Theme.of(context),
                         translate: translate,
                         onTap: (action) async {
-                          _popupControllers[state.localKeeper.indexOf(keeper)].hideMenu();
+                          _popupControllers[state.localKeeper.indexOf(keeper)]
+                              .hideMenu();
                           if (action == KeeperAction.change) {
                           } else {
                             var result = await showDialog(
@@ -188,14 +193,15 @@ class _ButtonTemplateState extends State<FolderList> {
                             );
                             if (result) {
                               DownloadLocation? deleteKeeper;
-                              for(var element in state.locationsInfo) {
+                              for (var element in state.locationsInfo) {
                                 if (element.idForCompare == keeper.id) {
                                   deleteKeeper = element;
                                   break;
                                 }
                               }
-                              if(deleteKeeper != null) {
-                                context.read<FolderListBloc>().add(DeleteLocation(location: deleteKeeper));
+                              if (deleteKeeper != null) {
+                                context.read<FolderListBloc>().add(
+                                    DeleteLocation(location: deleteKeeper));
                               }
                             }
                             //await context.read<FolderListBloc>().stream.first;
@@ -308,8 +314,11 @@ class _ButtonTemplateState extends State<FolderList> {
             child: Stack(
               children: [
                 Container(
-                  child:
-                      PercentArc(value: (100 / (keeper!.space! / (keeper.space! - keeper.availableSpace!).toDouble())) ?? 0),
+                  child: PercentArc(
+                      value: (100 /
+                          (keeper!.space! /
+                              (keeper.space! - keeper.availableSpace!)
+                                  .toDouble()))),
                 ),
               ],
             ),
@@ -450,7 +459,9 @@ class _ButtonTemplateState extends State<FolderList> {
                     height: 20.0,
                     width: 40.0,
                     onToggle: (_) {
-                      context.read<FolderListBloc>().add(SleepStatus(keeper: keeper));
+                      context
+                          .read<FolderListBloc>()
+                          .add(SleepStatus(keeper: keeper));
                     },
                     toggleSize: 16,
                     padding: 2,
@@ -545,7 +556,8 @@ class _ButtonTemplateState extends State<FolderList> {
         LayoutBuilder(
           builder: (context, constrains) {
             var countOnElementsInRow = constrains.maxWidth ~/ 354;
-            final elementsWidthWithoutSpacing = constrains.maxWidth - countOnElementsInRow * 20;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
             final actualElementsWidth = countOnElementsInRow * 354;
             if (actualElementsWidth > elementsWidthWithoutSpacing) {
               countOnElementsInRow--;
@@ -768,8 +780,7 @@ class KeeperPopupMenuActions extends StatefulWidget {
     required this.translate,
     required this.onTap,
     Key? key,
-  })
-      : super(key: key);
+  }) : super(key: key);
 
   final ThemeData theme;
   final S translate;
@@ -878,7 +889,8 @@ class _KeeperPopupMenuActionsState extends State<KeeperPopupMenuActions> {
                           ),
                           Text(
                             widget.translate.delete,
-                            style: style.copyWith(color: Theme.of(context).errorColor),
+                            style: style.copyWith(
+                                color: Theme.of(context).errorColor),
                           ),
                         ],
                       ),
