@@ -1024,7 +1024,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                             );
                                           } else {
                                             print('file tapped in properies');
-
                                             context
                                                 .read<OpenedFolderCubit>()
                                                 .fileTapped(element as Record);

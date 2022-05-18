@@ -44,8 +44,13 @@ class _ButtonTemplateState extends State<FileInfoView> {
                 sigmaX: 0.1,
                 sigmaY: 0.1,
               ),
-              child: Container(
-                color: Colors.transparent.withAlpha(0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  color: Colors.transparent.withAlpha(0),
+                ),
               ),
             ),
           ),

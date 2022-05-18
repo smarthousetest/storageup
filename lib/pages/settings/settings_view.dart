@@ -53,6 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget build(BuildContext context) {
+    //dropdownValue = StateContainer.of(context).locale.languageCode;
     var decoration = () {
       return BoxDecoration(
         border: Border(
@@ -687,6 +688,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     //   languageRu = translate.russian;
                     // }
 
+                    if (StateContainer.of(context).locale == Locale('en'))
+                      dropdownValue = 'English';
+                    else
+                      dropdownValue = 'Русский';
+
                     var english =
                         Intl.withLocale('en', () => translate.english);
                     // state.language.contains('en') ? translate.english : translate.russian;
@@ -706,6 +712,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           alignedDropdown: true,
                           child: DropdownButton(
                             dropdownColor: Theme.of(context).primaryColor,
+                            focusColor: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(10),
                             isExpanded: true,
                             value: dropdownValue,
@@ -725,15 +732,15 @@ class _SettingsPageState extends State<SettingsPage> {
                             onChanged: (String? newValue) {
                               setState(() {
                                 dropdownValue = newValue!;
-                                if (newValue == russian) {
-                                  context.read<SettingsBloc>().add(
-                                      LanguageChanged(newLanguage: RUSSIAN));
-                                  _changeLanguage(RUSSIAN);
-                                } else {
-                                  context.read<SettingsBloc>().add(
-                                      LanguageChanged(newLanguage: ENGLISH));
-                                  _changeLanguage(ENGLISH);
-                                }
+                                // if (newValue == russian) {
+                                //   context.read<SettingsBloc>().add(
+                                //       LanguageChanged(newLanguage: RUSSIAN));
+                                //   _changeLanguage(RUSSIAN);
+                                // } else {
+                                //   context.read<SettingsBloc>().add(
+                                //       LanguageChanged(newLanguage: ENGLISH));
+                                //   _changeLanguage(ENGLISH);
+                                // }
                                 StateContainer.of(context).changeLocale(
                                   Locale(
                                     newValue == 'English' ? 'en' : 'ru',

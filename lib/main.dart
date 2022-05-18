@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cpp_native/cpp_native.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -61,39 +62,42 @@ class _MyAppState extends State<MyApp> {
 //   }
   @override
   Widget build(BuildContext context) {
-    return AdaptiveTheme(
-      light: kLightTheme,
-      //dark: kDarkTheme,
-      initial: AdaptiveThemeMode.light,
-      builder: (light, dark) => MaterialApp(
-        darkTheme: dark,
-        theme: light,
-        locale: StateContainer.of(context).locale,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          S.delegate
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        // initialRoute: AuthView.route,
-        initialRoute: AuthView.route,
+    return MaterialApp(
+      //scrollBehavior: MyCustomScrollBehavior(),
+      home: AdaptiveTheme(
+        light: kLightTheme,
+        //dark: kDarkTheme,
+        initial: AdaptiveThemeMode.light,
+        builder: (light, dark) => MaterialApp(
+          darkTheme: dark,
+          theme: light,
+          locale: StateContainer.of(context).locale,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            S.delegate
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          // initialRoute: AuthView.route,
+          initialRoute: AuthView.route,
 
-        onGenerateRoute: (settings) {
-          switch (settings.name) {
-            case AuthView.route:
-              return MaterialPageRoute(
-                builder: (_) => AuthView(),
-                settings: settings,
-              );
-            case HomePage.route:
-              return MaterialPageRoute(
-                builder: (_) => HomePage(),
-                settings: settings,
-              );
-          }
-          return null;
-        },
+          onGenerateRoute: (settings) {
+            switch (settings.name) {
+              case AuthView.route:
+                return MaterialPageRoute(
+                  builder: (_) => AuthView(),
+                  settings: settings,
+                );
+              case HomePage.route:
+                return MaterialPageRoute(
+                  builder: (_) => HomePage(),
+                  settings: settings,
+                );
+            }
+            return null;
+          },
+        ),
       ),
     );
   }
@@ -101,7 +105,7 @@ class _MyAppState extends State<MyApp> {
 
 void writeToFileDomainName() {
   var os = Platform.isWindows ? Windows() : Linux();
-  if(os.appDirPath.isEmpty){
+  if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
   var domainNameFile = File('${os.appDirPath}domainName');
