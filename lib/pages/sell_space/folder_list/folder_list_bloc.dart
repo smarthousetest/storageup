@@ -177,7 +177,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     String? bearerToken = await TokenRepository().getApiToken();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
     var box = await Hive.openBox('keeper_data');
-    String keeperDir = await box.get(event.location.id.toString());
+    String keeperDir = Uri.decodeFull(await box.get(event.location.id.toString()));
     await box.delete(event.location.id.toString());
     String keeperId = '';
     var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
