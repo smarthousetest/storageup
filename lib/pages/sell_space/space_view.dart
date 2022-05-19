@@ -36,7 +36,7 @@ class PathCheck {
   static String doPathCorrect(String path) {
     var partPath = path.split(Platform.pathSeparator);
     for (int i = 0; i < partPath.length; i++) {
-      for(var restrictedWord in _restrictedWords){
+      for (var restrictedWord in _restrictedWords) {
         if (partPath[i] == restrictedWord) {
           var result = partPath.sublist(0, i);
           result.add(path.split(Platform.pathSeparator).last);
@@ -63,8 +63,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   S translate = getIt<S>();
   String list = "";
   String dirPath = '';
-  int countGbSpace = 0;
   double _currentSliderValue = 32;
+  int countGbSpace = 32;
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
   final myController = TextEditingController();
@@ -821,7 +821,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     bool checkValidate = list.isNotEmpty && myController.text.isNotEmpty;
                     return OutlinedButton(
                       onPressed: () async {
-                        if (checkValidate == false) {
+                        if (!checkValidate) {
                           print('path null');
                         } else {
                           var name = myController.text;
