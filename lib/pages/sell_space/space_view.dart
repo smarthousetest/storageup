@@ -81,143 +81,167 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return BlocProvider(
         create: (context) => SpaceBloc()..add(SpacePageOpened()),
         child: Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-            child: Container(
-              height: 46,
-              child: Row(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 30),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(13.0),
-                              child: Align(
-                                alignment: FractionalOffset.centerLeft,
-                                child: Container(
-                                    width: 20, height: 20, child: SvgPicture.asset("assets/file_page/search.svg")),
-                              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+                child: Container(
+                  height: 46,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 30),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: Color.fromARGB(25, 23, 69, 139),
+                                    blurRadius: 4,
+                                    offset: Offset(1, 4))
+                              ],
                             ),
-                            Container(
-                              width: _searchFieldWidth,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    StateContainer.of(context).changePage(ChosenPage.file);
-                                  },
-                                  child: MouseRegion(
-                                    cursor: SystemMouseCursors.click,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(13.0),
+                                  child: Align(
+                                    alignment: FractionalOffset.centerLeft,
                                     child: Container(
-                                      child: Text(
-                                        translate.search,
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Theme.of(context).disabledColor,
+                                        width: 20,
+                                        height: 20,
+                                        child: SvgPicture.asset(
+                                            "assets/file_page/search.svg")),
+                                  ),
+                                ),
+                                Container(
+                                  width: _searchFieldWidth,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        StateContainer.of(context)
+                                            .changePage(ChosenPage.file);
+                                      },
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Container(
+                                          child: Text(
+                                            translate.search,
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-                      return Row(
-                        key: nameWidthKey,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: 20,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                StateContainer.of(context).changePage(ChosenPage.settings);
-                              },
-                              child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(23.0),
-                                  child: Container(child: state.user.image),
-                                ),
-                              ),
+                              ],
                             ),
                           ),
-                          (MediaQuery.of(context).size.width > 965)
-                              ? Container(
-                                  constraints: BoxConstraints(maxWidth: 110),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 5),
-                                        child: Text(
-                                          state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            color: Theme.of(context).bottomAppBarColor,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        state.user?.email ?? '',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Theme.of(context).bottomAppBarColor,
-                                          height: 1,
-                                        ),
-                                      ),
-                                    ],
+                        ),
+                      ),
+                      Container(
+                        child: BlocBuilder<SpaceBloc, SpaceState>(
+                            builder: (context, state) {
+                          return Row(
+                            key: nameWidthKey,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  right: 20,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    StateContainer.of(context)
+                                        .changePage(ChosenPage.settings);
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(23.0),
+                                      child: Container(child: state.user.image),
+                                    ),
                                   ),
-                                )
-                              : Container(),
-                        ],
-                      );
-                    }),
+                                ),
+                              ),
+                              (MediaQuery.of(context).size.width > 965)
+                                  ? Container(
+                                      constraints:
+                                          BoxConstraints(maxWidth: 110),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5),
+                                            child: Text(
+                                              state.user?.firstName ??
+                                                  state.user?.email
+                                                      ?.split('@')
+                                                      .first ??
+                                                  'Name',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                color: Theme.of(context)
+                                                    .bottomAppBarColor,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            state.user?.email ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Theme.of(context)
+                                                  .bottomAppBarColor,
+                                              height: 1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          );
+                        }),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-              // List<Keeper?> othersKeeper = [];
-              // if (state.keeper != null) {
-              //   othersKeeper.addAll(state.keeper);
-              // }
-              return IndexedStack(
-                sizing: StackFit.expand,
-                key: ValueKey<int>(index),
-                index: index,
-                children: [
-                  state.keeper.isEmpty ? rentingAPlace(context) : folderList(context),
-                  Column(
-                    children: [addSpace(context)],
-                  ),
-                  folderList(context)
-                ],
-              );
-            }),
-          )
-        ])));
+              Expanded(
+                child: BlocBuilder<SpaceBloc, SpaceState>(
+                    builder: (context, state) {
+                  // List<Keeper?> othersKeeper = [];
+                  // if (state.keeper != null) {
+                  //   othersKeeper.addAll(state.keeper);
+                  // }
+                  return IndexedStack(
+                    sizing: StackFit.expand,
+                    key: ValueKey<int>(index),
+                    index: index,
+                    children: [
+                      state.keeper.isEmpty
+                          ? rentingAPlace(context)
+                          : folderList(context),
+                      Column(
+                        children: [addSpace(context)],
+                      ),
+                      folderList(context)
+                    ],
+                  );
+                }),
+              )
+            ])));
   }
 
   Widget rentingAPlace(BuildContext context) {
@@ -228,7 +252,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: <BoxShadow>[
-            BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+            BoxShadow(
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4))
           ],
         ),
         // ListView(controller: ScrollController(), children: [
@@ -302,7 +329,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               padding: const EdgeInsets.only(left: 40, top: 15),
               child: Container(
                 child: Text(
-                  translate.select_folder + "\n" + translate.store_files + "\n" + translate.money,
+                  translate.select_folder +
+                      "\n" +
+                      translate.store_files +
+                      "\n" +
+                      translate.money,
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,
                     fontFamily: kNormalTextFontFamily,
@@ -331,7 +362,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   Container(
                     width: 6,
                     height: 6,
-                    decoration: BoxDecoration(color: Color(0xff868FFF), shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                        color: Color(0xff868FFF), shape: BoxShape.circle),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -356,7 +388,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   Container(
                     width: 6,
                     height: 6,
-                    decoration: BoxDecoration(color: Color(0xff868FFF), shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                        color: Color(0xff868FFF), shape: BoxShape.circle),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -423,7 +456,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Theme.of(context).splashColor,
                   ),
                   child: Text(
@@ -452,7 +486,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(10),
             boxShadow: <BoxShadow>[
-              BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+              BoxShadow(
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4))
             ],
           ),
           child: ListView(controller: ScrollController(), children: [
@@ -536,7 +573,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             child: Text(
                               list,
                               maxLines: 1,
-                              style: TextStyle(color: Theme.of(context).disabledColor),
+                              style: TextStyle(
+                                  color: Theme.of(context).disabledColor),
                             ),
                           );
                         },
@@ -564,7 +602,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
                             backgroundColor: Theme.of(context).splashColor,
                           ),
                           child: Text(
@@ -647,7 +686,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           trackShape: RectangularSliderTrackShape(),
                           trackHeight: 8.0,
                           thumbColor: Theme.of(context).primaryColor,
-                          overlayShape: RoundSliderOverlayShape(overlayRadius: 0),
+                          overlayShape:
+                              RoundSliderOverlayShape(overlayRadius: 0),
                           //thumbShape:
                           //RoundSliderThumbShape(enabledThumbRadius: 10),
                         ),
@@ -705,7 +745,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             minimumSize: Size(double.maxFinite, 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0))),
+                                    topLeft: Radius.circular(10.0),
+                                    bottomLeft: Radius.circular(10.0))),
                             backgroundColor: Theme.of(context).cardColor,
                           ),
                           child: Center(
@@ -735,7 +776,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             minimumSize: Size(double.maxFinite, 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
+                                    topRight: Radius.circular(10.0),
+                                    bottomRight: Radius.circular(10.0))),
                             backgroundColor: Theme.of(context).cardColor,
                           ),
                           child: Center(
@@ -817,18 +859,21 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 child: Container(
                   height: 42,
                   width: 200,
-                  child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-                    bool checkValidate = list.isNotEmpty && myController.text.isNotEmpty;
+                  child: BlocBuilder<SpaceBloc, SpaceState>(
+                      builder: (context, state) {
+                    bool checkValidate =
+                        list.isNotEmpty && myController.text.isNotEmpty;
                     return OutlinedButton(
                       onPressed: () async {
                         if (!checkValidate) {
                           print('path null');
                         } else {
-                          var name = myController.text;
+                          var name = myController.text.trim();
                           countGbSpace = _currentSliderValue.toInt();
-                          context
-                              .read<SpaceBloc>()
-                              .add(SaveDirPath(pathDir: dirPath, countGb: countGbSpace, name: name));
+                          context.read<SpaceBloc>().add(SaveDirPath(
+                              pathDir: dirPath,
+                              countGb: countGbSpace,
+                              name: name));
                           await context.read<SpaceBloc>().stream.first;
                           setState(() {
                             index = 2;
@@ -837,10 +882,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: list.isEmpty && myController.value.text.isEmpty
-                            ? Theme.of(context).canvasColor
-                            : Theme.of(context).splashColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        backgroundColor:
+                            list.isEmpty && myController.value.text.isEmpty
+                                ? Theme.of(context).canvasColor
+                                : Theme.of(context).splashColor,
                       ),
                       child: Text(
                         translate.save,
@@ -915,11 +962,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         fillColor: Theme.of(context).cardColor,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                          borderSide:
+                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
                         ),
                       ),
                       style: TextStyle(
@@ -946,7 +995,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: <BoxShadow>[
-            BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+            BoxShadow(
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4))
           ],
         ),
         //alignment: Alignment.center,
@@ -983,7 +1035,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     },
                     style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
                       backgroundColor: Theme.of(context).splashColor,
                     ),
                     child: Text(
