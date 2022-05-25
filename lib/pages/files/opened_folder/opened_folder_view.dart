@@ -458,7 +458,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                                       object: obj,
                                                       user: state.user);
                                                 });
-                                            if (res) {
+                                            if (res != null) {
                                               if (obj is Folder) {
                                                 print(obj);
                                                 widget.push(

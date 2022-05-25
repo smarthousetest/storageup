@@ -14,7 +14,7 @@ import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/components/media_info.dart';
+import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -218,91 +218,81 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
-                            StateInfoContainer.of(context)?.record == null
-                                ? Container(
-                                    child: BlocBuilder<MediaCubit, MediaState>(
-                                        builder: (context, state) {
-                                      return Row(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 20, left: 20),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                StateContainer.of(context)
-                                                    .changePage(
-                                                        ChosenPage.settings);
-                                              },
-                                              child: MouseRegion(
-                                                cursor:
-                                                    SystemMouseCursors.click,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          23.0),
-                                                  child: Container(
-                                                      child: state.user.image),
-                                                ),
-                                              ),
-                                            ),
+                            Container(
+                              child: BlocBuilder<MediaCubit, MediaState>(
+                                  builder: (context, state) {
+                                return Row(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.only(right: 20, left: 20),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          StateContainer.of(context)
+                                              .changePage(ChosenPage.settings);
+                                        },
+                                        child: MouseRegion(
+                                          cursor: SystemMouseCursors.click,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(23.0),
+                                            child: Container(
+                                                child: state.user.image),
                                           ),
-                                          (MediaQuery.of(context).size.width >
-                                                  965)
-                                              ? Container(
-                                                  constraints: BoxConstraints(
-                                                      maxWidth: 120),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets
-                                                                .symmetric(
-                                                            vertical:
-                                                                3), //5 gives owerflow use 3 can't see diff
-                                                        child: Text(
-                                                          state.user
-                                                                  ?.firstName ??
-                                                              state.user?.email
-                                                                  ?.split('@')
-                                                                  .first ??
-                                                              'Name',
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 17,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .bottomAppBarColor,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
+                                        ),
+                                      ),
+                                    ),
+                                    (MediaQuery.of(context).size.width > 965)
+                                        ? Container(
+                                            constraints:
+                                                BoxConstraints(maxWidth: 120),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical:
+                                                          3), //5 gives owerflow use 3 can't see diff
+                                                  child: Text(
+                                                    state.user?.firstName ??
                                                         state.user?.email
-                                                                ?.split('@')
-                                                                .first ??
-                                                            'email',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .bottomAppBarColor,
-                                                        ),
-                                                      ),
-                                                    ],
+                                                            ?.split('@')
+                                                            .first ??
+                                                        'Name',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Theme.of(context)
+                                                          .bottomAppBarColor,
+                                                    ),
                                                   ),
-                                                )
-                                              : Container(),
-                                        ],
-                                      );
-                                    }),
-                                  )
-                                : Container(),
+                                                ),
+                                                Text(
+                                                  state.user?.email
+                                                          ?.split('@')
+                                                          .first ??
+                                                      'email',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .bottomAppBarColor,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
+                                );
+                              }),
+                            ),
                           ],
                         ),
                       ),
@@ -590,17 +580,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                     : Container(),
                                 BlocBuilder<MediaCubit, MediaState>(
                                   builder: (context, state) {
-                                    eventBusMediaOpen.on().listen((event) {
-                                      var element =
-                                          StateInfoContainer.of(context)
-                                              ?.record;
-                                      if (_isOpen == false) {
-                                        startTimer();
-                                        context
-                                            .read<MediaCubit>()
-                                            .fileTapped(element as Record);
-                                      }
-                                    });
                                     return Expanded(
                                       child: state.representation ==
                                               FilesRepresentation.grid
@@ -625,9 +604,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              StateInfoContainer.of(context)?.record == null
-                  ? Container()
-                  : showViewFileInfo(),
             ],
           ),
         ),
@@ -689,25 +665,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-
-  Widget showViewFileInfo() {
-    try {
-      if (StateInfoContainer.of(context)?.record == null) {
-        return Container();
-      } else {
-        // _prepareFields(context);
-        return BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
-          return Container(
-              child: MediaInfoView(
-                  key: propertiesWidthKey,
-                  user: state.user,
-                  record: StateInfoContainer.of(context)?.record));
-        });
-      }
-    } catch (e) {
-      return Container();
-    }
   }
 
   Widget _folderIcon(
@@ -899,9 +856,17 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           .indexOf(record)]
                                       .hideMenu();
                                   if (action == MediaAction.properties) {
-                                    // controller.hideMenu();
-                                    StateInfoContainer.of(context)
-                                        ?.setInfoRecord(record);
+                                    var res = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return FileInfoView(
+                                              object: record, user: state.user);
+                                        });
+                                    if (res != null) {
+                                      blocContext
+                                          .read<MediaCubit>()
+                                          .fileTapped(record);
+                                    }
                                   } else if (action == MediaAction.rename) {
                                     var fileExtention = FileAttribute()
                                         .getFileExtension(record.name ?? '');
@@ -1176,9 +1141,17 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                             .indexOf(e)]
                                         .hideMenu();
                                     if (action == MediaAction.properties) {
-                                      // controller.hideMenu();
-                                      StateInfoContainer.of(context)
-                                          ?.setInfoRecord(e);
+                                      var res = await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return FileInfoView(
+                                                object: e, user: state.user);
+                                          });
+                                      if (res != null) {
+                                        context
+                                            .read<MediaCubit>()
+                                            .fileTapped(e);
+                                      }
                                     } else if (action == MediaAction.rename) {
                                       var fileExtention = FileAttribute()
                                           .getFileExtension(record.name ?? '');
