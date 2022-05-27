@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/components/expanded_section.dart';
@@ -50,10 +51,12 @@ class _AuthViewState extends State<AuthView> {
 
   @override
   void initState() {
+    var os = OsSpecifications.getOs();
     var height = 780.0;
     var width = 1280.0;
     if (Platform.isWindows) {
-      width = 1296.0;
+      height = 780 * os.getWinScreenScale();
+      width = 1296 * os.getWinScreenScale();
     }
     if (Platform.isLinux) {
       width = 1392.0;
