@@ -117,7 +117,7 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 5),
                                           child: Text(
-                                            widget.user?.fullName ?? '',
+                                            widget.user?.firstName ?? '',
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               fontSize: 14,

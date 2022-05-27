@@ -83,7 +83,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<DownloadObserver> _downloadObservers = [];
 
   String? _getLocalAppVersion() {
-    var os = (Platform.isWindows) ? Windows() : Linux();
+    var os = OsSpecifications.getOs();
     var uiVersionFile = File('${os.appDirPath}ui_version.txt');
     if (uiVersionFile.existsSync()) {
       return (uiVersionFile.readAsStringSync()).trim();

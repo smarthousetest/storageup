@@ -458,7 +458,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                                       object: obj,
                                                       user: state.user);
                                                 });
-                                            if (res) {
+                                            if (res != null) {
                                               if (obj is Folder) {
                                                 print(obj);
                                                 widget.push(
@@ -1718,9 +1718,11 @@ class ObjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     String? type = '';
     bool isFile = false;
+
     if (object is Record) {
       var record = object as Record;
       isFile = true;
+
       if (record.thumbnail != null &&
               record.thumbnail!
                   .isNotEmpty /*&&
@@ -1729,6 +1731,7 @@ class ObjectView extends StatelessWidget {
         type = FileAttribute().getFilesType(record.name!.toLowerCase());
       }
     }
+
     return LayoutBuilder(
       builder: (context, constrains) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1751,8 +1754,8 @@ class ObjectView extends StatelessWidget {
                             fit: BoxFit.contain,
                           )
                     : type == 'image'
-                        ? Image.asset(
-                            'assets/file_icons/image_default.png',
+                        ? Image.network(
+                            (object as Record).thumbnail!.first.publicUrl!,
                             fit: BoxFit.contain,
                           )
                         : Image.asset(
