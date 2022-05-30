@@ -4,6 +4,7 @@ import 'package:upstorage_desktop/utilites/autoupload/models/download_location.d
 
 abstract class FolderListEvent extends Equatable {
   const FolderListEvent();
+
   @override
   List<Object?> get props => [];
 }
@@ -27,11 +28,13 @@ class GetKeeperInfo extends FolderListEvent {
 
 class SleepStatus extends FolderListEvent {
   final Keeper keeper;
+
   SleepStatus({required this.keeper});
 }
 
 class DeleteLocation extends FolderListEvent {
   final DownloadLocation location;
+
   DeleteLocation({required this.location});
 }
 
@@ -42,4 +45,9 @@ class UpdateLocationsList extends FolderListEvent {
 
   @override
   List<Object?> get props => [locations];
+}
+
+class KeeperReboot extends FolderListEvent {
+  final DownloadLocation location;
+  KeeperReboot({required this.location});
 }
