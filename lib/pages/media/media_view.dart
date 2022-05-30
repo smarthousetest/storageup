@@ -653,10 +653,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     String icon = 'album';
     if (album.id == '-1') {
       activeColor = Color(0xFF868FFF);
-    } else if (album.name == translate.photos) {
+    } else if (album.name == 'Фото') {
       activeColor = Color(0xFF59D7AB);
       icon = 'photo';
-    } else if (album.name == translate.video) {
+    } else if (album.name == 'Видео') {
       activeColor = Color(0xFFFF847E);
       icon = 'video';
     } else {

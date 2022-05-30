@@ -29,11 +29,7 @@ class UserController {
   Future<void> changeName(String name) async {
     var user = _repository.getUser;
     var response = await _authService.changeName(name: name);
-    // User user = User(
-    //   firstName: 'Sergey',
-    //   fullName: name,
-    //   email: 'sergeysorokin.radar@gmail.com',
-    // );
+
     if (response == AuthenticationStatus.authenticated) user?.firstName = name;
 
     _repository.setUser = user;

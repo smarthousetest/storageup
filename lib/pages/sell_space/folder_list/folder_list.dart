@@ -445,52 +445,89 @@ class _ButtonTemplateState extends State<FolderList> {
           SizedBox(
             height: 10,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BlocBuilder<FolderListBloc, FolderListState>(
-                builder: (context, state) {
-                  var valueSwitch = keeper.sleepStatus;
-                  ;
-                  if (valueSwitch != null && keeper.online == 1) {
-                    valueSwitch = !valueSwitch;
-                  }
-                  // else if (keeper.online == 0) {
-                  //   valueSwitch = true;
-                  // }
+          keeper.online == 1
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BlocBuilder<FolderListBloc, FolderListState>(
+                      builder: (context, state) {
+                        var valueSwitch = keeper.sleepStatus;
+                        ;
+                        if (valueSwitch != null && keeper.online == 1) {
+                          valueSwitch = !valueSwitch;
+                        }
+                        // else if (keeper.online == 0) {
+                        //   valueSwitch = true;
+                        // }
 
-                  return FlutterSwitch(
-                    value: valueSwitch ?? true,
-                    height: 20.0,
-                    width: 40.0,
-                    onToggle: (_) {
-                      context
-                          .read<FolderListBloc>()
-                          .add(SleepStatus(keeper: keeper));
-                    },
-                    toggleSize: 16,
-                    padding: 2,
-                    activeColor: Theme.of(context).splashColor,
-                    inactiveColor: Theme.of(context).canvasColor,
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5.0),
-                child: Text(
-                  keeper.sleepStatus == false && keeper.online == 1
-                      ? translate.on
-                      : translate.off,
-                  //textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).disabledColor,
-                    fontFamily: kNormalTextFontFamily,
-                    fontSize: 14,
+                        return FlutterSwitch(
+                          value: valueSwitch ?? true,
+                          height: 20.0,
+                          width: 40.0,
+                          onToggle: (_) {
+                            context
+                                .read<FolderListBloc>()
+                                .add(SleepStatus(keeper: keeper));
+                          },
+                          toggleSize: 16,
+                          padding: 2,
+                          activeColor: Theme.of(context).splashColor,
+                          inactiveColor: Theme.of(context).canvasColor,
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Text(
+                        keeper.sleepStatus == false && keeper.online == 1
+                            ? translate.on
+                            : translate.off,
+                        //textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).disabledColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : GestureDetector(
+                  onTap: () {},
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: Container(
+                      width: 119,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Theme.of(context).splashColor,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Center(
+                          child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/space_sell/refresh.svg',
+                            color: Theme.of(context).splashColor,
+                          ),
+                          Text(
+                            translate.reboot,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: Theme.of(context).splashColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      )),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
           SizedBox(
             height: 20,
           ),

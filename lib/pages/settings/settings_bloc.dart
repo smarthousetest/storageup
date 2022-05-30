@@ -152,8 +152,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       if (publicUrl != null) {
         var result = await _userController.changeProfilePic(publicUrl);
         if (result == ResponseStatus.ok) {
-          await _userController.updateUser();
-          User? user = await _userController.getUser;
+          User? user = await _userController.updateUser();
           emit(state.copyWith(
             user: user,
             status: FormzStatus.submissionSuccess,

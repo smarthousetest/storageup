@@ -34,15 +34,6 @@ import 'package:web_socket_channel/io.dart';
 import 'home_bloc.dart';
 import 'home_state.dart';
 
-enum TabItem {
-  infoPage,
-  filePage,
-  spaceSellPage,
-  financePage,
-  settingsPage,
-  mediaPage,
-}
-
 class HomePage extends StatefulWidget {
   static const route = "home_page";
 

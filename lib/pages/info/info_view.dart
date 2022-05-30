@@ -237,13 +237,13 @@ class _InfoPageState extends State<InfoPage> {
         //     ?.length;
 
         var countMediaFolderPhoto = state.allMediaFolders
-                ?.firstWhere((element) => element.name == translate.photos)
+                ?.firstWhere((element) => element.name == "Фото")
                 .records
                 ?.length ??
             0;
 
         var countMediaFolderVideo = state.allMediaFolders
-                ?.firstWhere((element) => element.name == translate.video)
+                ?.firstWhere((element) => element.name == "Видео")
                 .records
                 ?.length ??
             0;
@@ -284,7 +284,7 @@ class _InfoPageState extends State<InfoPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
-                              "Файлы",
+                              translate.files,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Theme.of(context).disabledColor,
@@ -338,7 +338,7 @@ class _InfoPageState extends State<InfoPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
-                              "Фото",
+                              translate.photos,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Theme.of(context).disabledColor,
@@ -391,7 +391,7 @@ class _InfoPageState extends State<InfoPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
-                              "Видео",
+                              translate.video,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Theme.of(context).disabledColor,
