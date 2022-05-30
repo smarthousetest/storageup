@@ -24,12 +24,10 @@ import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.
 import 'package:upstorage_desktop/pages/media/media_cubit.dart';
 import 'package:upstorage_desktop/pages/media/media_open/media_open_view.dart';
 import 'package:upstorage_desktop/pages/media/media_state.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_info_container.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -131,209 +129,231 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
             }
           }
         },
-        child: Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            //crossAxisAlignment:  CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        height: 46,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 0,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          //crossAxisAlignment:  CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: 46,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 0,
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Color.fromARGB(25, 23, 69, 139),
+                                        blurRadius: 4,
+                                        offset: Offset(1, 4))
+                                  ],
                                 ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color:
-                                              Color.fromARGB(25, 23, 69, 139),
-                                          blurRadius: 4,
-                                          offset: Offset(1, 4))
-                                    ],
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(13.0),
-                                        child: Align(
-                                          alignment:
-                                              FractionalOffset.centerLeft,
-                                          child: Container(
-                                              width: 20,
-                                              height: 20,
-                                              child: SvgPicture.asset(
-                                                  "assets/file_page/search.svg")),
-                                        ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(13.0),
+                                      child: Align(
+                                        alignment: FractionalOffset.centerLeft,
+                                        child: Container(
+                                            width: 20,
+                                            height: 20,
+                                            child: SvgPicture.asset(
+                                                "assets/file_page/search.svg")),
                                       ),
-                                      BlocBuilder<MediaCubit, MediaState>(
-                                          builder: (context, state) {
-                                        return Container(
-                                          width: _searchFieldWidth,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0),
-                                            child: Center(
-                                              child: TextField(
-                                                style: TextStyle(
+                                    ),
+                                    BlocBuilder<MediaCubit, MediaState>(
+                                        builder: (context, state) {
+                                      return Container(
+                                        width: _searchFieldWidth,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10.0),
+                                          child: Center(
+                                            child: TextField(
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Theme.of(context)
+                                                    .disabledColor,
+                                              ),
+                                              onChanged: (value) {
+                                                context
+                                                    .read<MediaCubit>()
+                                                    .mapSortedFieldChanged(
+                                                        value);
+                                              },
+                                              controller:
+                                                  _searchingFieldController,
+                                              decoration:
+                                                  InputDecoration.collapsed(
+                                                hintText: translate.search,
+                                                hintStyle: TextStyle(
                                                   fontSize: 16.0,
                                                   color: Theme.of(context)
                                                       .disabledColor,
                                                 ),
-                                                onChanged: (value) {
-                                                  context
-                                                      .read<MediaCubit>()
-                                                      .mapSortedFieldChanged(
-                                                          value);
-                                                },
-                                                controller:
-                                                    _searchingFieldController,
-                                                decoration:
-                                                    InputDecoration.collapsed(
-                                                  hintText: translate.search,
-                                                  hintStyle: TextStyle(
-                                                    fontSize: 16.0,
-                                                    color: Theme.of(context)
-                                                        .disabledColor,
-                                                  ),
-                                                ),
                                               ),
                                             ),
                                           ),
-                                        );
-                                      }),
-                                    ],
-                                  ),
+                                        ),
+                                      );
+                                    }),
+                                  ],
                                 ),
                               ),
                             ),
-                            Container(
-                              child: BlocBuilder<MediaCubit, MediaState>(
-                                  builder: (context, state) {
-                                return Row(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.only(right: 20, left: 20),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          StateContainer.of(context)
-                                              .changePage(ChosenPage.settings);
-                                        },
-                                        child: MouseRegion(
-                                          cursor: SystemMouseCursors.click,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(23.0),
-                                            child: Container(
-                                                child: state.user.image),
-                                          ),
+                          ),
+                          Container(
+                            child: BlocBuilder<MediaCubit, MediaState>(
+                                builder: (context, state) {
+                              return Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 20, left: 20),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        StateContainer.of(context)
+                                            .changePage(ChosenPage.settings);
+                                      },
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(23.0),
+                                          child: Container(
+                                              child: state.user.image),
                                         ),
                                       ),
                                     ),
-                                    (MediaQuery.of(context).size.width > 965)
-                                        ? Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 120),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      vertical:
-                                                          3), //5 gives owerflow use 3 can't see diff
-                                                  child: Text(
-                                                    state.user?.firstName ??
-                                                        state.user?.email
-                                                            ?.split('@')
-                                                            .first ??
-                                                        'Name',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: Theme.of(context)
-                                                          .bottomAppBarColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  state.user?.email
+                                  ),
+                                  (MediaQuery.of(context).size.width > 966)
+                                      ? Container(
+                                          constraints: BoxConstraints(
+                                              maxWidth: 95, minWidth: 50),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5),
+                                                child: Text(
+                                                  state.user?.firstName ??
+                                                      state.user?.email
                                                           ?.split('@')
                                                           .first ??
-                                                      'email',
+                                                      'Name',
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                    fontSize: 12,
+                                                    fontSize: 17,
                                                     color: Theme.of(context)
                                                         .bottomAppBarColor,
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                          )
-                                        : Container(),
-                                  ],
-                                );
-                              }),
-                            ),
+                                              ),
+                                              Text(
+                                                state.user?.email ?? 'email',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .bottomAppBarColor,
+                                                  height: 1,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(),
+                                ],
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 30,
+                      ),
+                      child: Container(
+                        height: 224,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Color.fromARGB(25, 23, 69, 139),
+                                blurRadius: 4,
+                                offset: Offset(1, 4))
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 30,
-                        ),
-                        child: Container(
-                          height: 224,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Color.fromARGB(25, 23, 69, 139),
-                                  blurRadius: 4,
-                                  offset: Offset(1, 4))
-                            ],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 30,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        translate.folder_dir,
-                                        style: TextStyle(
-                                          color: Theme.of(context).focusColor,
-                                          fontSize: 20,
-                                          fontFamily: kNormalTextFontFamily,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 30,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      translate.folder_dir,
+                                      style: TextStyle(
+                                        color: Theme.of(context).focusColor,
+                                        fontSize: 20,
+                                        fontFamily: kNormalTextFontFamily,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 861,
+                                      child: SizedBox(),
+                                    ),
+                                    Container(
+                                      width: 30,
+                                      height: 30,
+                                      child: RawMaterialButton(
+                                        onPressed: () {
+                                          _folderListScrollController.animateTo(
+                                              _folderListScrollController
+                                                      .offset -
+                                                  _folderButtonSize -
+                                                  14,
+                                              duration:
+                                                  Duration(milliseconds: 500),
+                                              curve: Curves.ease);
+                                        },
+                                        fillColor:
+                                            Theme.of(context).primaryColor,
+                                        child: Icon(
+                                          Icons.arrow_back_ios_rounded,
+                                          color: Theme.of(context).splashColor,
+                                          size: 20.0,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         ),
                                       ),
-                                      Expanded(
-                                        flex: 861,
-                                        child: SizedBox(),
-                                      ),
-                                      Container(
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
                                         width: 30,
                                         height: 30,
                                         child: RawMaterialButton(
@@ -341,8 +361,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                             _folderListScrollController
                                                 .animateTo(
                                                     _folderListScrollController
-                                                            .offset -
-                                                        _folderButtonSize -
+                                                            .offset +
+                                                        _folderButtonSize +
                                                         14,
                                                     duration: Duration(
                                                         milliseconds: 500),
@@ -351,7 +371,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           fillColor:
                                               Theme.of(context).primaryColor,
                                           child: Icon(
-                                            Icons.arrow_back_ios_rounded,
+                                            Icons.arrow_forward_ios,
                                             color:
                                                 Theme.of(context).splashColor,
                                             size: 20.0,
@@ -362,250 +382,207 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 15),
-                                        child: Container(
-                                          width: 30,
-                                          height: 30,
-                                          child: RawMaterialButton(
-                                            onPressed: () {
-                                              _folderListScrollController
-                                                  .animateTo(
-                                                      _folderListScrollController
-                                                              .offset +
-                                                          _folderButtonSize +
-                                                          14,
-                                                      duration: Duration(
-                                                          milliseconds: 500),
-                                                      curve: Curves.ease);
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 25,
+                                  ),
+                                  child: BlocBuilder<MediaCubit, MediaState>(
+                                    builder: (context, state) {
+                                      //  _folderListScrollController.animateTo(
+                                      //       _verticalFolderListScrollController
+                                      //           .offset,
+                                      //       duration: Duration(milliseconds: 500),
+                                      //       curve: Curves.ease);
+
+                                      _initiatingControllers(state);
+                                      return Scrollbar(
+                                        //thumbVisibility: true,
+                                        scrollbarOrientation:
+                                            ScrollbarOrientation.top,
+                                        controller: _folderListScrollController,
+                                        child: ScrollConfiguration(
+                                          behavior:
+                                              ScrollConfiguration.of(context)
+                                                  .copyWith(
+                                            dragDevices: {
+                                              PointerDeviceKind.touch,
+                                              PointerDeviceKind.mouse,
                                             },
-                                            fillColor:
-                                                Theme.of(context).primaryColor,
-                                            child: Icon(
-                                              Icons.arrow_forward_ios,
-                                              color:
-                                                  Theme.of(context).splashColor,
-                                              size: 20.0,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
                                           ),
+                                          child: SingleChildScrollView(
+                                              // shrinkWrap: true,
+                                              physics: ClampingScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              controller:
+                                                  _folderListScrollController,
+                                              child: Row(
+                                                children: [
+                                                  ...state.albums
+                                                      .map(
+                                                        (album) => _folderIcon(
+                                                          album,
+                                                          isChoosed: album.id ==
+                                                              state
+                                                                  .currentFolder
+                                                                  .id,
+                                                          blocContext: context,
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                                ],
+                                              )
+
+                                              // children: [
+
+                                              // ],
+                                              ),
                                         ),
-                                      ),
-                                    ],
+                                      );
+                                    },
                                   ),
                                 ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 25,
-                                    ),
-                                    child: BlocBuilder<MediaCubit, MediaState>(
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Color.fromARGB(25, 23, 69, 139),
+                                  blurRadius: 4,
+                                  offset: Offset(1, 4))
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(40, 20, 30, 0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    BlocBuilder<MediaCubit, MediaState>(
                                       builder: (context, state) {
-                                        //  _folderListScrollController.animateTo(
-                                        //       _verticalFolderListScrollController
-                                        //           .offset,
-                                        //       duration: Duration(milliseconds: 500),
-                                        //       curve: Curves.ease);
-
-                                        _initiatingControllers(state);
-                                        return Scrollbar(
-                                          //thumbVisibility: true,
-                                          scrollbarOrientation:
-                                              ScrollbarOrientation.top,
-                                          controller:
-                                              _folderListScrollController,
-                                          child: ScrollConfiguration(
-                                            behavior:
-                                                ScrollConfiguration.of(context)
-                                                    .copyWith(
-                                              dragDevices: {
-                                                PointerDeviceKind.touch,
-                                                PointerDeviceKind.mouse,
-                                              },
+                                        return Container(
+                                          constraints:
+                                              BoxConstraints(maxWidth: 200),
+                                          child: Text(
+                                            state.currentFolder.name ?? ':(',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(context).focusColor,
+                                              fontFamily: kNormalTextFontFamily,
+                                              fontSize: 20,
                                             ),
-                                            child: SingleChildScrollView(
-                                                // shrinkWrap: true,
-                                                physics:
-                                                    ClampingScrollPhysics(),
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                controller:
-                                                    _folderListScrollController,
-                                                child: Row(
-                                                  children: [
-                                                    ...state.albums
-                                                        .map(
-                                                          (album) =>
-                                                              _folderIcon(
-                                                            album,
-                                                            isChoosed: album
-                                                                    .id ==
-                                                                state
-                                                                    .currentFolder
-                                                                    .id,
-                                                            blocContext:
-                                                                context,
-                                                          ),
-                                                        )
-                                                        .toList(),
-                                                  ],
-                                                )
-
-                                                // children: [
-
-                                                // ],
-                                                ),
                                           ),
                                         );
                                       },
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 30),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 23, 69, 139),
-                                    blurRadius: 4,
-                                    offset: Offset(1, 4))
-                              ],
-                            ),
-                            alignment: Alignment.center,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(40, 20, 30, 0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      BlocBuilder<MediaCubit, MediaState>(
+                                    Expanded(
+                                      flex: 821,
+                                      child: Container(),
+                                    ),
+                                    BlocBuilder<MediaCubit, MediaState>(
                                         builder: (context, state) {
-                                          return Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 200),
-                                            child: Text(
-                                              state.currentFolder.name ?? ':(',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .focusColor,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                          );
+                                      return IconButton(
+                                        padding: EdgeInsets.zero,
+                                        iconSize: 30,
+                                        onPressed: () {
+                                          context
+                                              .read<MediaCubit>()
+                                              .changeRepresentation(
+                                                  FilesRepresentation.table);
                                         },
-                                      ),
-                                      Expanded(
-                                        flex: 821,
-                                        child: Container(),
-                                      ),
-                                      BlocBuilder<MediaCubit, MediaState>(
-                                          builder: (context, state) {
+                                        icon: SvgPicture.asset(
+                                            'assets/file_page/list.svg',
+                                            color: state.representation ==
+                                                    FilesRepresentation.table
+                                                ? Theme.of(context).splashColor
+                                                : Theme.of(context)
+                                                    .toggleButtonsTheme
+                                                    .color),
+                                      );
+                                    }),
+                                    BlocBuilder<MediaCubit, MediaState>(
+                                      builder: (context, state) {
                                         return IconButton(
-                                          padding: EdgeInsets.zero,
                                           iconSize: 30,
                                           onPressed: () {
                                             context
                                                 .read<MediaCubit>()
                                                 .changeRepresentation(
-                                                    FilesRepresentation.table);
+                                                    FilesRepresentation.grid);
                                           },
                                           icon: SvgPicture.asset(
-                                              'assets/file_page/list.svg',
+                                              'assets/file_page/block.svg',
+                                              // width: 30,
+                                              // height: 30,
+                                              //colorBlendMode: BlendMode.softLight,
                                               color: state.representation ==
-                                                      FilesRepresentation.table
+                                                      FilesRepresentation.grid
                                                   ? Theme.of(context)
                                                       .splashColor
                                                   : Theme.of(context)
                                                       .toggleButtonsTheme
                                                       .color),
                                         );
-                                      }),
-                                      BlocBuilder<MediaCubit, MediaState>(
-                                        builder: (context, state) {
-                                          return IconButton(
-                                            iconSize: 30,
-                                            onPressed: () {
-                                              context
-                                                  .read<MediaCubit>()
-                                                  .changeRepresentation(
-                                                      FilesRepresentation.grid);
-                                            },
-                                            icon: SvgPicture.asset(
-                                                'assets/file_page/block.svg',
-                                                // width: 30,
-                                                // height: 30,
-                                                //colorBlendMode: BlendMode.softLight,
-                                                color: state.representation ==
-                                                        FilesRepresentation.grid
-                                                    ? Theme.of(context)
-                                                        .splashColor
-                                                    : Theme.of(context)
-                                                        .toggleButtonsTheme
-                                                        .color),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                ifGrid
-                                    ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 40),
-                                        child: Divider(
-                                          height: 1,
-                                          color: Theme.of(context).dividerColor,
-                                        ),
-                                      )
-                                    : Container(),
-                                BlocBuilder<MediaCubit, MediaState>(
-                                  builder: (context, state) {
-                                    return Expanded(
-                                      child: state.representation ==
-                                              FilesRepresentation.grid
-                                          ? state.progress == true
-                                              ? _filesGrid()
-                                              : _progressIndicator(context)
-                                          : Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                              child: _filesList(context, state),
-                                            ),
-                                    );
-                                  },
-                                )
-                              ],
-                            ),
+                              ),
+                              ifGrid
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 40),
+                                      child: Divider(
+                                        height: 1,
+                                        color: Theme.of(context).dividerColor,
+                                      ),
+                                    )
+                                  : Container(),
+                              BlocBuilder<MediaCubit, MediaState>(
+                                builder: (context, state) {
+                                  return Expanded(
+                                    child: state.representation ==
+                                            FilesRepresentation.grid
+                                        ? state.progress == true
+                                            ? _filesGrid()
+                                            : _progressIndicator(context)
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            child: _filesList(context, state),
+                                          ),
+                                  );
+                                },
+                              )
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -755,22 +732,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                 selectedFolder: openedFolder),
           );
         });
-    // pushNewScreenWithRouteSettings(
-    //   context,
-    //   screen: MediaOpenPage(),
-    //   withNavBar: false,
-    //   settings: RouteSettings(
-    //     arguments: MediaOpenPageArgs(
-    //         media: media,
-    //         selectedMedia: selectedMedia,
-    //         selectedFolder: openedFolder),
-    //   ),
-    // ).then((value) {
-    //   if (value == true) {
-    //     context.read<MediaCubit>();
-    //   }
-    //   setState(() {});
-    // });
   }
 
   Widget _filesGrid() {

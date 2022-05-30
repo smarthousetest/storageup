@@ -17,6 +17,7 @@ import 'package:upstorage_desktop/utilites/state_container.dart';
 
 class SpaceSellPage extends StatefulWidget {
 // final List<DownloadLocation> locationsInfo;
+  static const route = "sell_space_page";
 
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
@@ -80,168 +81,165 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
     return BlocProvider(
         create: (context) => SpaceBloc()..add(SpacePageOpened()),
-        child: Expanded(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+            child: Container(
+              height: 46,
+              child: Row(
                 children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-                child: Container(
-                  height: 46,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 30),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 23, 69, 139),
-                                    blurRadius: 4,
-                                    offset: Offset(1, 4))
-                              ],
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Color.fromARGB(25, 23, 69, 139),
+                                blurRadius: 4,
+                                offset: Offset(1, 4))
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Align(
+                                alignment: FractionalOffset.centerLeft,
+                                child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    child: SvgPicture.asset(
+                                        "assets/file_page/search.svg")),
+                              ),
                             ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(13.0),
-                                  child: Align(
-                                    alignment: FractionalOffset.centerLeft,
+                            Container(
+                              width: _searchFieldWidth,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    StateContainer.of(context)
+                                        .changePage(ChosenPage.file);
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
                                     child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        child: SvgPicture.asset(
-                                            "assets/file_page/search.svg")),
-                                  ),
-                                ),
-                                Container(
-                                  width: _searchFieldWidth,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        StateContainer.of(context)
-                                            .changePage(ChosenPage.file);
-                                      },
-                                      child: MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: Container(
-                                          child: Text(
-                                            translate.search,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              color: Theme.of(context)
-                                                  .disabledColor,
-                                            ),
-                                          ),
+                                      child: Text(
+                                        translate.search,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color:
+                                              Theme.of(context).disabledColor,
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                      Container(
-                        child: BlocBuilder<SpaceBloc, SpaceState>(
-                            builder: (context, state) {
-                          return Row(
-                            key: nameWidthKey,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: 20,
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    StateContainer.of(context)
-                                        .changePage(ChosenPage.settings);
-                                  },
-                                  child: MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(23.0),
-                                      child: Container(child: state.user.image),
-                                    ),
-                                  ),
+                    ),
+                  ),
+                  Container(
+                    child: BlocBuilder<SpaceBloc, SpaceState>(
+                        builder: (context, state) {
+                      return Row(
+                        key: nameWidthKey,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: 20,
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                StateContainer.of(context)
+                                    .changePage(ChosenPage.settings);
+                              },
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(23.0),
+                                  child: Container(child: state.user.image),
                                 ),
                               ),
-                              (MediaQuery.of(context).size.width > 965)
-                                  ? Container(
-                                      constraints:
-                                          BoxConstraints(maxWidth: 110),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              state.user?.firstName ??
-                                                  state.user?.email
-                                                      ?.split('@')
-                                                      .first ??
-                                                  'Name',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                color: Theme.of(context)
-                                                    .bottomAppBarColor,
-                                              ),
-                                            ),
+                            ),
+                          ),
+                          (MediaQuery.of(context).size.width > 965)
+                              ? Container(
+                                  constraints: BoxConstraints(maxWidth: 110),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        child: Text(
+                                          state.user?.firstName ??
+                                              state.user?.email
+                                                  ?.split('@')
+                                                  .first ??
+                                              'Name',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Theme.of(context)
+                                                .bottomAppBarColor,
                                           ),
-                                          Text(
-                                            state.user?.email ?? '',
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Theme.of(context)
-                                                  .bottomAppBarColor,
-                                              height: 1,
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    )
-                                  : Container(),
-                            ],
-                          );
-                        }),
-                      ),
-                    ],
+                                      Text(
+                                        state.user?.email ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context)
+                                              .bottomAppBarColor,
+                                          height: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      );
+                    }),
                   ),
-                ),
+                ],
               ),
-              Expanded(
-                child: BlocBuilder<SpaceBloc, SpaceState>(
-                    builder: (context, state) {
-                  // List<Keeper?> othersKeeper = [];
-                  // if (state.keeper != null) {
-                  //   othersKeeper.addAll(state.keeper);
-                  // }
-                  return IndexedStack(
-                    sizing: StackFit.expand,
-                    key: ValueKey<int>(index),
-                    index: index,
-                    children: [
-                      state.keeper.isEmpty
-                          ? rentingAPlace(context)
-                          : folderList(context),
-                      Column(
-                        children: [addSpace(context)],
-                      ),
-                      folderList(context)
-                    ],
-                  );
-                }),
-              )
-            ])));
+            ),
+          ),
+          Expanded(
+            child:
+                BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+              // List<Keeper?> othersKeeper = [];
+              // if (state.keeper != null) {
+              //   othersKeeper.addAll(state.keeper);
+              // }
+              return IndexedStack(
+                sizing: StackFit.expand,
+                key: ValueKey<int>(index),
+                index: index,
+                children: [
+                  state.keeper.isEmpty
+                      ? rentingAPlace(context)
+                      : folderList(context),
+                  Column(
+                    children: [addSpace(context)],
+                  ),
+                  folderList(context)
+                ],
+              );
+            }),
+          )
+        ]));
   }
 
   Widget rentingAPlace(BuildContext context) {

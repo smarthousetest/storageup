@@ -1,12 +1,15 @@
 import 'dart:ui';
+import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
@@ -16,15 +19,22 @@ import '../../utilites/services/auth_service.dart';
 
 class BlurChangePassword extends StatefulWidget {
   //ValueSetter? callback;
+  User user;
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurChangePassword();
+  BlurChangePassword(
+    this.user,
+  );
 }
 
 class ChangePasswordPopupResult {
   String oldPassword;
   String newPassword;
-  ChangePasswordPopupResult(this.oldPassword, this.newPassword);
+
+  ChangePasswordPopupResult(
+    this.oldPassword,
+    this.newPassword,
+  );
 }
 
 class _ButtonTemplateState extends State<BlurChangePassword> {
@@ -498,6 +508,14 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                             } else if (result ==
                                                 AuthenticationStatus
                                                     .authenticated) {
+                                              var hashedPassword = new DBCrypt()
+                                                  .hashpw(
+                                                      _confirmPass.value.text,
+                                                      new DBCrypt().gensalt());
+                                              var os = OsSpecifications.getOs();
+                                              os.setKeeperHash(
+                                                  widget.user.email!,
+                                                  hashedPassword);
                                               setState(() {
                                                 wrongOldPass = true;
                                                 _showReAuthDialog();

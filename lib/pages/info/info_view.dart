@@ -48,7 +48,8 @@ class _InfoPageState extends State<InfoPage> {
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    _searchFieldWidth = width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 320;
+    _searchFieldWidth =
+        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 320;
   }
 
   @override
@@ -56,16 +57,16 @@ class _InfoPageState extends State<InfoPage> {
     _setWidthSearchFields(context);
     return BlocProvider(
       create: (context) => InfoBloc()..add(InfoPageOpened()),
-      child: Expanded(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _mainFields(context),
-            (MediaQuery.of(context).size.width > 1380) ? _rightInfoWidget(context) : Container(),
-          ],
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _mainFields(context),
+          (MediaQuery.of(context).size.width > 1380)
+              ? _rightInfoWidget(context)
+              : Container(),
+        ],
       ),
     );
   }
@@ -79,7 +80,10 @@ class _InfoPageState extends State<InfoPage> {
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(10),
             boxShadow: <BoxShadow>[
-              BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+              BoxShadow(
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4))
             ],
           ),
           child: Padding(
@@ -126,9 +130,12 @@ class _InfoPageState extends State<InfoPage> {
                 borderRadius: BorderRadius.circular(23),
                 child: GestureDetector(
                     onTap: () {
-                      StateContainer.of(context).changePage(ChosenPage.settings);
+                      StateContainer.of(context)
+                          .changePage(ChosenPage.settings);
                     },
-                    child: MouseRegion(cursor: SystemMouseCursors.click, child: state.user.image)),
+                    child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: state.user.image)),
               ),
             ),
           ),
@@ -140,7 +147,9 @@ class _InfoPageState extends State<InfoPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
+                    state.user?.firstName ??
+                        state.user?.email?.split('@').first ??
+                        'Name',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 17,
@@ -227,11 +236,17 @@ class _InfoPageState extends State<InfoPage> {
         //     .records
         //     ?.length;
 
-        var countMediaFolderPhoto =
-            state.allMediaFolders?.firstWhere((element) => element.name == translate.photos).records?.length ?? 0;
+        var countMediaFolderPhoto = state.allMediaFolders
+                ?.firstWhere((element) => element.name == translate.photos)
+                .records
+                ?.length ??
+            0;
 
-        var countMediaFolderVideo =
-            state.allMediaFolders?.firstWhere((element) => element.name == translate.video).records?.length ?? 0;
+        var countMediaFolderVideo = state.allMediaFolders
+                ?.firstWhere((element) => element.name == translate.video)
+                .records
+                ?.length ??
+            0;
         return Expanded(
           child: ListView(
             children: [
@@ -313,7 +328,8 @@ class _InfoPageState extends State<InfoPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: SvgPicture.asset('assets/home_page/foto_r.svg'),
+                          child:
+                              SvgPicture.asset('assets/home_page/foto_r.svg'),
                         ),
                       ),
                       Column(
@@ -365,7 +381,8 @@ class _InfoPageState extends State<InfoPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: SvgPicture.asset('assets/home_page/video_r.svg'),
+                          child:
+                              SvgPicture.asset('assets/home_page/video_r.svg'),
                         ),
                       ),
                       Column(
@@ -466,7 +483,10 @@ class _InfoPageState extends State<InfoPage> {
               color: Theme.of(context).dividerColor,
               borderRadius: BorderRadius.circular(10),
               boxShadow: <BoxShadow>[
-                BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+                BoxShadow(
+                    color: Color.fromARGB(25, 23, 69, 139),
+                    blurRadius: 4,
+                    offset: Offset(1, 4))
               ],
             ),
             child: Column(
@@ -501,7 +521,8 @@ class _InfoPageState extends State<InfoPage> {
                     translate.more_space,
                     textAlign: TextAlign.center,
                     maxLines: 2,
-                    style: TextStyle(fontSize: 14, fontFamily: kNormalTextFontFamily),
+                    style: TextStyle(
+                        fontSize: 14, fontFamily: kNormalTextFontFamily),
                   ),
                 ),
                 Padding(
@@ -511,11 +532,13 @@ class _InfoPageState extends State<InfoPage> {
                     width: 230,
                     child: OutlinedButton(
                       onPressed: () {
-                        StateContainer.of(context).changePage(ChosenPage.finance);
+                        StateContainer.of(context)
+                            .changePage(ChosenPage.finance);
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         backgroundColor: Theme.of(context).splashColor,
                       ),
                       child: Text(
@@ -559,7 +582,10 @@ class _InfoPageState extends State<InfoPage> {
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: <BoxShadow>[
-                            BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+                            BoxShadow(
+                                color: Color.fromARGB(25, 23, 69, 139),
+                                blurRadius: 4,
+                                offset: Offset(1, 4))
                           ],
                         ),
                         child: Row(
@@ -569,7 +595,10 @@ class _InfoPageState extends State<InfoPage> {
                               child: Align(
                                 alignment: FractionalOffset.centerLeft,
                                 child: Container(
-                                    width: 20, height: 20, child: SvgPicture.asset("assets/file_page/search.svg")),
+                                    width: 20,
+                                    height: 20,
+                                    child: SvgPicture.asset(
+                                        "assets/file_page/search.svg")),
                               ),
                             ),
                             Container(
@@ -578,7 +607,8 @@ class _InfoPageState extends State<InfoPage> {
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    StateContainer.of(context).changePage(ChosenPage.file);
+                                    StateContainer.of(context)
+                                        .changePage(ChosenPage.file);
                                   },
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
@@ -587,7 +617,8 @@ class _InfoPageState extends State<InfoPage> {
                                         translate.search,
                                         style: TextStyle(
                                           fontSize: 16.0,
-                                          color: Theme.of(context).disabledColor,
+                                          color:
+                                              Theme.of(context).disabledColor,
                                         ),
                                       ),
                                     ),
@@ -606,14 +637,17 @@ class _InfoPageState extends State<InfoPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(right: 30, left: 20),
+                                padding:
+                                    const EdgeInsets.only(right: 30, left: 20),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(23.0),
                                   child: GestureDetector(
                                     onTap: () {
-                                      StateContainer.of(context).changePage(ChosenPage.settings);
+                                      StateContainer.of(context)
+                                          .changePage(ChosenPage.settings);
                                     },
-                                    child: BlocBuilder<InfoBloc, InfoState>(builder: (context, state) {
+                                    child: BlocBuilder<InfoBloc, InfoState>(
+                                        builder: (context, state) {
                                       return MouseRegion(
                                         cursor: SystemMouseCursors.click,
                                         child: state.user.image,
@@ -653,13 +687,17 @@ class _InfoPageState extends State<InfoPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
-                                        color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+                                        color: Color.fromARGB(25, 23, 69, 139),
+                                        blurRadius: 4,
+                                        offset: Offset(1, 4))
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(40, 19, 40, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(40, 19, 40, 0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         height: 24,
@@ -687,14 +725,18 @@ class _InfoPageState extends State<InfoPage> {
                                       Expanded(
                                         flex: 376,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               flex: 1,
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
                                                   children: [
                                                     MyProgressIndicator(
                                                       percent: 70.0,
@@ -702,74 +744,106 @@ class _InfoPageState extends State<InfoPage> {
                                                       radius: 120,
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 24),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 24),
                                                       child: Container(
                                                         height: 17,
                                                         child: Text(
                                                           'Места на вашем устройстве арендовано',
-                                                          textAlign: TextAlign.center,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                           style: TextStyle(
-                                                            color: Theme.of(context).disabledColor,
-                                                            fontFamily: kNormalTextFontFamily,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .disabledColor,
+                                                            fontFamily:
+                                                                kNormalTextFontFamily,
                                                             fontSize: 14,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 20),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20),
                                                       child: Container(
                                                         width: 200,
                                                         child: Divider(
                                                           height: 1,
-                                                          color: Theme.of(context).dividerColor,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .dividerColor,
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 20),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20),
                                                       child: Container(
                                                         height: 49,
                                                         child: Text(
                                                           "50 ₽",
                                                           style: TextStyle(
-                                                            color: Theme.of(context).splashColor,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .splashColor,
                                                             fontSize: 36,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 5),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5),
                                                       child: Container(
                                                         height: 17,
                                                         child: Text(
                                                           "Ежедневный доход",
                                                           style: TextStyle(
-                                                            color: Theme.of(context).focusColor,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .focusColor,
                                                             fontSize: 14,
                                                           ),
-                                                          textAlign: TextAlign.center,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 32),
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 30, 0, 32),
                                                       child: ElevatedButton(
                                                         onPressed: () {},
                                                         child: Text(
                                                           'Увеличить',
                                                           style: TextStyle(
-                                                            fontFamily: kNormalTextFontFamily,
+                                                            fontFamily:
+                                                                kNormalTextFontFamily,
                                                             fontSize: 14,
-                                                            color: Theme.of(context).disabledColor,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .disabledColor,
                                                           ),
                                                         ),
-                                                        style: ElevatedButton.styleFrom(
-                                                          primary: Theme.of(context).primaryColor,
-                                                          fixedSize: Size(200, 42),
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(15),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          fixedSize:
+                                                              Size(200, 42),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
                                                           ),
                                                         ),
                                                       ),
@@ -781,9 +855,12 @@ class _InfoPageState extends State<InfoPage> {
                                             Expanded(
                                               flex: 1,
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10),
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
                                                   children: [
                                                     MyProgressIndicator(
                                                       percent: 35.0,
@@ -792,72 +869,105 @@ class _InfoPageState extends State<InfoPage> {
                                                       radius: 120,
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 24),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 24),
                                                       child: Container(
                                                         height: 17,
-                                                        child: Text('Арендованого места заполнено',
-                                                            textAlign: TextAlign.center,
+                                                        child: Text(
+                                                            'Арендованого места заполнено',
+                                                            textAlign: TextAlign
+                                                                .center,
                                                             style: TextStyle(
-                                                              color: Theme.of(context).disabledColor,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .disabledColor,
                                                               fontSize: 14,
-                                                              fontFamily: kNormalTextFontFamily,
+                                                              fontFamily:
+                                                                  kNormalTextFontFamily,
                                                             )),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 20),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20),
                                                       child: Container(
                                                         width: 200,
                                                         child: Divider(
                                                           height: 1,
-                                                          color: Theme.of(context).dividerColor,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .dividerColor,
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 20),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 20),
                                                       child: Container(
                                                         height: 49,
                                                         child: Text(
                                                           "3000 ₽",
-                                                          textAlign: TextAlign.center,
+                                                          textAlign:
+                                                              TextAlign.center,
                                                           style: TextStyle(
-                                                            color: Theme.of(context).splashColor,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .splashColor,
                                                             fontSize: 36,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.only(top: 5),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5),
                                                       child: Container(
                                                         height: 17,
                                                         child: Text(
                                                           "Ваш баланс",
                                                           style: TextStyle(
-                                                            color: Theme.of(context).focusColor,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .focusColor,
                                                             fontSize: 14,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 32),
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          0, 30, 0, 32),
                                                       child: ElevatedButton(
                                                         onPressed: () {},
                                                         child: Text(
                                                           'Оплатить',
                                                           style: TextStyle(
-                                                            fontFamily: kNormalTextFontFamily,
+                                                            fontFamily:
+                                                                kNormalTextFontFamily,
                                                             fontSize: 14,
-                                                            color: Theme.of(context).disabledColor,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .disabledColor,
                                                           ),
                                                         ),
-                                                        style: ElevatedButton.styleFrom(
-                                                          primary: Theme.of(context).primaryColor,
-                                                          fixedSize: Size(200, 42),
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(15),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          fixedSize:
+                                                              Size(200, 42),
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
                                                           ),
                                                         ),
                                                       ),
@@ -885,13 +995,17 @@ class _InfoPageState extends State<InfoPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
-                                        color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+                                        color: Color.fromARGB(25, 23, 69, 139),
+                                        blurRadius: 4,
+                                        offset: Offset(1, 4))
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(40, 20, 40, 0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Вы арендуете',
@@ -902,21 +1016,24 @@ class _InfoPageState extends State<InfoPage> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 20),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 20),
                                         child: Divider(
                                           height: 1,
                                           color: Theme.of(context).dividerColor,
                                         ),
                                       ),
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Пространство заполнено на: ',
                                             style: TextStyle(
                                               fontFamily: 'Lato',
                                               fontSize: 14,
-                                              color: Theme.of(context).disabledColor,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
                                             ),
                                           ),
                                           Text(
@@ -925,7 +1042,8 @@ class _InfoPageState extends State<InfoPage> {
                                         ],
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 25, 0, 10),
                                         child: MyProgressBar(
                                           bgColor: Theme.of(context).cardColor,
                                           color: Color(0xff868FFF),
@@ -933,14 +1051,17 @@ class _InfoPageState extends State<InfoPage> {
                                         ),
                                       ),
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             '0%',
                                             style: TextStyle(
                                               fontFamily: kNormalTextFontFamily,
                                               fontSize: 12,
-                                              color: Theme.of(context).colorScheme.onBackground,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
                                             ),
                                           ),
                                           Expanded(
@@ -953,7 +1074,9 @@ class _InfoPageState extends State<InfoPage> {
                                             style: TextStyle(
                                               fontFamily: kNormalTextFontFamily,
                                               fontSize: 12,
-                                              color: Theme.of(context).colorScheme.onBackground,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
                                             ),
                                           ),
                                           Expanded(
@@ -966,7 +1089,9 @@ class _InfoPageState extends State<InfoPage> {
                                             style: TextStyle(
                                               fontFamily: kNormalTextFontFamily,
                                               fontSize: 12,
-                                              color: Theme.of(context).colorScheme.onBackground,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
                                             ),
                                           ),
                                         ],
@@ -974,7 +1099,8 @@ class _InfoPageState extends State<InfoPage> {
                                       Padding(
                                         padding: const EdgeInsets.only(top: 30),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Expanded(
                                               child: Column(
@@ -982,9 +1108,11 @@ class _InfoPageState extends State<InfoPage> {
                                                   Text(
                                                     '300ГБ',
                                                     style: TextStyle(
-                                                      fontFamily: kNormalTextFontFamily,
+                                                      fontFamily:
+                                                          kNormalTextFontFamily,
                                                       fontSize: 36,
-                                                      color: Theme.of(context).splashColor,
+                                                      color: Theme.of(context)
+                                                          .splashColor,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -993,9 +1121,11 @@ class _InfoPageState extends State<InfoPage> {
                                                   Text(
                                                     'Используемое место',
                                                     style: TextStyle(
-                                                      fontFamily: kNormalTextFontFamily,
+                                                      fontFamily:
+                                                          kNormalTextFontFamily,
                                                       fontSize: 14,
-                                                      color: Theme.of(context).focusColor,
+                                                      color: Theme.of(context)
+                                                          .focusColor,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -1006,16 +1136,23 @@ class _InfoPageState extends State<InfoPage> {
                                                     child: Text(
                                                       'Увеличить',
                                                       style: TextStyle(
-                                                        fontFamily: kNormalTextFontFamily,
+                                                        fontFamily:
+                                                            kNormalTextFontFamily,
                                                         fontSize: 14,
-                                                        color: Theme.of(context).disabledColor,
+                                                        color: Theme.of(context)
+                                                            .disabledColor,
                                                       ),
                                                     ),
-                                                    style: ElevatedButton.styleFrom(
-                                                      primary: Theme.of(context).primaryColor,
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
                                                       fixedSize: Size(200, 46),
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(15),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
                                                       ),
                                                     ),
                                                   )
@@ -1028,9 +1165,11 @@ class _InfoPageState extends State<InfoPage> {
                                                   Text(
                                                     '17.17.21',
                                                     style: TextStyle(
-                                                      fontFamily: kNormalTextFontFamily,
+                                                      fontFamily:
+                                                          kNormalTextFontFamily,
                                                       fontSize: 36,
-                                                      color: Theme.of(context).splashColor,
+                                                      color: Theme.of(context)
+                                                          .splashColor,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -1039,9 +1178,11 @@ class _InfoPageState extends State<InfoPage> {
                                                   Text(
                                                     'Следущий платёж',
                                                     style: TextStyle(
-                                                      fontFamily: kNormalTextFontFamily,
+                                                      fontFamily:
+                                                          kNormalTextFontFamily,
                                                       fontSize: 14,
-                                                      color: Theme.of(context).focusColor,
+                                                      color: Theme.of(context)
+                                                          .focusColor,
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -1052,16 +1193,23 @@ class _InfoPageState extends State<InfoPage> {
                                                     child: Text(
                                                       'Оплатить',
                                                       style: TextStyle(
-                                                        fontFamily: kNormalTextFontFamily,
+                                                        fontFamily:
+                                                            kNormalTextFontFamily,
                                                         fontSize: 14,
-                                                        color: Theme.of(context).disabledColor,
+                                                        color: Theme.of(context)
+                                                            .disabledColor,
                                                       ),
                                                     ),
-                                                    style: ElevatedButton.styleFrom(
-                                                      primary: Theme.of(context).primaryColor,
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Theme.of(context)
+                                                          .primaryColor,
                                                       fixedSize: Size(200, 46),
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.circular(15),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
                                                       ),
                                                     ),
                                                   )
@@ -1094,7 +1242,12 @@ class _InfoPageState extends State<InfoPage> {
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Color.fromARGB(25, 23, 69, 139),
+              blurRadius: 4,
+              offset: Offset(1, 4))
+        ],
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
@@ -1130,7 +1283,8 @@ class _InfoPageState extends State<InfoPage> {
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: Size(double.maxFinite, 60),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 backgroundColor: Theme.of(context).splashColor,
               ),
               child: Text(
@@ -1203,12 +1357,16 @@ class _InfoPageState extends State<InfoPage> {
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
           boxShadow: <BoxShadow>[
-            BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+            BoxShadow(
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4))
           ],
         ),
         child: SizedBox(
           height: 422,
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 19, left: 40),
               child: Text(
@@ -1238,7 +1396,8 @@ class _InfoPageState extends State<InfoPage> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Theme.of(context).splashColor,
                   ),
                   child: Text(

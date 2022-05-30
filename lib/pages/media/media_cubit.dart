@@ -530,8 +530,7 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChosen(
-      Record object, String newName) async {
+  Future<ErrorType?> onActionRenameChosen(Record object, String newName) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);

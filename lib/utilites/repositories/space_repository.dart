@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
 const _downloadLocationsBoxName = 'donwnloadLocationsBox';
@@ -14,6 +16,10 @@ class DownloadLocationsRepository {
   static Future<DownloadLocationsRepository> create() async {
     //Hive.deleteFromDisk();
     Hive.registerAdapter(DownloadLocationAdapter());
+
+    WidgetsFlutterBinding.ensureInitialized();
+    var os = OsSpecifications.getOs();
+    Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
 
     final box = await Hive.openBox<DownloadLocation>(_downloadLocationsBoxName);
     // box.deleteFromDisk();
@@ -29,7 +35,8 @@ class DownloadLocationsRepository {
       final value = event.value;
 
       if (_locationsInfo.any((element) => element.id == key)) {
-        final currentLocationInfoIndex = _locationsInfo.indexWhere((element) => element.id == key);
+        final currentLocationInfoIndex =
+            _locationsInfo.indexWhere((element) => element.id == key);
 
         if (event.deleted)
           _locationsInfo.removeAt(currentLocationInfoIndex);
@@ -43,7 +50,8 @@ class DownloadLocationsRepository {
 
   List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
 
-  ValueListenable<Box<DownloadLocation>> get getDownloadLocationsValueListenable => _locationsBox.listenable();
+  ValueListenable<Box<DownloadLocation>>
+      get getDownloadLocationsValueListenable => _locationsBox.listenable();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;

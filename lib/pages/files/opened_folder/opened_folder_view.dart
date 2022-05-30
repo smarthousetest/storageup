@@ -22,13 +22,9 @@ import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
-
-import '../../../utilites/state_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({
@@ -2087,152 +2083,6 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class GridFileElement extends StatefulWidget {
-  const GridFileElement({
-    Key? key,
-    // required this.widget,
-    required this.isSelectable,
-    required this.file,
-  }) : super(key: key);
-
-  // final GridItemWidget widget;
-  final BaseObject file;
-  final bool isSelectable;
-
-  @override
-  State<GridFileElement> createState() => _GridFileElementState();
-}
-
-class _GridFileElementState extends State<GridFileElement> {
-  @override
-  Widget build(BuildContext context) {
-    // bool hasThumbnail = false;
-    bool isFile = false;
-    String? type = '';
-    List<Widget> indicators = [Container()];
-    if (widget.file is Record) {
-      var record = widget.file as Record;
-      isFile = true;
-      // print(record.thumbnail?.first.publicUrl);
-      if (record.thumbnail != null &&
-              record.thumbnail!
-                  .isNotEmpty /*&&
-          record.thumbnail!.first.name!.contains('.')*/
-          ) {
-        type = FileAttribute().getFilesType(
-            record.name!.toLowerCase()); //record.thumbnail?.first.name;
-        // print(type);
-      }
-
-      if (record.loadPercent != null && record.loadPercent != 99) {
-        indicators = [
-          Visibility(
-            child: CircularProgressIndicator(
-              value: record.loadPercent! / 100,
-            ),
-          ),
-          CircularProgressIndicator.adaptive(),
-        ];
-      }
-    }
-
-    return LayoutBuilder(
-      builder: (context, constrains) => Material(
-        type: MaterialType.transparency,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              // height: 100,
-              width: constrains.minWidth - 17,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    // height: 100,
-                    width: constrains.minWidth - 17,
-                    child: isFile && type != 'image'
-                        ? type!.isNotEmpty
-                            ? Image.asset(
-                                'assets/file_icons/$type.png',
-                                fit: BoxFit.contain,
-                              )
-                            : Image.asset(
-                                'assets/file_icons/files.png',
-                                fit: BoxFit.contain,
-                              )
-                        : type == 'image'
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  (widget.file as Record)
-                                      .thumbnail!
-                                      .first
-                                      .publicUrl!,
-                                  fit: BoxFit.contain,
-                                ),
-                              )
-                            : Image.asset(
-                                'assets/file_icons/folder.png',
-                                fit: BoxFit.contain,
-                              ),
-                  ),
-                  Container(
-                    width: 100,
-                    // height: 100,
-                    alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Visibility(
-                      visible: widget.isSelectable,
-                      child: SvgPicture.asset(
-                        widget.file.isChoosed
-                            ? 'assets/media_page/choosed_icon.svg'
-                            : 'assets/media_page/unchoosed_icon.svg',
-                        alignment: Alignment.bottomCenter,
-                        height: 16,
-                        width: 16,
-                      ),
-                    ),
-                  ),
-                  ...indicators,
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.0),
-              child: Container(
-                child: Text(
-                  widget.file.name ?? 'name does not exist',
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Theme.of(context).textTheme.headline6?.color,
-                    fontSize: 14,
-                    fontFamily: kNormalTextFontFamily,
-                  ),
-                ),
-              ),
-            ),
-            Text(
-              DateFormat('dd.MM.yyyy').format(widget.file.createdAt ??
-                  DateTime.now()), //TODO remove this costil'
-              style: TextStyle(
-                decoration: TextDecoration.none,
-                color: Theme.of(context).disabledColor,
-                fontSize: 10,
-                fontFamily: kNormalTextFontFamily,
-              ),
-            ),
-          ],
         ),
       ),
     );

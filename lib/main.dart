@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
@@ -101,7 +102,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 void writeToFileDomainName() {
-  var os = Platform.isWindows ? Windows() : Linux();
+  var os = OsSpecifications.getOs();
   if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }

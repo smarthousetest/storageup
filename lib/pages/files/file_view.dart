@@ -1,27 +1,14 @@
-import 'dart:ui';
-
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:file_typification/file_typification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/components/dir_button_template.dart';
-import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
-import '../../models/base_object.dart';
-import '../../models/user.dart';
-import 'files_list/files_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'file_bloc.dart';
@@ -149,70 +136,68 @@ class _FilePageState extends State<FilePage> {
   }
 
   Widget _fileView(BuildContext context) {
-    return Expanded(
-      child: Container(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(_rowPadding),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 46,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LayoutBuilder(builder: (context, constrains) {
-                            return _searchField(context, constrains);
-                          }),
-                          SizedBox(
-                            width: _rowSpasing,
-                          ),
-                          LayoutBuilder(builder: (context, constrains) {
-                            return _sortingField(context, constrains);
-                          }),
-                          _infoUser(context),
-                        ],
-                      ),
-                    ),
-                    /* Expanded(
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 1200),
-                        transitionBuilder: (child, animation) => SizeTransition(
-                          sizeFactor: animation,
-                          child: IndexedStack(
-                            key: ValueKey<int>(widget.index),
-                            index: widget.index,
-                            children: _opendedFolders,
-                          ),
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(_rowPadding),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 46,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LayoutBuilder(builder: (context, constrains) {
+                          return _searchField(context, constrains);
+                        }),
+                        SizedBox(
+                          width: _rowSpasing,
                         ),
-                        child:*/
-                    Expanded(
-                      child: IndexedStack(
-                        sizing: StackFit.expand,
-                        key: ValueKey<int>(index),
-                        index: index,
-                        children: _opendedFolders,
-                      ),
+                        LayoutBuilder(builder: (context, constrains) {
+                          return _sortingField(context, constrains);
+                        }),
+                        _infoUser(context),
+                      ],
                     ),
-                    // ),
-                    // ),
-                    // Expanded(
-                    //   child: IndexedStack(
-                    //     index: widget.index,
-                    //     children: _opendedFolders,
-                    //   ),
-                    // ),
-                  ],
-                ),
+                  ),
+                  /* Expanded(
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 1200),
+                      transitionBuilder: (child, animation) => SizeTransition(
+                        sizeFactor: animation,
+                        child: IndexedStack(
+                          key: ValueKey<int>(widget.index),
+                          index: widget.index,
+                          children: _opendedFolders,
+                        ),
+                      ),
+                      child:*/
+                  Expanded(
+                    child: IndexedStack(
+                      sizing: StackFit.expand,
+                      key: ValueKey<int>(index),
+                      index: index,
+                      children: _opendedFolders,
+                    ),
+                  ),
+                  // ),
+                  // ),
+                  // Expanded(
+                  //   child: IndexedStack(
+                  //     index: widget.index,
+                  //     children: _opendedFolders,
+                  //   ),
+                  // ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
