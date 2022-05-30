@@ -21,13 +21,16 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     on<FolderListEvent>((event, emit) async {
       if (event is FolderListPageOpened) {
         await _mapSpacePageOpened(event, state, emit);
+      } else if (event is GetKeeperInfo) {
+        await _mapGetKeeperInfo(event, state, emit);
       } else if (event is DeleteLocation) {
         await _mapDeleteLocation(event, state, emit);
       } else if (event is SleepStatus) {
         await _sleepStatusKeeper(emit, state, event);
       }
     });
-    on<UpdateLocationsList>((event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
+    on<UpdateLocationsList>(
+        (event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
   }
   // final AuthenticationRepository _authenticationRepository =
   // getIt<AuthenticationRepository>();
@@ -35,6 +38,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   UserController _userController = getIt<UserController>();
   late final DownloadLocationsRepository _repository;
   final KeeperService _keeperService = getIt<KeeperService>();
+  Timer? timer;
 
   Future _mapSpacePageOpened(
     FolderListPageOpened event,
@@ -43,8 +47,28 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   ) async {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+
+    emit(state.copyWith(
+      user: user,
+    ));
+    try {
+      timer =
+          Timer.periodic(const Duration(milliseconds: 5000), (Timer t) async {
+        add(GetKeeperInfo());
+      });
+    } catch (e) {
+      print('error timer in get keeper');
+    }
+    _repository.getDownloadLocationsValueListenable.addListener(_listener);
+  }
+
+  Future<void> _mapGetKeeperInfo(
+    GetKeeperInfo event,
+    FolderListState state,
+    Emitter<FolderListState> emit,
+  ) async {
     var keeper = await _keeperService.getAllKeepers();
-    final locationsInfo = _repository.getlocationsInfo;
+    final locationsInfo = await _repository.getlocationsInfo;
 
     List<Keeper> localKeeper = [];
     List<Keeper> serverKeeper = [];
@@ -63,22 +87,26 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       }
     });
 
+    print('5 seconds update keeper');
     emit(state.copyWith(
-      user: user,
       locationsInfo: locationsInfo,
-      keeper: keeper,
       localKeeper: localKeeper.reversed.toList(),
       serverKeeper: serverKeeper,
       localPath: localPath.reversed.toList(),
     ));
-
-    _repository.getDownloadLocationsValueListenable.addListener(_listener);
   }
 
   void _listener() {
     final info = _repository.getlocationsInfo;
 
     if (!isClosed) add(UpdateLocationsList(locations: info));
+  }
+
+  @override
+  Future<void> close() {
+    timer?.cancel();
+    print('timer is cancelled');
+    return super.close();
   }
 
   _update(
@@ -177,7 +205,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     String? bearerToken = await TokenRepository().getApiToken();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
     var box = await Hive.openBox('keeper_data');
-    String keeperDir = Uri.decodeFull(await box.get(event.location.id.toString()));
+    String keeperDir =
+        Uri.decodeFull(await box.get(event.location.id.toString()));
     await box.delete(event.location.id.toString());
     String keeperId = '';
     var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
@@ -235,12 +264,21 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         );
         if (response.data['online'] != 0) {
           await _disconnectKeeper(
-              'ws://${response.data['proxyIP']}:${response.data['proxyPORT']}', response.data['session']);
+              'ws://${response.data['proxyIP']}:${response.data['proxyPORT']}',
+              response.data['session']);
         }
       } catch (e) {
         print(e);
       }
       break;
     }
+  }
+}
+
+class Ticker {
+  const Ticker();
+  Stream<int> tick({required int ticks}) {
+    return Stream.periodic(Duration(seconds: 1), (x) => ticks - x - 1)
+        .take(ticks);
   }
 }

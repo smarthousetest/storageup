@@ -21,6 +21,10 @@ class FolderListPageOpened extends FolderListEvent {
   const FolderListPageOpened();
 }
 
+class GetKeeperInfo extends FolderListEvent {
+  const GetKeeperInfo();
+}
+
 class SleepStatus extends FolderListEvent {
   final Keeper keeper;
   SleepStatus({required this.keeper});

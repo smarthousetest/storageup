@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +30,7 @@ class _ButtonTemplateState extends State<FolderList> {
   // List<bool> isPopupMenuButtonClicked = [];
   List<Keeper> locationsInfo = [];
   List<CustomPopupMenuController> _popupControllers = [];
+  Timer? _timer;
 
   void _initiatingControllers(FolderListState state) {
     if (_popupControllers.isEmpty) {
@@ -507,24 +510,25 @@ class _ButtonTemplateState extends State<FolderList> {
                           width: 1.5,
                         ),
                       ),
-                      child: Center(
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 3),
                           child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/space_sell/refresh.svg',
-                            color: Theme.of(context).splashColor,
-                          ),
-                          Text(
-                            translate.reboot,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Theme.of(context).splashColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      )),
+                            children: [
+                              SvgPicture.asset(
+                                'assets/space_sell/refresh.svg',
+                                color: Theme.of(context).splashColor,
+                              ),
+                              Text(
+                                translate.reboot,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  color: Theme.of(context).splashColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          )),
                     ),
                   ),
                 ),

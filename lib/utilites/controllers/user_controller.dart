@@ -40,7 +40,8 @@ class UserController {
     var response =
         await _filesService.setProfilePic(url: publicUrl, user: user!);
     if (response == ResponseStatus.ok) {
-      _repository.setUser = user;
+      await updateUser();
+      // _repository.setUser = upUser;
       return ResponseStatus.ok;
     } else {
       return ResponseStatus.failed;

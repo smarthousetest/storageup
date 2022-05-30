@@ -178,16 +178,6 @@ class AuthService {
 
   Future<AuthenticationStatus> changeName({required String name}) async {
     try {
-      // var data = {
-      //   'data': {
-      //     'firstName': user.firstName,
-      //     'lastName': user.lastName,
-      //     'phoneNumber': user.phoneNumber,
-      //     'avatars': [
-      //       {'publicUrl': url}
-      //     ]
-      //   }
-      // };
       var user = _userRepository.getUser;
       String? url = '';
       if (user?.avatars != null && user!.avatars!.isNotEmpty)

@@ -363,6 +363,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([object]);
+
+    var recentsFile = await _filesController.getRecentFiles();
+    if (recentsFile != null) {
+      await _repository.addFiles(latestFile: recentsFile);
+    }
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
