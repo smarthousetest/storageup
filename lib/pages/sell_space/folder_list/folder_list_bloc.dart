@@ -296,7 +296,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         var domainNameFile = File("${os.appDirPath}domainName");
         String? domainName;
         if (domainNameFile.existsSync()) {
-          domainName = File("${os.appDirPath}domainName").readAsStringSync().trim();
+          domainName =
+              File("${os.appDirPath}domainName").readAsStringSync().trim();
           String? bearerToken = await TokenRepository().getApiToken();
           print(bearerToken);
           if (bearerToken != null) {
@@ -305,7 +306,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
               event.location.dirPath,
               bearerToken,
             ]);
-          }else{
+          } else {
             print("Bearer token is null");
           }
         } else {
@@ -313,13 +314,5 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         }
       },
     );
-  }
-}
-
-class Ticker {
-  const Ticker();
-  Stream<int> tick({required int ticks}) {
-    return Stream.periodic(Duration(seconds: 1), (x) => ticks - x - 1)
-        .take(ticks);
   }
 }

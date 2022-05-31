@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/packet/packet.dart';
 import 'package:upstorage_desktop/models/subscription.dart';
@@ -26,6 +27,7 @@ class InfoState extends Equatable {
   final Folder? rootFolders;
   final List<Folder>? allMediaFolders;
   final Packet? packetInfo;
+  final ValueNotifier<User?>? valueNotifier;
 
   InfoState({
     this.usingSpace = 0,
@@ -48,6 +50,7 @@ class InfoState extends Equatable {
     this.folder,
     this.allMediaFolders,
     this.packetInfo,
+    this.valueNotifier,
   });
 
   InfoState copyWith({
@@ -66,6 +69,7 @@ class InfoState extends Equatable {
     Folder? folder,
     List<Folder>? allMediaFolders,
     Packet? packetInfo,
+    ValueNotifier<User?>? valueNotifier,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -84,6 +88,7 @@ class InfoState extends Equatable {
       rootFolders: rootFolders ?? this.rootFolders,
       allMediaFolders: allMediaFolders ?? this.allMediaFolders,
       packetInfo: packetInfo ?? this.packetInfo,
+      valueNotifier: valueNotifier ?? this.valueNotifier,
     );
   }
 
@@ -104,5 +109,6 @@ class InfoState extends Equatable {
         allMediaFolders,
         sub,
         packetInfo,
+        valueNotifier,
       ];
 }

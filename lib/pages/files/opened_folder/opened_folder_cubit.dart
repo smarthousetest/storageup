@@ -130,7 +130,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var user = _userRepository.getUser;
     bool progress = true;
     _repository = await GetIt.instance.getAsync<LatestFileRepository>();
-
+    var valueNotifier = _userRepository.getValueNotifier;
     emit(
       state.copyWith(
         currentFolder: currentFolder,
@@ -139,6 +139,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         previousFolders: previousFolders,
         user: user,
         progress: progress,
+        valueNotifier: valueNotifier,
       ),
     );
 

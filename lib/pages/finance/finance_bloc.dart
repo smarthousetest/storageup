@@ -40,16 +40,23 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     var rootFolder = await _filesController.getRootFolder;
     //print(sub);
     // print(allSub);
+    var valueNotifier = _userController.getValueNotifier();
     if (sub == null && allSub == null) {
       emit(state.copyWith(
         user: user,
         sub: sub,
         allSub: allSub,
         rootFolders: rootFolder,
+        valueNotifier: valueNotifier,
       ));
     }
     emit(state.copyWith(
-        user: user, sub: sub, allSub: allSub, rootFolders: rootFolder));
+      user: user,
+      sub: sub,
+      allSub: allSub,
+      rootFolders: rootFolder,
+      valueNotifier: valueNotifier,
+    ));
   }
 
   Future<void> _changeSubcription(

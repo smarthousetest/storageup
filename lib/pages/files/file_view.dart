@@ -1,9 +1,11 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
@@ -399,71 +401,76 @@ class _FilePageState extends State<FilePage> {
   }
 
   Widget _infoUser(BuildContext context) {
-    return StateInfoContainer.of(context)?.object == null
-        ? Container(
-            child: BlocBuilder<FilesBloc, FilesState>(
-              builder: (context, state) {
-                return Row(
-                  key: stickyKey,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 20, left: 20),
-                      child: GestureDetector(
-                        onTap: () {
-                          StateContainer.of(context)
-                              .changePage(ChosenPage.settings);
-                        },
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(23.0),
-                            child: Container(child: state.user.image),
+    return Container(
+      child: BlocBuilder<FilesBloc, FilesState>(
+        builder: (context, state) {
+          return state.valueNotifier != null
+              ? ValueListenableBuilder<User?>(
+                  valueListenable: state.valueNotifier!,
+                  builder: (context, value, _) {
+                    return Row(
+                      key: stickyKey,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 20, left: 20),
+                          child: GestureDetector(
+                            onTap: () {
+                              StateContainer.of(context)
+                                  .changePage(ChosenPage.settings);
+                            },
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(23.0),
+                                child: Container(child: value.image),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    (MediaQuery.of(context).size.width > 966)
-                        ? Container(
-                            constraints:
-                                BoxConstraints(maxWidth: 95, minWidth: 50),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text(
-                                    state.user?.firstName ??
-                                        state.user?.email?.split('@').first ??
-                                        'Name',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color:
-                                          Theme.of(context).bottomAppBarColor,
+                        (MediaQuery.of(context).size.width > 966)
+                            ? Container(
+                                constraints:
+                                    BoxConstraints(maxWidth: 95, minWidth: 50),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: Text(
+                                        value?.firstName ??
+                                            value?.email?.split('@').first ??
+                                            'Name',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Theme.of(context)
+                                              .bottomAppBarColor,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Text(
+                                      value?.email ?? 'email',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color:
+                                            Theme.of(context).bottomAppBarColor,
+                                        height: 1,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  state.user?.email ?? 'email',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).bottomAppBarColor,
-                                    height: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(),
-                  ],
-                );
-              },
-            ),
-          )
-        : Container();
+                              )
+                            : Container(),
+                      ],
+                    );
+                  })
+              : Container();
+        },
+      ),
+    );
   }
 
   void _onActionSheetTap(BuildContext context, SortingElement item) {

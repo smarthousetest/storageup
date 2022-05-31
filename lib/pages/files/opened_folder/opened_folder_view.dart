@@ -452,7 +452,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                                     (BuildContext context) {
                                                   return FileInfoView(
                                                       object: obj,
-                                                      user: state.user);
+                                                      user: state.valueNotifier
+                                                          ?.value);
                                                 });
                                             if (res != null) {
                                               if (obj is Folder) {
@@ -712,7 +713,9 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                           context: context,
                                           builder: (BuildContext context) {
                                             return FileInfoView(
-                                                object: obj, user: state.user);
+                                                object: obj,
+                                                user:
+                                                    state.valueNotifier?.value);
                                           });
                                       if (res) {
                                         if (obj is Folder) {
@@ -1136,7 +1139,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                               builder: (BuildContext context) {
                                                 return FileInfoView(
                                                     object: element,
-                                                    user: state.user);
+                                                    user: state
+                                                        .valueNotifier?.value);
                                               });
                                           if (res) {
                                             if (element is Folder) {
@@ -1587,7 +1591,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   context: context,
                                   builder: (BuildContext context) {
                                     return FileInfoView(
-                                        object: obj, user: state.user);
+                                        object: obj,
+                                        user: state.valueNotifier?.value);
                                   });
                               if (res) {
                                 if (obj is Folder) {

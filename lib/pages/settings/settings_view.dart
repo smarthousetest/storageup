@@ -11,6 +11,7 @@ import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/main.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/settings/settings_bloc.dart';
 import 'package:upstorage_desktop/pages/settings/settings_event.dart';
@@ -292,20 +293,26 @@ class _SettingsPageState extends State<SettingsPage> {
         child:
             BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
           return Stack(children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 13, left: 40),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  child: state.user.image,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ),
+            state.valueNotifier != null
+                ? ValueListenableBuilder<User?>(
+                    valueListenable: state.valueNotifier!,
+                    builder: (context, value, _) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 13, left: 40),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Container(
+                            width: 120,
+                            height: 120,
+                            child: value.image,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      );
+                    })
+                : Container(),
             CustomPopupMenu(
               pressType: PressType.singleClick,
               barrierColor: Colors.transparent,

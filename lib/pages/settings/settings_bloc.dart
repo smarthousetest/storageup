@@ -54,7 +54,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     var locale = await getLocale();
     User? user = await _userController.getUser;
-    emit(state.copyWith(user: user, language: locale.languageCode));
+    var valueNotifier = _userController.getValueNotifier();
+    emit(state.copyWith(
+      user: user,
+      language: locale.languageCode,
+      valueNotifier: valueNotifier,
+    ));
   }
 
   Future _mapSettingNameChanged(

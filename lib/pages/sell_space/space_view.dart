@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
@@ -149,67 +150,78 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   Container(
                     child: BlocBuilder<SpaceBloc, SpaceState>(
                         builder: (context, state) {
-                      return Row(
-                        key: nameWidthKey,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: 20,
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                StateContainer.of(context)
-                                    .changePage(ChosenPage.settings);
-                              },
-                              child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(23.0),
-                                  child: Container(child: state.user.image),
-                                ),
-                              ),
-                            ),
-                          ),
-                          (MediaQuery.of(context).size.width > 965)
-                              ? Container(
-                                  constraints: BoxConstraints(maxWidth: 110),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5),
-                                        child: Text(
-                                          state.user?.firstName ??
-                                              state.user?.email
-                                                  ?.split('@')
-                                                  .first ??
-                                              'Name',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            color: Theme.of(context)
-                                                .bottomAppBarColor,
+                      return state.valueNotifier != null
+                          ? ValueListenableBuilder<User?>(
+                              valueListenable: state.valueNotifier!,
+                              builder: (context, value, _) {
+                                return Row(
+                                  key: nameWidthKey,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        right: 20,
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          StateContainer.of(context)
+                                              .changePage(ChosenPage.settings);
+                                        },
+                                        child: MouseRegion(
+                                          cursor: SystemMouseCursors.click,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(23.0),
+                                            child:
+                                                Container(child: value.image),
                                           ),
                                         ),
                                       ),
-                                      Text(
-                                        state.user?.email ?? '',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Theme.of(context)
-                                              .bottomAppBarColor,
-                                          height: 1,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      );
+                                    ),
+                                    (MediaQuery.of(context).size.width > 965)
+                                        ? Container(
+                                            constraints:
+                                                BoxConstraints(maxWidth: 110),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 5),
+                                                  child: Text(
+                                                    value?.firstName ??
+                                                        value?.email
+                                                            ?.split('@')
+                                                            .first ??
+                                                        'Name',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Theme.of(context)
+                                                          .bottomAppBarColor,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  value?.email ?? '',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .bottomAppBarColor,
+                                                    height: 1,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
+                                );
+                              })
+                          : Container();
                     }),
                   ),
                 ],

@@ -20,6 +20,7 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/pages/media/media_cubit.dart';
 import 'package:upstorage_desktop/pages/media/media_open/media_open_view.dart';
@@ -216,72 +217,91 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           Container(
                             child: BlocBuilder<MediaCubit, MediaState>(
                                 builder: (context, state) {
-                              return Row(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(right: 20, left: 20),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        StateContainer.of(context)
-                                            .changePage(ChosenPage.settings);
-                                      },
-                                      child: MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(23.0),
-                                          child: Container(
-                                              child: state.user.image),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  (MediaQuery.of(context).size.width > 966)
-                                      ? Container(
-                                          constraints: BoxConstraints(
-                                              maxWidth: 95, minWidth: 50),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 5),
-                                                child: Text(
-                                                  state.user?.firstName ??
-                                                      state.user?.email
-                                                          ?.split('@')
-                                                          .first ??
-                                                      'Name',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: Theme.of(context)
-                                                        .bottomAppBarColor,
+                              return state.valueNotifier != null
+                                  ? ValueListenableBuilder<User?>(
+                                      valueListenable: state.valueNotifier!,
+                                      builder: (context, value, _) {
+                                        return Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 20, left: 20),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  StateContainer.of(context)
+                                                      .changePage(
+                                                          ChosenPage.settings);
+                                                },
+                                                child: MouseRegion(
+                                                  cursor:
+                                                      SystemMouseCursors.click,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            23.0),
+                                                    child: Container(
+                                                        child: value.image),
                                                   ),
                                                 ),
                                               ),
-                                              Text(
-                                                state.user?.email ?? 'email',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Theme.of(context)
-                                                      .bottomAppBarColor,
-                                                  height: 1,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : Container(),
-                                ],
-                              );
+                                            ),
+                                            (MediaQuery.of(context).size.width >
+                                                    966)
+                                                ? Container(
+                                                    constraints: BoxConstraints(
+                                                        maxWidth: 95,
+                                                        minWidth: 50),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 5),
+                                                          child: Text(
+                                                            value?.firstName ??
+                                                                value?.email
+                                                                    ?.split('@')
+                                                                    .first ??
+                                                                'Name',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                              fontSize: 17,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .bottomAppBarColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          value?.email ??
+                                                              'email',
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .bottomAppBarColor,
+                                                            height: 1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                : Container(),
+                                          ],
+                                        );
+                                      })
+                                  : Container();
                             }),
                           ),
                         ],
@@ -821,7 +841,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return FileInfoView(
-                                              object: record, user: state.user);
+                                              object: record,
+                                              user: state.valueNotifier?.value);
                                         });
                                     if (res != null) {
                                       blocContext
@@ -1106,7 +1127,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           context: context,
                                           builder: (BuildContext context) {
                                             return FileInfoView(
-                                                object: e, user: state.user);
+                                                object: e,
+                                                user:
+                                                    state.valueNotifier?.value);
                                           });
                                       if (res != null) {
                                         context

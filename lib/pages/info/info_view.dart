@@ -15,6 +15,8 @@ import 'package:upstorage_desktop/components/custom_button_template.dart';
 
 import 'package:upstorage_desktop/utilites/extensions.dart';
 
+import '../../models/user.dart';
+
 class InfoPage extends StatefulWidget {
   @override
   _InfoPageState createState() => new _InfoPageState();
@@ -119,57 +121,63 @@ class _InfoPageState extends State<InfoPage> {
 
   _userRow(BuildContext context) {
     return BlocBuilder<InfoBloc, InfoState>(builder: (context, state) {
-      return Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Container(
-              height: 46,
-              // width: 46,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(23),
-                child: GestureDetector(
-                    onTap: () {
-                      StateContainer.of(context)
-                          .changePage(ChosenPage.settings);
-                    },
-                    child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: state.user.image)),
-              ),
-            ),
-          ),
-          Container(
-            constraints: BoxConstraints(maxWidth: 200),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Text(
-                    state.user?.firstName ??
-                        state.user?.email?.split('@').first ??
-                        'Name',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Theme.of(context).bottomAppBarColor,
+      return state.valueNotifier != null
+          ? ValueListenableBuilder<User?>(
+              valueListenable: state.valueNotifier!,
+              builder: (context, value, _) {
+                return Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Container(
+                        height: 46,
+                        // width: 46,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(23),
+                          child: GestureDetector(
+                              onTap: () {
+                                StateContainer.of(context)
+                                    .changePage(ChosenPage.settings);
+                              },
+                              child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: value.image)),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Text(
-                  state.user?.email ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).bottomAppBarColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
+                    Container(
+                      constraints: BoxConstraints(maxWidth: 200),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              value?.firstName ??
+                                  value?.email?.split('@').first ??
+                                  'Name',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Theme.of(context).bottomAppBarColor,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            value?.email ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).bottomAppBarColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              })
+          : Container();
     });
   }
 
@@ -648,10 +656,18 @@ class _InfoPageState extends State<InfoPage> {
                                     },
                                     child: BlocBuilder<InfoBloc, InfoState>(
                                         builder: (context, state) {
-                                      return MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: state.user.image,
-                                      );
+                                      return state.valueNotifier != null
+                                          ? ValueListenableBuilder<User?>(
+                                              valueListenable:
+                                                  state.valueNotifier!,
+                                              builder: (context, value, _) {
+                                                return MouseRegion(
+                                                  cursor:
+                                                      SystemMouseCursors.click,
+                                                  child: value.image,
+                                                );
+                                              })
+                                          : Container();
                                     }),
                                   ),
                                 ),

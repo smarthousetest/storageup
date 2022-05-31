@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -35,12 +36,15 @@ class UserController {
     _repository.setUser = user;
   }
 
+  ValueNotifier<User?> getValueNotifier() => _repository.getValueNotifier;
+
   Future<ResponseStatus> changeProfilePic(String publicUrl) async {
     var user = _repository.getUser;
     var response =
         await _filesService.setProfilePic(url: publicUrl, user: user!);
     if (response == ResponseStatus.ok) {
       await updateUser();
+
       // _repository.setUser = upUser;
       return ResponseStatus.ok;
     } else {
