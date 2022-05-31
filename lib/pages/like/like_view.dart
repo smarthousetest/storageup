@@ -15,195 +15,190 @@ class _LikePageState extends State<LikePage> {
   bool ifGrid = true;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(30),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Container(
-            height: 46,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Color.fromARGB(25, 23, 69, 139),
-                              blurRadius: 4,
-                              offset: Offset(1, 4))
-                        ],
-                      ),
+    return Padding(
+      padding: const EdgeInsets.all(30),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Container(
+          height: 46,
+          child: Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Color.fromARGB(25, 23, 69, 139),
+                            blurRadius: 4,
+                            offset: Offset(1, 4))
+                      ],
                     ),
                   ),
                 ),
-                Container(
-                  width: 46,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        //child: Padding(
-                        //padding: const EdgeInsets.only(right: 30),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Color.fromARGB(25, 23, 69, 139),
-                                      blurRadius: 4,
-                                      offset: Offset(1, 4))
-                                ]),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                  "assets/file_page/settings.svg"),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 30, left: 20),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(23.0),
-                          child: Image.asset('assets/home_page/man.jpg'),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              "Александр Рождественский",
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Theme.of(context).bottomAppBarColor,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            "votreaa@mail.ru",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).bottomAppBarColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              Container(
+                width: 46,
+                child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 120,
-                            child: Text(
-                              'Избранное',
-                              style: TextStyle(
-                                color: Theme.of(context).focusColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 20,
-                              ),
-                            ),
+                    Expanded(
+                      //child: Padding(
+                      //padding: const EdgeInsets.only(right: 30),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: Color.fromARGB(25, 23, 69, 139),
+                                    blurRadius: 4,
+                                    offset: Offset(1, 4))
+                              ]),
+                          child: Center(
+                            child: SvgPicture.asset(
+                                "assets/file_page/settings.svg"),
                           ),
-                          Expanded(
-                            flex: 100,
-                            child: Container(),
-                          ),
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                ifGrid = false;
-                              });
-                              print('ifGrid is $ifGrid');
-                            },
-                            icon: SvgPicture.asset('assets/file_page/list.svg',
-                                // icon: Image.asset('assets/file_page/list.png',
-                                // fit: BoxFit.contain,
-                                // width: 30,
-                                // height: 30,
-                                color: ifGrid
-                                    ? Theme.of(context).toggleButtonsTheme.color
-                                    : Theme.of(context).splashColor),
-                          ),
-                          IconButton(
-                            iconSize: 30,
-                            onPressed: () {
-                              setState(() {
-                                ifGrid = true;
-                              });
-                              print('ifGrid is $ifGrid');
-                            },
-                            icon: SvgPicture.asset('assets/file_page/block.svg',
-                                // width: 30,
-                                // height: 30,
-                                //colorBlendMode: BlendMode.softLight,
-                                color: ifGrid
-                                    ? Theme.of(context).splashColor
-                                    : Theme.of(context)
-                                        .toggleButtonsTheme
-                                        .color),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                    ifGrid
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
-                            child: Divider(
-                              height: 1,
-                              color: Theme.of(context).dividerColor,
-                            ),
-                          )
-                        : Container(),
-                    Expanded(
-                      child: ifGrid ? _filesGrid(context) : LikeList(),
-                    )
                   ],
                 ),
               ),
+              Container(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 30, left: 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(23.0),
+                        child: Image.asset('assets/home_page/man.jpg'),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            "Александр Рождественский",
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Theme.of(context).bottomAppBarColor,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "votreaa@mail.ru",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context).bottomAppBarColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Color.fromARGB(25, 23, 69, 139),
+                      blurRadius: 4,
+                      offset: Offset(1, 4))
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 120,
+                          child: Text(
+                            'Избранное',
+                            style: TextStyle(
+                              color: Theme.of(context).focusColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 100,
+                          child: Container(),
+                        ),
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          iconSize: 30,
+                          onPressed: () {
+                            setState(() {
+                              ifGrid = false;
+                            });
+                            print('ifGrid is $ifGrid');
+                          },
+                          icon: SvgPicture.asset('assets/file_page/list.svg',
+                              // icon: Image.asset('assets/file_page/list.png',
+                              // fit: BoxFit.contain,
+                              // width: 30,
+                              // height: 30,
+                              color: ifGrid
+                                  ? Theme.of(context).toggleButtonsTheme.color
+                                  : Theme.of(context).splashColor),
+                        ),
+                        IconButton(
+                          iconSize: 30,
+                          onPressed: () {
+                            setState(() {
+                              ifGrid = true;
+                            });
+                            print('ifGrid is $ifGrid');
+                          },
+                          icon: SvgPicture.asset('assets/file_page/block.svg',
+                              // width: 30,
+                              // height: 30,
+                              //colorBlendMode: BlendMode.softLight,
+                              color: ifGrid
+                                  ? Theme.of(context).splashColor
+                                  : Theme.of(context).toggleButtonsTheme.color),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ifGrid
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: Divider(
+                            height: 1,
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        )
+                      : Container(),
+                  Expanded(
+                    child: ifGrid ? _filesGrid(context) : LikeList(),
+                  )
+                ],
+              ),
             ),
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 

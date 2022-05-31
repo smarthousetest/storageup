@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/autoupload/autoupload_controller.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/upload_media.dart';

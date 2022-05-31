@@ -11,6 +11,7 @@ import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/main.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/settings/settings_bloc.dart';
 import 'package:upstorage_desktop/pages/settings/settings_event.dart';
@@ -80,52 +81,85 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return BlocProvider(
       create: (context) => SettingsBloc()..add(SettingsPageOpened()),
-      child: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Color.fromARGB(25, 23, 69, 139),
-                    blurRadius: 4,
-                    offset: Offset(1, 4))
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 40, top: 20),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Container(
-                        decoration: decoration(),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              index = 0;
-                              print(index);
-                            });
-                          },
+      child: Padding(
+        padding: const EdgeInsets.all(30),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4))
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 40, right: 40, top: 20),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Container(
+                      decoration: decoration(),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            index = 0;
+                            print(index);
+                          });
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 10),
+                            decoration: decorationUnderline(0),
+                            child: Text(
+                              translate.personal_data,
+                              key: _keys[0],
+                              style: TextStyle(
+                                color: index == 0
+                                    ? Theme.of(context).focusColor
+                                    : Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        ?.color,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: decoration(),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            index = 1;
+                            print(index);
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 30),
                           child: MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: Container(
                               padding: EdgeInsets.only(bottom: 10),
-                              decoration: decorationUnderline(0),
+                              decoration: decorationUnderline(1),
                               child: Text(
-                                translate.personal_data,
-                                key: _keys[0],
+                                translate.options,
+                                key: _keys[1],
                                 style: TextStyle(
-                                  color: index == 0
+                                  color: index == 1
                                       ? Theme.of(context).focusColor
                                       : Theme.of(context)
                                           .textTheme
@@ -139,117 +173,82 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: decoration(),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              index = 1;
-                              print(index);
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Container(
-                                padding: EdgeInsets.only(bottom: 10),
-                                decoration: decorationUnderline(1),
-                                child: Text(
-                                  translate.options,
-                                  key: _keys[1],
-                                  style: TextStyle(
-                                    color: index == 1
-                                        ? Theme.of(context).focusColor
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .subtitle1
-                                            ?.color,
-                                    fontFamily: kNormalTextFontFamily,
-                                    fontSize: 20,
-                                  ),
+                    ),
+                    Container(
+                      decoration: decoration(),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            index = 2;
+                            print(index);
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 29),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 10),
+                              decoration: decorationUnderline(2),
+                              child: Text(
+                                translate.regulations,
+                                key: _keys[2],
+                                style: TextStyle(
+                                  color: index == 2
+                                      ? Theme.of(context).focusColor
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          ?.color,
+                                  fontFamily: kNormalTextFontFamily,
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 20,
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: decoration(),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              index = 2;
-                              print(index);
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 29),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Container(
-                                padding: EdgeInsets.only(bottom: 10),
-                                decoration: decorationUnderline(2),
-                                child: Text(
-                                  translate.regulations,
-                                  key: _keys[2],
-                                  style: TextStyle(
-                                    color: index == 2
-                                        ? Theme.of(context).focusColor
-                                        : Theme.of(context)
-                                            .textTheme
-                                            .subtitle1
-                                            ?.color,
-                                    fontFamily: kNormalTextFontFamily,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        child: Container(
+                          padding: EdgeInsets.only(bottom: 12),
+                          child: Text(
+                            '',
+                            style: TextStyle(
+                              color: index == 2
+                                  ? Theme.of(context).focusColor
+                                  : Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      ?.color,
+                              fontFamily: kNormalTextFontFamily,
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 20,
                             ),
                           ),
+                          decoration: decoration(),
                         ),
                       ),
-                      Expanded(
-                        child: GestureDetector(
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 12),
-                            child: Text(
-                              '',
-                              style: TextStyle(
-                                color: index == 2
-                                    ? Theme.of(context).focusColor
-                                    : Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.color,
-                                fontFamily: kNormalTextFontFamily,
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 20,
-                              ),
-                            ),
-                            decoration: decoration(),
-                          ),
-                        ),
-                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return IndexedStack(
+                    index: index,
+                    sizing: StackFit.passthrough,
+                    children: [
+                      personalData(context),
+                      options(context),
+                      regulations(context),
                     ],
-                  ),
-                ),
-                Expanded(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return IndexedStack(
-                      index: index,
-                      sizing: StackFit.passthrough,
-                      children: [
-                        personalData(context),
-                        options(context),
-                        regulations(context),
-                      ],
-                    );
-                  }),
-                ),
-              ],
-            ),
+                  );
+                }),
+              ),
+            ],
           ),
         ),
       ),
@@ -294,20 +293,26 @@ class _SettingsPageState extends State<SettingsPage> {
         child:
             BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
           return Stack(children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 13, left: 40),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  child: state.user.image,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ),
+            state.valueNotifier != null
+                ? ValueListenableBuilder<User?>(
+                    valueListenable: state.valueNotifier!,
+                    builder: (context, value, _) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 13, left: 40),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Container(
+                            width: 120,
+                            height: 120,
+                            child: value.image,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      );
+                    })
+                : Container(),
             CustomPopupMenu(
               pressType: PressType.singleClick,
               barrierColor: Colors.transparent,
@@ -494,7 +499,7 @@ class _SettingsPageState extends State<SettingsPage> {
             var str = await showDialog(
               context: context,
               builder: (BuildContext context) {
-                return BlurChangePassword();
+                return BlurChangePassword(state.user!);
               },
             );
             if (str is ChangePasswordPopupResult) {

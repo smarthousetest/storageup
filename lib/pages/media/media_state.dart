@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-
 
 class MediaState extends Equatable {
   final List<Record> currentFolderRecords;
@@ -19,6 +19,7 @@ class MediaState extends Equatable {
   final FormzStatus status;
   final ErrorType? errorType;
   final ResponseStatus? responseStatus;
+  final ValueNotifier<User?>? valueNotifier;
 
   MediaState({
     this.currentFolderRecords = const [],
@@ -32,6 +33,7 @@ class MediaState extends Equatable {
     this.representation = FilesRepresentation.grid,
     this.user,
     this.errorType,
+    this.valueNotifier,
   }) : this.currentFolder = currentFolder ?? Folder.empty();
 
   MediaState copyWith({
@@ -46,6 +48,7 @@ class MediaState extends Equatable {
     bool? progress,
     ErrorType? errorType,
     ResponseStatus? responseStatus,
+    ValueNotifier<User?>? valueNotifier,
   }) {
     return MediaState(
       albums: albums ?? this.albums,
@@ -59,6 +62,7 @@ class MediaState extends Equatable {
       status: status ?? this.status,
       errorType: errorType,
       responseStatus: responseStatus ?? this.responseStatus,
+      valueNotifier: valueNotifier ?? this.valueNotifier,
     );
   }
 
@@ -75,5 +79,6 @@ class MediaState extends Equatable {
         errorType,
         status,
         responseStatus,
+        valueNotifier,
       ];
 }

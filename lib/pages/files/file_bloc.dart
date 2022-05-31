@@ -105,7 +105,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
       var currentFolder = _controller.getFilesRootFolder;
       var user = _userRepository.getUser;
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
-
+      var valueNotifier = _userRepository.getValueNotifier;
       print(files?.length);
       print(currentFolder?.name);
       emit(
@@ -115,6 +115,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
           currentFolder: currentFolder,
           filesToMove: filesToMove,
           user: user,
+          valueNotifier: valueNotifier,
         ),
       );
     } else {

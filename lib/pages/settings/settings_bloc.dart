@@ -54,7 +54,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     var locale = await getLocale();
     User? user = await _userController.getUser;
-    emit(state.copyWith(user: user, language: locale.languageCode));
+    var valueNotifier = _userController.getValueNotifier();
+    emit(state.copyWith(
+      user: user,
+      language: locale.languageCode,
+      valueNotifier: valueNotifier,
+    ));
   }
 
   Future _mapSettingNameChanged(
@@ -89,6 +94,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     var result = await _authController.changePassword(
         oldPassword: event.oldPassword, newPassword: event.newPassword);
+    if (result == AuthenticationStatus.authenticated) {}
+
     print(result);
     emit(state.copyWith(
       status: FormzStatus.submissionSuccess,
@@ -148,8 +155,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       var publicUrl = await _filesService.uploadProfilePic(file: file);
 
       if (publicUrl != null) {
-        var result = await _filesService.setProfilePic(
-            url: publicUrl, user: state.user!);
+        var result = await _userController.changeProfilePic(publicUrl);
         if (result == ResponseStatus.ok) {
           User? user = await _userController.updateUser();
           emit(state.copyWith(

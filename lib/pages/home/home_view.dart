@@ -29,20 +29,10 @@ import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
 import 'home_bloc.dart';
 import 'home_state.dart';
-
-enum Blur {
-  rename,
-  delete,
-  create_album,
-  menu_upload,
-  three_directory,
-  none,
-}
 
 class HomePage extends StatefulWidget {
   static const route = "home_page";
@@ -54,9 +44,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ChosenPage choosedPage = ChosenPage.home;
-  Blur blurItem = Blur.rename;
-
   S translate = getIt<S>();
 
   void changePage(ChosenPage newPage) {
@@ -79,12 +66,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     infoPage = InfoPage();
-    filePage = StateInfoContainer(child: StateSortedContainer(child: FilePage()));
+    filePage = StateSortedContainer(child: FilePage());
     likePage = LikePage();
     spaceSellPage = SpaceSellPage();
     financePage = FinancePage();
     settingsPage = SettingsPage();
-    mediaPage = StateInfoContainer(child: MediaPage());
+    mediaPage = MediaPage();
     super.initState();
   }
 
@@ -97,48 +84,37 @@ class _HomePageState extends State<HomePage> {
   late Widget mediaPage;
 
   Widget getPage() {
-    switch (StateContainer.of(context).choosedPage) {
-      case ChosenPage.home:
-        return infoPage;
-      case ChosenPage.file:
-        return filePage;
-      case ChosenPage.like:
-        return likePage;
-      case ChosenPage.sell_space:
-        return spaceSellPage;
-      case ChosenPage.finance:
-        return financePage;
-      case ChosenPage.settings:
-        return settingsPage;
-      case ChosenPage.media:
-        return mediaPage;
-      default:
-        return infoPage;
-    }
+    return IndexedStack(
+      index: getIndexPage(),
+      children: [
+        InfoPage(),
+        StateSortedContainer(child: FilePage()),
+        SpaceSellPage(),
+        FinancePage(),
+        SettingsPage(),
+        MediaPage(),
+      ],
+    );
   }
 
-  // Widget getBlurItem() {
-  //   switch (blurItem) {
-  //     case Blur.none:
-  //       return Container();
-  //     case Blur.rename:
-  //       return BlurRename(
-  //           //blur_item: blur_item,
-  //           );
-  //     // case Blur.delete:
-  //     //   return BlurDelete(
-  //     //     blurItem: blurItem,
-  //     //   );
-  //     // case Blur.create_album:
-  //     //   return BlurCreateAlbum(blur_item: blur_item,);
-  //     // case Blur.menu_upload:
-  //     //   return BlurMenuUpload(blur_item: blur_item,);
-  //     // case Blur.three_directory:
-  //     //   return BlurCreateThreeDirectory(blur_item: blur_item,);
-  //     default:
-  //       return Container();
-  //   }
-  // }
+  int getIndexPage() {
+    switch (StateContainer.of(context).choosedPage) {
+      case ChosenPage.home:
+        return 0;
+      case ChosenPage.file:
+        return 1;
+      case ChosenPage.sell_space:
+        return 2;
+      case ChosenPage.finance:
+        return 3;
+      case ChosenPage.settings:
+        return 4;
+      case ChosenPage.media:
+        return 5;
+      default:
+        return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +177,10 @@ class _HomePageState extends State<HomePage> {
                         child: ListView(
                           shrinkWrap: true,
                           controller: ScrollController(),
-                          children: leftButtonsItem(),
+                          children: [
+                            ..._customMenuItem(),
+                            ..._leftButtonsItem()
+                          ],
                         ),
                       ),
                       _logout(),
@@ -214,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }),
               ),
-              getPage(),
+              Expanded(child: getPage()),
             ],
           ),
         ),
@@ -222,7 +201,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> leftButtonsItem() {
+  List<CustomMenuButton> _customMenuItem() {
     return [
       CustomMenuButton(
         icon: "assets/home_page/home.svg",
@@ -230,6 +209,7 @@ class _HomePageState extends State<HomePage> {
         page: ChosenPage.home,
         onTap: () {
           changePage(ChosenPage.home);
+          getIndexPage();
         },
       ),
       CustomMenuButton(
@@ -238,6 +218,7 @@ class _HomePageState extends State<HomePage> {
         page: ChosenPage.file,
         onTap: () {
           changePage(ChosenPage.file);
+          getIndexPage();
         },
       ),
       CustomMenuButton(
@@ -246,6 +227,7 @@ class _HomePageState extends State<HomePage> {
         page: ChosenPage.media,
         onTap: () {
           changePage(ChosenPage.media);
+          getIndexPage();
         },
       ),
       // CustomMenuButton(
@@ -262,6 +244,7 @@ class _HomePageState extends State<HomePage> {
         page: ChosenPage.sell_space,
         onTap: () {
           changePage(ChosenPage.sell_space);
+          getIndexPage();
         },
       ),
       CustomMenuButton(
@@ -270,6 +253,7 @@ class _HomePageState extends State<HomePage> {
         page: ChosenPage.finance,
         onTap: () {
           changePage(ChosenPage.finance);
+          getIndexPage();
         },
       ),
       CustomMenuButton(
@@ -278,14 +262,14 @@ class _HomePageState extends State<HomePage> {
         page: ChosenPage.settings,
         onTap: () {
           changePage(ChosenPage.settings);
+          getIndexPage();
         },
       ),
-      // CustomMenuButton(
-      //   icon: "assets/home_page/trash.svg",
-      //   title: "Корзина",
-      //   page: ChoosedPage.trash,
-      //   onTap: () {},
-      // ),
+    ];
+  }
+
+  List<Widget> _leftButtonsItem() {
+    return [
       Padding(
         padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
         child: Container(
@@ -295,7 +279,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
         return state.objectsValueListenable != null && state.objectsValueListenable!.value.values.isNotEmpty
             ? latestFile(context)
@@ -336,17 +319,6 @@ class _HomePageState extends State<HomePage> {
                       _processUserAction(context, result);
                     }
                   });
-
-                  // if (result is AddMenuResult) {
-                  //   _processUserAction(context, result);
-                  // }
-                  /*FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowMultiple: true);
-                    List<String?> list = result!.paths;*/
-
-                  // var systemTempDir = Directory.current;
-                  // await for (var entity in systemTempDir.list(recursive: true, followLinks: false,)) {
-                  //   print(entity.path);
-                  // }
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
@@ -621,7 +593,7 @@ class LatestFileView extends StatelessWidget {
   Widget build(BuildContext context) {
     String? type = '';
     var record = object.latestFile;
-    var isFile = true;
+    // var isFile = true;
     type = FileAttribute().getFilesType(record.name!.toLowerCase());
     return LayoutBuilder(
       builder: (context, constrains) => Padding(
@@ -643,7 +615,7 @@ class LatestFileView extends StatelessWidget {
                     width: 24,
                   ),
                 ),
-                ..._uploadProgress(isFile ? record.loadPercent : null),
+                ..._uploadProgress(record.loadPercent),
               ],
             ),
             Padding(

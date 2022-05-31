@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
@@ -19,6 +20,8 @@ class FilesState extends Equatable {
   final bool isSelectable;
 
   final Map<String, List<BaseObject>> groupedFiles;
+
+  final ValueNotifier<User?>? valueNotifier;
 
   final FormzStatus status;
 
@@ -42,6 +45,7 @@ class FilesState extends Equatable {
     this.filesAction,
     this.errorType,
     this.user,
+    this.valueNotifier,
   });
 
   FilesState.init({
@@ -56,6 +60,7 @@ class FilesState extends Equatable {
     this.filesAction,
     this.errorType,
     this.user,
+    this.valueNotifier,
   }) : sortedFiles = allFiles;
 
   FilesState copyWith({
@@ -70,6 +75,7 @@ class FilesState extends Equatable {
     FilesAction? filesAction,
     ErrorType? errorType,
     User? user,
+    ValueNotifier<User?>? valueNotifier,
   }) {
     return FilesState(
       allFiles: allFiles ?? this.allFiles,
@@ -83,6 +89,7 @@ class FilesState extends Equatable {
       filesAction: filesAction ?? this.filesAction,
       errorType: errorType ?? this.errorType,
       user: user ?? this.user,
+      valueNotifier: valueNotifier ?? this.valueNotifier,
     );
   }
 
@@ -99,5 +106,6 @@ class FilesState extends Equatable {
         filesAction,
         errorType,
         user,
+        valueNotifier,
       ];
 }

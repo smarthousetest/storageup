@@ -1,13 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:upstorage_desktop/models/user.dart';
 
 class UserRepository {
   User? _user;
 
+  final ValueNotifier<User?> _valueNotifier = ValueNotifier<User?>(null);
+
+  ValueNotifier<User?> get getValueNotifier => _valueNotifier;
+
   bool containUser() {
     return _user != null;
   }
 
-  User? get getUser => _user;
+  User? get getUser => _valueNotifier.value;
 
-  set setUser(User? user) => _user = user;
+  set setUser(User? user) => _valueNotifier.value = user;
 }

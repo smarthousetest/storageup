@@ -36,6 +36,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     var sub = await _subscriptionService.getCurrentSubscription();
     var allMediaFolders = await _filesController.getMediaFolders(true);
     var packetInfo = await _subscriptionService.getPacketInfo();
+    var valueNotifier = _userController.getValueNotifier();
     emit(state.copyWith(
       user: user,
       folder: folder,
@@ -43,6 +44,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
       rootFolders: rootFolder,
       sub: sub,
       packetInfo: packetInfo,
+      valueNotifier: valueNotifier,
     ));
   }
 }

@@ -89,6 +89,7 @@ class MediaCubit extends Cubit<MediaState> {
         allMediaFolders?.firstWhere((element) => element.id == '-1');
     User? user = await _userController.getUser;
     bool progress = true;
+    var valueNotifier = _userController.getValueNotifier();
     emit(state.copyWith(
       albums: allMediaFolders,
       currentFolder: currentFolder,
@@ -97,6 +98,7 @@ class MediaCubit extends Cubit<MediaState> {
       user: user,
       progress: progress,
       status: FormzStatus.pure,
+      valueNotifier: valueNotifier,
     ));
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
@@ -530,8 +532,7 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChosen(
-      Record object, String newName) async {
+  Future<ErrorType?> onActionRenameChosen(Record object, String newName) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);

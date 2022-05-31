@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/models/file.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';

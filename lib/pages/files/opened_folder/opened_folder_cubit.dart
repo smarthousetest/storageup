@@ -130,7 +130,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var user = _userRepository.getUser;
     bool progress = true;
     _repository = await GetIt.instance.getAsync<LatestFileRepository>();
-
+    var valueNotifier = _userRepository.getValueNotifier;
     emit(
       state.copyWith(
         currentFolder: currentFolder,
@@ -139,6 +139,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         previousFolders: previousFolders,
         user: user,
         progress: progress,
+        valueNotifier: valueNotifier,
       ),
     );
 
@@ -363,6 +364,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([object]);
+
+    var recentsFile = await _filesController.getRecentFiles();
+    if (recentsFile != null) {
+      await _repository.addFiles(latestFile: recentsFile);
+    }
     print(result);
     if (result == ResponseStatus.ok) {
       _update();

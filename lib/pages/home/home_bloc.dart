@@ -55,9 +55,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       var recentsFile = await _filesService.getRecentsRecords();
       if (recentsFile != null) {
-        // recentsFile.forEach((element) {
         await _repository.addFiles(latestFile: recentsFile);
-        // });
       }
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
@@ -120,9 +118,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && folderId != null) {
       final result =
           await _filesController.createFolder(event.values!.first!, folderId);
-      if (event.choosedPage == ChosenPage.file) {
-        eventBusUpdateFolder.fire(UpdateFolderEvent);
-      }
+
+      eventBusUpdateFolder.fire(UpdateFolderEvent);
 
       if (result == ResponseStatus.failed) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));

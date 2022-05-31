@@ -6,6 +6,7 @@ import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
 import 'package:upstorage_desktop/pages/finance/finance_event.dart';
 import 'package:upstorage_desktop/pages/finance/finance_state.dart';
@@ -83,188 +84,233 @@ class _FinancePageState extends State<FinancePage> {
             );
           }
         },
-        child: Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 30.0, right: 30, top: 30),
-                child: Container(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 23),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 23, 69, 139),
-                                    blurRadius: 4,
-                                    offset: Offset(1, 4))
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(13.0),
-                                  child: Align(
-                                    alignment: FractionalOffset.centerLeft,
-                                    child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        child: SvgPicture.asset(
-                                            "assets/file_page/search.svg")),
-                                  ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0, right: 30, top: 30),
+              child: Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Color.fromARGB(25, 23, 69, 139),
+                                  blurRadius: 4,
+                                  offset: Offset(1, 4))
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(13.0),
+                                child: Align(
+                                  alignment: FractionalOffset.centerLeft,
+                                  child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      child: SvgPicture.asset(
+                                          "assets/file_page/search.svg")),
                                 ),
-                                Container(
-                                  width: _searchFieldWidth,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        StateContainer.of(context)
-                                            .changePage(ChosenPage.file);
-                                      },
-                                      child: MouseRegion(
-                                        cursor: SystemMouseCursors.click,
-                                        child: Container(
-                                          child: Text(
-                                            translate.search,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              color: Theme.of(context)
-                                                  .disabledColor,
-                                            ),
+                              ),
+                              Container(
+                                width: _searchFieldWidth,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      StateContainer.of(context)
+                                          .changePage(ChosenPage.file);
+                                    },
+                                    child: MouseRegion(
+                                      cursor: SystemMouseCursors.click,
+                                      child: Container(
+                                        child: Text(
+                                          translate.search,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color:
+                                                Theme.of(context).disabledColor,
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      Container(
-                        height: 46,
-                        child: BlocBuilder<FinanceBloc, FinanceState>(
-                            builder: (context, state) {
-                          return Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 20, left: 0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    StateContainer.of(context)
-                                        .changePage(ChosenPage.settings);
-                                  },
-                                  child: MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(23.0),
-                                      child: Container(child: state.user.image),
+                    ),
+                    Container(
+                      height: 46,
+                      child: BlocBuilder<FinanceBloc, FinanceState>(
+                          builder: (context, state) {
+                        return state.valueNotifier != null
+                            ? ValueListenableBuilder<User?>(
+                                valueListenable: state.valueNotifier!,
+                                builder: (context, value, _) {
+                                  return Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.only(right: 20, left: 0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            StateContainer.of(context)
+                                                .changePage(
+                                                    ChosenPage.settings);
+                                          },
+                                          child: MouseRegion(
+                                            cursor: SystemMouseCursors.click,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(23.0),
+                                              child:
+                                                  Container(child: value.image),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      (MediaQuery.of(context).size.width > 965)
+                                          ? Container(
+                                              constraints:
+                                                  BoxConstraints(maxWidth: 120),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    child: Text(
+                                                      value?.firstName ??
+                                                          value?.email
+                                                              ?.split('@')
+                                                              .first ??
+                                                          'Name',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 17,
+                                                        color: Theme.of(context)
+                                                            .bottomAppBarColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    value?.email ?? '',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Theme.of(context)
+                                                          .bottomAppBarColor,
+                                                      height: 1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  );
+                                })
+                            : Container();
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 40, right: 40, top: 20),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Container(
+                            decoration: decoration(),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  index = 0;
+                                  print(index);
+                                });
+                              },
+                              child: MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Container(
+                                  padding: EdgeInsets.only(bottom: 10),
+                                  decoration: decorationUnderline(0),
+                                  child: Text(
+                                    translate.management,
+                                    key: _keys[0],
+                                    style: TextStyle(
+                                      color: index == 0
+                                          ? Theme.of(context).focusColor
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .subtitle1
+                                              ?.color,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 24,
                                     ),
                                   ),
                                 ),
                               ),
-                              (MediaQuery.of(context).size.width > 965)
-                                  ? Container(
-                                      constraints:
-                                          BoxConstraints(maxWidth: 120),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5),
-                                            child: Text(
-                                              state.user?.firstName ??
-                                                  state.user?.email
-                                                      ?.split('@')
-                                                      .first ??
-                                                  'Name',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                color: Theme.of(context)
-                                                    .bottomAppBarColor,
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            state.user?.email ?? '',
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Theme.of(context)
-                                                  .bottomAppBarColor,
-                                              height: 1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : Container(),
-                            ],
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.all(30),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Color.fromARGB(25, 23, 69, 139),
-                          blurRadius: 4,
-                          offset: Offset(1, 4))
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 40, right: 40, top: 20),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              decoration: decoration(),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    index = 0;
-                                    print(index);
-                                  });
-                                },
+                            ),
+                          ),
+                          Container(
+                            decoration: decoration(),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  index = 1;
+                                  print(index);
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 30),
                                 child: MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: Container(
                                     padding: EdgeInsets.only(bottom: 10),
-                                    decoration: decorationUnderline(0),
+                                    decoration: decorationUnderline(1),
                                     child: Text(
-                                      translate.management,
-                                      key: _keys[0],
+                                      translate.funds,
+                                      key: _keys[1],
                                       style: TextStyle(
-                                        color: index == 0
+                                        color: index == 1
                                             ? Theme.of(context).focusColor
                                             : Theme.of(context)
                                                 .textTheme
@@ -278,60 +324,25 @@ class _FinancePageState extends State<FinancePage> {
                                 ),
                               ),
                             ),
-                            Container(
-                              decoration: decoration(),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    index = 1;
-                                    print(index);
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 30),
-                                  child: MouseRegion(
-                                    cursor: SystemMouseCursors.click,
-                                    child: Container(
-                                      padding: EdgeInsets.only(bottom: 10),
-                                      decoration: decorationUnderline(1),
-                                      child: Text(
-                                        translate.funds,
-                                        key: _keys[1],
-                                        style: TextStyle(
-                                          color: index == 1
-                                              ? Theme.of(context).focusColor
-                                              : Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1
-                                                  ?.color,
-                                          fontFamily: kNormalTextFontFamily,
-                                          fontSize: 24,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: IndexedStack(
-                          index: index,
-                          sizing: StackFit.passthrough,
-                          children: [
-                            subcription(theme),
-                            withdrawFunds(context),
-                          ],
-                        ),
+                    ),
+                    Expanded(
+                      child: IndexedStack(
+                        index: index,
+                        sizing: StackFit.passthrough,
+                        children: [
+                          subcription(theme),
+                          withdrawFunds(context),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -343,6 +354,7 @@ class _FinancePageState extends State<FinancePage> {
 
   Widget subcription(ThemeData theme) {
     return ListView(
+      controller: ScrollController(),
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(

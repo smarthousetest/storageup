@@ -1,27 +1,16 @@
-import 'dart:ui';
-
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:file_typification/file_typification.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
-import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/components/dir_button_template.dart';
-import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
+import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_info_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
-import '../../models/base_object.dart';
-import '../../models/user.dart';
-import 'files_list/files_list.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'file_bloc.dart';
@@ -149,70 +138,68 @@ class _FilePageState extends State<FilePage> {
   }
 
   Widget _fileView(BuildContext context) {
-    return Expanded(
-      child: Container(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(_rowPadding),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 46,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LayoutBuilder(builder: (context, constrains) {
-                            return _searchField(context, constrains);
-                          }),
-                          SizedBox(
-                            width: _rowSpasing,
-                          ),
-                          LayoutBuilder(builder: (context, constrains) {
-                            return _sortingField(context, constrains);
-                          }),
-                          _infoUser(context),
-                        ],
-                      ),
-                    ),
-                    /* Expanded(
-                      child: AnimatedSwitcher(
-                        duration: Duration(milliseconds: 1200),
-                        transitionBuilder: (child, animation) => SizeTransition(
-                          sizeFactor: animation,
-                          child: IndexedStack(
-                            key: ValueKey<int>(widget.index),
-                            index: widget.index,
-                            children: _opendedFolders,
-                          ),
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(_rowPadding),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 46,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LayoutBuilder(builder: (context, constrains) {
+                          return _searchField(context, constrains);
+                        }),
+                        SizedBox(
+                          width: _rowSpasing,
                         ),
-                        child:*/
-                    Expanded(
-                      child: IndexedStack(
-                        sizing: StackFit.expand,
-                        key: ValueKey<int>(index),
-                        index: index,
-                        children: _opendedFolders,
-                      ),
+                        LayoutBuilder(builder: (context, constrains) {
+                          return _sortingField(context, constrains);
+                        }),
+                        _infoUser(context),
+                      ],
                     ),
-                    // ),
-                    // ),
-                    // Expanded(
-                    //   child: IndexedStack(
-                    //     index: widget.index,
-                    //     children: _opendedFolders,
-                    //   ),
-                    // ),
-                  ],
-                ),
+                  ),
+                  /* Expanded(
+                    child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 1200),
+                      transitionBuilder: (child, animation) => SizeTransition(
+                        sizeFactor: animation,
+                        child: IndexedStack(
+                          key: ValueKey<int>(widget.index),
+                          index: widget.index,
+                          children: _opendedFolders,
+                        ),
+                      ),
+                      child:*/
+                  Expanded(
+                    child: IndexedStack(
+                      sizing: StackFit.expand,
+                      key: ValueKey<int>(index),
+                      index: index,
+                      children: _opendedFolders,
+                    ),
+                  ),
+                  // ),
+                  // ),
+                  // Expanded(
+                  //   child: IndexedStack(
+                  //     index: widget.index,
+                  //     children: _opendedFolders,
+                  //   ),
+                  // ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -414,71 +401,76 @@ class _FilePageState extends State<FilePage> {
   }
 
   Widget _infoUser(BuildContext context) {
-    return StateInfoContainer.of(context)?.object == null
-        ? Container(
-            child: BlocBuilder<FilesBloc, FilesState>(
-              builder: (context, state) {
-                return Row(
-                  key: stickyKey,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 20, left: 20),
-                      child: GestureDetector(
-                        onTap: () {
-                          StateContainer.of(context)
-                              .changePage(ChosenPage.settings);
-                        },
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(23.0),
-                            child: Container(child: state.user.image),
+    return Container(
+      child: BlocBuilder<FilesBloc, FilesState>(
+        builder: (context, state) {
+          return state.valueNotifier != null
+              ? ValueListenableBuilder<User?>(
+                  valueListenable: state.valueNotifier!,
+                  builder: (context, value, _) {
+                    return Row(
+                      key: stickyKey,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 20, left: 20),
+                          child: GestureDetector(
+                            onTap: () {
+                              StateContainer.of(context)
+                                  .changePage(ChosenPage.settings);
+                            },
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(23.0),
+                                child: Container(child: value.image),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    (MediaQuery.of(context).size.width > 966)
-                        ? Container(
-                            constraints:
-                                BoxConstraints(maxWidth: 95, minWidth: 50),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  child: Text(
-                                    state.user?.firstName ??
-                                        state.user?.email?.split('@').first ??
-                                        'Name',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color:
-                                          Theme.of(context).bottomAppBarColor,
+                        (MediaQuery.of(context).size.width > 966)
+                            ? Container(
+                                constraints:
+                                    BoxConstraints(maxWidth: 95, minWidth: 50),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: Text(
+                                        value?.firstName ??
+                                            value?.email?.split('@').first ??
+                                            'Name',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Theme.of(context)
+                                              .bottomAppBarColor,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Text(
+                                      value?.email ?? 'email',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color:
+                                            Theme.of(context).bottomAppBarColor,
+                                        height: 1,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  state.user?.email ?? 'email',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context).bottomAppBarColor,
-                                    height: 1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(),
-                  ],
-                );
-              },
-            ),
-          )
-        : Container();
+                              )
+                            : Container(),
+                      ],
+                    );
+                  })
+              : Container();
+        },
+      ),
+    );
   }
 
   void _onActionSheetTap(BuildContext context, SortingElement item) {
