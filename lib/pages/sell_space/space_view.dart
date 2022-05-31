@@ -728,7 +728,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                         child: Center(
                           child: Text(
-                            _currentSliderValue.toInt().toString() + " ГБ",
+                            translate.gb(_currentSliderValue.toInt()),
                             style: TextStyle(
                               color: Theme.of(context).disabledColor,
                               fontFamily: kNormalTextFontFamily,
@@ -879,10 +879,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           print('path null');
                         } else {
                           var name = myController.text.trim();
-                          countGbSpace = _currentSliderValue.toInt();
+                          // _currentSliderValue.toInt();
                           context.read<SpaceBloc>().add(SaveDirPath(
                               pathDir: dirPath,
-                              countGb: countGbSpace,
+                              countGb: _currentSliderValue.toInt(),
                               name: name));
                           await context.read<SpaceBloc>().stream.first;
                           setState(() {
