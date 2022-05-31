@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:upstorage_desktop/models/folder.dart';
+import 'package:upstorage_desktop/models/packet/packet.dart';
 import 'package:upstorage_desktop/models/subscription.dart';
 import 'package:upstorage_desktop/models/tariff.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -11,6 +12,7 @@ class FinanceState extends Equatable {
   final List<Tariff> allSub;
   final Folder? rootFolders;
   final ValueNotifier<User?>? valueNotifier;
+  final Packet? packetInfo;
 
   FinanceState({
     this.user,
@@ -18,6 +20,7 @@ class FinanceState extends Equatable {
     this.sub,
     this.allSub = const [],
     this.valueNotifier,
+    this.packetInfo,
   });
 
   FinanceState copyWith({
@@ -26,6 +29,7 @@ class FinanceState extends Equatable {
     Folder? rootFolders,
     List<Tariff>? allSub,
     ValueNotifier<User?>? valueNotifier,
+    Packet? packetInfo,
   }) {
     return FinanceState(
       user: user ?? this.user,
@@ -33,6 +37,7 @@ class FinanceState extends Equatable {
       sub: sub ?? this.sub,
       allSub: allSub ?? this.allSub,
       valueNotifier: valueNotifier ?? this.valueNotifier,
+      packetInfo: packetInfo ?? this.packetInfo,
     );
   }
 
@@ -43,5 +48,6 @@ class FinanceState extends Equatable {
         allSub,
         rootFolders,
         valueNotifier,
+        packetInfo,
       ];
 }

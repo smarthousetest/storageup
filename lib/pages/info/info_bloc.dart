@@ -32,7 +32,6 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     User? user = await _userController.getUser;
     await _filesController.updateFilesList();
     var folder = _filesController.getFilesRootFolder;
-    var rootFolder = await _filesController.getRootFolder;
     var sub = await _subscriptionService.getCurrentSubscription();
     var allMediaFolders = await _filesController.getMediaFolders(true);
     var packetInfo = await _subscriptionService.getPacketInfo();
@@ -41,7 +40,6 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
       user: user,
       folder: folder,
       allMediaFolders: allMediaFolders,
-      rootFolders: rootFolder,
       sub: sub,
       packetInfo: packetInfo,
       valueNotifier: valueNotifier,

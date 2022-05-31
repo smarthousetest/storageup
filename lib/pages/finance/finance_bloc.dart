@@ -37,7 +37,8 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     User? user = await _userController.getUser;
     var sub = await _subscriptionService.getCurrentSubscription();
     var allSub = await _subscriptionService.getAllTariffs();
-    var rootFolder = await _filesController.getRootFolder;
+    // var rootFolder = await _filesController.getRootFolder;
+    var packetInfo = await _subscriptionService.getPacketInfo();
     //print(sub);
     // print(allSub);
     var valueNotifier = _userController.getValueNotifier();
@@ -46,16 +47,18 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
         user: user,
         sub: sub,
         allSub: allSub,
-        rootFolders: rootFolder,
+        // rootFolders: rootFolder,
         valueNotifier: valueNotifier,
+        packetInfo: packetInfo,
       ));
     }
     emit(state.copyWith(
       user: user,
       sub: sub,
       allSub: allSub,
-      rootFolders: rootFolder,
+      // rootFolders: rootFolder,
       valueNotifier: valueNotifier,
+      packetInfo: packetInfo,
     ));
   }
 

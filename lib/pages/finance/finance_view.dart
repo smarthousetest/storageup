@@ -536,7 +536,7 @@ class _FinancePageState extends State<FinancePage> {
                     BlocBuilder<FinanceBloc, FinanceState>(
                         builder: (context, state) {
                       var choosedSubGb = state.sub?.tariff?.spaceGb;
-                      var allFilledGb = state.rootFolders?.size;
+                      var allFilledGb = state.packetInfo?.filledSpace;
                       if (allFilledGb == null && choosedSubGb == null) {
                         return GestureDetector(
                           onTap: () async {
