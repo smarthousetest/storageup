@@ -93,7 +93,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(state.copyWith(
       albums: allMediaFolders,
       currentFolder: currentFolder,
-      currentFolderRecords: currentFolder?.records?.reversed.toList(),
+      currentFolderRecords: currentFolder?.records,
       allRecords: currentFolder?.records,
       user: user,
       progress: progress,
@@ -104,10 +104,9 @@ class MediaCubit extends Cubit<MediaState> {
     List<Record> allMedia = [];
     for (int i = 1; i < allMediaFolders!.length; i++) {
       allMedia.addAll(allMediaFolders[i].records!);
-      print("all media $allMedia");
     }
     _syncWithLoadController(allMedia);
-    print("all media2 $allMedia");
+
     updatePageSubscription = eventBusUpdateAlbum.on().listen((event) {
       _update();
     });
@@ -158,14 +157,13 @@ class MediaCubit extends Cubit<MediaState> {
 
   void _syncWithLoadController(List<Record> filesInFolder) async {
     var loadState = _loadController.getState;
-    print("upload synh");
+
     filesInFolder.forEach((fileInFolder) {
       var index = loadState.uploadingFiles
           .indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
       if (index != -1 &&
           !_observers.any((element) =>
               element.id == loadState.uploadingFiles[index].localPath)) {
-        print("upload file ${loadState.uploadingFiles[index].localPath}");
         var observer = UploadObserver(
           loadState.uploadingFiles[index].localPath,
           (p0) {
@@ -174,7 +172,7 @@ class MediaCubit extends Cubit<MediaState> {
         );
 
         _observers.add(observer);
-        print("observesr $_observers");
+
         loadState.registerObserver(observer);
       }
     });
@@ -204,7 +202,7 @@ class MediaCubit extends Cubit<MediaState> {
     var newState = state.copyWith(
       albums: albums,
       currentFolder: updatedChoosedFolder,
-      currentFolderRecords: updatedChoosedFolder?.records?.reversed.toList(),
+      currentFolderRecords: updatedChoosedFolder?.records,
     );
 
     emit(newState);
@@ -252,7 +250,7 @@ class MediaCubit extends Cubit<MediaState> {
         state.copyWith(
           albums: newAlbumList,
           currentFolder: currentFolder,
-          currentFolderRecords: currentFolder.records?.reversed.toList(),
+          currentFolderRecords: currentFolder.records,
           status: FormzStatus.pure,
         ),
       );
@@ -421,8 +419,7 @@ class MediaCubit extends Cubit<MediaState> {
         var newState = state.copyWith(
           albums: albums,
           currentFolder: isCurrentFolder ? album : null,
-          currentFolderRecords:
-              isCurrentFolder ? album.records?.reversed.toList() : null,
+          currentFolderRecords: isCurrentFolder ? album.records : null,
         );
         emit(newState);
       }
