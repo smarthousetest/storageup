@@ -63,10 +63,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   double? _searchFieldWidth;
   var index = 0;
   S translate = getIt<S>();
-  String list = "";
   String dirPath = '';
   double _currentSliderValue = 32;
-  int countGbSpace = 32;
+  int countGbSpace = 0;
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
   final myController = TextEditingController();
@@ -581,7 +580,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 15, top: 11),
                             child: Text(
-                              list,
+                              dirPath,
                               maxLines: 1,
                               style: TextStyle(
                                   color: Theme.of(context).disabledColor),
@@ -605,7 +604,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               () {
                                 if (path != null) {
                                   dirPath = path;
-                                  list = path;
                                 }
                               },
                             );
@@ -871,10 +869,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   width: 200,
                   child: BlocBuilder<SpaceBloc, SpaceState>(
                       builder: (context, state) {
-                    bool checkValidate =
-                        list.isNotEmpty && myController.text.isNotEmpty;
                     return OutlinedButton(
                       onPressed: () async {
+                        bool checkValidate =
+                            dirPath.isNotEmpty && myController.text.isNotEmpty;
                         if (!checkValidate) {
                           print('path null');
                         } else {
@@ -895,7 +893,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         backgroundColor:
-                            list.isEmpty && myController.value.text.isEmpty
+                            dirPath.isEmpty && myController.value.text.isEmpty
                                 ? Theme.of(context).canvasColor
                                 : Theme.of(context).splashColor,
                       ),
