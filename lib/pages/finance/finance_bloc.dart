@@ -16,7 +16,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
       : super(FinanceState()) {
     on<FinanceEvent>((event, emit) async {
       if (event is FinancePageOpened) {
-        await _mapMediaPageOpened(event, state, emit);
+        await _mapFinancePageOpened(event, state, emit);
       } else if (event is ChangeSubscription) {
         await _changeSubcription(event, state, emit);
       }
@@ -29,7 +29,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
   FilesController _filesController;
   UserController _userController = getIt<UserController>();
 
-  Future _mapMediaPageOpened(
+  Future _mapFinancePageOpened(
     FinancePageOpened event,
     FinanceState state,
     Emitter<FinanceState> emit,

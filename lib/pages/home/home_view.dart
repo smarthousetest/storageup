@@ -155,10 +155,14 @@ class _HomePageState extends State<HomePage> {
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: <BoxShadow>[
-                    BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
                   ],
                 ),
-                child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                child:
+                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                   return Column(
                     children: [
                       Padding(
@@ -178,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                           shrinkWrap: true,
                           controller: ScrollController(),
                           children: [
+                            _downloadButton(context),
                             ..._customMenuItem(),
                             ..._leftButtonsItem()
                           ],
@@ -268,6 +273,85 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  Widget _downloadButton(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        if (!isEventBusInited) {
+          isEventBusInited = true;
+          eventBusForUpload.on().listen((event) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurMenuUpload();
+              },
+            ).then((result) {
+              if (result is AddMenuResult) {
+                _processUserAction(context, result);
+              }
+            });
+          });
+        }
+
+        return Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
+          child: Container(
+            height: 42,
+            width: 214,
+            child: ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurMenuUpload();
+                  },
+                ).then((result) {
+                  if (result is AddMenuResult) {
+                    _processUserAction(context, result);
+                  }
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).splashColor,
+                side: BorderSide(
+                  style: BorderStyle.solid,
+                  color: Theme.of(context).splashColor,
+                  width: 1.5,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Image.asset(
+                      'assets/file_page/plus.png',
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3.0),
+                    child: Text(
+                      translate.download,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   List<Widget> _leftButtonsItem() {
     return [
       Padding(
@@ -280,79 +364,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        return state.objectsValueListenable != null && state.objectsValueListenable!.value.values.isNotEmpty
+        return state.objectsValueListenable != null &&
+                state.objectsValueListenable!.value.values.isNotEmpty
             ? latestFile(context)
             : Container();
       }),
-      BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if (!isEventBusInited) {
-            isEventBusInited = true;
-            eventBusForUpload.on().listen((event) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurMenuUpload();
-                },
-              ).then((result) {
-                if (result is AddMenuResult) {
-                  _processUserAction(context, result);
-                }
-              });
-            });
-          }
-
-          return Padding(
-            padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
-            child: Container(
-              height: 42,
-              width: 214,
-              child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return BlurMenuUpload();
-                    },
-                  ).then((result) {
-                    if (result is AddMenuResult) {
-                      _processUserAction(context, result);
-                    }
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  side: BorderSide(
-                    style: BorderStyle.solid,
-                    color: Theme.of(context).splashColor,
-                    width: 1.5,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      translate.add,
-                      style: TextStyle(
-                        color: Theme.of(context).splashColor,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Image.asset('assets/file_page/plus.png'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
     ];
   }
 
@@ -382,7 +398,8 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 40.0),
                 child: ValueListenableBuilder<Box<LatestFile>>(
-                    valueListenable: Hive.box<LatestFile>('latestFileBox').listenable(),
+                    valueListenable:
+                        Hive.box<LatestFile>('latestFileBox').listenable(),
                     builder: (context, box, widget) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,7 +409,9 @@ class _HomePageState extends State<HomePage> {
                               child: GestureDetector(
                                   onTap: () {
                                     print(e.latestFile.name);
-                                    context.read<HomeBloc>().add(FileTapped(record: e.latestFile));
+                                    context
+                                        .read<HomeBloc>()
+                                        .add(FileTapped(record: e.latestFile));
                                   },
                                   child: LatestFileView(object: e)))),
                         ],
@@ -454,7 +473,9 @@ class _HomePageState extends State<HomePage> {
   Widget _update() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+        borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(10.0),
+            bottomLeft: Radius.circular(10.0)),
         color: Theme.of(context).dividerColor,
       ),
       height: 50,
@@ -609,7 +630,9 @@ class LatestFileView extends StatelessWidget {
                   height: 24,
                   width: 24,
                   child: Image.asset(
-                    type!.isNotEmpty ? 'assets/file_icons/${type}_s.png' : 'assets/file_icons/unexpected_s.png',
+                    type!.isNotEmpty
+                        ? 'assets/file_icons/${type}_s.png'
+                        : 'assets/file_icons/unexpected_s.png',
                     fit: BoxFit.contain,
                     height: 24,
                     width: 24,

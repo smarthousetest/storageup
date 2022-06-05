@@ -379,6 +379,52 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
+  Future<void> onActionMoveFiles(
+    List<BaseObject> objects,
+    Folder currentFolder,
+  ) async {
+    List<String>? records;
+    List<String>? folders;
+
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    objects.forEach((element) {
+      if (element is Record) {
+        if (records == null) records = [];
+
+        records?.add(element.id);
+      } else if (element is Folder) {
+        if (folders == null) folders = [];
+
+        folders?.add(element.id);
+      }
+    });
+
+    try {
+      if (folders!.contains(currentFolder.id)) {
+        print('do not move the folder to the same folder');
+      } else {
+        await _filesController.moveToFolder(
+          folderId: currentFolder.id,
+          folders: folders,
+          records: records,
+        );
+      }
+      await _update();
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+    }
+  }
+
   Future<ErrorType?> onActionRenameChoosedFile(
       BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
@@ -498,6 +544,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> _update({String? uploadingFileId}) async {
+    await _filesController.updateFilesList();
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
 

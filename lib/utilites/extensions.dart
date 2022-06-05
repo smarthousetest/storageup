@@ -48,10 +48,15 @@ extension UserProficeImage on User? {
       image = Container(
         height: 46,
         width: 46,
-        child: Image.network(
-          this!.avatars!.first.publicUrl ?? "",
-          fit: BoxFit.cover,
-        ),
+        child: this!.avatars!.first.publicUrl!.isNotEmpty
+            ? Image.network(
+                this!.avatars!.first.publicUrl ?? "",
+                fit: BoxFit.cover,
+              )
+            : SvgPicture.asset(
+                'assets/home_page/default_man.svg',
+                fit: BoxFit.fitHeight,
+              ),
       );
     } else {
       image = Container(
