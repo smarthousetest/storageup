@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,8 +15,9 @@ import 'generated/l10n.dart';
 import 'utilites/injection.dart';
 import 'utilites/state_container.dart';
 
+
 void main() async {
-  writeToFileDomainName();
+  readFromFileDomainName();
   await configureInjection();
   //HttpOverrides.global = MyHttpOverrides();
   runApp(new StateContainer(child: new MyApp()));
@@ -101,16 +101,29 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-void writeToFileDomainName() {
+// void writeToFileDomainName() {
+//   var os = OsSpecifications.getOs();
+//   if (os.appDirPath.isEmpty) {
+//     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
+//   }
+//   var domainNameFile = File('${os.appDirPath}domainName');
+//   if (!domainNameFile.existsSync()) {
+//     domainNameFile.createSync(recursive: true);
+//   }
+//   domainNameFile.writeAsStringSync(domainName);
+// }
+
+void readFromFileDomainName() {
   var os = OsSpecifications.getOs();
   if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
   var domainNameFile = File('${os.appDirPath}domainName');
   if (!domainNameFile.existsSync()) {
-    domainNameFile.createSync(recursive: true);
+    domainName = "upstorage.net";
   }
-  domainNameFile.writeAsStringSync(domainName);
+  domainName = domainNameFile.readAsStringSync();
+  print(domainName);
 }
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {

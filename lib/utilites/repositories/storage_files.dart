@@ -32,7 +32,7 @@ class LocalStorage {
 
     WidgetsFlutterBinding.ensureInitialized();
     var os = OsSpecifications.getOs();
-    Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
+    Hive.init(os.supportDir);
 
     final objectsBox = await Hive.openBox<BaseObject>(_objectsBoxName);
     final relationsBox = await Hive.openBox<List<String>>(_relationsBoxName);
