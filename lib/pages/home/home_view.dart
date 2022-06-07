@@ -541,13 +541,10 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          var page = StateContainer.of(context).choosedPage;
-
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
-                choosedPage: page,
               ));
         }
         break;
@@ -564,13 +561,11 @@ class _HomePageState extends State<HomePage> {
           // );
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
-          var page = StateContainer.of(context).choosedPage;
 
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
-                choosedPage: page,
               ));
         }
         break;

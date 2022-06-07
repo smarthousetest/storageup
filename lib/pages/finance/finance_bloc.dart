@@ -6,14 +6,14 @@ import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/finance/finance_event.dart';
 import 'package:upstorage_desktop/pages/finance/finance_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
+import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
 
 @injectable
 class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
-  FinanceBloc(@Named('files_controller') this._filesController)
-      : super(FinanceState()) {
+  FinanceBloc() : super(FinanceState()) {
     on<FinanceEvent>((event, emit) async {
       if (event is FinancePageOpened) {
         await _mapFinancePageOpened(event, state, emit);
@@ -22,12 +22,12 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
       }
     });
   }
-  // final AuthenticationRepository _authenticationRepository =
-  // getIt<AuthenticationRepository>();
 
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
-  FilesController _filesController;
+
   UserController _userController = getIt<UserController>();
+  var _packetController =
+      getIt<PacketController>(instanceName: 'packet_controller');
 
   Future _mapFinancePageOpened(
     FinancePageOpened event,
@@ -37,19 +37,16 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     User? user = await _userController.getUser;
     var sub = await _subscriptionService.getCurrentSubscription();
     var allSub = await _subscriptionService.getAllTariffs();
-    // var rootFolder = await _filesController.getRootFolder;
-    var packetInfo = await _subscriptionService.getPacketInfo();
-    //print(sub);
-    // print(allSub);
+    var packetNotifier = _packetController.getValueNotifier();
+
     var valueNotifier = _userController.getValueNotifier();
     if (sub == null && allSub == null) {
       emit(state.copyWith(
         user: user,
         sub: sub,
         allSub: allSub,
-        // rootFolders: rootFolder,
         valueNotifier: valueNotifier,
-        packetInfo: packetInfo,
+        packetNotifier: packetNotifier,
       ));
     }
     emit(state.copyWith(
@@ -58,7 +55,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
       allSub: allSub,
       // rootFolders: rootFolder,
       valueNotifier: valueNotifier,
-      packetInfo: packetInfo,
+      packetNotifier: packetNotifier,
     ));
   }
 

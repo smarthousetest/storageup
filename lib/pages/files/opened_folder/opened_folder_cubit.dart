@@ -20,6 +20,7 @@ import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
+import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
@@ -57,6 +58,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   late String idTappedFile;
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
+  var _packetController =
+      getIt<PacketController>(instanceName: 'packet_controller');
 
   late Observer _updateObserver = Observer((e) {
     try {
@@ -371,6 +374,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
     print(result);
     if (result == ResponseStatus.ok) {
+      await _packetController.updatePacket();
       _update();
     } else if (result == ResponseStatus.noInternet) {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
@@ -555,7 +559,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         objects[uploadingFileIndex] =
             (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
     }
-
+    await _packetController.updatePacket();
     emit(state.copyWith(
       objects: objects,
       status: FormzStatus.pure,

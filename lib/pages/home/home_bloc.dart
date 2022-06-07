@@ -152,9 +152,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.values?.first != null && mediaRootFolderId != null) {
       final result = await _filesController.createFolder(
           event.values!.first!, mediaRootFolderId);
-      if (event.choosedPage == ChosenPage.media) {
-        eventBusUpdateAlbum.fire(UpdateAlbumEvent);
-      }
+
+      eventBusUpdateAlbum.fire(UpdateAlbumEvent);
+
       if (result == ResponseStatus.failed) {
         emit(state.copyWith(status: FormzStatus.submissionFailure));
         emit(state.copyWith(status: FormzStatus.pure));

@@ -57,8 +57,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       user: user,
     ));
     try {
-      timer =
-          Timer.periodic(const Duration(milliseconds: 5000), (Timer t) async {
+      timer = Timer.periodic(const Duration(minutes: 5), (Timer t) async {
         add(GetKeeperInfo());
       });
     } catch (e) {

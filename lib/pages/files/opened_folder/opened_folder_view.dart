@@ -10,7 +10,6 @@ import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/relocation_files.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/properties.dart';
@@ -21,6 +20,7 @@ import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
+import 'package:upstorage_desktop/pages/files/move_files/relocation_files.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
@@ -1407,7 +1407,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         var result = await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return RelocationFiles();
+            return MoveFileView();
           },
         );
         if (result != null) {
