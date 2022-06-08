@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
+import 'package:upstorage_desktop/models/download_location.dart';
 
 const _downloadLocationsBoxName = 'donwnloadLocationsBox';
 
@@ -29,7 +29,8 @@ class DownloadLocationsRepository {
       final value = event.value;
 
       if (_locationsInfo.any((element) => element.id == key)) {
-        final currentLocationInfoIndex = _locationsInfo.indexWhere((element) => element.id == key);
+        final currentLocationInfoIndex =
+            _locationsInfo.indexWhere((element) => element.id == key);
 
         if (event.deleted)
           _locationsInfo.removeAt(currentLocationInfoIndex);
@@ -43,7 +44,8 @@ class DownloadLocationsRepository {
 
   List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
 
-  ValueListenable<Box<DownloadLocation>> get getDownloadLocationsValueListenable => _locationsBox.listenable();
+  ValueListenable<Box<DownloadLocation>>
+      get getDownloadLocationsValueListenable => _locationsBox.listenable();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:upstorage_desktop/models/download_location.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
 
 class SpaceState extends Equatable {
   final User? user;

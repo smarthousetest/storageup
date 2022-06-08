@@ -7,10 +7,8 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
-import 'package:upstorage_desktop/utilites/autoupload/autoupload_controller.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/upload_media.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/upload_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
@@ -20,11 +18,10 @@ import '../injection.dart';
 
 class LoadController {
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
-  AutouploadController? _autouploadController;
 
   _LoadState _state = _LoadState();
 
-  late CppNative _cpp;
+  CppNative? _cpp;
 
   _LoadState get getState => _state;
 
@@ -33,7 +30,7 @@ class LoadController {
   }
 
   bool isNotInited() {
-    return _autouploadController == null;
+    return _cpp == null;
   }
 
   Function(String)? _onAddAutouploadingFile;
@@ -44,50 +41,9 @@ class LoadController {
 
   Future<void> init() async {
     print('initializing load controller');
-    _autouploadController =
-        await GetIt.instance.getAsync<AutouploadController>();
     Directory appDocDir = await getApplicationDocumentsDirectory();
     _cpp = await getInstanceCppNative(
         documentsFolder: appDocDir, baseUrl: kServerUrl.split('/').last);
-    _autouploadController?.listen(null).listen((event) async {
-      try {
-        var uploadMedia = event.value as UploadMedia;
-        if (uploadMedia.serverId == null) return;
-
-        var mediaFromState = _state.uploadingFiles;
-
-        print('upload media local path is ${uploadMedia.localPath}');
-
-        if (mediaFromState
-            .any((element) => element.id == uploadMedia.serverId)) {
-          var listenableMedia = mediaFromState
-              .firstWhere((element) => element.id == uploadMedia.serverId);
-
-          listenableMedia
-            ..localPath = uploadMedia.localPath ?? ''
-            ..isInProgress = uploadMedia.state == AutouploadState.inProgress
-            ..uploadPercent = uploadMedia.uploadPercent ?? -1;
-
-          _state.changeUploadingFiles(mediaFromState);
-        } else {
-          var newListenableMedia = UploadFileInfo(
-            localPath: uploadMedia.localPath ?? '',
-            folderId: '',
-            id: uploadMedia.serverId ?? '',
-            auto: true,
-            isInProgress: uploadMedia.state == AutouploadState.inProgress,
-            uploadPercent: uploadMedia.uploadPercent ?? -1,
-          );
-
-          mediaFromState.add(newListenableMedia);
-          _onAddAutouploadingFile?.call(uploadMedia.serverId ?? '');
-          print('invoke autouploading file callback');
-          _state.changeUploadingFiles(mediaFromState);
-        }
-      } catch (e, st) {
-        print('$e, $st');
-      }
-    });
   }
 
   Future<void> uploadFile({
@@ -138,31 +94,33 @@ class LoadController {
         _state.changeUploadingFiles(uploadingFiles);
       }
     }
-    if (_autouploadController == null) {
-      _autouploadController =
-          await GetIt.instance.getAsync<AutouploadController>();
-    }
 
-    if (_autouploadController?.isInProgress == true) {
-      _autouploadController?.setNeedStop(() {
-        uploadFile(force: true);
-      });
-      print('file will be sended after autoupload continued');
-      return;
-    }
     print('start sending file $filePath');
     var token = await _tokenRepository.getApiToken();
     var file = File(obj.localPath);
     print('file existing is ${file.existsSync()}');
     if (token != null && token.isNotEmpty) {
-      _cpp.send(
-        filePath: obj.localPath,
-        callback: (value) {
-          _processUploadCallback(value, obj.localPath, null);
-        },
-        bearerToken: token,
-        folderId: obj.folderId,
-      );
+      final createRecordResult = await Request.instance.createRecord(
+          file: File(obj.localPath),
+          bearerToken: token,
+          documentsFolderPath: (await getApplicationDocumentsDirectory()).path,
+          backendUrl: kServerUrl.split('/').last);
+
+      if (createRecordResult.isLeft()) {
+        _processUploadCallback(createRecordResult.left, obj.localPath, null);
+      } else {
+        final record = Record.fromJson(createRecordResult.right!);
+
+        _cpp?.send(
+          recordId: record.id,
+          filePath: obj.localPath,
+          callback: (value) {
+            _processUploadCallback(value, obj.localPath, null);
+          },
+          bearerToken: token,
+          folderId: obj.folderId,
+        );
+      }
     }
   }
 
@@ -246,19 +204,6 @@ class LoadController {
       } catch (e, st) {
         print('$e \n$st');
       }
-    } else {
-      var prefs = await SharedPreferences.getInstance();
-
-      var needToContinueAutoupload =
-          prefs.getBool(kIsAutouploadEnabled) ?? false;
-
-      if (needToContinueAutoupload) {
-        var token = await _tokenRepository.getApiToken();
-
-        if (token != null && token.isNotEmpty) {
-          _autouploadController?.startAutoupload(token);
-        }
-      }
     }
   }
 
@@ -316,7 +261,7 @@ class LoadController {
 
       _state.changeDowloadingFiles(downloadingFiles);
 
-      _cpp.downloadFile(
+      _cpp?.downloadFile(
           recordID: fileInfo.id,
           bearerToken: token,
           callback: (value) {
@@ -468,7 +413,7 @@ class LoadController {
 
     if (downloadingFiles.isNotEmpty &&
         downloadingFiles.any((element) => element.isInProgress)) {
-      await _cpp.abortDownload();
+      await _cpp?.abortDownload();
       _state.changeDowloadingFiles([]);
     }
   }
