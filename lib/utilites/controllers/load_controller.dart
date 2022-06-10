@@ -101,48 +101,47 @@ class LoadController {
     print('file existing is ${file.existsSync()}');
     if (token != null && token.isNotEmpty) {
       final createRecordResult = await Request.instance.createRecord(
-          file: File(obj.localPath),
-          bearerToken: token,
-          documentsFolderPath: (await getApplicationDocumentsDirectory()).path,
-          backendUrl: kServerUrl.split('/').last);
+        file: File(obj.localPath),
+        bearerToken: token,
+        documentsFolderPath: (await getApplicationDocumentsDirectory()).path,
+        backendUrl: kServerUrl.split('/').last,
+        folderId: obj.folderId,
+      );
 
       if (createRecordResult.isLeft()) {
-        _processUploadCallback(createRecordResult.left, obj.localPath, null);
+        _processUploadCallback(Either.left(createRecordResult.left));
       } else {
         final record = Record.fromJson(createRecordResult.right!);
 
-        _cpp?.send(
-          recordId: record.id,
-          filePath: obj.localPath,
-          callback: (value) {
-            _processUploadCallback(value, obj.localPath, null);
-          },
-          bearerToken: token,
-          folderId: obj.folderId,
-        );
+        _cpp
+            ?.send(
+              recordId: record.id,
+              filePath: obj.localPath,
+              bearerToken: token,
+              folderId: obj.folderId,
+            )
+            .listen(_processUploadCallback);
       }
     }
   }
 
   void _processUploadCallback(
-    dynamic value,
-    String filePath,
-    String? fileId,
+    Either<CustomError, SendProgress> event,
   ) async {
-    print('--------------------------------------- $value');
+    print('--------------------------------------- $event');
     try {
-      if (fileId == null) fileId = '-1';
+      // if (fileId == null) fileId = '-1';
       var uploadingFiles = List<UploadFileInfo>.from(_state.uploadingFiles);
 
-      var element = uploadingFiles.firstWhere((element) =>
-          (element.localPath == filePath &&
-              (element.isInProgress || element.uploadPercent != 100)) ||
-          element.id == fileId);
-      if (value is SendProgress) {
-        final uploadingPercent = value.percent;
+      if (event.right != null) {
+        var element = uploadingFiles.firstWhere((element) =>
+            (element.localPath == event.right!.filePath &&
+                (element.isInProgress || element.uploadPercent != 100)) ||
+            element.id == event.right!.recordId);
+        final uploadingPercent = event.right!.percent;
         if (uploadingPercent != 100) {
           element.uploadPercent = uploadingPercent;
-          element.id = value.recordId;
+          element.id = event.right!.recordId;
           _state.changeUploadingFiles(uploadingFiles);
         } else {
           element.uploadPercent = 100;
@@ -154,12 +153,16 @@ class LoadController {
 
           _processNextFileUpload();
         }
-      } else if (value is CustomError) {
+      } else {
+        var element = uploadingFiles.firstWhere((element) =>
+            (element.localPath == event.left!.id &&
+                (element.isInProgress || element.uploadPercent != 100)) ||
+            element.id == event.right!.recordId);
         var nf = element.copyWith(
           isInProgress: false,
           uploadPercent: -1,
           endedWithException: true,
-          errorReason: value.errorReason,
+          errorReason: event.left!.errorReason,
         );
 
         var ind = uploadingFiles.indexOf(element);
@@ -261,29 +264,29 @@ class LoadController {
 
       _state.changeDowloadingFiles(downloadingFiles);
 
-      _cpp?.downloadFile(
-          recordID: fileInfo.id,
-          bearerToken: token,
-          callback: (value) {
-            _processDownloadCallback(value: value, fileId: fileInfo.id);
-          });
+      _cpp
+          ?.downloadFile(
+            recordID: fileInfo.id,
+            bearerToken: token,
+          )
+          .listen(_processDownloadCallback);
     }
   }
 
-  void _processDownloadCallback({
-    required dynamic value,
-    required String fileId,
-  }) async {
+  void _processDownloadCallback(
+    Either<CustomError, SendProgress> event,
+  ) async {
     try {
-      if (value is File) {
-        throwIfNot(
-            value.existsSync(), Exception('Downloaded file doesn\'t exists'));
+      if (event.right != null && event.right!.file != null) {
+        throwIfNot(event.right!.file!.existsSync(),
+            Exception('Downloaded file doesn\'t exists'));
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList.indexWhere((element) => element.id == fileId);
+        var fileIndex = filesList
+            .indexWhere((element) => element.id == event.right!.recordId);
         if (fileIndex != -1) {
-          log('LoadController -> processDownloadCallback: \n file recieved: ${value.path}');
+          log('LoadController -> processDownloadCallback: \n file recieved: ${event.right!.file!.path}');
           var record = filesList[fileIndex].copyWith(
-            localPath: value.path,
+            localPath: event.right!.file!.path,
             isInProgress: false,
             downloadPercent: 100,
             endedWithException: false,
@@ -298,38 +301,19 @@ class LoadController {
 
           _state.changeDowloadingFiles(filesList);
         }
-      } else if (value is SendProgress) {
+      } else if (event.right != null) {
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList.indexWhere((element) => element.id == fileId);
+        var fileIndex = filesList
+            .indexWhere((element) => element.id == event.right!.recordId);
         if (fileIndex != -1) {
-          log('LoadController -> processDownloadCallback: \n file: ${value.filePath}, download percent ${value.percent}');
+          log('LoadController -> processDownloadCallback: \n file: ${event.right!.file?.path}, download percent ${event.right!.percent}');
           var record = filesList[fileIndex].copyWith(
-            localPath: value.filePath,
+            localPath: event.right!.filePath,
             isInProgress: true,
-            downloadPercent: value.percent,
+            downloadPercent: event.right!.percent,
             endedWithException: false,
             errorReason: null,
           );
-
-          filesList[fileIndex] = record;
-          // filesList.firstWhere((element) => element.id == fileId)
-          //   ..localPath = file.path
-          //   ..isInProgress = false
-          //   ..downloadPercent = 100;
-
-          _state.changeDowloadingFiles(filesList);
-          _processNextFileDownload();
-        }
-      } else if (value is CustomError) {
-        var filesList = _state.downloadingFiles;
-        var fileIndex = filesList.indexWhere((element) => element.id == fileId);
-        if (fileIndex != -1) {
-          var record = filesList[fileIndex].copyWith(
-              localPath: null,
-              isInProgress: false,
-              downloadPercent: -1,
-              endedWithException: true,
-              errorReason: value.errorReason);
 
           filesList[fileIndex] = record;
           // filesList.firstWhere((element) => element.id == fileId)
@@ -342,20 +326,24 @@ class LoadController {
         }
       } else {
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList.indexWhere((element) => element.id == fileId);
+        var fileIndex =
+            filesList.indexWhere((element) => element.id == event.left!.id);
         if (fileIndex != -1) {
           var record = filesList[fileIndex].copyWith(
-            isInProgress: false,
-            downloadPercent: -1,
-            endedWithException: false,
-            errorReason: null,
-          );
+              localPath: null,
+              isInProgress: false,
+              downloadPercent: -1,
+              endedWithException: true,
+              errorReason: event.left!.errorReason);
 
           filesList[fileIndex] = record;
           // filesList.firstWhere((element) => element.id == fileId)
-          //   ..downloadPercent = -1
-          //   ..isInProgress = false;
+          //   ..localPath = file.path
+          //   ..isInProgress = false
+          //   ..downloadPercent = 100;
+
           _state.changeDowloadingFiles(filesList);
+          _processNextFileDownload();
         }
       }
     } catch (e) {

@@ -46,12 +46,12 @@ dependencies:
   web_socket_channel: ^2.1.0
   os_specification:
     git:
-      url: https://github.com/Fuxtrel/os_specification.git
+      url: ssh://git@gitlab.upstorage.net:2289/a.som/os_specification.git
 
   cpp_native:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git
-      ref: init_record
+      ref: future_completer
   event_bus: ^2.0.0
   file_typification:
     git:
