@@ -370,15 +370,15 @@ class _AuthViewState extends State<AuthView> {
             autofocus: true,
             focusNode: FocusNode(),
             onKey: (event) {
-              final key = event.logicalKey;
+              // final key = event.logicalKey;
               if (event is RawKeyDownEvent) {
-                if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
+                if (event.isKeyPressed(LogicalKeyboardKey.tab)) {
                   FocusScope.of(context).requestFocus(currentFocusNode);
                   print("login");
                 }
-                setState(() {
-                  return keys.add(key);
-                });
+                // setState(() {
+                //   return keys.add(key);
+                // });
               }
             },
             child: showNotConfirmedEmail
@@ -534,8 +534,7 @@ class _AuthViewState extends State<AuthView> {
                       RawKeyboardListener(
                         focusNode: FocusNode(),
                         onKey: (event) {
-                          if ((event.isKeyPressed(LogicalKeyboardKey.enter) ||
-                                  event.logicalKey == LogicalKeyboardKey.tab) &&
+                          if ((event.logicalKey == LogicalKeyboardKey.tab) &&
                               event is RawKeyDownEvent) {
                             FocusScope.of(context)
                                 .requestFocus(focusNodePasswordLog);
@@ -897,10 +896,10 @@ class _AuthViewState extends State<AuthView> {
         RawKeyboardListener(
           focusNode: FocusNode(),
           onKey: (event) {
-            if ((event.logicalKey == LogicalKeyboardKey.enter ||
-                    event.logicalKey == LogicalKeyboardKey.tab) &&
+            if ((event.logicalKey == LogicalKeyboardKey.tab) &&
                 event is RawKeyDownEvent) {
-              focusNodeForMail.requestFocus();
+              // focusNodeForMail.requestFocus();
+              FocusScope.of(context).requestFocus(focusNodeForMail);
               print("name");
             }
           },

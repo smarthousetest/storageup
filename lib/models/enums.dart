@@ -21,6 +21,7 @@ enum FileAction {
   properties,
   rename,
   move,
+  save,
 }
 
 enum MediaAction {

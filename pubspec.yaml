@@ -16,6 +16,7 @@ dependencies:
   vector_math: any
 
   dbcrypt: ^2.0.0
+  filesystem_picker: ^1.0.3
   tree_view: ^0.0.6
   cupertino_icons: ^1.0.4
   intl: ^0.17.0

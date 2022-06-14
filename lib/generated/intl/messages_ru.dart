@@ -123,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Удаление фотографии"),
         "deleting": MessageLookupByLibrary.simpleMessage("Удаление"),
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
+        "down": MessageLookupByLibrary.simpleMessage("Скачать"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "downloating": MessageLookupByLibrary.simpleMessage("Скачивание"),
         "earnings":

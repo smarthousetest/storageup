@@ -8,24 +8,24 @@ import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/pages/files/move_files/relocations_files_cubit.dart';
-import 'package:upstorage_desktop/pages/files/move_files/relocations_files_state.dart';
+import 'package:upstorage_desktop/pages/files/move_files/move_cubit.dart';
+import 'package:upstorage_desktop/pages/files/move_files/move_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class MoveFileView extends StatefulWidget {
-  // List<Folder>? folders;
-  final VoidCallback onPressedNext;
+  final List<Folder>? folder;
+
   @override
   _MoveFileState createState() => new _MoveFileState();
-  MoveFileView({
-    VoidCallback? onPressedNext,
-  }) : onPressedNext = onPressedNext ?? (() {});
+  MoveFileView(
+    this.folder,
+  );
 }
 
 class _MoveFileState extends State<MoveFileView> {
   S translate = getIt<S>();
 
-  bool canSave = false;
+  bool folderExpand = true;
   bool hintColor = true;
   final TextEditingController _searchingFieldController =
       TextEditingController();
@@ -39,7 +39,7 @@ class _MoveFileState extends State<MoveFileView> {
       create: (context) => MoveCubit()..init(),
       child: BlocBuilder<MoveCubit, MoveState>(
         builder: (context, state) {
-          listFolder = state.folders;
+          listFolder = state.folders.reversed.toList();
           return Material(
             color: Colors.transparent,
             child: Stack(
@@ -114,7 +114,13 @@ class _MoveFileState extends State<MoveFileView> {
                                               color: Theme.of(context)
                                                   .disabledColor,
                                             ),
-                                            onChanged: (value) {},
+                                            onChanged: (value) {
+                                              context
+                                                  .read<MoveCubit>()
+                                                  .mapSortedFieldChanged(
+                                                      _searchingFieldController
+                                                          .value.text);
+                                            },
                                             controller:
                                                 _searchingFieldController,
                                             decoration:
@@ -170,7 +176,8 @@ class _MoveFileState extends State<MoveFileView> {
                                               .createFolder(name, moveToFolder);
                                         }
                                         setState(() {
-                                          listFolder = state.folders;
+                                          listFolder =
+                                              state.folders.reversed.toList();
                                         });
                                       },
                                       child: MouseRegion(
@@ -311,43 +318,67 @@ class _MoveFileState extends State<MoveFileView> {
     );
   }
 
-  Widget _allFolders(BuildContext context) {
+  Widget _allFolders(
+    BuildContext context,
+  ) {
     return Container(
       height: 240,
       width: 600,
-      child: TreeView(
-        startExpanded: true,
-        children: _getChildList(listFolder!),
-        // itemCount: listFolder?.length,
-        // itemBuilder: (context, index) {
-        //   return _folder(context, listFolder?[index]);
-        // }
+      child: BlocBuilder<MoveCubit, MoveState>(
+        builder: (context, state) {
+          return TreeView(
+            startExpanded: true,
+            children: _getChildList(
+              listFolder: listFolder!,
+              state: state,
+              context: context,
+            ),
+            // itemCount: listFolder?.length,
+            // itemBuilder: (context, index) {
+            //   return _folder(context, listFolder?[index]);
+            // }
+          );
+        },
       ),
     );
   }
 
-  List<Widget> _getChildList(List<Folder> listFolder) {
-    return listFolder.map((folder) {
-      return BlocBuilder<MoveCubit, MoveState>(
-        builder: (context, state) {
-          return Container(
-            // margin: EdgeInsets.only(left: 8),
-            child: TreeViewChild(
-              parent: _folder(context, folder),
-              children: _getChildList(state.foldersInFolder ?? []),
-            ),
-          );
-        },
-      );
-    }).toList();
+  List<Widget> _getChildList({
+    required List<Folder> listFolder,
+    required MoveState state,
+    required BuildContext context,
+    double leftOffset = 0,
+  }) {
+    return listFolder.map(
+      (folder) {
+        return TreeViewChild(
+          parent: _folder(
+            context,
+            folder,
+            leftOffset,
+          ),
+          startExpanded: true,
+          onTap: () async {
+            await context
+                .read<MoveCubit>()
+                .getFolderById(folder, widget.folder);
+          },
+          children: _getChildList(
+            listFolder: state.childFolders[folder.id]?.reversed.toList() ?? [],
+            state: state,
+            context: context,
+            leftOffset: leftOffset + 15,
+          ),
+        );
+      },
+    ).toList();
   }
 
-  DirectoryWidget _getDirectoryWidget({required Folder folder}) =>
-      DirectoryWidget(
-        folder: folder,
-      );
-
-  Widget _folder(BuildContext context, Folder? folder) {
+  Widget _folder(
+    BuildContext context,
+    Folder? folder,
+    double leftOffset,
+  ) {
     return BlocBuilder<MoveCubit, MoveState>(
       builder: (context, state) {
         return GestureDetector(
@@ -355,12 +386,11 @@ class _MoveFileState extends State<MoveFileView> {
             setState(() {
               moveToFolder = folder;
             });
-            await context.read<MoveCubit>().getFolderById(folder!);
-            //widget.onPressedNext;
           },
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: Container(
+              padding: EdgeInsets.only(left: leftOffset),
               height: 40,
               decoration: BoxDecoration(
                 color: moveToFolder != folder
@@ -373,7 +403,7 @@ class _MoveFileState extends State<MoveFileView> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0, right: 10),
-                    child: moveToFolder != folder
+                    child: state.childFolders[folder?.id] == null
                         ? SvgPicture.asset('assets/file_page/arrow_right.svg')
                         : SvgPicture.asset('assets/file_page/arrow_down.svg'),
                   ),
@@ -385,79 +415,22 @@ class _MoveFileState extends State<MoveFileView> {
                       height: 20,
                     ),
                   ),
-                  Text(folder?.name ?? 'Folder')
+                  Text(
+                    folder?.parentFolder != 'root'
+                        ? folder?.name ?? 'name'
+                        : translate.all_files,
+                    style: TextStyle(
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 14,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
         );
       },
-    );
-  }
-}
-
-class DirectoryWidget extends StatelessWidget {
-  final Folder folder;
-
-  final VoidCallback? onPressedNext;
-
-  DirectoryWidget({
-    required this.folder,
-    this.onPressedNext,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // IconButton expandButton = IconButton(
-    //   icon: Icon(Icons.navigate_next),
-    //   onPressed: onPressedNext,
-    // );
-
-    return GestureDetector(
-      onTap: () {
-        // setState(() {
-        //   // moveToFolder = folder;
-        // });
-
-        onPressedNext;
-      },
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Container(
-          height: 40,
-          decoration: BoxDecoration(
-              color:
-                  // moveToFolder != folder
-                  // ?
-                  Theme.of(context).primaryColor
-              // :
-              // Theme.of(context).dividerColor,
-              ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.only(left: 15.0, right: 10),
-                  child:
-                      // moveToFolder != folder
-                      //     ?
-                      SvgPicture.asset('assets/file_page/arrow_right.svg')
-                  // : SvgPicture.asset('assets/file_page/arrow_down.svg'),
-                  ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Image.asset(
-                  'assets/file_icons/folder.png',
-                  width: 24,
-                  height: 20,
-                ),
-              ),
-              Text(folder.name ?? 'name')
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

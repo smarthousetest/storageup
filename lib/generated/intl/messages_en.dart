@@ -122,6 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_pic": MessageLookupByLibrary.simpleMessage("Removing a photo"),
         "deleting": MessageLookupByLibrary.simpleMessage("Deleting"),
         "documents": MessageLookupByLibrary.simpleMessage("Documents"),
+        "down": MessageLookupByLibrary.simpleMessage("Download"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
         "downloating": MessageLookupByLibrary.simpleMessage("Downloating"),
         "earnings":

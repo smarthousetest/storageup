@@ -4,22 +4,23 @@ import 'package:upstorage_desktop/models/folder.dart';
 class MoveState extends Equatable {
   final List<Folder> folders;
   final Folder currentFolder;
-  final List<Folder>? foldersInFolder;
+  final Map<String, List<Folder>?> childFolders;
 
   MoveState({
     this.folders = const [],
-    this.foldersInFolder = const [],
+    Map<String, List<Folder>?>? childFolders,
     Folder? currentFolder,
-  }) : this.currentFolder = currentFolder ?? Folder.empty();
+  })  : this.currentFolder = currentFolder ?? Folder.empty(),
+        this.childFolders = childFolders ?? Map();
 
   MoveState copyWith({
     List<Folder>? folders,
-    List<Folder>? foldersInFolder,
+    Map<String, List<Folder>?>? childFolders,
     Folder? currentFolder,
   }) {
     return MoveState(
       folders: folders ?? this.folders,
-      foldersInFolder: foldersInFolder ?? this.foldersInFolder,
+      childFolders: childFolders ?? this.childFolders,
       currentFolder: currentFolder ?? this.currentFolder,
     );
   }
@@ -28,6 +29,6 @@ class MoveState extends Equatable {
   List<Object?> get props => [
         currentFolder,
         folders,
-        foldersInFolder,
+        childFolders,
       ];
 }
