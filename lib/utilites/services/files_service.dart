@@ -626,7 +626,7 @@ class FilesService {
         var response = await _dio.get('https://upstorage.net/apps/version/ui');
         return response.data;
       } catch (e) {
-        print(e);
+        // print(e);
       }
     }
     return null;

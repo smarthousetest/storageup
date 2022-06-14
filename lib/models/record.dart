@@ -70,7 +70,7 @@ class Record extends BaseObject {
     var name = json['name'] as String?;
 
     return Record(
-      id: json['_id'] as String,
+      id: json['id'] as String,
       name: name,
       path: json['path'] as String?,
       // numOfParts: json['numOfParts'] as int?,
