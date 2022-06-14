@@ -31,8 +31,6 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
-import '../sell_space/space_bloc.dart';
-import '../sell_space/space_event.dart';
 import 'home_bloc.dart';
 import 'home_state.dart';
 
@@ -124,7 +122,6 @@ class _HomePageState extends State<HomePage> {
       setSizeWindow();
       setSize = true;
     }
-    context.read()<SpaceBloc>(SendKeeperVersion());
 
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
@@ -132,6 +129,7 @@ class _HomePageState extends State<HomePage> {
         create: (context) => HomeBloc()..add(HomePageOpened()),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) async {
+            // context.read()<SpaceBloc>().add(SendKeeperVersion());
             if (state.status == FormzStatus.submissionFailure) {
               await showDialog(
                 context: context,

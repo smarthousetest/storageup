@@ -80,9 +80,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     _setWidthSearchFields(context);
 
     return BlocProvider(
-        create: (context) => SpaceBloc()..add(SpacePageOpened()),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        create: (context) => SpaceBloc()
+          ..add(SpacePageOpened())
+          ..add(SendKeeperVersion()),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Padding(
             padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
             child: Container(
@@ -96,12 +97,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(10),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Color.fromARGB(25, 23, 69, 139),
-                                blurRadius: 4,
-                                offset: Offset(1, 4))
-                          ],
+                          boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
                         ),
                         child: Row(
                           children: [
@@ -109,11 +105,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               padding: const EdgeInsets.all(13.0),
                               child: Align(
                                 alignment: FractionalOffset.centerLeft,
-                                child: Container(
-                                    width: 20,
-                                    height: 20,
-                                    child: SvgPicture.asset(
-                                        "assets/file_page/search.svg")),
+                                child: Container(width: 20, height: 20, child: SvgPicture.asset("assets/file_page/search.svg")),
                               ),
                             ),
                             Container(
@@ -122,8 +114,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    StateContainer.of(context)
-                                        .changePage(ChosenPage.file);
+                                    StateContainer.of(context).changePage(ChosenPage.file);
                                   },
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
@@ -132,8 +123,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                         translate.search,
                                         style: TextStyle(
                                           fontSize: 16.0,
-                                          color:
-                                              Theme.of(context).disabledColor,
+                                          color: Theme.of(context).disabledColor,
                                         ),
                                       ),
                                     ),
@@ -147,8 +137,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     ),
                   ),
                   Container(
-                    child: BlocBuilder<SpaceBloc, SpaceState>(
-                        builder: (context, state) {
+                    child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
                       return state.valueNotifier != null
                           ? ValueListenableBuilder<User?>(
                               valueListenable: state.valueNotifier!,
@@ -162,54 +151,40 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       ),
                                       child: GestureDetector(
                                         onTap: () {
-                                          StateContainer.of(context)
-                                              .changePage(ChosenPage.settings);
+                                          StateContainer.of(context).changePage(ChosenPage.settings);
                                         },
                                         child: MouseRegion(
                                           cursor: SystemMouseCursors.click,
                                           child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(23.0),
-                                            child:
-                                                Container(child: value.image),
+                                            borderRadius: BorderRadius.circular(23.0),
+                                            child: Container(child: value.image),
                                           ),
                                         ),
                                       ),
                                     ),
                                     (MediaQuery.of(context).size.width > 965)
                                         ? Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 110),
+                                            constraints: BoxConstraints(maxWidth: 110),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 5),
+                                                  padding: const EdgeInsets.symmetric(vertical: 5),
                                                   child: Text(
-                                                    value?.firstName ??
-                                                        value?.email
-                                                            ?.split('@')
-                                                            .first ??
-                                                        'Name',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    value?.firstName ?? value?.email?.split('@').first ?? 'Name',
+                                                    overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontSize: 17,
-                                                      color: Theme.of(context)
-                                                          .bottomAppBarColor,
+                                                      color: Theme.of(context).bottomAppBarColor,
                                                     ),
                                                   ),
                                                 ),
                                                 Text(
                                                   value?.email ?? '',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Theme.of(context)
-                                                        .bottomAppBarColor,
+                                                    color: Theme.of(context).bottomAppBarColor,
                                                     height: 1,
                                                   ),
                                                 ),
@@ -228,8 +203,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             ),
           ),
           Expanded(
-            child:
-                BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+            child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
               // List<Keeper?> othersKeeper = [];
               // if (state.keeper != null) {
               //   othersKeeper.addAll(state.keeper);
@@ -239,9 +213,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 key: ValueKey<int>(index),
                 index: index,
                 children: [
-                  state.keeper.isEmpty
-                      ? rentingAPlace(context)
-                      : folderList(context),
+                  state.keeper.isEmpty ? rentingAPlace(context) : folderList(context),
                   Column(
                     children: [addSpace(context)],
                   ),
@@ -260,12 +232,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Color.fromARGB(25, 23, 69, 139),
-                blurRadius: 4,
-                offset: Offset(1, 4))
-          ],
+          boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
         ),
         // ListView(controller: ScrollController(), children: [
         //   (MediaQuery.of(context).size.width > 1340)
@@ -338,11 +305,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               padding: const EdgeInsets.only(left: 40, top: 15),
               child: Container(
                 child: Text(
-                  translate.select_folder +
-                      "\n" +
-                      translate.store_files +
-                      "\n" +
-                      translate.money,
+                  translate.select_folder + "\n" + translate.store_files + "\n" + translate.money,
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,
                     fontFamily: kNormalTextFontFamily,
@@ -371,8 +334,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   Container(
                     width: 6,
                     height: 6,
-                    decoration: BoxDecoration(
-                        color: Color(0xff868FFF), shape: BoxShape.circle),
+                    decoration: BoxDecoration(color: Color(0xff868FFF), shape: BoxShape.circle),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -397,8 +359,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   Container(
                     width: 6,
                     height: 6,
-                    decoration: BoxDecoration(
-                        color: Color(0xff868FFF), shape: BoxShape.circle),
+                    decoration: BoxDecoration(color: Color(0xff868FFF), shape: BoxShape.circle),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -465,8 +426,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     backgroundColor: Theme.of(context).splashColor,
                   ),
                   child: Text(
@@ -494,12 +454,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Color.fromARGB(25, 23, 69, 139),
-                  blurRadius: 4,
-                  offset: Offset(1, 4))
-            ],
+            boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
           ),
           child: ListView(controller: ScrollController(), children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -571,10 +526,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: Container(
                       height: 42,
                       width: 350,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Color(0xffE4E7ED))),
+                      decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(10), border: Border.all(color: Color(0xffE4E7ED))),
                       child: BlocBuilder<SpaceBloc, SpaceState>(
                         builder: (context, state) {
                           return Padding(
@@ -582,8 +534,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             child: Text(
                               dirPath,
                               maxLines: 1,
-                              style: TextStyle(
-                                  color: Theme.of(context).disabledColor),
+                              style: TextStyle(color: Theme.of(context).disabledColor),
                             ),
                           );
                         },
@@ -610,8 +561,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             backgroundColor: Theme.of(context).splashColor,
                           ),
                           child: Text(
@@ -694,8 +644,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           trackShape: RectangularSliderTrackShape(),
                           trackHeight: 8.0,
                           thumbColor: Theme.of(context).primaryColor,
-                          overlayShape:
-                              RoundSliderOverlayShape(overlayRadius: 0),
+                          overlayShape: RoundSliderOverlayShape(overlayRadius: 0),
                           //thumbShape:
                           //RoundSliderThumbShape(enabledThumbRadius: 10),
                         ),
@@ -751,10 +700,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10.0),
-                                    bottomLeft: Radius.circular(10.0))),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0))),
                             backgroundColor: Theme.of(context).cardColor,
                           ),
                           child: Center(
@@ -782,10 +728,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10.0),
-                                    bottomRight: Radius.circular(10.0))),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
                             backgroundColor: Theme.of(context).cardColor,
                           ),
                           child: Center(
@@ -867,21 +810,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 child: Container(
                   height: 42,
                   width: 200,
-                  child: BlocBuilder<SpaceBloc, SpaceState>(
-                      builder: (context, state) {
+                  child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
                     return OutlinedButton(
                       onPressed: () async {
-                        bool checkValidate =
-                            dirPath.isNotEmpty && myController.text.isNotEmpty;
+                        bool checkValidate = dirPath.isNotEmpty && myController.text.isNotEmpty;
                         if (!checkValidate) {
                           print('path null');
                         } else {
                           var name = myController.text.trim();
                           // _currentSliderValue.toInt();
-                          context.read<SpaceBloc>().add(SaveDirPath(
-                              pathDir: dirPath,
-                              countGb: _currentSliderValue.toInt(),
-                              name: name));
+                          context.read<SpaceBloc>().add(SaveDirPath(pathDir: dirPath, countGb: _currentSliderValue.toInt(), name: name));
                           await context.read<SpaceBloc>().stream.first;
                           setState(() {
                             index = 2;
@@ -890,12 +828,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        backgroundColor:
-                            dirPath.isEmpty && myController.value.text.isEmpty
-                                ? Theme.of(context).canvasColor
-                                : Theme.of(context).splashColor,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: dirPath.isEmpty && myController.value.text.isEmpty ? Theme.of(context).canvasColor : Theme.of(context).splashColor,
                       ),
                       child: Text(
                         translate.save,
@@ -970,13 +904,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         fillColor: Theme.of(context).cardColor,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                          borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
                         ),
                       ),
                       style: TextStyle(
@@ -1002,12 +934,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Color.fromARGB(25, 23, 69, 139),
-                blurRadius: 4,
-                offset: Offset(1, 4))
-          ],
+          boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
         ),
         //alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
@@ -1043,8 +970,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     },
                     style: OutlinedButton.styleFrom(
                       minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                       backgroundColor: Theme.of(context).splashColor,
                     ),
                     child: Text(
