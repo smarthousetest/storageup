@@ -37,3 +37,7 @@ class SaveDirPath extends SpaceEvent {
     required this.name,
   });
 }
+
+class SendKeeperVersion extends SpaceEvent{
+  SendKeeperVersion();
+}

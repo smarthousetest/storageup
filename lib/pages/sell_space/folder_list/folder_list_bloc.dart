@@ -58,7 +58,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     ));
     try {
       timer =
-          Timer.periodic(const Duration(milliseconds: 5000), (Timer t) async {
+          Timer.periodic(const Duration(seconds: 5), (Timer t) async {
         add(GetKeeperInfo());
       });
     } catch (e) {
@@ -104,7 +104,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   void _listener() {
     final info = _repository.getlocationsInfo;
 
-    if (!isClosed) add(UpdateLocationsList(locations: info));
+    if (!isClosed) {
+      add(UpdateLocationsList(locations: info));
+    };
   }
 
   @override

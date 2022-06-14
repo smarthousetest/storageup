@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -12,6 +13,7 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
 import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 import '../../constants.dart';
+import '../../utilites/keeper_data.dart';
 import '../../utilites/repositories/token_repository.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
@@ -19,9 +21,10 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     on<SpaceEvent>((event, emit) async {
       if (event is SpacePageOpened) {
         await _mapSpacePageOpened(event, state, emit);
-      }
-      if (event is SaveDirPath) {
+      } else if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
+      } else if (event is SendKeeperVersion) {
+        _sendLocalKeeperVersion(state, emit);
       }
     });
   }
@@ -44,10 +47,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var keeper = await _subscriptionService.getAllKeepers();
     var valueNotifier = _userController.getValueNotifier();
     emit(state.copyWith(
-        user: user,
-        locationsInfo: locationsInfo,
-        keeper: keeper,
-        valueNotifier: valueNotifier));
+      user: user,
+      locationsInfo: locationsInfo,
+      keeper: keeper,
+      valueNotifier: valueNotifier,
+    ));
   }
 
   Future _mapRunSoft(
@@ -60,8 +64,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     // os.setKeeperHash(state.user!.email!, hashedPassword);
 
     _writeKeeperId(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt',
-        keeperId);
+      '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt',
+      keeperId,
+    );
     var bearerToken = await TokenRepository().getApiToken();
     if (bearerToken != null) {
       _writeKeeperName(state);
@@ -76,8 +81,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
+    var keeperNameFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -85,13 +89,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile
-        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperIdFilePath, String keeper_id) {
@@ -112,8 +114,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var name = event.name;
     var id = await _subscriptionService.addNewKeeper(name, countOfGb);
     if (id != null) {
-      int keeperDataId = _repository.createLocation(
-          countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+      int keeperDataId = _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
       var locationsInfo = _repository.getlocationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
@@ -121,5 +122,47 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       await box.put(keeperDataId.toString(), Uri.encodeFull(path));
       _mapRunSoft(tmpState, id);
     }
+  }
+
+  void _sendLocalKeeperVersion(SpaceState state, Emitter<SpaceState> emit) {
+    var keeperVersion = _getKeeperVersion();
+    if (state.localKeeperVersion != keeperVersion) {
+      _putLocalKeeperVersion(state, keeperVersion);
+      emit(state.copyWith(localKeeperVersion: _getKeeperVersion()));
+    }
+  }
+
+  void _putLocalKeeperVersion(SpaceState state, String keeperVersion) async {
+    Dio dio = getIt<Dio>(instanceName: 'record_dio');
+    for (var location in state.locationsInfo) {
+      try {
+        dio.put("/keeper/${location.idForCompare}",
+            data: KeeperData(
+              null,
+              null,
+              null,
+              null,
+              keeperVersion,
+            ).toJson());
+      } catch (e) {
+        print("_putLocalKeeperVersion");
+        print(e);
+      }
+    }
+  }
+
+  String _getKeeperVersion() {
+    var os = OsSpecifications.getOs();
+    var keeperVersionFile = File("${os.appDirPath}keeper_version.txt");
+    var keeperVersion = "0.0.0.0";
+    if (!keeperVersionFile.existsSync()) {
+      keeperVersionFile.createSync();
+      keeperVersionFile.writeAsStringSync(keeperVersion);
+    } else if (keeperVersion.isEmpty) {
+      keeperVersionFile.writeAsStringSync(keeperVersion);
+    } else {
+      keeperVersion = keeperVersionFile.readAsStringSync().trim();
+    }
+    return keeperVersion;
   }
 }

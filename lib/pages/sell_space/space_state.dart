@@ -9,11 +9,14 @@ class SpaceState extends Equatable {
   final List<DownloadLocation> locationsInfo;
   final List<Keeper> keeper;
   final ValueNotifier<User?>? valueNotifier;
+  final String? localKeeperVersion;
+
   SpaceState({
     this.user,
     this.locationsInfo = const [],
     this.keeper = const [],
     this.valueNotifier,
+    this.localKeeperVersion = "",
   });
 
   SpaceState copyWith({
@@ -21,12 +24,14 @@ class SpaceState extends Equatable {
     List<DownloadLocation>? locationsInfo,
     List<Keeper>? keeper,
     ValueNotifier<User?>? valueNotifier,
+    String? localKeeperVersion,
   }) {
     return SpaceState(
       user: user ?? this.user,
       locationsInfo: locationsInfo ?? this.locationsInfo,
       keeper: keeper ?? this.keeper,
       valueNotifier: valueNotifier ?? this.valueNotifier,
+      localKeeperVersion: localKeeperVersion ?? this.localKeeperVersion,
     );
   }
 
@@ -36,5 +41,6 @@ class SpaceState extends Equatable {
         locationsInfo,
         keeper,
         valueNotifier,
+        localKeeperVersion,
       ];
 }
