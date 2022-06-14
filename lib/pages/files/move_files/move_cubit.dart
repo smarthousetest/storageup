@@ -72,13 +72,16 @@ class MoveCubit extends Cubit<MoveState> {
       ));
     } else {
       var curFolder = await _filesController.getFolderById(folder.id);
-      var toRemove = [];
-      curFolder?.folders?.forEach((a) {
-        if (moveFolder!.any((b) => a == b)) {
-          toRemove.add(a);
-        }
-      });
-      curFolder?.folders?.removeWhere((e) => toRemove.contains(e));
+      if (moveFolder != null) {
+        var toRemove = [];
+
+        curFolder?.folders?.forEach((a) {
+          if (moveFolder.any((b) => a == b)) {
+            toRemove.add(a);
+          }
+        });
+        curFolder?.folders?.removeWhere((e) => toRemove.contains(e));
+      }
 
       childFolders[folder.id] = curFolder?.folders;
 
