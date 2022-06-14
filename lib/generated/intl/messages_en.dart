@@ -95,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Continue"),
         "count_of_files": m2,
+        "create": MessageLookupByLibrary.simpleMessage("Create"),
         "create_a_folder":
             MessageLookupByLibrary.simpleMessage("Create a folder"),
         "create_album": MessageLookupByLibrary.simpleMessage("Create album"),
@@ -121,6 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_pic": MessageLookupByLibrary.simpleMessage("Removing a photo"),
         "deleting": MessageLookupByLibrary.simpleMessage("Deleting"),
         "documents": MessageLookupByLibrary.simpleMessage("Documents"),
+        "down": MessageLookupByLibrary.simpleMessage("Download"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
         "downloating": MessageLookupByLibrary.simpleMessage("Downloating"),
         "earnings":
@@ -352,6 +354,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Well"),
+        "where_move":
+            MessageLookupByLibrary.simpleMessage("Where to move it to?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "spaces will be deleted without the possibility of recovery."),
         "wrong_cred":

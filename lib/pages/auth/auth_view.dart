@@ -424,14 +424,240 @@ class _AuthViewState extends State<AuthView> {
       },
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          return showNotConfirmedEmail
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+          return RawKeyboardListener(
+            autofocus: true,
+            focusNode: FocusNode(),
+            onKey: (event) {
+              // final key = event.logicalKey;
+              if (event is RawKeyDownEvent) {
+                if (event.isKeyPressed(LogicalKeyboardKey.tab)) {
+                  FocusScope.of(context).requestFocus(currentFocusNode);
+                  print("login");
+                }
+                // setState(() {
+                //   return keys.add(key);
+                // });
+              }
+            },
+            child: showNotConfirmedEmail
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                        Expanded(
+                          child: Container(),
+                          flex: 3,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 190, right: 160, top: 73),
+                          child: Text(
+                            translate.confirm_email,
+                            style: TextStyle(
+                              color: theme.disabledColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 28.0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 120, top: 40),
+                          child: Column(
+                            children: [
+                              Text(
+                                translate.you_cant_enter,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: theme.disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 120, top: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                translate.we_send +
+                                    ' ' +
+                                    state.emailLogin.value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: theme.disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 120),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                translate.for_confirm,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: theme.disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 240, top: 97),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () => context
+                                  .read<AuthBloc>()
+                                  .add(AuthSendEmailVerify()),
+                              child: Text(
+                                translate.to_send_letter,
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17.0,
+                                  color: theme.splashColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 110, top: 131),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _isSignIn = false;
+                              _changePage();
+                              showNotConfirmedEmail = false;
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 147,
+                                vertical: 25,
+                              ),
+                              primary: theme.splashColor,
+                              elevation: 1,
+                            ),
+                            child: Text(
+                              translate.go_to_authorization,
+                              style: TextStyle(
+                                color: theme.primaryColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(),
+                          flex: 3,
+                        ),
+                      ])
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                       Expanded(
                         child: Container(),
                         flex: 3,
+                      ),
+                      // SizedBox(
+                      //   height: 130,
+                      // ),
+                      Text(
+                        translate.sign_in_to_account,
+                        style: TextStyle(
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w400,
+                          color: theme.disabledColor,
+                        ),
+                      ),
+                      // Expanded(
+                      //   child: Container(),
+                      // ),
+                      SizedBox(height: 63),
+                      RawKeyboardListener(
+                        focusNode: FocusNode(),
+                        onKey: (event) {
+                          if ((event.logicalKey == LogicalKeyboardKey.tab) &&
+                              event is RawKeyDownEvent) {
+                            FocusScope.of(context)
+                                .requestFocus(focusNodePasswordLog);
+                            print("mail");
+                          }
+                        },
+                        child: CustomTextField(
+                          autofocus: true,
+                          focusNode: focusNodeMailLog,
+                          hint: translate.email,
+                          errorMessage: translate.wrong_email,
+                          needErrorValidation: true,
+                          onChange: (email) {
+                            context.read<AuthBloc>().add(AuthLoginEmailChanged(
+                                email: email, needValidation: true));
+                          },
+                          onFinishEditing: (email) {
+                            context.read<AuthBloc>().add(AuthLoginEmailChanged(
+                                email: email, needValidation: true));
+                          },
+                          invalid: state.emailLogin.invalid &&
+                              state.emailLogin.value.isNotEmpty,
+                          isPassword: false,
+                        ),
+                      ),
+                      RawKeyboardListener(
+                        focusNode: FocusNode(),
+                        onKey: (event) {
+                          if (event.isKeyPressed(LogicalKeyboardKey.enter) &&
+                              event is RawKeyDownEvent) {
+                            if (_isLoginFieldValid(state)) {
+                              context
+                                  .read<AuthBloc>()
+                                  .add(AuthLoginConfirmed());
+                            }
+                            print("password");
+                          }
+                        },
+                        child: CustomTextField(
+                          focusNode: focusNodePasswordLog,
+                          hint: translate.password,
+                          errorMessage: translate.wrong_password,
+                          onChange: (password) {
+                            context
+                                .read<AuthBloc>()
+                                .add(AuthLoginPasswordChanged(
+                                  password: password,
+                                  needValidation: true,
+                                ));
+                          },
+                          onFinishEditing: (password) {
+                            context
+                                .read<AuthBloc>()
+                                .add(AuthLoginPasswordChanged(
+                                  password: password,
+                                  needValidation: true,
+                                ));
+                          },
+                          invalid: state.passwordLogin.invalid &&
+                              state.passwordLogin.value.isNotEmpty,
+                          isPassword: true,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
@@ -904,24 +1130,35 @@ class _AuthViewState extends State<AuthView> {
         //   child: Container(),
         // ),
         SizedBox(height: 63),
-        CustomTextField(
-          focusNode: signUpNameNode,
-          hint: translate.user_name,
-          errorMessage: translate.wrong_username,
-          onChange: (name) {
-            context
-                .read<AuthBloc>()
-                .add(AuthNameChanged(name: name, needValidation: true));
+        RawKeyboardListener(
+          focusNode: FocusNode(),
+          onKey: (event) {
+            if ((event.logicalKey == LogicalKeyboardKey.tab) &&
+                event is RawKeyDownEvent) {
+              // focusNodeForMail.requestFocus();
+              FocusScope.of(context).requestFocus(focusNodeForMail);
+              print("name");
+            }
           },
-          onFinishEditing: (name) {
-            context
-                .read<AuthBloc>()
-                .add(AuthNameChanged(name: name, needValidation: true));
-          },
-          needErrorValidation: true,
-          invalid: state.name.invalid && state.name.value.isNotEmpty,
-          isPassword: false,
-          inputFormatters: [],
+          child: CustomTextField(
+            focusNode: focusNodeForName,
+            hint: translate.user_name,
+            errorMessage: translate.wrong_username,
+            onChange: (name) {
+              context
+                  .read<AuthBloc>()
+                  .add(AuthNameChanged(name: name, needValidation: true));
+            },
+            onFinishEditing: (name) {
+              context
+                  .read<AuthBloc>()
+                  .add(AuthNameChanged(name: name, needValidation: true));
+            },
+            needErrorValidation: true,
+            invalid: state.name.invalid && state.name.value.isNotEmpty,
+            isPassword: false,
+            inputFormatters: [],
+          ),
         ),
         CustomTextField(
           focusNode: singUpEmailNode,
