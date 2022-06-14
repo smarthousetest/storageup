@@ -21,6 +21,7 @@ import 'package:upstorage_desktop/pages/home/home_event.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
 import 'package:upstorage_desktop/pages/files/file_view.dart';
 import 'package:upstorage_desktop/pages/info/info_view.dart';
+import 'package:upstorage_desktop/pages/loadind_files.dart/loading_container.dart';
 import 'package:upstorage_desktop/pages/media/media_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -125,78 +126,88 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
-      body: BlocProvider(
-        create: (context) => HomeBloc()..add(HomePageOpened()),
-        child: BlocListener<HomeBloc, HomeState>(
-          listener: (context, state) async {
-            if (state.status == FormzStatus.submissionFailure) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(true);
-                },
-              );
-            } else if (state.status == FormzStatus.submissionCanceled) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurFailedServerConnection(true);
-                },
-              );
-            }
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 274,
-                margin: const EdgeInsets.only(left: 30, top: 30, bottom: 30),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))
-                  ],
-                ),
-                child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                        child: SvgPicture.asset(
-                          'assets/home_page/storage_title.svg',
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                        child: SvgPicture.asset(
-                          'assets/home_page/separator.svg',
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          controller: ScrollController(),
-                          children: [
-                            ..._customMenuItem(),
-                            ..._leftButtonsItem()
-                          ],
-                        ),
-                      ),
-                      _logout(),
-                      (state.upToDateVersion != state.version)
-                          ? (state.upToDateVersion != null)
-                              ? _update()
-                              : Container()
-                          : Container(),
-                    ],
+      body: Stack(
+        children: [
+          BlocProvider(
+            create: (context) => HomeBloc()..add(HomePageOpened()),
+            child: BlocListener<HomeBloc, HomeState>(
+              listener: (context, state) async {
+                if (state.status == FormzStatus.submissionFailure) {
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BlurSomethingGoesWrong(true);
+                    },
                   );
-                }),
+                } else if (state.status == FormzStatus.submissionCanceled) {
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BlurFailedServerConnection(true);
+                    },
+                  );
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 274,
+                    margin:
+                        const EdgeInsets.only(left: 30, top: 30, bottom: 30),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Color.fromARGB(25, 23, 69, 139),
+                            blurRadius: 4,
+                            offset: Offset(1, 4))
+                      ],
+                    ),
+                    child: BlocBuilder<HomeBloc, HomeState>(
+                        builder: (context, state) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                            child: SvgPicture.asset(
+                              'assets/home_page/storage_title.svg',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                            child: SvgPicture.asset(
+                              'assets/home_page/separator.svg',
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView(
+                              shrinkWrap: true,
+                              controller: ScrollController(),
+                              children: [
+                                ..._customMenuItem(),
+                                ..._leftButtonsItem()
+                              ],
+                            ),
+                          ),
+                          _logout(),
+                          (state.upToDateVersion != state.version)
+                              ? (state.upToDateVersion != null)
+                                  ? _update()
+                                  : Container()
+                              : Container(),
+                        ],
+                      );
+                    }),
+                  ),
+                  Expanded(child: getPage()),
+                ],
               ),
-              Expanded(child: getPage()),
-            ],
+            ),
           ),
-        ),
+          LoadingContainer()
+        ],
       ),
     );
   }
@@ -280,7 +291,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        return state.objectsValueListenable != null && state.objectsValueListenable!.value.values.isNotEmpty
+        return state.objectsValueListenable != null &&
+                state.objectsValueListenable!.value.values.isNotEmpty
             ? latestFile(context)
             : Container();
       }),
@@ -382,7 +394,8 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 40.0),
                 child: ValueListenableBuilder<Box<LatestFile>>(
-                    valueListenable: Hive.box<LatestFile>('latestFileBox').listenable(),
+                    valueListenable:
+                        Hive.box<LatestFile>('latestFileBox').listenable(),
                     builder: (context, box, widget) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,7 +405,9 @@ class _HomePageState extends State<HomePage> {
                               child: GestureDetector(
                                   onTap: () {
                                     print(e.latestFile.name);
-                                    context.read<HomeBloc>().add(FileTapped(record: e.latestFile));
+                                    context
+                                        .read<HomeBloc>()
+                                        .add(FileTapped(record: e.latestFile));
                                   },
                                   child: LatestFileView(object: e)))),
                         ],
@@ -454,7 +469,9 @@ class _HomePageState extends State<HomePage> {
   Widget _update() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.0), bottomLeft: Radius.circular(10.0)),
+        borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(10.0),
+            bottomLeft: Radius.circular(10.0)),
         color: Theme.of(context).dividerColor,
       ),
       height: 50,
@@ -609,7 +626,9 @@ class LatestFileView extends StatelessWidget {
                   height: 24,
                   width: 24,
                   child: Image.asset(
-                    type!.isNotEmpty ? 'assets/file_icons/${type}_s.png' : 'assets/file_icons/unexpected_s.png',
+                    type!.isNotEmpty
+                        ? 'assets/file_icons/${type}_s.png'
+                        : 'assets/file_icons/unexpected_s.png',
                     fit: BoxFit.contain,
                     height: 24,
                     width: 24,

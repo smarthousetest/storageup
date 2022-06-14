@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
+import 'package:upstorage_desktop/utilites/controllers/load/load_controller.dart';
 import 'package:upstorage_desktop/utilites/repositories/file_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
@@ -35,9 +35,6 @@ abstract class ServiceModule {
 
   @Named('files_controller')
   FilesController get filesController => FilesController();
-
-  @lazySingleton
-  LoadController get leadController => LoadController();
 
   @Named('user_repo')
   @lazySingleton

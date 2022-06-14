@@ -272,6 +272,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "reboot": MessageLookupByLibrary.simpleMessage("Перезагрузка"),
         "reboot_keeper": MessageLookupByLibrary.simpleMessage(
             "Перезапустить кипер возможно локально"),
+        "no_internet": MessageLookupByLibrary.simpleMessage(
+            "Отсутствует соединение с  Интернетом!\n Проверьте сетевые настройки"),
         "recent": MessageLookupByLibrary.simpleMessage("Недавние"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "register_complete":
@@ -379,6 +381,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "you_turn_in": MessageLookupByLibrary.simpleMessage("Вы сдаете"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("начислятся деньги."),
-        "your_income": MessageLookupByLibrary.simpleMessage("Ваш доход")
+        "your_income": MessageLookupByLibrary.simpleMessage("Ваш доход"),
+        "technical_error": MessageLookupByLibrary.simpleMessage(
+            "Произошла техническая ошибка. Попробуйте позднее"),
+        "internal_server_error":
+            MessageLookupByLibrary.simpleMessage("Ошибка на стороне сервера"),
+        "no_available_keepers":
+            MessageLookupByLibrary.simpleMessage("Нет киперов"),
+        "no_available_proxy": MessageLookupByLibrary.simpleMessage(
+            "Отсутствует необходимый прокси"),
+        "no_available_space":
+            MessageLookupByLibrary.simpleMessage("Недостаточно места"),
+        "null_file":
+            MessageLookupByLibrary.simpleMessage("Ошибка приработе с файлом"),
       };
 }

@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   cpp_native
   desktop_window
+  objectbox_flutter_libs
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

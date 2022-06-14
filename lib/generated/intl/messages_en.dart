@@ -271,6 +271,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "reboot": MessageLookupByLibrary.simpleMessage("Reboot"),
         "reboot_keeper": MessageLookupByLibrary.simpleMessage(
             "It is possible to restart keeper locally"),
+        "no_internet": MessageLookupByLibrary.simpleMessage(
+            "No internet connection!\n Check network settings"),
         "recent": MessageLookupByLibrary.simpleMessage("Recent"),
         "register": MessageLookupByLibrary.simpleMessage("Register now"),
         "register_complete":
@@ -374,6 +376,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "you_turn_in": MessageLookupByLibrary.simpleMessage("You turn in"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("to your balance."),
-        "your_income": MessageLookupByLibrary.simpleMessage("Your income")
+        "your_income": MessageLookupByLibrary.simpleMessage("Your income"),
+        "technical_error": MessageLookupByLibrary.simpleMessage(
+            "A technical error has occurred. Try again later"),
+        "internal_server_error":
+            MessageLookupByLibrary.simpleMessage("Server side error"),
+        "no_available_keepers":
+            MessageLookupByLibrary.simpleMessage("No keepers"),
+        "no_available_proxy":
+            MessageLookupByLibrary.simpleMessage("Required proxy is missing"),
+        "no_available_space":
+            MessageLookupByLibrary.simpleMessage("Not enough storage"),
+        "null_file": MessageLookupByLibrary.simpleMessage("Error with file"),
       };
 }

@@ -39,6 +39,16 @@ class StateContainerState extends State<StateContainer> {
     );
   }
 
+  bool _isErrorPopUpShowing = false;
+
+  bool get isErrorPopUpShowing => _isErrorPopUpShowing;
+
+  set isErrorPopUpShowing(bool isShowing) {
+    setState(() {
+      _isErrorPopUpShowing = isShowing;
+    });
+  }
+
   void changePage(ChosenPage newPage) {
     setState(() {
       _choosedPage = newPage;

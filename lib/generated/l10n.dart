@@ -2256,6 +2256,74 @@ class S {
     );
   }
 
+  String get no_internet {
+    return Intl.message(
+      'No internet connection!\n Check network settings',
+      name: 'no_internet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error with file`
+  String get null_file {
+    return Intl.message(
+      'Error with file',
+      name: 'null_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get no_available_space {
+    return Intl.message(
+      'Not enough storage',
+      name: 'no_available_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Required proxy is missing`
+  String get no_available_proxy {
+    return Intl.message(
+      'Required proxy is missing',
+      name: 'no_available_proxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No keepers`
+  String get no_available_keepers {
+    return Intl.message(
+      'No keepers',
+      name: 'no_available_keepers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Server side error`
+  String get internal_server_error {
+    return Intl.message(
+      'Server side error',
+      name: 'internal_server_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A technical error has occurred. Try again later`
+  String get technical_error {
+    return Intl.message(
+      'A technical error has occurred. Try again later',
+      name: 'technical_error',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `It is possible to restart keeper locally`
   String get reboot_keeper {
     return Intl.message(

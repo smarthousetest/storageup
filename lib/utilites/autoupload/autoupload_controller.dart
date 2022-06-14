@@ -10,7 +10,7 @@ import 'package:upstorage_desktop/main.dart';
 import 'package:upstorage_desktop/utilites/autoupload/models/upload_state.dart';
 import 'package:upstorage_desktop/utilites/autoupload/upload_media_repository.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
+import 'package:upstorage_desktop/utilites/controllers/load/load_controller.dart';
 
 @lazySingleton
 class AutouploadController {
