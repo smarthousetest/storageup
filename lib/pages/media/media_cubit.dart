@@ -92,7 +92,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(state.copyWith(
       albums: allMediaFolders,
       currentFolder: currentFolder,
-      currentFolderRecords: currentFolder?.records,
+      currentFolderRecords: currentFolder?.records?.reversed.toList(),
       allRecords: currentFolder?.records,
       user: user,
       progress: progress,
@@ -203,7 +203,7 @@ class MediaCubit extends Cubit<MediaState> {
     var newState = state.copyWith(
       albums: albums,
       currentFolder: updatedChoosedFolder,
-      currentFolderRecords: updatedChoosedFolder?.records,
+      currentFolderRecords: updatedChoosedFolder?.records?.reversed.toList(),
     );
 
     emit(newState);
@@ -251,7 +251,7 @@ class MediaCubit extends Cubit<MediaState> {
         state.copyWith(
           albums: newAlbumList,
           currentFolder: currentFolder,
-          currentFolderRecords: currentFolder.records,
+          currentFolderRecords: currentFolder.records?.reversed.toList(),
           status: FormzStatus.pure,
         ),
       );
@@ -420,7 +420,8 @@ class MediaCubit extends Cubit<MediaState> {
         var newState = state.copyWith(
           albums: albums,
           currentFolder: isCurrentFolder ? album : null,
-          currentFolderRecords: isCurrentFolder ? album.records : null,
+          currentFolderRecords:
+              isCurrentFolder ? album.records?.reversed.toList() : null,
         );
         emit(newState);
       }

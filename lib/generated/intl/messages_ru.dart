@@ -95,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
         "continue_button": MessageLookupByLibrary.simpleMessage("Продолжить"),
         "count_of_files": m2,
+        "create": MessageLookupByLibrary.simpleMessage("Создать"),
         "create_a_folder":
             MessageLookupByLibrary.simpleMessage("Создать папку"),
         "create_album": MessageLookupByLibrary.simpleMessage("Создать альбом"),
@@ -122,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Удаление фотографии"),
         "deleting": MessageLookupByLibrary.simpleMessage("Удаление"),
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
+        "down": MessageLookupByLibrary.simpleMessage("Скачать"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "downloating": MessageLookupByLibrary.simpleMessage("Скачивание"),
         "earnings":
@@ -359,6 +361,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Хорошо"),
+        "where_move": MessageLookupByLibrary.simpleMessage("Куда переместить?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "пространства, будут удалены без возможности восстановления."),
         "wrong_cred":

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/download_location.dart';
+import 'package:upstorage_desktop/models/download_location.dart';
 
 const _downloadLocationsBoxName = 'donwnloadLocationsBox';
 

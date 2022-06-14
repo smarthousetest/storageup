@@ -19,9 +19,8 @@ import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/load_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/models.dart';
-
+import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
+import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
@@ -59,6 +58,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   late String idTappedFile;
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
+  var _packetController =
+      getIt<PacketController>(instanceName: 'packet_controller');
 
   late Observer _updateObserver = Observer((e) {
     try {
@@ -373,11 +374,58 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
     print(result);
     if (result == ResponseStatus.ok) {
+      await _packetController.updatePacket();
       _update();
     } else if (result == ResponseStatus.noInternet) {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     } else {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
+
+  Future<void> onActionMoveFiles(
+    List<BaseObject> objects,
+    Folder currentFolder,
+  ) async {
+    List<String>? records;
+    List<String>? folders;
+
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+    objects.forEach((element) {
+      if (element is Record) {
+        if (records == null) records = [];
+
+        records?.add(element.id);
+      } else if (element is Folder) {
+        if (folders == null) folders = [];
+
+        folders?.add(element.id);
+      }
+    });
+
+    try {
+      if (folders!.contains(currentFolder.id)) {
+        print('do not move the folder to the same folder');
+      } else {
+        await _filesController.moveToFolder(
+          folderId: currentFolder.id,
+          folders: folders,
+          records: records,
+        );
+      }
+      await _update();
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     }
   }
 
@@ -500,6 +548,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> _update({String? uploadingFileId}) async {
+    await _filesController.updateFilesList();
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
 
@@ -510,7 +559,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         objects[uploadingFileIndex] =
             (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
     }
-
+    await _packetController.updatePacket();
     emit(state.copyWith(
       objects: objects,
       status: FormzStatus.pure,

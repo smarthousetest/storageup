@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/components/custom_round_graph.dart';
 import 'package:upstorage_desktop/components/custom_progress_bar.dart';
+import 'package:upstorage_desktop/models/packet/packet.dart';
 import 'package:upstorage_desktop/pages/info/info_bloc.dart';
 import 'package:upstorage_desktop/pages/info/info_event.dart';
 import 'package:upstorage_desktop/pages/info/info_state.dart';
@@ -192,42 +193,49 @@ class _InfoPageState extends State<InfoPage> {
         //         ?.firstWhere((folder) => folder.name == 'Media')
         //         .size ??
         //     0;
-        var allSpaceGb = state.packetInfo?.filledSpace ?? 0;
+        //var allSpaceGb = state.packetInfo?.filledSpace ?? 0;
         //var allFolderSize = state.rootFolders?.size ?? 0;
         var currenSub = state.sub?.tariff?.spaceGb ?? 0;
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              '${fileSize(allSpaceGb, translate, 0)}',
-              style: TextStyle(
-                color: Theme.of(context).bottomAppBarColor,
-                fontSize: 28,
-                fontFamily: kNormalTextFontFamily,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 11, right: 11, top: 10),
-              child: Text(
-                'из',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).shadowColor,
-                  fontSize: 24,
-                  fontFamily: kNormalTextFontFamily,
-                ),
-              ),
-            ),
-            Text(
-              translate.gb(currenSub),
-              style: TextStyle(
-                color: Theme.of(context).shadowColor,
-                fontSize: 28,
-                fontFamily: kNormalTextFontFamily,
-              ),
-            ),
-          ],
-        );
+        return state.packetNotifier != null
+            ? ValueListenableBuilder<Packet?>(
+                valueListenable: state.packetNotifier!,
+                builder: (context, value, _) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${fileSize(value?.filledSpace ?? 0, translate, 0)}',
+                        style: TextStyle(
+                          color: Theme.of(context).bottomAppBarColor,
+                          fontSize: 28,
+                          fontFamily: kNormalTextFontFamily,
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 11, right: 11, top: 10),
+                        child: Text(
+                          'из',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).shadowColor,
+                            fontSize: 24,
+                            fontFamily: kNormalTextFontFamily,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        translate.gb(currenSub),
+                        style: TextStyle(
+                          color: Theme.of(context).shadowColor,
+                          fontSize: 28,
+                          fontFamily: kNormalTextFontFamily,
+                        ),
+                      ),
+                    ],
+                  );
+                })
+            : Container();
       },
     );
   }
@@ -431,49 +439,57 @@ class _InfoPageState extends State<InfoPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: BlocBuilder<InfoBloc, InfoState>(builder: (context, state) {
-        var currentSubSpace = state.sub?.tariff?.spaceGb ?? 0;
-        var allSpaceGb = state.packetInfo?.filledSpace ?? 0;
-        var e;
+        return state.packetNotifier != null
+            ? ValueListenableBuilder<Packet?>(
+                valueListenable: state.packetNotifier!,
+                builder: (context, value, _) {
+                  var currentSubSpace = state.sub?.tariff?.spaceGb ?? 0;
+                  var allSpaceGb = value?.filledSpace ?? 0;
+                  var e;
 
-        e = (allSpaceGb * (0.000000001));
+                  e = (allSpaceGb * (0.000000001));
 
-        double percentFiles = ((e / currentSubSpace) * 100).toDouble();
-        if (percentFiles.isNaN) {
-          percentFiles = 0;
-        }
-        return SizedBox(
-          height: 10,
-          child: Stack(
-            children: [
-              // MyProgressBar(
-              //   percent: 75,
-              //   color: Color(0xffFFD75E),
-              //   bgColor: Theme.of(context).cardColor,
-              // ),
-              // MyProgressBar(
-              //   percent: 50,
-              //   color: Color(0xffFF847E),
-              //   bgColor: Theme.of(context).cardColor,
+                  double percentFiles =
+                      ((e / currentSubSpace) * 100).toDouble();
+                  if (percentFiles.isNaN) {
+                    percentFiles = 0;
+                  }
+                  return SizedBox(
+                    height: 10,
+                    child: Stack(
+                      children: [
+                        // MyProgressBar(
+                        //   percent: 75,
+                        //   color: Color(0xffFFD75E),
+                        //   bgColor: Theme.of(context).cardColor,
+                        // ),
+                        // MyProgressBar(
+                        //   percent: 50,
+                        //   color: Color(0xffFF847E),
+                        //   bgColor: Theme.of(context).cardColor,
 
-              //   ///
-              // ),
-              // MyProgressBar(
-              //   percent: 30,
-              //   color: Color(0xff59D7AB),
-              //   bgColor: Color.fromARGB(0, 0, 0, 0),
+                        //   ///
+                        // ),
+                        // MyProgressBar(
+                        //   percent: 30,
+                        //   color: Color(0xff59D7AB),
+                        //   bgColor: Color.fromARGB(0, 0, 0, 0),
 
-              //   ///
-              // ),
-              MyProgressBar(
-                percent: percentFiles.ceilToDouble(),
-                color: Color(0xff868FFF),
-                bgColor: Theme.of(context).cardColor,
+                        //   ///
+                        // ),
+                        MyProgressBar(
+                          percent: percentFiles.ceilToDouble(),
+                          color: Color(0xff868FFF),
+                          bgColor: Theme.of(context).cardColor,
 
-                ///
-              ),
-            ],
-          ),
-        );
+                          ///
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              )
+            : Container();
       }),
     );
   }

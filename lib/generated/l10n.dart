@@ -2383,6 +2383,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Where to move it to?`
+  String get where_move {
+    return Intl.message(
+      'Where to move it to?',
+      name: 'where_move',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create`
+  String get create {
+    return Intl.message(
+      'Create',
+      name: 'create',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download`
+  String get down {
+    return Intl.message(
+      'Download',
+      name: 'down',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

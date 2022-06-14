@@ -16,6 +16,7 @@ import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/latest_file.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 import 'package:upstorage_desktop/pages/home/home_event.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
@@ -26,7 +27,6 @@ import 'package:upstorage_desktop/pages/media/media_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
@@ -126,88 +126,83 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
-      body: Stack(
-        children: [
-          BlocProvider(
-            create: (context) => HomeBloc()..add(HomePageOpened()),
-            child: BlocListener<HomeBloc, HomeState>(
-              listener: (context, state) async {
-                if (state.status == FormzStatus.submissionFailure) {
-                  await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return BlurSomethingGoesWrong(true);
-                    },
+      body: BlocProvider(
+        create: (context) => HomeBloc()..add(HomePageOpened()),
+        child: BlocListener<HomeBloc, HomeState>(
+          listener: (context, state) async {
+            if (state.status == FormzStatus.submissionFailure) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurSomethingGoesWrong(true);
+                },
+              );
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurFailedServerConnection(true);
+                },
+              );
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 274,
+                margin: const EdgeInsets.only(left: 30, top: 30, bottom: 30),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
+                ),
+                child:
+                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
+                        child: SvgPicture.asset(
+                          'assets/home_page/storage_title.svg',
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
+                        child: SvgPicture.asset(
+                          'assets/home_page/separator.svg',
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          controller: ScrollController(),
+                          children: [
+                            _downloadButton(context),
+                            ..._customMenuItem(),
+                            ..._leftButtonsItem()
+                          ],
+                        ),
+                      ),
+                      _logout(),
+                      (state.upToDateVersion != state.version)
+                          ? (state.upToDateVersion != null)
+                              ? _update()
+                              : Container()
+                          : Container(),
+                    ],
                   );
-                } else if (state.status == FormzStatus.submissionCanceled) {
-                  await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return BlurFailedServerConnection(true);
-                    },
-                  );
-                }
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 274,
-                    margin:
-                        const EdgeInsets.only(left: 30, top: 30, bottom: 30),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromARGB(25, 23, 69, 139),
-                            blurRadius: 4,
-                            offset: Offset(1, 4))
-                      ],
-                    ),
-                    child: BlocBuilder<HomeBloc, HomeState>(
-                        builder: (context, state) {
-                      return Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
-                            child: SvgPicture.asset(
-                              'assets/home_page/storage_title.svg',
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
-                            child: SvgPicture.asset(
-                              'assets/home_page/separator.svg',
-                            ),
-                          ),
-                          Expanded(
-                            child: ListView(
-                              shrinkWrap: true,
-                              controller: ScrollController(),
-                              children: [
-                                ..._customMenuItem(),
-                                ..._leftButtonsItem()
-                              ],
-                            ),
-                          ),
-                          _logout(),
-                          (state.upToDateVersion != state.version)
-                              ? (state.upToDateVersion != null)
-                                  ? _update()
-                                  : Container()
-                              : Container(),
-                        ],
-                      );
-                    }),
-                  ),
-                  Expanded(child: getPage()),
-                ],
+                }),
               ),
-            ),
+              Expanded(child: getPage()),
+            ],
           ),
-          LoadingContainer()
-        ],
+        ),
       ),
     );
   }
@@ -279,6 +274,85 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  Widget _downloadButton(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        if (!isEventBusInited) {
+          isEventBusInited = true;
+          eventBusForUpload.on().listen((event) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurMenuUpload();
+              },
+            ).then((result) {
+              if (result is AddMenuResult) {
+                _processUserAction(context, result);
+              }
+            });
+          });
+        }
+
+        return Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
+          child: Container(
+            height: 42,
+            width: 214,
+            child: ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurMenuUpload();
+                  },
+                ).then((result) {
+                  if (result is AddMenuResult) {
+                    _processUserAction(context, result);
+                  }
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).splashColor,
+                side: BorderSide(
+                  style: BorderStyle.solid,
+                  color: Theme.of(context).splashColor,
+                  width: 1.5,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Image.asset(
+                      'assets/file_page/plus.png',
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3.0),
+                    child: Text(
+                      translate.download,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   List<Widget> _leftButtonsItem() {
     return [
       Padding(
@@ -296,75 +370,6 @@ class _HomePageState extends State<HomePage> {
             ? latestFile(context)
             : Container();
       }),
-      BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if (!isEventBusInited) {
-            isEventBusInited = true;
-            eventBusForUpload.on().listen((event) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurMenuUpload();
-                },
-              ).then((result) {
-                if (result is AddMenuResult) {
-                  _processUserAction(context, result);
-                }
-              });
-            });
-          }
-
-          return Padding(
-            padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
-            child: Container(
-              height: 42,
-              width: 214,
-              child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return BlurMenuUpload();
-                    },
-                  ).then((result) {
-                    if (result is AddMenuResult) {
-                      _processUserAction(context, result);
-                    }
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  side: BorderSide(
-                    style: BorderStyle.solid,
-                    color: Theme.of(context).splashColor,
-                    width: 1.5,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      translate.add,
-                      style: TextStyle(
-                        color: Theme.of(context).splashColor,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Image.asset('assets/file_page/plus.png'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
     ];
   }
 
@@ -537,13 +542,10 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          var page = StateContainer.of(context).choosedPage;
-
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
-                choosedPage: page,
               ));
         }
         break;
@@ -560,13 +562,11 @@ class _HomePageState extends State<HomePage> {
           // );
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
-          var page = StateContainer.of(context).choosedPage;
 
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
-                choosedPage: page,
               ));
         }
         break;
