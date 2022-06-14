@@ -17,7 +17,6 @@ import '../pages/home/home_bloc.dart' as _i12;
 import '../pages/info/info_bloc.dart' as _i13;
 import '../pages/media/media_open/media_open_bloc.dart' as _i17;
 import '../pages/settings/settings_bloc.dart' as _i22;
-import 'autoupload/autoupload_controller.dart' as _i4;
 import 'controllers/files_controller.dart' as _i7;
 import 'controllers/load_controller.dart' as _i16;
 import 'controllers/packet_controllers.dart' as _i19;
@@ -47,15 +46,15 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i4.Dio>(() => serviceModule.dio, instanceName: 'auth_dio');
   gh.lazySingleton<_i4.Dio>(() => serviceModule.recordDio,
       instanceName: 'record_dio');
-  gh.lazySingletonAsync<_i5.DownloadLocationsRepository>(
-      () => _i5.DownloadLocationsRepository.create());
-  gh.factory<_i6.FilesController>(() => serviceModule.filesController,
+  gh.lazySingletonAsync<_i6.DownloadLocationsRepository>(
+      () => _i6.DownloadLocationsRepository.create());
+  gh.factory<_i7.FilesController>(() => serviceModule.filesController,
       instanceName: 'files_controller');
-  gh.factory<_i7.FilesRepository>(() => _i7.FilesRepository());
-  gh.lazySingleton<_i7.FilesRepository>(() => serviceModule.filesRepo,
+  gh.factory<_i8.FilesRepository>(() => _i8.FilesRepository());
+  gh.lazySingleton<_i8.FilesRepository>(() => serviceModule.filesRepo,
       instanceName: 'files_repo');
   gh.factory<_i9.FilesService>(
-      () => _i9.FilesService(get<_i5.Dio>(instanceName: 'record_dio')));
+      () => _i9.FilesService(get<_i4.Dio>(instanceName: 'record_dio')));
   gh.factory<_i10.FinanceBloc>(() => _i10.FinanceBloc());
   gh.factory<_i11.ForgotPasswordBloc>(() => _i11.ForgotPasswordBloc());
   gh.factory<_i12.HomeBloc>(() => _i12.HomeBloc());
@@ -82,7 +81,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i26.UserRepository>(() => serviceModule.userRepository,
       instanceName: 'user_repo');
   gh.factory<_i27.AuthService>(
-      () => _i27.AuthService(get<_i5.Dio>(instanceName: 'auth_dio')));
+      () => _i27.AuthService(get<_i4.Dio>(instanceName: 'auth_dio')));
   gh.singleton<_i28.AuthenticationRepository>(
       _i28.AuthenticationRepository(get<_i27.AuthService>()));
   gh.factory<_i29.FilesBloc>(() => _i29.FilesBloc(
