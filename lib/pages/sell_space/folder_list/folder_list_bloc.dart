@@ -33,8 +33,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         await _rebootKeeper(event, state, emit);
       }
     });
-    on<UpdateLocationsList>(
-        (event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
+    on<UpdateLocationsList>((event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
   }
 
   // final AuthenticationRepository _authenticationRepository =
@@ -57,8 +56,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       user: user,
     ));
     try {
-      timer =
-          Timer.periodic(const Duration(seconds: 5), (Timer t) async {
+      timer = Timer.periodic(const Duration(seconds: 5), (Timer t) async {
         add(GetKeeperInfo());
       });
     } catch (e) {
@@ -106,7 +104,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
 
     if (!isClosed) {
       add(UpdateLocationsList(locations: info));
-    };
+    }
+    ;
   }
 
   @override
@@ -207,8 +206,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     String? bearerToken = await TokenRepository().getApiToken();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
     var box = await Hive.openBox('keeper_data');
-    String keeperDir =
-        Uri.decodeFull(await box.get(event.location.id.toString()));
+    String keeperDir = Uri.decodeFull(await box.get(event.location.id.toString()));
     await box.delete(event.location.id.toString());
     String keeperId = '';
     var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
@@ -265,9 +263,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
           ),
         );
         if (response.data['online'] != 0) {
-          await _disconnectKeeper(
-              'ws://${response.data['proxyIP']}:${response.data['proxyPORT']}',
-              response.data['session']);
+          await _disconnectKeeper('ws://${response.data['proxyIP']}:${response.data['proxyPORT']}', response.data['session']);
         }
       } catch (e) {
         print(e);
@@ -279,15 +275,24 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   _rebootKeeper(KeeperReboot event, FolderListState state, Emitter emit) async {
     String keeperId = event.location.idForCompare;
     int keepersCount = state.locationsInfo.length;
+    print("Start reboot keeper");
     for (int port = START_PORT; port < END_PORT || keepersCount == 0; port++) {
       try {
-        Dio().get("http://localhost:$port/reboot/$keeperId");
+        await Dio().get("http://localhost:$port/reboot/$keeperId",
+            options: Options(
+              receiveTimeout: 500,
+              sendTimeout: 500,
+            ));
+        print("Send signal to off keeper");
         break;
       } on DioError catch (e) {
         switch (e.response?.statusCode) {
           case 404:
+            print("Not correct keeper to reboot");
             keepersCount--;
             break;
+          default:
+            print("Port is not busy by keeper");
         }
       }
     }
@@ -298,8 +303,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         var domainNameFile = File("${os.appDirPath}domainName");
         String? domainName;
         if (domainNameFile.existsSync()) {
-          domainName =
-              File("${os.appDirPath}domainName").readAsStringSync().trim();
+          domainName = File("${os.appDirPath}domainName").readAsStringSync().trim();
           String? bearerToken = await TokenRepository().getApiToken();
           print(bearerToken);
           if (bearerToken != null) {

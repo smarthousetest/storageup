@@ -58,11 +58,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     String keeperId,
   ) async {
-    // var hashedPassword =
-    //       new DBCrypt().hashpw(plainPwd, new DBCrypt().gensalt());
     var os = OsSpecifications.getOs();
-    // os.setKeeperHash(state.user!.email!, hashedPassword);
-
     _writeKeeperId(
       '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt',
       keeperId,
