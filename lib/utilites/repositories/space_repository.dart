@@ -35,8 +35,7 @@ class DownloadLocationsRepository {
       final value = event.value;
 
       if (_locationsInfo.any((element) => element.id == key)) {
-        final currentLocationInfoIndex =
-            _locationsInfo.indexWhere((element) => element.id == key);
+        final currentLocationInfoIndex = _locationsInfo.indexWhere((element) => element.id == key);
 
         if (event.deleted)
           _locationsInfo.removeAt(currentLocationInfoIndex);
@@ -50,11 +49,7 @@ class DownloadLocationsRepository {
 
   List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
 
-  ValueListenable<Box<DownloadLocation>>
-      get getDownloadLocationsValueListenable => _locationsBox.listenable();
-
-  // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
-  //     _locationsInfo = locationsInfo;
+  ValueListenable<Box<DownloadLocation>> get getDownloadLocationsValueListenable => _locationsBox.listenable();
 
   int createLocation({
     required String path,

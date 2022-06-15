@@ -10,6 +10,7 @@ import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
+import 'package:upstorage_desktop/utilites/local_server/local_server.dart' as ui;
 import 'constants.dart';
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
@@ -17,6 +18,7 @@ import 'utilites/state_container.dart';
 
 
 void main() async {
+  ui.Server().startServer();
   readFromFileDomainName();
   await configureInjection();
   //HttpOverrides.global = MyHttpOverrides();

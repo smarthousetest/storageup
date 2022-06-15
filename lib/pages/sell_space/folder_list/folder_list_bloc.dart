@@ -90,7 +90,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       }
     });
 
-    print('5 seconds update keeper');
+    // print('5 seconds update keeper');
     emit(state.copyWith(
       locationsInfo: locationsInfo,
       localKeeper: localKeeper.reversed.toList(),
