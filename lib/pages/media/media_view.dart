@@ -1217,6 +1217,8 @@ class MediaGridElement extends StatelessWidget {
     if (imageUrl != null && imageUrl.isURL()) {
       image = Image.network(
         record.thumbnail!.first.publicUrl!,
+        height: 100,
+        fit: BoxFit.fitHeight,
       );
     } else {
       image = Image.asset(
@@ -1230,9 +1232,12 @@ class MediaGridElement extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: image,
+            Container(
+              height: 67,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: image,
+              ),
             ),
             ..._uploadProgress(record.loadPercent),
           ],

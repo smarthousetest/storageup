@@ -1719,7 +1719,7 @@ class ObjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     String? type = '';
     bool isFile = false;
-
+    String? thumbnail;
     if (object is Record) {
       var record = object as Record;
       isFile = true;
@@ -1729,6 +1729,7 @@ class ObjectView extends StatelessWidget {
                   .isNotEmpty /*&&
           record.thumbnail!.first.name!.contains('.')*/
           ) {
+        thumbnail = record.thumbnail?.first.publicUrl;
         type = FileAttribute().getFilesType(record.name!.toLowerCase());
       }
     }
@@ -1744,7 +1745,7 @@ class ObjectView extends StatelessWidget {
               Container(
                 height: 90,
                 width: 80,
-                child: isFile && type != 'image'
+                child: isFile && type != 'image' && type != 'video'
                     ? type!.isNotEmpty && type != 'unexpected'
                         ? Image.asset(
                             'assets/file_icons/$type.png',
@@ -1754,15 +1755,20 @@ class ObjectView extends StatelessWidget {
                             'assets/file_icons/files.png',
                             fit: BoxFit.contain,
                           )
-                    : type == 'image'
+                    : type == 'image' || type == 'video' && thumbnail != null
                         ? Image.network(
-                            (object as Record).thumbnail!.first.publicUrl!,
+                            thumbnail!,
                             fit: BoxFit.contain,
                           )
-                        : Image.asset(
-                            'assets/file_icons/folder.png',
-                            fit: BoxFit.contain,
-                          ),
+                        : type == 'video' && thumbnail == null
+                            ? Image.asset(
+                                'assets/file_icons/$type.png',
+                                fit: BoxFit.contain,
+                              )
+                            : Image.asset(
+                                'assets/file_icons/folder.png',
+                                fit: BoxFit.contain,
+                              ),
               ),
               ..._uploadProgress(
                   isFile ? (object as Record).loadPercent : null),
