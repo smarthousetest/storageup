@@ -21,8 +21,8 @@ class LoadingContainerBloc
       _loadController = getIt<LoadController>();
       // final valueListenable = _filesController.getObjectsValueListenable(null);
 
-      print(
-          'load controller is not  inited: ${getIt<LoadController>().isNotInited()}');
+      // print(
+      //     'load controller is not  inited: ${getIt<LoadController>().isNotInited()}');
       //  var folder = await _filesController.getFilesRootFolder();
       //  print(folder?.size);
       emit(state.copyWith(
@@ -60,9 +60,9 @@ class LoadingContainerBloc
         _processLoadChanges(value);
       }
     });
-    if (_loadController.isNotInited()) {
-      await _loadController.init();
-    }
+    // if (_loadController.isNotInited()) {
+    //   await _loadController.init();
+    // }
 
     _loadController.getState.registerObserver(loadControllerObserver);
   }

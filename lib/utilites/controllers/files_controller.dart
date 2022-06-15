@@ -1,15 +1,14 @@
 import 'dart:io';
 
+import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/models.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/file_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
-import 'package:upstorage_desktop/utilites/repositories/storage_files.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 
 class FilesController {
