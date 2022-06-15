@@ -72,7 +72,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           final file = uploadingFilesList.firstWhere(
               (file) => file.isInProgress && file.uploadPercent == 0);
 
-          _update(uploadingFileId: file.id);
+          update(uploadingFileId: file.id);
         }
       } else if (e is List<DownloadFileInfo>) {
         final downloadingFilesList = e;
@@ -128,7 +128,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         await _filesController.getContentFromFolderById(currentFolder!.id);
 
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
-      _update();
+      update();
     });
     var user = _userRepository.getUser;
     bool progress = true;
@@ -375,7 +375,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     print(result);
     if (result == ResponseStatus.ok) {
       await _packetController.updatePacket();
-      _update();
+      update();
     } else if (result == ResponseStatus.noInternet) {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     } else {
@@ -414,7 +414,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           records: records,
         );
       }
-      await _update();
+      await update();
       emit(
         state.copyWith(
           status: FormzStatus.submissionSuccess,
@@ -434,7 +434,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
     if (result == ResponseStatus.ok) {
-      _update();
+      update();
     } else if (result == ResponseStatus.notExecuted) {
       return ErrorType.alreadyExist;
     } else if (result == ResponseStatus.failed) {
@@ -449,7 +449,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var result = await _filesController.renameFolder(newName, object.id);
     print(result);
     if (result == ResponseStatus.ok) {
-      _update();
+      update();
     } else if (result == ResponseStatus.notExecuted) {
       return ErrorType.alreadyExist;
     } else if (result == ResponseStatus.failed) {
@@ -511,7 +511,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var favorite = !object.favorite;
     var res = await _filesController.setFavorite(object, favorite);
     if (res == ResponseStatus.ok) {
-      _update();
+      update();
     }
   }
 
@@ -547,7 +547,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     ));
   }
 
-  Future<void> _update({String? uploadingFileId}) async {
+  Future<void> update({String? uploadingFileId}) async {
     await _filesController.updateFilesList();
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
@@ -612,7 +612,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             _observers.indexWhere((observer) => observer.id == currentFilePath);
 
         if (indexOfObserver == -1) {
-          await _update();
+          await update();
           _tryToFindObservableRecords();
         }
       }
@@ -635,7 +635,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       // }
 
       if (currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty) {
-        _update();
+        update();
         print('currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty');
         return;
       }

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:cpp_native/cpp_native.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -22,6 +24,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       }
       if (event is SaveDirPath) {
         await _mapSaveDirPath(event, state, emit);
+      }
+      if (event is GetPathToKeeper) {
+        await _getPathToKeeper(event, state, emit);
       }
     });
   }
@@ -48,6 +53,24 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         locationsInfo: locationsInfo,
         keeper: keeper,
         valueNotifier: valueNotifier));
+  }
+
+  // DiskSpaceController()
+  Future<void> _getPathToKeeper(
+    GetPathToKeeper event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) async {
+    String? result = await FilePicker.platform.getDirectoryPath();
+    if (result != null) {
+      var path = DiskSpaceController(pathToDir: result);
+      var availableBytes = await path.getAvailableDiskSpace();
+      print(availableBytes);
+      emit(state.copyWith(
+        pathToKeeper: PathCheck.doPathCorrect(result),
+        availableSpace: availableBytes,
+      ));
+    }
   }
 
   Future _mapRunSoft(
@@ -121,5 +144,29 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       await box.put(keeperDataId.toString(), Uri.encodeFull(path));
       _mapRunSoft(tmpState, id);
     }
+  }
+}
+
+class PathCheck {
+  static List<String> _restrictedWords = [
+    'OneDrive',
+    'Program Files',
+    'Program Files (x86)',
+  ];
+
+  ///Function check is a path contain "OneDrive" part
+  ///If contain, return path before "OneDrive" part
+  static String doPathCorrect(String path) {
+    var partPath = path.split(Platform.pathSeparator);
+    for (int i = 0; i < partPath.length; i++) {
+      for (var restrictedWord in _restrictedWords) {
+        if (partPath[i] == restrictedWord) {
+          var result = partPath.sublist(0, i);
+          result.add(path.split(Platform.pathSeparator).last);
+          return result.join(Platform.pathSeparator);
+        }
+      }
+    }
+    return path;
   }
 }

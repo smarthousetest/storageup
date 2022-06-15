@@ -710,23 +710,23 @@ class S {
     );
   }
 
-  /// `Minimum storage size: 32 GB`
-  String get min_storage {
+  /// `Minimum storage size: {count} GB`
+  String min_storage(Object count) {
     return Intl.message(
-      'Minimum storage size: 32 GB',
+      'Minimum storage size: $count GB',
       name: 'min_storage',
       desc: '',
-      args: [],
+      args: [count],
     );
   }
 
-  /// `Maximum size for your drive: 180 GB`
-  String get max_storage {
+  /// `Maximum size for your drive: {count} GB`
+  String max_storage(Object count) {
     return Intl.message(
-      'Maximum size for your drive: 180 GB',
+      'Maximum size for your drive: $count GB',
       name: 'max_storage',
       desc: '',
-      args: [],
+      args: [count],
     );
   }
 
@@ -2341,6 +2341,16 @@ class S {
     return Intl.message(
       'Download',
       name: 'down',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
       desc: '',
       args: [],
     );

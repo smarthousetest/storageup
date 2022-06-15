@@ -39,13 +39,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(count) => "${count} Kb";
 
-  static String m8(count) => "${count} Mb";
+  static String m8(count) => "Maximum size for your drive: ${count} GB";
 
-  static String m9(count) => "${count} Pb";
+  static String m9(count) => "${count} Mb";
 
-  static String m10(count) => "${count} \$/mounth";
+  static String m10(count) => "Minimum storage size: ${count} GB";
 
-  static String m11(count) => "${count} Tb";
+  static String m11(count) => "${count} Pb";
+
+  static String m12(count) => "${count} \$/mounth";
+
+  static String m13(count) => "${count} Tb";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -190,12 +194,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "disk - rent space and make money on it!"),
         "management":
             MessageLookupByLibrary.simpleMessage("Subscription management"),
-        "max_storage": MessageLookupByLibrary.simpleMessage(
-            "Maximum size for your drive: 180 GB"),
-        "mb": m8,
+        "max_storage": m8,
+        "mb": m9,
         "media": MessageLookupByLibrary.simpleMessage("Media"),
-        "min_storage":
-            MessageLookupByLibrary.simpleMessage("Minimum storage size: 32 GB"),
+        "min_storage": m10,
         "money":
             MessageLookupByLibrary.simpleMessage("can make money from it."),
         "money_two_step":
@@ -249,7 +251,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Passwords don\'t match"),
         "path": MessageLookupByLibrary.simpleMessage("Path"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
-        "pb": m9,
+        "pb": m11,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to permanently delete your account"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -319,8 +321,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m10,
-        "tb": m11,
+        "subscription_pay_mounth": m12,
+        "tb": m13,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),
@@ -334,6 +336,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "trust_level": MessageLookupByLibrary.simpleMessage("Trust level"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "unsubscribe": MessageLookupByLibrary.simpleMessage("Unsubscribe"),
+        "update": MessageLookupByLibrary.simpleMessage("Update"),
         "upload": MessageLookupByLibrary.simpleMessage("Upload"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),

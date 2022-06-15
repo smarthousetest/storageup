@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 
-
 abstract class SpaceEvent extends Equatable {
   const SpaceEvent();
   @override
@@ -19,6 +18,10 @@ abstract class SpaceEvent extends Equatable {
 
 class SpacePageOpened extends SpaceEvent {
   const SpacePageOpened();
+}
+
+class GetPathToKeeper extends SpaceEvent {
+  const GetPathToKeeper();
 }
 
 class RunSoft extends SpaceEvent {

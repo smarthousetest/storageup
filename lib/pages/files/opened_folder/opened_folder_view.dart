@@ -200,9 +200,52 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             //   ],
             // ),
             Spacer(),
+            GestureDetector(
+              onTap: () {
+                context.read<OpenedFolderCubit>().update();
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  width: 128,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/file_page/update.svg',
+                        color: Theme.of(context).splashColor,
+                        width: 24,
+                        height: 24,
+                      ),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          translate.update,
+                          maxLines: 1,
+                          style: TextStyle(
+                            color: Theme.of(context).splashColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             StateSortedContainer.of(context).sortedActionButton
                 ? IconButton(
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.only(left: 15.0, right: 15),
                     iconSize: 30,
                     onPressed: () {
                       if (_direction == SortingDirection.down) {
@@ -221,7 +264,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                   )
                 : Container(),
             Padding(
-              padding: const EdgeInsets.only(left: 30.0),
+              padding: const EdgeInsets.only(left: 15.0),
               child: IconButton(
                 padding: EdgeInsets.zero,
                 iconSize: 30,
