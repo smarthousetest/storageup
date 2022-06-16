@@ -26,6 +26,7 @@ import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
 
 import '../../constants.dart';
 import '../../utilites/repositories/latest_file_repository.dart';
+import '../sell_space/space_view.dart';
 
 //enum SortingDirection { neutral, up, down }
 enum ContextActionEnum {
@@ -131,7 +132,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
         ),
       );
     }
-    print('Load controller init is: ${_loadController.isNotInited()}');
+    print('Load controller init is: ${_loadController.isNotInitialized()}');
   }
 
   Future<void> _mapUpdateFilesList(
@@ -156,28 +157,6 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
         print('on updating files can\'t find file with the same id as sended in event');
       }
     }
-    // var st = _loadController.getState.uploadingFiles;
-    // if (st.any((element) => element.isInProgress)) {
-    //   st.forEach((uploadingFile) {
-    //     if (uploadingFile.isInProgress) {
-    //       try {
-    //         (files?.firstWhere((element) => element.id == uploadingFile.id)
-    //                 as Record)
-    //             .loadPercent = uploadingFile.uploadPercent.toDouble();
-    //       } catch (e) {
-    //         print('$e handled');
-    //       }
-    //     } else {
-    //       try {
-    //         (files?.firstWhere((element) => element.id == uploadingFile.id)
-    //                 as Record)
-    //             .loadPercent = 0;
-    //       } catch (e) {
-    //         print('$e handled');
-    //       }
-    //     }
-    //   });
-    // }
     emit(state.copyWith(
       allFiles: files,
       sortedFiles: files,
@@ -285,15 +264,11 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     Emitter<FilesState> emit,
   ) async {
     List<BaseObject> sortedFiles = await _getClearListOfFiles(state);
-    sortedFiles.sort((a, b) {
-      // if (a.size != null && b.size != null) {
-      return a.size.compareTo(b.size);
-      // }
-      // else if (a.size == null && b.size == null) {
-      //   return a.id.compareTo(b.id);
-      // } else
-      //   return a.size == null ? 0 : 1;
-    });
+    sortedFiles.sort(
+      (a, b) {
+        return a.size.compareTo(b.size);
+      },
+    );
     if (event.direction == SortingDirection.up) {
       emit(state.copyWith(sortedFiles: sortedFiles.reversed.toList()));
     } else {
@@ -461,23 +436,30 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     FilesState state,
     Emitter<FilesState> emit,
   ) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.any, allowCompression: false, allowMultiple: true);
-
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+      allowCompression: false,
+      allowMultiple: true,
+    );
     if (result != null && result.paths.isNotEmpty) {
-      result.paths.forEach((element) async {
-        if (element != null) {
-          var observer = UploadObserver(element, (_) {
-            _uploadListener(element);
-          });
-          _listeners.add(observer);
-          _loadController.getState.registerObserver(observer);
+      for (var path in result.paths) {
+        if (path != null) {
+          if (PathCheck().isPathCorrect(path)) {
+            var observer = UploadObserver(path, (_) {
+              _uploadListener(path);
+            });
+            _listeners.add(observer);
+            _loadController.getState.registerObserver(observer);
 
-          await _loadController.uploadFile(
-            filePath: element,
-            folderId: state.currentFolder?.id,
-          );
+            await _loadController.uploadFile(
+              filePath: path,
+              folderId: state.currentFolder?.id,
+            );
+          } else {
+            print('Path is not correct, contains restricted words: ${PathCheck().toString()}');
+          }
         }
-      });
+      }
     }
   }
 
@@ -532,30 +514,6 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     }
   }
 
-  // Future<void> _mapDownloadFile(
-  //   FileContextActionChoosed event,
-  //   FilesState state,
-  //   Emitter<FilesState> emit,
-  // ) async {
-  //   var token = await _tokenRepository.getApiToken();
-  //   var recordId = event.file.id;
-
-  //   if (token != null) {
-  //     CppNative cpp = CppNative();
-  //     await cpp.downloadFile(
-  //         recordID: recordId,
-  //         bearerToken: token,
-  //         callback: (file) async {
-  //           print(file.path);
-  //           var box = await Hive.openBox(kPathDBName);
-  //           box.put(recordId, file.path);
-  //         });
-  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
-  //   } else {
-  //     emit(state.copyWith(status: FormzStatus.submissionFailure));
-  //   }
-  // }
-
   Future<void> _mapAddFolder(
     FilesState state,
     FileAddFolder event,
@@ -581,29 +539,21 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     FileChangeUploadPercent event,
     Emitter<FilesState> emit,
   ) async {
-    // (state.allFiles.firstWhere((element) => element.id == event.id) as Record)
-    //     .uploadPercent = null;
     var files = await _controller.getContentFromFolderById(state.currentFolder!.id);
 
     files.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
     try {
-      // (files.firstWhere((element) =>
-      //         element.id == event.id &&
-      //         (element as Record).path?.isNotEmpty != true) as Record)
-      //     .loadPercent = event.percent;
-      var ind = files.indexWhere((element) => element is Record && element.id == event.id /*&&
-          element.path?.isNotEmpty != true*/
-          );
+      var ind = files.indexWhere((element) => element is Record && element.id == event.id);
       var record = (files[ind] as Record).copyWith(loadPercent: event.percent);
       files[ind] = record;
     } catch (_) {
-      print('can\'t find file with same id as downloading file at _mapChangePercent with id: ${event.id}');
+      print("can't find file with same id as downloading file at _mapChangePercent with id: ${event.id}");
     }
     emit(state.copyWith(
       allFiles: files,
       sortedFiles: files,
     ));
-    print('------------------------- state emmited');
+    print('------------------------- state emitted');
   }
 
   void _mapDiscardSelecting(FilesState state, Emitter<FilesState> emit) {

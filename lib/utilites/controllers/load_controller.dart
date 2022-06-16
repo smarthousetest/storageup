@@ -1,18 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cpp_native/cpp_native.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
-
 import 'package:upstorage_desktop/constants.dart';
 import '../injection.dart';
 
@@ -25,22 +21,20 @@ class LoadController {
 
   _LoadState get getState => _state;
 
-  LoadController() {
-    // init();
-  }
+  LoadController() {}
 
-  bool isNotInited() {
+  bool isNotInitialized() {
     return _cpp == null;
   }
 
-  Function(String)? _onAddAutouploadingFile;
+  Function(String)? _onAddAutoUploadingFile;
 
-  set setAutouploadNextFileListener(Function(String) callback) => _onAddAutouploadingFile = callback;
+  set setAutoUploadNextFileListener(Function(String) callback) => _onAddAutoUploadingFile = callback;
 
-  void clearAutouploadNextFileCallback() => _onAddAutouploadingFile = null;
+  void clearAutoUploadNextFileCallback() => _onAddAutoUploadingFile = null;
 
   Future<void> init() async {
-    print('initializing load controller');
+    print('Initializing load controller');
     Directory appDocDir = await getApplicationDocumentsDirectory();
     _cpp = await getInstanceCppNative(
       documentsFolder: appDocDir,
@@ -53,7 +47,7 @@ class LoadController {
     String? folderId,
     bool force = false,
   }) async {
-    if (isNotInited()) {
+    if (isNotInitialized()) {
       await init();
     }
     var uploadingFiles = _state.uploadingFiles;
@@ -124,7 +118,6 @@ class LoadController {
   ) async {
     print('--------------------------------------- $event');
     try {
-      // if (fileId == null) fileId = '-1';
       var uploadingFiles = List<UploadFileInfo>.from(_state.uploadingFiles);
 
       if (event.right != null) {
@@ -196,7 +189,7 @@ class LoadController {
   }
 
   void downloadFile({required String? fileId, bool force = false}) async {
-    if (isNotInited()) {
+    if (isNotInitialized()) {
       await init();
     }
     var downloadingFiles = _state.downloadingFiles;

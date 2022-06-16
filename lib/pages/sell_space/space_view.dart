@@ -32,6 +32,18 @@ class PathCheck {
     'Program Files (x86)',
   ];
 
+  bool isPathCorrect(String path){
+    var partsOfPath = path.split(Platform.pathSeparator);
+    for(var part in partsOfPath){
+      for(var restrictedWord in _restrictedWords){
+        if(part == restrictedWord){
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   ///Function check is a path contain "OneDrive" part
   ///If contain, return path before "OneDrive" part
   static String doPathCorrect(String path) {
@@ -47,6 +59,12 @@ class PathCheck {
     }
     return path;
   }
+
+  @override
+  String toString() {
+    return _restrictedWords.toString();
+  }
+
 }
 
 class _SpaceSellPageState extends State<SpaceSellPage> {
@@ -71,7 +89,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    //final box = keyContext?.findRenderObject() as RenderBox;
     _searchFieldWidth = width - _rowPadding * 4 - 274 - 222;
   }
 
