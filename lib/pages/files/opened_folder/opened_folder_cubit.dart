@@ -62,41 +62,94 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   var _packetController =
       getIt<PacketController>(instanceName: 'packet_controller');
 
+  late Observer loadControllerObserver = Observer((value) {
+    // if (value is List<DownloadFileInfo>) {
+    //   _processDownloadChanges(value);
+    // } else if (value is List<UploadFileInfo>) {
+    //   _processUploadChanges(value);
+    // }
+
+    // if (value is LoadNotification) {
+    //   _processLoadChanges(value);
+    // }
+  });
+  //    void _processLoadChanges(LoadNotification notification) async {
+  //   MainUploadInfo? upload;
+  //   MainDownloadInfo? download;
+
+  //   final isUploadingInProgress = notification.countOfUploadingFiles != 0 &&
+  //       notification.isUploadingInProgress;
+
+  //   if (isUploadingInProgress) {
+  //     final loadPercent = notification.uploadFileInfo?.loadPercent.toDouble();
+
+  //     upload = MainUploadInfo(
+  //       countOfUploadedFiles: notification.countOfUploadedFiles,
+  //       countOfUploadingFiles: notification.countOfUploadingFiles,
+  //       isUploading: true,
+  //       uploadingFilePercent:
+  //           loadPercent == null || loadPercent == -1 ? 0 : loadPercent,
+  //     );
+
+  //     add(MainPageChangeUploadInfo(uploadInfo: upload));
+  //   } else {
+  //     add(MainPageChangeUploadInfo(
+  //         uploadInfo: MainUploadInfo(isUploading: false)));
+  //   }
+
+  //   final isDownloadingInProgress = notification.countOfDownloadingFiles != 0 &&
+  //       notification.isDownloadingInProgress;
+
+  //   if (isDownloadingInProgress) {
+  //     final loadPercent = notification.downloadFileInfo?.loadPercent.toDouble();
+
+  //     download = MainDownloadInfo(
+  //       countOfDownloadedFiles: notification.countOfDownloadedFiles,
+  //       countOfDownloadingFiles: notification.countOfDownloadingFiles,
+  //       isDownloading: true,
+  //       downloadingFilePercent:
+  //           loadPercent == null || loadPercent == -1 ? 0 : loadPercent,
+  //     );
+
+  //     add(MainPageChangeDownloadInfo(downloadInfo: download));
+  //   } else {
+  //     add(MainPageChangeDownloadInfo(
+  //         downloadInfo: MainDownloadInfo(isDownloading: false)));
+  //   }
+  // }
+
   late Observer _updateObserver = Observer((e) {
     try {
-      if (e is List<UploadFileInfo>) {
-        final uploadingFilesList = e;
-        if (uploadingFilesList.any((file) =>
-            file.isInProgress && file.loadPercent == 0 && file.id.isNotEmpty)) {
-          final file = uploadingFilesList
-              .firstWhere((file) => file.isInProgress && file.loadPercent == 0);
-
-          _update(uploadingFileId: file.id);
-        }
-      } else if (e is List<DownloadFileInfo>) {
-        final downloadingFilesList = e;
-        if (downloadingFilesList
-            .any((file) => file.isInProgress && file.loadPercent == -1)) {
-          final file = downloadingFilesList.firstWhere(
-              (file) => file.isInProgress && file.loadPercent == -1);
-          _setRecordDownloading(recordId: file.id);
-        }
-        if (downloadingFilesList.any((file) =>
-            file.endedWithException == true &&
-            file.errorReason == ErrorReason.noInternetConnection &&
-            file.loadPercent == -1 &&
-            file.isInProgress == false &&
-            file.id == idTappedFile)) {
+      if (e is LoadNotification) {
+        final uploadingFiles = e.uploadFileInfo;
+        print("e =  ${e.downloadFileInfo}");
+        // if (uploadingFilesList.any((file) =>
+        //     file.isInProgress && file.loadPercent == 0 && file.id.isNotEmpty)) {
+        //   final file = uploadingFilesList
+        //       .firstWhere((file) => file.isInProgress && file.loadPercent == 0);
+        if (uploadingFiles != null) {
+          _update(uploadingFileId: uploadingFiles.id);
+        } else if (e.downloadFileInfo != null &&
+            e.isDownloadingInProgress &&
+            e.downloadFileInfo?.loadPercent == -1) {
+          _setRecordDownloading(recordId: e.downloadFileInfo!.id);
+        } else if (e.downloadFileInfo?.endedWithException == true &&
+            e.downloadFileInfo?.errorReason ==
+                ErrorReason.noInternetConnection &&
+            e.downloadFileInfo?.loadPercent == -1 &&
+            e.isDownloadingInProgress == false &&
+            e.downloadFileInfo?.id == idTappedFile) {
           emit(state.copyWith(status: FormzStatus.submissionCanceled));
           emit(state.copyWith(status: FormzStatus.pure));
-        } else if (downloadingFilesList.any((file) =>
-            file.endedWithException == true &&
-            file.loadPercent == -1 &&
-            file.isInProgress == false &&
-            file.id == idTappedFile)) {
+        } else if (e.downloadFileInfo?.endedWithException == true &&
+            e.downloadFileInfo?.loadPercent == -1 &&
+            e.isDownloadingInProgress == false &&
+            e.downloadFileInfo?.id == idTappedFile) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
           emit(state.copyWith(status: FormzStatus.pure));
         }
+
+        // }
       }
     } catch (e) {
       log('OpenFolderCubit -> _updateObserver:', error: e);

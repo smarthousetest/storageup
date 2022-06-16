@@ -273,6 +273,8 @@ class LoadController {
     DownloadFileInfo fileInfo;
     if (fileId != null) {
       if (_state.containDownloadingObjectWithId(fileId)) {
+        print(!_state.isDownloadingInProgress &&
+            _state.currentDownloadingFile?.id != fileId);
         if (!_state.isDownloadingInProgress &&
             _state.currentDownloadingFile?.id != fileId) {
           _state.increasePriorityOfDownloadFileById(fileId);
@@ -306,24 +308,46 @@ class LoadController {
     var token = await _tokenRepository.getApiToken();
 
     if (token != null && token.isNotEmpty) {
-      _cpp?.downloadFile(
-        recordID: fileInfo.id,
-        bearerToken: token,
-      );
+      _cpp
+          ?.downloadFile(
+            recordID: fileInfo.id,
+            bearerToken: token,
+          )
+          .listen(_processDownloadCallback);
     }
   }
 
-  void _processDownloadCallback({
-    required dynamic value,
-    required String fileId,
-  }) async {
+  void _processDownloadCallback(Either<CustomError, SendProgress> event) async {
     try {
-      if (value is File) {
-        throwIfNot(
-            value.existsSync(), Exception('Downloaded file doesn\'t exists'));
-        if (_state.currentDownloadingFile?.id == fileId) {
-          final filePath = value.path.split('/').last;
+      if (event.left != null) {
+        log('LoadController -> processDownloadCallback:',
+            error: 'CustomError recieved: ${event.left}');
 
+        if (_state.currentDownloadingFile?.id == event.left!.id) {
+          var record = _state.currentDownloadingFile!.copyWith(
+            localPath: null,
+            isInProgress: false,
+            downloadPercent: -1,
+            endedWithException: true,
+            errorReason: event.left!.errorReason,
+            isFinished: true,
+          );
+
+          _state.currentDownloadingFile = record;
+        }
+
+        AppMetrica.reportError(
+          message: 'error in _processDownloadCallback',
+          errorDescription: AppMetricaErrorDescription.fromCurrentStackTrace(
+              message: event.left!.errorSource,
+              type: event.left!.errorReason.toString()),
+        );
+      } else if (event.right != null && event.right!.file != null) {
+        throwIfNot(event.right!.file!.existsSync(),
+            Exception('Downloaded file doesn\'t exists'));
+        if (_state.currentDownloadingFile?.id == event.right!.recordId) {
+          final filePath = event.right!.file!.path.split('/').last;
+          log('LoadController -> processDownloadCallback: \n file: ${event.right!.filePath}, download percent 100');
           var record = _state.currentDownloadingFile!.copyWith(
             localPath: filePath,
             isInProgress: false,
@@ -333,35 +357,19 @@ class LoadController {
 
           _state.currentDownloadingFile = record;
         }
-      } else if (value is SendProgress) {
-        if (_state.currentDownloadingFile?.id == fileId) {
-          log('LoadController -> processDownloadCallback: \n file: ${value.filePath}, download percent ${value.percent}');
+      } else if (event.right != null) {
+        if (_state.currentDownloadingFile?.id == event.right!.recordId) {
+          log('LoadController -> processDownloadCallback: \n file: ${event.right!.filePath}, download percent ${event.right!.percent}');
           var record = _state.currentDownloadingFile!.copyWith(
-            localPath: value.filePath,
+            localPath: event.right!.file?.path,
             isInProgress: true,
-            downloadPercent: value.percent,
+            downloadPercent: event.right!.percent,
           );
 
           _state.currentDownloadingFile = record;
         } else {
           throw Exception(
               'LoadController -> processDownloadCallback: downloading file does not the same as in state');
-        }
-      } else if (value is CustomError) {
-        log('LoadController -> processDownloadCallback:',
-            error: 'CustomError recieved: $value');
-
-        if (_state.currentDownloadingFile?.id == fileId) {
-          var record = _state.currentDownloadingFile!.copyWith(
-            localPath: null,
-            isInProgress: false,
-            downloadPercent: -1,
-            endedWithException: true,
-            errorReason: value.errorReason,
-            isFinished: true,
-          );
-
-          _state.currentDownloadingFile = record;
         }
       }
       if (_state.currentDownloadingFile?.isFinished ?? false) {

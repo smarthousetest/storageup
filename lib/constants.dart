@@ -7,7 +7,7 @@ const int HEIGHT_BOTTOM_BLOCK = 372;
 const kPathDBName = 'file_path_db';
 
 /// Only domain <storageup.net> works, other domains crash application
-const kServerUrl = 'https://storageup.net';
+const kServerUrl = 'https://upstorage.net';
 
 var domainName = kServerUrl.split('//').last;
 //Shared Prefs constants
