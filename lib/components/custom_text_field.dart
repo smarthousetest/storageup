@@ -19,10 +19,10 @@ class CustomTextField extends StatefulWidget {
     FocusNode? focusNode,
     List<TextInputFormatter>? inputFormatters,
   })  : this.focusNode = focusNode ?? FocusNode(),
-        this.inputFormatters = inputFormatters ??
-            [FilteringTextInputFormatter.deny(RegExp('[ ]'))];
+        this.inputFormatters = inputFormatters ?? [FilteringTextInputFormatter.deny(RegExp('[ ]'))];
 
   final bool autofocus;
+
   //final FilteringTextInputFormatter inputFormatters;
   final FocusNode focusNode;
   final String hint;
@@ -34,6 +34,7 @@ class CustomTextField extends StatefulWidget {
   final bool needErrorValidation;
   final double horizontalPadding;
   final List<TextInputFormatter>? inputFormatters;
+
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState(isPassword);
 }
@@ -75,14 +76,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10.5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 25,
+                  vertical: 10.5,
+                ),
                 child: Image(
                   width: 26.0,
                   height: 26.0,
-                  image: AssetImage(_hidePassword
-                      ? 'assets/hide_password.png'
-                      : 'assets/show_password.png'),
+                  image: AssetImage(_hidePassword ? 'assets/hide_password.png' : 'assets/show_password.png'),
                 ),
               ),
             ),
@@ -153,7 +154,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         fontSize: 17,
                       ),
                       contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 20.0),
+                        horizontal: 20.0,
+                        vertical: 20.0,
+                      ),
                       focusedBorder: outlineInputBorder(theme, true),
                       enabledBorder: outlineInputBorder(theme, false),
 
@@ -176,9 +179,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
         widget.invalid ? widget.errorMessage : '',
         textAlign: TextAlign.left,
         style: TextStyle(
-            fontFamily: kNormalTextFontFamily,
-            fontSize: 14.0,
-            color: Theme.of(context).errorColor),
+          fontFamily: kNormalTextFontFamily,
+          fontSize: 14.0,
+          color: Theme.of(context).errorColor,
+        ),
       ),
     );
   }

@@ -47,8 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
   }
-  final AuthenticationRepository _authenticationRepository =
-      getIt<AuthenticationRepository>();
+  final AuthenticationRepository _authenticationRepository = getIt<AuthenticationRepository>();
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
 
   void _mapLoginEmailChanged(
@@ -161,14 +160,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (state.status.isValidated) {
       //DBCrypt dBCrypt = DBCrypt();
       var plainPwd = state.passwordLogin.value;
-      var hashedPassword =
-          new DBCrypt().hashpw(plainPwd, new DBCrypt().gensalt());
+      var hashedPassword = new DBCrypt().hashpw(plainPwd, new DBCrypt().gensalt());
       var os = OsSpecifications.getOs();
       os.setKeeperHash(state.emailLogin.value, hashedPassword);
 
-      emit(state.copyWith(
-          status: FormzStatus.submissionInProgress,
-          action: RequestedAction.login));
+      emit(state.copyWith(status: FormzStatus.submissionInProgress, action: RequestedAction.login));
       print('authorization in progress');
       try {
         final result = await _authenticationRepository.logIn(
@@ -176,9 +172,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: state.passwordLogin.value,
         );
         if (result == AuthenticationStatus.authenticated) {
-          emit(state.copyWith(
-              status: FormzStatus.submissionSuccess,
-              action: RequestedAction.login));
+          emit(state.copyWith(status: FormzStatus.submissionSuccess, action: RequestedAction.login));
         } else if (result == AuthenticationStatus.wrongPassword) {
           emit(state.copyWith(
             status: FormzStatus.submissionFailure,
@@ -212,9 +206,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     if (state.status.isValidated) {
-      emit(state.copyWith(
-          status: FormzStatus.submissionInProgress,
-          action: RequestedAction.registration));
+      emit(state.copyWith(status: FormzStatus.submissionInProgress, action: RequestedAction.registration));
 
       print('registration in progress');
       try {
@@ -251,9 +243,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (token != null && token.isNotEmpty) {
       var result = await _authenticationRepository.updateUserInfo();
       if (result == AuthenticationStatus.authenticated) {
-        emit(state.copyWith(
-            status: FormzStatus.submissionSuccess,
-            action: RequestedAction.login));
+        emit(state.copyWith(status: FormzStatus.submissionSuccess, action: RequestedAction.login));
       }
     }
   }

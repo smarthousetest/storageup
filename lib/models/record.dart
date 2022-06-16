@@ -61,8 +61,7 @@ class Record extends BaseObject {
     return 'Record(id: $id, isChoosed: $isChoosed, name: $name, path: $path, thumbnail: $thumbnail, size: $size, createdBy: $createdBy, updatedBy: $updatedBy, createdAt: $createdAt, updatedAt: $updatedAt, id: $id)';
   }
 
-  static Record fromJsonModel(Map<String, dynamic> json) =>
-      Record.fromJson(json);
+  static Record fromJsonModel(Map<String, dynamic> json) => Record.fromJson(json);
 
   factory Record.empty() => Record(id: '', size: 0, mimeType: '');
 
@@ -74,9 +73,7 @@ class Record extends BaseObject {
       name: name,
       path: json['path'] as String?,
       // numOfParts: json['numOfParts'] as int?,
-      thumbnail: (json['thumbnail'] as List<dynamic>?)
-          ?.map((e) => File.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      thumbnail: (json['thumbnail'] as List<dynamic>?)?.map((e) => File.fromJson(e as Map<String, dynamic>)).toList(),
       size: json['size'] as int,
       // copyStatus: json['copyStatus'] as int?,
       createdBy: json['createdBy'] as String?,
@@ -124,8 +121,7 @@ class Record extends BaseObject {
     bool? favorite,
     bool? isDownloading,
   }) {
-    var extention =
-        name != null ? name.split('.').last : this.name?.split('.').last;
+    var extension = name != null ? name.split('.').last : this.name?.split('.').last;
     return Record(
       id: this.id,
       name: name ?? this.name,
@@ -135,7 +131,7 @@ class Record extends BaseObject {
       updatedBy: updatedBy ?? this.updatedBy,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      extension: extention ?? this.extension,
+      extension: extension ?? this.extension,
       isChoosed: isChoosed ?? this.isChoosed,
       thumbnail: thumbnail ?? this.thumbnail,
       folder: folder ?? this.parentFolder,

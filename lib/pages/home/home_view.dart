@@ -157,13 +157,13 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
+                      color: Color.fromARGB(25, 23, 69, 139),
+                      blurRadius: 4,
+                      offset: Offset(1, 4),
+                    )
                   ],
                 ),
-                child:
-                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                   return Column(
                     children: [
                       Padding(
@@ -182,10 +182,7 @@ class _HomePageState extends State<HomePage> {
                         child: ListView(
                           shrinkWrap: true,
                           controller: ScrollController(),
-                          children: [
-                            ..._customMenuItem(),
-                            ..._leftButtonsItem()
-                          ],
+                          children: [..._customMenuItem(), ..._leftButtonsItem()],
                         ),
                       ),
                       _logout(),
@@ -285,10 +282,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        return state.objectsValueListenable != null &&
-                state.objectsValueListenable!.value.values.isNotEmpty
-            ? latestFile(context)
-            : Container();
+        return state.objectsValueListenable != null && state.objectsValueListenable!.value.values.isNotEmpty ? latestFile(context) : Container();
       }),
       BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
@@ -309,7 +303,11 @@ class _HomePageState extends State<HomePage> {
           }
 
           return Padding(
-            padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
+            padding: const EdgeInsets.only(
+              top: 30,
+              left: 30,
+              right: 30,
+            ),
             child: Container(
               height: 42,
               width: 214,
@@ -388,8 +386,7 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 40.0),
                 child: ValueListenableBuilder<Box<LatestFile>>(
-                    valueListenable:
-                        Hive.box<LatestFile>('latestFileBox').listenable(),
+                    valueListenable: Hive.box<LatestFile>('latestFileBox').listenable(),
                     builder: (context, box, widget) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -399,9 +396,7 @@ class _HomePageState extends State<HomePage> {
                               child: GestureDetector(
                                   onTap: () {
                                     print(e.latestFile.name);
-                                    context
-                                        .read<HomeBloc>()
-                                        .add(FileTapped(record: e.latestFile));
+                                    context.read<HomeBloc>().add(FileTapped(record: e.latestFile));
                                   },
                                   child: LatestFileView(object: e)))),
                         ],
@@ -464,8 +459,9 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(10.0),
-            bottomLeft: Radius.circular(10.0)),
+          bottomRight: Radius.circular(10.0),
+          bottomLeft: Radius.circular(10.0),
+        ),
         color: Theme.of(context).dividerColor,
       ),
       height: 50,
@@ -620,9 +616,7 @@ class LatestFileView extends StatelessWidget {
                   height: 24,
                   width: 24,
                   child: Image.asset(
-                    type!.isNotEmpty
-                        ? 'assets/file_icons/${type}_s.png'
-                        : 'assets/file_icons/unexpected_s.png',
+                    type!.isNotEmpty ? 'assets/file_icons/${type}_s.png' : 'assets/file_icons/unexpected_s.png',
                     fit: BoxFit.contain,
                     height: 24,
                     width: 24,
@@ -641,10 +635,11 @@ class LatestFileView extends StatelessWidget {
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 17,
-                      color: Theme.of(context).colorScheme.onBackground,
-                      overflow: TextOverflow.ellipsis),
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 17,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             ),

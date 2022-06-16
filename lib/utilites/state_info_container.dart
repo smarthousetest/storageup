@@ -10,9 +10,7 @@ class StateInfoContainer extends StatefulWidget {
   });
 
   static StateInfoContainerState? of(BuildContext context) {
-    return (context
-            .dependOnInheritedWidgetOfExactType<_InheritedStateInfoContainer>())
-        ?.data;
+    return (context.dependOnInheritedWidgetOfExactType<_InheritedStateInfoContainer>())?.data;
   }
 
   @override

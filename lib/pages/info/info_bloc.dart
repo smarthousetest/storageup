@@ -21,8 +21,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
   // getIt<AuthenticationRepository>();
 
   UserController _userController = getIt<UserController>();
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  var _filesController = getIt<FilesController>(instanceName: 'files_controller');
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
   Future _mapInfoPageOpened(
     InfoPageOpened event,

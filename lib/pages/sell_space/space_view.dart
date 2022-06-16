@@ -17,7 +17,6 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 
 class SpaceSellPage extends StatefulWidget {
-// final List<DownloadLocation> locationsInfo;
   static const route = "sell_space_page";
 
   @override
@@ -85,7 +84,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ..add(SendKeeperVersion()),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
+            padding: const EdgeInsets.only(
+              left: 30,
+              right: 30,
+              top: 30,
+            ),
             child: Container(
               height: 46,
               child: Row(
@@ -97,7 +100,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor,
                           borderRadius: BorderRadius.circular(10),
-                          boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Color.fromARGB(25, 23, 69, 139),
+                              blurRadius: 4,
+                              offset: Offset(1, 4),
+                            )
+                          ],
                         ),
                         child: Row(
                           children: [
@@ -105,7 +114,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               padding: const EdgeInsets.all(13.0),
                               child: Align(
                                 alignment: FractionalOffset.centerLeft,
-                                child: Container(width: 20, height: 20, child: SvgPicture.asset("assets/file_page/search.svg")),
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  child: SvgPicture.asset("assets/file_page/search.svg"),
+                                ),
                               ),
                             ),
                             Container(
@@ -232,7 +245,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color.fromARGB(25, 23, 69, 139),
+              blurRadius: 4,
+              offset: Offset(1, 4),
+            )
+          ],
         ),
         // ListView(controller: ScrollController(), children: [
         //   (MediaQuery.of(context).size.width > 1340)
@@ -263,7 +282,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 20,
+                right: 40,
+              ),
               child: Container(
                 height: 1,
                 decoration: BoxDecoration(
@@ -272,7 +295,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 20),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 20,
+              ),
               child: Container(
                 child: Text(
                   translate.how_work,
@@ -285,7 +311,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 15),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 15,
+              ),
               child: Row(
                 children: [
                   Container(
@@ -302,10 +331,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 15),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 15,
+              ),
               child: Container(
                 child: Text(
-                  translate.select_folder + "\n" + translate.store_files + "\n" + translate.money,
+                  '${translate.select_folder}\n${translate.store_files}\n${translate.money}',
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,
                     fontFamily: kNormalTextFontFamily,
@@ -334,7 +366,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   Container(
                     width: 6,
                     height: 6,
-                    decoration: BoxDecoration(color: Color(0xff868FFF), shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: Color(0xff868FFF),
+                      shape: BoxShape.circle,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -359,7 +394,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   Container(
                     width: 6,
                     height: 6,
-                    decoration: BoxDecoration(color: Color(0xff868FFF), shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: Color(0xff868FFF),
+                      shape: BoxShape.circle,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -378,7 +416,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 15),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 15,
+              ),
               child: Container(
                 child: Text(
                   translate.upload_file + "\n" + translate.your_balance,
@@ -391,7 +432,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 20,
+                right: 40,
+              ),
               child: Container(
                 height: 1,
                 decoration: BoxDecoration(
@@ -400,7 +445,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 20),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 20,
+              ),
               child: Container(
                 child: Text(
                   translate.not_storage,
@@ -413,7 +461,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 40, top: 20, bottom: 30),
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 20,
+                bottom: 30,
+              ),
               child: Container(
                 height: 42,
                 width: 200,
@@ -426,7 +478,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     backgroundColor: Theme.of(context).splashColor,
                   ),
                   child: Text(
@@ -454,35 +508,43 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4),
+              )
+            ],
           ),
           child: ListView(controller: ScrollController(), children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Padding(
                 padding: const EdgeInsets.only(left: 40, top: 20),
-                child: Row(children: [
-                  Container(
-                    child: Text(
-                      translate.sell_space + " / ",
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.subtitle1?.color,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
+                child: Row(
+                  children: [
+                    Container(
+                      child: Text(
+                        translate.sell_space + " / ",
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.subtitle1?.color,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Text(
-                      translate.add_location,
-                      style: TextStyle(
-                        color: Theme.of(context).focusColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 20,
+                    Container(
+                      child: Text(
+                        translate.add_location,
+                        style: TextStyle(
+                          color: Theme.of(context).focusColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
@@ -526,7 +588,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: Container(
                       height: 42,
                       width: 350,
-                      decoration: BoxDecoration(color: Theme.of(context).primaryColor, borderRadius: BorderRadius.circular(10), border: Border.all(color: Color(0xffE4E7ED))),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Color(0xffE4E7ED),
+                          )),
                       child: BlocBuilder<SpaceBloc, SpaceState>(
                         builder: (context, state) {
                           return Padding(
@@ -541,41 +608,43 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       ),
                     ),
                   ),
-                  BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 20),
-                      child: Container(
-                        height: 42,
-                        width: 200,
-                        child: OutlinedButton(
-                          onPressed: () async {
-                            String? path = await getFilesPaths();
-                            print(path);
-                            setState(
-                              () {
-                                if (path != null) {
-                                  dirPath = path;
-                                }
-                              },
-                            );
-                          },
-                          style: OutlinedButton.styleFrom(
-                            minimumSize: Size(double.maxFinite, 60),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            backgroundColor: Theme.of(context).splashColor,
-                          ),
-                          child: Text(
-                            translate.overview,
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 17,
+                  BlocBuilder<SpaceBloc, SpaceState>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 20),
+                        child: Container(
+                          height: 42,
+                          width: 200,
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              String? path = await getFilesPaths();
+                              print(path);
+                              setState(
+                                () {
+                                  if (path != null) {
+                                    dirPath = path;
+                                  }
+                                },
+                              );
+                            },
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: Size(double.maxFinite, 60),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Theme.of(context).splashColor,
+                            ),
+                            child: Text(
+                              translate.overview,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontFamily: kNormalTextFontFamily,
+                                fontSize: 17,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    },
+                  ),
                 ],
               ),
               _setName(context),
@@ -607,29 +676,31 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ],
               ),
               Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 10),
-                  child: Container(
-                    child: Text(
-                      translate.min_storage,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 14,
-                      ),
+                padding: const EdgeInsets.only(left: 40, top: 10),
+                child: Container(
+                  child: Text(
+                    translate.min_storage,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 14,
                     ),
-                  )),
+                  ),
+                ),
+              ),
               Padding(
-                  padding: const EdgeInsets.only(left: 40, top: 8),
-                  child: Container(
-                    child: Text(
-                      translate.max_storage,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 14,
-                      ),
+                padding: const EdgeInsets.only(left: 40, top: 8),
+                child: Container(
+                  child: Text(
+                    translate.max_storage,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontFamily: kNormalTextFontFamily,
+                      fontSize: 14,
                     ),
-                  )),
+                  ),
+                ),
+              ),
               Row(
                 children: [
                   Padding(
@@ -720,11 +791,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         width: 42,
                         child: OutlinedButton(
                           onPressed: () {
-                            setState(() {
-                              if (_currentSliderValue < 180) {
-                                _currentSliderValue = _currentSliderValue + 1;
-                              }
-                            });
+                            setState(
+                              () {
+                                if (_currentSliderValue < 180) {
+                                  _currentSliderValue = _currentSliderValue + 1;
+                                }
+                              },
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             minimumSize: Size(double.maxFinite, 60),
@@ -771,17 +844,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               Row(
                 children: [
                   Padding(
-                      padding: const EdgeInsets.only(left: 40, top: 30),
-                      child: Container(
-                        child: Text(
-                          translate.earnings,
-                          style: TextStyle(
-                            color: Theme.of(context).focusColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 16,
-                          ),
+                    padding: const EdgeInsets.only(left: 40, top: 30),
+                    child: Container(
+                      child: Text(
+                        translate.earnings,
+                        style: TextStyle(
+                          color: Theme.of(context).focusColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 16,
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 27, top: 30),
                     child: Container(
@@ -821,9 +895,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           // _currentSliderValue.toInt();
                           context.read<SpaceBloc>().add(SaveDirPath(pathDir: dirPath, countGb: _currentSliderValue.toInt(), name: name));
                           await context.read<SpaceBloc>().stream.first;
-                          setState(() {
-                            index = 2;
-                          });
+                          setState(
+                            () {
+                              index = 2;
+                            },
+                          );
                         }
                       },
                       style: OutlinedButton.styleFrom(
@@ -934,62 +1010,70 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(10),
-          boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color.fromARGB(25, 23, 69, 139),
+              blurRadius: 4,
+              offset: Offset(1, 4),
+            )
+          ],
         ),
         //alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: SingleChildScrollView(
           controller: ScrollController(),
-          child: Column(children: [
-            Row(
-              children: [
-                Container(
-                  child: Text(
-                    translate.sell_space,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Theme.of(context).focusColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 100,
-                  child: Container(),
-                ),
-                Container(
-                  height: 30,
-                  width: 142,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        index = 1;
-                        print(index);
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(double.maxFinite, 60),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                      backgroundColor: Theme.of(context).splashColor,
-                    ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
                     child: Text(
-                      translate.add_location,
+                      translate.sell_space,
+                      maxLines: 1,
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context).focusColor,
                         fontFamily: kNormalTextFontFamily,
-                        fontSize: 14,
+                        fontSize: 20,
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: FolderList(),
-            ),
-          ]),
+                  Expanded(
+                    flex: 100,
+                    child: Container(),
+                  ),
+                  Container(
+                    height: 30,
+                    width: 142,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          index = 1;
+                          print(index);
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.maxFinite, 60),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        backgroundColor: Theme.of(context).splashColor,
+                      ),
+                      child: Text(
+                        translate.add_location,
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: FolderList(),
+              ),
+            ],
+          ),
         ),
       ),
     );

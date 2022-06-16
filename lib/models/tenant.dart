@@ -42,9 +42,7 @@ class Tenant {
     updatedAt = json['updatedAt'];
     iV = json['__v'];
     id = json['id'];
-    settings = json['settings'] != null
-        ? new Settings.fromJson(json['settings'])
-        : null;
+    settings = json['settings'] != null ? new Settings.fromJson(json['settings']) : null;
   }
 
   Map<String, dynamic> toJson() {

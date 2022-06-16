@@ -11,10 +11,8 @@ import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 
 class FilesController {
-  MediaRepository _mediaRepo =
-      getIt<MediaRepository>(instanceName: 'media_repo');
-  FilesRepository _filesRepo =
-      getIt<FilesRepository>(instanceName: 'files_repo');
+  MediaRepository _mediaRepo = getIt<MediaRepository>(instanceName: 'media_repo');
+  FilesRepository _filesRepo = getIt<FilesRepository>(instanceName: 'files_repo');
 
   FilesService _service = getIt<FilesService>();
   S translate = getIt<S>();
@@ -66,8 +64,7 @@ class FilesController {
 
   Future<Folder?> getAlbum(String id) async {
     var folders = _mediaRepo.getMedia();
-    Folder? choosedFolder =
-        folders?.firstWhere((element) => element.id == id) as Folder;
+    Folder? choosedFolder = folders?.firstWhere((element) => element.id == id) as Folder;
 
     return choosedFolder;
   }
@@ -132,10 +129,8 @@ class FilesController {
   Future<void> updateFilesList() async {
     var rootFolder = await _service.getRootFolder();
 
-    var mediaFolderId = rootFolder?.folders
-        ?.firstWhere((element) => element.name == 'Media'); //[0].id;
-    var filesFolderId =
-        rootFolder?.folders?.firstWhere((element) => element.name == 'Files');
+    var mediaFolderId = rootFolder?.folders?.firstWhere((element) => element.name == 'Media'); //[0].id;
+    var filesFolderId = rootFolder?.folders?.firstWhere((element) => element.name == 'Files');
 
     var mediaFolder = await _service.getFolderById(mediaFolderId!.id);
     var filesFolder = await _service.getFolderById(filesFolderId!.id);
@@ -189,11 +184,9 @@ class FilesController {
     } else if (foldersResult != null && recordsResult == null) {
       return foldersResult;
     } else {
-      if (recordsResult == ResponseStatus.ok &&
-          foldersResult == ResponseStatus.ok) {
+      if (recordsResult == ResponseStatus.ok && foldersResult == ResponseStatus.ok) {
         return ResponseStatus.ok;
-      } else if (recordsResult == ResponseStatus.noInternet &&
-          foldersResult == ResponseStatus.noInternet) {
+      } else if (recordsResult == ResponseStatus.noInternet && foldersResult == ResponseStatus.noInternet) {
         return ResponseStatus.noInternet;
       } else {
         return ResponseStatus.failed;
@@ -217,10 +210,7 @@ class FilesController {
     return _service.createFolder(name, parentFolderId);
   }
 
-  Future<ResponseStatus> moveToFolder(
-      {required String folderId,
-      List<String>? records,
-      List<String>? folders}) {
+  Future<ResponseStatus> moveToFolder({required String folderId, List<String>? records, List<String>? folders}) {
     return _service.moveToFolder(
       folderId: folderId,
       folders: folders,

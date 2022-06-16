@@ -49,8 +49,7 @@ class _ButtonTemplateState extends State<FolderList> {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => FolderListBloc()..add(FolderListPageOpened()),
-        child: BlocBuilder<FolderListBloc, FolderListState>(
-            builder: (context, state) {
+        child: BlocBuilder<FolderListBloc, FolderListState>(builder: (context, state) {
           _initiatingControllers(state);
           locationsInfo = state.localKeeper;
           return Column(
@@ -58,9 +57,7 @@ class _ButtonTemplateState extends State<FolderList> {
             // shrinkWrap: true,
             // scrollDirection: Axis.vertical,
             children: [
-              state.localKeeper.isNotEmpty
-                  ? _thisKeeper(context, state)
-                  : Container(),
+              state.localKeeper.isNotEmpty ? _thisKeeper(context, state) : Container(),
               state.serverKeeper.isNotEmpty
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20.0),
@@ -97,8 +94,7 @@ class _ButtonTemplateState extends State<FolderList> {
         LayoutBuilder(
           builder: (context, constrains) {
             var countOnElementsInRow = constrains.maxWidth ~/ 354;
-            final elementsWidthWithoutSpacing =
-                constrains.maxWidth - countOnElementsInRow * 20;
+            final elementsWidthWithoutSpacing = constrains.maxWidth - countOnElementsInRow * 20;
             final actualElementsWidth = countOnElementsInRow * 354;
             if (actualElementsWidth > elementsWidthWithoutSpacing) {
               countOnElementsInRow--;
@@ -165,8 +161,7 @@ class _ButtonTemplateState extends State<FolderList> {
                   ),
                 ),
                 Spacer(),
-                BlocBuilder<FolderListBloc, FolderListState>(
-                    builder: (context, state) {
+                BlocBuilder<FolderListBloc, FolderListState>(builder: (context, state) {
                   if (state.localKeeper.length != _popupControllers.length) {
                     final controller = CustomPopupMenuController();
                     _popupControllers.add(controller);
@@ -177,15 +172,13 @@ class _ButtonTemplateState extends State<FolderList> {
                     showArrow: false,
                     horizontalMargin: 10,
                     verticalMargin: 0,
-                    controller:
-                        _popupControllers[state.localKeeper.indexOf(keeper)],
+                    controller: _popupControllers[state.localKeeper.indexOf(keeper)],
                     menuBuilder: () {
                       return KeeperPopupMenuActions(
                         theme: Theme.of(context),
                         translate: translate,
                         onTap: (action) async {
-                          _popupControllers[state.localKeeper.indexOf(keeper)]
-                              .hideMenu();
+                          _popupControllers[state.localKeeper.indexOf(keeper)].hideMenu();
                           if (action == KeeperAction.change) {
                           } else {
                             var result = await showDialog(
@@ -203,8 +196,7 @@ class _ButtonTemplateState extends State<FolderList> {
                                 }
                               }
                               if (deleteKeeper != null) {
-                                context.read<FolderListBloc>().add(
-                                    DeleteLocation(location: deleteKeeper));
+                                context.read<FolderListBloc>().add(DeleteLocation(location: deleteKeeper));
                               }
                             }
                             //await context.read<FolderListBloc>().stream.first;
@@ -413,21 +405,15 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: keeper.online == 1
-                  ? Theme.of(context).selectedRowColor
-                  : Color(0xFFFFE0DE),
+              color: keeper.online == 1 ? Theme.of(context).selectedRowColor : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                keeper.online == 1
-                    ? "• ${translate.active}"
-                    : "• ${translate.inactive}",
+                keeper.online == 1 ? "• ${translate.active}" : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: keeper.online == 1
-                      ? Color(0xFF25B885)
-                      : Theme.of(context).indicatorColor,
+                  color: keeper.online == 1 ? Color(0xFF25B885) : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 14,
                 ),
@@ -469,9 +455,7 @@ class _ButtonTemplateState extends State<FolderList> {
                           height: 20.0,
                           width: 40.0,
                           onToggle: (_) {
-                            context
-                                .read<FolderListBloc>()
-                                .add(SleepStatus(keeper: keeper));
+                            context.read<FolderListBloc>().add(SleepStatus(keeper: keeper));
                           },
                           toggleSize: 16,
                           padding: 2,
@@ -483,9 +467,7 @@ class _ButtonTemplateState extends State<FolderList> {
                     Padding(
                       padding: const EdgeInsets.only(left: 5.0),
                       child: Text(
-                        keeper.sleepStatus == false && keeper.online == 1
-                            ? translate.on
-                            : translate.off,
+                        keeper.sleepStatus == false && keeper.online == 1 ? translate.on : translate.off,
                         //textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).disabledColor,
@@ -508,9 +490,7 @@ class _ButtonTemplateState extends State<FolderList> {
                           }
                         }
                         if (rebootedKeeper != null) {
-                          context
-                              .read<FolderListBloc>()
-                              .add(KeeperReboot(location: rebootedKeeper));
+                          context.read<FolderListBloc>().add(KeeperReboot(location: rebootedKeeper));
                         }
                       },
                       child: MouseRegion(
@@ -619,8 +599,7 @@ class _ButtonTemplateState extends State<FolderList> {
         LayoutBuilder(
           builder: (context, constrains) {
             var countOnElementsInRow = constrains.maxWidth ~/ 354;
-            final elementsWidthWithoutSpacing =
-                constrains.maxWidth - countOnElementsInRow * 20;
+            final elementsWidthWithoutSpacing = constrains.maxWidth - countOnElementsInRow * 20;
             final actualElementsWidth = countOnElementsInRow * 354;
             if (actualElementsWidth > elementsWidthWithoutSpacing) {
               countOnElementsInRow--;
@@ -717,21 +696,15 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: keeper.online == 1
-                  ? Theme.of(context).selectedRowColor
-                  : Color(0xFFFFE0DE),
+              color: keeper.online == 1 ? Theme.of(context).selectedRowColor : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                keeper.online == 1
-                    ? "• ${translate.active}"
-                    : "• ${translate.inactive}",
+                keeper.online == 1 ? "• ${translate.active}" : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: keeper.online == 1
-                      ? Color(0xFF25B885)
-                      : Theme.of(context).indicatorColor,
+                  color: keeper.online == 1 ? Color(0xFF25B885) : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 14,
                 ),
@@ -935,9 +908,7 @@ class _KeeperPopupMenuActionsState extends State<KeeperPopupMenuActions> {
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1
-                          ? widget.theme.indicatorColor.withOpacity(0.1)
-                          : null,
+                      color: ind == 1 ? widget.theme.indicatorColor.withOpacity(0.1) : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -952,8 +923,7 @@ class _KeeperPopupMenuActionsState extends State<KeeperPopupMenuActions> {
                           ),
                           Text(
                             widget.translate.delete,
-                            style: style.copyWith(
-                                color: Theme.of(context).errorColor),
+                            style: style.copyWith(color: Theme.of(context).errorColor),
                           ),
                         ],
                       ),

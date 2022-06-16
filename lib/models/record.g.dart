@@ -86,9 +86,5 @@ class RecordAdapter extends TypeAdapter<Record> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RecordAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is RecordAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

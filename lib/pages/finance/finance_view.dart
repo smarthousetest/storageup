@@ -31,8 +31,7 @@ class _FinancePageState extends State<FinancePage> {
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    _searchFieldWidth =
-        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 172;
+    _searchFieldWidth = width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 172;
   }
 
   @override
@@ -62,9 +61,7 @@ class _FinancePageState extends State<FinancePage> {
           bottom: BorderSide(
             width: 2,
             style: BorderStyle.solid,
-            color: index == ind
-                ? Theme.of(context).splashColor
-                : Colors.transparent,
+            color: index == ind ? Theme.of(context).splashColor : Colors.transparent,
           ),
         ),
       );
@@ -100,12 +97,7 @@ class _FinancePageState extends State<FinancePage> {
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Color.fromARGB(25, 23, 69, 139),
-                                  blurRadius: 4,
-                                  offset: Offset(1, 4))
-                            ],
+                            boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
                           ),
                           child: Row(
                             children: [
@@ -113,11 +105,7 @@ class _FinancePageState extends State<FinancePage> {
                                 padding: const EdgeInsets.all(13.0),
                                 child: Align(
                                   alignment: FractionalOffset.centerLeft,
-                                  child: Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: SvgPicture.asset(
-                                          "assets/file_page/search.svg")),
+                                  child: Container(width: 20, height: 20, child: SvgPicture.asset("assets/file_page/search.svg")),
                                 ),
                               ),
                               Container(
@@ -126,8 +114,7 @@ class _FinancePageState extends State<FinancePage> {
                                   padding: const EdgeInsets.only(left: 10.0),
                                   child: GestureDetector(
                                     onTap: () {
-                                      StateContainer.of(context)
-                                          .changePage(ChosenPage.file);
+                                      StateContainer.of(context).changePage(ChosenPage.file);
                                     },
                                     child: MouseRegion(
                                       cursor: SystemMouseCursors.click,
@@ -136,8 +123,7 @@ class _FinancePageState extends State<FinancePage> {
                                           translate.search,
                                           style: TextStyle(
                                             fontSize: 16.0,
-                                            color:
-                                                Theme.of(context).disabledColor,
+                                            color: Theme.of(context).disabledColor,
                                           ),
                                         ),
                                       ),
@@ -152,8 +138,7 @@ class _FinancePageState extends State<FinancePage> {
                     ),
                     Container(
                       height: 46,
-                      child: BlocBuilder<FinanceBloc, FinanceState>(
-                          builder: (context, state) {
+                      child: BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
                         return state.valueNotifier != null
                             ? ValueListenableBuilder<User?>(
                                 valueListenable: state.valueNotifier!,
@@ -161,59 +146,43 @@ class _FinancePageState extends State<FinancePage> {
                                   return Row(
                                     children: [
                                       Padding(
-                                        padding:
-                                            EdgeInsets.only(right: 20, left: 0),
+                                        padding: EdgeInsets.only(right: 20, left: 0),
                                         child: GestureDetector(
                                           onTap: () {
-                                            StateContainer.of(context)
-                                                .changePage(
-                                                    ChosenPage.settings);
+                                            StateContainer.of(context).changePage(ChosenPage.settings);
                                           },
                                           child: MouseRegion(
                                             cursor: SystemMouseCursors.click,
                                             child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(23.0),
-                                              child:
-                                                  Container(child: value.image),
+                                              borderRadius: BorderRadius.circular(23.0),
+                                              child: Container(child: value.image),
                                             ),
                                           ),
                                         ),
                                       ),
                                       (MediaQuery.of(context).size.width > 965)
                                           ? Container(
-                                              constraints:
-                                                  BoxConstraints(maxWidth: 120),
+                                              constraints: BoxConstraints(maxWidth: 120),
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 5),
+                                                    padding: const EdgeInsets.symmetric(vertical: 5),
                                                     child: Text(
-                                                      value?.firstName ??
-                                                          value?.email
-                                                              ?.split('@')
-                                                              .first ??
-                                                          'Name',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      value?.firstName ?? value?.email?.split('@').first ?? 'Name',
+                                                      overflow: TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                         fontSize: 17,
-                                                        color: Theme.of(context)
-                                                            .bottomAppBarColor,
+                                                        color: Theme.of(context).bottomAppBarColor,
                                                       ),
                                                     ),
                                                   ),
                                                   Text(
                                                     value?.email ?? '',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      color: Theme.of(context)
-                                                          .bottomAppBarColor,
+                                                      color: Theme.of(context).bottomAppBarColor,
                                                       height: 1,
                                                     ),
                                                   ),
@@ -237,12 +206,7 @@ class _FinancePageState extends State<FinancePage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ],
+                  boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -250,8 +214,7 @@ class _FinancePageState extends State<FinancePage> {
                   //mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding:
-                          const EdgeInsets.only(left: 40, right: 40, top: 20),
+                      padding: const EdgeInsets.only(left: 40, right: 40, top: 20),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -276,12 +239,7 @@ class _FinancePageState extends State<FinancePage> {
                                     translate.management,
                                     key: _keys[0],
                                     style: TextStyle(
-                                      color: index == 0
-                                          ? Theme.of(context).focusColor
-                                          : Theme.of(context)
-                                              .textTheme
-                                              .subtitle1
-                                              ?.color,
+                                      color: index == 0 ? Theme.of(context).focusColor : Theme.of(context).textTheme.subtitle1?.color,
                                       fontFamily: kNormalTextFontFamily,
                                       fontSize: 24,
                                     ),
@@ -310,12 +268,7 @@ class _FinancePageState extends State<FinancePage> {
                                       translate.funds,
                                       key: _keys[1],
                                       style: TextStyle(
-                                        color: index == 1
-                                            ? Theme.of(context).focusColor
-                                            : Theme.of(context)
-                                                .textTheme
-                                                .subtitle1
-                                                ?.color,
+                                        color: index == 1 ? Theme.of(context).focusColor : Theme.of(context).textTheme.subtitle1?.color,
                                         fontFamily: kNormalTextFontFamily,
                                         fontSize: 24,
                                       ),
@@ -418,14 +371,11 @@ class _FinancePageState extends State<FinancePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BlocBuilder<FinanceBloc, FinanceState>(
-                    builder: (context, state) {
+                BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 40.0, left: 40),
                     child: Text(
-                      translate.current_subscription_title(
-                          state.sub?.tariff?.spaceGb ?? '',
-                          state.sub?.tariff?.priceRub ?? ''),
+                      translate.current_subscription_title(state.sub?.tariff?.spaceGb ?? '', state.sub?.tariff?.priceRub ?? ''),
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontFamily: kNormalTextFontFamily,
@@ -455,8 +405,7 @@ class _FinancePageState extends State<FinancePage> {
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.maxFinite, 60),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         backgroundColor: Theme.of(context).primaryColor,
                       ),
                       child: Text(
@@ -525,16 +474,14 @@ class _FinancePageState extends State<FinancePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      translate.current_subscription_payment(DateTime.now(),
-                          state.sub?.tariff?.priceRub?.toInt() ?? ''),
+                      translate.current_subscription_payment(DateTime.now(), state.sub?.tariff?.priceRub?.toInt() ?? ''),
                       style: TextStyle(
                         color: Theme.of(context).bottomAppBarColor,
                         fontFamily: kNormalTextFontFamily,
                         fontSize: 14,
                       ),
                     ),
-                    BlocBuilder<FinanceBloc, FinanceState>(
-                        builder: (context, state) {
+                    BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
                       var choosedSubGb = state.sub?.tariff?.spaceGb;
                       var allFilledGb = state.packetInfo?.filledSpace;
                       if (allFilledGb == null && choosedSubGb == null) {
@@ -569,8 +516,7 @@ class _FinancePageState extends State<FinancePage> {
                             var str = await showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return BlurCancelSub(
-                                    choosedSubGb, DateTime.now(), allFilledGb);
+                                return BlurCancelSub(choosedSubGb, DateTime.now(), allFilledGb);
                               },
                             );
                           },
@@ -686,12 +632,10 @@ class _FinancePageState extends State<FinancePage> {
       Container(
           margin: EdgeInsets.only(left: 40, top: 30, right: 40, bottom: 30),
           height: 312,
-          child:
-              BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
+          child: BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
             //var sub = state.allSub;
             var subscription = List.from(state.allSub);
-            subscription
-                .removeWhere((element) => element.id == state.sub?.tariff?.id);
+            subscription.removeWhere((element) => element.id == state.sub?.tariff?.id);
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: subscription.length,
@@ -712,11 +656,8 @@ class _FinancePageState extends State<FinancePage> {
                       height: 312,
                       margin: EdgeInsets.only(right: 50),
                       decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Theme.of(context).dividerColor, width: 3),
-                        color: pointedSubCardIndex == index
-                            ? Theme.of(context).splashColor
-                            : Theme.of(context).primaryColor,
+                        border: Border.all(color: Theme.of(context).dividerColor, width: 3),
+                        color: pointedSubCardIndex == index ? Theme.of(context).splashColor : Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -725,12 +666,9 @@ class _FinancePageState extends State<FinancePage> {
                           Padding(
                             padding: const EdgeInsets.only(top: 40.0, left: 35),
                             child: Text(
-                              translate
-                                  .gb(subscription[index].spaceGb.toString()),
+                              translate.gb(subscription[index].spaceGb.toString()),
                               style: TextStyle(
-                                color: pointedSubCardIndex == index
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context).splashColor,
+                                color: pointedSubCardIndex == index ? Theme.of(context).primaryColor : Theme.of(context).splashColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 36,
                                 fontWeight: FontWeight.w600,
@@ -740,13 +678,10 @@ class _FinancePageState extends State<FinancePage> {
                           Padding(
                             padding: const EdgeInsets.only(top: 30.0, left: 35),
                             child: Text(
-                              translate.subscription_pay_mounth(
-                                  subscription[index].priceRub ?? ''),
+                              translate.subscription_pay_mounth(subscription[index].priceRub ?? ''),
                               maxLines: 2,
                               style: TextStyle(
-                                color: pointedSubCardIndex == index
-                                    ? Theme.of(context).primaryColor
-                                    : Theme.of(context).bottomAppBarColor,
+                                color: pointedSubCardIndex == index ? Theme.of(context).primaryColor : Theme.of(context).bottomAppBarColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 24,
                                 fontWeight: FontWeight.w500,
@@ -759,9 +694,7 @@ class _FinancePageState extends State<FinancePage> {
                               cursor: SystemMouseCursors.click,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  context.read<FinanceBloc>().add(
-                                      ChangeSubscription(
-                                          choosedSub: subscription[index].id!));
+                                  context.read<FinanceBloc>().add(ChangeSubscription(choosedSub: subscription[index].id!));
                                 },
                                 child: Text(
                                   translate.select,

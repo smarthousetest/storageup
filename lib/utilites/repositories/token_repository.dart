@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-  const _api_token = "bearer_token";
+const _api_token = "bearer_token";
 
 enum RepositoryEnum { goodResponse, error }
 

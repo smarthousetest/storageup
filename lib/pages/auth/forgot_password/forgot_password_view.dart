@@ -95,27 +95,20 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
                       builder: (context, state) {
                         return Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 245.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 245.0),
                           child: OutlinedButton(
                             onPressed: _buttonAction(state, context),
                             style: OutlinedButton.styleFrom(
                               minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                               // padding: EdgeInsets.symmetric(
                               //   horizontal: 135,
                               //   vertical: 20,
                               // ),
-                              backgroundColor: state.email.invalid ||
-                                      state.email.value.isEmpty
-                                  ? theme.colorScheme.onPrimary
-                                  : theme.colorScheme.onSurface,
+                              backgroundColor: state.email.invalid || state.email.value.isEmpty ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
                             ),
                             child: Text(
-                              state.status == FormzStatus.submissionSuccess
-                                  ? translate.back_to_main
-                                  : translate.continue_button,
+                              state.status == FormzStatus.submissionSuccess ? translate.back_to_main : translate.continue_button,
                               style: TextStyle(
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 17.0,
@@ -173,18 +166,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             autofocus: true,
             hint: translate.email,
             onChange: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(email: email, needValidation: true));
             },
             onFinishEditing: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(email: email, needValidation: true));
             }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            invalid: state.email.invalid && state.email.value.isNotEmpty ||
-                state.error == AuthError.wrongCredentials,
-            errorMessage: state.error == AuthError.wrongCredentials
-                ? translate.non_existent_email
-                : translate.wrong_email,
+            invalid: state.email.invalid && state.email.value.isNotEmpty || state.error == AuthError.wrongCredentials,
+            errorMessage: state.error == AuthError.wrongCredentials ? translate.non_existent_email : translate.wrong_email,
             needErrorValidation: true,
             isPassword: false,
             horizontalPadding: 170,
@@ -260,9 +248,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  context
-                      .read<ForgotPasswordBloc>()
-                      .add(ForgotPasswordConfirmed());
+                  context.read<ForgotPasswordBloc>().add(ForgotPasswordConfirmed());
                 },
                 child: Text(
                   translate.to_send_letter,

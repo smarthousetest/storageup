@@ -122,7 +122,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
 
   void _sendLocalKeeperVersion(SpaceState state, Emitter<SpaceState> emit) {
     print("_sendLocalKeeperVersion");
-    var keeperVersion =  _getKeeperVersion();
+    var keeperVersion = _getKeeperVersion();
     if (state.localKeeperVersion != keeperVersion) {
       _putLocalKeeperVersion(state, keeperVersion);
       emit(state.copyWith(localKeeperVersion: _getKeeperVersion()));
@@ -134,19 +134,15 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     String? bearerToken = await getIt<TokenRepository>().getApiToken();
     for (var location in state.locationsInfo) {
       try {
-        dio.put(
-          "/keeper/${location.idForCompare}",
-          data: KeeperData(
-            null,
-            null,
-            null,
-            null,
-            keeperVersion,
-          ).toJson(),
-          options: Options(headers: {
-            "Authorisation": "Bearer $bearerToken"
-          })
-        );
+        dio.put("/keeper/${location.idForCompare}",
+            data: KeeperData(
+              null,
+              null,
+              null,
+              null,
+              keeperVersion,
+            ).toJson(),
+            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");

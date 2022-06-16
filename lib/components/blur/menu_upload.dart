@@ -161,8 +161,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                         style: TextStyle(
                                           fontFamily: kNormalTextFontFamily,
                                           fontSize: 14,
-                                          color:
-                                              Theme.of(context).disabledColor,
+                                          color: Theme.of(context).disabledColor,
                                         ),
                                       )
                                     ],
@@ -258,8 +257,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                             style: TextStyle(
                                               fontFamily: kNormalTextFontFamily,
                                               fontSize: 14,
-                                              color: Theme.of(context)
-                                                  .disabledColor,
+                                              color: Theme.of(context).disabledColor,
                                             ),
                                           )
                                         ],
@@ -292,8 +290,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                             style: TextStyle(
                                               fontFamily: kNormalTextFontFamily,
                                               fontSize: 14,
-                                              color: Theme.of(context)
-                                                  .disabledColor,
+                                              color: Theme.of(context).disabledColor,
                                             ),
                                           )
                                         ],
@@ -317,8 +314,7 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                           padding: const EdgeInsets.only(top: 20, right: 15),
                           child: MouseRegion(
                             cursor: SystemMouseCursors.click,
-                            child:
-                                SvgPicture.asset("assets/file_page/close.svg"),
+                            child: SvgPicture.asset("assets/file_page/close.svg"),
                           ),
                         ),
                       ),

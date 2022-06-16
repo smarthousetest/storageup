@@ -8,11 +8,13 @@ class LikePage extends StatefulWidget {
 
   @override
   _LikePageState createState() => _LikePageState();
+
   LikePage();
 }
 
 class _LikePageState extends State<LikePage> {
   bool ifGrid = true;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,9 +33,10 @@ class _LikePageState extends State<LikePage> {
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                            color: Color.fromARGB(25, 23, 69, 139),
-                            blurRadius: 4,
-                            offset: Offset(1, 4))
+                          color: Color.fromARGB(25, 23, 69, 139),
+                          blurRadius: 4,
+                          offset: Offset(1, 4),
+                        )
                       ],
                     ),
                   ),
@@ -50,17 +53,18 @@ class _LikePageState extends State<LikePage> {
                         cursor: SystemMouseCursors.click,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 23, 69, 139),
-                                    blurRadius: 4,
-                                    offset: Offset(1, 4))
-                              ]),
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: Color.fromARGB(25, 23, 69, 139),
+                                blurRadius: 4,
+                                offset: Offset(1, 4),
+                              )
+                            ],
+                          ),
                           child: Center(
-                            child: SvgPicture.asset(
-                                "assets/file_page/settings.svg"),
+                            child: SvgPicture.asset("assets/file_page/settings.svg"),
                           ),
                         ),
                       ),
@@ -72,7 +76,10 @@ class _LikePageState extends State<LikePage> {
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 30, left: 20),
+                      padding: const EdgeInsets.only(
+                        right: 30,
+                        left: 20,
+                      ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(23.0),
                         child: Image.asset('assets/home_page/man.jpg'),
@@ -113,12 +120,7 @@ class _LikePageState extends State<LikePage> {
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(10),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Color.fromARGB(25, 23, 69, 139),
-                      blurRadius: 4,
-                      offset: Offset(1, 4))
-                ],
+                boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
               ),
               alignment: Alignment.center,
               child: Column(
@@ -158,9 +160,7 @@ class _LikePageState extends State<LikePage> {
                               // fit: BoxFit.contain,
                               // width: 30,
                               // height: 30,
-                              color: ifGrid
-                                  ? Theme.of(context).toggleButtonsTheme.color
-                                  : Theme.of(context).splashColor),
+                              color: ifGrid ? Theme.of(context).toggleButtonsTheme.color : Theme.of(context).splashColor),
                         ),
                         IconButton(
                           iconSize: 30,
@@ -174,9 +174,7 @@ class _LikePageState extends State<LikePage> {
                               // width: 30,
                               // height: 30,
                               //colorBlendMode: BlendMode.softLight,
-                              color: ifGrid
-                                  ? Theme.of(context).splashColor
-                                  : Theme.of(context).toggleButtonsTheme.color),
+                              color: ifGrid ? Theme.of(context).splashColor : Theme.of(context).toggleButtonsTheme.color),
                         ),
                       ],
                     ),
@@ -204,9 +202,7 @@ class _LikePageState extends State<LikePage> {
 
   Widget _filesGrid(BuildContext context) {
     return GridView.count(
-      crossAxisCount: (MediaQuery.of(context).size.width > 1380)
-          ? (1076 ~/ 160)
-          : ((MediaQuery.of(context).size.width - 384) ~/ (160)),
+      crossAxisCount: (MediaQuery.of(context).size.width > 1380) ? (1076 ~/ 160) : ((MediaQuery.of(context).size.width - 384) ~/ (160)),
       padding: EdgeInsets.fromLTRB(20, 20, 36, 40),
       crossAxisSpacing: 56,
       children: List.generate(17, (index) {
