@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
@@ -15,7 +16,7 @@ import 'forgot_password_state.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   ForgotPasswordView({Key? key}) : super(key: key);
-
+  
   @override
   _ForgotPasswordViewState createState() => _ForgotPasswordViewState();
 }
@@ -140,6 +141,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     );
   }
 
+final node = FocusNode();
+
   List<Widget> _body(ThemeData theme, ForgotPasswordState state) {
     if (state.status != FormzStatus.submissionSuccess)
       return _bodyRequest(theme);
@@ -169,25 +172,34 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
-          return CustomTextField(
-            autofocus: true,
-            hint: translate.email,
-            onChange: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
+          return RawKeyboardListener(
+            focusNode: FocusNode(),
+            onKey: (event){
+              if(event.isKeyPressed(LogicalKeyboardKey.backspace)|| event.isKeyPressed(LogicalKeyboardKey.delete)){
+                FocusScope.of(context).requestFocus(node);
+              }
             },
-            onFinishEditing: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
-            }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            invalid: state.email.invalid && state.email.value.isNotEmpty ||
-                state.error == AuthError.wrongCredentials,
-            errorMessage: state.error == AuthError.wrongCredentials
-                ? translate.non_existent_email
-                : translate.wrong_email,
-            needErrorValidation: true,
-            isPassword: false,
-            horizontalPadding: 170,
+            child: CustomTextField(
+              autofocus: true,
+              hint: translate.email,
+              focusNode: node,
+              onChange: (email) {
+                context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                    email: email, needValidation: true));
+              },
+              onFinishEditing: (email) {
+                context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                    email: email, needValidation: true));
+              }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+              invalid: state.email.invalid && state.email.value.isNotEmpty ||
+                  state.error == AuthError.wrongCredentials,
+              errorMessage: state.error == AuthError.wrongCredentials
+                  ? translate.non_existent_email
+                  : translate.wrong_email,
+              needErrorValidation: true,
+              isPassword: false,
+              horizontalPadding: 170,
+            ),
           );
         },
       ),
