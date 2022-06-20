@@ -218,6 +218,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "notification_re_auth":
             MessageLookupByLibrary.simpleMessage("You need to log in again"),
+        "never": MessageLookupByLibrary.simpleMessage("Never"),
         "of_percent": MessageLookupByLibrary.simpleMessage(" of 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Off"),
         "offer": MessageLookupByLibrary.simpleMessage(

@@ -32,6 +32,19 @@ class _ButtonTemplateState extends State<FileInfoView> {
   var setNull;
   bool open = true;
 
+  String getRecordViewedDate() {
+    BaseObject? object = widget.object;
+    if (object is Record) {
+      DateTime? accessDate = object.accessDate;
+
+      if (accessDate is DateTime) {
+        return DateFormat('dd.MM.yyyy').format(accessDate);
+      }
+    }
+
+    return translate.never;
+  }
+
   Widget build(BuildContext context) {
     var type = FileAttribute().getFilesType(widget.object!.name!.toLowerCase());
 
@@ -416,31 +429,16 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 18),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              translate.viewed,
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onBackground,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 100,
-                                              child: Container(),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                widget.object?.updatedBy ?? '',
+                                      if (widget.object is Record)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 18),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                translate.viewed,
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -450,10 +448,28 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                                   fontSize: 14,
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Expanded(
+                                                flex: 100,
+                                                child: Container(),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Text(
+                                                  getRecordViewedDate(),
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                                    fontFamily:
+                                                        kNormalTextFontFamily,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 18),
                                         child: Row(
