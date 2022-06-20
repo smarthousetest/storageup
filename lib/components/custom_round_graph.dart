@@ -10,8 +10,11 @@ class MyProgressIndicator extends StatefulWidget {
   @override
   _MyProgressIndicator createState() => new _MyProgressIndicator();
 
-  MyProgressIndicator(
-      {required this.percent, required this.color, required this.radius});
+  MyProgressIndicator({
+    required this.percent,
+    required this.color,
+    required this.radius,
+  });
 }
 
 class _MyProgressIndicator extends State<MyProgressIndicator> {
@@ -32,9 +35,10 @@ class _MyProgressIndicator extends State<MyProgressIndicator> {
           widget.percent.toString() + '%',
           textAlign: TextAlign.center,
           style: TextStyle(
-              color: Color(0xff5F5F5F),
-              fontWeight: FontWeight.normal,
-              fontSize: 20.0),
+            color: Color(0xff5F5F5F),
+            fontWeight: FontWeight.normal,
+            fontSize: 20.0,
+          ),
         ),
         //center text, you can set Icon as well
         backgroundColor: Color(0xffF7F9FB),

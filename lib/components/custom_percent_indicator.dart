@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-
 import '../constants.dart';
 
 class PercentIndicator extends CustomPainter {
   final bool isBackGround;
   final Color color;
   final double? value;
-  PercentIndicator(
-      {required this.isBackGround, required this.color, required this.value});
+
+  PercentIndicator({
+    required this.isBackGround,
+    required this.color,
+    required this.value,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -41,31 +44,32 @@ class PercentIndicator extends CustomPainter {
 
 class PercentArc extends StatefulWidget {
   final double value;
+
   PercentArc({required this.value, Key? key}) : super(key: key);
 
   @override
   _PercentArc createState() => _PercentArc();
 }
 
-class _PercentArc extends State<PercentArc>
-    with SingleTickerProviderStateMixin {
+class _PercentArc extends State<PercentArc> with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
+
   //final double value;
 
   @override
   void initState() {
     super.initState();
-    controller =
-        AnimationController(duration: Duration(seconds: 3), vsync: this);
-    final curvedAnimation =
-        CurvedAnimation(parent: controller, curve: Curves.easeInOutCubic);
+    controller = AnimationController(
+      duration: Duration(seconds: 3),
+      vsync: this,
+    );
+    final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.easeInOutCubic);
 
-    animation =
-        Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
-          ..addListener(() {
-            setState(() {});
-          });
+    animation = Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
+      ..addListener(() {
+        setState(() {});
+      });
   }
 
   @override
@@ -76,17 +80,21 @@ class _PercentArc extends State<PercentArc>
       child: Stack(
         children: [
           CustomPaint(
-              //size: Size(100, 100),
-              painter: PercentIndicator(
-                  isBackGround: false,
-                  color: Theme.of(context).canvasColor,
-                  value: null)),
+            //size: Size(100, 100),
+            painter: PercentIndicator(
+              isBackGround: false,
+              color: Theme.of(context).canvasColor,
+              value: null,
+            ),
+          ),
           CustomPaint(
-              //size: Size(100, 100),
-              painter: PercentIndicator(
-                  isBackGround: false,
-                  color: Theme.of(context).splashColor,
-                  value: (widget.value * 3.14) / 100)),
+            //size: Size(100, 100),
+            painter: PercentIndicator(
+              isBackGround: false,
+              color: Theme.of(context).splashColor,
+              value: (widget.value * 3.14) / 100,
+            ),
+          ),
           Align(
             alignment: FractionalOffset.center,
             child: Padding(

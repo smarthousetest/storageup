@@ -9,9 +9,7 @@ class StateSortedContainer extends StatefulWidget {
   });
 
   static StateSortedContainerState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<
-            _InheritedStateSortedContainer>())!
-        .data;
+    return (context.dependOnInheritedWidgetOfExactType<_InheritedStateSortedContainer>())!.data;
   }
 
   @override

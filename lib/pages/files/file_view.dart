@@ -21,6 +21,7 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
+
   //var index = 0;
   FilePage();
 }
@@ -36,11 +37,12 @@ class _FilePageState extends State<FilePage> {
   final double _rowPadding = 30.0;
   double? _searchFieldWidth;
   bool _isSearchFieldChoosen = true;
-  final TextEditingController _searchingFieldController =
-      TextEditingController();
+  final TextEditingController _searchingFieldController = TextEditingController();
+
   //SortingDirection _direction = SortingDirection.neutral;
   GlobalKey stickyKey = GlobalKey();
   GlobalKey propertiesWidthKey = GlobalKey();
+
   //SortingCriterion _lastCriterion = SortingCriterion.byDateCreated;
 
   @override
@@ -72,13 +74,11 @@ class _FilePageState extends State<FilePage> {
     } else {
       if (MediaQuery.of(context).size.width < 967) {
         setState(() {
-          _searchFieldWidth =
-              width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
+          _searchFieldWidth = width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
         });
       } else
         setState(() {
-          _searchFieldWidth =
-              width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
+          _searchFieldWidth = width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
         });
     }
   }
@@ -86,8 +86,7 @@ class _FilePageState extends State<FilePage> {
   void postPrepareFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    _searchFieldWidth =
-        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
+    _searchFieldWidth = width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
   }
 
   void _initFilterList() {
@@ -96,11 +95,22 @@ class _FilePageState extends State<FilePage> {
 
   List<SortingElement> _getSortingElements() {
     return [
-      SortingElement(text: translate.by_type, type: SortingCriterion.byType),
-      SortingElement(text: translate.by_name, type: SortingCriterion.byName),
       SortingElement(
-          text: translate.by_date_added, type: SortingCriterion.byDateCreated),
-      SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
+        text: translate.by_type,
+        type: SortingCriterion.byType,
+      ),
+      SortingElement(
+        text: translate.by_name,
+        type: SortingCriterion.byName,
+      ),
+      SortingElement(
+        text: translate.by_date_added,
+        type: SortingCriterion.byDateCreated,
+      ),
+      SortingElement(
+        text: translate.by_size,
+        type: SortingCriterion.bySize,
+      ),
     ];
   }
 
@@ -120,8 +130,7 @@ class _FilePageState extends State<FilePage> {
           setState(() {
             var folderId = state.currentFolder;
             if (folderId != null) {
-              StateContainer.of(context)
-                  .changeChoosedFilesFolderId(folderId.id);
+              StateContainer.of(context).changeChoosedFilesFolderId(folderId.id);
             }
           });
         },
@@ -220,14 +229,16 @@ class _FilePageState extends State<FilePage> {
             child: Container(
               width: _isSearchFieldChoosen ? 46 : _searchFieldWidth! + 46,
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ]),
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Color.fromARGB(25, 23, 69, 139),
+                    blurRadius: 4,
+                    offset: Offset(1, 4),
+                  )
+                ],
+              ),
               child: Container(
                 //width: 46,
                 child: Row(children: [
@@ -242,8 +253,7 @@ class _FilePageState extends State<FilePage> {
                                   ),
                                 )
                               : Text(
-                                  _getSortingElements()[_sortingTextFieldIndex]
-                                      .text,
+                                  _getSortingElements()[_sortingTextFieldIndex].text,
                                   style: TextStyle(
                                     color: Theme.of(context).disabledColor,
                                   ),
@@ -292,8 +302,7 @@ class _FilePageState extends State<FilePage> {
                               _isSearchFieldChoosen
                                   ? setState(() {
                                       _changeSortFieldsVisibility(context);
-                                      StateSortedContainer.of(context)
-                                          .actionForButton();
+                                      StateSortedContainer.of(context).actionForButton();
                                     })
                                   : print('a');
                               controller.showMenu();
@@ -328,12 +337,7 @@ class _FilePageState extends State<FilePage> {
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Color.fromARGB(25, 23, 69, 139),
-              blurRadius: 4,
-              offset: Offset(1, 4))
-        ],
+        boxShadow: <BoxShadow>[BoxShadow(color: Color.fromARGB(25, 23, 69, 139), blurRadius: 4, offset: Offset(1, 4))],
       ),
       child: Row(
         children: [
@@ -346,10 +350,7 @@ class _FilePageState extends State<FilePage> {
                   padding: const EdgeInsets.all(13.0),
                   child: Align(
                     alignment: FractionalOffset.centerLeft,
-                    child: Container(
-                        width: 20,
-                        height: 20,
-                        child: SvgPicture.asset("assets/file_page/search.svg")),
+                    child: Container(width: 20, height: 20, child: SvgPicture.asset("assets/file_page/search.svg")),
                   ),
                 ),
               ),
@@ -415,8 +416,7 @@ class _FilePageState extends State<FilePage> {
                           padding: EdgeInsets.only(right: 20, left: 20),
                           child: GestureDetector(
                             onTap: () {
-                              StateContainer.of(context)
-                                  .changePage(ChosenPage.settings);
+                              StateContainer.of(context).changePage(ChosenPage.settings);
                             },
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
@@ -429,24 +429,19 @@ class _FilePageState extends State<FilePage> {
                         ),
                         (MediaQuery.of(context).size.width > 966)
                             ? Container(
-                                constraints:
-                                    BoxConstraints(maxWidth: 95, minWidth: 50),
+                                constraints: BoxConstraints(maxWidth: 95, minWidth: 50),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
+                                      padding: const EdgeInsets.symmetric(vertical: 5),
                                       child: Text(
-                                        value?.firstName ??
-                                            value?.email?.split('@').first ??
-                                            'Name',
+                                        value?.firstName ?? value?.email?.split('@').first ?? 'Name',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           fontSize: 17,
-                                          color: Theme.of(context)
-                                              .bottomAppBarColor,
+                                          color: Theme.of(context).bottomAppBarColor,
                                         ),
                                       ),
                                     ),
@@ -455,8 +450,7 @@ class _FilePageState extends State<FilePage> {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 12,
-                                        color:
-                                            Theme.of(context).bottomAppBarColor,
+                                        color: Theme.of(context).bottomAppBarColor,
                                         height: 1,
                                       ),
                                     ),
@@ -475,8 +469,7 @@ class _FilePageState extends State<FilePage> {
 
   void _onActionSheetTap(BuildContext context, SortingElement item) {
     setState(() {
-      _sortingTextFieldIndex = _getSortingElements()
-          .indexWhere((element) => element.text == item.text);
+      _sortingTextFieldIndex = _getSortingElements().indexWhere((element) => element.text == item.text);
     });
     // _lastCriterion = item.type;
     StateSortedContainer.of(context).newSortedCriterion(item.type);
@@ -531,23 +524,19 @@ class _FilePageState extends State<FilePage> {
 class FileInfoViewEvent {}
 
 class SortingMenuActions extends StatefulWidget {
-  SortingMenuActions(
-      {required this.theme,
-      required this.translate,
-      required this.onTap,
-      Key? key})
-      : super(key: key);
+  SortingMenuActions({required this.theme, required this.translate, required this.onTap, Key? key}) : super(key: key);
 
   final ThemeData theme;
   final S translate;
   final Function(SortingCriterion) onTap;
+
   @override
-  _SortingPopupMenuActionsState createState() =>
-      _SortingPopupMenuActionsState();
+  _SortingPopupMenuActionsState createState() => _SortingPopupMenuActionsState();
 }
 
 class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
   int ind = -1;
+
   @override
   Widget build(BuildContext context) {
     var style = TextStyle(

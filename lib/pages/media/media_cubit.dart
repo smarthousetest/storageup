@@ -28,8 +28,7 @@ import 'media_state.dart';
 class MediaCubit extends Cubit<MediaState> {
   MediaCubit() : super(MediaState());
 
-  FilesController _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  FilesController _filesController = getIt<FilesController>(instanceName: 'files_controller');
   var _loadController = getIt<LoadController>();
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
@@ -41,19 +40,14 @@ class MediaCubit extends Cubit<MediaState> {
     try {
       if (e is List<UploadFileInfo>) {
         final uploadingFilesList = e;
-        if (uploadingFilesList.any((file) =>
-            file.isInProgress &&
-            file.uploadPercent == 0 &&
-            file.id.isNotEmpty)) {
-          final file = uploadingFilesList.firstWhere(
-              (file) => file.isInProgress && file.uploadPercent == 0);
+        if (uploadingFilesList.any((file) => file.isInProgress && file.uploadPercent == 0 && file.id.isNotEmpty)) {
+          final file = uploadingFilesList.firstWhere((file) => file.isInProgress && file.uploadPercent == 0);
 
           _update(uploadingFileId: file.id);
         }
       } else if (e is List<DownloadFileInfo>) {
         final downloadingFilesList = e;
-        if (downloadingFilesList
-            .any((file) => file.isInProgress && file.downloadPercent == -1)) {
+        if (downloadingFilesList.any((file) => file.isInProgress && file.downloadPercent == -1)) {
           final file = downloadingFilesList.firstWhere(
             (file) => file.isInProgress && file.downloadPercent == -1,
           );
@@ -69,11 +63,7 @@ class MediaCubit extends Cubit<MediaState> {
             file.id == idTappedFile)) {
           emit(state.copyWith(status: FormzStatus.submissionCanceled));
           emit(state.copyWith(status: FormzStatus.pure));
-        } else if (downloadingFilesList.any((file) =>
-            file.endedWithException == true &&
-            file.downloadPercent == -1 &&
-            file.isInProgress == false &&
-            file.id == idTappedFile)) {
+        } else if (downloadingFilesList.any((file) => file.endedWithException == true && file.downloadPercent == -1 && file.isInProgress == false && file.id == idTappedFile)) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
           emit(state.copyWith(status: FormzStatus.pure));
         }
@@ -85,8 +75,7 @@ class MediaCubit extends Cubit<MediaState> {
 
   void init() async {
     var allMediaFolders = await _filesController.getMediaFolders(true);
-    var currentFolder =
-        allMediaFolders?.firstWhere((element) => element.id == '-1');
+    var currentFolder = allMediaFolders?.firstWhere((element) => element.id == '-1');
     User? user = await _userController.getUser;
     bool progress = true;
     var valueNotifier = _userController.getValueNotifier();
@@ -131,22 +120,15 @@ class MediaCubit extends Cubit<MediaState> {
     var textLoverCase = sortText.toLowerCase();
 
     allFiles.forEach((element) {
-      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
-          .format(element.createdAt!)
-          .toString()
-          .toLowerCase()
-          .contains(textLoverCase);
+      var containsDate = DateFormat.yMd(Intl.getCurrentLocale()).format(element.createdAt!).toString().toLowerCase().contains(textLoverCase);
       if ((element.createdAt != null && containsDate) ||
-          (element.name != null &&
-              element.name!.toLowerCase().contains(textLoverCase)) ||
-          (element.extension != null &&
-              element.extension!.toLowerCase().contains(textLoverCase))) {
+          (element.name != null && element.name!.toLowerCase().contains(textLoverCase)) ||
+          (element.extension != null && element.extension!.toLowerCase().contains(textLoverCase))) {
         sortedMedia.add(element);
       }
     });
 
-    emit(state.copyWith(
-        currentFolderRecords: sortedMedia, status: FormzStatus.pure));
+    emit(state.copyWith(currentFolderRecords: sortedMedia, status: FormzStatus.pure));
   }
 
   MediaState _resetSortedList({
@@ -159,11 +141,8 @@ class MediaCubit extends Cubit<MediaState> {
     var loadState = _loadController.getState;
 
     filesInFolder.forEach((fileInFolder) {
-      var index = loadState.uploadingFiles
-          .indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
-      if (index != -1 &&
-          !_observers.any((element) =>
-              element.id == loadState.uploadingFiles[index].localPath)) {
+      var index = loadState.uploadingFiles.indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
+      if (index != -1 && !_observers.any((element) => element.id == loadState.uploadingFiles[index].localPath)) {
         var observer = UploadObserver(
           loadState.uploadingFiles[index].localPath,
           (p0) {
@@ -197,8 +176,7 @@ class MediaCubit extends Cubit<MediaState> {
     await _filesController.updateFilesList();
 
     var albums = await _filesController.getMediaFolders(true);
-    var updatedChoosedFolder =
-        albums?.firstWhere((element) => element.id == state.currentFolder.id);
+    var updatedChoosedFolder = albums?.firstWhere((element) => element.id == state.currentFolder.id);
     var newState = state.copyWith(
       albums: albums,
       currentFolder: updatedChoosedFolder,
@@ -207,45 +185,35 @@ class MediaCubit extends Cubit<MediaState> {
 
     emit(newState);
 
-    var isAnyMediaUploding = albums?.any((album) =>
-        album.records?.any((record) => record.id == uploadingFileId) == true);
+    var isAnyMediaUploding = albums?.any((album) => album.records?.any((record) => record.id == uploadingFileId) == true);
 
     if (uploadingFileId != null && isAnyMediaUploding == true) {
       log('MediaCubit -> _update: Downloading file finded');
       List<Folder> newAlbumList = [];
       for (int i = 0; i < albums!.length; i++) {
         var album = albums[i];
-        var indexOfUploadingMedia =
-            album.records?.indexWhere((record) => record.id == uploadingFileId);
+        var indexOfUploadingMedia = album.records?.indexWhere((record) => record.id == uploadingFileId);
 
-        final uploadingObjectIndexFromLoadState = _loadController
-            .getState.uploadingFiles
-            .indexWhere((element) => element.id == uploadingFileId);
+        final uploadingObjectIndexFromLoadState = _loadController.getState.uploadingFiles.indexWhere((element) => element.id == uploadingFileId);
 
         var isAllreadyLoaded = false;
 
         if (uploadingObjectIndexFromLoadState != -1) {
-          final objectFromLoadState = _loadController
-              .getState.uploadingFiles[uploadingObjectIndexFromLoadState];
+          final objectFromLoadState = _loadController.getState.uploadingFiles[uploadingObjectIndexFromLoadState];
 
-          isAllreadyLoaded = objectFromLoadState.uploadPercent == 100 ||
-              objectFromLoadState.uploadPercent == -1;
+          isAllreadyLoaded = objectFromLoadState.uploadPercent == 100 || objectFromLoadState.uploadPercent == -1;
         }
 
-        if (indexOfUploadingMedia != null &&
-            indexOfUploadingMedia != -1 &&
-            !isAllreadyLoaded) {
+        if (indexOfUploadingMedia != null && indexOfUploadingMedia != -1 && !isAllreadyLoaded) {
           var newRecordsList = album.records!;
-          newRecordsList[indexOfUploadingMedia] =
-              newRecordsList[indexOfUploadingMedia].copyWith(loadPercent: 0);
+          newRecordsList[indexOfUploadingMedia] = newRecordsList[indexOfUploadingMedia].copyWith(loadPercent: 0);
           var newAlbum = album.copyWith(records: newRecordsList);
           newAlbumList.add(newAlbum);
         } else {
           newAlbumList.add(album);
         }
       }
-      var currentFolder = newAlbumList
-          .firstWhere((element) => element.id == state.currentFolder.id);
+      var currentFolder = newAlbumList.firstWhere((element) => element.id == state.currentFolder.id);
       emit(
         state.copyWith(
           albums: newAlbumList,
@@ -268,23 +236,19 @@ class MediaCubit extends Cubit<MediaState> {
 
     if (controllerState.uploadingFiles.isNotEmpty) {
       try {
-        var uploadingFile = controllerState.uploadingFiles
-            .firstWhere((file) => file.isInProgress);
+        var uploadingFile = controllerState.uploadingFiles.firstWhere((file) => file.isInProgress);
 
         if (state.albums.any(
-          (album) =>
-              album.records!.any((object) => object.id == uploadingFile.id),
+          (album) => album.records!.any((object) => object.id == uploadingFile.id),
         )) {
-          var observer = UploadObserver(uploadingFile.localPath,
-              (_) => _uploadListener(uploadingFile.localPath));
+          var observer = UploadObserver(uploadingFile.localPath, (_) => _uploadListener(uploadingFile.localPath));
 
           _observers.add(observer);
 
           _loadController.getState.registerObserver(observer);
         }
       } catch (e) {
-        print(
-            'OpenedFolderCubit: can\'t find any uploading files in folder: ${state.currentFolder.name}');
+        print('OpenedFolderCubit: can\'t find any uploading files in folder: ${state.currentFolder.name}');
       }
     }
   }
@@ -293,15 +257,12 @@ class MediaCubit extends Cubit<MediaState> {
     var controllerState = _loadController.getState;
 
     if (pathToFile.isEmpty) {
-      var currentFileIndex = controllerState.uploadingFiles
-          .indexWhere((file) => file.isInProgress);
+      var currentFileIndex = controllerState.uploadingFiles.indexWhere((file) => file.isInProgress);
 
       if (currentFileIndex != -1) {
-        var currentFilePath =
-            controllerState.uploadingFiles[currentFileIndex].localPath;
+        var currentFilePath = controllerState.uploadingFiles[currentFileIndex].localPath;
 
-        var indexOfObserver =
-            _observers.indexWhere((observer) => observer.id == currentFilePath);
+        var indexOfObserver = _observers.indexWhere((observer) => observer.id == currentFilePath);
 
         if (indexOfObserver == -1) {
           await _update();
@@ -312,8 +273,7 @@ class MediaCubit extends Cubit<MediaState> {
     }
 
     try {
-      var currentFile = controllerState.uploadingFiles.firstWhere(
-          (element) => element.localPath == pathToFile && element.isInProgress);
+      var currentFile = controllerState.uploadingFiles.firstWhere((element) => element.localPath == pathToFile && element.isInProgress);
 
       if (currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty) {
         // add(FileUpdateFiles(id: currentFile.id));
@@ -349,19 +309,16 @@ class MediaCubit extends Cubit<MediaState> {
           fileId: currentFile.id,
           percent: currentFile.uploadPercent,
         );
-        var observer =
-            _observers.firstWhere((element) => element.id == pathToFile);
+        var observer = _observers.firstWhere((element) => element.id == pathToFile);
         controllerState.unregisterObserver(observer);
 
         _observers.remove(observer);
       }
     } catch (e) {
       print(e);
-      var ind = controllerState.uploadingFiles
-          .indexWhere((e) => e.id == pathToFile && e.endedWithException);
+      var ind = controllerState.uploadingFiles.indexWhere((e) => e.id == pathToFile && e.endedWithException);
       if (ind != -1) {
-        var observer =
-            _observers.firstWhere((element) => element.id == pathToFile);
+        var observer = _observers.firstWhere((element) => element.id == pathToFile);
         controllerState.unregisterObserver(observer);
 
         _observers.remove(observer);
@@ -381,15 +338,13 @@ class MediaCubit extends Cubit<MediaState> {
     required String fileId,
     required int percent,
   }) async {
-    if (percent == 100 || percent == 99)
-      print('------------------- fuck yeah $percent percents');
+    if (percent == 100 || percent == 99) print('------------------- fuck yeah $percent percents');
     var albums = List<Folder>.from(state.albums);
     for (var album in albums) {
       print('foler index = ${albums.indexOf(album)}, percent is $percent');
       var objects = List<Record>.from(album.records!);
 
-      var indexOfUploadingFile =
-          objects.indexWhere((element) => element.id == fileId);
+      var indexOfUploadingFile = objects.indexWhere((element) => element.id == fileId);
       print('index of uploading file is $indexOfUploadingFile');
       if (indexOfUploadingFile != -1) {
         var uploadingFile = objects[indexOfUploadingFile];
@@ -403,8 +358,7 @@ class MediaCubit extends Cubit<MediaState> {
         objects.removeAt(indexOfUploadingFile + 1);
         // objects[indexOfUploadingFile] =
         //     uploadingFile.copyWith(loadPercent: percent.toDouble());
-        print(
-            'file\'s ${uploadingFile.name} upload percent = ${uploadingFile.loadPercent}');
+        print('file\'s ${uploadingFile.name} upload percent = ${uploadingFile.loadPercent}');
 
         var indexOfAlbum = albums.indexOf(album);
         // albums[indexOfAlbum] = ;
@@ -471,15 +425,11 @@ class MediaCubit extends Cubit<MediaState> {
             _unregisterDownloadObserver(recordId);
           } else {
             var state = _loadController.getState;
-            var fileId = state.downloadingFiles
-                .indexWhere((element) => element.id == recordId);
+            var fileId = state.downloadingFiles.indexWhere((element) => element.id == recordId);
             if (fileId != -1) {
               var file = state.downloadingFiles[fileId];
               if (file.localPath.isNotEmpty) {
-                var path = file.localPath
-                    .split('/')
-                    .skipWhile((value) => value != 'downloads')
-                    .join('/');
+                var path = file.localPath.split('/').skipWhile((value) => value != 'downloads').join('/');
                 await box.put(file.id, path);
 
                 _setRecordDownloading(
@@ -507,8 +457,7 @@ class MediaCubit extends Cubit<MediaState> {
 
   void _unregisterDownloadObserver(String recordId) async {
     try {
-      final observer =
-          _downloadObservers.firstWhere((observer) => observer.id == recordId);
+      final observer = _downloadObservers.firstWhere((observer) => observer.id == recordId);
 
       _loadController.getState.unregisterObserver(observer);
 
@@ -557,8 +506,7 @@ class MediaCubit extends Cubit<MediaState> {
     var albums = List<Folder>.from(state.albums);
     for (var album in albums) {
       try {
-        var currentRecordIndex =
-            album.records!.indexWhere((element) => element.id == recordId);
+        var currentRecordIndex = album.records!.indexWhere((element) => element.id == recordId);
 
         var objects = [...album.records!];
         var currentRecord = objects[currentRecordIndex];
@@ -577,8 +525,7 @@ class MediaCubit extends Cubit<MediaState> {
         print(e);
       }
     }
-    final currentFolder =
-        albums.firstWhere((album) => album.id == state.currentFolder.id);
+    final currentFolder = albums.firstWhere((album) => album.id == state.currentFolder.id);
     emit(state.copyWith(
       albums: albums,
       currentFolder: currentFolder,

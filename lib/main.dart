@@ -16,7 +16,6 @@ import 'generated/l10n.dart';
 import 'utilites/injection.dart';
 import 'utilites/state_container.dart';
 
-
 void main() async {
   ui.Server().startServer();
   readFromFileDomainName();
@@ -77,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
-          S.delegate
+          S.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
         // initialRoute: AuthView.route,

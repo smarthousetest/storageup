@@ -30,6 +30,7 @@ enum FileOptions { changePhoto, remove }
 class SettingsPage extends StatefulWidget {
   @override
   _SettingsPageState createState() => _SettingsPageState();
+
   SettingsPage();
 }
 
@@ -71,9 +72,7 @@ class _SettingsPageState extends State<SettingsPage> {
           bottom: BorderSide(
             width: 2,
             style: BorderStyle.solid,
-            color: index == ind
-                ? Theme.of(context).splashColor
-                : Colors.transparent,
+            color: index == ind ? Theme.of(context).splashColor : Colors.transparent,
           ),
         ),
       );
@@ -89,9 +88,10 @@ class _SettingsPageState extends State<SettingsPage> {
             borderRadius: BorderRadius.circular(10),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Color.fromARGB(25, 23, 69, 139),
-                  blurRadius: 4,
-                  offset: Offset(1, 4))
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4),
+              )
             ],
           ),
           child: Column(
@@ -125,12 +125,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               translate.personal_data,
                               key: _keys[0],
                               style: TextStyle(
-                                color: index == 0
-                                    ? Theme.of(context).focusColor
-                                    : Theme.of(context)
-                                        .textTheme
-                                        .subtitle1
-                                        ?.color,
+                                color: index == 0 ? Theme.of(context).focusColor : Theme.of(context).textTheme.subtitle1?.color,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 20,
                               ),
@@ -159,12 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 translate.options,
                                 key: _keys[1],
                                 style: TextStyle(
-                                  color: index == 1
-                                      ? Theme.of(context).focusColor
-                                      : Theme.of(context)
-                                          .textTheme
-                                          .subtitle1
-                                          ?.color,
+                                  color: index == 1 ? Theme.of(context).focusColor : Theme.of(context).textTheme.subtitle1?.color,
                                   fontFamily: kNormalTextFontFamily,
                                   fontSize: 20,
                                 ),
@@ -194,12 +184,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 translate.regulations,
                                 key: _keys[2],
                                 style: TextStyle(
-                                  color: index == 2
-                                      ? Theme.of(context).focusColor
-                                      : Theme.of(context)
-                                          .textTheme
-                                          .subtitle1
-                                          ?.color,
+                                  color: index == 2 ? Theme.of(context).focusColor : Theme.of(context).textTheme.subtitle1?.color,
                                   fontFamily: kNormalTextFontFamily,
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: 20,
@@ -217,12 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: Text(
                             '',
                             style: TextStyle(
-                              color: index == 2
-                                  ? Theme.of(context).focusColor
-                                  : Theme.of(context)
-                                      .textTheme
-                                      .subtitle1
-                                      ?.color,
+                              color: index == 2 ? Theme.of(context).focusColor : Theme.of(context).textTheme.subtitle1?.color,
                               fontFamily: kNormalTextFontFamily,
                               overflow: TextOverflow.ellipsis,
                               fontSize: 20,
@@ -256,6 +236,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   var controller = CustomPopupMenuController();
+
   Widget personalData(BuildContext context) {
     return ListView(controller: ScrollController(), children: [
       Padding(
@@ -290,8 +271,7 @@ class _SettingsPageState extends State<SettingsPage> {
             );
           }
         },
-        child:
-            BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
+        child: BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
           return Stack(children: [
             state.valueNotifier != null
                 ? ValueListenableBuilder<User?>(
@@ -329,9 +309,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                     if (action == AvatarAction.changeAvatar) {
                       controller.hideMenu();
-                      context
-                          .read<SettingsBloc>()
-                          .add(SettingsChangeProfileImage());
+                      context.read<SettingsBloc>().add(SettingsChangeProfileImage());
                     } else {
                       controller.hideMenu();
                       var result = await showDialog(
@@ -341,9 +319,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                       );
                       if (result) {
-                        context
-                            .read<SettingsBloc>()
-                            .add(SettingsDeleteProfileImage());
+                        context.read<SettingsBloc>().add(SettingsDeleteProfileImage());
                       }
                     }
                   },
@@ -356,9 +332,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   height: 34,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: controller.menuIsShowing
-                        ? Theme.of(context).dividerColor
-                        : Theme.of(context).cardColor,
+                    color: controller.menuIsShowing ? Theme.of(context).dividerColor : Theme.of(context).cardColor,
                   ),
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
@@ -366,9 +340,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       padding: const EdgeInsets.all(6.0),
                       child: SvgPicture.asset(
                         "assets/file_page/photo.svg",
-                        color: controller.menuIsShowing
-                            ? Theme.of(context).splashColor
-                            : Theme.of(context).focusColor,
+                        color: controller.menuIsShowing ? Theme.of(context).splashColor : Theme.of(context).focusColor,
                       ),
                     ),
                   ),
@@ -385,15 +357,15 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Text(
               translate.user_name,
               style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: kNormalTextFontFamily,
-                  color: Theme.of(context).focusColor),
+                fontSize: 18,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5, top: 25),
-            child: BlocBuilder<SettingsBloc, SettingsState>(
-                builder: (context, state) {
+            child: BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
               return GestureDetector(
                 onTap: () async {
                   var str = await showDialog<String>(
@@ -402,10 +374,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       return BlurRenameName(state.user!.firstName!);
                     },
                   );
-                  if (str != null)
-                    context
-                        .read<SettingsBloc>()
-                        .add(SettingsNameChanged(name: str));
+                  if (str != null) context.read<SettingsBloc>().add(SettingsNameChanged(name: str));
                 },
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
@@ -428,19 +397,16 @@ class _SettingsPageState extends State<SettingsPage> {
               decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xffE4E7ED))),
+                  border: Border.all(
+                    color: Color(0xffE4E7ED),
+                  )),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, top: 11),
-                child: BlocBuilder<SettingsBloc, SettingsState>(
-                    builder: (context, state) {
+                child: BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
                   return Text(
-                    state.user?.firstName ??
-                        state.user?.email?.split('@').first ??
-                        'Name',
+                    state.user?.firstName ?? state.user?.email?.split('@').first ?? 'Name',
                     maxLines: 1,
-                    style: TextStyle(
-                        color: Theme.of(context).disabledColor,
-                        overflow: TextOverflow.ellipsis),
+                    style: TextStyle(color: Theme.of(context).disabledColor, overflow: TextOverflow.ellipsis),
                   );
                 }),
               ),
@@ -452,10 +418,7 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: const EdgeInsets.only(top: 25, left: 40),
         child: Text(
           translate.mail,
-          style: TextStyle(
-              fontSize: 18,
-              fontFamily: kNormalTextFontFamily,
-              color: Theme.of(context).focusColor),
+          style: TextStyle(fontSize: 18, fontFamily: kNormalTextFontFamily, color: Theme.of(context).focusColor),
         ),
       ),
       Padding(
@@ -466,13 +429,15 @@ class _SettingsPageState extends State<SettingsPage> {
               height: 42,
               width: 350,
               decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xffE4E7ED))),
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Color(0xffE4E7ED),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, top: 11),
-                child: BlocBuilder<SettingsBloc, SettingsState>(
-                    builder: (context, state) {
+                child: BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
                   return Text(
                     state.user?.email ?? '',
                     style: TextStyle(color: Theme.of(context).disabledColor),
@@ -503,11 +468,11 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             );
             if (str is ChangePasswordPopupResult) {
-              context.read<SettingsBloc>().add(SettingsPasswordChanged(
-                  oldPassword: str.oldPassword, newPassword: str.newPassword));
+              context.read<SettingsBloc>().add(
+                    SettingsPasswordChanged(oldPassword: str.oldPassword, newPassword: str.newPassword),
+                  );
               context.read<SettingsBloc>().add(SettingsLogOut());
-              Navigator.pushNamedAndRemoveUntil(
-                  context, AuthView.route, (route) => false);
+              Navigator.pushNamedAndRemoveUntil(context, AuthView.route, (route) => false);
               ;
             }
 
@@ -552,9 +517,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: Text(
                             translate.change_password,
                             style: TextStyle(
-                                color: Theme.of(context).disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17),
+                              color: Theme.of(context).disabledColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                         Spacer(),
@@ -562,9 +528,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           alignment: FractionalOffset.centerRight,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 148, top: 2),
-                            child: Container(
-                                child: SvgPicture.asset(
-                                    "assets/file_page/arrow.svg")),
+                            child: Container(child: SvgPicture.asset("assets/file_page/arrow.svg")),
                           ),
                         ),
                       ],
@@ -628,9 +592,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Text(
                           translate.delete_account,
                           style: TextStyle(
-                              color: Theme.of(context).disabledColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 17),
+                            color: Theme.of(context).disabledColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 17,
+                          ),
                         ),
                       ),
                       Spacer(),
@@ -638,9 +603,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         alignment: FractionalOffset.centerRight,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 148, top: 2),
-                          child: Container(
-                              child: SvgPicture.asset(
-                                  "assets/file_page/arrow.svg")),
+                          child: Container(child: SvgPicture.asset("assets/file_page/arrow.svg")),
                         ),
                       ),
                     ],
@@ -668,10 +631,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: const EdgeInsets.only(top: 25, left: 40),
                   child: Text(
                     translate.language,
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                        color: Theme.of(context).disabledColor),
+                    style: TextStyle(fontSize: 17, fontFamily: kNormalTextFontFamily, color: Theme.of(context).disabledColor),
                   ),
                 ),
                 BlocBuilder<SettingsBloc, SettingsState>(
@@ -698,20 +658,16 @@ class _SettingsPageState extends State<SettingsPage> {
                     else
                       dropdownValue = 'Русский';
 
-                    var english =
-                        Intl.withLocale('en', () => translate.english);
+                    var english = Intl.withLocale('en', () => translate.english);
                     // state.language.contains('en') ? translate.english : translate.russian;
-                    var russian =
-                        Intl.withLocale('ru', () => translate.russian);
+                    var russian = Intl.withLocale('ru', () => translate.russian);
                     return Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: SizedBox(
                         width: 140,
                         child: ButtonTheme(
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 1,
-                                color: Theme.of(context).dividerColor),
+                            side: BorderSide(width: 1, color: Theme.of(context).dividerColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           alignedDropdown: true,
@@ -723,16 +679,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             value: dropdownValue,
                             icon: Padding(
                               padding: const EdgeInsets.only(left: 6),
-                              child: SvgPicture.asset(
-                                  "assets/file_page/array_down.svg"),
+                              child: SvgPicture.asset("assets/file_page/array_down.svg"),
                             ),
                             underline: Container(
                               height: 2,
                               width: 140,
                               color: Theme.of(context).dividerColor,
                             ),
-                            style: TextStyle(
-                                color: Theme.of(context).disabledColor),
+                            style: TextStyle(color: Theme.of(context).disabledColor),
                             elevation: 10,
                             onChanged: (String? newValue) {
                               setState(() {
@@ -788,9 +742,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Text(
                     translate.date_format,
                     style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                        color: Theme.of(context).disabledColor),
+                      fontSize: 17,
+                      fontFamily: kNormalTextFontFamily,
+                      color: Theme.of(context).disabledColor,
+                    ),
                   ),
                 ),
                 Padding(
@@ -806,16 +761,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         value: dropdownDateValue,
                         icon: Padding(
                           padding: const EdgeInsets.only(left: 6),
-                          child: SvgPicture.asset(
-                              "assets/file_page/array_down.svg"),
+                          child: SvgPicture.asset("assets/file_page/array_down.svg"),
                         ),
                         underline: Container(
                           height: 2,
                           width: 140,
                           color: Theme.of(context).dividerColor,
                         ),
-                        style:
-                            TextStyle(color: Theme.of(context).disabledColor),
+                        style: TextStyle(color: Theme.of(context).disabledColor),
                         elevation: 10,
                         onChanged: (String? newValue) {
                           setState(() {
@@ -830,9 +783,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Center(
-                                child:
-                                    Text(value, textAlign: TextAlign.center)),
+                            child: Center(child: Text(value, textAlign: TextAlign.center)),
                           );
                         }).toList(),
                       ),
@@ -857,8 +808,12 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget regulations(BuildContext context) {
     return ListView(controller: ScrollController(), children: [
       Padding(
-        padding:
-            const EdgeInsets.only(left: 125, top: 20, right: 125, bottom: 20),
+        padding: const EdgeInsets.only(
+          left: 125,
+          top: 20,
+          right: 125,
+          bottom: 20,
+        ),
         child: Column(
           children: [
             Container(
@@ -905,23 +860,19 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 class SettingsPopupMenuActions extends StatefulWidget {
-  SettingsPopupMenuActions(
-      {required this.theme,
-      required this.translate,
-      required this.onTap,
-      Key? key})
-      : super(key: key);
+  SettingsPopupMenuActions({required this.theme, required this.translate, required this.onTap, Key? key}) : super(key: key);
 
   final ThemeData theme;
   final S translate;
   final Function(AvatarAction) onTap;
+
   @override
-  _SettingsPopupMenuActionsState createState() =>
-      _SettingsPopupMenuActionsState();
+  _SettingsPopupMenuActionsState createState() => _SettingsPopupMenuActionsState();
 }
 
 class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
   int ind = -1;
+
   @override
   Widget build(BuildContext context) {
     var style = TextStyle(
@@ -1004,9 +955,7 @@ class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1
-                          ? widget.theme.indicatorColor.withOpacity(0.1)
-                          : null,
+                      color: ind == 1 ? widget.theme.indicatorColor.withOpacity(0.1) : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1025,8 +974,7 @@ class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
                           ),
                           Text(
                             widget.translate.delete,
-                            style: style.copyWith(
-                                color: Theme.of(context).errorColor),
+                            style: style.copyWith(color: Theme.of(context).errorColor),
                           ),
                         ],
                       ),

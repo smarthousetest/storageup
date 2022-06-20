@@ -90,8 +90,7 @@ class User {
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
-    data['emailVerificationTokenExpiresAt'] =
-        this.emailVerificationTokenExpiresAt;
+    data['emailVerificationTokenExpiresAt'] = this.emailVerificationTokenExpiresAt;
     data['updatedBy'] = this.updatedBy;
     data['lastName'] = this.lastName;
     data['phoneNumber'] = this.phoneNumber;

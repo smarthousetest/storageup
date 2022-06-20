@@ -1,18 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cpp_native/cpp_native.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
-
 import 'package:upstorage_desktop/constants.dart';
 import '../injection.dart';
 
@@ -25,25 +21,25 @@ class LoadController {
 
   _LoadState get getState => _state;
 
-  LoadController() {
-    // init();
-  }
+  LoadController() {}
 
-  bool isNotInited() {
+  bool isNotInitialized() {
     return _cpp == null;
   }
 
-  Function(String)? _onAddAutouploadingFile;
+  Function(String)? _onAddAutoUploadingFile;
 
-  set setAutouploadNextFileListener(Function(String) callback) =>
-      _onAddAutouploadingFile = callback;
-  void clearAutouploadNextFileCallback() => _onAddAutouploadingFile = null;
+  set setAutoUploadNextFileListener(Function(String) callback) => _onAddAutoUploadingFile = callback;
+
+  void clearAutoUploadNextFileCallback() => _onAddAutoUploadingFile = null;
 
   Future<void> init() async {
-    print('initializing load controller');
+    print('Initializing load controller');
     Directory appDocDir = await getApplicationDocumentsDirectory();
     _cpp = await getInstanceCppNative(
-        documentsFolder: appDocDir, baseUrl: kServerUrl.split('/').last);
+      documentsFolder: appDocDir,
+      baseUrl: kServerUrl.split('/').last,
+    );
   }
 
   Future<void> uploadFile({
@@ -51,32 +47,24 @@ class LoadController {
     String? folderId,
     bool force = false,
   }) async {
-    if (isNotInited()) {
+    if (isNotInitialized()) {
       await init();
     }
     var uploadingFiles = _state.uploadingFiles;
     UploadFileInfo obj;
     if (filePath == null) {
       obj = uploadingFiles.firstWhere(
-        (element) =>
-            element.isInProgress == false &&
-            element.uploadPercent != 100 &&
-            !element.auto &&
-            !element.endedWithException,
+        (element) => element.isInProgress == false && element.uploadPercent != 100 && !element.auto && !element.endedWithException,
       );
     } else {
       obj = UploadFileInfo(localPath: filePath, folderId: folderId);
     }
 
     print('start processing file: $filePath');
-    print(!force &&
-        _state.uploadingFiles.isNotEmpty &&
-        _state.uploadingFiles.any((element) => element.isInProgress));
+    print(!force && _state.uploadingFiles.isNotEmpty && _state.uploadingFiles.any((element) => element.isInProgress));
     print(!_state.uploadingFiles.contains(obj));
 
-    if (!force &&
-        _state.uploadingFiles.isNotEmpty &&
-        _state.uploadingFiles.any((element) => element.isInProgress)) {
+    if (!force && _state.uploadingFiles.isNotEmpty && _state.uploadingFiles.any((element) => element.isInProgress)) {
       print('file $filePath will be added to list and loaded');
       uploadingFiles.add(obj);
       _state.changeUploadingFiles(uploadingFiles);
@@ -130,14 +118,11 @@ class LoadController {
   ) async {
     print('--------------------------------------- $event');
     try {
-      // if (fileId == null) fileId = '-1';
       var uploadingFiles = List<UploadFileInfo>.from(_state.uploadingFiles);
 
       if (event.right != null) {
-        var element = uploadingFiles.firstWhere((element) =>
-            (element.localPath == event.right!.filePath &&
-                (element.isInProgress || element.uploadPercent != 100)) ||
-            element.id == event.right!.recordId);
+        var element = uploadingFiles
+            .firstWhere((element) => (element.localPath == event.right!.filePath && (element.isInProgress || element.uploadPercent != 100)) || element.id == event.right!.recordId);
         final uploadingPercent = event.right!.percent;
         if (uploadingPercent != 100) {
           element.uploadPercent = uploadingPercent;
@@ -154,10 +139,8 @@ class LoadController {
           _processNextFileUpload();
         }
       } else {
-        var element = uploadingFiles.firstWhere((element) =>
-            (element.localPath == event.left!.id &&
-                (element.isInProgress || element.uploadPercent != 100)) ||
-            element.id == event.right!.recordId);
+        var element = uploadingFiles
+            .firstWhere((element) => (element.localPath == event.left!.id && (element.isInProgress || element.uploadPercent != 100)) || element.id == event.right!.recordId);
         var nf = element.copyWith(
           isInProgress: false,
           uploadPercent: -1,
@@ -171,8 +154,7 @@ class LoadController {
         _state.changeUploadingFiles(uploadingFiles);
         _processNextFileUpload();
       }
-      print(
-          '_processUploadCallback ! count of uploading files : ${_state.uploadingFiles.length}');
+      print('_processUploadCallback ! count of uploading files : ${_state.uploadingFiles.length}');
     } catch (e, sw) {
       print('_processUploadCallback error: $e \nstack trace: $sw');
       _processNextFileUpload();
@@ -186,11 +168,7 @@ class LoadController {
 
     if (uploadingFiles.isNotEmpty &&
         uploadingFiles.any(
-          (element) =>
-              !element.isInProgress &&
-              element.uploadPercent != 100 &&
-              !element.auto &&
-              !element.endedWithException,
+          (element) => !element.isInProgress && element.uploadPercent != 100 && !element.auto && !element.endedWithException,
         )) {
       print('start uploading next file');
       try {
@@ -211,7 +189,7 @@ class LoadController {
   }
 
   void downloadFile({required String? fileId, bool force = false}) async {
-    if (isNotInited()) {
+    if (isNotInitialized()) {
       await init();
     }
     var downloadingFiles = _state.downloadingFiles;
@@ -219,13 +197,11 @@ class LoadController {
     DownloadFileInfo fileInfo;
     if (fileId != null) {
       if (downloadingFiles.any((element) => element.id == fileId))
-        fileInfo =
-            downloadingFiles.firstWhere((element) => element.id == fileId);
+        fileInfo = downloadingFiles.firstWhere((element) => element.id == fileId);
       else
         fileInfo = DownloadFileInfo(id: fileId);
     } else {
-      fileInfo = downloadingFiles.firstWhere(
-          (element) => !element.isInProgress && element.downloadPercent != 100);
+      fileInfo = downloadingFiles.firstWhere((element) => !element.isInProgress && element.downloadPercent != 100);
     }
 
     // if (downloadingFiles.any((element) => element.id != fileId)) {
@@ -233,13 +209,10 @@ class LoadController {
     // } else {
     //   fileInfo = downloadingFiles.firstWhere((element) => element.id == fileId);
     // }
-    if (!force &&
-        downloadingFiles.isNotEmpty &&
-        downloadingFiles.any((element) => element.isInProgress == true)) {
+    if (!force && downloadingFiles.isNotEmpty && downloadingFiles.any((element) => element.isInProgress == true)) {
       downloadingFiles = [fileInfo, ...downloadingFiles];
       _state.changeDowloadingFiles(downloadingFiles);
-      print(
-          'file with id $fileId added to a list and will be downloaded later');
+      print('file with id $fileId added to a list and will be downloaded later');
       return;
     } else if (!downloadingFiles.contains(fileInfo)) {
       fileInfo.isInProgress = true;
@@ -278,11 +251,9 @@ class LoadController {
   ) async {
     try {
       if (event.right != null && event.right!.file != null) {
-        throwIfNot(event.right!.file!.existsSync(),
-            Exception('Downloaded file doesn\'t exists'));
+        throwIfNot(event.right!.file!.existsSync(), Exception('Downloaded file doesn\'t exists'));
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList
-            .indexWhere((element) => element.id == event.right!.recordId);
+        var fileIndex = filesList.indexWhere((element) => element.id == event.right!.recordId);
         if (fileIndex != -1) {
           log('LoadController -> processDownloadCallback: \n file recieved: ${event.right!.file!.path}');
           var record = filesList[fileIndex].copyWith(
@@ -303,8 +274,7 @@ class LoadController {
         }
       } else if (event.right != null) {
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList
-            .indexWhere((element) => element.id == event.right!.recordId);
+        var fileIndex = filesList.indexWhere((element) => element.id == event.right!.recordId);
         if (fileIndex != -1) {
           log('LoadController -> processDownloadCallback: \n file: ${event.right!.file?.path}, download percent ${event.right!.percent}');
           var record = filesList[fileIndex].copyWith(
@@ -326,15 +296,15 @@ class LoadController {
         }
       } else {
         var filesList = _state.downloadingFiles;
-        var fileIndex =
-            filesList.indexWhere((element) => element.id == event.left!.id);
+        var fileIndex = filesList.indexWhere((element) => element.id == event.left!.id);
         if (fileIndex != -1) {
           var record = filesList[fileIndex].copyWith(
-              localPath: null,
-              isInProgress: false,
-              downloadPercent: -1,
-              endedWithException: true,
-              errorReason: event.left!.errorReason);
+            localPath: null,
+            isInProgress: false,
+            downloadPercent: -1,
+            endedWithException: true,
+            errorReason: event.left!.errorReason,
+          );
 
           filesList[fileIndex] = record;
           // filesList.firstWhere((element) => element.id == fileId)
@@ -357,19 +327,14 @@ class LoadController {
       var downloadingFiles = _state.downloadingFiles;
       if (downloadingFiles.isNotEmpty &&
           downloadingFiles.any(
-            (element) =>
-                !element.isInProgress &&
-                element.downloadPercent != 100 &&
-                !element.endedWithException,
+            (element) => !element.isInProgress && element.downloadPercent != 100 && !element.endedWithException,
           )) {
         print('start downloading next file');
 
-        var file = _state.downloadingFiles.firstWhere((element) =>
-            !element.isInProgress && element.downloadPercent != 100);
+        var file = _state.downloadingFiles.firstWhere((element) => !element.isInProgress && element.downloadPercent != 100);
 
         downloadFile(fileId: file.id, force: true);
-      } else if (downloadingFiles.every((element) =>
-          element.downloadPercent == 100 && !element.isInProgress)) {
+      } else if (downloadingFiles.every((element) => element.downloadPercent == 100 && !element.isInProgress)) {
         _state.changeDowloadingFiles([]);
       }
     } catch (e, st) {
@@ -379,8 +344,7 @@ class LoadController {
 
   void increasePriorityOfRecord(String recordId) {
     try {
-      var currentRecord = _state.downloadingFiles
-          .firstWhere((element) => element.id == recordId);
+      var currentRecord = _state.downloadingFiles.firstWhere((element) => element.id == recordId);
       var downloadingRecords = _state.downloadingFiles;
       downloadingRecords.forEach((element) {
         print('old: ${element.id}');
@@ -399,8 +363,7 @@ class LoadController {
   Future<void> discardDownloading() async {
     var downloadingFiles = _state.downloadingFiles;
 
-    if (downloadingFiles.isNotEmpty &&
-        downloadingFiles.any((element) => element.isInProgress)) {
+    if (downloadingFiles.isNotEmpty && downloadingFiles.any((element) => element.isInProgress)) {
       await _cpp?.abortDownload();
       _state.changeDowloadingFiles([]);
     }
@@ -409,19 +372,18 @@ class LoadController {
   bool isCurrentFileDownloading(String id) {
     var downloadingFiles = _state.downloadingFiles;
 
-    var currentFileIndex = downloadingFiles
-        .indexWhere((element) => element.isInProgress && element.id == id);
+    var currentFileIndex = downloadingFiles.indexWhere((element) => element.isInProgress && element.id == id);
 
     return currentFileIndex != -1;
   }
 
-  // bool _checkIsUploadingInProgress() {
-  //   return _state.uploadingFiles.value.isNotEmpty;
-  // }
+// bool _checkIsUploadingInProgress() {
+//   return _state.uploadingFiles.value.isNotEmpty;
+// }
 
-  // bool _checkIsDownloadingInProgress() {
-  //   return _state.downloadingFiles.value.isNotEmpty;
-  // }
+// bool _checkIsDownloadingInProgress() {
+//   return _state.downloadingFiles.value.isNotEmpty;
+// }
 }
 
 Future<void> copyFileToDownloadDir({
@@ -450,9 +412,11 @@ Future<void> copyFileToDownloadDir({
 
 class _LoadState extends Observable {
   List<UploadFileInfo> _uploadingFiles = [];
+
   List<UploadFileInfo> get uploadingFiles => _uploadingFiles.toList();
 
   List<DownloadFileInfo> _downloadingFiles = [];
+
   List<DownloadFileInfo> get downloadingFiles => _downloadingFiles.toList();
 
   void changeUploadingFiles(List<UploadFileInfo> uploadingFiles) {
@@ -471,8 +435,7 @@ class _LoadState extends Observable {
   void unregisterObserver(Observer observer) {
     if (observer is UploadObserver) {
       try {
-        var uploadedObject = _uploadingFiles
-            .firstWhere((element) => element.localPath == observer.id);
+        var uploadedObject = _uploadingFiles.firstWhere((element) => element.localPath == observer.id);
         _uploadingFiles.remove(uploadedObject);
       } catch (e) {
         print('unregisterObserver: $e');
@@ -527,10 +490,7 @@ class UploadFileInfo {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is UploadFileInfo &&
-        other.localPath == localPath &&
-        other.isInProgress == isInProgress &&
-        other.uploadPercent == uploadPercent;
+    return other is UploadFileInfo && other.localPath == localPath && other.isInProgress == isInProgress && other.uploadPercent == uploadPercent;
   }
 
   @override

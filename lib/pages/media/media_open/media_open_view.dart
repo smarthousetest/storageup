@@ -27,6 +27,7 @@ class MediaOpenPage extends StatefulWidget {
     required this.arguments,
   }) : super(key: key);
   final MediaOpenPageArgs arguments;
+
   @override
   _MediaOpenPageState createState() => _MediaOpenPageState();
 }
@@ -47,10 +48,7 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
 
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<MediaOpenBloc>()
-        ..add(MediaOpenPageOpened(
-            choosedFolder: widget.arguments.selectedFolder,
-            choosedMedia: widget.arguments.selectedMedia)),
+      create: (context) => getIt<MediaOpenBloc>()..add(MediaOpenPageOpened(choosedFolder: widget.arguments.selectedFolder, choosedMedia: widget.arguments.selectedMedia)),
       child: Material(
         color: Colors.transparent,
         child: Stack(children: [
@@ -79,9 +77,10 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                           child: Text(
                             widget.arguments.selectedMedia.name ?? '',
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 20,
-                                fontFamily: kNormalTextFontFamily),
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 20,
+                              fontFamily: kNormalTextFontFamily,
+                            ),
                           )),
                       Spacer(),
                       Align(
@@ -94,8 +93,7 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
-                                child: SvgPicture.asset(
-                                    'assets/options/close.svg')),
+                                child: SvgPicture.asset('assets/options/close.svg')),
                           ),
                         ),
                       )
@@ -116,49 +114,55 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
 
   mainSection(BuildContext context) {
     return Expanded(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 30.0),
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset('assets/options/arrow_left.svg')),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30.0),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  //TODO do realisation of this function
+                },
+                child: SvgPicture.asset('assets/options/arrow_left.svg'),
+              ),
+            ),
           ),
-        ),
-        Spacer(),
-        Center(
+          Spacer(),
+          Center(
             child: Container(
-                width: MediaQuery.of(context).size.width - 140,
-                child: _imageView(context))),
-        Spacer(),
-        Padding(
-          padding: const EdgeInsets.only(right: 30.0),
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset('assets/options/arrow_right.svg')),
+              width: MediaQuery.of(context).size.width - 140,
+              child: _imageView(context),
+            ),
           ),
-        ),
-      ],
-    ));
+          Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(right: 30.0),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  //TODO do realisation of this function
+                },
+                child: SvgPicture.asset('assets/options/arrow_right.svg'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   ScrollDirection _direction = ScrollDirection.forward;
 
   _imageView(BuildContext context) {
-    return BlocBuilder<MediaOpenBloc, MediaOpenState>(
-        buildWhen: (previous, current) {
-      var isChoosedFilePathChanged = (previous.choosedMedia as Record).path !=
-          (current.choosedMedia as Record).path;
+    return BlocBuilder<MediaOpenBloc, MediaOpenState>(buildWhen: (previous, current) {
+      var isChoosedFilePathChanged = (previous.choosedMedia as Record).path != (current.choosedMedia as Record).path;
 
       var isInited = previous.isInitialized != current.isInitialized;
 
-      var isAnyOfFilesChanged =
-          current.mediaFromFolder != previous.mediaFromFolder;
+      var isAnyOfFilesChanged = current.mediaFromFolder != previous.mediaFromFolder;
       return isChoosedFilePathChanged || isInited || isAnyOfFilesChanged;
     }, builder: ((context, state) {
       _initControllers(context);
@@ -171,8 +175,7 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                   shrinkWrap: true,
                   itemCount: state.mediaFromFolder.length,
                   itemScrollController: _mainListScrollController,
-                  initialScrollIndex: state.mediaFromFolder.indexWhere(
-                      (element) => element.id == state.choosedMedia.id),
+                  initialScrollIndex: state.mediaFromFolder.indexWhere((element) => element.id == state.choosedMedia.id),
                   itemPositionsListener: _mainListPositionsListener,
                   physics: PageScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -180,10 +183,8 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                     var mediaLocalPath = media.path;
                     var isExisting = File(media.path ?? '').existsSync();
                     var mediaMiniatureAdress = '';
-                    if (media.thumbnail != null &&
-                        media.thumbnail!.isNotEmpty) {
-                      mediaMiniatureAdress =
-                          media.thumbnail!.first.publicUrl ?? '';
+                    if (media.thumbnail != null && media.thumbnail!.isNotEmpty) {
+                      mediaMiniatureAdress = media.thumbnail!.first.publicUrl ?? '';
                     }
 
                     return Padding(
@@ -191,9 +192,7 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          mediaLocalPath != null &&
-                                  mediaLocalPath.isNotEmpty &&
-                                  isExisting
+                          mediaLocalPath != null && mediaLocalPath.isNotEmpty && isExisting
                               ? Image.file(
                                   File(media.path!),
                                   fit: BoxFit.contain,
@@ -203,18 +202,18 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                   ? Image.asset(
                                       'assets/test_image2.png',
                                       fit: BoxFit.contain,
-                                      width:
-                                          MediaQuery.of(context).size.width - 2,
+                                      width: MediaQuery.of(context).size.width - 2,
                                     )
                                   : Image.network(
                                       mediaMiniatureAdress,
                                       fit: BoxFit.contain,
-                                      width:
-                                          MediaQuery.of(context).size.width - 2,
+                                      width: MediaQuery.of(context).size.width - 2,
                                     ),
                           media.path != null && media.path?.isNotEmpty == true
                               ? Container()
-                              : Center(child: CircularProgressIndicator()),
+                              : Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                         ],
                       ),
                     );
@@ -227,10 +226,8 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                   if (notification is ScrollEndNotification) {
                     print(notification.runtimeType);
 
-                    var pos = _mainListPositionsListener
-                        .itemPositions.value.first.index;
-                    var pos2 = _mainListPositionsListener
-                        .itemPositions.value.last.index;
+                    var pos = _mainListPositionsListener.itemPositions.value.first.index;
+                    var pos2 = _mainListPositionsListener.itemPositions.value.last.index;
                     // var path = (state.mediaFromFolder[pos] as Record).path;
                     // print('pos: $pos, pos2:$pos2');
                     // var positions =
@@ -260,13 +257,8 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                     // print('dragDetails: ${notification.dragDetails}');
                     // print('dept: ${notification.depth}');
                     if (_direction == ScrollDirection.forward)
-                      context
-                          .read<MediaOpenBloc>()
-                          .add(MediaOpenChangeChoosedMedia(index: pos));
-                    else if (_direction == ScrollDirection.reverse)
-                      context
-                          .read<MediaOpenBloc>()
-                          .add(MediaOpenChangeChoosedMedia(index: pos2));
+                      context.read<MediaOpenBloc>().add(MediaOpenChangeChoosedMedia(index: pos));
+                    else if (_direction == ScrollDirection.reverse) context.read<MediaOpenBloc>().add(MediaOpenChangeChoosedMedia(index: pos2));
                     // if (path == null || path.isEmpty) {
                     //   context.read<MediaOpenBloc>().add(MediaOpenDownload(
                     //       mediaId: state.mediaFromFolder[pos].id));
@@ -296,7 +288,10 @@ class MediaOpenPageArgs {
 class NoColorOverscrollBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
+    BuildContext context,
+    Widget child,
+    AxisDirection axisDirection,
+  ) {
     return child;
   }
 }

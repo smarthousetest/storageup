@@ -34,8 +34,7 @@ class _AuthViewState extends State<AuthView> {
   bool _isAnimationCompleted = true;
   bool showNotConfirmedEmail = false;
   final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionsListener =
-      ItemPositionsListener.create();
+  final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
   final ScrollController controller = ScrollController();
 
   S translate = getIt<S>();
@@ -137,10 +136,8 @@ class _AuthViewState extends State<AuthView> {
       create: (context) => getIt<AuthBloc>()..add(AuthPageOpened()),
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state.status == FormzStatus.submissionSuccess &&
-              state.action == RequestedAction.login) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, HomePage.route, (route) => false);
+          if (state.status == FormzStatus.submissionSuccess && state.action == RequestedAction.login) {
+            Navigator.pushNamedAndRemoveUntil(context, HomePage.route, (route) => false);
           }
         },
         child: GestureDetector(
@@ -181,9 +178,7 @@ class _AuthViewState extends State<AuthView> {
                         radius: 22.5,
                         child: SvgPicture.asset(
                           'assets/auth/logo.svg',
-                          color: _isSignIn
-                              ? theme.accentColor
-                              : theme.primaryColor,
+                          color: _isSignIn ? theme.accentColor : theme.primaryColor,
                         ),
                       ),
                       SizedBox(
@@ -195,9 +190,7 @@ class _AuthViewState extends State<AuthView> {
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w900,
                           fontSize: 24,
-                          color: _isSignIn
-                              ? theme.accentColor
-                              : theme.primaryColor,
+                          color: _isSignIn ? theme.accentColor : theme.primaryColor,
                         ),
                       ),
                     ],
@@ -237,11 +230,7 @@ class _AuthViewState extends State<AuthView> {
           Text(
             translate.welcome_to_upstorage,
             textAlign: TextAlign.center,
-            style: TextStyle(
-                color: theme.primaryColor,
-                fontSize: 28,
-                fontFamily: kNormalTextFontFamily,
-                fontWeight: FontWeight.w400),
+            style: TextStyle(color: theme.primaryColor, fontSize: 28, fontFamily: kNormalTextFontFamily, fontWeight: FontWeight.w400),
           ),
           SizedBox(
             height: 15,
@@ -278,8 +267,7 @@ class _AuthViewState extends State<AuthView> {
                 _changePage();
               },
               style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 primary: theme.primaryColor,
               ),
               child: Center(
@@ -328,11 +316,7 @@ class _AuthViewState extends State<AuthView> {
             child: Text(
               translate.already_have_an_account,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: theme.primaryColor,
-                  fontSize: 28,
-                  fontFamily: kNormalTextFontFamily,
-                  fontWeight: FontWeight.w400),
+              style: TextStyle(color: theme.primaryColor, fontSize: 28, fontFamily: kNormalTextFontFamily, fontWeight: FontWeight.w400),
             ),
           ),
           Expanded(child: Container()),
@@ -352,8 +336,7 @@ class _AuthViewState extends State<AuthView> {
                 _changePage();
               },
               style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 // padding: EdgeInsets.symmetric(
                 //   horizontal: 100,
                 //   vertical: 18,
@@ -393,12 +376,8 @@ class _AuthViewState extends State<AuthView> {
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width, minWidth: width),
-                child: _signInMain(theme)),
-            ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width, minWidth: width),
-                child: _registerMain(theme)),
+            ConstrainedBox(constraints: BoxConstraints(maxWidth: width, minWidth: width), child: _signInMain(theme)),
+            ConstrainedBox(constraints: BoxConstraints(maxWidth: width, minWidth: width), child: _registerMain(theme)),
           ],
         ),
       );
@@ -425,129 +404,122 @@ class _AuthViewState extends State<AuthView> {
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           return showNotConfirmedEmail
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                      Expanded(
-                        child: Container(),
-                        flex: 3,
+              ? Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                  Expanded(
+                    child: Container(),
+                    flex: 3,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 190, right: 160, top: 73),
+                    child: Text(
+                      translate.confirm_email,
+                      style: TextStyle(
+                        color: theme.disabledColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 28.0,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 190, right: 160, top: 73),
-                        child: Text(
-                          translate.confirm_email,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 120, top: 40),
+                    child: Column(
+                      children: [
+                        Text(
+                          translate.you_cant_enter,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: theme.disabledColor,
                             fontFamily: kNormalTextFontFamily,
-                            fontSize: 28.0,
+                            fontSize: 17.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 120, top: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          translate.we_send + ' ' + state.emailLogin.value,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: theme.disabledColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 17.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 120),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          translate.for_confirm,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: theme.disabledColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 17.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 240, top: 97),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => context.read<AuthBloc>().add(AuthSendEmailVerify()),
+                        child: Text(
+                          translate.to_send_letter,
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 17.0,
+                            color: theme.splashColor,
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 120, top: 40),
-                        child: Column(
-                          children: [
-                            Text(
-                              translate.you_cant_enter,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: theme.disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17.0,
-                              ),
-                            ),
-                          ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 110, top: 131),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _isSignIn = false;
+                        _changePage();
+                        showNotConfirmedEmail = false;
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 147,
+                          vertical: 25,
+                        ),
+                        primary: theme.splashColor,
+                        elevation: 1,
+                      ),
+                      child: Text(
+                        translate.go_to_authorization,
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 17,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 120, top: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              translate.we_send + ' ' + state.emailLogin.value,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: theme.disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 120),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              translate.for_confirm,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: theme.disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 240, top: 97),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () => context
-                                .read<AuthBloc>()
-                                .add(AuthSendEmailVerify()),
-                            child: Text(
-                              translate.to_send_letter,
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17.0,
-                                color: theme.splashColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 110, top: 131),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _isSignIn = false;
-                            _changePage();
-                            showNotConfirmedEmail = false;
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 147,
-                              vertical: 25,
-                            ),
-                            primary: theme.splashColor,
-                            elevation: 1,
-                          ),
-                          child: Text(
-                            translate.go_to_authorization,
-                            style: TextStyle(
-                              color: theme.primaryColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 17,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                        flex: 3,
-                      ),
-                    ])
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(),
+                    flex: 3,
+                  ),
+                ])
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
@@ -579,15 +551,12 @@ class _AuthViewState extends State<AuthView> {
                       errorMessage: translate.wrong_email,
                       needErrorValidation: true,
                       onChange: (email) {
-                        context.read<AuthBloc>().add(AuthLoginEmailChanged(
-                            email: email, needValidation: true));
+                        context.read<AuthBloc>().add(AuthLoginEmailChanged(email: email, needValidation: true));
                       },
                       onFinishEditing: (email) {
-                        context.read<AuthBloc>().add(AuthLoginEmailChanged(
-                            email: email, needValidation: true));
+                        context.read<AuthBloc>().add(AuthLoginEmailChanged(email: email, needValidation: true));
                       },
-                      invalid: state.emailLogin.invalid &&
-                          state.emailLogin.value.isNotEmpty,
+                      invalid: state.emailLogin.invalid && state.emailLogin.value.isNotEmpty,
                       isPassword: false,
                     ),
                     CustomTextField(
@@ -606,8 +575,7 @@ class _AuthViewState extends State<AuthView> {
                               needValidation: true,
                             ));
                       },
-                      invalid: state.passwordLogin.invalid &&
-                          state.passwordLogin.value.isNotEmpty,
+                      invalid: state.passwordLogin.invalid && state.passwordLogin.value.isNotEmpty,
                       isPassword: true,
                     ),
                     SizedBox(
@@ -625,9 +593,7 @@ class _AuthViewState extends State<AuthView> {
                             width: 23,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(7.0),
-                              color: state.rememberMe
-                                  ? theme.colorScheme.onSurface
-                                  : theme.colorScheme.onPrimary,
+                              color: state.rememberMe ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
                             ),
                             padding: EdgeInsets.all(1.5),
                             child: Container(
@@ -637,17 +603,13 @@ class _AuthViewState extends State<AuthView> {
                               ),
                               child: Checkbox(
                                 value: state.rememberMe,
-                                side: BorderSide(
-                                    width: 1, color: Colors.transparent),
+                                side: BorderSide(width: 1, color: Colors.transparent),
                                 splashRadius: 0,
                                 checkColor: theme.accentColor,
                                 activeColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6.0)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
                                 onChanged: (_) {
-                                  context
-                                      .read<AuthBloc>()
-                                      .add(AuthRememberMeChanged());
+                                  context.read<AuthBloc>().add(AuthRememberMeChanged());
                                 },
                               ),
                             ),
@@ -747,16 +709,12 @@ class _AuthViewState extends State<AuthView> {
                         //   width: 25.0,
                         // ),
                         Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: theme.primaryColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: theme.colorScheme.onBackground
-                                      .withOpacity(0.5),
-                                  blurRadius: 4,
-                                )
-                              ]),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: theme.primaryColor, boxShadow: [
+                            BoxShadow(
+                              color: theme.colorScheme.onBackground.withOpacity(0.5),
+                              blurRadius: 4,
+                            )
+                          ]),
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Image.asset(
@@ -773,9 +731,7 @@ class _AuthViewState extends State<AuthView> {
                       padding: EdgeInsets.symmetric(horizontal: 120),
                       child: Visibility(
                         //TODO change this shit
-                        visible:
-                            state.status == FormzStatus.submissionFailure &&
-                                state.action == RequestedAction.login,
+                        visible: state.status == FormzStatus.submissionFailure && state.action == RequestedAction.login,
                         child: Row(
                           children: [
                             state.error != AuthError.noVerifiedEmail
@@ -815,9 +771,7 @@ class _AuthViewState extends State<AuthView> {
                           autofocus: true,
                           onPressed: _isLoginFieldValid(state)
                               ? () {
-                                  context
-                                      .read<AuthBloc>()
-                                      .add(AuthLoginConfirmed());
+                                  context.read<AuthBloc>().add(AuthLoginConfirmed());
                                 }
                               : null,
                           style: OutlinedButton.styleFrom(
@@ -831,9 +785,7 @@ class _AuthViewState extends State<AuthView> {
                               horizontal: 135,
                               vertical: 20,
                             ),
-                            backgroundColor: _isLoginFieldValid(state)
-                                ? theme.colorScheme.onSurface
-                                : theme.colorScheme.onPrimary,
+                            backgroundColor: _isLoginFieldValid(state) ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
                           ),
                           child: Center(
                               child: Text(
@@ -860,10 +812,7 @@ class _AuthViewState extends State<AuthView> {
   }
 
   bool _isLoginFieldValid(AuthState state) {
-    return state.emailLogin.valid &&
-        state.emailLogin.value.isNotEmpty &&
-        state.passwordLogin.valid &&
-        state.passwordLogin.value.isNotEmpty;
+    return state.emailLogin.valid && state.emailLogin.value.isNotEmpty && state.passwordLogin.valid && state.passwordLogin.value.isNotEmpty;
   }
 
   var focusNodePasswordReg = FocusNode();
@@ -873,15 +822,12 @@ class _AuthViewState extends State<AuthView> {
   Widget _registerMain(ThemeData theme) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        return state.status.isSubmissionSuccess
-            ? _registrationSuccess(theme, context, state)
-            : _registrationInProgress(theme, context, state);
+        return state.status.isSubmissionSuccess ? _registrationSuccess(theme, context, state) : _registrationInProgress(theme, context, state);
       },
     );
   }
 
-  _registrationInProgress(
-      ThemeData theme, BuildContext context, AuthState state) {
+  _registrationInProgress(ThemeData theme, BuildContext context, AuthState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -909,14 +855,10 @@ class _AuthViewState extends State<AuthView> {
           hint: translate.user_name,
           errorMessage: translate.wrong_username,
           onChange: (name) {
-            context
-                .read<AuthBloc>()
-                .add(AuthNameChanged(name: name, needValidation: true));
+            context.read<AuthBloc>().add(AuthNameChanged(name: name, needValidation: true));
           },
           onFinishEditing: (name) {
-            context
-                .read<AuthBloc>()
-                .add(AuthNameChanged(name: name, needValidation: true));
+            context.read<AuthBloc>().add(AuthNameChanged(name: name, needValidation: true));
           },
           needErrorValidation: true,
           invalid: state.name.invalid && state.name.value.isNotEmpty,
@@ -928,16 +870,13 @@ class _AuthViewState extends State<AuthView> {
           hint: translate.email,
           errorMessage: translate.wrong_email,
           onChange: (email) {
-            context.read<AuthBloc>().add(
-                AuthRegisterEmailChanged(email: email, needValidation: true));
+            context.read<AuthBloc>().add(AuthRegisterEmailChanged(email: email, needValidation: true));
           },
           onFinishEditing: (email) {
-            context.read<AuthBloc>().add(
-                AuthRegisterEmailChanged(email: email, needValidation: true));
+            context.read<AuthBloc>().add(AuthRegisterEmailChanged(email: email, needValidation: true));
           },
           needErrorValidation: true,
-          invalid: state.emailRegister.invalid &&
-              state.emailRegister.value.isNotEmpty,
+          invalid: state.emailRegister.invalid && state.emailRegister.value.isNotEmpty,
           isPassword: false,
         ),
 
@@ -947,16 +886,13 @@ class _AuthViewState extends State<AuthView> {
           hint: translate.password,
           errorMessage: translate.wrong_password,
           onChange: (password) {
-            context.read<AuthBloc>().add(AuthRegisterPasswordChanged(
-                password: password, needValidation: true));
+            context.read<AuthBloc>().add(AuthRegisterPasswordChanged(password: password, needValidation: true));
           },
           onFinishEditing: (password) {
-            context.read<AuthBloc>().add(AuthRegisterPasswordChanged(
-                password: password, needValidation: true));
+            context.read<AuthBloc>().add(AuthRegisterPasswordChanged(password: password, needValidation: true));
           },
           needErrorValidation: true,
-          invalid: state.passwordRegister.invalid &&
-              state.passwordRegister.value.isNotEmpty,
+          invalid: state.passwordRegister.invalid && state.passwordRegister.value.isNotEmpty,
           isPassword: true,
         ),
         SizedBox(
@@ -973,9 +909,7 @@ class _AuthViewState extends State<AuthView> {
                 width: 21,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7.0),
-                  color: state.acceptedTermsOfUse
-                      ? theme.colorScheme.onSurface
-                      : theme.colorScheme.onPrimary,
+                  color: state.acceptedTermsOfUse ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
                 ),
                 padding: EdgeInsets.all(1.5),
                 child: Container(
@@ -989,12 +923,9 @@ class _AuthViewState extends State<AuthView> {
                     splashRadius: 0,
                     checkColor: theme.accentColor,
                     activeColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
                     onChanged: (_) {
-                      context
-                          .read<AuthBloc>()
-                          .add(AuthAcceptTermsOfUseChanged());
+                      context.read<AuthBloc>().add(AuthAcceptTermsOfUseChanged());
                     },
                   ),
                 ),
@@ -1063,8 +994,7 @@ class _AuthViewState extends State<AuthView> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 120),
               child: Visibility(
-                visible: state.status == FormzStatus.submissionFailure &&
-                    state.action == RequestedAction.registration,
+                visible: state.status == FormzStatus.submissionFailure && state.action == RequestedAction.registration,
                 child: Row(
                   children: [
                     Image.asset(
@@ -1076,9 +1006,7 @@ class _AuthViewState extends State<AuthView> {
                       width: 5,
                     ),
                     Text(
-                      state.error == AuthError.emailAlreadyRegistered
-                          ? translate.already_registered_email
-                          : translate.something_goes_wrong,
+                      state.error == AuthError.emailAlreadyRegistered ? translate.already_registered_email : translate.something_goes_wrong,
                       style: TextStyle(
                         fontFamily: kNormalTextFontFamily,
                         fontSize: 16,
@@ -1140,9 +1068,7 @@ class _AuthViewState extends State<AuthView> {
                   horizontal: 135,
                   vertical: 20,
                 ),
-                backgroundColor: _isRegisterFieldsValid(state)
-                    ? theme.colorScheme.onSurface
-                    : theme.colorScheme.onPrimary,
+                backgroundColor: _isRegisterFieldsValid(state) ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary,
               ),
               child: Text(
                 translate.register,
@@ -1177,15 +1103,11 @@ class _AuthViewState extends State<AuthView> {
     setState(() {
       if (_isSignIn) {
         _isAnimationCompleted = false;
-        controller
-            .animateTo(MediaQuery.of(context).size.width * 0.563,
-                duration: Duration(milliseconds: 500), curve: Curves.linear)
-            .then((value) => _isAnimationCompleted = true);
+        controller.animateTo(MediaQuery.of(context).size.width * 0.563, duration: Duration(milliseconds: 500), curve: Curves.linear).then((value) => _isAnimationCompleted = true);
         focusNodeForName.requestFocus();
         _isSignIn = !_isSignIn;
       } else {
-        controller.animateTo(0,
-            duration: Duration(milliseconds: 500), curve: Curves.linear);
+        controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.linear);
         singInEmailNode.requestFocus();
         _isSignIn = !_isSignIn;
       }
@@ -1196,8 +1118,7 @@ class _AuthViewState extends State<AuthView> {
     showDialog(context: context, builder: (context) => ForgotPasswordView());
   }
 
-  Widget _registrationSuccess(
-      ThemeData theme, BuildContext context, AuthState state) {
+  Widget _registrationSuccess(ThemeData theme, BuildContext context, AuthState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -1290,8 +1211,7 @@ class _AuthViewState extends State<AuthView> {
               _changePage();
             },
             style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
               // padding: EdgeInsets.symmetric(
               //   horizontal: 140,
               //   vertical: 20,
@@ -1318,75 +1238,70 @@ class _AuthViewState extends State<AuthView> {
     );
   }
 
-  Widget _registrationComplete(
-      ThemeData theme, BuildContext context, AuthState state) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: Container(),
-            flex: 3,
+  Widget _registrationComplete(ThemeData theme, BuildContext context, AuthState state) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisSize: MainAxisSize.min, children: [
+      Expanded(
+        child: Container(),
+        flex: 3,
+      ),
+      Center(
+        child: Text(
+          translate.register_complete,
+          style: TextStyle(
+            color: theme.disabledColor,
+            fontFamily: kNormalTextFontFamily,
+            fontSize: 28.0,
           ),
-          Center(
-            child: Text(
-              translate.register_complete,
-              style: TextStyle(
-                color: theme.disabledColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 28.0,
-              ),
-            ),
+        ),
+      ),
+      Expanded(
+        child: Container(),
+        flex: 2,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 160),
+        child: Text(
+          translate.email_successfully,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: theme.disabledColor,
+            fontFamily: kNormalTextFontFamily,
+            fontSize: 17.0,
           ),
-          Expanded(
-            child: Container(),
-            flex: 2,
+        ),
+      ),
+      SizedBox(
+        height: 250,
+      ),
+      ElevatedButton(
+        onPressed: () {
+          _changePage();
+        },
+        // onPressed: () {
+        //   context.read<AuthBloc>().add(AuthClear());
+        // },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          padding: EdgeInsets.symmetric(
+            horizontal: 147,
+            vertical: 25,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 160),
-            child: Text(
-              translate.email_successfully,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: theme.disabledColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 17.0,
-              ),
-            ),
+          primary: theme.splashColor,
+          elevation: 1,
+        ),
+        child: Text(
+          translate.go_to_authorization,
+          style: TextStyle(
+            color: theme.primaryColor,
+            fontFamily: kNormalTextFontFamily,
+            fontSize: 17,
           ),
-          SizedBox(
-            height: 250,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _changePage();
-            },
-            // onPressed: () {
-            //   context.read<AuthBloc>().add(AuthClear());
-            // },
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              padding: EdgeInsets.symmetric(
-                horizontal: 147,
-                vertical: 25,
-              ),
-              primary: theme.splashColor,
-              elevation: 1,
-            ),
-            child: Text(
-              translate.go_to_authorization,
-              style: TextStyle(
-                color: theme.primaryColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 17,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(),
-            flex: 3,
-          ),
-        ]);
+        ),
+      ),
+      Expanded(
+        child: Container(),
+        flex: 3,
+      ),
+    ]);
   }
 }

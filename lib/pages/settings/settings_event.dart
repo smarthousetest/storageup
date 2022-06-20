@@ -24,8 +24,10 @@ class SettingsPasswordChanged extends SettingsEvent {
   final String oldPassword;
   final String newPassword;
 
-  const SettingsPasswordChanged(
-      {required this.oldPassword, required this.newPassword});
+  const SettingsPasswordChanged({
+    required this.oldPassword,
+    required this.newPassword,
+  });
 
   @override
   List<Object?> get props => [oldPassword, newPassword];

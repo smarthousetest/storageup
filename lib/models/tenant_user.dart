@@ -23,8 +23,7 @@ class TenantUser {
   TenantUser.fromJson(Map<String, dynamic> json) {
     roles = json['roles'].cast<String>();
     sId = json['_id'];
-    tenant =
-        json['tenant'] != null ? new Tenant.fromJson(json['tenant']) : null;
+    tenant = json['tenant'] != null ? new Tenant.fromJson(json['tenant']) : null;
     status = mapJsonToStatus(json['status']);
     updatedAt = json['updatedAt'];
     createdAt = json['createdAt'];
