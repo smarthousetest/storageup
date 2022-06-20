@@ -345,8 +345,9 @@ class LoadController {
       } else if (event.right != null && event.right!.file != null) {
         throwIfNot(event.right!.file!.existsSync(),
             Exception('Downloaded file doesn\'t exists'));
+
         if (_state.currentDownloadingFile?.id == event.right!.recordId) {
-          final filePath = event.right!.file!.path.split('/').last;
+          final filePath = event.right!.file!.path;
           log('LoadController -> processDownloadCallback: \n file: ${event.right!.filePath}, download percent 100');
           var record = _state.currentDownloadingFile!.copyWith(
             localPath: filePath,

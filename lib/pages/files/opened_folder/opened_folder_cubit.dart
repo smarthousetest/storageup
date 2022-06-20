@@ -809,31 +809,31 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var box = await Hive.openBox(kPathDBName);
     var controllerState = _loadController.getState;
     var downloadObserver = DownloadObserver(recordId, (value) async {
-      if (value is List<DownloadFileInfo>) {
-        var fileId = value.indexWhere((element) => element.id == recordId);
+      if (value is LoadNotification) {
+        // var fileId = value.indexWhere((element) => element.id == recordId);
 
-        if (fileId != -1) {
-          var file = value[fileId];
-          if (file.endedWithException) {
+        if (value.downloadFileInfo!.id != -1) {
+          // var file = value[fileId];
+          if (value.downloadFileInfo!.endedWithException) {
             _setRecordDownloading(
               recordId: recordId,
               isDownloading: false,
             );
 
             _unregisterDownloadObserver(recordId);
-          } else if (file.localPath.isNotEmpty) {
-            var path = file.localPath
+          } else if (value.downloadFileInfo!.localPath.isNotEmpty) {
+            var path = value.downloadFileInfo!.localPath
                 .split('/')
                 .skipWhile((value) => value != 'downloads')
                 .join('/');
-            await box.put(file.id, path);
+            await box.put(value.downloadFileInfo!.id, path);
 
             _setRecordDownloading(
               recordId: recordId,
               isDownloading: false,
             );
 
-            var res = await OpenFile.open(file.localPath);
+            var res = await OpenFile.open(value.downloadFileInfo!.localPath);
             print(res.message);
 
             _unregisterDownloadObserver(recordId);
