@@ -77,13 +77,17 @@ class _FinancePageState extends State<FinancePage> {
       child: BlocListener<FinanceBloc, FinanceState>(
         listener: (context, state) async {
           if (state.sub?.tariff?.spaceGb == null) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurFailedServerConnection(true);
-              },
-            );
-          }
+             print('Finance view trouble - null sub');}
+          // if (state.sub?.tariff?.spaceGb == null) {
+          //   print('Sell_space trouble');
+          //   await showDialog(
+          //     context: context,
+          //     builder: (BuildContext context) {
+          //       return BlurFailedServerConnection(true);
+          //     },
+          //   );
+          // }
+          // показывается поп ап так как у нового пользователя подписка - null
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,
