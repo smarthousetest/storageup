@@ -210,7 +210,8 @@ class LoadController {
     }
   }
 
-  void downloadFile({required String? fileId, bool force = false}) async {
+  void downloadFile(
+      {required String? fileId, bool force = false, String? path}) async {
     if (isNotInited()) {
       await init();
     }
@@ -263,13 +264,22 @@ class LoadController {
       }
 
       _state.changeDowloadingFiles(downloadingFiles);
-
-      _cpp
-          ?.downloadFile(
-            recordID: fileInfo.id,
-            bearerToken: token,
-          )
-          .listen(_processDownloadCallback);
+      if (path != null && Directory(path).existsSync()) {
+        CppNative? _cppSave = CppNative(documentsFolder: Directory(path));
+        _cppSave = await getInstanceCppNative(
+            documentsFolder: Directory(path),
+            baseUrl: kServerUrl.split('/').last);
+        _cppSave
+            .downloadFile(recordID: fileInfo.id, bearerToken: token)
+            .listen(_processDownloadCallback);
+      } else {
+        _cpp
+            ?.downloadFile(
+              recordID: fileInfo.id,
+              bearerToken: token,
+            )
+            .listen(_processDownloadCallback);
+      }
     }
   }
 

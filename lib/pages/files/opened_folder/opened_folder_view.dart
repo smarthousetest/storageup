@@ -1463,6 +1463,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         }
         break;
       case FileAction.save:
+        context.read<OpenedFolderCubit>().fileSave(object as Record);
         print('save objects');
         break;
       default:
@@ -1687,36 +1688,41 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                 //   color: mainColor,
                 //   height: 1,
                 // ),
-                MouseRegion(
-                  onEnter: (event) {
-                    setState(() {
-                      ind = 1;
-                    });
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.save);
                   },
-                  child: Container(
-                    width: 190,
-                    height: 40,
-                    color: ind == 1 ? mainColor : null,
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Image.asset(
-                        //   'assets/file_page/file_options/download.png',
-                        //   height: 20,
-                        // ),
-                        SvgPicture.asset(
-                          'assets/options/download.svg',
-                          height: 20,
-                        ),
-                        Container(
-                          width: 15,
-                        ),
-                        Text(
-                          widget.translate.down,
-                          style: style,
-                        ),
-                      ],
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 1;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 1 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/download.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/download.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.down,
+                            style: style,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

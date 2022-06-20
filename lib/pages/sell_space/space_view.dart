@@ -281,7 +281,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
         ),
       ]);
-    } else if (state.keeper.isNotEmpty) {
+    } else if (state.keeper.isNotEmpty || index == 2) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -542,7 +542,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
-          var maxSpace = state.availableSpace / GB;
+          var maxSpace = (state.availableSpace / GB).round();
+          print(maxSpace);
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -597,7 +598,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             return Padding(
                               padding: const EdgeInsets.only(left: 15, top: 11),
                               child: Text(
-                                dirPath,
+                                state.pathToKeeper,
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: Theme.of(context).disabledColor),
@@ -622,9 +623,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               print(state.pathToKeeper);
                               setState(
                                 () {
-                                  if (state.pathToKeeper != null) {
-                                    dirPath = state.pathToKeeper!;
-                                  }
+                                  dirPath = state.pathToKeeper;
                                 },
                               );
                             },
@@ -724,8 +723,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             //RoundSliderThumbShape(enabledThumbRadius: 10),
                           ),
                           child: Slider(
-                            min: maxSpace > 32 ? 32 : 0,
-                            max: maxSpace > 32 ? 180 : maxSpace.toDouble(),
+                            min: 32,
+                            max: maxSpace > 32 ? maxSpace.toDouble() : 180,
                             value: _currentSliderValue,
                             onChanged: (double value) {
                               setState(
@@ -897,7 +896,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         builder: (context, state) {
                       return OutlinedButton(
                         onPressed: () async {
-                          bool checkValidate = dirPath.isNotEmpty &&
+                          bool checkValidate = state.pathToKeeper.isNotEmpty &&
                               myController.text.isNotEmpty;
                           if (!checkValidate) {
                             print('path null');
@@ -918,10 +917,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           minimumSize: Size(double.maxFinite, 60),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          backgroundColor:
-                              dirPath.isEmpty && myController.value.text.isEmpty
-                                  ? Theme.of(context).canvasColor
-                                  : Theme.of(context).splashColor,
+                          backgroundColor: (state.pathToKeeper.isEmpty &&
+                                  myController.text.isEmpty)
+                              ? Theme.of(context).canvasColor
+                              : Theme.of(context).splashColor,
                         ),
                         child: Text(
                           translate.save,

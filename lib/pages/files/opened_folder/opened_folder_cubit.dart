@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:cpp_native/cpp_native.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:formz/formz.dart';
@@ -55,7 +56,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   List<DownloadObserver> _downloadObservers = [];
   StreamSubscription? updatePageSubscription;
   late final LatestFileRepository _repository;
-  late String idTappedFile;
+  String idTappedFile = '';
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
   var _packetController =
@@ -710,6 +711,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
+  Future<void> fileSave(Record record) async {
+    String? result = await FilePicker.platform.getDirectoryPath();
+    if (result != null) {
+      _downloadFile(record.id, result);
+    }
+  }
+
   Future<void> fileTapped(Record record) async {
     await _filesController.setRecentFile(record, DateTime.now());
     var recentsFile = await _filesController.getRecentFiles();
@@ -738,20 +746,20 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         var res = await OpenFile.open(fullPathToFile);
         print(res.message);
       } else {
-        _downloadFile(record.id);
+        _downloadFile(record.id, null);
       }
     } else {
-      _downloadFile(record.id);
+      _downloadFile(record.id, null);
     }
   }
 
-  void _downloadFile(String recordId) async {
-    _loadController.downloadFile(fileId: recordId);
-    _registerDownloadObserver(recordId);
+  void _downloadFile(String recordId, String? path) async {
+    _loadController.downloadFile(fileId: recordId, path: path);
+    _registerDownloadObserver(recordId,);
     _setRecordDownloading(recordId: recordId);
   }
 
-  void _registerDownloadObserver(String recordId) async {
+  void _registerDownloadObserver(String recordId,) async {
     var box = await Hive.openBox(kPathDBName);
     var controllerState = _loadController.getState;
     var downloadObserver = DownloadObserver(recordId, (value) async {
@@ -768,10 +776,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
             _unregisterDownloadObserver(recordId);
           } else if (file.localPath.isNotEmpty) {
-            var path = file.localPath
-                .split('/')
-                .skipWhile((value) => value != 'downloads')
-                .join('/');
+            String path = file.localPath
+                  .split('/')
+                  .skipWhile((value) => value != 'downloads')
+                  .join('/');
+
             await box.put(file.id, path);
 
             _setRecordDownloading(

@@ -9,14 +9,14 @@ class SpaceState extends Equatable {
   final List<DownloadLocation> locationsInfo;
   final List<Keeper> keeper;
   final ValueNotifier<User?>? valueNotifier;
-  final String? pathToKeeper;
+  final String pathToKeeper;
   final int availableSpace;
   SpaceState({
     this.user,
     this.locationsInfo = const [],
     this.keeper = const [],
     this.valueNotifier,
-    this.pathToKeeper,
+    this.pathToKeeper = '',
     this.availableSpace = 0,
   });
 
