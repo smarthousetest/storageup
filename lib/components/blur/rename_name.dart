@@ -29,6 +29,8 @@ class _ButtonTemplateState extends State<BlurRenameName> {
   void initState() {
     myController = TextEditingController(text: widget.name);
     super.initState();
+        myController.selection =
+        TextSelection(baseOffset: 0, extentOffset: widget.name.length);
   }
 
   @override
