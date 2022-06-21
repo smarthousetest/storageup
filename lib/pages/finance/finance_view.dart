@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
+import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -76,18 +78,21 @@ class _FinancePageState extends State<FinancePage> {
       create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: BlocListener<FinanceBloc, FinanceState>(
         listener: (context, state) async {
-          if (state.sub?.tariff?.spaceGb == null) {
-             print('Finance view trouble - null sub');}
-          // if (state.sub?.tariff?.spaceGb == null) {
-          //   print('Sell_space trouble');
-          //   await showDialog(
-          //     context: context,
-          //     builder: (BuildContext context) {
-          //       return BlurFailedServerConnection(true);
-          //     },
-          //   );
-          // }
-          // показывается поп ап так как у нового пользователя подписка - null
+          if (state.status == FormzStatus.submissionFailure) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurFailedServerConnection(true);
+              },
+            );
+          } else if (state.status == FormzStatus.submissionCanceled) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurSomethingGoesWrong(true);
+              },
+            );
+          }
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,
