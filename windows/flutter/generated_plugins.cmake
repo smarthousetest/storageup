@@ -5,7 +5,11 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   cpp_native
   desktop_window
+<<<<<<< dev
   objectbox_flutter_libs
+=======
+  native_context_menu
+>>>>>>> context menu
   permission_handler_windows
   window_size
 )

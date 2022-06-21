@@ -54,6 +54,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   S translate = getIt<S>();
   SortingDirection _direction = SortingDirection.down;
   var _bloc = OpenedFolderCubit();
+  CustomPopupMenuController _popupController = CustomPopupMenuController();
   List<CustomPopupMenuController> _popupControllers = [];
   List<CustomPopupMenuController> _popupControllersGrouped = [];
   Timer? timerForOpenFile;
@@ -174,6 +175,16 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     );
   }
 
+  _onPointerDownRight(PointerDownEvent event) {
+    if (event.kind == PointerDeviceKind.mouse &&
+        event.buttons == kSecondaryMouseButton) {
+      print("right button click");
+
+      //_popupControllers[state.sortedFiles.indexOf(obj)].showMenu();
+      //controller.showMenu();
+    }
+  }
+
   Widget _progressIndicator(BuildContext context) {
     return SizedBox(
       height: MediaQuery.of(context).size.height / 1.9,
@@ -232,13 +243,14 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         width: 7,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 2.0),
+                        padding: const EdgeInsets.only(top: 0.0),
                         child: Text(
                           translate.update,
                           maxLines: 1,
                           style: TextStyle(
                             color: Theme.of(context).splashColor,
                             fontFamily: kNormalTextFontFamily,
+                            height: 24,
                             fontSize: 16,
                           ),
                         ),
@@ -311,12 +323,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       bloc: _bloc,
       builder: (context, state) {
         var searchText = StateSortedContainer.of(context).search;
-
-        // if (state.search != searchText) {
-        //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(
-        //         searchText,
-        //       );
-        // }
         var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
         var direction = StateSortedContainer.of(context).direction;
         context.read<OpenedFolderCubit>()
@@ -325,9 +331,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         if (state.representation == FilesRepresentation.grid) {
           return state.criterion == SortingCriterion.byType
               ? _filesGridForType(state)
-              : // state.objects.isNotEmpty
-              _filesGrid(state);
-          //: Center(child: _progressIndicator(context));
+              : _filesGrid(state);
         } else {
           return state.criterion == SortingCriterion.byType
               ? _filesListSortType(context, state)
