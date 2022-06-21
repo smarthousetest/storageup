@@ -43,7 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m9(count) => "${count} Пб";
 
   static String m10(count) =>
-      "${Intl.plural(count, zero: '0 секунд', one: '1 секунду', two: '2 секунды', few: '${count} секунды', many: '${count} секунд', other: '${count} секунд')}";
+      "${Intl.plural(count, zero: '0 секунд', one: '${count} секунду', two: '${count} секунды', few: '${count} секунды', many: '${count} секунд', other: '${count} секунд')}";
 
   static String m11(count) => "${count} ₽/месяц";
 

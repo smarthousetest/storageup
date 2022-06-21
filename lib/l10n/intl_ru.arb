@@ -257,5 +257,5 @@
     "check_ethernet_connection": "Проверьте соединение с Интернетом и повторите попытку.",
     "ok": "Ок",
     "resend_letter_available": "Повторная отправка письма будет доступна через",
-    "seconds": "{count,plural, =0{0 секунд} =1{1 секунду} =2{2 секунды} few{{count} секунды} many{{count} секунд} other{{count} секунд}}"
+    "seconds": "{count,plural, =0{0 секунд} =1{{count} секунду} =2{{count} секунды} few{{count} секунды} many{{count} секунд} other{{count} секунд}}"
 }
