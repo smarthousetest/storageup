@@ -720,13 +720,23 @@ class S {
     );
   }
 
-  /// `Maximum size for your drive: {count} GB`
-  String max_storage(Object count) {
+  /// `Maximum size for your drive: `
+  String get max_storage {
     return Intl.message(
-      'Maximum size for your drive: $count GB',
+      'Maximum size for your drive: ',
       name: 'max_storage',
       desc: '',
-      args: [count],
+      args: [],
+    );
+  }
+
+  /// `The volume of the selected storage space does not exceed 32 GB`
+  String get not_exceed {
+    return Intl.message(
+      'The volume of the selected storage space does not exceed 32 GB',
+      name: 'not_exceed',
+      desc: '',
+      args: [],
     );
   }
 
@@ -2351,6 +2361,16 @@ class S {
     return Intl.message(
       'Update',
       name: 'update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The name must contain more than 2 characters`
+  String get name_contain {
+    return Intl.message(
+      'The name must contain more than 2 characters',
+      name: 'name_contain',
       desc: '',
       args: [],
     );

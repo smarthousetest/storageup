@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/pages/auth/models/name.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:os_specification/os_specification.dart';
@@ -27,6 +28,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       }
       if (event is GetPathToKeeper) {
         await _getPathToKeeper(event, state, emit);
+      }
+      if (event is NameChanged) {
+        _mapNameChanged(state, event, emit);
       }
     });
   }
@@ -71,6 +75,18 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         availableSpace: availableBytes,
       ));
     }
+  }
+
+  void _mapNameChanged(
+    SpaceState state,
+    NameChanged event,
+    Emitter<SpaceState> emit,
+  ) {
+    Name name = Name.dirty(event.name, event.needValidation);
+    print(name.value);
+    emit(state.copyWith(
+      name: name,
+    ));
   }
 
   Future _mapRunSoft(
@@ -132,11 +148,15 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     var countOfGb = event.countGb;
     var path = event.pathDir;
-    var name = event.name;
-    var id = await _subscriptionService.addNewKeeper(name, countOfGb);
+
+    var id =
+        await _subscriptionService.addNewKeeper(state.name.value, countOfGb);
     if (id != null) {
       int keeperDataId = _repository.createLocation(
-          countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+          countOfGb: countOfGb,
+          path: path,
+          name: state.name.value,
+          idForCompare: id);
       var locationsInfo = _repository.getlocationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);

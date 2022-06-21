@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:upstorage_desktop/models/download_location.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/pages/auth/models/name.dart';
 
 class SpaceState extends Equatable {
   final User? user;
@@ -11,6 +12,8 @@ class SpaceState extends Equatable {
   final ValueNotifier<User?>? valueNotifier;
   final String pathToKeeper;
   final int availableSpace;
+  final Name name;
+
   SpaceState({
     this.user,
     this.locationsInfo = const [],
@@ -18,6 +21,7 @@ class SpaceState extends Equatable {
     this.valueNotifier,
     this.pathToKeeper = '',
     this.availableSpace = 0,
+    this.name = const Name.pure(),
   });
 
   SpaceState copyWith({
@@ -25,6 +29,7 @@ class SpaceState extends Equatable {
     List<DownloadLocation>? locationsInfo,
     List<Keeper>? keeper,
     ValueNotifier<User?>? valueNotifier,
+    Name? name,
     String? pathToKeeper,
     int? availableSpace,
   }) {
@@ -34,6 +39,7 @@ class SpaceState extends Equatable {
       keeper: keeper ?? this.keeper,
       valueNotifier: valueNotifier ?? this.valueNotifier,
       pathToKeeper: pathToKeeper ?? this.pathToKeeper,
+      name: name ?? this.name,
       availableSpace: availableSpace ?? this.availableSpace,
     );
   }
@@ -43,6 +49,7 @@ class SpaceState extends Equatable {
         user,
         locationsInfo,
         keeper,
+        name,
         valueNotifier,
         pathToKeeper,
         availableSpace,

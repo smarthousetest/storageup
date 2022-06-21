@@ -39,17 +39,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(count) => "${count} Kb";
 
-  static String m8(count) => "Maximum size for your drive: ${count} GB";
+  static String m8(count) => "${count} Mb";
 
-  static String m9(count) => "${count} Mb";
+  static String m9(count) => "Minimum storage size: ${count} GB";
 
-  static String m10(count) => "Minimum storage size: ${count} GB";
+  static String m10(count) => "${count} Pb";
 
-  static String m11(count) => "${count} Pb";
+  static String m11(count) => "${count} \$/mounth";
 
-  static String m12(count) => "${count} \$/mounth";
-
-  static String m13(count) => "${count} Tb";
+  static String m12(count) => "${count} Tb";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -194,10 +192,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "disk - rent space and make money on it!"),
         "management":
             MessageLookupByLibrary.simpleMessage("Subscription management"),
-        "max_storage": m8,
-        "mb": m9,
+        "max_storage": MessageLookupByLibrary.simpleMessage(
+            "Maximum size for your drive: "),
+        "mb": m8,
         "media": MessageLookupByLibrary.simpleMessage("Media"),
-        "min_storage": m10,
+        "min_storage": m9,
         "money":
             MessageLookupByLibrary.simpleMessage("can make money from it."),
         "money_two_step":
@@ -206,6 +205,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Get more space change your subscription!"),
         "move": MessageLookupByLibrary.simpleMessage("Move"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "name_contain": MessageLookupByLibrary.simpleMessage(
+            "The name must contain more than 2 characters"),
         "name_storage":
             MessageLookupByLibrary.simpleMessage("Name of storage location"),
         "new_album": MessageLookupByLibrary.simpleMessage("New album"),
@@ -215,6 +216,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "The new password must be at least 8 characters long"),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
+        "not_exceed": MessageLookupByLibrary.simpleMessage(
+            "The volume of the selected storage space does not exceed 32 GB"),
         "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
         "not_storage": MessageLookupByLibrary.simpleMessage(
             "You have no storage locations yet"),
@@ -251,7 +254,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Passwords don\'t match"),
         "path": MessageLookupByLibrary.simpleMessage("Path"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
-        "pb": m11,
+        "pb": m10,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to permanently delete your account"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -321,8 +324,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m12,
-        "tb": m13,
+        "subscription_pay_mounth": m11,
+        "tb": m12,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),

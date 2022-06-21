@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -12,7 +11,6 @@ import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/state_container.dart';
 
@@ -583,6 +581,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   ]),
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 40, top: 15),
@@ -590,7 +590,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         height: 42,
                         width: 350,
                         decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Color(0xffE4E7ED))),
                         child: BlocBuilder<SpaceBloc, SpaceState>(
@@ -611,10 +611,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     BlocBuilder<SpaceBloc, SpaceState>(
                         builder: (context, state) {
                       return Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 20),
+                        padding: const EdgeInsets.only(left: 20, top: 15),
                         child: Container(
                           height: 42,
-                          width: 200,
+                          width: 101,
                           child: OutlinedButton(
                             onPressed: () async {
                               //String? path = await getFilesPaths();
@@ -647,7 +647,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     }),
                   ],
                 ),
-                _setName(context),
+                _setName(context, state),
                 Row(
                   children: [
                     Padding(
@@ -680,7 +680,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: Container(
                       child: Text(
                         translate.min_storage(
-                          maxSpace > 32 ? 32 : 0,
+                          32,
                         ),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onBackground,
@@ -689,20 +689,49 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     )),
-                Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 8),
-                    child: Container(
-                      child: Text(
-                        translate.max_storage(
-                          maxSpace == 0 ? 180 : maxSpace,
-                        ),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 14,
+                state.pathToKeeper.isNotEmpty
+                    ? maxSpace < 32
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 40, top: 8),
+                            child: Container(
+                              child: Text(
+                                translate.not_exceed,
+                                style: TextStyle(
+                                  color: Theme.of(context).indicatorColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(left: 40, top: 8),
+                            child: Container(
+                              child: Text(
+                                translate.max_storage + translate.gb(maxSpace),
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          )
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 40, top: 8),
+                        child: Container(
+                          child: Text(
+                            translate.max_storage,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 14,
+                            ),
+                          ),
                         ),
                       ),
-                    )),
                 Row(
                   children: [
                     Padding(
@@ -713,8 +742,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         child: SliderTheme(
                           data: SliderTheme.of(context).copyWith(
                             activeTrackColor: Theme.of(context).splashColor,
-                            inactiveTrackColor: Theme.of(context).dividerColor,
+                            inactiveTrackColor: Theme.of(context).cardColor,
                             trackShape: RectangularSliderTrackShape(),
+                            disabledInactiveTrackColor: Color(0xffF1F3F6),
+                            disabledThumbColor: Color(0xffF1F3F6),
                             trackHeight: 8.0,
                             thumbColor: Theme.of(context).primaryColor,
                             overlayShape:
@@ -723,16 +754,20 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             //RoundSliderThumbShape(enabledThumbRadius: 10),
                           ),
                           child: Slider(
+                            activeColor: Theme.of(context).splashColor,
+                            inactiveColor: Theme.of(context).cardColor,
                             min: 32,
                             max: maxSpace > 32 ? maxSpace.toDouble() : 180,
                             value: _currentSliderValue,
-                            onChanged: (double value) {
-                              setState(
-                                () {
-                                  _currentSliderValue = value;
-                                },
-                              );
-                            },
+                            onChanged: maxSpace < 32
+                                ? null
+                                : (double value) {
+                                    setState(
+                                      () {
+                                        _currentSliderValue = value;
+                                      },
+                                    );
+                                  },
                           ),
                         ),
                       ),
@@ -744,14 +779,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           height: 42,
                           width: 200,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
+                            color: state.pathToKeeper.isEmpty && maxSpace < 32
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Center(
                             child: Text(
                               translate.gb(_currentSliderValue.toInt()),
                               style: TextStyle(
-                                color: Theme.of(context).disabledColor,
+                                color:
+                                    state.pathToKeeper.isEmpty && maxSpace < 32
+                                        ? Theme.of(context).canvasColor
+                                        : Theme.of(context).disabledColor,
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 14,
                               ),
@@ -766,12 +806,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           width: 42,
                           child: OutlinedButton(
                             onPressed: () {
-                              var minSpace = maxSpace > 32 ? 32 : 0;
-                              setState(() {
-                                if (_currentSliderValue.toInt() > minSpace) {
-                                  _currentSliderValue = _currentSliderValue - 1;
-                                }
-                              });
+                              if (state.pathToKeeper.isEmpty && maxSpace < 32) {
+                              } else {
+                                var minSpace = maxSpace > 32 ? 32 : 0;
+                                setState(() {
+                                  if (_currentSliderValue.toInt() > minSpace) {
+                                    _currentSliderValue =
+                                        _currentSliderValue - 1;
+                                  }
+                                });
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               minimumSize: Size(double.maxFinite, 60),
@@ -779,13 +823,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10.0),
                                       bottomLeft: Radius.circular(10.0))),
-                              backgroundColor: Theme.of(context).cardColor,
+                              backgroundColor:
+                                  state.pathToKeeper.isEmpty && maxSpace < 32
+                                      ? Color(0xffF1F3F6)
+                                      : Theme.of(context).cardColor,
                             ),
                             child: Center(
                               child: Icon(
                                 Icons.remove,
                                 size: 15,
-                                color: Theme.of(context).focusColor,
+                                color:
+                                    state.pathToKeeper.isEmpty && maxSpace < 32
+                                        ? Theme.of(context).canvasColor
+                                        : Theme.of(context).disabledColor,
                               ),
                             ),
                           ),
@@ -798,12 +848,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           width: 42,
                           child: OutlinedButton(
                             onPressed: () {
-                              var max = maxSpace == 0 ? 180 : maxSpace;
-                              setState(() {
-                                if (_currentSliderValue.toInt() < max) {
-                                  _currentSliderValue = _currentSliderValue + 1;
-                                }
-                              });
+                              if (state.pathToKeeper.isEmpty && maxSpace < 32) {
+                              } else {
+                                var max = maxSpace == 0 ? 180 : maxSpace;
+                                setState(() {
+                                  if (_currentSliderValue.toInt() < max) {
+                                    _currentSliderValue =
+                                        _currentSliderValue + 1;
+                                  }
+                                });
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               minimumSize: Size(double.maxFinite, 60),
@@ -811,13 +865,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(10.0),
                                       bottomRight: Radius.circular(10.0))),
-                              backgroundColor: Theme.of(context).cardColor,
+                              backgroundColor:
+                                  state.pathToKeeper.isEmpty && maxSpace < 32
+                                      ? Color(0xffF1F3F6)
+                                      : Theme.of(context).cardColor,
                             ),
                             child: Center(
                               child: Icon(
                                 Icons.add,
                                 size: 15,
-                                color: Theme.of(context).focusColor,
+                                color:
+                                    state.pathToKeeper.isEmpty && maxSpace < 32
+                                        ? Theme.of(context).canvasColor
+                                        : Theme.of(context).disabledColor,
                               ),
                             ),
                           ),
@@ -895,32 +955,25 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: BlocBuilder<SpaceBloc, SpaceState>(
                         builder: (context, state) {
                       return OutlinedButton(
-                        onPressed: () async {
-                          bool checkValidate = state.pathToKeeper.isNotEmpty &&
-                              myController.text.isNotEmpty;
-                          if (!checkValidate) {
-                            print('path null');
-                          } else {
-                            var name = myController.text.trim();
-                            // _currentSliderValue.toInt();
-                            context.read<SpaceBloc>().add(SaveDirPath(
-                                pathDir: dirPath,
-                                countGb: _currentSliderValue.toInt(),
-                                name: name));
-                            await context.read<SpaceBloc>().stream.first;
-                            setState(() {
-                              index = 2;
-                            });
-                          }
-                        },
+                        onPressed: _isFieldsValid(state)
+                            ? () async {
+                                context.read<SpaceBloc>().add(SaveDirPath(
+                                      pathDir: dirPath,
+                                      countGb: _currentSliderValue.toInt(),
+                                    ));
+                                await context.read<SpaceBloc>().stream.first;
+                                setState(() {
+                                  index = 2;
+                                });
+                              }
+                            : null,
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size(double.maxFinite, 60),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: (state.pathToKeeper.isEmpty &&
-                                  myController.text.isEmpty)
-                              ? Theme.of(context).canvasColor
-                              : Theme.of(context).splashColor,
+                          backgroundColor: _isFieldsValid(state)
+                              ? Theme.of(context).splashColor
+                              : Theme.of(context).canvasColor,
                         ),
                         child: Text(
                           translate.save,
@@ -940,8 +993,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     ]);
   }
 
-  _setName(BuildContext context) {
+  bool _isFieldsValid(SpaceState state) {
+    return state.name.valid &&
+        state.name.value.isNotEmpty &&
+        state.pathToKeeper.isNotEmpty;
+  }
+
+  _setName(BuildContext context, SpaceState state) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 40, top: 26),
@@ -969,51 +1030,70 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             ),
           ]),
         ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 40, top: 15),
-              child: Container(
-                height: 42,
-                width: 350,
-                // decoration: BoxDecoration(
-                //     color: Theme.of(context).primaryColor,
-                //     borderRadius: BorderRadius.circular(10),
-                //     border: Border.all(color: Color(0xffE4E7ED))),
-                child: BlocBuilder<SpaceBloc, SpaceState>(
-                  builder: (context, state) {
-                    return TextField(
-                      controller: myController,
-                      textAlignVertical: TextAlignVertical.bottom,
-                      textAlign: TextAlign.start,
-                      //autofocus: true,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(left: 15, bottom: 21),
-                        hoverColor: Theme.of(context).cardColor,
-                        focusColor: Theme.of(context).cardColor,
-                        fillColor: Theme.of(context).cardColor,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide:
-                              BorderSide(color: Color(0xffE4E7ED), width: 0.0),
-                        ),
-                      ),
-                      style: TextStyle(
-                        color: Theme.of(context).disabledColor,
-                        fontFamily: kNormalTextFontFamily,
-                        fontSize: 14,
-                      ),
-                    );
-                  },
+        state.name.valid || state.name.value.isEmpty
+            ? SizedBox(
+                height: 15,
+              )
+            : Padding(
+                padding: EdgeInsets.only(left: 40, top: 8, bottom: 5),
+                child: Text(
+                  translate.name_contain,
+                  style: TextStyle(
+                    color: Theme.of(context).indicatorColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
                 ),
               ),
+        Padding(
+          padding: const EdgeInsets.only(left: 40),
+          child: Container(
+            height: 42,
+            width: 350,
+            // decoration: BoxDecoration(
+            //     color: Theme.of(context).primaryColor,
+            //     borderRadius: BorderRadius.circular(10),
+            //     border: Border.all(color: Color(0xffE4E7ED))),
+            child: BlocBuilder<SpaceBloc, SpaceState>(
+              builder: (context, state) {
+                return TextField(
+                  controller: myController,
+                  onChanged: (value) {
+                    context
+                        .read<SpaceBloc>()
+                        .add(NameChanged(name: value, needValidation: true));
+                  },
+                  textAlignVertical: TextAlignVertical.bottom,
+                  textAlign: TextAlign.start,
+                  //autofocus: true,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 15, bottom: 21),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                          color: state.name.valid || state.name.value.isEmpty
+                              ? Color(0xffE4E7ED)
+                              : Theme.of(context).indicatorColor,
+                          width: 0.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                          color: state.name.valid || state.name.value.isEmpty
+                              ? Color(0xffE4E7ED)
+                              : Theme.of(context).indicatorColor,
+                          width: 0.0),
+                    ),
+                  ),
+                  style: TextStyle(
+                    color: Theme.of(context).disabledColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
+                );
+              },
             ),
-          ],
+          ),
         )
       ],
     );
