@@ -80,7 +80,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     List<String> localPaths = [];
     var keepers = await _keeperService.getAllKeepers();
     final locationsInfo = await _repository.locationsInfo;
-print(state.localKeepers);
     for (var keeper in keepers!) {
       if (locationsInfo.any((_locationInfo) => _locationInfo.keeperId == keeper.id)) {
         if (state.localKeepers.isNotEmpty) {
@@ -94,9 +93,6 @@ print(state.localKeepers);
       } else {
         serverKeepers.add(keeper);
       }
-    }
-    for (var keeper in localKeepers) {
-      print(keeper);
     }
     // print('5 seconds update keeper');
     emit(

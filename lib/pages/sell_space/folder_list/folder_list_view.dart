@@ -23,10 +23,8 @@ class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 
-  FolderList({ Key? key}):super(key: key);
+  FolderList({Key? key}) : super(key: key);
 }
-
-
 
 class _ButtonTemplateState extends State<FolderList> {
   List<Keeper> locationsInfo = [];
@@ -43,6 +41,7 @@ class _ButtonTemplateState extends State<FolderList> {
   var customPopupMenuController = CustomPopupMenuController();
   S translate = getIt<S>();
   var bloc = FolderListBloc();
+
   @override
   void deactivate() {
     // TODO: implement deactivate
@@ -57,13 +56,10 @@ class _ButtonTemplateState extends State<FolderList> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => bloc
-        ..add(FolderListPageOpened()),
+      create: (context) => bloc..add(FolderListPageOpened()),
       child: BlocBuilder<FolderListBloc, FolderListState>(
         builder: (context, state) {
           _initiatingControllers(state);
@@ -392,6 +388,8 @@ class _ButtonTemplateState extends State<FolderList> {
     BuildContext context,
     Keeper keeper,
   ) {
+    late AnimationController controller;
+
     return Container(
       width: 167,
       padding: const EdgeInsets.only(left: 45.0, top: 15),
@@ -492,38 +490,37 @@ class _ButtonTemplateState extends State<FolderList> {
                     var kk = state.localKeepers.firstWhere((element) => element.name == keeper.name);
                     return GestureDetector(
                       onTap: () {
-                        DownloadLocation? rebootedKeeper;
-                        for (var location in state.locationsInfo) {
-                          if (location.keeperId == keeper.id) {
-                            rebootedKeeper = location;
-                            break;
+                        if (!kk.isRebooting!) {
+                          print("Press reboot keeper");
+                          DownloadLocation? rebootedKeeper;
+                          for (var location in state.locationsInfo) {
+                            if (location.keeperId == keeper.id) {
+                              rebootedKeeper = location;
+                              break;
+                            }
+                          }
+                          if (rebootedKeeper != null) {
+                            context.read<FolderListBloc>().add(KeeperReboot(location: rebootedKeeper));
                           }
                         }
-                        if (rebootedKeeper != null) {
-                          context.read<FolderListBloc>().add(KeeperReboot(location: rebootedKeeper));
-                        }
                       },
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          width: 119,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Theme.of(context).splashColor,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: Center(
-                            child: (kk.isRebooting!)
-                                ? Container(
-                                    color: Colors.red,
-                                    width: 50,
-                                    height: 50,
-                                  )
-                                : Row(
+                      child: (kk.isRebooting!)
+                          ? Container(child: CircularProgressIndicator(), width: 24, height: 24)
+                          : MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Container(
+                                width: 119,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: Theme.of(context).splashColor,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Row(
                                     children: [
                                       SvgPicture.asset(
                                         'assets/space_sell/refresh.svg',
@@ -540,9 +537,9 @@ class _ButtonTemplateState extends State<FolderList> {
                                       ),
                                     ],
                                   ),
-                          ),
-                        ),
-                      ),
+                                ),
+                              ),
+                            ),
                     );
                   },
                 ),
