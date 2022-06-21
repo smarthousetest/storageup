@@ -43,7 +43,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
-    final locationsInfo = _repository.getlocationsInfo;
+    final locationsInfo = _repository.locationsInfo;
     var keeper = await _subscriptionService.getAllKeepers();
     var valueNotifier = _userController.getValueNotifier();
     emit(state.copyWith(
@@ -111,7 +111,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var id = await _subscriptionService.addNewKeeper(name, countOfGb);
     if (id != null) {
       int keeperDataId = _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
-      var locationsInfo = _repository.getlocationsInfo;
+      var locationsInfo = _repository.locationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
       var box = await Hive.openBox('keeper_data');
@@ -134,7 +134,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     String? bearerToken = await getIt<TokenRepository>().getApiToken();
     for (var location in state.locationsInfo) {
       try {
-        dio.put("/keeper/${location.idForCompare}",
+        dio.put("/keeper/${location.keeperId}",
             data: KeeperData(
               null,
               null,

@@ -1,5 +1,5 @@
 name: upstorage_desktop
-description: A new Flutter project.
+description: StorageUp
 
 publish_to: none
 
@@ -14,7 +14,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   vector_math: any
-
   dbcrypt: ^2.0.0
   cupertino_icons: ^1.0.4
   intl: ^0.17.0
@@ -44,6 +43,9 @@ dependencies:
   open_file: ^3.2.1
   photo_view: ^0.13.0
   web_socket_channel: ^2.1.0
+  linked_scroll_controller: ^0.2.0
+  event_bus: ^2.0.0
+
   os_specification:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/os_specification.git
@@ -51,12 +53,10 @@ dependencies:
   cpp_native:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git
-      # ref: future_completer
-  event_bus: ^2.0.0
+
   file_typification:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/file_typification.git
-  linked_scroll_controller: ^0.2.0
 
 dev_dependencies:
   injectable_generator:

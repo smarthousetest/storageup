@@ -7,7 +7,7 @@ import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
+import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
@@ -234,20 +234,17 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
           Expanded(
             child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
-              // List<Keeper?> othersKeeper = [];
-              // if (state.keeper != null) {
-              //   othersKeeper.addAll(state.keeper);
-              // }
+              var fl = folderList(context);
               return IndexedStack(
                 sizing: StackFit.expand,
                 key: ValueKey<int>(index),
                 index: index,
                 children: [
-                  state.keeper.isEmpty ? rentingAPlace(context) : folderList(context),
+                  state.keeper.isEmpty ? rentingAPlace(context) : fl,
                   Column(
                     children: [addSpace(context)],
                   ),
-                  folderList(context)
+                  fl,
                 ],
               );
             }),
@@ -1087,7 +1084,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
-                child: FolderList(),
+                child: FolderList(key: Key('test')),
               ),
             ],
           ),
@@ -1096,3 +1093,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     );
   }
 }
+
+
+
+
