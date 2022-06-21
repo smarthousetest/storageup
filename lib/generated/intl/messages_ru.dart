@@ -206,6 +206,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
         "name_storage":
             MessageLookupByLibrary.simpleMessage("Название места хранения"),
+        "never": MessageLookupByLibrary.simpleMessage("Никогда"),
         "new_album": MessageLookupByLibrary.simpleMessage("Новый альбом"),
         "new_folder": MessageLookupByLibrary.simpleMessage("Новая папка"),
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
@@ -220,7 +221,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "notification_re_auth": MessageLookupByLibrary.simpleMessage(
             "Вам нужно снова зайти в аккаунт"),
-        "never": MessageLookupByLibrary.simpleMessage("Никогда"),
         "of_percent": MessageLookupByLibrary.simpleMessage(" из 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Выкл"),
         "offer": MessageLookupByLibrary.simpleMessage(

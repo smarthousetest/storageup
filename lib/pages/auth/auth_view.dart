@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:desktop_window/desktop_window.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:upstorage_desktop/components/blur/term_of_use_registration.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/components/expanded_section.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -981,7 +983,16 @@ class _AuthViewState extends State<AuthView> {
                             fontFamily: kNormalTextFontFamily,
                             fontSize: 16,
                             color: theme.accentColor,
-                          )),
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return TermOfUseBlur();
+                                },
+                              );
+                            }),
                       TextSpan(text: translate.term_of_use_after),
                     ],
                   ),
