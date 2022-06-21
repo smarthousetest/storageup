@@ -10,8 +10,7 @@ import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/local_server/local_server.dart'
-    as ui;
+import 'package:upstorage_desktop/utilites/local_server/local_server.dart' as ui;
 import 'constants.dart';
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
@@ -44,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   _MyAppState() : _locale = Locale(Intl.systemLocale) {
     hasCurrentLocale().then((value) {
       getLocale().then(
-        (loc) => setLocale(loc),
+            (loc) => setLocale(loc),
       );
     });
   }
@@ -132,8 +131,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        // etc.
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    // etc.
+  };
 }
