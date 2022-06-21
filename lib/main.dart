@@ -123,8 +123,8 @@ void readFromFileDomainName() {
   var domainNameFile = File('${os.appDirPath}domainName');
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
-  } else
-    domainName = domainNameFile.readAsStringSync();
+  }
+  domainName = domainNameFile.readAsStringSync();
   print(domainName);
 }
 
