@@ -29,7 +29,8 @@ class LoadController {
 
   Function(String)? _onAddAutoUploadingFile;
 
-  set setAutoUploadNextFileListener(Function(String) callback) => _onAddAutoUploadingFile = callback;
+  set setAutoUploadNextFileListener(Function(String) callback) =>
+      _onAddAutoUploadingFile = callback;
 
   void clearAutoUploadNextFileCallback() => _onAddAutoUploadingFile = null;
 
@@ -54,17 +55,25 @@ class LoadController {
     UploadFileInfo obj;
     if (filePath == null) {
       obj = uploadingFiles.firstWhere(
-        (element) => element.isInProgress == false && element.uploadPercent != 100 && !element.auto && !element.endedWithException,
+        (element) =>
+            element.isInProgress == false &&
+            element.uploadPercent != 100 &&
+            !element.auto &&
+            !element.endedWithException,
       );
     } else {
       obj = UploadFileInfo(localPath: filePath, folderId: folderId);
     }
 
     print('start processing file: $filePath');
-    print(!force && _state.uploadingFiles.isNotEmpty && _state.uploadingFiles.any((element) => element.isInProgress));
+    print(!force &&
+        _state.uploadingFiles.isNotEmpty &&
+        _state.uploadingFiles.any((element) => element.isInProgress));
     print(!_state.uploadingFiles.contains(obj));
 
-    if (!force && _state.uploadingFiles.isNotEmpty && _state.uploadingFiles.any((element) => element.isInProgress)) {
+    if (!force &&
+        _state.uploadingFiles.isNotEmpty &&
+        _state.uploadingFiles.any((element) => element.isInProgress)) {
       print('file $filePath will be added to list and loaded');
       uploadingFiles.add(obj);
       _state.changeUploadingFiles(uploadingFiles);
@@ -121,8 +130,10 @@ class LoadController {
       var uploadingFiles = List<UploadFileInfo>.from(_state.uploadingFiles);
 
       if (event.right != null) {
-        var element = uploadingFiles
-            .firstWhere((element) => (element.localPath == event.right!.filePath && (element.isInProgress || element.uploadPercent != 100)) || element.id == event.right!.recordId);
+        var element = uploadingFiles.firstWhere((element) =>
+            (element.localPath == event.right!.filePath &&
+                (element.isInProgress || element.uploadPercent != 100)) ||
+            element.id == event.right!.recordId);
         final uploadingPercent = event.right!.percent;
         if (uploadingPercent != 100) {
           element.uploadPercent = uploadingPercent;
@@ -139,8 +150,10 @@ class LoadController {
           _processNextFileUpload();
         }
       } else {
-        var element = uploadingFiles
-            .firstWhere((element) => (element.localPath == event.left!.id && (element.isInProgress || element.uploadPercent != 100)) || element.id == event.right!.recordId);
+        var element = uploadingFiles.firstWhere((element) =>
+            (element.localPath == event.left!.id &&
+                (element.isInProgress || element.uploadPercent != 100)) ||
+            element.id == event.right!.recordId);
         var nf = element.copyWith(
           isInProgress: false,
           uploadPercent: -1,
@@ -154,7 +167,8 @@ class LoadController {
         _state.changeUploadingFiles(uploadingFiles);
         _processNextFileUpload();
       }
-      print('_processUploadCallback ! count of uploading files : ${_state.uploadingFiles.length}');
+      print(
+          '_processUploadCallback ! count of uploading files : ${_state.uploadingFiles.length}');
     } catch (e, sw) {
       print('_processUploadCallback error: $e \nstack trace: $sw');
       _processNextFileUpload();
@@ -168,7 +182,11 @@ class LoadController {
 
     if (uploadingFiles.isNotEmpty &&
         uploadingFiles.any(
-          (element) => !element.isInProgress && element.uploadPercent != 100 && !element.auto && !element.endedWithException,
+          (element) =>
+              !element.isInProgress &&
+              element.uploadPercent != 100 &&
+              !element.auto &&
+              !element.endedWithException,
         )) {
       print('start uploading next file');
       try {
@@ -188,7 +206,8 @@ class LoadController {
     }
   }
 
-  void downloadFile({required String? fileId, bool force = false}) async {
+  void downloadFile(
+      {required String? fileId, bool force = false, String? path}) async {
     if (isNotInitialized()) {
       await init();
     }
@@ -197,11 +216,13 @@ class LoadController {
     DownloadFileInfo fileInfo;
     if (fileId != null) {
       if (downloadingFiles.any((element) => element.id == fileId))
-        fileInfo = downloadingFiles.firstWhere((element) => element.id == fileId);
+        fileInfo =
+            downloadingFiles.firstWhere((element) => element.id == fileId);
       else
         fileInfo = DownloadFileInfo(id: fileId);
     } else {
-      fileInfo = downloadingFiles.firstWhere((element) => !element.isInProgress && element.downloadPercent != 100);
+      fileInfo = downloadingFiles.firstWhere(
+          (element) => !element.isInProgress && element.downloadPercent != 100);
     }
 
     // if (downloadingFiles.any((element) => element.id != fileId)) {
@@ -209,10 +230,13 @@ class LoadController {
     // } else {
     //   fileInfo = downloadingFiles.firstWhere((element) => element.id == fileId);
     // }
-    if (!force && downloadingFiles.isNotEmpty && downloadingFiles.any((element) => element.isInProgress == true)) {
+    if (!force &&
+        downloadingFiles.isNotEmpty &&
+        downloadingFiles.any((element) => element.isInProgress == true)) {
       downloadingFiles = [fileInfo, ...downloadingFiles];
       _state.changeDowloadingFiles(downloadingFiles);
-      print('file with id $fileId added to a list and will be downloaded later');
+      print(
+          'file with id $fileId added to a list and will be downloaded later');
       return;
     } else if (!downloadingFiles.contains(fileInfo)) {
       fileInfo.isInProgress = true;
@@ -236,13 +260,22 @@ class LoadController {
       }
 
       _state.changeDowloadingFiles(downloadingFiles);
-
-      _cpp
-          ?.downloadFile(
-            recordID: fileInfo.id,
-            bearerToken: token,
-          )
-          .listen(_processDownloadCallback);
+      if (path != null && Directory(path).existsSync()) {
+        CppNative? _cppSave = CppNative(documentsFolder: Directory(path));
+        _cppSave = await getInstanceCppNative(
+            documentsFolder: Directory(path),
+            baseUrl: kServerUrl.split('/').last);
+        _cppSave
+            .downloadFile(recordID: fileInfo.id, bearerToken: token)
+            .listen(_processDownloadCallback);
+      } else {
+        _cpp
+            ?.downloadFile(
+              recordID: fileInfo.id,
+              bearerToken: token,
+            )
+            .listen(_processDownloadCallback);
+      }
     }
   }
 
@@ -251,9 +284,11 @@ class LoadController {
   ) async {
     try {
       if (event.right != null && event.right!.file != null) {
-        throwIfNot(event.right!.file!.existsSync(), Exception('Downloaded file doesn\'t exists'));
+        throwIfNot(event.right!.file!.existsSync(),
+            Exception('Downloaded file doesn\'t exists'));
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList.indexWhere((element) => element.id == event.right!.recordId);
+        var fileIndex = filesList
+            .indexWhere((element) => element.id == event.right!.recordId);
         if (fileIndex != -1) {
           log('LoadController -> processDownloadCallback: \n file recieved: ${event.right!.file!.path}');
           var record = filesList[fileIndex].copyWith(
@@ -274,7 +309,8 @@ class LoadController {
         }
       } else if (event.right != null) {
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList.indexWhere((element) => element.id == event.right!.recordId);
+        var fileIndex = filesList
+            .indexWhere((element) => element.id == event.right!.recordId);
         if (fileIndex != -1) {
           log('LoadController -> processDownloadCallback: \n file: ${event.right!.file?.path}, download percent ${event.right!.percent}');
           var record = filesList[fileIndex].copyWith(
@@ -296,7 +332,8 @@ class LoadController {
         }
       } else {
         var filesList = _state.downloadingFiles;
-        var fileIndex = filesList.indexWhere((element) => element.id == event.left!.id);
+        var fileIndex =
+            filesList.indexWhere((element) => element.id == event.left!.id);
         if (fileIndex != -1) {
           var record = filesList[fileIndex].copyWith(
             localPath: null,
@@ -327,14 +364,19 @@ class LoadController {
       var downloadingFiles = _state.downloadingFiles;
       if (downloadingFiles.isNotEmpty &&
           downloadingFiles.any(
-            (element) => !element.isInProgress && element.downloadPercent != 100 && !element.endedWithException,
+            (element) =>
+                !element.isInProgress &&
+                element.downloadPercent != 100 &&
+                !element.endedWithException,
           )) {
         print('start downloading next file');
 
-        var file = _state.downloadingFiles.firstWhere((element) => !element.isInProgress && element.downloadPercent != 100);
+        var file = _state.downloadingFiles.firstWhere((element) =>
+            !element.isInProgress && element.downloadPercent != 100);
 
         downloadFile(fileId: file.id, force: true);
-      } else if (downloadingFiles.every((element) => element.downloadPercent == 100 && !element.isInProgress)) {
+      } else if (downloadingFiles.every((element) =>
+          element.downloadPercent == 100 && !element.isInProgress)) {
         _state.changeDowloadingFiles([]);
       }
     } catch (e, st) {
@@ -344,7 +386,8 @@ class LoadController {
 
   void increasePriorityOfRecord(String recordId) {
     try {
-      var currentRecord = _state.downloadingFiles.firstWhere((element) => element.id == recordId);
+      var currentRecord = _state.downloadingFiles
+          .firstWhere((element) => element.id == recordId);
       var downloadingRecords = _state.downloadingFiles;
       downloadingRecords.forEach((element) {
         print('old: ${element.id}');
@@ -363,7 +406,8 @@ class LoadController {
   Future<void> discardDownloading() async {
     var downloadingFiles = _state.downloadingFiles;
 
-    if (downloadingFiles.isNotEmpty && downloadingFiles.any((element) => element.isInProgress)) {
+    if (downloadingFiles.isNotEmpty &&
+        downloadingFiles.any((element) => element.isInProgress)) {
       await _cpp?.abortDownload();
       _state.changeDowloadingFiles([]);
     }
@@ -372,7 +416,8 @@ class LoadController {
   bool isCurrentFileDownloading(String id) {
     var downloadingFiles = _state.downloadingFiles;
 
-    var currentFileIndex = downloadingFiles.indexWhere((element) => element.isInProgress && element.id == id);
+    var currentFileIndex = downloadingFiles
+        .indexWhere((element) => element.isInProgress && element.id == id);
 
     return currentFileIndex != -1;
   }
@@ -435,7 +480,8 @@ class _LoadState extends Observable {
   void unregisterObserver(Observer observer) {
     if (observer is UploadObserver) {
       try {
-        var uploadedObject = _uploadingFiles.firstWhere((element) => element.localPath == observer.id);
+        var uploadedObject = _uploadingFiles
+            .firstWhere((element) => element.localPath == observer.id);
         _uploadingFiles.remove(uploadedObject);
       } catch (e) {
         print('unregisterObserver: $e');
@@ -490,7 +536,10 @@ class UploadFileInfo {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other.runtimeType != runtimeType) return false;
-    return other is UploadFileInfo && other.localPath == localPath && other.isInProgress == isInProgress && other.uploadPercent == uploadPercent;
+    return other is UploadFileInfo &&
+        other.localPath == localPath &&
+        other.isInProgress == isInProgress &&
+        other.uploadPercent == uploadPercent;
   }
 
   @override

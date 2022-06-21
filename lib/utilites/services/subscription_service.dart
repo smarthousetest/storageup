@@ -5,6 +5,7 @@ import 'package:upstorage_desktop/models/packet/packet.dart';
 import 'package:upstorage_desktop/models/subscription.dart';
 import 'package:upstorage_desktop/models/tariff.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/repositories/packet_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 
 @Injectable()
@@ -14,6 +15,8 @@ class SubscriptionService {
   SubscriptionService();
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
+  final PacketRepository _packetRepository =
+      getIt<PacketRepository>(instanceName: 'packet_repo');
 
   Future<Subscription?> getCurrentSubscription() async {
     try {
@@ -87,7 +90,7 @@ class SubscriptionService {
     }
   }
 
-  Future<Packet?> getPacketInfo() async {
+  Future<ResponseStatus?> getPacketInfo() async {
     try {
       String? token = await _tokenRepository.getApiToken();
       if (token != null && token.isNotEmpty) {
@@ -103,8 +106,8 @@ class SubscriptionService {
           // (response.data as List).forEach((element) {
           //   packetInfo.add(Packet.fromMap(element));
           // });
-          Packet packetInfo = Packet.fromMap(response.data);
-          return packetInfo;
+          _packetRepository.setPacketInfo = Packet.fromMap(response.data);
+          return ResponseStatus.ok;
         }
       }
     } catch (e) {

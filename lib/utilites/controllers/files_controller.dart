@@ -127,17 +127,15 @@ class FilesController {
   }
 
   Future<void> updateFilesList() async {
-    var rootFolder = await _service.getRootFolder();
+    var mediaFolder = await _service.getRootMediaFolder();
+    var filesFolder = await _service.getRootFilesFolder();
 
-    var mediaFolderId = rootFolder?.folders?.firstWhere((element) => element.name == 'Media'); //[0].id;
-    var filesFolderId = rootFolder?.folders?.firstWhere((element) => element.name == 'Files');
-
-    var mediaFolder = await _service.getFolderById(mediaFolderId!.id);
-    var filesFolder = await _service.getFolderById(filesFolderId!.id);
+    // var mediaFolder = await _service.getFolderById(mediaFolderId!.id);
+    // var filesFolder = await _service.getFolderById(filesFolderId!.id);
 
     _filesRepo.setRootFolder = filesFolder;
 
-    _mediaRepo.mediaRootFolderId = mediaFolderId.id;
+    _mediaRepo.mediaRootFolderId = mediaFolder?.id;
 
     List<BaseObject> files = [];
     List<BaseObject> media = [];
@@ -210,7 +208,11 @@ class FilesController {
     return _service.createFolder(name, parentFolderId);
   }
 
-  Future<ResponseStatus> moveToFolder({required String folderId, List<String>? records, List<String>? folders}) {
+  Future<ResponseStatus> moveToFolder({
+    required String folderId,
+    List<String>? records,
+    List<String>? folders,
+  }) {
     return _service.moveToFolder(
       folderId: folderId,
       folders: folders,

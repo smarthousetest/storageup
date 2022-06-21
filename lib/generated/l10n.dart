@@ -18,14 +18,17 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null, 'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
     return _current!;
   }
 
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -38,7 +41,8 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null, 'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -706,21 +710,31 @@ class S {
     );
   }
 
-  /// `Minimum storage size: 32 GB`
-  String get min_storage {
+  /// `Minimum storage size: {count} GB`
+  String min_storage(Object count) {
     return Intl.message(
-      'Minimum storage size: 32 GB',
+      'Minimum storage size: $count GB',
       name: 'min_storage',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Maximum size for your drive: `
+  String get max_storage {
+    return Intl.message(
+      'Maximum size for your drive: ',
+      name: 'max_storage',
       desc: '',
       args: [],
     );
   }
 
-  /// `Maximum size for your drive: 180 GB`
-  String get max_storage {
+  /// `The volume of the selected storage space does not exceed 32 GB`
+  String get not_exceed {
     return Intl.message(
-      'Maximum size for your drive: 180 GB',
-      name: 'max_storage',
+      'The volume of the selected storage space does not exceed 32 GB',
+      name: 'not_exceed',
       desc: '',
       args: [],
     );
@@ -2317,6 +2331,56 @@ class S {
     return Intl.message(
       'Never',
       name: 'never',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Where to move it to?`
+  String get where_move {
+    return Intl.message(
+      'Where to move it to?',
+      name: 'where_move',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create`
+  String get create {
+    return Intl.message(
+      'Create',
+      name: 'create',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download`
+  String get down {
+    return Intl.message(
+      'Download',
+      name: 'down',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The name must contain more than 2 characters`
+  String get name_contain {
+    return Intl.message(
+      'The name must contain more than 2 characters',
+      name: 'name_contain',
       desc: '',
       args: [],
     );
