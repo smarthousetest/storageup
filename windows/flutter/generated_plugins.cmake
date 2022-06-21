@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   cpp_native
   desktop_window
+  native_context_menu
   permission_handler_windows
 )
 
