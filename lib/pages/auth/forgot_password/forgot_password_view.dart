@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -22,6 +24,47 @@ class ForgotPasswordView extends StatefulWidget {
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   S translate = getIt<S>();
+
+  DateTime? lastSubmittedTime;
+  Timer? timer;
+
+  Duration getTimeLeftToWaitUntilNextResend(DateTime nowDateTime) {
+    var submittedTime = lastSubmittedTime;
+
+    if (submittedTime is! DateTime) {
+      return Duration(seconds: 0);
+    }
+
+    return Duration(seconds: 30) - nowDateTime.difference(submittedTime);
+  }
+
+  bool isEmailResendAvailable(DateTime nowDateTime) {
+    var submittedTime = lastSubmittedTime;
+
+    if (submittedTime is! DateTime) {
+      return true;
+    }
+
+    if (nowDateTime.difference(submittedTime) >= Duration(seconds: 30)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  @override
+  void initState() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,20 +138,27 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
                       builder: (context, state) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 245.0),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 245.0),
                           child: OutlinedButton(
                             onPressed: _buttonAction(state, context),
                             style: OutlinedButton.styleFrom(
                               minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               // padding: EdgeInsets.symmetric(
                               //   horizontal: 135,
                               //   vertical: 20,
                               // ),
-                              backgroundColor: state.email.invalid || state.email.value.isEmpty ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
+                              backgroundColor: state.email.invalid ||
+                                      state.email.value.isEmpty
+                                  ? theme.colorScheme.onPrimary
+                                  : theme.colorScheme.onSurface,
                             ),
                             child: Text(
-                              state.status == FormzStatus.submissionSuccess ? translate.back_to_main : translate.continue_button,
+                              state.status == FormzStatus.submissionSuccess
+                                  ? translate.back_to_main
+                                  : translate.continue_button,
                               style: TextStyle(
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 17.0,
@@ -166,13 +216,18 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             autofocus: true,
             hint: translate.email,
             onChange: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(email: email, needValidation: true));
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                  email: email, needValidation: true));
             },
             onFinishEditing: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(email: email, needValidation: true));
-            }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            invalid: state.email.invalid && state.email.value.isNotEmpty || state.error == AuthError.wrongCredentials,
-            errorMessage: state.error == AuthError.wrongCredentials ? translate.non_existent_email : translate.wrong_email,
+              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
+                  email: email, needValidation: true));
+            },
+            invalid: state.email.invalid && state.email.value.isNotEmpty ||
+                state.error == AuthError.wrongCredentials,
+            errorMessage: state.error == AuthError.wrongCredentials
+                ? translate.non_existent_email
+                : translate.wrong_email,
             needErrorValidation: true,
             isPassword: false,
             horizontalPadding: 170,
@@ -208,6 +263,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   // bool nothingOnEmail = false;
 
   List<Widget> _bodyResult(ThemeData theme) {
+    var nowDateTime = DateTime.now();
+
     return [
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
@@ -248,10 +305,18 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  context.read<ForgotPasswordBloc>().add(ForgotPasswordConfirmed());
+                  if (isEmailResendAvailable(nowDateTime)) {
+                    print("Resend letter");
+                    context
+                        .read<ForgotPasswordBloc>()
+                        .add(ForgotPasswordConfirmed());
+                    lastSubmittedTime = DateTime.now();
+                  }
                 },
                 child: Text(
-                  translate.to_send_letter,
+                  isEmailResendAvailable(nowDateTime)
+                      ? translate.to_send_letter
+                      : "${translate.resend_letter_available} ${translate.seconds(getTimeLeftToWaitUntilNextResend(nowDateTime).inSeconds)}",
                   style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontFamily: kNormalTextFontFamily,
