@@ -6,6 +6,7 @@ import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/packet/packet.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
 import 'package:upstorage_desktop/pages/finance/finance_event.dart';
@@ -481,63 +482,80 @@ class _FinancePageState extends State<FinancePage> {
                         fontSize: 14,
                       ),
                     ),
-                    BlocBuilder<FinanceBloc, FinanceState>(builder: (context, state) {
-                      var choosedSubGb = state.sub?.tariff?.spaceGb;
-                      var allFilledGb = state.packetInfo?.filledSpace;
-                      if (allFilledGb == null && choosedSubGb == null) {
-                        return GestureDetector(
-                          onTap: () async {
-                            var str = await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return BlurFailedServerConnection(true);
-                              },
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Text(
-                                translate.canceled,
-                                style: TextStyle(
-                                  color: Theme.of(context).indicatorColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 14,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        return GestureDetector(
-                          onTap: () async {
-                            var str = await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return BlurCancelSub(choosedSubGb, DateTime.now(), allFilledGb);
-                              },
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: Text(
-                                translate.canceled,
-                                style: TextStyle(
-                                  color: Theme.of(context).indicatorColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 14,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                    }),
+                    state.packetNotifier != null
+                        ? ValueListenableBuilder<Packet?>(
+                            valueListenable: state.packetNotifier!,
+                            builder: (context, value, _) {
+                              return BlocBuilder<FinanceBloc, FinanceState>(
+                                  builder: (context, state) {
+                                var choosedSubGb = state.sub?.tariff?.spaceGb;
+                                var allFilledGb = value?.filledSpace;
+                                if (allFilledGb == null &&
+                                    choosedSubGb == null) {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      var str = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return BlurFailedServerConnection(
+                                              true);
+                                        },
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Text(
+                                          translate.canceled,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .indicatorColor,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return GestureDetector(
+                                    onTap: () async {
+                                      var str = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return BlurCancelSub(choosedSubGb,
+                                              DateTime.now(), allFilledGb);
+                                        },
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: Text(
+                                          translate.canceled,
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .indicatorColor,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 14,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              });
+                            },
+                          )
+                        : Container(),
                   ],
                 ),
               ),

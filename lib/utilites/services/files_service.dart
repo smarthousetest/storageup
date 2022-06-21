@@ -137,6 +137,54 @@ class FilesService {
     return null;
   }
 
+  Future<Folder?> getRootFilesFolder() async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+
+      var query = {
+        'path': '/Files',
+      };
+
+      var response = await _dio.post(
+        '/folder/path',
+        options: Options(headers: {'Authorization': ' Bearer $token'}),
+        data: query,
+      );
+
+      if (response.statusCode == 200) {
+        Folder folder = Folder.fromJson(response.data);
+        return folder;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<Folder?> getRootMediaFolder() async {
+    try {
+      String? token = await _tokenRepository.getApiToken();
+
+      var query = {
+        'path': '/Media',
+      };
+
+      var response = await _dio.post(
+        '/folder/path',
+        options: Options(headers: {'Authorization': ' Bearer $token'}),
+        data: query,
+      );
+
+      if (response.statusCode == 200) {
+        Folder folder = Folder.fromJson(response.data);
+        return folder;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
   Future<Folder?> getFolderById(String id) async {
     try {
       String? token = await _tokenRepository.getApiToken();
@@ -286,7 +334,10 @@ class FilesService {
     }
   }
 
-  Future<ResponseStatus> moveContentToFolder(String folderId, List<String> files) async {
+  Future<ResponseStatus> moveContentToFolder(
+    String folderId,
+    List<String> files,
+  ) async {
     try {
       String? token = await _tokenRepository.getApiToken();
 

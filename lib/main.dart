@@ -10,7 +10,8 @@ import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/local_server/local_server.dart' as ui;
+import 'package:upstorage_desktop/utilites/local_server/local_server.dart'
+    as ui;
 import 'constants.dart';
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
@@ -122,8 +123,8 @@ void readFromFileDomainName() {
   var domainNameFile = File('${os.appDirPath}domainName');
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
-  }
-  domainName = domainNameFile.readAsStringSync();
+  } else
+    domainName = domainNameFile.readAsStringSync();
   print(domainName);
 }
 

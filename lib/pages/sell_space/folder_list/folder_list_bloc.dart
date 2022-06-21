@@ -55,8 +55,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     emit(state.copyWith(
       user: user,
     ));
+    add(GetKeeperInfo());
     try {
-      timer = Timer.periodic(const Duration(seconds: 5), (Timer t) async {
+      timer = Timer.periodic(const Duration(minutes: 5), (Timer t) async {
         add(GetKeeperInfo());
       });
     } catch (e) {

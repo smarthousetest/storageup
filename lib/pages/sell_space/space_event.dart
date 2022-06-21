@@ -20,20 +20,36 @@ class SpacePageOpened extends SpaceEvent {
   const SpacePageOpened();
 }
 
+class GetPathToKeeper extends SpaceEvent {
+  const GetPathToKeeper();
+}
+
 class RunSoft extends SpaceEvent {
   final String keeperId;
   final SpaceState state;
   const RunSoft(this.state, this.keeperId);
 }
 
+class NameChanged extends SpaceEvent {
+  final String name;
+  final bool needValidation;
+
+  NameChanged({
+    required this.name,
+    this.needValidation = false,
+  });
+
+  @override
+  List<Object?> get props => [name];
+}
+
 class SaveDirPath extends SpaceEvent {
   final String pathDir;
   final int countGb;
-  final String name;
+
   SaveDirPath({
     required this.pathDir,
     required this.countGb,
-    required this.name,
   });
 }
 

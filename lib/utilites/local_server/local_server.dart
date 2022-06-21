@@ -21,9 +21,10 @@ class Server {
   late File localUiServerConfigFile;
 
   Server() {
-    localUiServerConfigFile = File("${_os.supportDir}${Platform.pathSeparator}localUiServerConfigFile");
+    localUiServerConfigFile = File(
+        "${_os.supportDir}${Platform.pathSeparator}localUiServerConfigFile");
     if (!localUiServerConfigFile.existsSync()) {
-      localUiServerConfigFile.createSync();
+      localUiServerConfigFile.createSync(recursive: true);
     }
 
     Hive.init(_os.supportDir);
@@ -37,7 +38,8 @@ class Server {
     for (int port = START_UI_PORT; port < END_UI_PORT; port++) {
       try {
         final server = await serve(_handler, ip, port);
-        _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+        _repository =
+            await GetIt.instance.getAsync<DownloadLocationsRepository>();
         localUiServerConfigFile.writeAsStringSync(
           json.encode({
             "port": port,
@@ -59,7 +61,8 @@ class Server {
     var downloadLocationInfo = _repository.getlocationsInfo;
     for (var curLocation in downloadLocationInfo) {
       if (curLocation.idForCompare == old_id) {
-        DownloadLocation newLocation = curLocation.copyWith(idForCompare: new_id);
+        DownloadLocation newLocation =
+            curLocation.copyWith(idForCompare: new_id);
         _repository.changelocation(location: newLocation);
         print("Keeper id is changed [$old_id] => [$new_id]");
         return Response.ok("Keeper id is changed [$old_id] => [$new_id]");

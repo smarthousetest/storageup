@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:upstorage_desktop/models/user.dart';
+import 'package:upstorage_desktop/pages/auth/models/name.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:os_specification/os_specification.dart';
@@ -25,6 +28,12 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         await _mapSaveDirPath(event, state, emit);
       } else if (event is SendKeeperVersion) {
         _sendLocalKeeperVersion(state, emit);
+      }
+      if (event is GetPathToKeeper) {
+        await _getPathToKeeper(event, state, emit);
+      }
+      if (event is NameChanged) {
+        _mapNameChanged(state, event, emit);
       }
     });
   }
@@ -54,6 +63,36 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     ));
   }
 
+  // DiskSpaceController()
+  Future<void> _getPathToKeeper(
+    GetPathToKeeper event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) async {
+    String? result = await FilePicker.platform.getDirectoryPath();
+    if (result != null) {
+      var path = DiskSpaceController(pathToDir: result);
+      var availableBytes = await path.getAvailableDiskSpace();
+      print(availableBytes);
+      emit(state.copyWith(
+        pathToKeeper: PathCheck.doPathCorrect(result),
+        availableSpace: availableBytes,
+      ));
+    }
+  }
+
+  void _mapNameChanged(
+    SpaceState state,
+    NameChanged event,
+    Emitter<SpaceState> emit,
+  ) {
+    Name name = Name.dirty(event.name, event.needValidation);
+    print(name.value);
+    emit(state.copyWith(
+      name: name,
+    ));
+  }
+
   Future _mapRunSoft(
     SpaceState state,
     String keeperId,
@@ -77,7 +116,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
+    var keeperNameFile = File(
+        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -85,11 +125,13 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile = File(
+        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile
+        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperIdFilePath, String keeper_id) {
@@ -107,10 +149,15 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     var countOfGb = event.countGb;
     var path = event.pathDir;
-    var name = event.name;
-    var id = await _subscriptionService.addNewKeeper(name, countOfGb);
+
+    var id =
+        await _subscriptionService.addNewKeeper(state.name.value, countOfGb);
     if (id != null) {
-      int keeperDataId = _repository.createLocation(countOfGb: countOfGb, path: path, name: name, idForCompare: id);
+      int keeperDataId = _repository.createLocation(
+          countOfGb: countOfGb,
+          path: path,
+          name: state.name.value,
+          idForCompare: id);
       var locationsInfo = _repository.getlocationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
@@ -142,7 +189,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
               null,
               keeperVersion,
             ).toJson(),
-            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
+            options:
+                Options(headers: {"Authorisation": "Bearer $bearerToken"}));
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");
@@ -164,5 +212,29 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       keeperVersion = keeperVersionFile.readAsStringSync().trim();
     }
     return keeperVersion;
+  }
+}
+
+class PathCheck {
+  static List<String> _restrictedWords = [
+    'OneDrive',
+    'Program Files',
+    'Program Files (x86)',
+  ];
+
+  ///Function check is a path contain "OneDrive" part
+  ///If contain, return path before "OneDrive" part
+  static String doPathCorrect(String path) {
+    var partPath = path.split(Platform.pathSeparator);
+    for (int i = 0; i < partPath.length; i++) {
+      for (var restrictedWord in _restrictedWords) {
+        if (partPath[i] == restrictedWord) {
+          var result = partPath.sublist(0, i);
+          result.add(path.split(Platform.pathSeparator).last);
+          return result.join(Platform.pathSeparator);
+        }
+      }
+    }
+    return path;
   }
 }
