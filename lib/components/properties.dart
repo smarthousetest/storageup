@@ -33,6 +33,19 @@ class _ButtonTemplateState extends State<FileInfoView> {
   var setNull;
   bool open = true;
 
+  String getRecordViewedDate() {
+    BaseObject? object = widget.object;
+    if (object is Record) {
+      DateTime? accessDate = object.accessDate;
+
+      if (accessDate is DateTime) {
+        return DateFormat('dd.MM.yyyy').format(accessDate);
+      }
+    }
+
+    return translate.never;
+  }
+
   Widget build(BuildContext context) {
     var type = FileAttribute().getFilesType(widget.object!.name!.toLowerCase());
 
@@ -85,7 +98,8 @@ class _ButtonTemplateState extends State<FileInfoView> {
                               child: MouseRegion(
                                 cursor: SystemMouseCursors.click,
                                 child: Container(
-                                  child: SvgPicture.asset('assets/file_page/close.svg'),
+                                  child: SvgPicture.asset(
+                                      'assets/file_page/close.svg'),
                                 ),
                               ),
                             ))),
@@ -96,336 +110,49 @@ class _ButtonTemplateState extends State<FileInfoView> {
                           bottom: 30,
                           top: 5,
                         ),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Row(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Container(
-                                  height: 46,
-                                  width: 46,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(23),
-                                    child: widget.user.image,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                constraints: BoxConstraints(maxWidth: 120),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      child: Text(
-                                        widget.user?.firstName ?? '',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Theme.of(context).bottomAppBarColor,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.user?.email ?? '',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Theme.of(context).colorScheme.onBackground,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(30),
-                            child: Divider(
-                              height: 1,
-                              color: Theme.of(context).dividerColor,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 0),
-                            child: Center(
-                              child: Text(
-                                translate.properties,
-                                style: TextStyle(
-                                  color: Theme.of(context).focusColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25),
-                            child: Center(
-                              child: Container(
-                                width: 150,
-                                height: 150,
-                                child: widget.object is Record && type != 'image'
-                                    ? type.isNotEmpty
-                                        ? Image.asset(
-                                            'assets/file_icons/$type.png',
-                                            fit: BoxFit.contain,
-                                          )
-                                        : Image.asset(
-                                            'assets/file_icons/files.png',
-                                            fit: BoxFit.contain,
-                                          )
-                                    : widget.object is Folder
-                                        ? Image.asset(
-                                            'assets/file_icons/folder.png',
-                                            fit: BoxFit.contain,
-                                          )
-                                        : ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: Image.network(
-                                              (widget.object as Record).thumbnail!.first.publicUrl!,
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25),
-                            child: Center(
-                              child: Text(
-                                widget.object?.name ?? '',
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Theme.of(context).disabledColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 0,
-                              top: 25,
-                              right: 0,
-                            ),
-                            child: Container(
-                              width: 260,
-                              child: Column(
+                              Row(
                                 children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        translate.size,
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onBackground,
-                                          fontFamily: kNormalTextFontFamily,
-                                          fontSize: 14,
-                                        ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: Container(
+                                      height: 46,
+                                      width: 46,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(23),
+                                        child: widget.user.image,
                                       ),
-                                      Expanded(
-                                        flex: 100,
-                                        child: Container(),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text(
-                                          fileSize(widget.object?.size, translate, 1),
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 18),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          translate.type,
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 100,
-                                          child: Container(),
-                                        ),
-                                        Text(
-                                          widget.object is Record ? widget.object?.extension?.toUpperCase() ?? '' : translate.foldr,
-                                          // type.isEmpty
-                                          //     ? translate.foldr
-                                          //     : type.toUpperCase(),
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 18),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                  Container(
+                                    constraints: BoxConstraints(maxWidth: 120),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          translate.format,
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 100,
-                                          child: Container(),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
                                           child: Text(
-                                            widget.object is Record ? type.toUpperCase() : translate.foldr,
-                                            //textAlign: TextAlign.end,
+                                            widget.user?.firstName ?? '',
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onBackground,
-                                              fontFamily: kNormalTextFontFamily,
                                               fontSize: 14,
+                                              color: Theme.of(context)
+                                                  .bottomAppBarColor,
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 18),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
                                         Text(
-                                          translate.created,
+                                          widget.user?.email ?? '',
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 100,
-                                          child: Container(),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            DateFormat('dd.MM.yyyy').format(widget.object!.createdAt!),
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onBackground,
-                                              fontFamily: kNormalTextFontFamily,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 18),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          translate.changed,
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 100,
-                                          child: Container(),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            DateFormat('dd.MM.yyyy').format(widget.object!.updatedAt!),
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onBackground,
-                                              fontFamily: kNormalTextFontFamily,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 18),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          translate.viewed,
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 100,
-                                          child: Container(),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            widget.object?.updatedBy ?? '',
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onBackground,
-                                              fontFamily: kNormalTextFontFamily,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 18),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          translate.location,
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.onBackground,
-                                            fontFamily: kNormalTextFontFamily,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 100,
-                                          child: Container(),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text(
-                                            "папка «Документы»",
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onBackground,
-                                              fontFamily: kNormalTextFontFamily,
-                                              fontSize: 14,
-                                            ),
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground,
                                           ),
                                         ),
                                       ],
@@ -433,37 +160,767 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0, top: 25, bottom: 30),
-                            child: Container(
-                              height: 42,
-                              width: 260,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pop(context, open);
-                                  //eventBus.fire(FileInfoViewEvent);
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  minimumSize: Size(double.maxFinite, 60),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  backgroundColor: Theme.of(context).splashColor,
+                              Padding(
+                                padding: const EdgeInsets.all(30),
+                                child: Divider(
+                                  height: 1,
+                                  color: Theme.of(context).dividerColor,
                                 ),
-                                child: Text(
-                                  translate.open,
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontFamily: kNormalTextFontFamily,
-                                    fontSize: 17,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 0),
+                                child: Center(
+                                  child: Text(
+                                    translate.properties,
+                                    style: TextStyle(
+                                      color: Theme.of(context).focusColor,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ])),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Center(
+                                  child: Container(
+                                    width: 150,
+                                    height: 150,
+                                    child: widget.object is Record &&
+                                            type != 'image'
+                                        ? type.isNotEmpty
+                                            ? Image.asset(
+                                                'assets/file_icons/$type.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                            : Image.asset(
+                                                'assets/file_icons/files.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                        : widget.object is Folder
+                                            ? Image.asset(
+                                                'assets/file_icons/folder.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Image.network(
+                                                  (widget.object as Record)
+                                                      .thumbnail!
+                                                      .first
+                                                      .publicUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Center(
+                                  child: Text(
+                                    widget.object?.name ?? '',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Theme.of(context).disabledColor,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 0,
+                                  top: 25,
+                                  right: 0,
+                                ),
+                                child: Container(
+                                  width: 260,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            translate.size,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
+                                              fontFamily: kNormalTextFontFamily,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 100,
+                                            child: Container(),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              fileSize(widget.object?.size,
+                                                  translate, 1),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.type,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Text(
+                                              widget.object is Record
+                                                  ? widget.object?.extension
+                                                          ?.toUpperCase() ??
+                                                      ''
+                                                  : translate.foldr,
+                                              // type.isEmpty
+                                              //     ? translate.foldr
+                                              //     : type.toUpperCase(),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.format,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                widget.object is Record
+                                                    ? type.toUpperCase()
+                                                    : translate.foldr,
+                                                //textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.created,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                DateFormat('dd.MM.yyyy').format(
+                                                    widget.object!.createdAt!),
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.changed,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                DateFormat('dd.MM.yyyy').format(
+                                                    widget.object!.updatedAt!),
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (widget.object is Record)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 18),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                translate.viewed,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 100,
+                                                child: Container(),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Text(
+                                                  getRecordViewedDate(),
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                                    fontFamily:
+                                                        kNormalTextFontFamily,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.location,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                "папка «Документы»",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 0, top: 25, bottom: 30),
+                                  child: Container(
+                                      height: 42,
+                                      width: 260,
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, open);
+                                          //eventBus.fire(FileInfoViewEvent);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          minimumSize:
+                                              Size(double.maxFinite, 60),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          backgroundColor:
+                                              Theme.of(context).splashColor,
+                                        ),
+                                        child: Text(
+                                          translate.open,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ))),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Center(
+                                  child: Container(
+                                    width: 150,
+                                    height: 150,
+                                    child: widget.object is Record &&
+                                            type != 'image'
+                                        ? type.isNotEmpty
+                                            ? Image.asset(
+                                                'assets/file_icons/$type.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                            : Image.asset(
+                                                'assets/file_icons/files.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                        : widget.object is Folder
+                                            ? Image.asset(
+                                                'assets/file_icons/folder.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Image.network(
+                                                  (widget.object as Record)
+                                                      .thumbnail!
+                                                      .first
+                                                      .publicUrl!,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25),
+                                child: Center(
+                                  child: Text(
+                                    widget.object?.name ?? '',
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Theme.of(context).disabledColor,
+                                      fontFamily: kNormalTextFontFamily,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 0, top: 25, right: 0),
+                                child: Container(
+                                  width: 260,
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            translate.size,
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
+                                              fontFamily: kNormalTextFontFamily,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 100,
+                                            child: Container(),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              fileSize(widget.object?.size,
+                                                  translate, 1),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.type,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Text(
+                                              widget.object is Record
+                                                  ? widget.object?.extension
+                                                          ?.toUpperCase() ??
+                                                      ''
+                                                  : translate.foldr,
+                                              // type.isEmpty
+                                              //     ? translate.foldr
+                                              //     : type.toUpperCase(),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.format,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                widget.object is Record
+                                                    ? type.toUpperCase()
+                                                    : translate.foldr,
+                                                //textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.created,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                DateFormat('dd.MM.yyyy').format(
+                                                    widget.object!.createdAt!),
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.changed,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                DateFormat('dd.MM.yyyy').format(
+                                                    widget.object!.updatedAt!),
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      if (widget.object is Record)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 18),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                translate.viewed,
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 100,
+                                                child: Container(),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Text(
+                                                  getRecordViewedDate(),
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                                    fontFamily:
+                                                        kNormalTextFontFamily,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 18),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              translate.location,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 100,
+                                              child: Container(),
+                                            ),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                "папка «Документы»",
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onBackground,
+                                                  fontFamily:
+                                                      kNormalTextFontFamily,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 0, top: 25, bottom: 30),
+                                child: Container(
+                                  height: 42,
+                                  width: 260,
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, open);
+                                      //eventBus.fire(FileInfoViewEvent);
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      minimumSize: Size(double.maxFinite, 60),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      backgroundColor:
+                                          Theme.of(context).splashColor,
+                                    ),
+                                    child: Text(
+                                      translate.open,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontFamily: kNormalTextFontFamily,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ])),
                   ])),
             ),
           ),

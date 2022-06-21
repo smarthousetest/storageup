@@ -253,5 +253,6 @@
     "error": "Error",
     "server_connection_error": "The connection to the server cannot be established.",
     "check_ethernet_connection": "Check your internet connection and try again.",
-    "ok": "Ok"
+    "ok": "Ok",
+    "never": "Never"
 }
