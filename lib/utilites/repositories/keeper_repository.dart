@@ -4,26 +4,19 @@ import 'package:os_specification/os_specification.dart';
 class KeeperRepository {
   KeeperRepository() {
     var os = OsSpecifications.getOs();
-    Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
+    Hive.init(os.supportDir);
   }
 
   Box? box;
 
   Future<Box?> initBox() async {
     if (box != null) {
-      if(!box!.isOpen) {
+      if (!box!.isOpen) {
         return await Hive.openBox('KeeperLocation');
-      }else{
+      } else {
         return box;
       }
     }
     return null;
   }
-
 }
-
-
-
-
-
-

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-  const _api_token = "bearer_token";
+const _api_token = "bearer_token";
 
 enum RepositoryEnum { goodResponse, error }
 
@@ -9,6 +12,7 @@ enum RepositoryEnum { goodResponse, error }
 class TokenRepository {
   Future<RepositoryEnum> setApiToken(String token) async {
     try {
+      writeBearerTokenToFile(token);
       var prefs = await SharedPreferences.getInstance();
       await prefs.setString(_api_token, token);
       return RepositoryEnum.goodResponse;
@@ -25,5 +29,19 @@ class TokenRepository {
     } on Exception {
       return null;
     }
+  }
+
+  File writeBearerTokenToFile(String bearerToken) {
+    var os = OsSpecifications.getOs();
+    if (os.supportDir.isEmpty) {
+      os.supportDir = "${Directory.current.path}${Platform.pathSeparator}";
+    }
+    var bearerTokenFile = File('${os.supportDir}/bearerToken');
+
+    if (!bearerTokenFile.existsSync()) {
+      bearerTokenFile.createSync(recursive: true);
+    }
+    bearerTokenFile.writeAsStringSync(bearerToken);
+    return bearerTokenFile;
   }
 }

@@ -40,8 +40,10 @@ class UserController {
 
   Future<ResponseStatus> changeProfilePic(String publicUrl) async {
     var user = _repository.getUser;
-    var response =
-        await _filesService.setProfilePic(url: publicUrl, user: user!);
+    var response = await _filesService.setProfilePic(
+      url: publicUrl,
+      user: user!,
+    );
     if (response == ResponseStatus.ok) {
       await updateUser();
 

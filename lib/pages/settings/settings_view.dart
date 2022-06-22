@@ -20,7 +20,7 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/components/blur/rename_name.dart';
 import 'package:upstorage_desktop/components/blur/delete_account.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 
 import '../../models/enums.dart';
@@ -30,6 +30,7 @@ enum FileOptions { changePhoto, remove }
 class SettingsPage extends StatefulWidget {
   @override
   _SettingsPageState createState() => _SettingsPageState();
+
   SettingsPage();
 }
 
@@ -89,9 +90,10 @@ class _SettingsPageState extends State<SettingsPage> {
             borderRadius: BorderRadius.circular(10),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Color.fromARGB(25, 23, 69, 139),
-                  blurRadius: 4,
-                  offset: Offset(1, 4))
+                color: Color.fromARGB(25, 23, 69, 139),
+                blurRadius: 4,
+                offset: Offset(1, 4),
+              )
             ],
           ),
           child: Column(
@@ -256,6 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   var controller = CustomPopupMenuController();
+
   Widget personalData(BuildContext context) {
     return ListView(controller: ScrollController(), children: [
       Padding(
@@ -385,9 +388,10 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Text(
               translate.user_name,
               style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: kNormalTextFontFamily,
-                  color: Theme.of(context).focusColor),
+                fontSize: 18,
+                fontFamily: kNormalTextFontFamily,
+                color: Theme.of(context).focusColor,
+              ),
             ),
           ),
           Padding(
@@ -428,7 +432,9 @@ class _SettingsPageState extends State<SettingsPage> {
               decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xffE4E7ED))),
+                  border: Border.all(
+                    color: Color(0xffE4E7ED),
+                  )),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, top: 11),
                 child: BlocBuilder<SettingsBloc, SettingsState>(
@@ -466,9 +472,12 @@ class _SettingsPageState extends State<SettingsPage> {
               height: 42,
               width: 350,
               decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xffE4E7ED))),
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Color(0xffE4E7ED),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, top: 11),
                 child: BlocBuilder<SettingsBloc, SettingsState>(
@@ -503,8 +512,11 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             );
             if (str is ChangePasswordPopupResult) {
-              context.read<SettingsBloc>().add(SettingsPasswordChanged(
-                  oldPassword: str.oldPassword, newPassword: str.newPassword));
+              context.read<SettingsBloc>().add(
+                    SettingsPasswordChanged(
+                        oldPassword: str.oldPassword,
+                        newPassword: str.newPassword),
+                  );
               context.read<SettingsBloc>().add(SettingsLogOut());
               Navigator.pushNamedAndRemoveUntil(
                   context, AuthView.route, (route) => false);
@@ -552,9 +564,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           child: Text(
                             translate.change_password,
                             style: TextStyle(
-                                color: Theme.of(context).disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17),
+                              color: Theme.of(context).disabledColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 17,
+                            ),
                           ),
                         ),
                         Spacer(),
@@ -628,9 +641,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Text(
                           translate.delete_account,
                           style: TextStyle(
-                              color: Theme.of(context).disabledColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 17),
+                            color: Theme.of(context).disabledColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 17,
+                          ),
                         ),
                       ),
                       Spacer(),
@@ -788,9 +802,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: Text(
                     translate.date_format,
                     style: TextStyle(
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                        color: Theme.of(context).disabledColor),
+                      fontSize: 17,
+                      fontFamily: kNormalTextFontFamily,
+                      color: Theme.of(context).disabledColor,
+                    ),
                   ),
                 ),
                 Padding(
@@ -857,8 +872,12 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget regulations(BuildContext context) {
     return ListView(controller: ScrollController(), children: [
       Padding(
-        padding:
-            const EdgeInsets.only(left: 125, top: 20, right: 125, bottom: 20),
+        padding: const EdgeInsets.only(
+          left: 125,
+          top: 20,
+          right: 125,
+          bottom: 20,
+        ),
         child: Column(
           children: [
             Container(
@@ -915,6 +934,7 @@ class SettingsPopupMenuActions extends StatefulWidget {
   final ThemeData theme;
   final S translate;
   final Function(AvatarAction) onTap;
+
   @override
   _SettingsPopupMenuActionsState createState() =>
       _SettingsPopupMenuActionsState();
@@ -922,6 +942,7 @@ class SettingsPopupMenuActions extends StatefulWidget {
 
 class _SettingsPopupMenuActionsState extends State<SettingsPopupMenuActions> {
   int ind = -1;
+
   @override
   Widget build(BuildContext context) {
     var style = TextStyle(

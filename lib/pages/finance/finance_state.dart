@@ -12,7 +12,8 @@ class FinanceState extends Equatable {
   final List<Tariff> allSub;
   final Folder? rootFolders;
   final ValueNotifier<User?>? valueNotifier;
-  final Packet? packetInfo;
+
+  final ValueNotifier<Packet?>? packetNotifier;
 
   FinanceState({
     this.user,
@@ -20,7 +21,7 @@ class FinanceState extends Equatable {
     this.sub,
     this.allSub = const [],
     this.valueNotifier,
-    this.packetInfo,
+    this.packetNotifier,
   });
 
   FinanceState copyWith({
@@ -29,7 +30,7 @@ class FinanceState extends Equatable {
     Folder? rootFolders,
     List<Tariff>? allSub,
     ValueNotifier<User?>? valueNotifier,
-    Packet? packetInfo,
+    ValueNotifier<Packet?>? packetNotifier,
   }) {
     return FinanceState(
       user: user ?? this.user,
@@ -37,7 +38,7 @@ class FinanceState extends Equatable {
       sub: sub ?? this.sub,
       allSub: allSub ?? this.allSub,
       valueNotifier: valueNotifier ?? this.valueNotifier,
-      packetInfo: packetInfo ?? this.packetInfo,
+      packetNotifier: packetNotifier ?? this.packetNotifier,
     );
   }
 
@@ -48,6 +49,6 @@ class FinanceState extends Equatable {
         allSub,
         rootFolders,
         valueNotifier,
-        packetInfo,
+        packetNotifier,
       ];
 }

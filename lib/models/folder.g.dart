@@ -30,11 +30,11 @@ class FolderAdapter extends TypeAdapter<Folder> {
       updatedAt: fields[6] as DateTime?,
       assetImage: fields[13] as String?,
       readOnly: fields[14] as bool?,
-      isChosen: fields[8] as bool,
       loadPercent: fields[10] as double?,
       isDownloading: fields[20] as bool?,
     )
       ..extension = fields[7] as String?
+      ..isChoosed = fields[8] as bool
       ..isInProgress = fields[17] as bool
       ..endedWithException = fields[18] as bool
       ..copiedToAppFolder = fields[19] as bool;
@@ -90,9 +90,5 @@ class FolderAdapter extends TypeAdapter<Folder> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is FolderAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is FolderAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

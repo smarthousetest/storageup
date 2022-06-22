@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:upstorage_desktop/models/file.dart';
+import 'package:upstorage_desktop/models/latest_file.dart';
 import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
 import 'package:os_specification/os_specification.dart';
 
 const _latestFileBoxName = 'latestFileBox';
@@ -25,7 +25,7 @@ class LatestFileRepository {
 
     WidgetsFlutterBinding.ensureInitialized();
     var os = OsSpecifications.getOs();
-    Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
+    Hive.init(os.supportDir);
 
     final box = await Hive.openBox<LatestFile>(_latestFileBoxName);
     //box.deleteFromDisk();
@@ -41,8 +41,7 @@ class LatestFileRepository {
       final value = event.value;
 
       if (_latestFileInfo.any((element) => element.latestFile.id == key)) {
-        final currentLocationInfoIndex = _latestFileInfo
-            .indexWhere((element) => element.latestFile.id == key);
+        final currentLocationInfoIndex = _latestFileInfo.indexWhere((element) => element.latestFile.id == key);
 
         if (event.deleted)
           _latestFileInfo.removeAt(currentLocationInfoIndex);
@@ -68,8 +67,7 @@ class LatestFileRepository {
   Future<void> addFiles({
     required List<Record> latestFile,
   }) async {
-    final List<LatestFile> latestFileInfo =
-        latestFile.map((e) => LatestFile(latestFile: e)).toList();
+    final List<LatestFile> latestFileInfo = latestFile.map((e) => LatestFile(latestFile: e)).toList();
 
     await _latestFileBox.clear();
 

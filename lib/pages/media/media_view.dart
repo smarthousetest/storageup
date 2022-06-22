@@ -28,7 +28,7 @@ import 'package:upstorage_desktop/pages/media/media_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -48,15 +48,12 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   final double _rowSpasing = 20.0;
   final double _rowPadding = 30.0;
   var _folderListScrollController = ScrollController(keepScrollOffset: false);
-  var _verticalFolderListScrollController =
-      ScrollController(keepScrollOffset: false);
   final TextEditingController _searchingFieldController =
       TextEditingController();
   GlobalKey propertiesWidthKey = GlobalKey();
   List<CustomPopupMenuController> _popupControllers = [];
   Timer? timerForOpenFile;
   int _startTimer = 1;
-  bool _isOpen = false;
   var _indexObject = -1;
   var x;
 
@@ -75,7 +72,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
   }
 
   void startTimer() {
-    _isOpen = true;
     const oneSec = const Duration(seconds: 1);
     if (timerForOpenFile != null) {
       timerForOpenFile?.cancel();
@@ -89,7 +85,6 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
             timer.cancel();
             _startTimer = 1;
             _indexObject = -1;
-            _isOpen = false;
           });
         } else {
           setState(() {
@@ -110,23 +105,29 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
       create: (_) => MediaCubit()..init(),
       child: BlocListener<MediaCubit, MediaState>(
         listener: (context, state) async {
-          if (youSeePopUp == false) {
+          if (StateContainer.of(context).isPopUpShowing == false) {
             if (state.status == FormzStatus.submissionFailure) {
-              youSeePopUp = true;
+              // youSeePopUp = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
               youSeePopUp = await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurSomethingGoesWrong(youSeePopUp);
                 },
               );
+
+              StateContainer.of(context).changeIsPopUpShowing(false);
             } else if (state.status == FormzStatus.submissionCanceled) {
-              youSeePopUp = true;
+              // youSeePopUp = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
               youSeePopUp = await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurFailedServerConnection(youSeePopUp);
                 },
               );
+
+              StateContainer.of(context).changeIsPopUpShowing(false);
             }
           }
         },
@@ -155,9 +156,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
-                                        color: Color.fromARGB(25, 23, 69, 139),
-                                        blurRadius: 4,
-                                        offset: Offset(1, 4))
+                                      color: Color.fromARGB(25, 23, 69, 139),
+                                      blurRadius: 4,
+                                      offset: Offset(1, 4),
+                                    )
                                   ],
                                 ),
                                 child: Row(
@@ -167,10 +169,11 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       child: Align(
                                         alignment: FractionalOffset.centerLeft,
                                         child: Container(
-                                            width: 20,
-                                            height: 20,
-                                            child: SvgPicture.asset(
-                                                "assets/file_page/search.svg")),
+                                          width: 20,
+                                          height: 20,
+                                          child: SvgPicture.asset(
+                                              "assets/file_page/search.svg"),
+                                        ),
                                       ),
                                     ),
                                     BlocBuilder<MediaCubit, MediaState>(
@@ -225,7 +228,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.only(
-                                                  right: 20, left: 20),
+                                                right: 20,
+                                                left: 20,
+                                              ),
                                               child: GestureDetector(
                                                 onTap: () {
                                                   StateContainer.of(context)
@@ -249,8 +254,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                     966)
                                                 ? Container(
                                                     constraints: BoxConstraints(
-                                                        maxWidth: 95,
-                                                        minWidth: 50),
+                                                      maxWidth: 95,
+                                                      minWidth: 50,
+                                                    ),
                                                     child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -1217,6 +1223,8 @@ class MediaGridElement extends StatelessWidget {
     if (imageUrl != null && imageUrl.isURL()) {
       image = Image.network(
         record.thumbnail!.first.publicUrl!,
+        height: 100,
+        fit: BoxFit.fitHeight,
       );
     } else {
       image = Image.asset(
@@ -1230,9 +1238,12 @@ class MediaGridElement extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: image,
+            Container(
+              height: 67,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: image,
+              ),
             ),
             ..._uploadProgress(record.loadPercent),
           ],

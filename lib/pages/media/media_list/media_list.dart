@@ -26,6 +26,7 @@ class _ButtonTemplateState extends State<MediaList> {
   // List<bool> ifFavoritesPressedList = [];
   // List<bool> isPopupMenuButtonClicked = [];
   ScrollController _controller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     TextStyle style = TextStyle(
@@ -206,8 +207,9 @@ class _ButtonTemplateState extends State<MediaList> {
                                 padding: EdgeInsets.zero,
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide(
-                                      width: 1,
-                                      color: Theme.of(context).dividerColor),
+                                    width: 1,
+                                    color: Theme.of(context).dividerColor,
+                                  ),
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
                                 icon: Image.asset(
@@ -233,8 +235,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 190,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/share.png',
@@ -259,8 +260,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 170,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/move.png',
@@ -285,8 +285,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 170,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/double.png',
@@ -311,8 +310,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 170,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/favorites.png',
@@ -337,8 +335,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 170,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/download.png',
@@ -363,8 +360,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 170,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/rename.png',
@@ -389,8 +385,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 170,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/info.png',
@@ -415,8 +410,7 @@ class _ButtonTemplateState extends State<MediaList> {
                                       child: Container(
                                         width: 170,
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             Image.asset(
                                               'assets/file_page/file_options/trash.png',

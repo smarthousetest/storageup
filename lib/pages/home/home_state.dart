@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:upstorage_desktop/utilites/autoupload/models/latest_file.dart';
+import 'package:upstorage_desktop/models/latest_file.dart';
 
 class HomeState extends Equatable {
   final double usingSpace;
@@ -70,8 +70,7 @@ class HomeState extends Equatable {
       usingSpace: usingSpace ?? this.usingSpace,
       allSpace: allSpace ?? this.allSpace,
       loadPercentRentPlace: loadPercentRentPlace ?? this.loadPercentRentPlace,
-      loadPercentPentPlaceFull:
-          loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
+      loadPercentPentPlaceFull: loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
       dailyProfit: dailyProfit ?? this.dailyProfit,
       yourBalance: yourBalance ?? this.yourBalance,
       homeTab: homeTab ?? this.homeTab,
@@ -80,8 +79,7 @@ class HomeState extends Equatable {
       status: status ?? FormzStatus.pure,
       upToDateVersion: upToDateVersion ?? this.upToDateVersion,
       version: version ?? this.version,
-      objectsValueListenable:
-          objectsValueListenable ?? this.objectsValueListenable,
+      objectsValueListenable: objectsValueListenable ?? this.objectsValueListenable,
       latestFile: latestFile ?? this.latestFile,
       checkLatestFile: checkLatestFile ?? this.checkLatestFile,
     );

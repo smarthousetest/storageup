@@ -26,8 +26,9 @@ class InfoState extends Equatable {
   final Subscription? sub;
   final Folder? rootFolders;
   final List<Folder>? allMediaFolders;
-  final Packet? packetInfo;
+
   final ValueNotifier<User?>? valueNotifier;
+  final ValueNotifier<Packet?>? packetNotifier;
 
   InfoState({
     this.usingSpace = 0,
@@ -49,7 +50,7 @@ class InfoState extends Equatable {
     this.rootFolders,
     this.folder,
     this.allMediaFolders,
-    this.packetInfo,
+    this.packetNotifier,
     this.valueNotifier,
   });
 
@@ -70,13 +71,13 @@ class InfoState extends Equatable {
     List<Folder>? allMediaFolders,
     Packet? packetInfo,
     ValueNotifier<User?>? valueNotifier,
+    ValueNotifier<Packet?>? packetNotifier,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
       allSpace: allSpace ?? this.allSpace,
       loadPercentRentPlace: loadPercentRentPlace ?? this.loadPercentRentPlace,
-      loadPercentPentPlaceFull:
-          loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
+      loadPercentPentPlaceFull: loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
       dailyProfit: dailyProfit ?? this.dailyProfit,
       yourBalance: yourBalance ?? this.yourBalance,
       homeTab: homeTab ?? this.homeTab,
@@ -87,7 +88,7 @@ class InfoState extends Equatable {
       sub: sub ?? this.sub,
       rootFolders: rootFolders ?? this.rootFolders,
       allMediaFolders: allMediaFolders ?? this.allMediaFolders,
-      packetInfo: packetInfo ?? this.packetInfo,
+      packetNotifier: packetNotifier ?? this.packetNotifier,
       valueNotifier: valueNotifier ?? this.valueNotifier,
     );
   }
@@ -108,7 +109,7 @@ class InfoState extends Equatable {
         rootFolders,
         allMediaFolders,
         sub,
-        packetInfo,
+        packetNotifier,
         valueNotifier,
       ];
 }

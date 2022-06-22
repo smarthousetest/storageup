@@ -11,27 +11,21 @@ class $AssetsAuthGen {
   AssetGenImage get error => const AssetGenImage('assets/auth/error.png');
   AssetGenImage get facebook => const AssetGenImage('assets/auth/facebook.png');
   AssetGenImage get google => const AssetGenImage('assets/auth/google.png');
-  AssetGenImage get leftBackgroung =>
-      const AssetGenImage('assets/auth/left_backgroung.png');
+  AssetGenImage get leftBackgroung => const AssetGenImage('assets/auth/left_backgroung.png');
   String get logo => 'assets/auth/logo.svg';
   AssetGenImage get manLeft => const AssetGenImage('assets/auth/man_left.png');
-  AssetGenImage get manRight =>
-      const AssetGenImage('assets/auth/man_right.png');
-  AssetGenImage get oblakaRight =>
-      const AssetGenImage('assets/auth/oblaka.png');
+  AssetGenImage get manRight => const AssetGenImage('assets/auth/man_right.png');
+  AssetGenImage get oblakaRight => const AssetGenImage('assets/auth/oblaka.png');
   AssetGenImage get oblakaLeft => const AssetGenImage('assets/auth/oblaka.png');
-  AssetGenImage get rightBackground =>
-      const AssetGenImage('assets/auth/right_background.png');
+  AssetGenImage get rightBackground => const AssetGenImage('assets/auth/right_background.png');
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsAuthGen auth = $AssetsAuthGen();
-  static const AssetGenImage hidePassword =
-      AssetGenImage('assets/hide_password.png');
-  static const AssetGenImage showPassword =
-      AssetGenImage('assets/show_password.png');
+  static const AssetGenImage hidePassword = AssetGenImage('assets/hide_password.png');
+  static const AssetGenImage showPassword = AssetGenImage('assets/show_password.png');
 }
 
 class AssetGenImage extends AssetImage {

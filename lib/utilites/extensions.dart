@@ -12,8 +12,7 @@ extension StringExtension on String {
   }
 
   bool isURL() {
-    var urlPattern =
-        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    var urlPattern = r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
     return RegExp(urlPattern, caseSensitive: false).hasMatch(this);
   }
 }
@@ -27,8 +26,7 @@ extension GlobalKeyExtension on GlobalKey {
     final renderObject = currentContext?.findRenderObject();
     var translation = renderObject?.getTransformTo(null).getTranslation();
     if (translation != null && renderObject?.paintBounds != null) {
-      return renderObject!.paintBounds
-          .shift(Offset(translation.x, translation.y));
+      return renderObject!.paintBounds.shift(Offset(translation.x, translation.y));
     } else {
       return null;
     }
@@ -48,10 +46,15 @@ extension UserProficeImage on User? {
       image = Container(
         height: 46,
         width: 46,
-        child: Image.network(
-          this!.avatars!.first.publicUrl ?? "",
-          fit: BoxFit.cover,
-        ),
+        child: this!.avatars!.first.publicUrl!.isNotEmpty
+            ? Image.network(
+                this!.avatars!.first.publicUrl ?? "",
+                fit: BoxFit.cover,
+              )
+            : SvgPicture.asset(
+                'assets/home_page/default_man.svg',
+                fit: BoxFit.fitHeight,
+              ),
       );
     } else {
       image = Container(
@@ -104,17 +107,14 @@ String fileSize(dynamic size, S translate, [int round = 2]) {
   }
 
   if (_size < divider * divider * divider * divider && _size % divider == 0) {
-    return translate
-        .gb((_size / (divider * divider * divider)).toStringAsFixed(0));
+    return translate.gb((_size / (divider * divider * divider)).toStringAsFixed(0));
   }
 
   if (_size < divider * divider * divider * divider) {
-    return translate
-        .gb((_size / divider / divider / divider).toStringAsFixed(round));
+    return translate.gb((_size / divider / divider / divider).toStringAsFixed(round));
   }
 
-  if (_size < divider * divider * divider * divider * divider &&
-      _size % divider == 0) {
+  if (_size < divider * divider * divider * divider * divider && _size % divider == 0) {
     num r = _size / divider / divider / divider / divider;
     return translate.tb(r.toStringAsFixed(0));
   }
@@ -124,8 +124,7 @@ String fileSize(dynamic size, S translate, [int round = 2]) {
     return translate.tb(r.toStringAsFixed(round));
   }
 
-  if (_size < divider * divider * divider * divider * divider * divider &&
-      _size % divider == 0) {
+  if (_size < divider * divider * divider * divider * divider * divider && _size % divider == 0) {
     num r = _size / divider / divider / divider / divider / divider;
     return translate.pb(r.toStringAsFixed(0));
   } else {

@@ -32,7 +32,7 @@ class LocalStorage {
 
     WidgetsFlutterBinding.ensureInitialized();
     var os = OsSpecifications.getOs();
-    Hive.init(os.appDirPath.substring(0, os.appDirPath.length - 1));
+    Hive.init(os.supportDir);
 
     final objectsBox = await Hive.openBox<BaseObject>(_objectsBoxName);
     final relationsBox = await Hive.openBox<List<String>>(_relationsBoxName);
@@ -53,10 +53,7 @@ class LocalStorage {
     required Box<List<String>> relationsBox,
   })  : _objectsBox = objectsBox,
         _relationsBox = relationsBox {
-    _objectsToDelete.addAll(_objectsBox.values.where((element) =>
-        element.isInProgress ||
-        element.loadPercent != null ||
-        element.endedWithException));
+    _objectsToDelete.addAll(_objectsBox.values.where((element) => element.isInProgress || element.loadPercent != null || element.endedWithException));
   }
 
   ///Adding [Folder] and it's childs to local storage

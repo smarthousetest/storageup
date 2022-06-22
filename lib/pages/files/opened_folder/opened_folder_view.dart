@@ -24,7 +24,8 @@ import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({
@@ -37,8 +38,10 @@ class OpenedFolderView extends StatefulWidget {
 
   final Folder? currentFolder;
   final List<Folder> previousFolders;
-  final void Function(
-      {required OpenedFolderView child, required String? folderId}) push;
+  final void Function({
+    required OpenedFolderView child,
+    required String? folderId,
+  }) push;
   final Function(int) pop;
 
   @override
@@ -55,7 +58,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   Timer? timerForOpenFile;
   int _startTimer = 1;
   var _indexObject = -1;
-  bool _isOpen = false;
   bool youSeePopUp = false;
 
   void _initiatingControllers(OpenedFolderState state) {
@@ -75,7 +77,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   }
 
   void startTimer() {
-    _isOpen = true;
     const oneSec = const Duration(seconds: 1);
     if (timerForOpenFile != null) {
       timerForOpenFile?.cancel();
@@ -89,7 +90,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             timer.cancel();
             _startTimer = 1;
             _indexObject = -1;
-            _isOpen = false;
           });
         } else {
           setState(() {
@@ -110,23 +110,28 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         ),
       child: BlocListener<OpenedFolderCubit, OpenedFolderState>(
         listener: (context, state) async {
-          if (youSeePopUp == false) {
+          if (StateContainer.of(context).isPopUpShowing == false) {
             if (state.status == FormzStatus.submissionFailure) {
-              youSeePopUp = true;
+              // youSeePopUp = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
               youSeePopUp = await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurSomethingGoesWrong(youSeePopUp);
                 },
               );
+
+              StateContainer.of(context).changeIsPopUpShowing(false);
             } else if (state.status == FormzStatus.submissionCanceled) {
-              youSeePopUp = true;
+              // youSeePopUp = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
               youSeePopUp = await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurFailedServerConnection(youSeePopUp);
                 },
               );
+              StateContainer.of(context).changeIsPopUpShowing(false);
             }
           }
         },
@@ -138,9 +143,10 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               borderRadius: BorderRadius.circular(10),
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                    color: Color.fromARGB(25, 23, 69, 139),
-                    blurRadius: 4,
-                    offset: Offset(1, 4))
+                  color: Color.fromARGB(25, 23, 69, 139),
+                  blurRadius: 4,
+                  offset: Offset(1, 4),
+                )
               ],
             ),
             alignment: Alignment.center,
@@ -199,9 +205,52 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             //   ],
             // ),
             Spacer(),
+            GestureDetector(
+              onTap: () {
+                context.read<OpenedFolderCubit>().update();
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  width: 128,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/file_page/update.svg',
+                        color: Theme.of(context).splashColor,
+                        width: 24,
+                        height: 24,
+                      ),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          translate.update,
+                          maxLines: 1,
+                          style: TextStyle(
+                            color: Theme.of(context).splashColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             StateSortedContainer.of(context).sortedActionButton
                 ? IconButton(
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.only(left: 15.0, right: 15),
                     iconSize: 30,
                     onPressed: () {
                       if (_direction == SortingDirection.down) {
@@ -220,7 +269,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                   )
                 : Container(),
             Padding(
-              padding: const EdgeInsets.only(left: 30.0),
+              padding: const EdgeInsets.only(left: 15.0),
               child: IconButton(
                 padding: EdgeInsets.zero,
                 iconSize: 30,
@@ -433,8 +482,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                     barrierColor: Colors.transparent,
                                     showArrow: false,
                                     enablePassEvent: false,
-                                    horizontalMargin: 110,
-                                    verticalMargin: 0,
+                                    horizontalMargin: -90,
+                                    verticalMargin: -90,
                                     controller: _popupControllers[
                                         state.sortedFiles.indexOf(obj)],
                                     menuBuilder: () {
@@ -445,115 +494,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                           _popupControllers[state.sortedFiles
                                                   .indexOf(obj)]
                                               .hideMenu();
-                                          if (action == FileAction.properties) {
-                                            var res = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return FileInfoView(
-                                                      object: obj,
-                                                      user: state.valueNotifier
-                                                          ?.value);
-                                                });
-                                            if (res != null) {
-                                              if (obj is Folder) {
-                                                print(obj);
-                                                widget.push(
-                                                  child: OpenedFolderView(
-                                                    currentFolder: obj,
-                                                    previousFolders: [
-                                                      ...state.previousFolders,
-                                                      state.currentFolder!
-                                                    ],
-                                                    pop: widget.pop,
-                                                    push: widget.push,
-                                                  ),
-                                                  folderId: obj.id,
-                                                );
-                                              } else {
-                                                print(
-                                                    'file tapped in properies');
-
-                                                context
-                                                    .read<OpenedFolderCubit>()
-                                                    .fileTapped(obj as Record);
-                                              }
-                                            }
-                                          } else if (action ==
-                                              FileAction.rename) {
-                                            if (obj is Record) {
-                                              var fileExtention =
-                                                  FileAttribute()
-                                                      .getFileExtension(
-                                                          obj.name ?? '');
-                                              var result = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  var filename = FileAttribute()
-                                                      .getFileName(
-                                                          obj.name ?? '');
-                                                  return BlurRename(
-                                                      filename, true);
-                                                },
-                                              );
-                                              if (result != null &&
-                                                  result is String &&
-                                                  result !=
-                                                      FileAttribute()
-                                                          .getFileName(
-                                                              obj.name ?? '')) {
-                                                result = result +
-                                                    '.' +
-                                                    fileExtention;
-                                                final res = await context
-                                                    .read<OpenedFolderCubit>()
-                                                    .onActionRenameChoosedFile(
-                                                        obj, result);
-                                                if (res ==
-                                                    ErrorType.alreadyExist) {
-                                                  _renameFile(context, obj,
-                                                      result, fileExtention);
-                                                }
-                                              }
-                                            } else {
-                                              var result = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurRename(
-                                                      obj.name, true);
-                                                },
-                                              );
-                                              if (result != null &&
-                                                  result is String &&
-                                                  result != obj.name) {
-                                                final res = await context
-                                                    .read<OpenedFolderCubit>()
-                                                    .onActionRenameChoosedFolder(
-                                                        obj, result);
-                                                if (res ==
-                                                    ErrorType.alreadyExist) {
-                                                  _renameFolder(
-                                                      context, obj, result);
-                                                }
-                                              }
-                                            }
-                                          } else {
-                                            var result = await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return BlurDelete();
-                                              },
-                                            );
-
-                                            if (result == true) {
-                                              context
-                                                  .read<OpenedFolderCubit>()
-                                                  .onRecordActionChoosed(
-                                                      action, obj);
-                                            }
-                                          }
+                                          _popupActions(
+                                              state, context, action, obj);
                                         },
                                       );
                                     },
@@ -571,7 +513,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   }
 
   void _renameFile(BuildContext context, BaseObject record, String name,
-      String extention) async {
+      String extension) async {
     String newName = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -580,12 +522,17 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       },
     );
     if (newName != FileAttribute().getFileName(record.name ?? '')) {
-      newName = newName + '.' + extention;
+      newName += '.$extension';
       final res = await context
           .read<OpenedFolderCubit>()
           .onActionRenameChoosedFile(record, newName);
       if (res == ErrorType.alreadyExist) {
-        _renameFile(context, record, newName, extention);
+        _renameFile(
+          context,
+          record,
+          newName,
+          extension,
+        );
       }
     }
   }
@@ -659,7 +606,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         currentFolder: object,
                         previousFolders: [
                           ...state.previousFolders,
-                          state.currentFolder!
+                          state.currentFolder!,
                         ],
                         pop: widget.pop,
                         push: widget.push,
@@ -695,8 +642,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                             barrierColor: Colors.transparent,
                             showArrow: false,
                             enablePassEvent: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
+                            horizontalMargin: -90,
+                            verticalMargin: -90,
                             controller: _popupControllersGrouped[state.objects
                                 .indexWhere((element) => element.id == obj.id)],
                             menuBuilder: () {
@@ -708,88 +655,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                             .indexWhere((element) =>
                                                 element.id == obj.id)]
                                         .hideMenu();
-                                    if (action == FileAction.properties) {
-                                      var res = await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return FileInfoView(
-                                                object: obj,
-                                                user:
-                                                    state.valueNotifier?.value);
-                                          });
-                                      if (res) {
-                                        if (obj is Folder) {
-                                          print(obj);
-                                          widget.push(
-                                            child: OpenedFolderView(
-                                              currentFolder: obj,
-                                              previousFolders: [
-                                                ...state.previousFolders,
-                                                state.currentFolder!
-                                              ],
-                                              pop: widget.pop,
-                                              push: widget.push,
-                                            ),
-                                            folderId: obj.id,
-                                          );
-                                        } else {
-                                          print('file tapped in properies');
-
-                                          context
-                                              .read<OpenedFolderCubit>()
-                                              .fileTapped(obj as Record);
-                                        }
-                                      }
-                                    } else if (action == FileAction.rename) {
-                                      if (obj is Record) {
-                                        var fileExtention = FileAttribute()
-                                            .getFileExtension(obj.name ?? '');
-                                        var result = await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            var filename = FileAttribute()
-                                                .getFileName(obj.name ?? '');
-                                            return BlurRename(filename, true);
-                                          },
-                                        );
-                                        if (result != null &&
-                                            result is String &&
-                                            result !=
-                                                FileAttribute().getFileName(
-                                                    obj.name ?? '')) {
-                                          result = result + '.' + fileExtention;
-                                          final res = await context
-                                              .read<OpenedFolderCubit>()
-                                              .onActionRenameChoosedFile(
-                                                  obj, result);
-                                          if (res == ErrorType.alreadyExist) {
-                                            _renameFile(context, obj, result,
-                                                fileExtention);
-                                          }
-                                        }
-                                      } else {
-                                        var result = await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return BlurRename(obj.name, true);
-                                          },
-                                        );
-                                        if (result != null &&
-                                            result is String &&
-                                            result != obj.name) {
-                                          final res = await context
-                                              .read<OpenedFolderCubit>()
-                                              .onActionRenameChoosedFolder(
-                                                  obj, result);
-                                          if (res == ErrorType.alreadyExist) {
-                                            _renameFolder(context, obj, result);
-                                          }
-                                          // StateInfoContainer.of(context)
-                                          //     ?.setInfoObject(obj);
-
-                                        }
-                                      }
-                                    }
+                                    _popupActions(state, context, action, obj);
                                   });
                             },
                             child: ObjectView(object: value[index])),
@@ -1132,119 +998,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                         _popupControllers[state.sortedFiles
                                                 .indexOf(element)]
                                             .hideMenu();
-                                        if (action == FileAction.properties) {
-                                          // controller.hideMenu();
-                                          var res = await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return FileInfoView(
-                                                    object: element,
-                                                    user: state
-                                                        .valueNotifier?.value);
-                                              });
-                                          if (res) {
-                                            if (element is Folder) {
-                                              print(element);
-                                              widget.push(
-                                                child: OpenedFolderView(
-                                                  currentFolder: element,
-                                                  previousFolders: [
-                                                    ...state.previousFolders,
-                                                    state.currentFolder!
-                                                  ],
-                                                  pop: widget.pop,
-                                                  push: widget.push,
-                                                ),
-                                                folderId: element.id,
-                                              );
-                                            } else {
-                                              print('file tapped in properies');
-
-                                              context
-                                                  .read<OpenedFolderCubit>()
-                                                  .fileTapped(
-                                                      element as Record);
-                                            }
-                                          } else if (action ==
-                                              FileAction.rename) {
-                                            if (element is Record) {
-                                              var fileExtention =
-                                                  FileAttribute()
-                                                      .getFileExtension(
-                                                          element.name ?? '');
-                                              var result = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  var filename = FileAttribute()
-                                                      .getFileName(
-                                                          element.name ?? '');
-                                                  return BlurRename(
-                                                      filename, true);
-                                                },
-                                              );
-                                              if (result != null &&
-                                                  result is String &&
-                                                  result !=
-                                                      FileAttribute()
-                                                          .getFileName(
-                                                              element.name ??
-                                                                  '')) {
-                                                result = result +
-                                                    '.' +
-                                                    fileExtention;
-                                                final res = await context
-                                                    .read<OpenedFolderCubit>()
-                                                    .onActionRenameChoosedFile(
-                                                        element, result);
-                                                if (res ==
-                                                    ErrorType.alreadyExist) {
-                                                  _renameFile(context, element,
-                                                      result, fileExtention);
-                                                }
-                                              }
-                                            } else {
-                                              var result = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurRename(
-                                                      element.name, true);
-                                                },
-                                              );
-                                              if (result != null &&
-                                                  result is String &&
-                                                  result != element.name) {
-                                                final res = await context
-                                                    .read<OpenedFolderCubit>()
-                                                    .onActionRenameChoosedFolder(
-                                                        element, result);
-                                                if (res ==
-                                                    ErrorType.alreadyExist) {
-                                                  _renameFolder(
-                                                      context, element, result);
-                                                }
-                                              } else {
-                                                //   controller.hideMenu();
-                                                var result = await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return BlurDelete();
-                                                  },
-                                                );
-                                                if (result == true) {
-                                                  context
-                                                      .read<OpenedFolderCubit>()
-                                                      .onRecordActionChoosed(
-                                                        action,
-                                                        element,
-                                                      );
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
+                                        _popupActions(
+                                            state, context, action, element);
                                       });
                                 },
                                 child: Container(
@@ -1586,102 +1341,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                           onTap: (action) async {
                             _popupControllersGrouped[state.objects.indexOf(obj)]
                                 .hideMenu();
-                            if (action == FileAction.properties) {
-                              var res = await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return FileInfoView(
-                                        object: obj,
-                                        user: state.valueNotifier?.value);
-                                  });
-                              if (res) {
-                                if (obj is Folder) {
-                                  print(obj);
-                                  widget.push(
-                                    child: OpenedFolderView(
-                                      currentFolder: obj,
-                                      previousFolders: [
-                                        ...state.previousFolders,
-                                        state.currentFolder!
-                                      ],
-                                      pop: widget.pop,
-                                      push: widget.push,
-                                    ),
-                                    folderId: obj.id,
-                                  );
-                                } else {
-                                  print('file tapped in properies');
-
-                                  context
-                                      .read<OpenedFolderCubit>()
-                                      .fileTapped(obj as Record);
-                                }
-                              } else if (action == FileAction.rename) {
-                                if (obj is Record) {
-                                  var fileExtention = FileAttribute()
-                                      .getFileExtension(obj.name ?? '');
-                                  var result = await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      var filename = FileAttribute()
-                                          .getFileName(obj.name ?? '');
-                                      return BlurRename(filename, true);
-                                    },
-                                  );
-                                  if (result != null &&
-                                      result is String &&
-                                      result !=
-                                          FileAttribute()
-                                              .getFileName(obj.name ?? '')) {
-                                    result = result + '.' + fileExtention;
-                                    final res = await context
-                                        .read<OpenedFolderCubit>()
-                                        .onActionRenameChoosedFile(obj, result);
-                                    if (res == ErrorType.alreadyExist) {
-                                      _renameFile(
-                                          context, obj, result, fileExtention);
-                                    }
-                                  }
-                                } else {
-                                  var result = await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return BlurRename(obj.name, true);
-                                    },
-                                  );
-                                  if (result != null &&
-                                      result is String &&
-                                      result != obj.name) {
-                                    final res = await context
-                                        .read<OpenedFolderCubit>()
-                                        .onActionRenameChoosedFolder(
-                                            obj, result);
-                                    if (res == ErrorType.alreadyExist) {
-                                      _renameFolder(context, obj, result);
-                                    }
-
-                                    // StateInfoContainer.of(context)
-                                    //     ?.setInfoObject(obj);
-
-                                  }
-                                }
-                              } else {
-                                var result = await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return BlurDelete();
-                                  },
-                                );
-                                if (result == true) {
-                                  context
-                                      .read<OpenedFolderCubit>()
-                                      .onRecordActionChoosed(
-                                        action,
-                                        obj,
-                                      );
-                                }
-                              }
-                            }
+                            _popupActions(state, context, action, obj);
                           },
                         );
                       },
@@ -1710,16 +1370,126 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
 
     return keyFiles;
   }
+
+  _popupActions(OpenedFolderState state, BuildContext context,
+      FileAction action, BaseObject object) async {
+    switch (action) {
+      case FileAction.properties:
+        var res = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return FileInfoView(
+                  object: object, user: state.valueNotifier?.value);
+            });
+        if (res != null) {
+          if (object is Folder) {
+            print(object);
+            widget.push(
+              child: OpenedFolderView(
+                currentFolder: object,
+                previousFolders: [
+                  ...state.previousFolders,
+                  state.currentFolder!
+                ],
+                pop: widget.pop,
+                push: widget.push,
+              ),
+              folderId: object.id,
+            );
+          } else {
+            print('file tapped in properies');
+
+            context.read<OpenedFolderCubit>().fileTapped(object as Record);
+          }
+        }
+        break;
+      case FileAction.rename:
+        if (object is Record) {
+          var fileExtention =
+              FileAttribute().getFileExtension(object.name ?? '');
+          var result = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              var filename = FileAttribute().getFileName(object.name ?? '');
+              return BlurRename(filename, true);
+            },
+          );
+          if (result != null &&
+              result is String &&
+              result != FileAttribute().getFileName(object.name ?? '')) {
+            result = result + '.' + fileExtention;
+            final res = await context
+                .read<OpenedFolderCubit>()
+                .onActionRenameChoosedFile(object, result);
+            if (res == ErrorType.alreadyExist) {
+              _renameFile(context, object, result, fileExtention);
+            }
+          }
+        } else {
+          var result = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurRename(object.name, true);
+            },
+          );
+          if (result != null && result is String && result != object.name) {
+            final res = await context
+                .read<OpenedFolderCubit>()
+                .onActionRenameChoosedFolder(object, result);
+            if (res == ErrorType.alreadyExist) {
+              _renameFolder(context, object, result);
+            }
+          }
+        }
+        break;
+      case FileAction.delete:
+        var result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return BlurDelete();
+          },
+        );
+
+        if (result == true) {
+          context
+              .read<OpenedFolderCubit>()
+              .onRecordActionChoosed(action, object);
+        }
+        break;
+      // case FileAction.move:
+      //   var result = await showDialog(
+      //     context: context,
+      //     builder: (BuildContext context) {
+      //       return MoveFileView(
+      //         object is Folder ? [object] : null,
+      //       );
+      //     },
+      //   );
+      //   if (result != null) {
+      //     List<BaseObject> objects = [];
+      //     objects.add(object);
+
+      //     context.read<OpenedFolderCubit>().onActionMoveFiles(objects, result);
+      //   }
+      //   break;
+      // case FileAction.save:
+      //   context.read<OpenedFolderCubit>().fileSave(object as Record);
+      //   print('save objects');
+      //   break;
+      default:
+    }
+  }
 }
 
 class ObjectView extends StatelessWidget {
   const ObjectView({Key? key, required this.object}) : super(key: key);
   final BaseObject object;
+
   @override
   Widget build(BuildContext context) {
     String? type = '';
     bool isFile = false;
-
+    String? thumbnail;
     if (object is Record) {
       var record = object as Record;
       isFile = true;
@@ -1729,6 +1499,7 @@ class ObjectView extends StatelessWidget {
                   .isNotEmpty /*&&
           record.thumbnail!.first.name!.contains('.')*/
           ) {
+        thumbnail = record.thumbnail?.first.publicUrl;
         type = FileAttribute().getFilesType(record.name!.toLowerCase());
       }
     }
@@ -1744,7 +1515,7 @@ class ObjectView extends StatelessWidget {
               Container(
                 height: 90,
                 width: 80,
-                child: isFile && type != 'image'
+                child: isFile && type != 'image' && type != 'video'
                     ? type!.isNotEmpty && type != 'unexpected'
                         ? Image.asset(
                             'assets/file_icons/$type.png',
@@ -1754,15 +1525,20 @@ class ObjectView extends StatelessWidget {
                             'assets/file_icons/files.png',
                             fit: BoxFit.contain,
                           )
-                    : type == 'image'
+                    : type == 'image' || type == 'video' && thumbnail != null
                         ? Image.network(
-                            (object as Record).thumbnail!.first.publicUrl!,
+                            thumbnail!,
                             fit: BoxFit.contain,
                           )
-                        : Image.asset(
-                            'assets/file_icons/folder.png',
-                            fit: BoxFit.contain,
-                          ),
+                        : type == 'video' && thumbnail == null
+                            ? Image.asset(
+                                'assets/file_icons/$type.png',
+                                fit: BoxFit.contain,
+                              )
+                            : Image.asset(
+                                'assets/file_icons/folder.png',
+                                fit: BoxFit.contain,
+                              ),
               ),
               ..._uploadProgress(
                   isFile ? (object as Record).loadPercent : null),
@@ -1816,12 +1592,14 @@ class FilesPopupMenuActions extends StatefulWidget {
   final ThemeData theme;
   final S translate;
   final Function(FileAction) onTap;
+
   @override
   _FilesPopupMenuActionsState createState() => _FilesPopupMenuActionsState();
 }
 
 class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
   int ind = -1;
+
   @override
   Widget build(BuildContext context) {
     var style = TextStyle(
@@ -1887,36 +1665,41 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                 //   color: mainColor,
                 //   height: 1,
                 // ),
-                // MouseRegion(
-                //   onEnter: (event) {
-                //     setState(() {
-                //       ind = 1;
-                //     });
+                // GestureDetector(
+                //   onTap: () {
+                //     widget.onTap(FileAction.move);
                 //   },
-                //   child: Container(
-                //     width: 190,
-                //     height: 40,
-                //     color: ind == 1 ? mainColor : null,
-                //     padding: EdgeInsets.symmetric(horizontal: 15),
-                //     child: Row(
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       children: [
-                //         // Image.asset(
-                //         //   'assets/file_page/file_options/move.png',
-                //         //   height: 20,
-                //         // ),
-                //         SvgPicture.asset(
-                //           'assets/options/folder.svg',
-                //           height: 20,
-                //         ),
-                //         Container(
-                //           width: 15,
-                //         ),
-                //         Text(
-                //           widget.translate.move,
-                //           style: style,
-                //         ),
-                //       ],
+                //   child: MouseRegion(
+                //     onEnter: (event) {
+                //       setState(() {
+                //         ind = 0;
+                //       });
+                //     },
+                //     child: Container(
+                //       width: 190,
+                //       height: 40,
+                //       color: ind == 0 ? mainColor : null,
+                //       padding: EdgeInsets.symmetric(horizontal: 15),
+                //       child: Row(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: [
+                //           // Image.asset(
+                //           //   'assets/file_page/file_options/move.png',
+                //           //   height: 20,
+                //           // ),
+                //           SvgPicture.asset(
+                //             'assets/options/folder.svg',
+                //             height: 20,
+                //           ),
+                //           Container(
+                //             width: 15,
+                //           ),
+                //           Text(
+                //             widget.translate.move,
+                //             style: style,
+                //           ),
+                //         ],
+                //       ),
                 //     ),
                 //   ),
                 // ),
@@ -1924,36 +1707,41 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                 //   color: mainColor,
                 //   height: 1,
                 // ),
-                // MouseRegion(
-                //   onEnter: (event) {
-                //     setState(() {
-                //       ind = 2;
-                //     });
+                // GestureDetector(
+                //   onTap: () {
+                //     widget.onTap(FileAction.save);
                 //   },
-                //   child: Container(
-                //     width: 190,
-                //     height: 40,
-                //     color: ind == 2 ? mainColor : null,
-                //     padding: EdgeInsets.symmetric(horizontal: 15),
-                //     child: Row(
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       children: [
-                //         // Image.asset(
-                //         //   'assets/file_page/file_options/download.png',
-                //         //   height: 20,
-                //         // ),
-                //         SvgPicture.asset(
-                //           'assets/options/download.svg',
-                //           height: 20,
-                //         ),
-                //         Container(
-                //           width: 15,
-                //         ),
-                //         Text(
-                //           widget.translate.download,
-                //           style: style,
-                //         ),
-                //       ],
+                //   child: MouseRegion(
+                //     onEnter: (event) {
+                //       setState(() {
+                //         ind = 1;
+                //       });
+                //     },
+                //     child: Container(
+                //       width: 190,
+                //       height: 40,
+                //       color: ind == 1 ? mainColor : null,
+                //       padding: EdgeInsets.symmetric(horizontal: 15),
+                //       child: Row(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: [
+                //           // Image.asset(
+                //           //   'assets/file_page/file_options/download.png',
+                //           //   height: 20,
+                //           // ),
+                //           SvgPicture.asset(
+                //             'assets/options/download.svg',
+                //             height: 20,
+                //           ),
+                //           Container(
+                //             width: 15,
+                //           ),
+                //           Text(
+                //             widget.translate.down,
+                //             style: style,
+                //           ),
+                //         ],
+                //       ),
                 //     ),
                 //   ),
                 // ),
@@ -2097,5 +1885,6 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
 class GridElement {
   Widget grid;
   String type;
+
   GridElement({required this.grid, required this.type});
 }

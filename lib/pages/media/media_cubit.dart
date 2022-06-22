@@ -35,7 +35,7 @@ class MediaCubit extends Cubit<MediaState> {
   List<DownloadObserver> _downloadObservers = [];
   UserController _userController = getIt<UserController>();
   StreamSubscription? updatePageSubscription;
-  late String idTappedFile;
+  String idTappedFile = '';
 
   late var _updateObserver = Observer((e) {
     try {
@@ -577,7 +577,7 @@ class MediaCubit extends Cubit<MediaState> {
         );
         albums.removeAt(indexOfAlbum + 1);
       } catch (e) {
-        print(e);
+        // print(e);
       }
     }
     final currentFolder =

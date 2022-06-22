@@ -40,8 +40,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   TokenRepository _tokenRepository = getIt<TokenRepository>();
   FilesService _filesService = getIt<FilesService>();
-  FilesController _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  FilesController _filesController = getIt<FilesController>(instanceName: 'files_controller');
 
   UserController _userController = getIt<UserController>();
 
@@ -93,7 +92,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     var result = await _authController.changePassword(
-        oldPassword: event.oldPassword, newPassword: event.newPassword);
+      oldPassword: event.oldPassword,
+      newPassword: event.newPassword,
+    );
     if (result == AuthenticationStatus.authenticated) {}
 
     print(result);
