@@ -53,10 +53,7 @@ class LocalStorage {
     required Box<List<String>> relationsBox,
   })  : _objectsBox = objectsBox,
         _relationsBox = relationsBox {
-    _objectsToDelete.addAll(_objectsBox.values.where((element) =>
-        element.isInProgress ||
-        element.loadPercent != null ||
-        element.endedWithException));
+    _objectsToDelete.addAll(_objectsBox.values.where((element) => element.isInProgress || element.loadPercent != null || element.endedWithException));
   }
 
   ///Adding [Folder] and it's childs to local storage

@@ -1,18 +1,14 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cpp_native/cpp_native.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/file_bloc.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
-
 import 'package:upstorage_desktop/constants.dart';
 import '../injection.dart';
 
@@ -25,25 +21,26 @@ class LoadController {
 
   _LoadState get getState => _state;
 
-  LoadController() {
-    // init();
-  }
+  LoadController() {}
 
-  bool isNotInited() {
+  bool isNotInitialized() {
     return _cpp == null;
   }
 
-  Function(String)? _onAddAutouploadingFile;
+  Function(String)? _onAddAutoUploadingFile;
 
-  set setAutouploadNextFileListener(Function(String) callback) =>
-      _onAddAutouploadingFile = callback;
-  void clearAutouploadNextFileCallback() => _onAddAutouploadingFile = null;
+  set setAutoUploadNextFileListener(Function(String) callback) =>
+      _onAddAutoUploadingFile = callback;
+
+  void clearAutoUploadNextFileCallback() => _onAddAutoUploadingFile = null;
 
   Future<void> init() async {
-    print('initializing load controller');
+    print('Initializing load controller');
     Directory appDocDir = await getApplicationDocumentsDirectory();
     _cpp = await getInstanceCppNative(
-        documentsFolder: appDocDir, baseUrl: kServerUrl.split('/').last);
+      documentsFolder: appDocDir,
+      baseUrl: kServerUrl.split('/').last,
+    );
   }
 
   Future<void> uploadFile({
@@ -51,7 +48,7 @@ class LoadController {
     String? folderId,
     bool force = false,
   }) async {
-    if (isNotInited()) {
+    if (isNotInitialized()) {
       await init();
     }
     var uploadingFiles = _state.uploadingFiles;
@@ -130,7 +127,6 @@ class LoadController {
   ) async {
     print('--------------------------------------- $event');
     try {
-      // if (fileId == null) fileId = '-1';
       var uploadingFiles = List<UploadFileInfo>.from(_state.uploadingFiles);
 
       if (event.right != null) {
@@ -210,8 +206,9 @@ class LoadController {
     }
   }
 
-  void downloadFile({required String? fileId, bool force = false}) async {
-    if (isNotInited()) {
+  void downloadFile(
+      {required String? fileId, bool force = false, String? path}) async {
+    if (isNotInitialized()) {
       await init();
     }
     var downloadingFiles = _state.downloadingFiles;
@@ -263,13 +260,22 @@ class LoadController {
       }
 
       _state.changeDowloadingFiles(downloadingFiles);
-
-      _cpp
-          ?.downloadFile(
-            recordID: fileInfo.id,
-            bearerToken: token,
-          )
-          .listen(_processDownloadCallback);
+      if (path != null && Directory(path).existsSync()) {
+        CppNative? _cppSave = CppNative(documentsFolder: Directory(path));
+        _cppSave = await getInstanceCppNative(
+            documentsFolder: Directory(path),
+            baseUrl: kServerUrl.split('/').last);
+        _cppSave
+            .downloadFile(recordID: fileInfo.id, bearerToken: token)
+            .listen(_processDownloadCallback);
+      } else {
+        _cpp
+            ?.downloadFile(
+              recordID: fileInfo.id,
+              bearerToken: token,
+            )
+            .listen(_processDownloadCallback);
+      }
     }
   }
 
@@ -330,11 +336,12 @@ class LoadController {
             filesList.indexWhere((element) => element.id == event.left!.id);
         if (fileIndex != -1) {
           var record = filesList[fileIndex].copyWith(
-              localPath: null,
-              isInProgress: false,
-              downloadPercent: -1,
-              endedWithException: true,
-              errorReason: event.left!.errorReason);
+            localPath: null,
+            isInProgress: false,
+            downloadPercent: -1,
+            endedWithException: true,
+            errorReason: event.left!.errorReason,
+          );
 
           filesList[fileIndex] = record;
           // filesList.firstWhere((element) => element.id == fileId)
@@ -415,13 +422,13 @@ class LoadController {
     return currentFileIndex != -1;
   }
 
-  // bool _checkIsUploadingInProgress() {
-  //   return _state.uploadingFiles.value.isNotEmpty;
-  // }
+// bool _checkIsUploadingInProgress() {
+//   return _state.uploadingFiles.value.isNotEmpty;
+// }
 
-  // bool _checkIsDownloadingInProgress() {
-  //   return _state.downloadingFiles.value.isNotEmpty;
-  // }
+// bool _checkIsDownloadingInProgress() {
+//   return _state.downloadingFiles.value.isNotEmpty;
+// }
 }
 
 Future<void> copyFileToDownloadDir({
@@ -450,9 +457,11 @@ Future<void> copyFileToDownloadDir({
 
 class _LoadState extends Observable {
   List<UploadFileInfo> _uploadingFiles = [];
+
   List<UploadFileInfo> get uploadingFiles => _uploadingFiles.toList();
 
   List<DownloadFileInfo> _downloadingFiles = [];
+
   List<DownloadFileInfo> get downloadingFiles => _downloadingFiles.toList();
 
   void changeUploadingFiles(List<UploadFileInfo> uploadingFiles) {

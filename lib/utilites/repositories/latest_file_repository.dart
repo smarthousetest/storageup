@@ -41,8 +41,7 @@ class LatestFileRepository {
       final value = event.value;
 
       if (_latestFileInfo.any((element) => element.latestFile.id == key)) {
-        final currentLocationInfoIndex = _latestFileInfo
-            .indexWhere((element) => element.latestFile.id == key);
+        final currentLocationInfoIndex = _latestFileInfo.indexWhere((element) => element.latestFile.id == key);
 
         if (event.deleted)
           _latestFileInfo.removeAt(currentLocationInfoIndex);
@@ -68,8 +67,7 @@ class LatestFileRepository {
   Future<void> addFiles({
     required List<Record> latestFile,
   }) async {
-    final List<LatestFile> latestFileInfo =
-        latestFile.map((e) => LatestFile(latestFile: e)).toList();
+    final List<LatestFile> latestFileInfo = latestFile.map((e) => LatestFile(latestFile: e)).toList();
 
     await _latestFileBox.clear();
 

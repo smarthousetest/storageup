@@ -12,6 +12,7 @@ import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_info_container.dart';
 
 class FileInfoView extends StatefulWidget {
   final BaseObject? object;
@@ -19,6 +20,7 @@ class FileInfoView extends StatefulWidget {
 
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
+
   FileInfoView({
     required this.object,
     required this.user,
@@ -29,6 +31,19 @@ class _ButtonTemplateState extends State<FileInfoView> {
   S translate = getIt<S>();
   var setNull;
   bool open = true;
+
+  String getRecordViewedDate() {
+    BaseObject? object = widget.object;
+    if (object is Record) {
+      DateTime? accessDate = object.accessDate;
+
+      if (accessDate is DateTime) {
+        return DateFormat('dd.MM.yyyy').format(accessDate);
+      }
+    }
+
+    return translate.never;
+  }
 
   Widget build(BuildContext context) {
     var type = FileAttribute().getFilesType(widget.object!.name!.toLowerCase());
@@ -64,9 +79,10 @@ class _ButtonTemplateState extends State<FileInfoView> {
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: Color.fromARGB(25, 23, 69, 139),
-                          blurRadius: 4,
-                          offset: Offset(1, 4))
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4),
+                      )
                     ],
                   ),
                   child: ListView(controller: ScrollController(), children: [
@@ -88,7 +104,11 @@ class _ButtonTemplateState extends State<FileInfoView> {
                             ))),
                     Padding(
                         padding: const EdgeInsets.only(
-                            right: 30.0, left: 30, bottom: 30, top: 5),
+                          right: 30.0,
+                          left: 30,
+                          bottom: 30,
+                          top: 5,
+                        ),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -213,7 +233,10 @@ class _ButtonTemplateState extends State<FileInfoView> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 0, top: 25, right: 0),
+                                  left: 0,
+                                  top: 25,
+                                  right: 0,
+                                ),
                                 child: Container(
                                   width: 260,
                                   child: Column(
@@ -414,31 +437,16 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                           ],
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 18),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              translate.viewed,
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onBackground,
-                                                fontFamily:
-                                                    kNormalTextFontFamily,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 100,
-                                              child: Container(),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                widget.object?.updatedBy ?? '',
+                                      if (widget.object is Record)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 18),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                translate.viewed,
                                                 style: TextStyle(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -448,10 +456,28 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                                   fontSize: 14,
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Expanded(
+                                                flex: 100,
+                                                child: Container(),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Text(
+                                                  getRecordViewedDate(),
+                                                  style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onBackground,
+                                                    fontFamily:
+                                                        kNormalTextFontFamily,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 18),
                                         child: Row(
@@ -495,36 +521,37 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 0, top: 25, bottom: 30),
-                                child: Container(
-                                  height: 42,
-                                  width: 260,
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, open);
-                                      //eventBus.fire(FileInfoViewEvent);
-                                    },
-                                    style: OutlinedButton.styleFrom(
-                                      minimumSize: Size(double.maxFinite, 60),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      backgroundColor:
-                                          Theme.of(context).splashColor,
-                                    ),
-                                    child: Text(
-                                      translate.open,
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontFamily: kNormalTextFontFamily,
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ])),
+                                  padding: const EdgeInsets.only(
+                                      left: 0, top: 25, bottom: 30),
+                                  child: Container(
+                                      height: 42,
+                                      width: 260,
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, open);
+                                          //eventBus.fire(FileInfoViewEvent);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                          minimumSize:
+                                              Size(double.maxFinite, 60),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          backgroundColor:
+                                              Theme.of(context).splashColor,
+                                        ),
+                                        child: Text(
+                                          translate.open,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontFamily: kNormalTextFontFamily,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                      ))),
+                            ]))
                   ])),
             ),
           ),

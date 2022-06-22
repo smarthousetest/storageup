@@ -8,12 +8,14 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 class BlurDeletingAccount extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
+
   BlurDeletingAccount();
 }
 
 class _ButtonTemplateState extends State<BlurDeletingAccount> {
   S translate = getIt<S>();
   final myController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -60,9 +62,7 @@ class _ButtonTemplateState extends State<BlurDeletingAccount> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: Text(
-                            translate.permanently_delete +
-                                "\n" +
-                                translate.in_StorageUp,
+                            '${translate.permanently_delete}\n${translate.in_StorageUp}',
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: kNormalTextFontFamily,
@@ -130,33 +130,34 @@ class _ButtonTemplateState extends State<BlurDeletingAccount> {
                             alignment: Alignment.center,
                             child: TextFormField(
                               style: TextStyle(
-                                  color: Theme.of(context).disabledColor,
-                                  fontSize: 14,
-                                  fontFamily: kNormalTextFontFamily),
+                                color: Theme.of(context).disabledColor,
+                                fontSize: 14,
+                                fontFamily: kNormalTextFontFamily,
+                              ),
                               decoration: InputDecoration(
                                 hintText: translate.enter_password,
                                 hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      ?.color,
+                                  color: Theme.of(context).textTheme.headline1?.color,
                                   fontFamily: kNormalTextFontFamily,
                                   fontSize: 15,
                                 ),
-                                contentPadding:
-                                    EdgeInsets.only(left: 15, bottom: 8),
+                                contentPadding: EdgeInsets.only(left: 15, bottom: 8),
                                 hoverColor: Theme.of(context).primaryColor,
                                 focusColor: Theme.of(context).primaryColor,
                                 fillColor: Theme.of(context).primaryColor,
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   borderSide: BorderSide(
-                                      color: Color(0xffE4E7ED), width: 1.0),
+                                    color: Color(0xffE4E7ED),
+                                    width: 1.0,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   borderSide: BorderSide(
-                                      color: Color(0xffE4E7ED), width: 1.0),
+                                    color: Color(0xffE4E7ED),
+                                    width: 1.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -186,18 +187,18 @@ class _ButtonTemplateState extends State<BlurDeletingAccount> {
                             child: TextFormField(
                               maxLines: 9,
                               style: TextStyle(
-                                  color: Theme.of(context).disabledColor,
-                                  fontSize: 14,
-                                  fontFamily: kNormalTextFontFamily),
+                                color: Theme.of(context).disabledColor,
+                                fontSize: 14,
+                                fontFamily: kNormalTextFontFamily,
+                              ),
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 15.0, vertical: 15.0),
+                                  horizontal: 15.0,
+                                  vertical: 15.0,
+                                ),
                                 hintText: translate.tell_us,
                                 hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      ?.color,
+                                  color: Theme.of(context).textTheme.headline1?.color,
                                   fontFamily: kNormalTextFontFamily,
                                   fontSize: 15,
                                 ),
@@ -207,12 +208,16 @@ class _ButtonTemplateState extends State<BlurDeletingAccount> {
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   borderSide: BorderSide(
-                                      color: Color(0xffE4E7ED), width: 1.0),
+                                    color: Color(0xffE4E7ED),
+                                    width: 1.0,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   borderSide: BorderSide(
-                                      color: Color(0xffE4E7ED), width: 1.0),
+                                    color: Color(0xffE4E7ED),
+                                    width: 1.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -270,8 +275,7 @@ class _ButtonTemplateState extends State<BlurDeletingAccount> {
                                           color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),

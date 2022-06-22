@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/pages/files/move_files/move_state.dart';
 import 'package:upstorage_desktop/pages/home/home_bloc.dart';
@@ -25,20 +24,41 @@ class MoveCubit extends Cubit<MoveState> {
     ));
   }
 
-  Future<void> createFolder(String name, Folder? moveToFolder) async {
+  Future<void> createFolder(
+    String name,
+    Folder? moveToFolder,
+    List<Folder>? moveFolder,
+  ) async {
     if (moveToFolder == null) {
       moveToFolder = _filesController.getFilesRootFolder;
     }
+
     await _filesController.createFolder(name, moveToFolder!.id);
 
     await _filesController.updateFilesList();
-    var rootFolder = _filesController.getFilesRootFolder;
-    List<Folder> allFolders = [];
-    if (rootFolder != null) allFolders.add(rootFolder);
+    // var rootFolder = _filesController.getFilesRootFolder;
+    var childFolders = Map<String, List<Folder>?>.from(state.childFolders);
+    var curFolder = await _filesController.getFolderById(moveToFolder.id);
+
+    if (moveFolder != null) {
+      var toRemove = [];
+
+      curFolder?.folders?.forEach((a) {
+        if (moveFolder.any((b) => a == b)) {
+          toRemove.add(a);
+        }
+      });
+      curFolder?.folders?.removeWhere((e) => toRemove.contains(e));
+    }
+
+    childFolders[moveToFolder.id] = curFolder?.folders;
+
+    // List<Folder> allFolders = [];
+    // if (rootFolder != null) allFolders.add(rootFolder);
 
     emit(state.copyWith(
-      folders: allFolders,
-    ));
+        // folders: allFolders,
+        childFolders: childFolders));
 
     eventBusUpdateFolder.fire(UpdateFolderEvent);
   }
@@ -56,7 +76,9 @@ class MoveCubit extends Cubit<MoveState> {
         sortedFolders.add(element);
       }
     });
+
     //emit(state.copyWith(folders: sortedFolders));
+
     return sortedFolders;
   }
 

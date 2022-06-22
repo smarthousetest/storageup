@@ -21,7 +21,7 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
       countGb: fields[1] as int,
       id: fields[2] as int,
       name: fields[3] == null ? '' : fields[3] as String,
-      idForCompare: fields[4] == null ? '' : fields[4] as String,
+      keeperId: fields[4] == null ? '' : fields[4] as String,
     );
   }
 
@@ -38,16 +38,12 @@ class DownloadLocationAdapter extends TypeAdapter<DownloadLocation> {
       ..writeByte(3)
       ..write(obj.name)
       ..writeByte(4)
-      ..write(obj.idForCompare);
+      ..write(obj.keeperId);
   }
 
   @override
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is DownloadLocationAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is DownloadLocationAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

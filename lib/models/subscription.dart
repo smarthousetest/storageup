@@ -24,14 +24,10 @@ class Subscription extends Equatable {
 
   factory Subscription.fromMap(Map<String, dynamic> data) => Subscription(
         id: data['_id'] as String?,
-        tariff: data['tariff'] == null
-            ? null
-            : Tariff.fromMap(data['tariff'] as Map<String, dynamic>),
+        tariff: data['tariff'] == null ? null : Tariff.fromMap(data['tariff'] as Map<String, dynamic>),
         expireAt: data['expireAt'] as String?,
         isPayd: data['isPayd'] as bool?,
-        payment: data['payment'] == null
-            ? null
-            : Payment.fromMap(data['payment'] as Map<String, dynamic>),
+        payment: data['payment'] == null ? null : Payment.fromMap(data['payment'] as Map<String, dynamic>),
         owner: data['owner'] as String?,
       );
 

@@ -35,17 +35,20 @@ class RecordAdapter extends TypeAdapter<Record> {
       isInProgress: fields[17] as bool,
       mimeType: fields[14] as String?,
       isDownloading: fields[20] as bool?,
+      accessDate: fields[13] as DateTime?,
     )..parentFolder = fields[16] as String?;
   }
 
   @override
   void write(BinaryWriter writer, Record obj) {
     writer
-      ..writeByte(19)
+      ..writeByte(20)
       ..writeByte(11)
       ..write(obj.path)
       ..writeByte(12)
       ..write(obj.thumbnail)
+      ..writeByte(13)
+      ..write(obj.accessDate)
       ..writeByte(14)
       ..write(obj.mimeType)
       ..writeByte(0)
@@ -86,9 +89,5 @@ class RecordAdapter extends TypeAdapter<Record> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is RecordAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+  bool operator ==(Object other) => identical(this, other) || other is RecordAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

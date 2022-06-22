@@ -13,12 +13,12 @@ import 'package:upstorage_desktop/pages/files/move_files/move_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
 class MoveFileView extends StatefulWidget {
-  final List<Folder>? folder;
+  final List<Folder>? folders;
 
   @override
   _MoveFileState createState() => new _MoveFileState();
   MoveFileView(
-    this.folder,
+    this.folders,
   );
 }
 
@@ -173,7 +173,8 @@ class _MoveFileState extends State<MoveFileView> {
                                         if (name != null) {
                                           await context
                                               .read<MoveCubit>()
-                                              .createFolder(name, moveToFolder);
+                                              .createFolder(name, moveToFolder,
+                                                  widget.folders);
                                         }
                                         setState(() {
                                           listFolder =
@@ -361,7 +362,7 @@ class _MoveFileState extends State<MoveFileView> {
           onTap: () async {
             await context
                 .read<MoveCubit>()
-                .getFolderById(folder, widget.folder);
+                .getFolderById(folder, widget.folders);
           },
           children: _getChildList(
             listFolder: state.childFolders[folder.id]?.reversed.toList() ?? [],
@@ -415,14 +416,17 @@ class _MoveFileState extends State<MoveFileView> {
                       height: 20,
                     ),
                   ),
-                  Text(
-                    folder?.parentFolder != 'root'
-                        ? folder?.name ?? 'name'
-                        : translate.all_files,
-                    style: TextStyle(
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 14,
-                      overflow: TextOverflow.ellipsis,
+                  Container(
+                    constraints: BoxConstraints(maxWidth: 120),
+                    child: Text(
+                      folder?.parentFolder != 'root'
+                          ? folder?.name ?? 'name'
+                          : translate.all_files,
+                      style: TextStyle(
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ],
