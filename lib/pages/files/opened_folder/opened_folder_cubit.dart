@@ -467,15 +467,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     try {
-      if (folders!.contains(currentFolder.id)) {
-        print('do not move the folder to the same folder');
-      } else {
-        await _filesController.moveToFolder(
-          folderId: currentFolder.id,
-          folders: folders,
-          records: records,
-        );
-      }
+      await _filesController.moveToFolder(
+        folderId: currentFolder.id,
+        folders: folders,
+        records: records,
+      );
       await update();
       emit(
         state.copyWith(

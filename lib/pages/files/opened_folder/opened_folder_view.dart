@@ -495,6 +495,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                       return FilesPopupMenuActions(
                                         theme: Theme.of(context),
                                         translate: translate,
+                                        object: obj,
                                         onTap: (action) async {
                                           _popupControllers[state.sortedFiles
                                                   .indexOf(obj)]
@@ -659,6 +660,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                               return FilesPopupMenuActions(
                                   theme: Theme.of(context),
                                   translate: translate,
+                                  object: obj,
                                   onTap: (action) async {
                                     _popupControllersGrouped[state.objects
                                             .indexWhere((element) =>
@@ -1003,6 +1005,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   return FilesPopupMenuActions(
                                       theme: Theme.of(context),
                                       translate: translate,
+                                      object: element,
                                       onTap: (action) async {
                                         _popupControllers[state.sortedFiles
                                                 .indexOf(element)]
@@ -1347,6 +1350,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         return FilesPopupMenuActions(
                           theme: Theme.of(context),
                           translate: translate,
+                          object: obj,
                           onTap: (action) async {
                             _popupControllersGrouped[state.objects.indexOf(obj)]
                                 .hideMenu();
@@ -1602,12 +1606,14 @@ class FilesPopupMenuActions extends StatefulWidget {
       {required this.theme,
       required this.translate,
       required this.onTap,
+      required this.object,
       Key? key})
       : super(key: key);
 
   final ThemeData theme;
   final S translate;
   final Function(FileAction) onTap;
+  final BaseObject object;
 
   @override
   _FilesPopupMenuActionsState createState() => _FilesPopupMenuActionsState();
