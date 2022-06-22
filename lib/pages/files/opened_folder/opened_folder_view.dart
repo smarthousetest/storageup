@@ -24,7 +24,8 @@ import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({
@@ -57,7 +58,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   Timer? timerForOpenFile;
   int _startTimer = 1;
   var _indexObject = -1;
-  bool _isOpen = false;
   bool youSeePopUp = false;
 
   void _initiatingControllers(OpenedFolderState state) {
@@ -77,7 +77,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   }
 
   void startTimer() {
-    _isOpen = true;
     const oneSec = const Duration(seconds: 1);
     if (timerForOpenFile != null) {
       timerForOpenFile?.cancel();
@@ -91,7 +90,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             timer.cancel();
             _startTimer = 1;
             _indexObject = -1;
-            _isOpen = false;
           });
         } else {
           setState(() {
@@ -112,23 +110,28 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         ),
       child: BlocListener<OpenedFolderCubit, OpenedFolderState>(
         listener: (context, state) async {
-          if (youSeePopUp == false) {
+          if (StateContainer.of(context).isPopUpShowing == false) {
             if (state.status == FormzStatus.submissionFailure) {
-              youSeePopUp = true;
+              // youSeePopUp = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
               youSeePopUp = await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurSomethingGoesWrong(youSeePopUp);
                 },
               );
+
+              StateContainer.of(context).changeIsPopUpShowing(false);
             } else if (state.status == FormzStatus.submissionCanceled) {
-              youSeePopUp = true;
+              // youSeePopUp = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
               youSeePopUp = await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurFailedServerConnection(youSeePopUp);
                 },
               );
+              StateContainer.of(context).changeIsPopUpShowing(false);
             }
           }
         },

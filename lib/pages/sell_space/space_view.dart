@@ -13,7 +13,7 @@ import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 class SpaceSellPage extends StatefulWidget {
   static const route = "sell_space_page";
@@ -89,7 +89,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         create: (context) => SpaceBloc()
           ..add(SpacePageOpened())
           ..add(SendKeeperVersion()),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Padding(
             padding: const EdgeInsets.only(
               left: 30,
@@ -124,7 +125,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 child: Container(
                                   width: 20,
                                   height: 20,
-                                  child: SvgPicture.asset("assets/file_page/search.svg"),
+                                  child: SvgPicture.asset(
+                                      "assets/file_page/search.svg"),
                                 ),
                               ),
                             ),
@@ -134,7 +136,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    StateContainer.of(context).changePage(ChosenPage.file);
+                                    StateContainer.of(context)
+                                        .changePage(ChosenPage.file);
                                   },
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
@@ -143,7 +146,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                         translate.search,
                                         style: TextStyle(
                                           fontSize: 16.0,
-                                          color: Theme.of(context).disabledColor,
+                                          color:
+                                              Theme.of(context).disabledColor,
                                         ),
                                       ),
                                     ),
@@ -157,7 +161,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     ),
                   ),
                   Container(
-                    child: BlocBuilder<SpaceBloc, SpaceState>(builder: (context, state) {
+                    child: BlocBuilder<SpaceBloc, SpaceState>(
+                        builder: (context, state) {
                       return state.valueNotifier != null
                           ? ValueListenableBuilder<User?>(
                               valueListenable: state.valueNotifier!,
@@ -171,40 +176,54 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       ),
                                       child: GestureDetector(
                                         onTap: () {
-                                          StateContainer.of(context).changePage(ChosenPage.settings);
+                                          StateContainer.of(context)
+                                              .changePage(ChosenPage.settings);
                                         },
                                         child: MouseRegion(
                                           cursor: SystemMouseCursors.click,
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(23.0),
-                                            child: Container(child: value.image),
+                                            borderRadius:
+                                                BorderRadius.circular(23.0),
+                                            child:
+                                                Container(child: value.image),
                                           ),
                                         ),
                                       ),
                                     ),
                                     (MediaQuery.of(context).size.width > 965)
                                         ? Container(
-                                            constraints: BoxConstraints(maxWidth: 110),
+                                            constraints:
+                                                BoxConstraints(maxWidth: 110),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 5),
                                                   child: Text(
-                                                    value?.firstName ?? value?.email?.split('@').first ?? 'Name',
-                                                    overflow: TextOverflow.ellipsis,
+                                                    value?.firstName ??
+                                                        value?.email
+                                                            ?.split('@')
+                                                            .first ??
+                                                        'Name',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontSize: 17,
-                                                      color: Theme.of(context).bottomAppBarColor,
+                                                      color: Theme.of(context)
+                                                          .bottomAppBarColor,
                                                     ),
                                                   ),
                                                 ),
                                                 Text(
                                                   value?.email ?? '',
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Theme.of(context).bottomAppBarColor,
+                                                    color: Theme.of(context)
+                                                        .bottomAppBarColor,
                                                     height: 1,
                                                   ),
                                                 ),

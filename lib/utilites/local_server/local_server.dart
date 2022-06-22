@@ -21,7 +21,8 @@ class Server {
   late File localUiServerConfigFile;
 
   Server() {
-    localUiServerConfigFile = File("${_os.supportDir}${Platform.pathSeparator}localUiServerConfigFile");
+    localUiServerConfigFile = File(
+        "${_os.supportDir}${Platform.pathSeparator}localUiServerConfigFile");
     if (!localUiServerConfigFile.existsSync()) {
       localUiServerConfigFile.createSync(recursive: true);
     }
@@ -37,7 +38,8 @@ class Server {
     for (int port = START_UI_PORT; port < END_UI_PORT; port++) {
       try {
         final server = await serve(_handler, ip, port);
-        _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+        _repository =
+            await GetIt.instance.getAsync<DownloadLocationsRepository>();
         localUiServerConfigFile.writeAsStringSync(
           json.encode({
             "port": port,
