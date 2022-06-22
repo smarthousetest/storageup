@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,6 +53,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         print('Hive initialized');
       });
       var remoteAppVersion = await _filesService.getRemoteAppVersion();
+      Timer(
+        Duration(minutes: 5),
+        () async {
+          String? localAppVersion = _getLocalAppVersion();
+          var remoteAppVersion = await _filesService.getRemoteAppVersion();
+          emit(state.copyWith(
+            upToDateVersion: remoteAppVersion,
+            version: localAppVersion,
+          ));
+        },
+      );
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
       var recentsFile = await _filesService.getRecentsRecords();
