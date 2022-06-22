@@ -10,7 +10,7 @@ import 'package:os_specification/os_specification.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/components/expanded_section.dart';
-import 'package:upstorage_desktop/components/regitration_success.dart';
+import 'package:upstorage_desktop/components/registration_success.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/auth_event.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_view.dart';
@@ -1199,7 +1199,7 @@ class _AuthViewState extends State<AuthView> {
 
   Widget _registrationSuccess(
       ThemeData theme, BuildContext context, AuthState state) {
-    return RegitrationSuccess(
+    return RegistrationSuccess(
         theme: theme, state: state, changePage: _changePage);
   }
 

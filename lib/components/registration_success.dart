@@ -9,8 +9,8 @@ import 'package:upstorage_desktop/pages/auth/auth_event.dart';
 import 'package:upstorage_desktop/pages/auth/auth_state.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
-class RegitrationSuccess extends StatefulWidget {
-  RegitrationSuccess({
+class RegistrationSuccess extends StatefulWidget {
+  RegistrationSuccess({
     Key? key,
     required this.theme,
     required this.state,
@@ -22,10 +22,12 @@ class RegitrationSuccess extends StatefulWidget {
   final VoidCallback changePage;
 
   @override
-  State<RegitrationSuccess> createState() => _RegitrationSuccessState();
+  State<RegistrationSuccess> createState() => _RegistrationSuccessState();
 }
 
-class _RegitrationSuccessState extends State<RegitrationSuccess> {
+class _RegistrationSuccessState extends State<RegistrationSuccess> {
+  static const delayBetweenSendingEmails = Duration(seconds: 30);
+
   S translate = getIt<S>();
 
   DateTime? lastSubmittedTime;
@@ -38,7 +40,7 @@ class _RegitrationSuccessState extends State<RegitrationSuccess> {
       return Duration(seconds: 0);
     }
 
-    return Duration(seconds: 30) - nowDateTime.difference(submittedTime);
+    return delayBetweenSendingEmails - nowDateTime.difference(submittedTime);
   }
 
   bool isEmailResendAvailable(DateTime nowDateTime) {

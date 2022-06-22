@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
@@ -18,12 +17,14 @@ import 'forgot_password_state.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   ForgotPasswordView({Key? key}) : super(key: key);
-  
+
   @override
   _ForgotPasswordViewState createState() => _ForgotPasswordViewState();
 }
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
+  static const delayBetweenSendingEmails = Duration(seconds: 30);
+
   S translate = getIt<S>();
 
   DateTime? lastSubmittedTime;
@@ -36,7 +37,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       return Duration(seconds: 0);
     }
 
-    return Duration(seconds: 30) - nowDateTime.difference(submittedTime);
+    return delayBetweenSendingEmails - nowDateTime.difference(submittedTime);
   }
 
   bool isEmailResendAvailable(DateTime nowDateTime) {
@@ -184,7 +185,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     );
   }
 
-final node = FocusNode();
+  final node = FocusNode();
 
   List<Widget> _body(ThemeData theme, ForgotPasswordState state) {
     if (state.status != FormzStatus.submissionSuccess)
@@ -219,12 +220,20 @@ final node = FocusNode();
             autofocus: true,
             hint: translate.email,
             onChange: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
+              context.read<ForgotPasswordBloc>().add(
+                    ForgotPasswordEmailChanged(
+                      email: email,
+                      needValidation: true,
+                    ),
+                  );
             },
             onFinishEditing: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
+              context.read<ForgotPasswordBloc>().add(
+                    ForgotPasswordEmailChanged(
+                      email: email,
+                      needValidation: true,
+                    ),
+                  );
             },
             invalid: state.email.invalid && state.email.value.isNotEmpty ||
                 state.error == AuthError.wrongCredentials,
