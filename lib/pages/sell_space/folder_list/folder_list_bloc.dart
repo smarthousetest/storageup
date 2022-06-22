@@ -107,7 +107,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
 
   void _listener() {
     final info = _repository.locationsInfo;
-
     if (!isClosed) {
       add(UpdateLocationsList(locations: info));
     }

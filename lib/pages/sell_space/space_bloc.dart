@@ -99,7 +99,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     var os = OsSpecifications.getOs();
     _writeKeeperId(
-      '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt',
+      '${state.pathToKeeper}${Platform.pathSeparator}keeper_id.txt',
       keeperId,
     );
     var bearerToken = await TokenRepository().getApiToken();
@@ -116,7 +116,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
+    var keeperNameFile = File('${state.pathToKeeper}${Platform.pathSeparator}keeperName');
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -124,7 +124,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File('${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile = File('${state.pathToKeeper}${Platform.pathSeparator}memorySize');
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
@@ -145,7 +145,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     Emitter<SpaceState> emit,
   ) async {
     var countOfGb = event.countGb;
-    var path = event.pathDir;
+    var path = state.pathToKeeper;
 
     var id =
         await _subscriptionService.addNewKeeper(state.name.value, countOfGb);

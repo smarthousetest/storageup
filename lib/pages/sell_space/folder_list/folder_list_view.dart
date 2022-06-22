@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,16 +62,19 @@ class _ButtonTemplateState extends State<FolderList> {
         builder: (context, state) {
           _initiatingControllers(state);
           locationsInfo = state.localKeepers;
-          return Column(
-            children: [
-              state.localKeepers.isNotEmpty ? _thisKeeper(context, state) : Container(),
-              state.serverKeepers.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: _otherKeeper(context, state),
-                    )
-                  : Container(),
-            ],
+          return SingleChildScrollView(
+            controller: ScrollController(),
+            child: Column(
+              children: [
+                state.localKeepers.isNotEmpty ? _thisKeeper(context, state) : Container(),
+                state.serverKeepers.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: _otherKeeper(context, state),
+                      )
+                    : Container(),
+              ],
+            ),
           );
         },
       ),
@@ -359,9 +360,7 @@ class _ButtonTemplateState extends State<FolderList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  usedSpace != null
-                      ? fileSize(usedSpace, translate, 0)
-                      : "null",
+                  usedSpace != null ? fileSize(usedSpace, translate, 0) : "null",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -392,8 +391,6 @@ class _ButtonTemplateState extends State<FolderList> {
     BuildContext context,
     Keeper keeper,
   ) {
-    late AnimationController controller;
-
     return Container(
       width: 167,
       padding: const EdgeInsets.only(left: 45.0, top: 15),
