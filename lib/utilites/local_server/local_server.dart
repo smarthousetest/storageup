@@ -23,7 +23,7 @@ class Server {
   Server() {
     localUiServerConfigFile = File("${_os.supportDir}${Platform.pathSeparator}localUiServerConfigFile");
     if (!localUiServerConfigFile.existsSync()) {
-      localUiServerConfigFile.createSync();
+      localUiServerConfigFile.createSync(recursive: true);
     }
 
     Hive.init(_os.supportDir);

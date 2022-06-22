@@ -271,9 +271,11 @@ class _ButtonTemplateState extends State<FolderList> {
     }
 
     return Container(
-      width: 140,
+      width: 143,
       padding: const EdgeInsets.only(left: 20.0, top: 10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Stack(
             children: [
@@ -352,12 +354,14 @@ class _ButtonTemplateState extends State<FolderList> {
             height: 5,
           ),
           Container(
-            constraints: BoxConstraints(maxWidth: 170),
+            constraints: BoxConstraints(maxWidth: 180),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  usedSpace != null ? fileSize(usedSpace, translate) : "null",
+                  usedSpace != null
+                      ? fileSize(usedSpace, translate, 0)
+                      : "null",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -367,7 +371,7 @@ class _ButtonTemplateState extends State<FolderList> {
                   ),
                 ),
                 Text(
-                  " из ${fileSize(keeperAllSpace, translate)}",
+                  " из ${fileSize(keeperAllSpace, translate, 0)}",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   _MyAppState() : _locale = Locale(Intl.systemLocale) {
     hasCurrentLocale().then((value) {
       getLocale().then(
-        (loc) => setLocale(loc),
+            (loc) => setLocale(loc),
       );
     });
   }
@@ -131,8 +131,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        // etc.
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    // etc.
+  };
 }

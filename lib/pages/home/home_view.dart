@@ -182,7 +182,11 @@ class _HomePageState extends State<HomePage> {
                         child: ListView(
                           shrinkWrap: true,
                           controller: ScrollController(),
-                          children: [..._customMenuItem(), ..._leftButtonsItem()],
+                          children: [
+                            _downloadButton(context),
+                            ..._customMenuItem(),
+                            ..._leftButtonsItem()
+                          ],
                         ),
                       ),
                       _logout(),
@@ -270,6 +274,85 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  Widget _downloadButton(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        if (!isEventBusInited) {
+          isEventBusInited = true;
+          eventBusForUpload.on().listen((event) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurMenuUpload();
+              },
+            ).then((result) {
+              if (result is AddMenuResult) {
+                _processUserAction(context, result);
+              }
+            });
+          });
+        }
+
+        return Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30, bottom: 30),
+          child: Container(
+            height: 42,
+            width: 214,
+            child: ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurMenuUpload();
+                  },
+                ).then((result) {
+                  if (result is AddMenuResult) {
+                    _processUserAction(context, result);
+                  }
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).splashColor,
+                side: BorderSide(
+                  style: BorderStyle.solid,
+                  color: Theme.of(context).splashColor,
+                  width: 1.5,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Image.asset(
+                      'assets/file_page/plus.png',
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3.0),
+                    child: Text(
+                      translate.download,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 17,
+                        fontFamily: kNormalTextFontFamily,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   List<Widget> _leftButtonsItem() {
     return [
       Padding(
@@ -284,79 +367,6 @@ class _HomePageState extends State<HomePage> {
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
         return state.objectsValueListenable != null && state.objectsValueListenable!.value.values.isNotEmpty ? latestFile(context) : Container();
       }),
-      BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if (!isEventBusInited) {
-            isEventBusInited = true;
-            eventBusForUpload.on().listen((event) {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurMenuUpload();
-                },
-              ).then((result) {
-                if (result is AddMenuResult) {
-                  _processUserAction(context, result);
-                }
-              });
-            });
-          }
-
-          return Padding(
-            padding: const EdgeInsets.only(
-              top: 30,
-              left: 30,
-              right: 30,
-            ),
-            child: Container(
-              height: 42,
-              width: 214,
-              child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return BlurMenuUpload();
-                    },
-                  ).then((result) {
-                    if (result is AddMenuResult) {
-                      _processUserAction(context, result);
-                    }
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  side: BorderSide(
-                    style: BorderStyle.solid,
-                    color: Theme.of(context).splashColor,
-                    width: 1.5,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      translate.add,
-                      style: TextStyle(
-                        color: Theme.of(context).splashColor,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Image.asset('assets/file_page/plus.png'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
     ];
   }
 
@@ -527,13 +537,10 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          var page = StateContainer.of(context).choosedPage;
-
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
-                choosedPage: page,
               ));
         }
         break;
@@ -550,13 +557,11 @@ class _HomePageState extends State<HomePage> {
           // );
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
-          var page = StateContainer.of(context).choosedPage;
 
           context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
-                choosedPage: page,
               ));
         }
         break;
