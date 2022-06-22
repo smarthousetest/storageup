@@ -2326,6 +2326,26 @@ class S {
     );
   }
 
+  /// `Resend letter will be available in`
+  String get resend_letter_available {
+    return Intl.message(
+      'Resend letter will be available in',
+      name: 'resend_letter_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} seconds`
+  String seconds(Object count) {
+    return Intl.message(
+      '$count seconds',
+      name: 'seconds',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Never`
   String get never {
     return Intl.message(

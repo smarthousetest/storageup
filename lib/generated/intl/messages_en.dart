@@ -45,9 +45,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(count) => "${count} Pb";
 
-  static String m11(count) => "${count} \$/mounth";
+  static String m11(count) => "${count} seconds";
 
-  static String m12(count) => "${count} Tb";
+  static String m12(count) => "${count} \$/mounth";
+
+  static String m13(count) => "${count} Tb";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -292,6 +294,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "You can use free space on your hard"),
         "repeat_password":
             MessageLookupByLibrary.simpleMessage("Repeat new password"),
+        "resend_letter_available": MessageLookupByLibrary.simpleMessage(
+            "Resend letter will be available in"),
         "restart_keeper":
             MessageLookupByLibrary.simpleMessage("You need to restart keeper"),
         "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
@@ -301,6 +305,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Russian"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
+        "seconds": m11,
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Select the folder on the drive where you have free space."),
@@ -325,8 +330,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m11,
-        "tb": m12,
+        "subscription_pay_mounth": m12,
+        "tb": m13,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),

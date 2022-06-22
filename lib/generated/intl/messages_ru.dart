@@ -44,9 +44,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(count) => "${count} Пб";
 
-  static String m11(count) => "${count} ₽/месяц";
+  static String m11(count) =>
+      "${Intl.plural(count, zero: '0 секунд', one: '${count} секунду', two: '${count} секунды', few: '${count} секунды', many: '${count} секунд', other: '${count} секунд')}";
 
-  static String m12(count) => "${count} Тб";
+  static String m12(count) => "${count} ₽/месяц";
+
+  static String m13(count) => "${count} Тб";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -294,6 +297,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Вы можете использовать свободное место на вашем жестком"),
         "repeat_password":
             MessageLookupByLibrary.simpleMessage("Повторите новый пароль"),
+        "resend_letter_available": MessageLookupByLibrary.simpleMessage(
+            "Повторная отправка письма будет доступна через"),
         "restart_keeper": MessageLookupByLibrary.simpleMessage(
             "Необходимо перезапустить кипер"),
         "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
@@ -303,6 +308,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Русский"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
+        "seconds": m11,
         "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Выберите папку на диске, где у вас есть свободное пространство."),
@@ -328,8 +334,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
-        "subscription_pay_mounth": m11,
-        "tb": m12,
+        "subscription_pay_mounth": m12,
+        "tb": m13,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(
