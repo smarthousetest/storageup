@@ -414,15 +414,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     try {
-      if (folders!.contains(currentFolder.id)) {
-        print('do not move the folder to the same folder');
-      } else {
-        await _filesController.moveToFolder(
-          folderId: currentFolder.id,
-          folders: folders,
-          records: records,
-        );
-      }
+      await _filesController.moveToFolder(
+        folderId: currentFolder.id,
+        folders: folders,
+        records: records,
+      );
       await update();
       emit(
         state.copyWith(
@@ -763,11 +759,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   void _downloadFile(String recordId, String? path) async {
     _loadController.downloadFile(fileId: recordId, path: path);
-    _registerDownloadObserver(recordId,);
+    _registerDownloadObserver(
+      recordId,
+    );
     _setRecordDownloading(recordId: recordId);
   }
 
-  void _registerDownloadObserver(String recordId,) async {
+  void _registerDownloadObserver(
+    String recordId,
+  ) async {
     var box = await Hive.openBox(kPathDBName);
     var controllerState = _loadController.getState;
     var downloadObserver = DownloadObserver(recordId, (value) async {
@@ -785,9 +785,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             _unregisterDownloadObserver(recordId);
           } else if (file.localPath.isNotEmpty) {
             String path = file.localPath
-                  .split('/')
-                  .skipWhile((value) => value != 'downloads')
-                  .join('/');
+                .split('/')
+                .skipWhile((value) => value != 'downloads')
+                .join('/');
 
             await box.put(file.id, path);
 
