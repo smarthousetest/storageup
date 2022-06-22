@@ -585,7 +585,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(state.copyWith(
       albums: albums,
       currentFolder: currentFolder,
-      currentFolderRecords: currentFolder.records,
+      currentFolderRecords: currentFolder.records?.reversed.toList(),
       status: FormzStatus.pure,
     ));
   }
@@ -594,7 +594,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(
       state.copyWith(
         currentFolder: newFolder,
-        currentFolderRecords: newFolder.records,
+        currentFolderRecords: newFolder.records?.reversed.toList(),
         status: FormzStatus.pure,
       ),
     );
