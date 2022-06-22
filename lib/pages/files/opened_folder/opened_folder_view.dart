@@ -166,10 +166,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                // Image.asset(
-                                //   'assets/file_page/file_options/move.png',
-                                //   height: 20,
-                                // ),
                                 SvgPicture.asset(
                                   'assets/options/folder.svg',
                                   height: 20,
@@ -276,11 +272,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         padding: const EdgeInsets.only(top: 0.0),
                         child: Text(
                           translate.update,
+                          textAlign: TextAlign.center,
                           maxLines: 1,
                           style: TextStyle(
                             color: Theme.of(context).splashColor,
                             fontFamily: kNormalTextFontFamily,
-                            height: 24,
+                            height: 1.5,
                             fontSize: 16,
                           ),
                         ),
@@ -1490,26 +1487,26 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               .onRecordActionChoosed(action, object);
         }
         break;
-      // case FileAction.move:
-      //   var result = await showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return MoveFileView(
-      //         object is Folder ? [object] : null,
-      //       );
-      //     },
-      //   );
-      //   if (result != null) {
-      //     List<BaseObject> objects = [];
-      //     objects.add(object);
+      case FileAction.move:
+        var result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MoveFileView(
+              object is Folder ? [object] : null,
+            );
+          },
+        );
+        if (result != null) {
+          List<BaseObject> objects = [];
+          objects.add(object);
 
-      //     context.read<OpenedFolderCubit>().onActionMoveFiles(objects, result);
-      //   }
-      //   break;
-      // case FileAction.save:
-      //   context.read<OpenedFolderCubit>().fileSave(object as Record);
-      //   print('save objects');
-      //   break;
+          context.read<OpenedFolderCubit>().onActionMoveFiles(objects, result);
+        }
+        break;
+      case FileAction.save:
+        context.read<OpenedFolderCubit>().fileSave(object as Record);
+        print('save objects');
+        break;
       default:
     }
   }
@@ -1699,93 +1696,9 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                 //   color: mainColor,
                 //   height: 1,
                 // ),
-                // GestureDetector(
-                //   onTap: () {
-                //     widget.onTap(FileAction.move);
-                //   },
-                //   child: MouseRegion(
-                //     onEnter: (event) {
-                //       setState(() {
-                //         ind = 0;
-                //       });
-                //     },
-                //     child: Container(
-                //       width: 190,
-                //       height: 40,
-                //       color: ind == 0 ? mainColor : null,
-                //       padding: EdgeInsets.symmetric(horizontal: 15),
-                //       child: Row(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           // Image.asset(
-                //           //   'assets/file_page/file_options/move.png',
-                //           //   height: 20,
-                //           // ),
-                //           SvgPicture.asset(
-                //             'assets/options/folder.svg',
-                //             height: 20,
-                //           ),
-                //           Container(
-                //             width: 15,
-                //           ),
-                //           Text(
-                //             widget.translate.move,
-                //             style: style,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Divider(
-                //   color: mainColor,
-                //   height: 1,
-                // ),
-                // GestureDetector(
-                //   onTap: () {
-                //     widget.onTap(FileAction.save);
-                //   },
-                //   child: MouseRegion(
-                //     onEnter: (event) {
-                //       setState(() {
-                //         ind = 1;
-                //       });
-                //     },
-                //     child: Container(
-                //       width: 190,
-                //       height: 40,
-                //       color: ind == 1 ? mainColor : null,
-                //       padding: EdgeInsets.symmetric(horizontal: 15),
-                //       child: Row(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           // Image.asset(
-                //           //   'assets/file_page/file_options/download.png',
-                //           //   height: 20,
-                //           // ),
-                //           SvgPicture.asset(
-                //             'assets/options/download.svg',
-                //             height: 20,
-                //           ),
-                //           Container(
-                //             width: 15,
-                //           ),
-                //           Text(
-                //             widget.translate.down,
-                //             style: style,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Divider(
-                //   color: mainColor,
-                //   height: 1,
-                // ),
                 GestureDetector(
                   onTap: () {
-                    widget.onTap(FileAction.rename);
+                    widget.onTap(FileAction.move);
                   },
                   child: MouseRegion(
                     onEnter: (event) {
@@ -1797,6 +1710,90 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                       width: 190,
                       height: 40,
                       color: ind == 0 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/move.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/folder.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.move,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.save);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 1;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 1 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/download.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/download.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.down,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.rename);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 2;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 2 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       margin: EdgeInsets.zero,
                       child: Row(
@@ -1829,13 +1826,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 1;
+                        ind = 3;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1 ? mainColor : null,
+                      color: ind == 3 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       margin: EdgeInsets.zero,
                       child: Row(
@@ -1872,13 +1869,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 2;
+                        ind = 4;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 2
+                      color: ind == 4
                           ? widget.theme.indicatorColor.withOpacity(0.1)
                           : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
