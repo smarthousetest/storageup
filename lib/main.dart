@@ -120,7 +120,7 @@ void readFromFileDomainName() {
   if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
-  var domainNameFile = File('${os.appDirPath}domainName');
+  var domainNameFile = File('${os.appDirPath}${Platform.pathSeparator}domainName');
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
   } else {
