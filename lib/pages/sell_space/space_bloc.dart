@@ -155,7 +155,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           path: path,
           name: state.name.value,
           idForCompare: id);
-      var locationsInfo = _repository.getlocationsInfo;
+      var locationsInfo = _repository.locationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
       var box = await Hive.openBox('keeper_data');
