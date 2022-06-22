@@ -15,9 +15,6 @@ class TermOfUseBlur extends StatefulWidget {
 class _ButtonTemplateState extends State<TermOfUseBlur> {
   S translate = getIt<S>();
   var myController = TextEditingController();
-  bool canSave = false;
-  bool hintColor = false;
-  bool hintSymbvols = true;
 
   @override
   void initState() {
@@ -32,13 +29,18 @@ class _ButtonTemplateState extends State<TermOfUseBlur> {
       child: Stack(
         children: [
           Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: 5,
-                sigmaY: 5,
-              ),
-              child: Container(
-                color: Colors.black.withAlpha(25),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 5,
+                  sigmaY: 5,
+                ),
+                child: Container(
+                  color: Colors.black.withAlpha(25),
+                ),
               ),
             ),
           ),
