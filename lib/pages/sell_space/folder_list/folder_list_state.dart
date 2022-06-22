@@ -6,19 +6,19 @@ import 'package:upstorage_desktop/models/user.dart';
 class FolderListState extends Equatable {
   final User? user;
   final List<DownloadLocation> locationsInfo;
-  final List<Keeper>? keeper;
-  final List<Keeper> localKeeper;
-  final List<Keeper> serverKeeper;
-  final List<String> localPath;
+  final List<Keeper>? keepers;
+  final List<Keeper> localKeepers;
+  final List<Keeper> serverKeepers;
+  final List<String> localPaths;
   final bool sleepStatus;
 
   FolderListState({
     this.user,
     this.locationsInfo = const [],
-    this.keeper,
-    this.localKeeper = const [],
-    this.serverKeeper = const [],
-    this.localPath = const [],
+    this.keepers,
+    this.localKeepers = const [],
+    this.serverKeepers = const [],
+    this.localPaths = const [],
     this.sleepStatus = true,
   });
 
@@ -34,10 +34,10 @@ class FolderListState extends Equatable {
     return FolderListState(
       user: user ?? this.user,
       locationsInfo: locationsInfo ?? this.locationsInfo,
-      keeper: keeper ?? this.keeper,
-      localKeeper: localKeeper ?? this.localKeeper,
-      serverKeeper: serverKeeper ?? this.serverKeeper,
-      localPath: localPath ?? this.localPath,
+      keepers: keeper ?? this.keepers,
+      localKeepers: localKeeper ?? this.localKeepers,
+      serverKeepers: serverKeeper ?? this.serverKeepers,
+      localPaths: localPath ?? this.localPaths,
       sleepStatus: sleepStatus ?? this.sleepStatus,
     );
   }
@@ -46,10 +46,10 @@ class FolderListState extends Equatable {
   List<Object?> get props => [
         user,
         locationsInfo,
-        keeper,
-        localKeeper,
-        serverKeeper,
-        localPath,
+        keepers,
+        localKeepers,
+        serverKeepers,
+        localPaths,
         sleepStatus,
       ];
 }

@@ -3,18 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list.dart';
+import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_view.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 class SpaceSellPage extends StatefulWidget {
   static const route = "sell_space_page";
@@ -264,24 +263,25 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     children: [
                       Padding(
                         padding:
-                            const EdgeInsets.only(left: 40, right: 40, top: 20),
+                        const EdgeInsets.only(left: 40, right: 40, top: 20),
                         child: _title(context, state),
                       ),
                       BlocBuilder<SpaceBloc, SpaceState>(
                         builder: (context, state) {
+                          var fl = folderList(context);
                           return Expanded(
                               child: IndexedStack(
-                            sizing: StackFit.passthrough,
-                            key: ValueKey<int>(index),
-                            index: index,
-                            children: [
-                              state.keeper.isEmpty
-                                  ? rentingAPlace(context)
-                                  : folderList(context),
-                              addSpace(context),
-                              folderList(context)
-                            ],
-                          ));
+                                sizing: StackFit.passthrough,
+                                key: ValueKey<int>(index),
+                                index: index,
+                                children: [
+                                  state.keeper.isEmpty
+                                      ? rentingAPlace(context)
+                                      : fl,
+                                  addSpace(context),
+                                  fl
+                                ],
+                              ));
                         },
                       ),
                     ],

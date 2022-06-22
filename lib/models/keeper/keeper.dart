@@ -4,9 +4,9 @@ import 'package:equatable/equatable.dart';
 
 class Keeper extends Equatable {
   final String? id;
-
   final String? name;
   final int? online;
+  final bool? isRebooting;
   final int? rating;
   final int? space;
   final int? availableSpace;
@@ -18,6 +18,7 @@ class Keeper extends Equatable {
     this.id,
     this.name,
     this.online,
+    this.isRebooting = false,
     this.rating,
     this.space,
     this.availableSpace,
@@ -64,6 +65,7 @@ class Keeper extends Equatable {
     String? id,
     String? name,
     int? online,
+    bool? isRebooting,
     int? rating,
     int? space,
     int? availableSpace,
@@ -75,6 +77,7 @@ class Keeper extends Equatable {
       id: id ?? this.id,
       name: name ?? this.name,
       online: online ?? this.online,
+      isRebooting: isRebooting ?? this.isRebooting,
       rating: rating ?? this.rating,
       space: space ?? this.space,
       availableSpace: availableSpace ?? this.availableSpace,
@@ -96,6 +99,13 @@ class Keeper extends Equatable {
       dirPath,
       sleepStatus,
       usedSpace,
+      isRebooting,
     ];
+  }
+
+  @override
+  String toString() {
+    return 'Keeper{id: $id, name: $name, online: $online, isRebooting: $isRebooting, rating: $rating, space: $space,'
+        ' availableSpace: $availableSpace, dirPath: $dirPath, sleepStatus: $sleepStatus, usedSpace: $usedSpace}';
   }
 }

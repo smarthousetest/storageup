@@ -49,7 +49,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           previousFolders: [],
         ));
 
-  var _filesController = getIt<FilesController>(instanceName: 'files_controller');
+  var _filesController =
+      getIt<FilesController>(instanceName: 'files_controller');
   var _loadController = getIt<LoadController>();
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
@@ -65,26 +66,38 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     try {
       if (e is List<UploadFileInfo>) {
         final uploadingFilesList = e;
-        if (uploadingFilesList.any((file) => file.isInProgress && file.uploadPercent == 0 && file.id.isNotEmpty)) {
-          final file = uploadingFilesList.firstWhere((file) => file.isInProgress && file.uploadPercent == 0);
+        if (uploadingFilesList.any((file) =>
+            file.isInProgress &&
+            file.uploadPercent == 0 &&
+            file.id.isNotEmpty)) {
+          final file = uploadingFilesList.firstWhere(
+              (file) => file.isInProgress && file.uploadPercent == 0);
 
           update(uploadingFileId: file.id);
         }
       } else if (e is List<DownloadFileInfo>) {
         final downloadingFilesList = e;
-        if (downloadingFilesList.any((file) => file.isInProgress && file.downloadPercent == -1)) {
-          final file = downloadingFilesList.firstWhere((file) => file.isInProgress && file.downloadPercent == -1);
+        if (downloadingFilesList
+            .any((file) => file.isInProgress && file.downloadPercent == -1)) {
+          final file = downloadingFilesList.firstWhere(
+              (file) => file.isInProgress && file.downloadPercent == -1);
           _setRecordDownloading(recordId: file.id);
         }
         if (downloadingFilesList.any((file) =>
-            file.endedWithException == true &&
-            file.errorReason == ErrorReason.noInternetConnection &&
-            file.downloadPercent == -1 &&
-            file.isInProgress == false &&
-            file.id == idTappedFile)) {
+                file.endedWithException == true &&
+                file.errorReason == ErrorReason.noInternetConnection &&
+                file.downloadPercent == -1 &&
+                file.isInProgress == false
+            // &&file.id == idTappedFile
+            )) {
           emit(state.copyWith(status: FormzStatus.submissionCanceled));
           emit(state.copyWith(status: FormzStatus.pure));
-        } else if (downloadingFilesList.any((file) => file.endedWithException == true && file.downloadPercent == -1 && file.isInProgress == false && file.id == idTappedFile)) {
+        } else if (downloadingFilesList.any((file) =>
+                file.endedWithException == true &&
+                file.downloadPercent == -1 &&
+                file.isInProgress == false
+            //  && file.id == idTappedFile
+            )) {
           emit(state.copyWith(status: FormzStatus.submissionFailure));
           emit(state.copyWith(status: FormzStatus.pure));
         }
@@ -114,7 +127,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       currentFolder = await _filesController.getFolderById(folder.id);
     }
-    var objects = await _filesController.getContentFromFolderById(currentFolder!.id);
+    var objects =
+        await _filesController.getContentFromFolderById(currentFolder!.id);
 
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       update();
@@ -148,10 +162,16 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var textLoverCase = sortText.toLowerCase();
 
     allFiles.forEach((element) {
-      var containsDate = DateFormat.yMd(Intl.getCurrentLocale()).format(element.createdAt!).toString().toLowerCase().contains(textLoverCase);
+      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
+          .format(element.createdAt!)
+          .toString()
+          .toLowerCase()
+          .contains(textLoverCase);
       if ((element.createdAt != null && containsDate) ||
-          (element.name != null && element.name!.toLowerCase().contains(textLoverCase)) ||
-          (element.extension != null && element.extension!.toLowerCase().contains(textLoverCase))) {
+          (element.name != null &&
+              element.name!.toLowerCase().contains(textLoverCase)) ||
+          (element.extension != null &&
+              element.extension!.toLowerCase().contains(textLoverCase))) {
         sortedFiles.add(element);
       }
     });
@@ -259,12 +279,14 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             //     groupedFiles, (a, b) => a.compareTo(b))
             //groupedFiles.keys.toList()..sort()
             // LinkedHashMap.fromEntries(groupedFiles.entries.toList().reversed)
-            groupedFiles.map((key, value) => MapEntry(key, value.reversed.toList())),
+            groupedFiles
+                .map((key, value) => MapEntry(key, value.reversed.toList())),
       ));
     }
   }
 
-  Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction, SortingCriterion criterion) async {
+  Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction,
+      SortingCriterion criterion) async {
     List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
     sortedFiles.sort((a, b) {
       // if (a.size != null && b.size != null) {
@@ -288,7 +310,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> _sortByName(OpenedFolderState state, SortingDirection direction, SortingCriterion criterion) async {
+  Future<void> _sortByName(OpenedFolderState state, SortingDirection direction,
+      SortingCriterion criterion) async {
     List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
     sortedFiles.sort((a, b) {
       if (a.name != null && b.name != null) {
@@ -430,7 +453,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChoosedFolder(BaseObject object, String newName) async {
+  Future<ErrorType?> onActionRenameChoosedFolder(
+      BaseObject object, String newName) async {
     var result = await _filesController.renameFolder(newName, object.id);
     print(result);
     if (result == ResponseStatus.ok) {
@@ -449,8 +473,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     final filesInFolder = state.objects;
 
     filesInFolder.forEach((fileInFolder) {
-      var index = loadState.uploadingFiles.indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
-      if (index != -1 && !_observers.any((element) => element.id == loadState.uploadingFiles[index].localPath)) {
+      var index = loadState.uploadingFiles
+          .indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
+      if (index != -1 &&
+          !_observers.any((element) =>
+              element.id == loadState.uploadingFiles[index].localPath)) {
         var observer = UploadObserver(
           loadState.uploadingFiles[index].localPath,
           (p0) {
@@ -499,7 +526,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   void updateForCreateFolder() async {}
 
-  Future<void> setNewCriterionAndDirection(SortingCriterion criterion, SortingDirection direction, String sortText) async {
+  Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
+      SortingDirection direction, String sortText) async {
     // final allFiles = state.sortedFiles;
 
     // List<BaseObject> sortedFiles = [];
@@ -534,8 +562,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         .getContentFromFolderById(state.currentFolder!.id);
 
     if (uploadingFileId != null) {
-      var uploadingFileIndex = objects.indexWhere((element) => element.id == uploadingFileId);
-      if (uploadingFileIndex != -1) objects[uploadingFileIndex] = (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
+      var uploadingFileIndex =
+          objects.indexWhere((element) => element.id == uploadingFileId);
+      if (uploadingFileIndex != -1)
+        objects[uploadingFileIndex] =
+            (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
     }
     await _packetController.updatePacket();
     emit(state.copyWith(
@@ -555,7 +586,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
     if (controllerState.uploadingFiles.isNotEmpty) {
       try {
-        var uploadingFile = controllerState.uploadingFiles.firstWhere((file) => file.isInProgress);
+        var uploadingFile = controllerState.uploadingFiles
+            .firstWhere((file) => file.isInProgress);
 
         if (state.objects.any((object) => object.id == uploadingFile.id)) {
           var observer = UploadObserver(
@@ -568,7 +600,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           _loadController.getState.registerObserver(observer);
         }
       } catch (e) {
-        print('OpenedFolderCubit: can\'t find any uploading files in folder: ${state.currentFolder?.name}');
+        print(
+            'OpenedFolderCubit: can\'t find any uploading files in folder: ${state.currentFolder?.name}');
       }
     }
   }
@@ -577,12 +610,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var controllerState = _loadController.getState;
 
     if (pathToFile.isEmpty) {
-      var currentFileIndex = controllerState.uploadingFiles.indexWhere((file) => file.isInProgress);
+      var currentFileIndex = controllerState.uploadingFiles
+          .indexWhere((file) => file.isInProgress);
 
       if (currentFileIndex != -1) {
-        var currentFilePath = controllerState.uploadingFiles[currentFileIndex].localPath;
+        var currentFilePath =
+            controllerState.uploadingFiles[currentFileIndex].localPath;
 
-        var indexOfObserver = _observers.indexWhere((observer) => observer.id == currentFilePath);
+        var indexOfObserver =
+            _observers.indexWhere((observer) => observer.id == currentFilePath);
 
         if (indexOfObserver == -1) {
           await update();
@@ -593,7 +629,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
 
     try {
-      var currentFile = controllerState.uploadingFiles.firstWhere((element) => element.localPath == pathToFile && element.isInProgress);
+      var currentFile = controllerState.uploadingFiles.firstWhere(
+          (element) => element.localPath == pathToFile && element.isInProgress);
 
       // if (value is CustomError) {
       //   var observer =
@@ -627,16 +664,19 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           fileId: currentFile.id,
           percent: currentFile.uploadPercent,
         );
-        var observer = _observers.firstWhere((element) => element.id == pathToFile);
+        var observer =
+            _observers.firstWhere((element) => element.id == pathToFile);
         controllerState.unregisterObserver(observer);
 
         _observers.remove(observer);
       }
     } catch (e) {
       print(e);
-      var ind = controllerState.uploadingFiles.indexWhere((e) => e.id == pathToFile && e.endedWithException);
+      var ind = controllerState.uploadingFiles
+          .indexWhere((e) => e.id == pathToFile && e.endedWithException);
       if (ind != -1) {
-        var observer = _observers.firstWhere((element) => element.id == pathToFile);
+        var observer =
+            _observers.firstWhere((element) => element.id == pathToFile);
         controllerState.unregisterObserver(observer);
 
         _observers.remove(observer);
@@ -650,7 +690,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }) async {
     var objects = List.from(state.objects);
 
-    var indexOfUploadingFile = objects.indexWhere((element) => element.id == fileId);
+    var indexOfUploadingFile =
+        objects.indexWhere((element) => element.id == fileId);
     print('index if uploading filse is $indexOfUploadingFile');
     if (indexOfUploadingFile != -1) {
       var uploadingFile = objects[indexOfUploadingFile];
@@ -665,7 +706,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         objects.removeAt(indexOfUploadingFile + 1);
         // objects[indexOfUploadingFile] =
         //     uploadingFile.copyWith(loadPercent: percent.toDouble());
-        print('file\'s ${uploadingFile.name} upload percent = ${uploadingFile.loadPercent}');
+        print(
+            'file\'s ${uploadingFile.name} upload percent = ${uploadingFile.loadPercent}');
         var newState = state.copyWith(
           objects: List.from(objects),
         );
@@ -696,7 +738,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
     var box = await Hive.openBox(kPathDBName);
     String path = box.get(record.id, defaultValue: '');
-    idTappedFile = record.id;
+    // idTappedFile = record.id;
     if (path.isNotEmpty) {
       var appPath = (await getApplicationSupportDirectory()).path;
       if (path.contains("()")) {
@@ -773,7 +815,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   void _unregisterDownloadObserver(String recordId) async {
     try {
-      final observer = _downloadObservers.firstWhere((observer) => observer.id == recordId);
+      final observer =
+          _downloadObservers.firstWhere((observer) => observer.id == recordId);
 
       _loadController.getState.unregisterObserver(observer);
 
@@ -788,11 +831,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     bool isDownloading = true,
   }) {
     try {
-      var currentRecordIndex = state.objects.indexWhere((element) => element.id == recordId);
+      var currentRecordIndex =
+          state.objects.indexWhere((element) => element.id == recordId);
 
       var objects = [...state.objects];
       var currentRecord = objects[currentRecordIndex] as Record;
-      objects[currentRecordIndex] = currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
+      objects[currentRecordIndex] =
+          currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
       emit(state.copyWith(
         objects: objects,
         status: FormzStatus.pure,

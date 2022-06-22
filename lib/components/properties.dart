@@ -10,10 +10,9 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_info_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_info_container.dart';
 
 class FileInfoView extends StatefulWidget {
   final BaseObject? object;

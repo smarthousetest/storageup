@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -52,11 +52,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         print('Hive initialized');
       });
       var remoteAppVersion = await _filesService.getRemoteAppVersion();
+      Timer(
+        Duration(minutes: 5),
+        () async {
+          String? localAppVersion = _getLocalAppVersion();
+          var remoteAppVersion = await _filesService.getRemoteAppVersion();
+          emit(state.copyWith(
+            upToDateVersion: remoteAppVersion,
+            version: localAppVersion,
+          ));
+        },
+      );
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
-      var recentsFile = await _filesService.getRecentsRecords();
-      if (recentsFile != null) {
-        await _repository.addFiles(latestFile: recentsFile);
+      var recentFiles = await _filesService.getRecentsRecords();
+      if (recentFiles != null) {
+        await _repository.addFiles(latestFile: recentFiles);
       }
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
