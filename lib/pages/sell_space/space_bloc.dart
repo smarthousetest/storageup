@@ -52,7 +52,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
-    final locationsInfo = _repository.getlocationsInfo;
+    final locationsInfo = _repository.locationsInfo;
     var keeper = await _subscriptionService.getAllKeepers();
     var valueNotifier = _userController.getValueNotifier();
     emit(state.copyWith(
@@ -99,7 +99,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     var os = OsSpecifications.getOs();
     _writeKeeperId(
-      '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeper_id.txt',
+      '${state.pathToKeeper}${Platform.pathSeparator}keeper_id.txt',
       keeperId,
     );
     var bearerToken = await TokenRepository().getApiToken();
@@ -116,8 +116,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}keeperName');
+    var keeperNameFile = File('${state.pathToKeeper}${Platform.pathSeparator}keeperName');
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -125,13 +124,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File(
-        '${state.locationsInfo.last.dirPath}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile = File('${state.pathToKeeper}${Platform.pathSeparator}memorySize');
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile
-        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperIdFilePath, String keeper_id) {
@@ -148,7 +145,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     Emitter<SpaceState> emit,
   ) async {
     var countOfGb = event.countGb;
-    var path = event.pathDir;
+    var path = state.pathToKeeper;
 
     var id =
         await _subscriptionService.addNewKeeper(state.name.value, countOfGb);
@@ -158,7 +155,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           path: path,
           name: state.name.value,
           idForCompare: id);
-      var locationsInfo = _repository.getlocationsInfo;
+      var locationsInfo = _repository.locationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
       var box = await Hive.openBox('keeper_data');
@@ -181,7 +178,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     String? bearerToken = await getIt<TokenRepository>().getApiToken();
     for (var location in state.locationsInfo) {
       try {
-        dio.put("/keeper/${location.idForCompare}",
+        dio.put("/keeper/${location.keeperId}",
             data: KeeperData(
               null,
               null,
@@ -189,8 +186,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
               null,
               keeperVersion,
             ).toJson(),
-            options:
-                Options(headers: {"Authorisation": "Bearer $bearerToken"}));
+            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");

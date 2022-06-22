@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,22 +14,19 @@ import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:upstorage_desktop/components/blur/ceeper_delete_confirm.dart';
+import 'package:upstorage_desktop/components/blur/keeper_delete_confirm.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 
 class FolderList extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
 
-  FolderList();
+  FolderList({Key? key}) : super(key: key);
 }
 
 class _ButtonTemplateState extends State<FolderList> {
-  // List<bool> ifFavoritesPressedList = [];
-  // List<bool> isPopupMenuButtonClicked = [];
   List<Keeper> locationsInfo = [];
   List<CustomPopupMenuController> _popupControllers = [];
-  Timer? _timer;
 
   void _initiatingControllers(FolderListState state) {
     if (_popupControllers.isEmpty) {
@@ -41,28 +36,38 @@ class _ButtonTemplateState extends State<FolderList> {
     }
   }
 
-  var controller = CustomPopupMenuController();
-
+  var customPopupMenuController = CustomPopupMenuController();
   S translate = getIt<S>();
+  var bloc = FolderListBloc();
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    bloc.close();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    bloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => FolderListBloc()..add(FolderListPageOpened()),
-        child: BlocBuilder<FolderListBloc, FolderListState>(builder: (context, state) {
+      create: (context) => bloc..add(FolderListPageOpened()),
+      child: BlocBuilder<FolderListBloc, FolderListState>(
+        builder: (context, state) {
           _initiatingControllers(state);
-          locationsInfo = state.localKeeper;
+          locationsInfo = state.localKeepers;
           return SingleChildScrollView(
             controller: ScrollController(),
             child: Column(
-              // controller: ScrollController(),
-              // shrinkWrap: true,
-              // scrollDirection: Axis.vertical,
               children: [
-                state.localKeeper.isNotEmpty
-                    ? _thisKeeper(context, state)
-                    : Container(),
-                state.serverKeeper.isNotEmpty
+                state.localKeepers.isNotEmpty ? _thisKeeper(context, state) : Container(),
+                state.serverKeepers.isNotEmpty
                     ? Padding(
                         padding: const EdgeInsets.only(top: 20.0),
                         child: _otherKeeper(context, state),
@@ -71,7 +76,9 @@ class _ButtonTemplateState extends State<FolderList> {
               ],
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 
   Widget _thisKeeper(
@@ -108,7 +115,7 @@ class _ButtonTemplateState extends State<FolderList> {
               builder: (context, state) {
                 return GridView.builder(
                   shrinkWrap: true,
-                  itemCount: state.localKeeper.length,
+                  itemCount: state.localKeepers.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: countOnElementsInRow,
                     mainAxisExtent: 345,
@@ -116,8 +123,8 @@ class _ButtonTemplateState extends State<FolderList> {
                     crossAxisSpacing: 20,
                   ),
                   itemBuilder: (context, index) {
-                    var keeper = state.localKeeper[index];
-                    var localPath = state.localPath[index];
+                    var keeper = state.localKeepers[index];
+                    var localPath = state.localPaths[index];
 
                     return _keeperInfo(context, keeper, localPath);
                   },
@@ -166,64 +173,65 @@ class _ButtonTemplateState extends State<FolderList> {
                   ),
                 ),
                 Spacer(),
-                BlocBuilder<FolderListBloc, FolderListState>(builder: (context, state) {
-                  if (state.localKeeper.length != _popupControllers.length) {
-                    final controller = CustomPopupMenuController();
-                    _popupControllers.add(controller);
-                  }
-                  return CustomPopupMenu(
-                    pressType: PressType.singleClick,
-                    barrierColor: Colors.transparent,
-                    showArrow: false,
-                    horizontalMargin: 10,
-                    verticalMargin: 0,
-                    controller: _popupControllers[state.localKeeper.indexOf(keeper)],
-                    menuBuilder: () {
-                      return KeeperPopupMenuActions(
-                        theme: Theme.of(context),
-                        translate: translate,
-                        onTap: (action) async {
-                          _popupControllers[state.localKeeper.indexOf(keeper)].hideMenu();
-                          if (action == KeeperAction.change) {
-                          } else {
-                            var result = await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return BlurDeleteKeeper();
-                              },
-                            );
-                            if (result) {
-                              var deleteKeeper;
-                              for (var element in state.locationsInfo) {
-                                if (element.idForCompare == keeper.id) {
-                                  deleteKeeper = element;
-                                  break;
+                BlocBuilder<FolderListBloc, FolderListState>(
+                  builder: (context, state) {
+                    if (state.localKeepers.length != _popupControllers.length) {
+                      final controller = CustomPopupMenuController();
+                      _popupControllers.add(controller);
+                    }
+                    return CustomPopupMenu(
+                      pressType: PressType.singleClick,
+                      barrierColor: Colors.transparent,
+                      showArrow: false,
+                      horizontalMargin: 10,
+                      verticalMargin: 0,
+                      controller: _popupControllers[state.localKeepers.indexOf(keeper)],
+                      menuBuilder: () {
+                        return KeeperPopupMenuActions(
+                          theme: Theme.of(context),
+                          translate: translate,
+                          onTap: (action) async {
+                            _popupControllers[state.localKeepers.indexOf(keeper)].hideMenu();
+                            if (action == KeeperAction.change) {
+                            } else {
+                              var result = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return BlurDeleteKeeper();
+                                },
+                              );
+                              if (result) {
+                                var deleteKeeper;
+                                for (var element in state.locationsInfo) {
+                                  if (element.keeperId == keeper.id) {
+                                    deleteKeeper = element;
+                                    break;
+                                  }
+                                }
+                                if (deleteKeeper != null) {
+                                  context.read<FolderListBloc>().add(DeleteLocation(location: deleteKeeper));
                                 }
                               }
-                              if (deleteKeeper != null) {
-                                context.read<FolderListBloc>().add(DeleteLocation(location: deleteKeeper));
-                              }
+                              setState(() {});
                             }
-                            //await context.read<FolderListBloc>().stream.first;
-                            setState(() {});
-                          }
-                        },
-                      );
-                    },
-                    child: Container(
-                      height: 29,
-                      width: 30,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/space_sell/dots.svg',
-                          ),
-                        ],
+                          },
+                        );
+                      },
+                      child: Container(
+                        height: 29,
+                        width: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/space_sell/dots.svg',
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  },
+                ),
               ],
             ),
             Container(
@@ -279,9 +287,6 @@ class _ButtonTemplateState extends State<FolderList> {
               ),
             ],
           ),
-          // SizedBox(
-          //   height: 5,
-          // ),
           Align(
             alignment: FractionalOffset.center,
             child: Text(
@@ -355,9 +360,7 @@ class _ButtonTemplateState extends State<FolderList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  usedSpace != null
-                      ? fileSize(usedSpace, translate, 0)
-                      : "null",
+                  usedSpace != null ? fileSize(usedSpace, translate, 0) : "null",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -451,13 +454,9 @@ class _ButtonTemplateState extends State<FolderList> {
                     BlocBuilder<FolderListBloc, FolderListState>(
                       builder: (context, state) {
                         var valueSwitch = keeper.sleepStatus;
-                        ;
                         if (valueSwitch != null && keeper.online == 1) {
                           valueSwitch = !valueSwitch;
                         }
-                        // else if (keeper.online == 0) {
-                        //   valueSwitch = true;
-                        // }
 
                         return FlutterSwitch(
                           value: valueSwitch ?? true,
@@ -489,52 +488,59 @@ class _ButtonTemplateState extends State<FolderList> {
                 )
               : BlocBuilder<FolderListBloc, FolderListState>(
                   builder: (context, state) {
+                    var kk = state.localKeepers.firstWhere((element) => element.name == keeper.name);
                     return GestureDetector(
                       onTap: () {
-                        DownloadLocation? rebootedKeeper;
-                        for (var location in state.locationsInfo) {
-                          if (location.idForCompare == keeper.id) {
-                            rebootedKeeper = location;
-                            break;
+                        if (!kk.isRebooting!) {
+                          print("Press reboot keeper");
+                          DownloadLocation? rebootedKeeper;
+                          for (var location in state.locationsInfo) {
+                            if (location.keeperId == keeper.id) {
+                              rebootedKeeper = location;
+                              break;
+                            }
+                          }
+                          if (rebootedKeeper != null) {
+                            context.read<FolderListBloc>().add(KeeperReboot(location: rebootedKeeper));
                           }
                         }
-                        if (rebootedKeeper != null) {
-                          context.read<FolderListBloc>().add(KeeperReboot(location: rebootedKeeper));
-                        }
                       },
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          width: 119,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Theme.of(context).splashColor,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: Center(
-                              child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/space_sell/refresh.svg',
-                                color: Theme.of(context).splashColor,
-                              ),
-                              Text(
-                                translate.reboot,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Theme.of(context).splashColor,
-                                  fontFamily: kNormalTextFontFamily,
-                                  fontSize: 14,
+                      child: (kk.isRebooting!)
+                          ? Container(child: CircularProgressIndicator(), width: 24, height: 24)
+                          : MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Container(
+                                width: 119,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: Theme.of(context).splashColor,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/space_sell/refresh.svg',
+                                        color: Theme.of(context).splashColor,
+                                      ),
+                                      Text(
+                                        translate.reboot,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color: Theme.of(context).splashColor,
+                                          fontFamily: kNormalTextFontFamily,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ],
-                          )),
-                        ),
-                      ),
+                            ),
                     );
                   },
                 ),
@@ -615,7 +621,7 @@ class _ButtonTemplateState extends State<FolderList> {
             }
             return GridView.builder(
               shrinkWrap: true,
-              itemCount: state.serverKeeper.length,
+              itemCount: state.serverKeepers.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: countOnElementsInRow,
                 mainAxisExtent: 345,
@@ -623,7 +629,7 @@ class _ButtonTemplateState extends State<FolderList> {
                 crossAxisSpacing: 20,
               ),
               itemBuilder: (context, index) {
-                var keeper = state.serverKeeper[index];
+                var keeper = state.serverKeepers[index];
                 return _otherKeeperInfo(context, keeper);
               },
             );

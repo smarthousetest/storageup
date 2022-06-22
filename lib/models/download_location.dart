@@ -12,14 +12,14 @@ class DownloadLocation {
   @HiveField(3, defaultValue: '')
   String name;
   @HiveField(4, defaultValue: '')
-  String idForCompare;
+  String keeperId;
 
   DownloadLocation({
     required this.dirPath,
     required this.countGb,
     required this.id,
     required this.name,
-    required this.idForCompare,
+    required this.keeperId,
   });
 
   DownloadLocation copyWith({
@@ -33,12 +33,12 @@ class DownloadLocation {
       countGb: countGb ?? this.countGb,
       id: id,
       name: name ?? this.name,
-      idForCompare: idForCompare ?? this.idForCompare,
+      keeperId: idForCompare ?? this.keeperId,
     );
   }
 
   @override
   String toString() {
-    return 'dirPath: $dirPath, countGb: $countGb, id: $id, name: $name, idForCompare: $idForCompare';
+    return 'dirPath: $dirPath, countGb: $countGb, id: $id, name: $name, idForCompare: $keeperId';
   }
 }

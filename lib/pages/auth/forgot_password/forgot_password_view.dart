@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
@@ -17,7 +18,7 @@ import 'forgot_password_state.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   ForgotPasswordView({Key? key}) : super(key: key);
-
+  
   @override
   _ForgotPasswordViewState createState() => _ForgotPasswordViewState();
 }
@@ -182,6 +183,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
     );
   }
+
+final node = FocusNode();
 
   List<Widget> _body(ThemeData theme, ForgotPasswordState state) {
     if (state.status != FormzStatus.submissionSuccess)

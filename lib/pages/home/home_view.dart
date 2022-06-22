@@ -28,8 +28,8 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
 import 'home_bloc.dart';
 import 'home_state.dart';
@@ -163,7 +163,8 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
-                child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                child:
+                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                   return Column(
                     children: [
                       Padding(
@@ -365,7 +366,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-        return state.objectsValueListenable != null && state.objectsValueListenable!.value.values.isNotEmpty ? latestFile(context) : Container();
+        return state.objectsValueListenable != null &&
+                state.objectsValueListenable!.value.values.isNotEmpty
+            ? latestFile(context)
+            : Container();
       }),
     ];
   }
@@ -396,7 +400,8 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 40.0),
                 child: ValueListenableBuilder<Box<LatestFile>>(
-                    valueListenable: Hive.box<LatestFile>('latestFileBox').listenable(),
+                    valueListenable:
+                        Hive.box<LatestFile>('latestFileBox').listenable(),
                     builder: (context, box, widget) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,7 +411,9 @@ class _HomePageState extends State<HomePage> {
                               child: GestureDetector(
                                   onTap: () {
                                     print(e.latestFile.name);
-                                    context.read<HomeBloc>().add(FileTapped(record: e.latestFile));
+                                    context
+                                        .read<HomeBloc>()
+                                        .add(FileTapped(record: e.latestFile));
                                   },
                                   child: LatestFileView(object: e)))),
                         ],
@@ -621,7 +628,9 @@ class LatestFileView extends StatelessWidget {
                   height: 24,
                   width: 24,
                   child: Image.asset(
-                    type!.isNotEmpty ? 'assets/file_icons/${type}_s.png' : 'assets/file_icons/unexpected_s.png',
+                    type!.isNotEmpty
+                        ? 'assets/file_icons/${type}_s.png'
+                        : 'assets/file_icons/unexpected_s.png',
                     fit: BoxFit.contain,
                     height: 24,
                     width: 24,

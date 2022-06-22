@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 enum ChosenPage {
   home,
@@ -38,7 +38,9 @@ class _ButtonTemplateState extends State<CustomMenuButton> {
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 5),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).dividerColor : Theme.of(context).primaryColor,
+          color: isSelected
+              ? Theme.of(context).dividerColor
+              : Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(7),
         ),
         width: 214,
@@ -50,16 +52,22 @@ class _ButtonTemplateState extends State<CustomMenuButton> {
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.normal,
-              color: isSelected ? Theme.of(context).splashColor : Theme.of(context).colorScheme.onBackground,
+              color: isSelected
+                  ? Theme.of(context).splashColor
+                  : Theme.of(context).colorScheme.onBackground,
             ),
           ),
           icon: SvgPicture.asset(
             widget.icon,
-            color: isSelected ? Theme.of(context).splashColor : Theme.of(context).colorScheme.onBackground,
+            color: isSelected
+                ? Theme.of(context).splashColor
+                : Theme.of(context).colorScheme.onBackground,
           ),
           style: TextButton.styleFrom(
             alignment: Alignment.centerLeft,
-            primary: isSelected ? Theme.of(context).dividerColor : Theme.of(context).primaryColor,
+            primary: isSelected
+                ? Theme.of(context).dividerColor
+                : Theme.of(context).primaryColor,
             //onPrimary: Colors.transparent,
             shadowColor: const Color.fromARGB(0, 0, 0, 0),
             side: const BorderSide(

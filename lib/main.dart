@@ -15,7 +15,7 @@ import 'package:upstorage_desktop/utilites/local_server/local_server.dart'
 import 'constants.dart';
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
-import 'utilites/state_container.dart';
+import 'utilites/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
   _MyAppState() : _locale = Locale(Intl.systemLocale) {
     hasCurrentLocale().then((value) {
       getLocale().then(
-        (loc) => setLocale(loc),
+            (loc) => setLocale(loc),
       );
     });
   }
@@ -120,11 +120,12 @@ void readFromFileDomainName() {
   if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
-  var domainNameFile = File('${os.appDirPath}domainName');
+  var domainNameFile = File('${os.appDirPath}${Platform.pathSeparator}domainName');
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
-  } else
+  } else {
     domainName = domainNameFile.readAsStringSync();
+  }
   print(domainName);
 }
 
@@ -132,8 +133,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-        // etc.
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    // etc.
+  };
 }
