@@ -308,7 +308,7 @@ class _ButtonTemplateState extends State<FolderList> {
     }
 
     return Container(
-      width: 143,
+      width: 146,
       padding: const EdgeInsets.only(left: 20.0, top: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -391,7 +391,7 @@ class _ButtonTemplateState extends State<FolderList> {
             height: 5,
           ),
           Container(
-            constraints: BoxConstraints(maxWidth: 180),
+            constraints: BoxConstraints(maxWidth: 185),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

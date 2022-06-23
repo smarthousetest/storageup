@@ -487,7 +487,30 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChosenFile(
+  Future<void> uploadFilesAction(String folderId) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.any,
+    );
+    if (result != null) {
+      List<String?> filePaths = result.paths;
+
+      for (int i = 0; i < filePaths.length; i++) {
+        if (filePaths[i] != null &&
+            PathCheck().isPathCorrect(filePaths[i].toString())) {
+          await _loadController.uploadFile(
+              filePath: filePaths[i], folderId: folderId);
+        } else {
+          print(
+              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+        }
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<ErrorType?> onActionRenameChoosedFile(
       BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
@@ -558,7 +581,32 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  void updateForCreateFolder() async {}
+  Future<void> createFolder(
+    String? name,
+    String? folderId,
+  ) async {
+    if (folderId == null) {
+      try {
+        await _filesController.updateFilesList();
+      } catch (_) {}
+      folderId = _filesController.getFilesRootFolder?.id;
+    } else {
+      folderId = folderId;
+    }
+
+    if (name != null && folderId != null) {
+      final result = await _filesController.createFolder(name, folderId);
+      update();
+
+      if (result == ResponseStatus.failed) {
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+      } else if (result == ResponseStatus.noInternet) {
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
+      }
+    } else if (folderId == null) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
 
   Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
       SortingDirection direction, String sortText) async {

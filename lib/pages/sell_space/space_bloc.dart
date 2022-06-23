@@ -138,7 +138,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile
+        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperDisk, String keeperId) {
@@ -202,7 +203,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
               null,
               keeperVersion,
             ).toJson(),
-            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
+            options:
+                Options(headers: {"Authorisation": "Bearer $bearerToken"}));
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");
@@ -234,6 +236,18 @@ class PathCheck {
     'Program Files (x86)',
   ];
 
+  bool isPathCorrect(String path) {
+    var partsOfPath = path.split(Platform.pathSeparator);
+    for (var part in partsOfPath) {
+      for (var restrictedWord in _restrictedWords) {
+        if (part == restrictedWord) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   ///Function check is a path contain "OneDrive" part
   ///If contain, return path before "OneDrive" part
   static String doPathCorrect(String path) {
@@ -248,5 +262,10 @@ class PathCheck {
       }
     }
     return path;
+  }
+
+  @override
+  String toString() {
+    return _restrictedWords.toString();
   }
 }

@@ -15,7 +15,7 @@ class ArcIndicator extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const arcCenter = Offset(57, 65);
+    const arcCenter = Offset(60, 65);
     final arcRect = Rect.fromCircle(center: arcCenter, radius: 65);
     final startAngle = -math.pi;
     final sweepAngle = value != null ? value : math.pi;
@@ -50,7 +50,8 @@ class CircularArc extends StatefulWidget {
   _CircularArc createState() => _CircularArc();
 }
 
-class _CircularArc extends State<CircularArc> with SingleTickerProviderStateMixin {
+class _CircularArc extends State<CircularArc>
+    with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
 
@@ -68,10 +69,11 @@ class _CircularArc extends State<CircularArc> with SingleTickerProviderStateMixi
       curve: Curves.easeInOutCubic,
     );
 
-    animation = Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
-      ..addListener(() {
-        setState(() {});
-      });
+    animation =
+        Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
+          ..addListener(() {
+            setState(() {});
+          });
   }
 
   SvgPicture _smail(double value) {
