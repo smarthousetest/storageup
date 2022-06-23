@@ -56,6 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
+        "add_files": MessageLookupByLibrary.simpleMessage("Добавить файлы"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
         "all": MessageLookupByLibrary.simpleMessage("Все"),
         "all_files": MessageLookupByLibrary.simpleMessage("Все файлы"),

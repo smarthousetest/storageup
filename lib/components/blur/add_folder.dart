@@ -14,6 +14,7 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
   S translate = getIt<S>();
   final myController = TextEditingController();
   bool canSave = false;
+  bool hintSymbvols = true;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,24 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 25),
+                            padding: hintSymbvols
+                                ? EdgeInsets.only(top: 0)
+                                : EdgeInsets.only(top: 5),
+                            child: Text(
+                              translate.wrong_symbvols,
+                              style: TextStyle(
+                                fontSize: hintSymbvols ? 0 : 14,
+                                fontFamily: kNormalTextFontFamily,
+                                color: hintSymbvols
+                                    ? Colors.white
+                                    : Theme.of(context).errorColor,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: hintSymbvols
+                                ? EdgeInsets.only(top: 25)
+                                : EdgeInsets.only(top: 5),
                             child: Container(
                               width: 400,
                               height: 36,
@@ -75,32 +93,48 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                 autofocus: true,
                                 onChanged: (myController) {
                                   myController = myController.trim();
-
-                                  if (myController.length != 0)
+                                  if (myController.contains(
+                                              RegExp(r'[\\/:*?\"<>|]'), 0) ==
+                                          true &&
+                                      myController.isNotEmpty) {
                                     setState(() {
-                                      canSave = true;
-                                    });
-                                  if (myController.length < 1)
-                                    setState(() {
+                                      hintSymbvols = false;
                                       canSave = false;
                                     });
+                                  } else if (myController.isNotEmpty) {
+                                    setState(() {
+                                      hintSymbvols = true;
+                                      canSave = true;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      hintSymbvols = true;
+                                      canSave = false;
+                                    });
+                                  }
                                 },
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.only(left: 15, bottom: 21),
+                                    contentPadding:
+                                        EdgeInsets.only(left: 15, bottom: 21),
                                     hoverColor: Theme.of(context).cardColor,
                                     focusColor: Theme.of(context).cardColor,
                                     fillColor: Theme.of(context).cardColor,
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                                      borderSide: BorderSide(
+                                          color: Color(0xffE4E7ED), width: 0.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
+                                      borderSide: BorderSide(
+                                          color: Color(0xffE4E7ED), width: 0.0),
                                     ),
                                     hintText: translate.new_folder,
                                     hintStyle: TextStyle(
-                                      color: Theme.of(context).textTheme.headline1?.color,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline1
+                                          ?.color,
                                       fontFamily: kNormalTextFontFamily,
                                       fontSize: 14,
                                     )),
@@ -141,7 +175,8 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                           color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -151,7 +186,8 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (canSave == true) {
-                                          Navigator.pop(context, myController.text.trim());
+                                          Navigator.pop(context,
+                                              myController.text.trim());
                                         } else {
                                           null;
                                         }
@@ -165,12 +201,20 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
+                                        primary: canSave
+                                            ? Theme.of(context).splashColor
+                                            : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
-                                        side: BorderSide(style: BorderStyle.solid, color: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor),
+                                        side: BorderSide(
+                                            style: BorderStyle.solid,
+                                            color: canSave
+                                                ? Theme.of(context).splashColor
+                                                : Theme.of(context)
+                                                    .canvasColor),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),

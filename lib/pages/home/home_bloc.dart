@@ -18,7 +18,7 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
-import '../sell_space/space_view.dart';
+import '../sell_space/space_bloc.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 import 'package:os_specification/os_specification.dart';

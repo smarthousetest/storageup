@@ -116,7 +116,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File('${state.pathToKeeper}${Platform.pathSeparator}keeperName');
+    var keeperNameFile =
+        File('${state.pathToKeeper}${Platform.pathSeparator}keeperName');
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -124,11 +125,13 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File('${state.pathToKeeper}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile =
+        File('${state.pathToKeeper}${Platform.pathSeparator}memorySize');
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile
+        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperIdFilePath, String keeper_id) {
@@ -186,7 +189,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
               null,
               keeperVersion,
             ).toJson(),
-            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
+            options:
+                Options(headers: {"Authorisation": "Bearer $bearerToken"}));
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");
@@ -218,6 +222,18 @@ class PathCheck {
     'Program Files (x86)',
   ];
 
+  bool isPathCorrect(String path) {
+    var partsOfPath = path.split(Platform.pathSeparator);
+    for (var part in partsOfPath) {
+      for (var restrictedWord in _restrictedWords) {
+        if (part == restrictedWord) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   ///Function check is a path contain "OneDrive" part
   ///If contain, return path before "OneDrive" part
   static String doPathCorrect(String path) {
@@ -232,5 +248,10 @@ class PathCheck {
       }
     }
     return path;
+  }
+
+  @override
+  String toString() {
+    return _restrictedWords.toString();
   }
 }

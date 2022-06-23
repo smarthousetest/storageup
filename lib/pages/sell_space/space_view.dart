@@ -24,46 +24,46 @@ class SpaceSellPage extends StatefulWidget {
   SpaceSellPage();
 }
 
-class PathCheck {
-  static List<String> _restrictedWords = [
-    'OneDrive',
-    'Program Files',
-    'Program Files (x86)',
-  ];
+// class PathCheck {
+//   static List<String> _restrictedWords = [
+//     'OneDrive',
+//     'Program Files',
+//     'Program Files (x86)',
+//   ];
 
-  bool isPathCorrect(String path) {
-    var partsOfPath = path.split(Platform.pathSeparator);
-    for (var part in partsOfPath) {
-      for (var restrictedWord in _restrictedWords) {
-        if (part == restrictedWord) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+//   bool isPathCorrect(String path) {
+//     var partsOfPath = path.split(Platform.pathSeparator);
+//     for (var part in partsOfPath) {
+//       for (var restrictedWord in _restrictedWords) {
+//         if (part == restrictedWord) {
+//           return false;
+//         }
+//       }
+//     }
+//     return true;
+//   }
 
-  ///Function check is a path contain "OneDrive" part
-  ///If contain, return path before "OneDrive" part
-  static String doPathCorrect(String path) {
-    var partPath = path.split(Platform.pathSeparator);
-    for (int i = 0; i < partPath.length; i++) {
-      for (var restrictedWord in _restrictedWords) {
-        if (partPath[i] == restrictedWord) {
-          var result = partPath.sublist(0, i);
-          result.add(path.split(Platform.pathSeparator).last);
-          return result.join(Platform.pathSeparator);
-        }
-      }
-    }
-    return path;
-  }
+//   ///Function check is a path contain "OneDrive" part
+//   ///If contain, return path before "OneDrive" part
+//   static String doPathCorrect(String path) {
+//     var partPath = path.split(Platform.pathSeparator);
+//     for (int i = 0; i < partPath.length; i++) {
+//       for (var restrictedWord in _restrictedWords) {
+//         if (partPath[i] == restrictedWord) {
+//           var result = partPath.sublist(0, i);
+//           result.add(path.split(Platform.pathSeparator).last);
+//           return result.join(Platform.pathSeparator);
+//         }
+//       }
+//     }
+//     return path;
+//   }
 
-  @override
-  String toString() {
-    return _restrictedWords.toString();
-  }
-}
+//   @override
+//   String toString() {
+//     return _restrictedWords.toString();
+//   }
+// }
 
 class _SpaceSellPageState extends State<SpaceSellPage> {
   //final List<DownloadLocation> locationsInfo;
@@ -263,7 +263,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     children: [
                       Padding(
                         padding:
-                        const EdgeInsets.only(left: 40, right: 40, top: 20),
+                            const EdgeInsets.only(left: 40, right: 40, top: 20),
                         child: _title(context, state),
                       ),
                       BlocBuilder<SpaceBloc, SpaceState>(
@@ -271,17 +271,17 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           var fl = folderList(context);
                           return Expanded(
                               child: IndexedStack(
-                                sizing: StackFit.passthrough,
-                                key: ValueKey<int>(index),
-                                index: index,
-                                children: [
-                                  state.keeper.isEmpty
-                                      ? rentingAPlace(context)
-                                      : fl,
-                                  addSpace(context),
-                                  fl
-                                ],
-                              ));
+                            sizing: StackFit.passthrough,
+                            key: ValueKey<int>(index),
+                            index: index,
+                            children: [
+                              state.keeper.isEmpty
+                                  ? rentingAPlace(context)
+                                  : fl,
+                              addSpace(context),
+                              fl
+                            ],
+                          ));
                         },
                       ),
                     ],
