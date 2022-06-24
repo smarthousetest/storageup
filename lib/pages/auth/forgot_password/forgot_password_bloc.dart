@@ -10,8 +10,7 @@ import 'forgot_password_event.dart';
 import 'forgot_password_state.dart';
 
 @Injectable()
-class ForgotPasswordBloc
-    extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
+class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
   ForgotPasswordBloc() : super(ForgotPasswordState()) {
     on<ForgotPasswordEvent>((event, emit) async {
       if (event is ForgotPasswordEmailChanged) {
@@ -22,8 +21,7 @@ class ForgotPasswordBloc
     });
   }
 
-  final AuthenticationRepository _authenticationRepository =
-      getIt<AuthenticationRepository>();
+  final AuthenticationRepository _authenticationRepository = getIt<AuthenticationRepository>();
 
   void _mapEmailChanged(
     ForgotPasswordEmailChanged event,
@@ -43,21 +41,17 @@ class ForgotPasswordBloc
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     print('send email to restore password');
     try {
-      final result = await _authenticationRepository.restorePassword(
-          email: state.email.value);
+      final result = await _authenticationRepository.restorePassword(email: state.email.value);
       if (result == AuthenticationStatus.authenticated) {
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } else if (result == AuthenticationStatus.noInternet) {
-        emit(state.copyWith(
-            status: FormzStatus.submissionCanceled,
-            error: AuthError.noInternet));
+        emit(state.copyWith(status: FormzStatus.submissionCanceled, error: AuthError.noInternet));
       } else if (result == AuthenticationStatus.externalError) {
         emit(state.copyWith(
           status: FormzStatus.submissionFailure,
         ));
       } else {
-        emit(state.copyWith(
-            status: FormzStatus.pure, error: AuthError.wrongCredentials));
+        emit(state.copyWith(status: FormzStatus.pure, error: AuthError.wrongCredentials));
       }
     } on Exception catch (_) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

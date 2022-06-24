@@ -10,8 +10,11 @@ class MyProgressBar extends StatefulWidget {
   @override
   _MyProgressIndicator createState() => new _MyProgressIndicator();
 
-  MyProgressBar(
-      {required this.percent, required this.color, required this.bgColor});
+  MyProgressBar({
+    required this.percent,
+    required this.color,
+    required this.bgColor,
+  });
 }
 
 class _MyProgressIndicator extends State<MyProgressBar> {

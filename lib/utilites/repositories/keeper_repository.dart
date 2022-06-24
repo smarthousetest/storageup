@@ -11,19 +11,12 @@ class KeeperRepository {
 
   Future<Box?> initBox() async {
     if (box != null) {
-      if(!box!.isOpen) {
+      if (!box!.isOpen) {
         return await Hive.openBox('KeeperLocation');
-      }else{
+      } else {
         return box;
       }
     }
     return null;
   }
-
 }
-
-
-
-
-
-

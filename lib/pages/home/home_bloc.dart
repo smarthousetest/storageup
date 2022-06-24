@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -18,6 +18,7 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
+import '../sell_space/space_view.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 import 'package:os_specification/os_specification.dart';
@@ -51,11 +52,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         print('Hive initialized');
       });
       var remoteAppVersion = await _filesService.getRemoteAppVersion();
+      Timer(
+        Duration(minutes: 5),
+        () async {
+          String? localAppVersion = _getLocalAppVersion();
+          var remoteAppVersion = await _filesService.getRemoteAppVersion();
+          emit(state.copyWith(
+            upToDateVersion: remoteAppVersion,
+            version: localAppVersion,
+          ));
+        },
+      );
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
-      var recentsFile = await _filesService.getRecentsRecords();
-      if (recentsFile != null) {
-        await _repository.addFiles(latestFile: recentsFile);
+      var recentFiles = await _filesService.getRecentsRecords();
+      if (recentFiles != null) {
+        await _repository.addFiles(latestFile: recentFiles);
       }
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
@@ -75,8 +87,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final FilesService _filesService = getIt<FilesService>();
   var _loadController = getIt<LoadController>();
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  var _filesController = getIt<FilesController>(instanceName: 'files_controller');
   late final LatestFileRepository _repository;
   List<DownloadObserver> _downloadObservers = [];
 
@@ -96,8 +107,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     if (event.values != null) {
       for (int i = 0; i < event.values!.length; i++) {
-        await _loadController.uploadFile(
-            filePath: event.values![i], folderId: event.folderId);
+        if (event.values![i] != null && PathCheck().isPathCorrect(event.values![i].toString())) {
+          await _loadController.uploadFile(filePath: event.values![i], folderId: event.folderId);
+        } else {
+          print("File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+        }
       }
     }
   }
@@ -116,8 +130,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       folderId = event.folderId;
     }
     if (event.values?.first != null && folderId != null) {
-      final result =
-          await _filesController.createFolder(event.values!.first!, folderId);
+      final result = await _filesController.createFolder(event.values!.first!, folderId);
 
       eventBusUpdateFolder.fire(UpdateFolderEvent);
 
@@ -174,8 +187,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     if (event.values != null && event.values!.isNotEmpty) {
       for (int i = 0; i < event.values!.length; i++) {
-        await _loadController.uploadFile(
-            filePath: event.values![i], folderId: event.folderId);
+        await _loadController.uploadFile(filePath: event.values![i], folderId: event.folderId);
       }
     }
     //eventBusUpdateFolder.fire(HomeBloc());
@@ -231,10 +243,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
             _unregisterDownloadObserver(recordId);
           } else if (file.localPath.isNotEmpty) {
-            var path = file.localPath
-                .split('/')
-                .skipWhile((value) => value != 'downloads')
-                .join('/');
+            var path = file.localPath.split('/').skipWhile((value) => value != 'downloads').join('/');
             await box.put(file.id, path);
 
             _setRecordDownloading(
@@ -261,8 +270,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _unregisterDownloadObserver(String recordId) async {
     try {
-      final observer =
-          _downloadObservers.firstWhere((observer) => observer.id == recordId);
+      final observer = _downloadObservers.firstWhere((observer) => observer.id == recordId);
 
       _loadController.getState.unregisterObserver(observer);
 
@@ -277,13 +285,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     bool isDownloading = true,
   }) {
     try {
-      var currentRecordIndex = state.latestFile
-          .indexWhere((element) => element.latestFile.id == recordId);
+      var currentRecordIndex = state.latestFile.indexWhere((element) => element.latestFile.id == recordId);
       var record = state.latestFile.map((e) => e.latestFile).toList();
       var objects = [...record];
       var currentRecord = objects[currentRecordIndex];
-      objects[currentRecordIndex] =
-          currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
+      objects[currentRecordIndex] = currentRecord.copyWith(loadPercent: isDownloading ? 0 : null);
       //List<LatestFile> latestFile = [];
 
       //emit(state.copyWith(latestFile: objects));

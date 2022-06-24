@@ -86,27 +86,21 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                     });
                                 },
                                 decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(left: 15, bottom: 21),
+                                    contentPadding: EdgeInsets.only(left: 15, bottom: 21),
                                     hoverColor: Theme.of(context).cardColor,
                                     focusColor: Theme.of(context).cardColor,
                                     fillColor: Theme.of(context).cardColor,
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(
-                                          color: Color(0xffE4E7ED), width: 0.0),
+                                      borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(
-                                          color: Color(0xffE4E7ED), width: 0.0),
+                                      borderSide: BorderSide(color: Color(0xffE4E7ED), width: 0.0),
                                     ),
                                     hintText: translate.new_folder,
                                     hintStyle: TextStyle(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline1
-                                          ?.color,
+                                      color: Theme.of(context).textTheme.headline1?.color,
                                       fontFamily: kNormalTextFontFamily,
                                       fontSize: 14,
                                     )),
@@ -147,8 +141,7 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                           color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -158,8 +151,7 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (canSave == true) {
-                                          Navigator.pop(context,
-                                              myController.text.trim());
+                                          Navigator.pop(context, myController.text.trim());
                                         } else {
                                           null;
                                         }
@@ -173,20 +165,12 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: canSave
-                                            ? Theme.of(context).splashColor
-                                            : Theme.of(context).canvasColor,
+                                        primary: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
-                                        side: BorderSide(
-                                            style: BorderStyle.solid,
-                                            color: canSave
-                                                ? Theme.of(context).splashColor
-                                                : Theme.of(context)
-                                                    .canvasColor),
+                                        side: BorderSide(style: BorderStyle.solid, color: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),

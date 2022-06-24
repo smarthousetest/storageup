@@ -55,8 +55,7 @@ class Settings {
     data['tenant'] = this.tenant;
     data['createdBy'] = this.createdBy;
     if (this.backgroundImages != null) {
-      data['backgroundImages'] =
-          this.backgroundImages?.map((v) => v.toJson()).toList();
+      data['backgroundImages'] = this.backgroundImages?.map((v) => v.toJson()).toList();
     }
     if (this.logos != null) {
       data['logos'] = this.logos?.map((v) => v.toJson()).toList();

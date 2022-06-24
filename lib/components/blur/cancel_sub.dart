@@ -9,8 +9,10 @@ class BlurCancelSub extends StatefulWidget {
   final chosenSubGb;
   final DateTime dateTime;
   final filledGb;
+
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
+
   BlurCancelSub(this.chosenSubGb, this.dateTime, this.filledGb);
 }
 
@@ -74,19 +76,20 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        translate.cancel_sub(widget.dateTime,
-                                            widget.chosenSubGb),
-                                        style: textStyle),
+                                      translate.cancel_sub(widget.dateTime, widget.chosenSubGb),
+                                      style: textStyle,
+                                    ),
                                     Text(
-                                        translate.filled_gb(fileSize(
-                                            widget.filledGb, translate)),
-                                        style: textStyle),
-                                    Text(translate.will_be_deleted,
-                                        style: textStyle),
+                                      translate.filled_gb(fileSize(widget.filledGb, translate)),
+                                      style: textStyle,
+                                    ),
+                                    Text(translate.will_be_deleted, style: textStyle),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10),
-                                      child: Text(translate.further_use,
-                                          style: textStyle),
+                                      child: Text(
+                                        translate.further_use,
+                                        style: textStyle,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -109,25 +112,21 @@ class _ButtonTemplateState extends State<BlurCancelSub> {
                                         child: Text(
                                           translate.delete_file,
                                           style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                            color: Theme.of(context).primaryColor,
                                             fontSize: 16,
                                             fontFamily: kNormalTextFontFamily,
                                           ),
                                         ),
                                         style: ElevatedButton.styleFrom(
-                                          primary:
-                                              Theme.of(context).indicatorColor,
+                                          primary: Theme.of(context).indicatorColor,
                                           fixedSize: Size(260, 42),
                                           elevation: 0,
                                           side: BorderSide(
                                             style: BorderStyle.solid,
-                                            color: Theme.of(context)
-                                                .indicatorColor,
+                                            color: Theme.of(context).indicatorColor,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                         ),
                                       ),

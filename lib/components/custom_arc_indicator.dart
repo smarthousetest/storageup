@@ -6,8 +6,12 @@ class ArcIndicator extends CustomPainter {
   final bool isBackGround;
   final Color color;
   final double? value;
-  ArcIndicator(
-      {required this.isBackGround, required this.color, required this.value});
+
+  ArcIndicator({
+    required this.isBackGround,
+    required this.color,
+    required this.value,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -39,31 +43,35 @@ class ArcIndicator extends CustomPainter {
 
 class CircularArc extends StatefulWidget {
   final double value;
+
   CircularArc({required this.value, Key? key}) : super(key: key);
 
   @override
   _CircularArc createState() => _CircularArc();
 }
 
-class _CircularArc extends State<CircularArc>
-    with SingleTickerProviderStateMixin {
+class _CircularArc extends State<CircularArc> with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
+
   //final double value;
 
   @override
   void initState() {
     super.initState();
-    controller =
-        AnimationController(duration: Duration(seconds: 3), vsync: this);
-    final curvedAnimation =
-        CurvedAnimation(parent: controller, curve: Curves.easeInOutCubic);
+    controller = AnimationController(
+      duration: Duration(seconds: 3),
+      vsync: this,
+    );
+    final curvedAnimation = CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeInOutCubic,
+    );
 
-    animation =
-        Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
-          ..addListener(() {
-            setState(() {});
-          });
+    animation = Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
+      ..addListener(() {
+        setState(() {});
+      });
   }
 
   SvgPicture _smail(double value) {
@@ -112,15 +120,18 @@ class _CircularArc extends State<CircularArc>
           CustomPaint(
               //size: Size(100, 100),
               painter: ArcIndicator(
-                  isBackGround: false,
-                  color: Theme.of(context).canvasColor,
-                  value: null)),
+            isBackGround: false,
+            color: Theme.of(context).canvasColor,
+            value: null,
+          )),
           CustomPaint(
-              //size: Size(100, 100),
-              painter: ArcIndicator(
-                  isBackGround: false,
-                  color: _colorIndicator(widget.value),
-                  value: (widget.value * 3.14) / 100)),
+            //size: Size(100, 100),
+            painter: ArcIndicator(
+              isBackGround: false,
+              color: _colorIndicator(widget.value),
+              value: (widget.value * 3.14) / 100,
+            ),
+          ),
           Container(
             //padding: const EdgeInsets.only(right: 30.0),
             margin: const EdgeInsets.only(right: 5.0),

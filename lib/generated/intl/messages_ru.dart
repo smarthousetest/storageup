@@ -40,11 +40,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m8(count) => "${count} Мб";
 
-  static String m9(count) => "${count} Пб";
+  static String m9(count) => "Минимальный размер хранилища: ${count} ГБ";
 
-  static String m10(count) => "${count} ₽/месяц";
+  static String m10(count) => "${count} Пб";
 
-  static String m11(count) => "${count} Тб";
+  static String m11(count) => "${count} ₽/месяц";
+
+  static String m12(count) => "${count} Тб";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -193,11 +195,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "management":
             MessageLookupByLibrary.simpleMessage("Управление подпиской"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
-            "Максимальный размер для вашего диска: 180 ГБ"),
+            "Максимальный размер для вашего диска: "),
         "mb": m8,
         "media": MessageLookupByLibrary.simpleMessage("Медиа"),
-        "min_storage": MessageLookupByLibrary.simpleMessage(
-            "Минимальный размер хранилища: 32 ГБ"),
+        "min_storage": m9,
         "money":
             MessageLookupByLibrary.simpleMessage("сможете на этом заработать."),
         "money_two_step": MessageLookupByLibrary.simpleMessage(
@@ -206,8 +207,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "Получите больше пространства, поменяйте подписку!"),
         "move": MessageLookupByLibrary.simpleMessage("Переместить"),
         "name": MessageLookupByLibrary.simpleMessage("Имя"),
+        "name_contain": MessageLookupByLibrary.simpleMessage(
+            "Название должно содержать более 2 символов"),
         "name_storage":
             MessageLookupByLibrary.simpleMessage("Название места хранения"),
+        "never": MessageLookupByLibrary.simpleMessage("Никогда"),
         "new_album": MessageLookupByLibrary.simpleMessage("Новый альбом"),
         "new_folder": MessageLookupByLibrary.simpleMessage("Новая папка"),
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
@@ -215,6 +219,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Новый пароль должен содержать не менее 8 символов"),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
+        "not_exceed": MessageLookupByLibrary.simpleMessage(
+            "Объем выбранного места хранения не превышает 32 Гб"),
         "not_space": MessageLookupByLibrary.simpleMessage("Не хватает места?"),
         "not_storage":
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),
@@ -250,7 +256,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Пароли не совпадают"),
         "path": MessageLookupByLibrary.simpleMessage("Путь"),
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
-        "pb": m9,
+        "pb": m10,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -322,8 +328,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
-        "subscription_pay_mounth": m10,
-        "tb": m11,
+        "subscription_pay_mounth": m11,
+        "tb": m12,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(
@@ -338,6 +344,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "trust_level": MessageLookupByLibrary.simpleMessage("Уровень доверия"),
         "type": MessageLookupByLibrary.simpleMessage("Тип"),
         "unsubscribe": MessageLookupByLibrary.simpleMessage("Отмена подписки"),
+        "update": MessageLookupByLibrary.simpleMessage("Обновить"),
         "upload": MessageLookupByLibrary.simpleMessage("Загрузить"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "Как только мы загрузим туда первые файлы, на ваш баланс "),

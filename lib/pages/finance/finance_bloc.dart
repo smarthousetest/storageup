@@ -90,8 +90,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
 
     var status = await _subscriptionService.changeSubscription(choosedSub);
     if (status == ResponseStatus.ok) {
-      var updatedSubscription =
-          await _subscriptionService.getCurrentSubscription();
+      var updatedSubscription = await _subscriptionService.getCurrentSubscription();
       emit(state.copyWith(
         sub: updatedSubscription.left,
       ));

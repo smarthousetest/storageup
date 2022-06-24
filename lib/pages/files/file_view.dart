@@ -8,9 +8,9 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_info_container.dart';
-import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_info_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'file_bloc.dart';
@@ -21,6 +21,7 @@ import 'package:upstorage_desktop/utilites/extensions.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
+
   //var index = 0;
   FilePage();
 }
@@ -38,9 +39,11 @@ class _FilePageState extends State<FilePage> {
   bool _isSearchFieldChoosen = true;
   final TextEditingController _searchingFieldController =
       TextEditingController();
+
   //SortingDirection _direction = SortingDirection.neutral;
   GlobalKey stickyKey = GlobalKey();
   GlobalKey propertiesWidthKey = GlobalKey();
+
   //SortingCriterion _lastCriterion = SortingCriterion.byDateCreated;
 
   @override
@@ -96,11 +99,22 @@ class _FilePageState extends State<FilePage> {
 
   List<SortingElement> _getSortingElements() {
     return [
-      SortingElement(text: translate.by_type, type: SortingCriterion.byType),
-      SortingElement(text: translate.by_name, type: SortingCriterion.byName),
       SortingElement(
-          text: translate.by_date_added, type: SortingCriterion.byDateCreated),
-      SortingElement(text: translate.by_size, type: SortingCriterion.bySize),
+        text: translate.by_type,
+        type: SortingCriterion.byType,
+      ),
+      SortingElement(
+        text: translate.by_name,
+        type: SortingCriterion.byName,
+      ),
+      SortingElement(
+        text: translate.by_date_added,
+        type: SortingCriterion.byDateCreated,
+      ),
+      SortingElement(
+        text: translate.by_size,
+        type: SortingCriterion.bySize,
+      ),
     ];
   }
 
@@ -220,14 +234,16 @@ class _FilePageState extends State<FilePage> {
             child: Container(
               width: _isSearchFieldChoosen ? 46 : _searchFieldWidth! + 46,
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ]),
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Color.fromARGB(25, 23, 69, 139),
+                    blurRadius: 4,
+                    offset: Offset(1, 4),
+                  )
+                ],
+              ),
               child: Container(
                 //width: 46,
                 child: Row(children: [
@@ -541,6 +557,7 @@ class SortingMenuActions extends StatefulWidget {
   final ThemeData theme;
   final S translate;
   final Function(SortingCriterion) onTap;
+
   @override
   _SortingPopupMenuActionsState createState() =>
       _SortingPopupMenuActionsState();
@@ -548,6 +565,7 @@ class SortingMenuActions extends StatefulWidget {
 
 class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
   int ind = -1;
+
   @override
   Widget build(BuildContext context) {
     var style = TextStyle(

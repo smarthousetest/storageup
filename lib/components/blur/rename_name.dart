@@ -13,8 +13,10 @@ import '../../utilites/services/auth_service.dart';
 
 class BlurRenameName extends StatefulWidget {
   final String name;
+
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
+
   BlurRenameName(this.name);
 }
 
@@ -84,11 +86,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: kNormalTextFontFamily,
-                                  color: hintColor
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .onBackground
-                                      : Theme.of(context).errorColor,
+                                  color: hintColor ? Theme.of(context).colorScheme.onBackground : Theme.of(context).errorColor,
                                 ),
                               ),
                             ),
@@ -109,15 +107,13 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                 onChanged: (myController) {
                                   print(myController);
                                   myController = myController.trim();
-                                  if (myController.isEmpty ||
-                                      myController.length <= 2) {
+                                  if (myController.isEmpty || myController.length <= 2) {
                                     setState(() {
                                       canSave = false;
                                       hintColor = false;
                                     });
                                   }
-                                  if (myController.isNotEmpty &&
-                                      myController.length > 2) {
+                                  if (myController.isNotEmpty && myController.length > 2) {
                                     setState(() {
                                       canSave = true;
                                       hintColor = true;
@@ -125,26 +121,28 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                   }
                                 },
                                 style: TextStyle(
-                                    color: Theme.of(context).disabledColor,
-                                    fontSize: 14,
-                                    fontFamily: kNormalTextFontFamily),
+                                  color: Theme.of(context).disabledColor,
+                                  fontSize: 14,
+                                  fontFamily: kNormalTextFontFamily,
+                                ),
                                 decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.only(left: 15, bottom: 8),
+                                  contentPadding: EdgeInsets.only(left: 15, bottom: 8),
                                   hoverColor: Theme.of(context).cardColor,
                                   focusColor: Theme.of(context).cardColor,
                                   fillColor: Theme.of(context).cardColor,
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
-                                        color: Theme.of(context).cardColor,
-                                        width: 0.0),
+                                      color: Theme.of(context).cardColor,
+                                      width: 0.0,
+                                    ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
-                                        color: Theme.of(context).cardColor,
-                                        width: 0.0),
+                                      color: Theme.of(context).cardColor,
+                                      width: 0.0,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -179,8 +177,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                           color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -190,29 +187,22 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (canSave) {
-                                          final result =
-                                              await _authController.changeName(
-                                                  name: myController.value.text
-                                                      .trim());
-                                          Navigator.pop(context,
-                                              myController.value.text.trim());
-                                          if (result ==
-                                              AuthenticationStatus
-                                                  .externalError) {
+                                          final result = await _authController.changeName(
+                                            name: myController.value.text.trim(),
+                                          );
+                                          Navigator.pop(context, myController.value.text.trim());
+                                          if (result == AuthenticationStatus.externalError) {
                                             await showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                return BlurSomethingGoesWrong(
-                                                    true);
+                                                return BlurSomethingGoesWrong(true);
                                               },
                                             );
-                                          } else if (result ==
-                                              AuthenticationStatus.noInternet) {
+                                          } else if (result == AuthenticationStatus.noInternet) {
                                             await showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
-                                                return BlurFailedServerConnection(
-                                                    true);
+                                                return BlurFailedServerConnection(true);
                                               },
                                             );
                                           }
@@ -228,20 +218,15 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: canSave
-                                            ? Theme.of(context).splashColor
-                                            : Theme.of(context).canvasColor,
+                                        primary: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: canSave
-                                              ? Theme.of(context).splashColor
-                                              : Theme.of(context).canvasColor,
+                                          color: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -262,10 +247,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child:
-                                SvgPicture.asset('assets/file_page/close.svg')),
+                        child: MouseRegion(cursor: SystemMouseCursors.click, child: SvgPicture.asset('assets/file_page/close.svg')),
                       )),
                 ],
               ),

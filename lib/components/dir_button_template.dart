@@ -9,10 +9,12 @@ class CustomDirButton extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
   final String name;
+
   // TextEditingController? dirName;
   final Function()? onTap;
   final String description;
   final bool readonly;
+
   CustomDirButton({
     required this.name,
     this.onTap,
@@ -23,10 +25,8 @@ class CustomDirButton extends StatefulWidget {
 
 class _ButtonTemplateState extends State<CustomDirButton> {
   Future<void> _onPointerDown(PointerDownEvent event) async {
-    if (event.kind == PointerDeviceKind.mouse &&
-        event.buttons == kSecondaryMouseButton) {
-      final overlay =
-          Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    if (event.kind == PointerDeviceKind.mouse && event.buttons == kSecondaryMouseButton) {
+      final overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
       final menuItem = await showMenu<int>(
           shape: RoundedRectangleBorder(
             side: BorderSide(width: 1, color: Theme.of(context).dividerColor),
@@ -147,7 +147,9 @@ class _ButtonTemplateState extends State<CustomDirButton> {
                 value: 5),
           ],
           position: RelativeRect.fromSize(
-              event.position & Size(48.0, 48.0), overlay.size));
+            event.position & Size(48.0, 48.0),
+            overlay.size,
+          ));
       // Check if menu item clicked
       switch (menuItem) {
         case 1:

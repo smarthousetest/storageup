@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 part 'like_event.dart';
+
 part 'like_state.dart';
 
 class LikeBloc extends Bloc<LikeEvent, LikeState> {
@@ -19,7 +20,9 @@ class LikeBloc extends Bloc<LikeEvent, LikeState> {
   }
 
   LikeState _mapSearchFieldChanged(
-      LikeState state, LikeSearchFieldChanged event) {
+    LikeState state,
+    LikeSearchFieldChanged event,
+  ) {
     return state;
   }
 }
