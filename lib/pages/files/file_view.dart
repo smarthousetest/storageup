@@ -1,5 +1,4 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,12 +38,10 @@ class _FilePageState extends State<FilePage> {
   bool _isSearchFieldChoosen = true;
   final TextEditingController _searchingFieldController =
       TextEditingController();
+  final FocusNode focusNode = FocusNode();
 
-  //SortingDirection _direction = SortingDirection.neutral;
   GlobalKey stickyKey = GlobalKey();
   GlobalKey propertiesWidthKey = GlobalKey();
-
-  //SortingCriterion _lastCriterion = SortingCriterion.byDateCreated;
 
   @override
   void initState() {
@@ -66,24 +63,16 @@ class _FilePageState extends State<FilePage> {
     final width = MediaQuery.of(context).size.width;
     //final keyContext = stickyKey.currentContext;
     //final keyInfoContext = propertiesWidthKey.currentContext;
-
-    if (StateInfoContainer.of(context)?.object != null) {
-      // setState(() {
-      //   _searchFieldWidth =
-      //       width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 320 - 22;
-      // });
-    } else {
-      if (MediaQuery.of(context).size.width < 967) {
-        setState(() {
-          _searchFieldWidth =
-              width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
-        });
-      } else
-        setState(() {
-          _searchFieldWidth =
-              width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
-        });
-    }
+    if (MediaQuery.of(context).size.width < 967) {
+      setState(() {
+        _searchFieldWidth =
+            width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
+      });
+    } else
+      setState(() {
+        _searchFieldWidth =
+            width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
+      });
   }
 
   void postPrepareFields(BuildContext context) {
@@ -148,7 +137,7 @@ class _FilePageState extends State<FilePage> {
     setState(() {
       _isSearchFieldChoosen = !_isSearchFieldChoosen;
     });
-    context.read<FilesBloc>().add(FilesSortingClear());
+    //context.read<FilesBloc>().add(FilesSortingClear());
   }
 
   Widget _fileView(BuildContext context) {
@@ -376,9 +365,12 @@ class _FilePageState extends State<FilePage> {
                     setState(() {
                       _changeSortFieldsVisibility(context);
                       StateSortedContainer.of(context).actionForButton();
+                      StateSortedContainer.of(context)
+                          .newSortedCriterion(SortingCriterion.byDateCreated);
+                      focusNode.requestFocus();
+                      // _searchingFieldController
                     });
-
-                    _searchingFieldController.clear();
+                    // _searchingFieldController.clear();
                   },
           ),
           Container(
@@ -389,6 +381,7 @@ class _FilePageState extends State<FilePage> {
                   padding: const EdgeInsets.only(left: 10.0),
                   child: Center(
                     child: TextField(
+                      focusNode: focusNode,
                       autofocus: true,
                       style: TextStyle(
                         fontSize: 16.0,
