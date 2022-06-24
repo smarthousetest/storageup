@@ -63,9 +63,6 @@ class _RegistrationCompleteState extends State<RegistrationComplete> {
             onPressed: () {
               widget.changePage();
             },
-            // onPressed: () {
-            //   context.read<AuthBloc>().add(AuthClear());
-            // },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
