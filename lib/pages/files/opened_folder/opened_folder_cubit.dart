@@ -1,18 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:cpp_native/cpp_native.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
-
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
@@ -438,7 +436,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChoosedFile(
+  Future<ErrorType?> onActionRenameChosenFile(
       BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
@@ -451,9 +449,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
-  Future<ErrorType?> onActionRenameChoosedFolder(
+  Future<ErrorType?> onActionRenameChosenFolder(
       BaseObject object, String newName) async {
     var result = await _filesController.renameFolder(newName, object.id);
     print(result);
@@ -466,6 +465,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
   void _syncWithLoadController() async {
@@ -491,23 +491,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       }
     });
   }
-
-  // Future<void> _mapContextActionChoosed(
-  //    ContextActionEnum action,
-  // ) async {
-  //   // emit(state.copyWith(status: FormzStatus.submissionInProgress));
-
-  //   //print('${action} ${event.file}');
-  //   if (action == ContextActionEnum.delete) {
-  //     await _onActionDeleteChoosed();
-  //   } else if (action == ContextActionEnum.share) {
-  //     // await _mapDownloadFile(event, state, emit); //TODO remove this
-  //   } else if (action == ContextActionEnum.select) {
-  //     await _mapSelectFile(event, state, emit);
-  //   } else {
-  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
-  //   }
-  // }
 
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(
@@ -763,11 +746,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   void _downloadFile(String recordId, String? path) async {
     _loadController.downloadFile(fileId: recordId, path: path);
-    _registerDownloadObserver(recordId,);
+    _registerDownloadObserver(
+      recordId,
+    );
     _setRecordDownloading(recordId: recordId);
   }
 
-  void _registerDownloadObserver(String recordId,) async {
+  void _registerDownloadObserver(
+    String recordId,
+  ) async {
     var box = await Hive.openBox(kPathDBName);
     var controllerState = _loadController.getState;
     var downloadObserver = DownloadObserver(recordId, (value) async {
@@ -785,9 +772,9 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             _unregisterDownloadObserver(recordId);
           } else if (file.localPath.isNotEmpty) {
             String path = file.localPath
-                  .split('/')
-                  .skipWhile((value) => value != 'downloads')
-                  .join('/');
+                .split('/')
+                .skipWhile((value) => value != 'downloads')
+                .join('/');
 
             await box.put(file.id, path);
 
