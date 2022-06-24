@@ -61,7 +61,8 @@ class Server {
     var downloadLocationInfo = _repository.locationsInfo;
     for (var curLocation in downloadLocationInfo) {
       if (curLocation.keeperId == old_id) {
-        DownloadLocation newLocation = curLocation.copyWith(idForCompare: new_id);
+        DownloadLocation newLocation =
+            curLocation.copyWith(idForCompare: new_id);
         _repository.changeLocation(location: newLocation);
         print("Keeper id is changed [$old_id] => [$new_id]");
         return Response.ok("Keeper id is changed [$old_id] => [$new_id]");
