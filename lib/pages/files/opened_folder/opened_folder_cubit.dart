@@ -248,7 +248,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> mapFileSortingByCriterion() async {
     emit(state.copyWith(status: FormzStatus.pure));
-    OpenedFolderState newState = _clearGroupedMap(state);
+    OpenedFolderState newState = state;
     var criterion = newState.criterion;
     var direction = newState.direction;
     switch (criterion) {
@@ -323,10 +323,12 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     if (direction == SortingDirection.down) {
       emit(state.copyWith(
         groupedFiles: groupedFiles,
+        criterion: SortingCriterion.byType,
         status: FormzStatus.pure,
       ));
     } else {
       emit(state.copyWith(
+        criterion: SortingCriterion.byType,
         groupedFiles:
             // SplayTreeMap<String, List<BaseObject>>.from(
             //     groupedFiles, (a, b) => a.compareTo(b))
@@ -487,7 +489,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> uploadFilesAction(String folderId) async {
+  Future<void> uploadFilesAction(String? folderId) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.any,
@@ -498,6 +500,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       for (int i = 0; i < filePaths.length; i++) {
         if (filePaths[i] != null &&
             PathCheck().isPathCorrect(filePaths[i].toString())) {
+          if (folderId == null) folderId = state.currentFolder?.id;
           await _loadController.uploadFile(
               filePath: filePaths[i], folderId: folderId);
         } else {

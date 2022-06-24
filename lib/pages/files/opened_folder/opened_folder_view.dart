@@ -155,6 +155,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               builder: (context, state) {
                 return ContextMenuRightTap(
                   translate: translate,
+                  theme: Theme.of(context),
                   onTap: (action) {
                     Navigator.of(context).pop();
                     _contextAction(state, context, action);
@@ -586,14 +587,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                   _initiatingControllersForGroupedFiles(state);
                 }
 
-                Future<void> _onPointerDown(PointerDownEvent event) async {
-                  if (event.kind == PointerDeviceKind.mouse &&
-                      event.buttons == kSecondaryMouseButton) {
-                    //print("right button click");
-                    _popupControllersGrouped[state.sortedFiles
-                            .indexWhere((element) => element.id == obj.id)]
-                        .showMenu();
-                  }
+                _onPointerDown() {
+                  //print("right button click");
+                  _popupControllersGrouped[state.sortedFiles
+                          .indexWhere((element) => element.id == obj.id)]
+                      .showMenu();
                 }
 
                 final object = files[index];
@@ -631,36 +629,35 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 return MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
+                    onSecondaryTapDown: (_) {
+                      _onPointerDown();
+                    },
                     behavior: HitTestBehavior.opaque,
                     onTap: onTap,
-                    child: Listener(
-                      onPointerDown: _onPointerDown,
-                      behavior: HitTestBehavior.opaque,
-                      child: IgnorePointer(
-                        child: CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            enablePassEvent: false,
-                            horizontalMargin: -90,
-                            verticalMargin: -90,
-                            controller: _popupControllersGrouped[state.objects
-                                .indexWhere((element) => element.id == obj.id)],
-                            menuBuilder: () {
-                              return FilesPopupMenuActions(
-                                  theme: Theme.of(context),
-                                  translate: translate,
-                                  object: obj,
-                                  onTap: (action) async {
-                                    _popupControllersGrouped[state.objects
-                                            .indexWhere((element) =>
-                                                element.id == obj.id)]
-                                        .hideMenu();
-                                    _popupActions(state, context, action, obj);
-                                  });
-                            },
-                            child: ObjectView(object: value[index])),
-                      ),
+                    child: IgnorePointer(
+                      child: CustomPopupMenu(
+                          pressType: PressType.singleClick,
+                          barrierColor: Colors.transparent,
+                          showArrow: false,
+                          enablePassEvent: false,
+                          horizontalMargin: -90,
+                          verticalMargin: -90,
+                          controller: _popupControllersGrouped[state.objects
+                              .indexWhere((element) => element.id == obj.id)],
+                          menuBuilder: () {
+                            return FilesPopupMenuActions(
+                                theme: Theme.of(context),
+                                translate: translate,
+                                object: obj,
+                                onTap: (action) async {
+                                  _popupControllersGrouped[state.objects
+                                          .indexWhere((element) =>
+                                              element.id == obj.id)]
+                                      .hideMenu();
+                                  _popupActions(state, context, action, obj);
+                                });
+                          },
+                          child: ObjectView(object: value[index])),
                     ),
                   ),
                 );
@@ -1382,8 +1379,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     switch (action) {
       case ContextMenuAction.addFiles:
         final folderId = StateContainer.of(context).choosedFilesFolderId;
-        if (folderId != null)
-          context.read<OpenedFolderCubit>().uploadFilesAction(folderId);
+        context.read<OpenedFolderCubit>().uploadFilesAction(folderId);
         break;
       case ContextMenuAction.createFolder:
         final folderId = StateContainer.of(context).choosedFilesFolderId;
@@ -1537,6 +1533,8 @@ class ObjectView extends StatelessWidget {
           ) {
         thumbnail = record.thumbnail?.first.publicUrl;
         type = FileAttribute().getFilesType(record.name!.toLowerCase());
+        var typeDefault = ['ico', 'bmp', 'eps', 'mac', 'psd', 'vsd'];
+        if (typeDefault.contains(type)) type = 'image_default';
       }
     }
 
@@ -1626,12 +1624,14 @@ class ContextMenuRightTap extends StatefulWidget {
       {required this.translate,
       required this.onTap,
       required this.child,
+      required this.theme,
       Key? key})
       : super(key: key);
 
   final S translate;
   final Function(ContextMenuAction) onTap;
   final Widget child;
+  final ThemeData theme;
 
   @override
   _ContextMenuRightTapState createState() => _ContextMenuRightTapState();
@@ -1640,6 +1640,7 @@ class ContextMenuRightTap extends StatefulWidget {
 class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
   @override
   Widget build(BuildContext context) {
+    var mainColor = widget.theme.colorScheme.onSecondary;
     int ind = -1;
     return ContextMenuArea(
       builder: (context) => [
@@ -1663,9 +1664,7 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 0
-                          ? Theme.of(context).colorScheme.onSecondary
-                          : null,
+                      color: ind == 0 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -1698,9 +1697,7 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1
-                          ? Theme.of(context).colorScheme.onSecondary
-                          : null,
+                      color: ind == 1 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
