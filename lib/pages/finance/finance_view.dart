@@ -555,7 +555,7 @@ class _FinancePageState extends State<FinancePage> {
                                     choosedSubGb == null) {
                                   return GestureDetector(
                                     onTap: () async {
-                                      var str = await showDialog(
+                                      await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return BlurFailedServerConnection(
@@ -585,7 +585,7 @@ class _FinancePageState extends State<FinancePage> {
                                 } else {
                                   return GestureDetector(
                                     onTap: () async {
-                                      var str = await showDialog(
+                                      await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return BlurCancelSub(choosedSubGb,
