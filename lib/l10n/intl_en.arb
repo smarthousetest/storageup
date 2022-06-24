@@ -255,6 +255,8 @@
     "server_connection_error": "The connection to the server cannot be established.",
     "check_ethernet_connection": "Check your internet connection and try again.",
     "ok": "Ok",
+    "resend_letter_available": "Resend letter will be available in",
+    "seconds": "{count} seconds",
     "never": "Never",
     "where_move": "Where to move it to?",
     "create": "Create",

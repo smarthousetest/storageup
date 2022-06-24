@@ -645,15 +645,13 @@ class FilesService {
     }
   }
 
-  Future<String?> getRemoteAppVersion() async {
+  Future<String> getRemoteAppVersion() async {
     for (int i = 0; i < 5; i++) {
       try {
         var response = await _dio.get('https://upstorage.net/apps/version/ui');
         return response.data;
-      } catch (e) {
-        // print(e);
-      }
+      } catch (e) {}
     }
-    return null;
+    return "";
   }
 }

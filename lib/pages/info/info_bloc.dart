@@ -45,7 +45,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
       user: user,
       folder: folder,
       allMediaFolders: allMediaFolders,
-      sub: sub,
+      sub: sub.left,
       packetNotifier: packetNotifier,
       valueNotifier: valueNotifier,
     ));
