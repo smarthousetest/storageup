@@ -235,6 +235,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     ),
                   );
             },
+            onSubmitted: () {
+              var action = _buttonAction(state, context);
+
+              if (action is Function()) {
+                action();
+              }
+            },
             invalid: state.email.invalid && state.email.value.isNotEmpty ||
                 state.error == AuthError.wrongCredentials,
             errorMessage: state.error == AuthError.wrongCredentials
