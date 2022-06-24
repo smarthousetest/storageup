@@ -6,13 +6,10 @@ import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -99,11 +96,11 @@ Future<void> showErrorPopUp({
 }) async {
   final tag = 'Extensions: showErrorPopUp -> ';
   final container = StateContainer.of(context);
-  final bool canNotShowPopUp = container?.isErrorPopUpShowing ?? true;
+  final bool canNotShowPopUp = container.isErrorPopUpShowing;
   log('$tag canNotShowPopUp: $canNotShowPopUp');
   if (!canNotShowPopUp) {
     log('$tag will set isErrorPopUpShowing to true');
-    StateContainer.of(context)?.isErrorPopUpShowing = true;
+    StateContainer.of(context).isErrorPopUpShowing = true;
     log('$tag has set isErrorPopUpShowing to true');
     /*final dialogFuture =*/ await showDialog(
       context: context,
@@ -114,7 +111,7 @@ Future<void> showErrorPopUp({
 
     // dialogFuture.whenComplete(
     //   () =>
-    StateContainer.of(context)?.isErrorPopUpShowing = false;
+    StateContainer.of(context).isErrorPopUpShowing = false;
     // );
     // BottomBarView.setLoading(context, false);
 

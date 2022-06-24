@@ -57,7 +57,7 @@ dependencies:
   cpp_native:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git
-
+      ref: load_controller
   file_typification:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/file_typification.git

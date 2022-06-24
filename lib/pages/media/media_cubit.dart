@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cpp_native/controllers/load/load_controller.dart';
+import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -16,12 +18,9 @@ import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/load_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/models.dart';
 import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
 import '../../constants.dart';
 import 'media_state.dart';
@@ -31,7 +30,7 @@ class MediaCubit extends Cubit<MediaState> {
 
   FilesController _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
-  var _loadController = getIt<LoadController>();
+  var _loadController = LoadController.instance;
   List<UploadObserver> _observers = [];
   List<DownloadObserver> _downloadObservers = [];
   UserController _userController = getIt<UserController>();
@@ -39,47 +38,47 @@ class MediaCubit extends Cubit<MediaState> {
   String idTappedFile = '';
 
   late var _updateObserver = Observer((e) {
-    try {
-      if (e is List<UploadFileInfo>) {
-        final uploadingFilesList = e;
-        if (uploadingFilesList.any((file) =>
-            file.isInProgress && file.loadPercent == 0 && file.id.isNotEmpty)) {
-          final file = uploadingFilesList
-              .firstWhere((file) => file.isInProgress && file.loadPercent == 0);
+    // try {
+    //   if (e is List<UploadFileInfo>) {
+    //     final uploadingFilesList = e;
+    //     if (uploadingFilesList.any((file) =>
+    //         file.isInProgress && file.loadPercent == 0 && file.id.isNotEmpty)) {
+    //       final file = uploadingFilesList
+    //           .firstWhere((file) => file.isInProgress && file.loadPercent == 0);
 
-          _update(uploadingFileId: file.id);
-        }
-      } else if (e is List<DownloadFileInfo>) {
-        final downloadingFilesList = e;
-        if (downloadingFilesList
-            .any((file) => file.isInProgress && file.loadPercent == -1)) {
-          final file = downloadingFilesList.firstWhere(
-            (file) => file.isInProgress && file.loadPercent == -1,
-          );
+    //       _update(uploadingFileId: file.id);
+    //     }
+    //   } else if (e is List<DownloadFileInfo>) {
+    //     final downloadingFilesList = e;
+    //     if (downloadingFilesList
+    //         .any((file) => file.isInProgress && file.loadPercent == -1)) {
+    //       final file = downloadingFilesList.firstWhere(
+    //         (file) => file.isInProgress && file.loadPercent == -1,
+    //       );
 
-          _setRecordDownloading(recordId: file.id);
-        }
+    //       _setRecordDownloading(recordId: file.id);
+    //     }
 
-        if (downloadingFilesList.any((file) =>
-            file.endedWithException == true &&
-            file.errorReason == ErrorReason.noInternetConnection &&
-            file.loadPercent == -1 &&
-            file.isInProgress == false &&
-            file.id == idTappedFile)) {
-          emit(state.copyWith(status: FormzStatus.submissionCanceled));
-          emit(state.copyWith(status: FormzStatus.pure));
-        } else if (downloadingFilesList.any((file) =>
-            file.endedWithException == true &&
-            file.loadPercent == -1 &&
-            file.isInProgress == false &&
-            file.id == idTappedFile)) {
-          emit(state.copyWith(status: FormzStatus.submissionFailure));
-          emit(state.copyWith(status: FormzStatus.pure));
-        }
-      }
-    } catch (e) {
-      log('MediaCubit -> _updateObserver:', error: e);
-    }
+    //     if (downloadingFilesList.any((file) =>
+    //         file.endedWithException == true &&
+    //         file.errorReason == ErrorReason.noInternetConnection &&
+    //         file.loadPercent == -1 &&
+    //         file.isInProgress == false &&
+    //         file.id == idTappedFile)) {
+    //       emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    //       emit(state.copyWith(status: FormzStatus.pure));
+    //     } else if (downloadingFilesList.any((file) =>
+    //         file.endedWithException == true &&
+    //         file.loadPercent == -1 &&
+    //         file.isInProgress == false &&
+    //         file.id == idTappedFile)) {
+    //       emit(state.copyWith(status: FormzStatus.submissionFailure));
+    //       emit(state.copyWith(status: FormzStatus.pure));
+    //     }
+    //   }
+    // } catch (e) {
+    //   log('MediaCubit -> _updateObserver:', error: e);
+    // }
   });
 
   void init() async {
@@ -99,9 +98,7 @@ class MediaCubit extends Cubit<MediaState> {
       status: FormzStatus.pure,
       valueNotifier: valueNotifier,
     ));
-    if (_loadController.isNotInited()) {
-      await _loadController.init();
-    }
+
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
     for (int i = 1; i < allMediaFolders!.length; i++) {

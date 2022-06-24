@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
@@ -12,11 +13,8 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/load_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/models.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 import '../sell_space/space_view.dart';
@@ -97,11 +95,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   final FilesService _filesService = getIt<FilesService>();
-  var _loadController = getIt<LoadController>();
+  var _loadController = LoadController.instance;
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
   late final LatestFileRepository _repository;
-  List<DownloadObserver> _downloadObservers = [];
 
   String _getLocalAppVersion() {
     var os = OsSpecifications.getOs();
@@ -239,66 +236,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _downloadFile(String recordId) async {
     _loadController.downloadFile(fileId: recordId);
-    _registerDownloadObserver(recordId);
     _setRecordDownloading(recordId: recordId);
-  }
-
-  void _registerDownloadObserver(String recordId) async {
-    var box = await Hive.openBox(kPathDBName);
-    var controllerState = _loadController.getState;
-    var downloadObserver = DownloadObserver(recordId, (value) async {
-      if (value is List<DownloadFileInfo>) {
-        var fileId = value.indexWhere((element) => element.id == recordId);
-
-        if (fileId != -1) {
-          var file = value[fileId];
-          if (file.endedWithException) {
-            _setRecordDownloading(
-              recordId: recordId,
-              isDownloading: false,
-            );
-
-            _unregisterDownloadObserver(recordId);
-          } else if (file.localPath.isNotEmpty) {
-            var path = file.localPath
-                .split('/')
-                .skipWhile((value) => value != 'downloads')
-                .join('/');
-            await box.put(file.id, path);
-
-            _setRecordDownloading(
-              recordId: recordId,
-              isDownloading: false,
-            );
-
-            var res = await OpenFile.open(file.localPath);
-            print(res.message);
-
-            _unregisterDownloadObserver(recordId);
-          }
-        }
-      }
-      // }
-    });
-
-    controllerState.registerObserver(
-      downloadObserver,
-    );
-
-    _downloadObservers.add(downloadObserver);
-  }
-
-  void _unregisterDownloadObserver(String recordId) async {
-    try {
-      final observer =
-          _downloadObservers.firstWhere((observer) => observer.id == recordId);
-
-      _loadController.getState.unregisterObserver(observer);
-
-      _downloadObservers.remove(observer);
-    } catch (e) {
-      log('OpenFolderCubit -> _unregisterDownloadObserver:', error: e);
-    }
   }
 
   void _setRecordDownloading({
@@ -325,9 +263,3 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 class UpdateFolderEvent {}
 
 class UpdateAlbumEvent {}
-
-class DownloadObserver extends Observer {
-  String id;
-
-  DownloadObserver(this.id, Function(dynamic) onChange) : super(onChange);
-}

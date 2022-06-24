@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:cpp_native/controllers/load/load_controller.dart';
+import 'package:cpp_native/controllers/load/models.dart';
+import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
@@ -11,11 +14,6 @@ import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/load_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load/models.dart';
-
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/observable_utils.dart';
 
 import 'media_open_event.dart';
 import 'media_open_state.dart';
@@ -46,8 +44,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
   }
 
   FilesController _controller;
-  final LoadController _loadController = getIt<LoadController>();
-  List<Observer> _listeners = [];
+  final LoadController _loadController = LoadController.instance;
 
   Future<void> _mapMediaOpenPageOpened(
     MediaOpenState state,
@@ -123,7 +120,6 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         // _downloadListener(id);
       });
 
-      _listeners.add(observer);
       _loadController.getState.registerObserver(observer);
 
       emit(
