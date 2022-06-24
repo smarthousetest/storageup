@@ -1398,7 +1398,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               folderId: object.id,
             );
           } else {
-            print('file tapped in properies');
+            print('file tapped in properties');
 
             context.read<OpenedFolderCubit>().fileTapped(object as Record);
           }
@@ -1418,8 +1418,10 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           if (result != null &&
               result is String &&
               result != FileAttribute().getFileName(object.name ?? '')) {
-            result =
-                "$result${fileExtension.isNotEmpty ? ".$fileExtension" : ""}";
+            if (fileExtension.isNotEmpty) {
+              fileExtension = ".$fileExtension";
+            }
+            result = "$result$fileExtension";
             final res = await context
                 .read<OpenedFolderCubit>()
                 .onActionRenameChosenFile(object, result);
