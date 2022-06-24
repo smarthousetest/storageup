@@ -36,7 +36,7 @@ class MediaCubit extends Cubit<MediaState> {
   List<DownloadObserver> _downloadObservers = [];
   UserController _userController = getIt<UserController>();
   StreamSubscription? updatePageSubscription;
-  late String idTappedFile;
+  String idTappedFile = '';
 
   late var _updateObserver = Observer((e) {
     try {
@@ -106,9 +106,10 @@ class MediaCubit extends Cubit<MediaState> {
     List<Record> allMedia = [];
     for (int i = 1; i < allMediaFolders!.length; i++) {
       allMedia.addAll(allMediaFolders[i].records!);
+      print("all media $allMedia");
     }
     _syncWithLoadController(allMedia);
-
+    print("all media2 $allMedia");
     updatePageSubscription = eventBusUpdateAlbum.on().listen((event) {
       _update();
     });
@@ -576,7 +577,7 @@ class MediaCubit extends Cubit<MediaState> {
         );
         albums.removeAt(indexOfAlbum + 1);
       } catch (e) {
-        print(e);
+        // print(e);
       }
     }
     final currentFolder =
@@ -584,7 +585,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(state.copyWith(
       albums: albums,
       currentFolder: currentFolder,
-      currentFolderRecords: currentFolder.records,
+      currentFolderRecords: currentFolder.records?.reversed.toList(),
       status: FormzStatus.pure,
     ));
   }
@@ -593,7 +594,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(
       state.copyWith(
         currentFolder: newFolder,
-        currentFolderRecords: newFolder.records,
+        currentFolderRecords: newFolder.records?.reversed.toList(),
         status: FormzStatus.pure,
       ),
     );

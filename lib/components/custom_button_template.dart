@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 enum ChosenPage {
   home,
@@ -38,10 +38,11 @@ class _ButtonTemplateState extends State<CustomMenuButton> {
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 5),
       child: Container(
         decoration: BoxDecoration(
-            color: isSelected
-                ? Theme.of(context).dividerColor
-                : Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(7)),
+          color: isSelected
+              ? Theme.of(context).dividerColor
+              : Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(7),
+        ),
         width: 214,
         height: 44,
         child: TextButton.icon(

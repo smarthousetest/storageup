@@ -12,10 +12,8 @@ import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 
 class FilesController {
-  MediaRepository _mediaRepo =
-      getIt<MediaRepository>(instanceName: 'media_repo');
-  FilesRepository _filesRepo =
-      getIt<FilesRepository>(instanceName: 'files_repo');
+  MediaRepository _mediaRepo = getIt<MediaRepository>(instanceName: 'media_repo');
+  FilesRepository _filesRepo = getIt<FilesRepository>(instanceName: 'files_repo');
 
   FilesService _service = getIt<FilesService>();
   S translate = getIt<S>();
@@ -67,8 +65,7 @@ class FilesController {
 
   Future<Folder?> getAlbum(String id) async {
     var folders = _mediaRepo.getMedia();
-    Folder? choosedFolder =
-        folders?.firstWhere((element) => element.id == id) as Folder;
+    Folder? choosedFolder = folders?.firstWhere((element) => element.id == id) as Folder;
 
     return choosedFolder;
   }
@@ -186,11 +183,9 @@ class FilesController {
     } else if (foldersResult != null && recordsResult == null) {
       return foldersResult;
     } else {
-      if (recordsResult == ResponseStatus.ok &&
-          foldersResult == ResponseStatus.ok) {
+      if (recordsResult == ResponseStatus.ok && foldersResult == ResponseStatus.ok) {
         return ResponseStatus.ok;
-      } else if (recordsResult == ResponseStatus.noInternet &&
-          foldersResult == ResponseStatus.noInternet) {
+      } else if (recordsResult == ResponseStatus.noInternet && foldersResult == ResponseStatus.noInternet) {
         return ResponseStatus.noInternet;
       } else {
         return ResponseStatus.failed;

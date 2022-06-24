@@ -41,11 +41,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m8(count) => "${count} Mb";
 
-  static String m9(count) => "${count} Pb";
+  static String m9(count) => "Minimum storage size: ${count} GB";
 
-  static String m10(count) => "${count} \$/mounth";
+  static String m10(count) => "${count} Pb";
 
-  static String m11(count) => "${count} Tb";
+  static String m11(count) => "${count} seconds";
+
+  static String m12(count) => "${count} \$/mounth";
+
+  static String m13(count) => "${count} Tb";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -191,11 +195,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "management":
             MessageLookupByLibrary.simpleMessage("Subscription management"),
         "max_storage": MessageLookupByLibrary.simpleMessage(
-            "Maximum size for your drive: 180 GB"),
+            "Maximum size for your drive: "),
         "mb": m8,
         "media": MessageLookupByLibrary.simpleMessage("Media"),
-        "min_storage":
-            MessageLookupByLibrary.simpleMessage("Minimum storage size: 32 GB"),
+        "min_storage": m9,
         "money":
             MessageLookupByLibrary.simpleMessage("can make money from it."),
         "money_two_step":
@@ -204,8 +207,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "Get more space change your subscription!"),
         "move": MessageLookupByLibrary.simpleMessage("Move"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "name_contain": MessageLookupByLibrary.simpleMessage(
+            "The name must contain more than 2 characters"),
         "name_storage":
             MessageLookupByLibrary.simpleMessage("Name of storage location"),
+        "never": MessageLookupByLibrary.simpleMessage("Never"),
         "new_album": MessageLookupByLibrary.simpleMessage("New album"),
         "new_folder": MessageLookupByLibrary.simpleMessage("New folder"),
         "new_password": MessageLookupByLibrary.simpleMessage("New password"),
@@ -213,6 +219,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "The new password must be at least 8 characters long"),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
+        "not_exceed": MessageLookupByLibrary.simpleMessage(
+            "The volume of the selected storage space does not exceed 32 GB"),
         "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
         "not_storage": MessageLookupByLibrary.simpleMessage(
             "You have no storage locations yet"),
@@ -249,7 +257,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Passwords don\'t match"),
         "path": MessageLookupByLibrary.simpleMessage("Path"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
-        "pb": m9,
+        "pb": m10,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to permanently delete your account"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -288,6 +296,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "You can use free space on your hard"),
         "repeat_password":
             MessageLookupByLibrary.simpleMessage("Repeat new password"),
+        "resend_letter_available": MessageLookupByLibrary.simpleMessage(
+            "Resend letter will be available in"),
         "restart_keeper":
             MessageLookupByLibrary.simpleMessage("You need to restart keeper"),
         "restore_password_after_email": MessageLookupByLibrary.simpleMessage(
@@ -297,6 +307,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Russian"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
+        "seconds": m11,
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Select the folder on the drive where you have free space."),
@@ -321,8 +332,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m10,
-        "tb": m11,
+        "subscription_pay_mounth": m12,
+        "tb": m13,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),
@@ -336,6 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "trust_level": MessageLookupByLibrary.simpleMessage("Trust level"),
         "type": MessageLookupByLibrary.simpleMessage("Type"),
         "unsubscribe": MessageLookupByLibrary.simpleMessage("Unsubscribe"),
+        "update": MessageLookupByLibrary.simpleMessage("Update"),
         "upload": MessageLookupByLibrary.simpleMessage("Upload"),
         "upload_file": MessageLookupByLibrary.simpleMessage(
             "As soon as we upload the first files there, money will be credited "),

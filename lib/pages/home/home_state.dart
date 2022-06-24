@@ -70,8 +70,7 @@ class HomeState extends Equatable {
       usingSpace: usingSpace ?? this.usingSpace,
       allSpace: allSpace ?? this.allSpace,
       loadPercentRentPlace: loadPercentRentPlace ?? this.loadPercentRentPlace,
-      loadPercentPentPlaceFull:
-          loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
+      loadPercentPentPlaceFull: loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
       dailyProfit: dailyProfit ?? this.dailyProfit,
       yourBalance: yourBalance ?? this.yourBalance,
       homeTab: homeTab ?? this.homeTab,
@@ -80,8 +79,7 @@ class HomeState extends Equatable {
       status: status ?? FormzStatus.pure,
       upToDateVersion: upToDateVersion ?? this.upToDateVersion,
       version: version ?? this.version,
-      objectsValueListenable:
-          objectsValueListenable ?? this.objectsValueListenable,
+      objectsValueListenable: objectsValueListenable ?? this.objectsValueListenable,
       latestFile: latestFile ?? this.latestFile,
       checkLatestFile: checkLatestFile ?? this.checkLatestFile,
     );

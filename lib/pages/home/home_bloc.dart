@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -19,6 +19,7 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/observable_utils.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
+import '../sell_space/space_view.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 import 'package:os_specification/os_specification.dart';
@@ -26,7 +27,7 @@ import 'package:os_specification/os_specification.dart';
 @Injectable()
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeState()) {
-    on<HomeUserActionChoosed>((event, emit) async {
+    on<HomeUserActionChosen>((event, emit) async {
       switch (event.action) {
         case UserAction.uploadFiles:
           _uploadFiles(event, emit);
@@ -45,18 +46,28 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     });
 
+    Timer.periodic(
+      Duration(minutes: 5),
+      (_) async {
+        String? localAppVersion = _getLocalAppVersion();
+        var remoteAppVersion = await _filesService.getRemoteAppVersion();
+        add(UpdateRemoteVersion(
+          localVersion: localAppVersion,
+          remoteVersion: remoteAppVersion,
+        ));
+      },
+    );
+
     on<HomePageOpened>((event, emit) async {
-      getApplicationSupportDirectory().then((value) {
-        var os = OsSpecifications.getOs();
-        Hive.init(os.supportDir);
-        print('Hive initialized');
-      });
+      var os = OsSpecifications.getOs();
+      Hive.init(os.supportDir);
+      print('Hive initialized');
       var remoteAppVersion = await _filesService.getRemoteAppVersion();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
 
-      var recentsFile = await _filesService.getRecentsRecords();
-      if (recentsFile != null) {
-        await _repository.addFiles(latestFile: recentsFile);
+      var recentFiles = await _filesService.getRecentsRecords();
+      if (recentFiles != null) {
+        await _repository.addFiles(latestFile: recentFiles);
       }
       var latestFile = await _repository.getLatestFile;
       var listenable = _repository.getLatestFilesValueListenable();
@@ -72,6 +83,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<FileTapped>((event, emit) async {
       await fileTapped(event);
     });
+
+    on<HomeEvent>((event, emit) async {
+      if (event is UpdateRemoteVersion) {
+        emit(
+          state.copyWith(
+            upToDateVersion: event.remoteVersion,
+            version: event.localVersion,
+          ),
+        );
+      }
+    });
   }
 
   final FilesService _filesService = getIt<FilesService>();
@@ -81,30 +103,36 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   late final LatestFileRepository _repository;
   List<DownloadObserver> _downloadObservers = [];
 
-  String? _getLocalAppVersion() {
+  String _getLocalAppVersion() {
     var os = OsSpecifications.getOs();
     var uiVersionFile = File('${os.appDirPath}ui_version.txt');
     if (uiVersionFile.existsSync()) {
       return (uiVersionFile.readAsStringSync()).trim();
     } else {
-      return null;
+      return "";
     }
   }
 
   Future<void> _uploadFiles(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     if (event.values != null) {
       for (int i = 0; i < event.values!.length; i++) {
-        await _loadController.uploadFile(
-            filePath: event.values![i], folderId: event.folderId);
+        if (event.values![i] != null &&
+            PathCheck().isPathCorrect(event.values![i].toString())) {
+          await _loadController.uploadFile(
+              filePath: event.values![i], folderId: event.folderId);
+        } else {
+          print(
+              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+        }
       }
     }
   }
 
   Future<void> _createFolder(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     String? folderId;
@@ -136,7 +164,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _createAlbum(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     String? mediaRootFolderId;
@@ -170,7 +198,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _uploadMedia(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     if (event.values != null && event.values!.isNotEmpty) {

@@ -29,8 +29,8 @@ import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/settings/settings_view.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_sorted_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
 import 'home_bloc.dart';
 import 'home_state.dart';
@@ -130,6 +130,7 @@ class _HomePageState extends State<HomePage> {
         create: (context) => HomeBloc()..add(HomePageOpened()),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) async {
+            // context.read()<SpaceBloc>().add(SendKeeperVersion());
             if (state.status == FormzStatus.submissionFailure) {
               await showDialog(
                 context: context,
@@ -157,9 +158,10 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
+                      color: Color.fromARGB(25, 23, 69, 139),
+                      blurRadius: 4,
+                      offset: Offset(1, 4),
+                    )
                   ],
                 ),
                 child:
@@ -475,8 +477,9 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(10.0),
-            bottomLeft: Radius.circular(10.0)),
+          bottomRight: Radius.circular(10.0),
+          bottomLeft: Radius.circular(10.0),
+        ),
         color: Theme.of(context).dividerColor,
       ),
       height: 50,
@@ -542,7 +545,7 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -563,7 +566,7 @@ class _HomePageState extends State<HomePage> {
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -574,7 +577,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadFiles:
         final folderId = StateContainer.of(context).choosedFilesFolderId;
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+          HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -584,7 +587,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+          HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -593,7 +596,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+          HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
               ),
@@ -647,10 +650,11 @@ class LatestFileView extends StatelessWidget {
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 17,
-                      color: Theme.of(context).colorScheme.onBackground,
-                      overflow: TextOverflow.ellipsis),
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 17,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             ),

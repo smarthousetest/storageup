@@ -710,21 +710,31 @@ class S {
     );
   }
 
-  /// `Minimum storage size: 32 GB`
-  String get min_storage {
+  /// `Minimum storage size: {count} GB`
+  String min_storage(Object count) {
     return Intl.message(
-      'Minimum storage size: 32 GB',
+      'Minimum storage size: $count GB',
       name: 'min_storage',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Maximum size for your drive: `
+  String get max_storage {
+    return Intl.message(
+      'Maximum size for your drive: ',
+      name: 'max_storage',
       desc: '',
       args: [],
     );
   }
 
-  /// `Maximum size for your drive: 180 GB`
-  String get max_storage {
+  /// `The volume of the selected storage space does not exceed 32 GB`
+  String get not_exceed {
     return Intl.message(
-      'Maximum size for your drive: 180 GB',
-      name: 'max_storage',
+      'The volume of the selected storage space does not exceed 32 GB',
+      name: 'not_exceed',
       desc: '',
       args: [],
     );
@@ -2384,6 +2394,36 @@ class S {
     );
   }
 
+  /// `Resend letter will be available in`
+  String get resend_letter_available {
+    return Intl.message(
+      'Resend letter will be available in',
+      name: 'resend_letter_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} seconds`
+  String seconds(Object count) {
+    return Intl.message(
+      '$count seconds',
+      name: 'seconds',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Never`
+  String get never {
+    return Intl.message(
+      'Never',
+      name: 'never',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Where to move it to?`
   String get where_move {
     return Intl.message(
@@ -2409,6 +2449,26 @@ class S {
     return Intl.message(
       'Download',
       name: 'down',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The name must contain more than 2 characters`
+  String get name_contain {
+    return Intl.message(
+      'The name must contain more than 2 characters',
+      name: 'name_contain',
       desc: '',
       args: [],
     );

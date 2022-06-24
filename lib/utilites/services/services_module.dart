@@ -22,7 +22,7 @@ abstract class ServiceModule {
   @lazySingleton
   Dio get recordDio => Dio(
         BaseOptions(
-          baseUrl: '$kServerUrl/api/tenant/sdf',
+          baseUrl: '$kServerUrl/api/tenant/tenant',
         ),
       );
 

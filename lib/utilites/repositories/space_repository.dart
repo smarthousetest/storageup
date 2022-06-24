@@ -14,15 +14,11 @@ class DownloadLocationsRepository {
 
   @factoryMethod
   static Future<DownloadLocationsRepository> create() async {
-    //Hive.deleteFromDisk();
     Hive.registerAdapter(DownloadLocationAdapter());
-
     WidgetsFlutterBinding.ensureInitialized();
     var os = OsSpecifications.getOs();
     Hive.init(os.supportDir);
-
     final box = await Hive.openBox<DownloadLocation>(_downloadLocationsBoxName);
-    // box.deleteFromDisk();
     return DownloadLocationsRepository._(locationsBox: box);
   }
 
@@ -30,31 +26,29 @@ class DownloadLocationsRepository {
     _locationsBox = locationsBox;
     _locationsInfo = _locationsBox.values.toList();
 
-    _locationsBox.watch().listen((event) {
-      final key = event.key;
-      final value = event.value;
+    _locationsBox.watch().listen(
+      (event) {
+        final key = event.key;
+        final value = event.value;
 
-      if (_locationsInfo.any((element) => element.id == key)) {
-        final currentLocationInfoIndex =
-            _locationsInfo.indexWhere((element) => element.id == key);
+        if (_locationsInfo.any((element) => element.id == key)) {
+          final currentLocationInfoIndex = _locationsInfo.indexWhere((element) => element.id == key);
 
-        if (event.deleted)
-          _locationsInfo.removeAt(currentLocationInfoIndex);
-        else
-          _locationsInfo[currentLocationInfoIndex] = value;
-      } else {
-        _locationsInfo.add(value);
-      }
-    });
+          if (event.deleted) {
+            _locationsInfo.removeAt(currentLocationInfoIndex);
+          } else {
+            _locationsInfo[currentLocationInfoIndex] = value;
+          }
+        } else {
+          _locationsInfo.add(value);
+        }
+      },
+    );
   }
 
-  List<DownloadLocation> get getlocationsInfo => _locationsBox.values.toList();
+  List<DownloadLocation> get locationsInfo => _locationsBox.values.toList();
 
-  ValueListenable<Box<DownloadLocation>>
-      get getDownloadLocationsValueListenable => _locationsBox.listenable();
-
-  // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
-  //     _locationsInfo = locationsInfo;
+  ValueListenable<Box<DownloadLocation>> get getDownloadLocationsValueListenable => _locationsBox.listenable();
 
   int createLocation({
     required String path,
@@ -72,7 +66,7 @@ class DownloadLocationsRepository {
       countGb: countOfGb,
       id: lastKey != null ? lastKey + 1 : 0,
       name: name,
-      idForCompare: idForCompare,
+      keeperId: idForCompare,
     );
 
     _locationsBox.put(
@@ -82,7 +76,7 @@ class DownloadLocationsRepository {
     return downloadLocation.id;
   }
 
-  void changelocation({required DownloadLocation location}) {
+  void changeLocation({required DownloadLocation location}) {
     _locationsBox.put(location.id, location);
   }
 

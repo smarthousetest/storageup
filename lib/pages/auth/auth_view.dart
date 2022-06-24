@@ -10,6 +10,7 @@ import 'package:os_specification/os_specification.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/components/expanded_section.dart';
+import 'package:upstorage_desktop/components/registration_success.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/auth_event.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_view.dart';
@@ -1198,124 +1199,8 @@ class _AuthViewState extends State<AuthView> {
 
   Widget _registrationSuccess(
       ThemeData theme, BuildContext context, AuthState state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Expanded(
-          child: Container(),
-          flex: 5,
-        ),
-        Center(
-          child: Text(
-            translate.email_confirming_reg,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontFamily: kNormalTextFontFamily,
-              fontSize: 28.0,
-              color: theme.disabledColor,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(),
-          flex: 2,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 120),
-          child: RichText(
-            textAlign: TextAlign.left,
-            text: TextSpan(
-              text: translate.email_confirming_confirm + "\n\n",
-              style: TextStyle(
-                color: theme.disabledColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 17.0,
-              ),
-              children: [
-                TextSpan(
-                    text: translate.email_confirming_letter,
-                    style: TextStyle(
-                      color: theme.disabledColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 17.0,
-                    )),
-                TextSpan(
-                    text: state.emailRegister.value + "\n",
-                    style: TextStyle(
-                      color: theme.disabledColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 17.0,
-                    )),
-                TextSpan(
-                    text: translate.email_confirming_link,
-                    style: TextStyle(
-                      color: theme.disabledColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 17.0,
-                    )),
-              ],
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(),
-          flex: 3,
-        ),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () => context.read<AuthBloc>().add(AuthSendEmailVerify()),
-            child: Text(
-              translate.to_send_letter,
-              style: TextStyle(
-                decoration: TextDecoration.underline,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 17.0,
-                color: theme.splashColor,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 97,
-        ),
-        Expanded(child: Container()),
-        Container(
-          height: 60,
-          width: 480,
-          child: ElevatedButton(
-            onPressed: () {
-              context.read<AuthBloc>().add(AuthClear());
-              _changePage();
-            },
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              // padding: EdgeInsets.symmetric(
-              //   horizontal: 140,
-              //   vertical: 20,
-              // ),
-              primary: theme.splashColor,
-              elevation: 1,
-            ),
-            child: Text(
-              translate.back_to_authorization,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              style: TextStyle(
-                color: theme.primaryColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 17,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 100,
-        ),
-      ],
-    );
+    return RegistrationSuccess(
+        theme: theme, state: state, changePage: _changePage);
   }
 
   Widget _registrationComplete(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -21,7 +23,50 @@ class ForgotPasswordView extends StatefulWidget {
 }
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
+  static const delayBetweenSendingEmails = Duration(seconds: 30);
+
   S translate = getIt<S>();
+
+  DateTime? lastSubmittedTime;
+  Timer? timer;
+
+  Duration getTimeLeftToWaitUntilNextResend(DateTime nowDateTime) {
+    var submittedTime = lastSubmittedTime;
+
+    if (submittedTime is! DateTime) {
+      return Duration(seconds: 0);
+    }
+
+    return delayBetweenSendingEmails - nowDateTime.difference(submittedTime);
+  }
+
+  bool isEmailResendAvailable(DateTime nowDateTime) {
+    var submittedTime = lastSubmittedTime;
+
+    if (submittedTime is! DateTime) {
+      return true;
+    }
+
+    if (nowDateTime.difference(submittedTime) >= Duration(seconds: 30)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  @override
+  void initState() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +185,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     );
   }
 
+  final node = FocusNode();
+
   List<Widget> _body(ThemeData theme, ForgotPasswordState state) {
     if (state.status != FormzStatus.submissionSuccess)
       return _bodyRequest(theme);
@@ -173,13 +220,21 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
             autofocus: true,
             hint: translate.email,
             onChange: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
+              context.read<ForgotPasswordBloc>().add(
+                    ForgotPasswordEmailChanged(
+                      email: email,
+                      needValidation: true,
+                    ),
+                  );
             },
             onFinishEditing: (email) {
-              context.read<ForgotPasswordBloc>().add(ForgotPasswordEmailChanged(
-                  email: email, needValidation: true));
-            }, /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+              context.read<ForgotPasswordBloc>().add(
+                    ForgotPasswordEmailChanged(
+                      email: email,
+                      needValidation: true,
+                    ),
+                  );
+            },
             invalid: state.email.invalid && state.email.value.isNotEmpty ||
                 state.error == AuthError.wrongCredentials,
             errorMessage: state.error == AuthError.wrongCredentials
@@ -220,6 +275,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   // bool nothingOnEmail = false;
 
   List<Widget> _bodyResult(ThemeData theme) {
+    var nowDateTime = DateTime.now();
+
     return [
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
@@ -260,12 +317,18 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  context
-                      .read<ForgotPasswordBloc>()
-                      .add(ForgotPasswordConfirmed());
+                  if (isEmailResendAvailable(nowDateTime)) {
+                    print("Resend letter");
+                    context
+                        .read<ForgotPasswordBloc>()
+                        .add(ForgotPasswordConfirmed());
+                    lastSubmittedTime = DateTime.now();
+                  }
                 },
                 child: Text(
-                  translate.to_send_letter,
+                  isEmailResendAvailable(nowDateTime)
+                      ? translate.to_send_letter
+                      : "${translate.resend_letter_available} ${translate.seconds(getTimeLeftToWaitUntilNextResend(nowDateTime).inSeconds)}",
                   style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontFamily: kNormalTextFontFamily,

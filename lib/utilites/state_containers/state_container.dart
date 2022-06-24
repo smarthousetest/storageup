@@ -30,6 +30,8 @@ class StateContainerState extends State<StateContainer> {
   String? get choosedFilesFolderId => _choosedFilesFolderId;
   String? _choosedMediaFolderId;
   String? get choosedMediaFolderId => _choosedMediaFolderId;
+  bool _isPopUpShowing = false;
+  bool get isPopUpShowing => _isPopUpShowing;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,12 @@ class StateContainerState extends State<StateContainer> {
       _choosedFilesFolderId = folderId;
     });
     log('new folder id is $folderId');
+  }
+
+  void changeIsPopUpShowing(bool isPopUpShowing) {
+    setState(() {
+      _isPopUpShowing = isPopUpShowing;
+    });
   }
 }
 

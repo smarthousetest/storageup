@@ -75,27 +75,30 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                                 });
                             },
                             decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.only(left: 15, bottom: 21),
+                                contentPadding: EdgeInsets.only(
+                                  left: 15,
+                                  bottom: 21,
+                                ),
                                 hoverColor: Theme.of(context).cardColor,
                                 focusColor: Theme.of(context).cardColor,
                                 fillColor: Theme.of(context).cardColor,
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   borderSide: BorderSide(
-                                      color: Color(0xffE4E7ED), width: 0.0),
+                                    color: Color(0xffE4E7ED),
+                                    width: 0.0,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                   borderSide: BorderSide(
-                                      color: Color(0xffE4E7ED), width: 0.0),
+                                    color: Color(0xffE4E7ED),
+                                    width: 0.0,
+                                  ),
                                 ),
                                 hintText: translate.new_album,
                                 hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      ?.color,
+                                  color: Theme.of(context).textTheme.headline1?.color,
                                   fontFamily: kNormalTextFontFamily,
                                   fontSize: 14,
                                 )),
@@ -163,16 +166,12 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: canSave
-                                        ? Theme.of(context).splashColor
-                                        : Theme.of(context).canvasColor,
+                                    primary: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
                                     fixedSize: Size(240, 42),
                                     elevation: 0,
                                     side: BorderSide(
                                       style: BorderStyle.solid,
-                                      color: canSave
-                                          ? Theme.of(context).splashColor
-                                          : Theme.of(context).canvasColor,
+                                      color: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
                                     ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
