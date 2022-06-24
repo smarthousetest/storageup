@@ -94,6 +94,10 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
       emit(state.copyWith(
         sub: updatedSubscription.left,
       ));
+    } else if (status == ResponseStatus.declined) {
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    } else if (status == ResponseStatus.failed) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
 }
