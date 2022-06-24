@@ -48,7 +48,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
         allSub: allSub,
         valueNotifier: valueNotifier,
         packetNotifier: packetNotifier,
-        status: FormzStatus.submissionCanceled,
+        statusHttpRequest: FormzStatus.submissionCanceled,
       ));
     } else if (sub.right == ResponseStatus.failed) {
       emit(state.copyWith(
@@ -57,7 +57,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
         allSub: allSub,
         valueNotifier: valueNotifier,
         packetNotifier: packetNotifier,
-        status: FormzStatus.submissionFailure,
+        statusHttpRequest: FormzStatus.submissionFailure,
       ));
     }
     if (sub.left == null && allSub == null) {
@@ -67,7 +67,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
         allSub: allSub,
         valueNotifier: valueNotifier,
         packetNotifier: packetNotifier,
-        status: FormzStatus.pure,
+        statusHttpRequest: FormzStatus.pure,
       ));
     }
     emit(state.copyWith(
@@ -77,7 +77,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
       // rootFolders: rootFolder,
       valueNotifier: valueNotifier,
       packetNotifier: packetNotifier,
-      status: FormzStatus.pure,
+      statusHttpRequest: FormzStatus.pure,
     ));
   }
 
@@ -87,17 +87,25 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     Emitter<FinanceState> emit,
   ) async {
     var choosedSub = event.choosedSub;
-
+emit(state.copyWith(
+        
+      statusHttpRequest: FormzStatus.pure,
+    ));
     var status = await _subscriptionService.changeSubscription(choosedSub);
     if (status == ResponseStatus.ok) {
       var updatedSubscription = await _subscriptionService.getCurrentSubscription();
       emit(state.copyWith(
         sub: updatedSubscription.left,
+        statusHttpRequest: FormzStatus.pure, 
       ));
     } else if (status == ResponseStatus.declined) {
-      emit(state.copyWith(status: FormzStatus.submissionCanceled));
+      emit(state.copyWith(
+        statusHttpRequest: FormzStatus.submissionCanceled,
+      ));
     } else if (status == ResponseStatus.failed) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(state.copyWith(
+        statusHttpRequest: FormzStatus.submissionFailure,
+      ));
     }
   }
 }
