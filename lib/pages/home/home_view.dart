@@ -544,7 +544,7 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -565,7 +565,7 @@ class _HomePageState extends State<HomePage> {
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -576,7 +576,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadFiles:
         final folderId = StateContainer.of(context).choosedFilesFolderId;
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+          HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -586,7 +586,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+          HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -595,7 +595,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+          HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
               ),
