@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/user.dart';
@@ -425,63 +426,12 @@ class _FilePageState extends State<FilePage> {
               ? ValueListenableBuilder<User?>(
                   valueListenable: state.valueNotifier!,
                   builder: (context, value, _) {
-                    return Row(
-                      key: stickyKey,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 20, left: 20),
-                          child: GestureDetector(
-                            onTap: () {
-                              StateContainer.of(context)
-                                  .changePage(ChosenPage.settings);
-                            },
-                            child: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(23.0),
-                                child: Container(child: value.image),
-                              ),
-                            ),
-                          ),
-                        ),
-                        (MediaQuery.of(context).size.width > 966)
-                            ? Container(
-                                constraints:
-                                    BoxConstraints(maxWidth: 95, minWidth: 50),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      child: Text(
-                                        value?.firstName ??
-                                            value?.email?.split('@').first ??
-                                            'Name',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          color: Theme.of(context)
-                                              .bottomAppBarColor,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      value?.email ?? 'email',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color:
-                                            Theme.of(context).bottomAppBarColor,
-                                        height: 1,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                      ],
+                    return UserInfo(
+                      user: value,
+                      isExtended: MediaQuery.of(context).size.width > 966,
+                      padding: EdgeInsets.only(right: 20, left: 20),
+                      textInfoConstraints:
+                          BoxConstraints(maxWidth: 95, minWidth: 50),
                     );
                   })
               : Container();

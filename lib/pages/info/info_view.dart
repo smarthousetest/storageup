@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/components/custom_progress_bar.dart';
 import 'package:storageup/components/custom_round_graph.dart';
+import 'package:storageup/components/user_info.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/packet/packet.dart';
 import 'package:storageup/pages/info/info_bloc.dart';
@@ -125,56 +126,11 @@ class _InfoPageState extends State<InfoPage> {
           ? ValueListenableBuilder<User?>(
               valueListenable: state.valueNotifier!,
               builder: (context, value, _) {
-                return Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Container(
-                        height: 46,
-                        // width: 46,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(23),
-                          child: GestureDetector(
-                              onTap: () {
-                                StateContainer.of(context)
-                                    .changePage(ChosenPage.settings);
-                              },
-                              child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: value.image)),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      constraints: BoxConstraints(maxWidth: 200),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              value?.firstName ??
-                                  value?.email?.split('@').first ??
-                                  'Name',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Theme.of(context).bottomAppBarColor,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            value?.email ?? '',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).bottomAppBarColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                return UserInfo(
+                  user: value,
+                  isExtended: true,
+                  padding: EdgeInsets.only(right: 10),
+                  textInfoConstraints: BoxConstraints(maxWidth: 200),
                 );
               })
           : Container();
