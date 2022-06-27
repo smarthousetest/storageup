@@ -60,6 +60,7 @@ dependencies:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/file_typification.git
   linked_scroll_controller: ^0.2.0
   syncfusion_flutter_sliders: ^20.1.61
+  contextmenu: ^3.0.0
 
 dev_dependencies:
   injectable_generator:
