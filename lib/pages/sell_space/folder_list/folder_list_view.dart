@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:upstorage_desktop/components/custom_arc_indicator.dart';
+import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/custom_percent_indicator.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -11,11 +12,13 @@ import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_bloc.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
+import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
 import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:upstorage_desktop/components/blur/keeper_delete_confirm.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 class FolderList extends StatefulWidget {
   @override

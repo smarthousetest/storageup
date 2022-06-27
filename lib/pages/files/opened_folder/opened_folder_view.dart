@@ -2,17 +2,17 @@ import 'dart:async';
 import 'package:file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
-import 'package:upstorage_desktop/components/blur/create_album.dart';
+import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
 import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
 import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
+import 'package:upstorage_desktop/components/context_menu.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -21,7 +21,6 @@ import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/move_files/context_menu.dart';
 import 'package:upstorage_desktop/pages/files/move_files/move_files_view.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
@@ -472,7 +471,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
-                            onSecondaryTapDown: (_) {
+                            onSecondaryTapUp: (_) {
                               _onPointerDown();
                             },
                             onTap: onTap,
@@ -1385,7 +1384,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         var folderName = await showDialog<String?>(
             context: context,
             builder: (BuildContext context) {
-              return BlurCreateAlbum();
+              return BlurAddFolder();
             });
         if (folderName != null) {
           context.read<OpenedFolderCubit>().createFolder(folderName, folderId);
@@ -1615,114 +1614,6 @@ class ObjectView extends StatelessWidget {
     }
 
     return indicators;
-  }
-}
-
-class ContextMenuRightTap extends StatefulWidget {
-  ContextMenuRightTap(
-      {required this.translate,
-      required this.onTap,
-      required this.child,
-      required this.theme,
-      Key? key})
-      : super(key: key);
-
-  final S translate;
-  final Function(ContextMenuAction) onTap;
-  final Widget child;
-  final ThemeData theme;
-
-  @override
-  _ContextMenuRightTapState createState() => _ContextMenuRightTapState();
-}
-
-class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
-  @override
-  Widget build(BuildContext context) {
-    var mainColor = widget.theme.colorScheme.onSecondary;
-    int ind = -1;
-    return ContextMenuArea(
-      builder: (context) => [
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-          ),
-          child: IntrinsicWidth(
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    widget.onTap(ContextMenuAction.addFiles);
-                  },
-                  child: MouseRegion(
-                    onEnter: (event) {
-                      setState(() {
-                        ind = 0;
-                      });
-                    },
-                    child: Container(
-                      width: 190,
-                      height: 40,
-                      color: ind == 0 ? mainColor : null,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/options/add_files.svg',
-                            height: 20,
-                          ),
-                          Container(
-                            width: 15,
-                          ),
-                          Text(
-                            widget.translate.add_files,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    widget.onTap(ContextMenuAction.createFolder);
-                  },
-                  child: MouseRegion(
-                    onEnter: (event) {
-                      setState(() {
-                        ind = 1;
-                      });
-                    },
-                    child: Container(
-                      width: 190,
-                      height: 40,
-                      color: ind == 1 ? mainColor : null,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/options/create_folder.svg',
-                            height: 20,
-                          ),
-                          Container(
-                            width: 15,
-                          ),
-                          Text(
-                            widget.translate.create_a_folder,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-      child: widget.child,
-    );
   }
 }
 

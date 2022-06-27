@@ -56,20 +56,20 @@ class ContextMenuArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onSecondaryTapDown: (details) => showContextMenu(
+      onSecondaryTapUp: (details) => showContextMenu(
         details.globalPosition,
         context,
         builder,
         verticalPadding,
         width,
       ),
-      onLongPressStart: (details) => showContextMenu(
-        details.globalPosition,
-        context,
-        builder,
-        verticalPadding,
-        width,
-      ),
+      // onLongPressStart: (details) => showContextMenu(
+      //   details.globalPosition,
+      //   context,
+      //   builder,
+      //   verticalPadding,
+      //   width,
+      // ),
       child: child,
     );
   }
@@ -160,7 +160,7 @@ class _ContextMenuState extends State<ContextMenu> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Material(
-              color: Colors.transparent,
+              //color: Colors.transparent,
               child: ListView(
                 primary: false,
                 shrinkWrap: true,

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,11 +15,11 @@ import 'package:upstorage_desktop/utilites/state_containers/state_container.dart
 
 class SpaceSellPage extends StatefulWidget {
   static const route = "sell_space_page";
-
+  var index = 0;
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
 
-  SpaceSellPage();
+  SpaceSellPage({this.index = 0});
 }
 
 // class PathCheck {
@@ -68,7 +66,7 @@ class SpaceSellPage extends StatefulWidget {
 class _SpaceSellPageState extends State<SpaceSellPage> {
   //final List<DownloadLocation> locationsInfo;
   double? _searchFieldWidth;
-  var index = 0;
+
   S translate = getIt<S>();
   String dirPath = '';
   double _currentSliderValue = 32;
@@ -272,8 +270,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           return Expanded(
                               child: IndexedStack(
                             sizing: StackFit.passthrough,
-                            key: ValueKey<int>(index),
-                            index: index,
+                            key: ValueKey<int>(widget.index),
+                            index: widget.index,
                             children: [
                               state.keeper.isEmpty
                                   ? rentingAPlace(context)
@@ -294,12 +292,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   }
 
   Widget _title(BuildContext context, SpaceState state) {
-    if (index == 1) {
+    if (widget.index == 1) {
       return Row(children: [
         GestureDetector(
           onTap: () {
             setState(() {
-              index = 0;
+              widget.index = 0;
             });
           },
           child: MouseRegion(
@@ -328,7 +326,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
         ),
       ]);
-    } else if (state.keeper.isNotEmpty || index == 2) {
+    } else if (state.keeper.isNotEmpty || widget.index == 2) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -356,8 +354,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             child: OutlinedButton(
               onPressed: () {
                 setState(() {
-                  index = 1;
-                  print(index);
+                  widget.index = 1;
+                  print(widget.index);
                 });
               },
               style: OutlinedButton.styleFrom(
@@ -560,8 +558,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             child: OutlinedButton(
               onPressed: () {
                 setState(() {
-                  index = 1;
-                  print(index);
+                  widget.index = 1;
+                  print(widget.index);
                 });
               },
               style: OutlinedButton.styleFrom(
@@ -666,7 +664,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           width: 101,
                           child: OutlinedButton(
                             onPressed: () async {
-                              //String? path = await getFilesPaths();
                               context.read<SpaceBloc>().add(GetPathToKeeper());
 
                               print(state.pathToKeeper);
@@ -1012,8 +1009,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     ));
                                 await context.read<SpaceBloc>().stream.first;
                                 setState(() {
-                                  index = 2;
+                                  widget.index = 2;
                                 });
+                                _currentSliderValue = 32;
+                                myController.text = '';
                               }
                             : null,
                         style: OutlinedButton.styleFrom(

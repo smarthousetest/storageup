@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   cpp_native
   desktop_window
-  native_context_menu
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
