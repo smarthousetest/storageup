@@ -88,7 +88,6 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
   ) async {
     var choosedSub = event.choosedSub;
 emit(state.copyWith(
-        
       statusHttpRequest: FormzStatus.pure,
     ));
     var status = await _subscriptionService.changeSubscription(choosedSub);

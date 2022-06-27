@@ -130,14 +130,14 @@ class _HomePageState extends State<HomePage> {
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) async {
             // context.read()<SpaceBloc>().add(SendKeeperVersion());
-            if (state.status == FormzStatus.submissionFailure) {
+            if (state.status == FormzStatus.submissionCanceled) {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurSomethingGoesWrong(true);
                 },
               );
-            } else if (state.status == FormzStatus.submissionCanceled) {
+            } else if (state.status == FormzStatus.submissionFailure) {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {

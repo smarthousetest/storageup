@@ -1,5 +1,7 @@
+import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
@@ -13,7 +15,7 @@ class KeeperService {
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
 
-  Future<List<Keeper>?> getAllKeepers() async {
+  Future<Either<ResponseStatus, List<Keeper>?>> getAllKeepers() async {
     try {
       String? token = await _tokenRepository.getApiToken();
       if (token != null && token.isNotEmpty) {
@@ -30,16 +32,26 @@ class KeeperService {
           (response.data as List).forEach((element) {
             allKeeper.add(Keeper.fromMap(element));
           });
-          return allKeeper;
+          return Either.right(allKeeper);
         }
       }
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return Either.left(ResponseStatus.declined);
+      } else {
+        return Either.left(ResponseStatus.failed);
+      }
     }
-    return null;
+    return Either.left(ResponseStatus.ok);
   }
 
-  Future<String?> addNewKeeper(String name, int countGb) async {
+  Future<Either<ResponseStatus, String?>> addNewKeeper(
+      String name, int countGb) async {
     for (int i = 0; i < 5; i++) {
       try {
         String? token = await _tokenRepository.getApiToken();
@@ -53,15 +65,24 @@ class KeeperService {
             }
           },
         );
-        return response.data['id'];
+        return Either.right(response.data['id']);
       } on DioError catch (e) {
         print(e);
+        if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 429 ||
+            e.response?.statusCode == 500 ||
+            e.response?.statusCode == 502 ||
+            e.response?.statusCode == 504) {
+          return Either.left(ResponseStatus.declined);
+        } else {
+          return Either.left(ResponseStatus.failed);
+        }
       }
     }
-    return null;
+    return Either.left(ResponseStatus.ok);
   }
 
-  Future<bool?> changeSleepStatus(String id) async {
+  Future<Either<ResponseStatus, bool?>> changeSleepStatus(String id) async {
     try {
       String? token = await _tokenRepository.getApiToken();
 
@@ -72,12 +93,20 @@ class KeeperService {
 
       if (response.statusCode == 200) {
         print(response);
-        return response.data['sleepStatus'];
+        return Either.right(response.data['sleepStatus']);
       } else
-        return response.data;
-    } catch (e) {
+        return Either.right(response.data);
+    } on DioError catch (e) {
       print(e);
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return Either.left(ResponseStatus.declined);
+      } else {
+        return Either.left(ResponseStatus.failed);
+      }
     }
-    return null;
   }
 }
