@@ -707,7 +707,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     //   languageRu = translate.russian;
                     // }
 
-                    if (StateContainer.of(context).locale == Locale('en'))
+                    if (StateContainer.of(context).locale.languageCode == 'en')
                       dropdownValue = 'English';
                     else
                       dropdownValue = 'Русский';
@@ -731,7 +731,6 @@ class _SettingsPageState extends State<SettingsPage> {
                           alignedDropdown: true,
                           child: DropdownButton(
                             dropdownColor: Theme.of(context).primaryColor,
-                            focusColor: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(10),
                             isExpanded: true,
                             value: dropdownValue,

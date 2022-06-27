@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
+import 'package:upstorage_desktop/utilites/language_locale.dart';
 
 class StateContainer extends StatefulWidget {
   final Widget child;
@@ -47,7 +48,9 @@ class StateContainerState extends State<StateContainer> {
     });
   }
 
-  void changeLocale(Locale newLocale) {
+  Future<void> changeLocale(Locale newLocale) async {
+    await setLocale(newLocale.languageCode);
+
     setState(() {
       _locale = newLocale;
     });

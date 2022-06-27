@@ -41,20 +41,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  _MyAppState() : _locale = Locale(Intl.systemLocale) {
+  _MyAppState() {
     hasCurrentLocale().then((value) {
-      getLocale().then(
-            (loc) => setLocale(loc),
-      );
+      if (value) {
+        getLocale().then(
+          (loc) => setLocale(loc),
+        );
+      } else {
+        setLocale(Locale(Intl.systemLocale));
+      }
     });
   }
 
-  Locale? _locale;
-
-  setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
+  setLocale(Locale locale) async {
+    await StateContainer.of(context).changeLocale(locale);
   }
 
 //  Locale? _locale = StateContainer.of(context).locale;
@@ -120,7 +120,8 @@ void readFromFileDomainName() {
   if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
-  var domainNameFile = File('${os.appDirPath}${Platform.pathSeparator}domainName');
+  var domainNameFile =
+      File('${os.appDirPath}${Platform.pathSeparator}domainName');
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
   } else {
@@ -133,8 +134,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    // etc.
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }
