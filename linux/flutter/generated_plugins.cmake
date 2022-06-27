@@ -6,11 +6,14 @@ list(APPEND FLUTTER_PLUGIN_LIST
   cpp_native
   desktop_window
 <<<<<<< dev
+<<<<<<< dev
   objectbox_flutter_libs
   window_size
 =======
   native_context_menu
 >>>>>>> context menu
+=======
+>>>>>>> fix context menu
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

@@ -61,8 +61,6 @@ dependencies:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/file_typification.git
   linked_scroll_controller: ^0.2.0
   syncfusion_flutter_sliders: ^20.1.61
-  native_context_menu: ^0.2.1+4
-  contextmenu: ^3.0.0
 
   window_size:
     git:
