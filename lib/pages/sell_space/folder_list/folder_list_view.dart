@@ -228,6 +228,16 @@ class _ButtonTemplateState extends State<FolderList> {
                                     state.localKeepers.indexOf(keeper)]
                                 .hideMenu();
                             if (action == KeeperAction.change) {
+                              var changeKeeper;
+                              for (var element in state.locationsInfo) {
+                                if (element.keeperId == keeper.id) {
+                                  changeKeeper = element;
+                                  break;
+                                }
+                              }
+                              SpaceInheritedWidget.of(context)
+                                  .state
+                                  .changePageIndex(1, changeKeeper);
                             } else {
                               var result = await showDialog(
                                 context: context,

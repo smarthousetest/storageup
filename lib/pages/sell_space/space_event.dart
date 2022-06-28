@@ -21,7 +21,17 @@ class SpacePageOpened extends SpaceEvent {
 }
 
 class GetPathToKeeper extends SpaceEvent {
-  const GetPathToKeeper();
+  final String? pathForChange;
+  const GetPathToKeeper({this.pathForChange});
+}
+
+class ChangeKeeper extends SpaceEvent {
+  final int countGb;
+  final DownloadLocation keeper;
+  ChangeKeeper({
+    required this.countGb,
+    required this.keeper,
+  });
 }
 
 class RunSoft extends SpaceEvent {

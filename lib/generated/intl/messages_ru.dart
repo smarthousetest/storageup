@@ -96,6 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_password":
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
+        "change_place": MessageLookupByLibrary.simpleMessage("Изменить место"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),

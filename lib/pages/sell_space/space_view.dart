@@ -17,11 +17,11 @@ import 'package:storageup/utilities/state_containers/state_container.dart';
 
 class SpaceSellPage extends StatefulWidget {
   static const route = "sell_space_page";
-  var index = 0;
+
   @override
   _SpaceSellPageState createState() => _SpaceSellPageState();
 
-  SpaceSellPage({this.index = 0});
+  SpaceSellPage();
 }
 
 // class PathCheck {
@@ -69,6 +69,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   //final List<DownloadLocation> locationsInfo;
   double? _searchFieldWidth;
 
+  var index = 0;
   S translate = getIt<S>();
   String dirPath = '';
   double _currentSliderValue = 32;
@@ -76,10 +77,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
   final myController = TextEditingController();
+  DownloadLocation? changeKeeper;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     _searchFieldWidth = width - _rowPadding * 4 - 274 - 222;
+  }
+
+  changePageIndex(int newIndex, DownloadLocation keeper) {
+    setState(() {
+      index = newIndex;
+      changeKeeper = keeper;
+      myController.text = keeper.name;
+    });
   }
 
   Widget build(BuildContext context) {
@@ -263,7 +273,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ),
             ),
-            Expanded(
+          ),
+          SpaceInheritedWidget(
+            index: index,
+            state: this,
+            child: Expanded(
               child: Container(
                 margin: const EdgeInsets.all(30),
                 decoration: BoxDecoration(
@@ -300,7 +314,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 state.keeper.isEmpty
                                     ? rentingAPlace(context)
                                     : fl,
-                                addSpace(context),
+                                addSpace(context, changeKeeper),
                                 fl
                               ],
                             ));
@@ -317,12 +331,14 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   }
 
   Widget _title(BuildContext context, SpaceState state) {
-    if (widget.index == 1) {
+    if (index == 1) {
       return Row(children: [
         GestureDetector(
           onTap: () {
             setState(() {
-              widget.index = 0;
+              index = 0;
+              changeKeeper = null;
+              myController.text = '';
             });
           },
           child: MouseRegion(
@@ -342,7 +358,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         ),
         Container(
           child: Text(
-            translate.add_location,
+            changeKeeper?.id == null
+                ? translate.add_location
+                : translate.change_place,
             style: TextStyle(
               color: Theme.of(context).focusColor,
               fontFamily: kNormalTextFontFamily,
@@ -351,7 +369,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
         ),
       ]);
-    } else if (state.keeper.isNotEmpty || widget.index == 2) {
+    } else if (state.keeper.isNotEmpty || index == 2) {
       return Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -379,8 +397,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             child: OutlinedButton(
               onPressed: () {
                 setState(() {
-                  widget.index = 1;
-                  print(widget.index);
+                  index = 1;
+                  print(index);
                 });
               },
               style: OutlinedButton.styleFrom(
@@ -583,8 +601,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             child: OutlinedButton(
               onPressed: () {
                 setState(() {
-                  widget.index = 1;
-                  print(widget.index);
+                  index = 1;
                 });
               },
               style: OutlinedButton.styleFrom(
@@ -608,10 +625,14 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     ]);
   }
 
-  Widget addSpace(BuildContext context) {
+  Widget addSpace(BuildContext context, DownloadLocation? changeKepper) {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
+          if (changeKeeper != null)
+            context
+                .read<SpaceBloc>()
+                .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
           var maxSpace = (state.availableSpace / GB).round();
           print(maxSpace);
           return Column(
@@ -670,7 +691,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             return Padding(
                               padding: const EdgeInsets.only(left: 15, top: 11),
                               child: Text(
-                                state.pathToKeeper,
+                                changeKeeper == null
+                                    ? state.pathToKeeper
+                                    : changeKeeper!.dirPath,
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: Theme.of(context).disabledColor),
@@ -689,20 +712,25 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           width: 101,
                           child: OutlinedButton(
                             onPressed: () async {
-                              context.read<SpaceBloc>().add(GetPathToKeeper());
-
-                              print(state.pathToKeeper);
-                              setState(
-                                () {
-                                  dirPath = state.pathToKeeper;
-                                },
-                              );
+                              if (changeKeeper == null) {
+                                context
+                                    .read<SpaceBloc>()
+                                    .add(GetPathToKeeper());
+                                print(state.pathToKeeper);
+                                setState(
+                                  () {
+                                    dirPath = state.pathToKeeper;
+                                  },
+                                );
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               minimumSize: Size(double.maxFinite, 60),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: Theme.of(context).splashColor,
+                              backgroundColor: changeKeeper == null
+                                  ? Theme.of(context).splashColor
+                                  : Theme.of(context).canvasColor,
                             ),
                             child: Text(
                               translate.overview,
@@ -751,7 +779,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: Container(
                       child: Text(
                         translate.min_storage(
-                          32,
+                          changeKeeper == null ? 32 : changeKeeper!.countGb,
                         ),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onBackground,
@@ -760,7 +788,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     )),
-                state.pathToKeeper.isNotEmpty
+                state.pathToKeeper.isNotEmpty || changeKeeper != null
                     ? maxSpace < 32
                         ? Padding(
                             padding: const EdgeInsets.only(left: 40, top: 8),
@@ -1028,16 +1056,27 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
-                                context.read<SpaceBloc>().add(SaveDirPath(
-                                      pathDir: dirPath,
+                                if (changeKeeper != null) {
+                                  context.read<SpaceBloc>().add(ChangeKeeper(
                                       countGb: _currentSliderValue.toInt(),
-                                    ));
-                                await context.read<SpaceBloc>().stream.first;
-                                setState(() {
-                                  widget.index = 2;
-                                });
-                                _currentSliderValue = 32;
-                                myController.text = '';
+                                      keeper: changeKeeper!));
+                                  setState(() {
+                                    index = 2;
+                                    changeKeeper = null;
+                                    myController.text = '';
+                                  });
+                                } else {
+                                  context.read<SpaceBloc>().add(SaveDirPath(
+                                        pathDir: dirPath,
+                                        countGb: _currentSliderValue.toInt(),
+                                      ));
+                                  await context.read<SpaceBloc>().stream.first;
+                                  setState(() {
+                                    index = 2;
+                                  });
+                                  _currentSliderValue = 32;
+                                  myController.text = '';
+                                }
                               }
                             : null,
                         style: OutlinedButton.styleFrom(
@@ -1049,7 +1088,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               : Theme.of(context).canvasColor,
                         ),
                         child: Text(
-                          translate.save,
+                          changeKeeper == null
+                              ? translate.save
+                              : translate.change,
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontFamily: kNormalTextFontFamily,
@@ -1068,8 +1109,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   bool _isFieldsValid(SpaceState state) {
     return state.name.valid &&
-        state.name.value.isNotEmpty &&
-        state.pathToKeeper.isNotEmpty;
+            state.name.value.isNotEmpty &&
+            state.pathToKeeper.isNotEmpty ||
+        changeKeeper != null;
   }
 
   _setName(BuildContext context, SpaceState state) {
@@ -1131,6 +1173,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               builder: (context, state) {
                 return TextField(
                   controller: myController,
+
                   onChanged: (value) {
                     context
                         .read<SpaceBloc>()
@@ -1179,4 +1222,26 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
       child: FolderList(),
     );
   }
+}
+
+class SpaceInheritedWidget extends InheritedWidget {
+  final int index;
+  final _SpaceSellPageState state;
+
+  SpaceInheritedWidget({
+    Key? key,
+    required this.index,
+    required this.state,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  static SpaceInheritedWidget of(BuildContext context) {
+    final SpaceInheritedWidget? result =
+        context.dependOnInheritedWidgetOfExactType<SpaceInheritedWidget>();
+
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(SpaceInheritedWidget old) => index != old.index;
 }

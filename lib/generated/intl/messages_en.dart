@@ -95,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_password":
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
+        "change_place": MessageLookupByLibrary.simpleMessage("Change place"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
