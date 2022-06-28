@@ -1,19 +1,22 @@
 import 'dart:io';
 
-import 'package:injectable/injectable.dart';
+import 'package:cpp_native/controllers/load/models.dart';
+import 'package:cpp_native/interfaces/load_interfaces.dart';
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/file_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 
-class FilesController {
-  MediaRepository _mediaRepo = getIt<MediaRepository>(instanceName: 'media_repo');
-  FilesRepository _filesRepo = getIt<FilesRepository>(instanceName: 'files_repo');
+class FilesController extends IFilesController {
+  MediaRepository _mediaRepo =
+      getIt<MediaRepository>(instanceName: 'media_repo');
+  FilesRepository _filesRepo =
+      getIt<FilesRepository>(instanceName: 'files_repo');
 
   FilesService _service = getIt<FilesService>();
   S translate = getIt<S>();
@@ -65,7 +68,8 @@ class FilesController {
 
   Future<Folder?> getAlbum(String id) async {
     var folders = _mediaRepo.getMedia();
-    Folder? choosedFolder = folders?.firstWhere((element) => element.id == id) as Folder;
+    Folder? choosedFolder =
+        folders?.firstWhere((element) => element.id == id) as Folder;
 
     return choosedFolder;
   }
@@ -183,9 +187,11 @@ class FilesController {
     } else if (foldersResult != null && recordsResult == null) {
       return foldersResult;
     } else {
-      if (recordsResult == ResponseStatus.ok && foldersResult == ResponseStatus.ok) {
+      if (recordsResult == ResponseStatus.ok &&
+          foldersResult == ResponseStatus.ok) {
         return ResponseStatus.ok;
-      } else if (recordsResult == ResponseStatus.noInternet && foldersResult == ResponseStatus.noInternet) {
+      } else if (recordsResult == ResponseStatus.noInternet &&
+          foldersResult == ResponseStatus.noInternet) {
         return ResponseStatus.noInternet;
       } else {
         return ResponseStatus.failed;
@@ -246,5 +252,15 @@ class FilesController {
     folders.insert(0, all);
 
     _mediaRepo.setMedia(folders);
+  }
+
+  @override
+  void setObject(BaseObject object) {
+    // TODO: implement setObject
+  }
+
+  @override
+  Future<void> updateObject(FileInfo object) async {
+    // TODO: implement updateObject
   }
 }

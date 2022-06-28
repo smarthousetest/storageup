@@ -1,4 +1,4 @@
-import 'package:upstorage_desktop/models/file.dart';
+import 'package:cpp_native/models/file.dart';
 
 class Settings {
   String? sId;
@@ -55,7 +55,8 @@ class Settings {
     data['tenant'] = this.tenant;
     data['createdBy'] = this.createdBy;
     if (this.backgroundImages != null) {
-      data['backgroundImages'] = this.backgroundImages?.map((v) => v.toJson()).toList();
+      data['backgroundImages'] =
+          this.backgroundImages?.map((v) => v.toJson()).toList();
     }
     if (this.logos != null) {
       data['logos'] = this.logos?.map((v) => v.toJson()).toList();

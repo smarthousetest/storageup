@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,10 +18,7 @@ import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
@@ -512,8 +512,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     );
   }
 
-  void _renameFile(BuildContext context, BaseObject record, String name,
-      String extension) async {
+  void _renameFile(
+    BuildContext context,
+    BaseObject record,
+    String name,
+    String extension,
+  ) async {
     String newName = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1525,12 +1529,16 @@ class ObjectView extends StatelessWidget {
                             'assets/file_icons/files.png',
                             fit: BoxFit.contain,
                           )
-                    : type == 'image' || type == 'video' && thumbnail != null
+                    : type == 'image' ||
+                            type == 'video' &&
+                                thumbnail != null &&
+                                thumbnail.isNotEmpty
                         ? Image.network(
                             thumbnail!,
                             fit: BoxFit.contain,
                           )
-                        : type == 'video' && thumbnail == null
+                        : type == 'video' &&
+                                (thumbnail == null || thumbnail.isEmpty)
                             ? Image.asset(
                                 'assets/file_icons/$type.png',
                                 fit: BoxFit.contain,

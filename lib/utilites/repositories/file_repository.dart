@@ -1,6 +1,6 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/folder.dart';
 
 @Injectable()
 class FilesRepository {

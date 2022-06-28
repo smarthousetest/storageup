@@ -33,7 +33,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         await _rebootKeeper(event, state, emit);
       }
     });
-    on<UpdateLocationsList>((event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
+    on<UpdateLocationsList>(
+        (event, emit) => emit(state.copyWith(locationsInfo: event.locations)));
   }
 
   UserController _userController = getIt<UserController>();
@@ -80,10 +81,14 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     List<String> localPaths = [];
     var keepers = await _keeperService.getAllKeepers();
     final locationsInfo = await _repository.locationsInfo;
-    for (var keeper in keepers!) {
-      if (locationsInfo.any((_locationInfo) => _locationInfo.keeperId == keeper.id)) {
+    for (var keeper in keepers ?? []) {
+      if (locationsInfo
+          .any((_locationInfo) => _locationInfo.keeperId == keeper.id)) {
         if (state.localKeepers.isNotEmpty) {
-          localKeepers.add(keeper.copyWith(isRebooting: (state.localKeepers.firstWhere((keeper2) => keeper.name == keeper2.name)).isRebooting));
+          localKeepers.add(keeper.copyWith(
+              isRebooting: (state.localKeepers
+                      .firstWhere((keeper2) => keeper.name == keeper2.name))
+                  .isRebooting));
         } else {
           localKeepers.add(keeper);
         }
@@ -194,7 +199,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     String? bearerToken = await TokenRepository().getApiToken();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
     var box = await Hive.openBox('keeper_data');
-    String keeperDir = Uri.decodeFull(await box.get(event.location.id.toString()));
+    String keeperDir =
+        Uri.decodeFull(await box.get(event.location.id.toString()));
     await box.delete(event.location.id.toString());
     String keeperId = '';
     var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
@@ -251,7 +257,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
           ),
         );
         if (response.data['online'] != 0) {
-          await _disconnectKeeper('ws://${response.data['proxyIP']}:${response.data['proxyPORT']}', response.data['session']);
+          await _disconnectKeeper(
+              'ws://${response.data['proxyIP']}:${response.data['proxyPORT']}',
+              response.data['session']);
         }
       } catch (e) {
         print(e);
@@ -260,7 +268,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     }
   }
 
-  Future<void> _rebootKeeper(KeeperReboot event, FolderListState state, Emitter<FolderListState> emit) async {
+  Future<void> _rebootKeeper(KeeperReboot event, FolderListState state,
+      Emitter<FolderListState> emit) async {
     String keeperId = event.location.keeperId;
     print("Start rebooting keeper");
     _emitNewLocalKeepersState(emit, event.location.name, true);
@@ -272,11 +281,13 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     _emitNewLocalKeepersState(emit, event.location.name, false);
   }
 
-  void _emitNewLocalKeepersState(Emitter<FolderListState> emit, String name, bool isRebooting) {
+  void _emitNewLocalKeepersState(
+      Emitter<FolderListState> emit, String name, bool isRebooting) {
     var newLocalKeepers = <Keeper>[];
     for (int i = 0; i < state.localKeepers.length; i++) {
       if (state.localKeepers[i].name == name) {
-        newLocalKeepers.add(state.localKeepers[i].copyWith(isRebooting: isRebooting));
+        newLocalKeepers
+            .add(state.localKeepers[i].copyWith(isRebooting: isRebooting));
       } else {
         newLocalKeepers.add(state.localKeepers[i]);
       }

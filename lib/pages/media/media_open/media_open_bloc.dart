@@ -4,15 +4,15 @@ import 'package:connectivity/connectivity.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 
 import 'media_open_event.dart';
@@ -42,9 +42,39 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
       }
     });
   }
+  @override
+  Future<void> close() {
+    _loadController.getState.unregisterObserver(_loadObserver);
+    return super.close();
+  }
 
   FilesController _controller;
   final LoadController _loadController = LoadController.instance;
+  late var _loadObserver = Observer<LoadNotification>(
+    (notification) {
+      final downloadingFile = notification.downloadFileInfo;
+
+      if (downloadingFile != null &&
+          state.choosedMedia.id == downloadingFile.id) {
+        var choosedMedia = state.choosedMedia as Record;
+
+        choosedMedia = choosedMedia.copyWith(
+          isDownloading: downloadingFile.localPath.isEmpty,
+          isInProgress: downloadingFile.localPath.isEmpty,
+          path: downloadingFile.localPath.isEmpty
+              ? null
+              : downloadingFile.localPath,
+        );
+
+        var indexOfChoosedFile = state.mediaFromFolder
+            .indexWhere((element) => element.id == choosedMedia.id);
+
+        final mediaFromFolder = List<Record>.from(state.mediaFromFolder);
+
+        mediaFromFolder[indexOfChoosedFile] = choosedMedia;
+      }
+    },
+  );
 
   Future<void> _mapMediaOpenPageOpened(
     MediaOpenState state,
@@ -57,6 +87,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     }
 
     List<BaseObject> mediaFromFolder = [];
+    _loadController.getState.registerObserver(_loadObserver);
     if (event.choosedFolder?.id == '-1') {
       var allMediaFolders = await _controller.getMediaFolders(true);
 
@@ -114,13 +145,6 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         await _loadController.discardDownloading();
         _loadController.downloadFile(fileId: id);
       }
-
-      var observer = Observer<LoadNotification>((loadNotification) {
-        loadNotification.downloadFileInfo?.localPath;
-        // _downloadListener(id);
-      });
-
-      _loadController.getState.registerObserver(observer);
 
       emit(
         state.copyWith(
@@ -247,7 +271,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     //   return;
     // }
 
-    // _loadController.downloadFile(fileId: event.mediaId);
+    _loadController.downloadFile(fileId: event.mediaId);
 
     // var observer = DownloadObserver(id, (_) {
     //   _downloadListener(id);

@@ -5,6 +5,9 @@ import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:cpp_native/cpp_native.dart';
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,15 +19,13 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
 import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
 import 'package:upstorage_desktop/utilites/event_bus.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
 
@@ -61,17 +62,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   var _packetController =
       getIt<PacketController>(instanceName: 'packet_controller');
 
-  late Observer loadControllerObserver = Observer((value) {
-    // if (value is List<DownloadFileInfo>) {
-    //   _processDownloadChanges(value);
-    // } else if (value is List<UploadFileInfo>) {
-    //   _processUploadChanges(value);
-    // }
-
-    // if (value is LoadNotification) {
-    //   _processLoadChanges(value);
-    // }
-  });
   //    void _processLoadChanges(LoadNotification notification) async {
   //   MainUploadInfo? upload;
   //   MainDownloadInfo? download;
@@ -117,21 +107,44 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   //   }
   // }
 
-  late Observer _updateObserver = Observer((e) {
+  late Observer _updateObserver = Observer((e) async {
     try {
       if (e is LoadNotification) {
-        final uploadingFiles = e.uploadFileInfo;
+        final uploadingFile = e.uploadFileInfo;
         print("e =  ${e.downloadFileInfo}");
         // if (uploadingFilesList.any((file) =>
         //     file.isInProgress && file.loadPercent == 0 && file.id.isNotEmpty)) {
         //   final file = uploadingFilesList
         //       .firstWhere((file) => file.isInProgress && file.loadPercent == 0);
-        if (uploadingFiles != null) {
-          update(uploadingFileId: uploadingFiles.id);
+
+        if (uploadingFile != null &&
+            uploadingFile.folderId == state.currentFolder?.id) {
+          _updateUploadPercent(
+            fileId: uploadingFile.id,
+            percent: uploadingFile.loadPercent,
+          );
         } else if (e.downloadFileInfo != null &&
             e.isDownloadingInProgress &&
             e.downloadFileInfo?.loadPercent == -1) {
           _setRecordDownloading(recordId: e.downloadFileInfo!.id);
+        } else if (e.downloadFileInfo != null &&
+            e.downloadFileInfo!.loadPercent == 100) {
+          var downloadObject = e.downloadFileInfo;
+
+          if (downloadObject!.localPath.isNotEmpty) {
+            var box = await Hive.openBox(kPathDBName);
+            var path = downloadObject.localPath;
+            await box.put(downloadObject.id, path);
+
+            _setRecordDownloading(
+              recordId: downloadObject.id,
+              isDownloading: false,
+            );
+            var appPath = await getDownloadAppFolder();
+            var fullPathToFile = '$appPath$path';
+            // fullPathToFile = Uri.decodeFull(fullPathToFile);
+            await OpenFile.open(fullPathToFile);
+          }
         } else if (e.downloadFileInfo?.endedWithException == true &&
             e.downloadFileInfo?.errorReason ==
                 ErrorReason.noInternetConnection &&
@@ -650,121 +663,94 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     // }
   }
 
-  void _uploadListener(String pathToFile, dynamic value) async {
-    var controllerState = _loadController.getState;
+  // void _uploadListener(String pathToFile, dynamic value) async {
+  //   var controllerState = _loadController.getState;
 
-    final uploadingFile = controllerState.currentUploadingFile;
-    final downloadingFile = controllerState.currentDownloadingFile;
+  //   final uploadingFile = controllerState.currentUploadingFile;
+  //   // final downloadingFile = controllerState.currentDownloadingFile;
 
-    if (uploadingFile != null &&
-        uploadingFile.folderId == state.currentFolder) {
-      final indexOfUploadingFileFromSorted = state.sortedFiles
-          .indexWhere((element) => element.id == uploadingFile.id);
+  //   if (uploadingFile != null &&
+  //       uploadingFile.folderId == state.currentFolder) {
+  //     _updateUploadPercent(
+  //       fileId: uploadingFile.id,
+  //       percent: uploadingFile.loadPercent,
+  //     );
+  //   }
+  // }
 
-      if (indexOfUploadingFileFromSorted != -1) {
-        final uploadingFileFromSorted =
-            state.sortedFiles[indexOfUploadingFileFromSorted];
+  // if (pathToFile.isEmpty) {
+  //   var currentFileIndex = controllerState.uploadingFiles
+  //       .indexWhere((file) => file.isInProgress);
 
-        state.sortedFiles[indexOfUploadingFileFromSorted] =
-            (uploadingFileFromSorted as Record).copyWith(
-          isInProgress: uploadingFile.isInProgress,
-          loadPercent: uploadingFile.loadPercent.toDouble(),
-        );
-      }
+  //   if (currentFileIndex != -1) {
+  //     var currentFilePath =
+  //         controllerState.uploadingFiles[currentFileIndex].localPath;
 
-      final indexOfUploadindFileFromObjects =
-          state.objects.indexWhere((element) => element.id == uploadingFile.id);
+  //     var indexOfObserver =
+  //         _observers.indexWhere((observer) => observer.id == currentFilePath);
 
-      if (indexOfUploadindFileFromObjects != -1) {
-        final uploadingFileFromSorted =
-            state.objects[indexOfUploadindFileFromObjects];
+  //     if (indexOfObserver == -1) {
+  //       await _update();
+  //       _tryToFindObservableRecords();
+  //     }
+  //   }
+  //   return;
+  // }
 
-        state.objects[indexOfUploadindFileFromObjects] =
-            (uploadingFileFromSorted as Record).copyWith(
-          isInProgress: uploadingFile.isInProgress,
-          loadPercent: uploadingFile.loadPercent.toDouble(),
-        );
-      }
+  // try {
+  //   // var currentFile = controllerState.uploadingFiles.firstWhere(
+  //   //     (element) => element.localPath == pathToFile && element.isInProgress);
 
-      state.groupedFiles.
-    }
+  //   // if (value is CustomError) {
+  //   //   var observer =
+  //   //       _observers.firstWhere((element) => element.id == pathToFile);
+  //   //   controllerState.unregisterObserver(observer);
 
-    if (downloadingFile != null) {}
+  //   //   _observers.remove(observer);
 
-    // if (pathToFile.isEmpty) {
-    //   var currentFileIndex = controllerState.uploadingFiles
-    //       .indexWhere((file) => file.isInProgress);
+  //   //   _update();
+  //   //   return;
+  //   // }
 
-    //   if (currentFileIndex != -1) {
-    //     var currentFilePath =
-    //         controllerState.uploadingFiles[currentFileIndex].localPath;
+  //   if (currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty) {
+  //     _update();
+  //     print('currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty');
+  //     return;
+  //   }
 
-    //     var indexOfObserver =
-    //         _observers.indexWhere((observer) => observer.id == currentFilePath);
+  //   if (!currentFile.isInProgress && currentFile.uploadPercent == -1) {
+  //     print('!currentFile.isInProgress && currentFile.uploadPercent == -1');
+  //     return;
+  //   }
 
-    //     if (indexOfObserver == -1) {
-    //       await _update();
-    //       _tryToFindObservableRecords();
-    //     }
-    //   }
-    //   return;
-    // }
+  //   if (currentFile.uploadPercent >= 0 && currentFile.uploadPercent < 100) {
+  //     _updateUploadPercent(
+  //       fileId: currentFile.id,
+  //       percent: currentFile.uploadPercent,
+  //     );
+  //   } else if (currentFile.uploadPercent != -1) {
+  //     _updateUploadPercent(
+  //       fileId: currentFile.id,
+  //       percent: currentFile.uploadPercent,
+  //     );
+  //     var observer =
+  //         _observers.firstWhere((element) => element.id == pathToFile);
+  //     controllerState.unregisterObserver(observer);
 
-    // try {
-    //   // var currentFile = controllerState.uploadingFiles.firstWhere(
-    //   //     (element) => element.localPath == pathToFile && element.isInProgress);
+  //     _observers.remove(observer);
+  //   }
+  // } catch (e) {
+  //   print(e);
+  //   var ind = controllerState.uploadingFiles
+  //       .indexWhere((e) => e.id == pathToFile && e.endedWithException);
+  //   if (ind != -1) {
+  //     var observer =
+  //         _observers.firstWhere((element) => element.id == pathToFile);
+  //     controllerState.unregisterObserver(observer);
 
-    //   // if (value is CustomError) {
-    //   //   var observer =
-    //   //       _observers.firstWhere((element) => element.id == pathToFile);
-    //   //   controllerState.unregisterObserver(observer);
-
-    //   //   _observers.remove(observer);
-
-    //   //   _update();
-    //   //   return;
-    //   // }
-
-    //   if (currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty) {
-    //     _update();
-    //     print('currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty');
-    //     return;
-    //   }
-
-    //   if (!currentFile.isInProgress && currentFile.uploadPercent == -1) {
-    //     print('!currentFile.isInProgress && currentFile.uploadPercent == -1');
-    //     return;
-    //   }
-
-    //   if (currentFile.uploadPercent >= 0 && currentFile.uploadPercent < 100) {
-    //     _updateUploadPercent(
-    //       fileId: currentFile.id,
-    //       percent: currentFile.uploadPercent,
-    //     );
-    //   } else if (currentFile.uploadPercent != -1) {
-    //     _updateUploadPercent(
-    //       fileId: currentFile.id,
-    //       percent: currentFile.uploadPercent,
-    //     );
-    //     var observer =
-    //         _observers.firstWhere((element) => element.id == pathToFile);
-    //     controllerState.unregisterObserver(observer);
-
-    //     _observers.remove(observer);
-    //   }
-    // } catch (e) {
-    //   print(e);
-    //   var ind = controllerState.uploadingFiles
-    //       .indexWhere((e) => e.id == pathToFile && e.endedWithException);
-    //   if (ind != -1) {
-    //     var observer =
-    //         _observers.firstWhere((element) => element.id == pathToFile);
-    //     controllerState.unregisterObserver(observer);
-
-    //     _observers.remove(observer);
-    //   }
-    // }
-  }
+  //     _observers.remove(observer);
+  //   }
+  // }
 
   void _updateUploadPercent({
     required String fileId,
@@ -775,6 +761,14 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var indexOfUploadingFile =
         objects.indexWhere((element) => element.id == fileId);
     print('index if uploading filse is $indexOfUploadingFile');
+
+    if (indexOfUploadingFile == -1) {
+      objects = await _filesController
+          .getContentFromFolderById(state.currentFolder!.id);
+      indexOfUploadingFile =
+          objects.indexWhere((element) => element.id == fileId);
+    }
+
     if (indexOfUploadingFile != -1) {
       var uploadingFile = objects[indexOfUploadingFile];
 
@@ -822,7 +816,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     String path = box.get(record.id, defaultValue: '');
     // idTappedFile = record.id;
     if (path.isNotEmpty) {
-      var appPath = (await getApplicationSupportDirectory()).path;
+      var appPath = await getDownloadAppFolder();
       if (path.contains("()")) {
         path.replaceAll(('('), '"("');
         path.replaceAll((')'), '")"');

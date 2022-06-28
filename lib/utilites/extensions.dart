@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/user.dart';
 
@@ -12,7 +14,8 @@ extension StringExtension on String {
   }
 
   bool isURL() {
-    var urlPattern = r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    var urlPattern =
+        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
     return RegExp(urlPattern, caseSensitive: false).hasMatch(this);
   }
 }
@@ -26,7 +29,8 @@ extension GlobalKeyExtension on GlobalKey {
     final renderObject = currentContext?.findRenderObject();
     var translation = renderObject?.getTransformTo(null).getTranslation();
     if (translation != null && renderObject?.paintBounds != null) {
-      return renderObject!.paintBounds.shift(Offset(translation.x, translation.y));
+      return renderObject!.paintBounds
+          .shift(Offset(translation.x, translation.y));
     } else {
       return null;
     }
@@ -34,7 +38,7 @@ extension GlobalKeyExtension on GlobalKey {
 }
 
 Future<String> getDownloadAppFolder() async {
-  var appPath = await getApplicationDocumentsDirectory();
+  var appPath = await getApplicationSupportDirectory();
   return appPath.path + '/downloads/';
 }
 
@@ -107,14 +111,17 @@ String fileSize(dynamic size, S translate, [int round = 2]) {
   }
 
   if (_size < divider * divider * divider * divider && _size % divider == 0) {
-    return translate.gb((_size / (divider * divider * divider)).toStringAsFixed(0));
+    return translate
+        .gb((_size / (divider * divider * divider)).toStringAsFixed(0));
   }
 
   if (_size < divider * divider * divider * divider) {
-    return translate.gb((_size / divider / divider / divider).toStringAsFixed(round));
+    return translate
+        .gb((_size / divider / divider / divider).toStringAsFixed(round));
   }
 
-  if (_size < divider * divider * divider * divider * divider && _size % divider == 0) {
+  if (_size < divider * divider * divider * divider * divider &&
+      _size % divider == 0) {
     num r = _size / divider / divider / divider / divider;
     return translate.tb(r.toStringAsFixed(0));
   }
@@ -124,11 +131,35 @@ String fileSize(dynamic size, S translate, [int round = 2]) {
     return translate.tb(r.toStringAsFixed(round));
   }
 
-  if (_size < divider * divider * divider * divider * divider * divider && _size % divider == 0) {
+  if (_size < divider * divider * divider * divider * divider * divider &&
+      _size % divider == 0) {
     num r = _size / divider / divider / divider / divider / divider;
     return translate.pb(r.toStringAsFixed(0));
   } else {
     num r = _size / divider / divider / divider / divider / divider;
     return translate.pb(r.toStringAsFixed(round));
+  }
+}
+
+Future<void> copyFileToDownloadDir({
+  required String filePath,
+  required String fileId,
+}) async {
+  try {
+    var file = File(filePath);
+    var appDownloadFolderPath = await getDownloadAppFolder();
+    await Directory(appDownloadFolderPath).create(recursive: true);
+    var copiedFile = await file.copy(appDownloadFolderPath + file.name);
+
+    var isFileCopied = await copiedFile.exists();
+    print('copied file existing is $isFileCopied');
+
+    if (isFileCopied) {
+      var box = await Hive.openBox(kPathDBName);
+      await box.put(fileId, 'downloads/${file.name}');
+      print('uploading file succesfully copied to app folder');
+    }
+  } catch (e) {
+    print('cannot copy file with exception: $e');
   }
 }

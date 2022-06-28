@@ -1,6 +1,6 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:flutter/material.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/record.dart';
 
 class StateInfoContainer extends StatefulWidget {
   final Widget child;
@@ -10,7 +10,9 @@ class StateInfoContainer extends StatefulWidget {
   });
 
   static StateInfoContainerState? of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<_InheritedStateInfoContainer>())?.data;
+    return (context
+            .dependOnInheritedWidgetOfExactType<_InheritedStateInfoContainer>())
+        ?.data;
   }
 
   @override

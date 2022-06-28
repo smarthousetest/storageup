@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,10 +19,7 @@ import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:upstorage_desktop/pages/media/media_cubit.dart';
@@ -356,13 +356,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       child: RawMaterialButton(
                                         onPressed: () {
                                           _folderListScrollController.animateTo(
-                                              _folderListScrollController
-                                                      .offset -
-                                                  _folderButtonSize -
-                                                  14,
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              curve: Curves.ease);
+                                            _folderListScrollController.offset -
+                                                _folderButtonSize -
+                                                14,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            curve: Curves.ease,
+                                          );
                                         },
                                         fillColor:
                                             Theme.of(context).primaryColor,

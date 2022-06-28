@@ -1,17 +1,23 @@
 import 'dart:io';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
+import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
+import 'package:upstorage_desktop/utilites/extensions.dart';
 import 'package:upstorage_desktop/utilites/language_locale.dart';
 import 'package:upstorage_desktop/utilites/local_server/local_server.dart'
     as ui;
+import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
 import 'constants.dart';
 import 'generated/l10n.dart';
 import 'utilites/injection.dart';
@@ -22,6 +28,7 @@ void main() async {
   readFromFileDomainName();
   await configureInjection();
   //HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(new StateContainer(child: new MyApp()));
 }
 
@@ -44,7 +51,7 @@ class _MyAppState extends State<MyApp> {
   _MyAppState() : _locale = Locale(Intl.systemLocale) {
     hasCurrentLocale().then((value) {
       getLocale().then(
-            (loc) => setLocale(loc),
+        (loc) => setLocale(loc),
       );
     });
   }
@@ -63,6 +70,23 @@ class _MyAppState extends State<MyApp> {
 //       _locale = locale;
 //     });
 //   }
+  @override
+  void initState() {
+    initLoadController();
+    super.initState();
+  }
+
+  void initLoadController() async {
+    LoadController.instance.init(
+      filesController: getIt<FilesController>(instanceName: 'files_controller'),
+      tokenRepository: getIt<TokenRepository>(),
+      documentsDirectory: (await getApplicationSupportDirectory()).path,
+      supportDirectory: (await getApplicationSupportDirectory()).path,
+      backendUrl: kServerUrl.split('/').last,
+      copyFileToDownloadDir: copyFileToDownloadDir,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
@@ -120,7 +144,8 @@ void readFromFileDomainName() {
   if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
-  var domainNameFile = File('${os.appDirPath}${Platform.pathSeparator}domainName');
+  var domainNameFile =
+      File('${os.appDirPath}${Platform.pathSeparator}domainName');
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
   } else {
@@ -133,8 +158,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    // etc.
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

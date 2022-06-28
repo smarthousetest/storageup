@@ -1,6 +1,6 @@
+import 'package:cpp_native/models/record.dart';
 import 'package:equatable/equatable.dart';
 import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/record.dart';
 
 abstract class HomeEvent extends Equatable {
   const HomeEvent();

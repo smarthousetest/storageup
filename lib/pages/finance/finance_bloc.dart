@@ -13,7 +13,8 @@ import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
 
 @injectable
 class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
-  FinanceBloc(FilesController filesController) : super(FinanceState()) {
+  FinanceBloc(@Named('files_controller') FilesController filesController)
+      : super(FinanceState()) {
     on<FinanceEvent>((event, emit) async {
       if (event is FinancePageOpened) {
         await _mapFinancePageOpened(event, state, emit);
@@ -68,7 +69,8 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
 
     var status = await _subscriptionService.changeSubscription(choosedSub);
     if (status == ResponseStatus.ok) {
-      var updatedSubscription = await _subscriptionService.getCurrentSubscription();
+      var updatedSubscription =
+          await _subscriptionService.getCurrentSubscription();
       emit(state.copyWith(
         sub: updatedSubscription,
       ));

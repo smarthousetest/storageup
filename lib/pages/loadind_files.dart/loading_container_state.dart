@@ -1,9 +1,9 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/folder.dart';
 
 class LoadingContainerState extends Equatable {
   final List<BaseObject> filtredFiles;
