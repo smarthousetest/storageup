@@ -89,6 +89,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
       index = newIndex;
       changeKeeper = keeper;
       myController.text = keeper.name;
+      _currentSliderValue = changeKeeper!.countGb.toDouble();
     });
   }
 
@@ -316,6 +317,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               index = 0;
               changeKeeper = null;
               myController.text = '';
+              _currentSliderValue = 32;
             });
           },
           child: MouseRegion(
@@ -606,12 +608,14 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
-          if (changeKeeper != null)
+          if (changeKeeper != null) {
             context
                 .read<SpaceBloc>()
                 .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+          }
+
           var maxSpace = (state.availableSpace / GB).round();
-          print(maxSpace);
+          //print(maxSpace);
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -832,7 +836,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           child: Slider(
                             activeColor: Theme.of(context).splashColor,
                             inactiveColor: Theme.of(context).cardColor,
-                            min: 32,
+                            min: changeKeeper == null
+                                ? 32
+                                : changeKeeper!.countGb.toDouble(),
                             max: maxSpace > 32 ? maxSpace.toDouble() : 180,
                             value: _currentSliderValue,
                             onChanged: maxSpace < 32
@@ -1041,6 +1047,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     index = 2;
                                     changeKeeper = null;
                                     myController.text = '';
+                                    _currentSliderValue = 0;
                                   });
                                 } else {
                                   context.read<SpaceBloc>().add(SaveDirPath(
@@ -1050,9 +1057,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   await context.read<SpaceBloc>().stream.first;
                                   setState(() {
                                     index = 2;
+                                    _currentSliderValue = 32;
+                                    myController.text = '';
                                   });
-                                  _currentSliderValue = 32;
-                                  myController.text = '';
                                 }
                               }
                             : null,
@@ -1086,9 +1093,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   bool _isFieldsValid(SpaceState state) {
     return state.name.valid &&
-            state.name.value.isNotEmpty &&
-            state.pathToKeeper.isNotEmpty ||
-        changeKeeper != null;
+        state.name.value.isNotEmpty &&
+        (state.pathToKeeper.isNotEmpty || changeKeeper != null);
   }
 
   _setName(BuildContext context, SpaceState state) {
