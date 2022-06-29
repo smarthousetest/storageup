@@ -125,7 +125,7 @@ void readFromFileDomainName() {
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
   } else {
-    domainName = domainNameFile.readAsStringSync();
+    domainName = domainNameFile.readAsStringSync().trim();
   }
   print(domainName);
 }
