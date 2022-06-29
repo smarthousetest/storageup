@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 enum ChosenPage {
   home,

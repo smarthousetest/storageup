@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/components/custom_text_field.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
-import 'package:upstorage_desktop/pages/auth/auth_event.dart';
-import 'package:upstorage_desktop/pages/auth/auth_state.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:storageup/components/custom_text_field.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/auth/auth_bloc.dart';
+import 'package:storageup/pages/auth/auth_event.dart';
+import 'package:storageup/pages/auth/auth_state.dart';
+import 'package:storageup/utilities/injection.dart';
 
 class RegistrationInProgress extends StatefulWidget {
   const RegistrationInProgress({Key? key, required this.state});

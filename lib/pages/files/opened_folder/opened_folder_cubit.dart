@@ -1,34 +1,32 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:cpp_native/cpp_native.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
-
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/observable_utils.dart';
-import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/folder.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/load_controller.dart';
+import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/event_bus.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/observable_utils.dart';
+import 'package:storageup/utilities/repositories/latest_file_repository.dart';
 
 import '../../../constants.dart';
-import '../../../utilites/repositories/user_repository.dart';
+import '../../../utilities/repositories/user_repository.dart';
 
 enum ContextActionEnum {
   share,

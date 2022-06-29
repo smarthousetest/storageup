@@ -1,21 +1,21 @@
 import 'dart:ui';
+
 import 'package:dbcrypt/dbcrypt.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/auth/auth_view.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-
-import '../../utilites/services/auth_service.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/auth/auth_bloc.dart';
+import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/services/auth_service.dart';
 
 class BlurChangePassword extends StatefulWidget {
   //ValueSetter? callback;

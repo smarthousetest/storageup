@@ -1,16 +1,14 @@
-import 'dart:io';
-
 import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/pages/auth/models/email.dart';
-import 'package:upstorage_desktop/pages/auth/models/name.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/auth_repository.dart';
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/auth/models/email.dart';
+import 'package:storageup/pages/auth/models/name.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/auth_repository.dart';
+import 'package:storageup/utilities/repositories/token_repository.dart';
 
 import 'auth_event.dart';
 import 'auth_state.dart';

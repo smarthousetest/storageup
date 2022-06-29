@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/file.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/file.dart';
 
 import 'stored.dart';
 

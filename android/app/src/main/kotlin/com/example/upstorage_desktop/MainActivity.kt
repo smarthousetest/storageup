@@ -1,4 +1,4 @@
-package com.example.upstorage_desktop
+package com.example.storageup
 
 import io.flutter.embedding.android.FlutterActivity
 

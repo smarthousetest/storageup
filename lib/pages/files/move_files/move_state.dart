@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:upstorage_desktop/models/folder.dart';
+import 'package:storageup/models/folder.dart';
 
 class MoveState extends Equatable {
   final List<Folder> folders;

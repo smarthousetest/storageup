@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "upstorage_desktop")
-set(APPLICATION_ID "com.example.upstorage_desktop")
+set(BINARY_NAME "storageup")
+set(APPLICATION_ID "com.example.storageup")
 
 cmake_policy(SET CMP0063 NEW)
 

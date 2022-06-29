@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/record.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/record.dart';
+
 part 'folder.g.dart';
 
 @HiveType(typeId: 6)
