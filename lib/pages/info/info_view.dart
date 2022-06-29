@@ -253,13 +253,15 @@ class _InfoPageState extends State<InfoPage> {
         //     ?.length;
 
         var countMediaFolderPhoto = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Фото")
+                ?.firstWhere(
+                    (element) => ['Фото', 'Photos'].contains(element.name))
                 .records
                 ?.length ??
             0;
 
         var countMediaFolderVideo = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Видео")
+                ?.firstWhere(
+                    (element) => ['Видео', 'Video'].contains(element.name))
                 .records
                 ?.length ??
             0;
@@ -310,7 +312,7 @@ class _InfoPageState extends State<InfoPage> {
                           ),
                           Text(
                             //"${(filesFolder?.records?.length ?? 0)} файлов",
-                            "${(filesFolder)} файлов",
+                            "${translate.many_files(filesFolder)}",
                             //"${(filesFolder)}",
                             style: TextStyle(
                               fontSize: 12,
@@ -363,7 +365,7 @@ class _InfoPageState extends State<InfoPage> {
                             ),
                           ),
                           Text(
-                            "${(countMediaFolderPhoto)} файлов",
+                            "${translate.many_files(countMediaFolderPhoto)}",
                             // 's',
                             style: TextStyle(
                               fontSize: 12,
@@ -416,7 +418,7 @@ class _InfoPageState extends State<InfoPage> {
                             ),
                           ),
                           Text(
-                            "${(countMediaFolderVideo)} файлов",
+                            "${translate.many_files(countMediaFolderPhoto)}",
                             style: TextStyle(
                               fontSize: 12,
                               color: Theme.of(context).shadowColor,
