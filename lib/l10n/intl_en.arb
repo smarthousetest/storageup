@@ -271,5 +271,6 @@
     "no_available_space": "The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.",
     "many_files": "{count,plural, =0{0 files} =1{{count} file} other{{count} files}}",
     "add_files": "Add files",
-    "change_place": "Change place"
+    "change_place": "Change place",
+    "where_download": "Where download?"
 }

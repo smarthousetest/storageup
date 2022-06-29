@@ -1489,8 +1489,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           context: context,
           builder: (BuildContext context) {
             return MoveFileView(
-              object is Folder ? [object] : null,
-            );
+                object is Folder ? [object] : null, UserAction.moveFiles);
           },
         );
         if (result != null) {

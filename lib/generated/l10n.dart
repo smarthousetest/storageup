@@ -2498,6 +2498,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Where download?`
+  String get where_download {
+    return Intl.message(
+      'Where download?',
+      name: 'where_download',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
