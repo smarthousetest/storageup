@@ -17,6 +17,7 @@ import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/latest_file.dart';
+import 'package:upstorage_desktop/pages/files/move_files/move_files_view.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
 import 'package:upstorage_desktop/pages/home/home_event.dart';
 import 'package:upstorage_desktop/pages/like/like_view.dart';
@@ -574,14 +575,22 @@ class _HomePageState extends State<HomePage> {
         break;
 
       case UserAction.uploadFiles:
-        final folderId = StateContainer.of(context).choosedFilesFolderId;
-        context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
-                action: userAction.action,
-                values: userAction.result,
-                folderId: folderId,
-              ),
-            );
+        var result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MoveFileView(null, UserAction.uploadFiles);
+          },
+        );
+        if (result != null) {
+          final folder = result;
+          context.read<HomeBloc>().add(
+                HomeUserActionChoosed(
+                  action: userAction.action,
+                  values: userAction.result,
+                  folderId: folder.id,
+                ),
+              );
+        }
         break;
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;

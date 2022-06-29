@@ -262,5 +262,6 @@
     "update": "Update",
     "name_contain": "The name must contain more than 2 characters",
     "add_files": "Add files",
-    "change_place": "Change place"
+    "change_place": "Change place",
+    "where_download": "Where download?"
 }

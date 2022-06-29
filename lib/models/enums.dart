@@ -65,6 +65,7 @@ enum UserAction {
   createFolder,
   createAlbum,
   uploadFolder,
+  moveFiles,
 }
 
 enum ResponseStatus {

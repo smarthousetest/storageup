@@ -363,6 +363,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Well"),
+        "where_download":
+            MessageLookupByLibrary.simpleMessage("Where download?"),
         "where_move":
             MessageLookupByLibrary.simpleMessage("Where to move it to?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(

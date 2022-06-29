@@ -16,11 +16,9 @@ class MoveCubit extends Cubit<MoveState> {
     var rootFolder = _filesController.getFilesRootFolder;
     List<Folder> allFolders = [];
     if (rootFolder != null) allFolders.add(rootFolder);
-    // var currentFolder = allFolders?.firstWhere((element) => element.id == '-1');
 
     emit(state.copyWith(
       folders: allFolders,
-      // currentFolder: currentFolder,
     ));
   }
 

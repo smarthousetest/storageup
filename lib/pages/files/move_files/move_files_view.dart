@@ -7,6 +7,7 @@ import 'package:tree_view/tree_view.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/pages/files/move_files/move_cubit.dart';
 import 'package:upstorage_desktop/pages/files/move_files/move_state.dart';
@@ -14,11 +15,13 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 
 class MoveFileView extends StatefulWidget {
   final List<Folder>? folders;
+  final UserAction action;
 
   @override
   _MoveFileState createState() => new _MoveFileState();
   MoveFileView(
     this.folders,
+    this.action,
   );
 }
 
@@ -74,7 +77,9 @@ class _MoveFileState extends State<MoveFileView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  translate.where_move,
+                                  widget.action == UserAction.moveFiles
+                                      ? translate.where_move
+                                      : translate.where_download,
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: kNormalTextFontFamily,
@@ -261,7 +266,10 @@ class _MoveFileState extends State<MoveFileView> {
                                                       context, moveToFolder);
                                                 },
                                                 child: Text(
-                                                  translate.move,
+                                                  widget.action ==
+                                                          UserAction.moveFiles
+                                                      ? translate.move
+                                                      : translate.download,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 17,
