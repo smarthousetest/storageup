@@ -9,10 +9,9 @@ import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:upstorage_desktop/components/blur/add_folder.dart';
 import 'package:upstorage_desktop/components/blur/create_album.dart';
+import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
 import 'package:upstorage_desktop/components/blur/exit.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/menu_upload.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
@@ -130,21 +129,29 @@ class _HomePageState extends State<HomePage> {
         create: (context) => HomeBloc()..add(HomePageOpened()),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) async {
-            // context.read()<SpaceBloc>().add(SendKeeperVersion());
-            if (state.status == FormzStatus.submissionFailure) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(true);
-                },
-              );
-            } else if (state.status == FormzStatus.submissionCanceled) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurFailedServerConnection(true);
-                },
-              );
+            if (StateContainer.of(context).isPopUpShowing == false) {
+              if (state.status == FormzStatus.submissionFailure) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                      middleText: translate.something_goes_wrong,
+                    );
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              } else if (state.status == FormzStatus.submissionCanceled) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                        middleText: translate.no_internet);
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              }
             }
           },
           child: Row(
@@ -577,7 +584,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadFiles:
         final folderId = StateContainer.of(context).choosedFilesFolderId;
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -587,7 +594,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -596,7 +603,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
               ),

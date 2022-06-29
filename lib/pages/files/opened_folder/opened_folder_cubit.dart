@@ -803,37 +803,43 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> fileTapped(Record record) async {
-    await _filesController.setRecentFile(record, DateTime.now());
-    var recentsFile = await _filesController.getRecentFiles();
-    if (recentsFile != null) {
-      // recentsFile.forEach((element) {
-      await _repository.addFiles(latestFile: recentsFile);
-      // });
-    }
-    //_repository.addFile(latestFile: record);
-
-    var box = await Hive.openBox(kPathDBName);
-    String path = box.get(record.id, defaultValue: '');
-    // idTappedFile = record.id;
-    if (path.isNotEmpty) {
-      var appPath = await getDownloadAppFolder();
-      if (path.contains("()")) {
-        path.replaceAll(('('), '"("');
-        path.replaceAll((')'), '")"');
+    final result = await _filesController.setRecentFile(record, DateTime.now());
+    if (result == ResponseStatus.ok) {
+      var recentsFile = await _filesController.getRecentFiles();
+      if (recentsFile != null) {
+        // recentsFile.forEach((element) {
+        await _repository.addFiles(latestFile: recentsFile);
+        // });
       }
+      //_repository.addFile(latestFile: record);
 
-      var fullPathToFile = "$appPath/$path";
-      var isExisting = await File(fullPathToFile).exists();
-      //var isExistingSync = File(fullPathToFile).watch();
-      print(fullPathToFile);
-      if (isExisting) {
-        var res = await OpenFile.open(fullPathToFile);
-        print(res.message);
+      var box = await Hive.openBox(kPathDBName);
+      String path = box.get(record.id, defaultValue: '');
+      // idTappedFile = record.id;
+      if (path.isNotEmpty) {
+        var appPath = await getDownloadAppFolder();
+        if (path.contains("()")) {
+          path.replaceAll(('('), '"("');
+          path.replaceAll((')'), '")"');
+        }
+
+        var fullPathToFile = "$appPath/$path";
+        var isExisting = await File(fullPathToFile).exists();
+        //var isExistingSync = File(fullPathToFile).watch();
+        print(fullPathToFile);
+        if (isExisting) {
+          var res = await OpenFile.open(fullPathToFile);
+          print(res.message);
+        } else {
+          _downloadFile(record.id, null);
+        }
       } else {
         _downloadFile(record.id, null);
       }
+    } else if (result == ResponseStatus.failed) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     } else {
-      _downloadFile(record.id, null);
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
   }
 

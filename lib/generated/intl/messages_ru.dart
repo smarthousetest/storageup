@@ -93,8 +93,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
-        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
-            "Проверьте соединение с Интернетом и повторите попытку."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
@@ -184,6 +182,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "info": MessageLookupByLibrary.simpleMessage("Свойства"),
         "install_update":
             MessageLookupByLibrary.simpleMessage("Установить обновление"),
+        "internal_server_error":
+            MessageLookupByLibrary.simpleMessage("Ошибка на стороне сервера"),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
@@ -220,6 +220,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),
+        "no_available_keepers":
+            MessageLookupByLibrary.simpleMessage("Нет киперов"),
+        "no_available_proxy": MessageLookupByLibrary.simpleMessage(
+            "Отсутствует необходимый прокси"),
+        "no_available_space":
+            MessageLookupByLibrary.simpleMessage("Недостаточно места"),
+        "no_internet": MessageLookupByLibrary.simpleMessage(
+            "Не удаётся установить соединение с сервером.\nПроверьте соединение с Интернетом и повторите попытку."),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
@@ -231,6 +239,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "notification_re_auth": MessageLookupByLibrary.simpleMessage(
             "Вам нужно снова зайти в аккаунт"),
+        "null_file":
+            MessageLookupByLibrary.simpleMessage("Ошибка при работе с файлом"),
         "of_percent": MessageLookupByLibrary.simpleMessage(" из 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Выкл"),
         "offer": MessageLookupByLibrary.simpleMessage(
@@ -283,8 +293,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "reboot": MessageLookupByLibrary.simpleMessage("Перезагрузка"),
         "reboot_keeper": MessageLookupByLibrary.simpleMessage(
             "Перезапустить кипер возможно локально"),
-        "no_internet": MessageLookupByLibrary.simpleMessage(
-            "Отсутствует соединение с  Интернетом!\n Проверьте сетевые настройки"),
         "recent": MessageLookupByLibrary.simpleMessage("Недавние"),
         "register": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
         "register_complete":
@@ -317,8 +325,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Выберите место хранения"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Сдача места"),
-        "server_connection_error": MessageLookupByLibrary.simpleMessage(
-            "Не удаётся установить соединение с сервером."),
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
@@ -338,6 +344,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Мы используем это пространство для хранения файлов, а вы"),
         "subscription_pay_mounth": m12,
         "tb": m13,
+        "technical_error": MessageLookupByLibrary.simpleMessage(
+            "Произошла техническая ошибка. Попробуйте позднее"),
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(
@@ -397,18 +405,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "you_turn_in": MessageLookupByLibrary.simpleMessage("Вы сдаете"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("начислятся деньги."),
-        "your_income": MessageLookupByLibrary.simpleMessage("Ваш доход"),
-        "technical_error": MessageLookupByLibrary.simpleMessage(
-            "Произошла техническая ошибка. Попробуйте позднее"),
-        "internal_server_error":
-            MessageLookupByLibrary.simpleMessage("Ошибка на стороне сервера"),
-        "no_available_keepers":
-            MessageLookupByLibrary.simpleMessage("Нет киперов"),
-        "no_available_proxy": MessageLookupByLibrary.simpleMessage(
-            "Отсутствует необходимый прокси"),
-        "no_available_space":
-            MessageLookupByLibrary.simpleMessage("Недостаточно места"),
-        "null_file":
-            MessageLookupByLibrary.simpleMessage("Ошибка приработе с файлом"),
+        "your_income": MessageLookupByLibrary.simpleMessage("Ваш доход")
       };
 }

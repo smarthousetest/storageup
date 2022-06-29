@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:cpp_native/controllers/load/models.dart';
+import 'package:cpp_native/cpp_native.dart';
 import 'package:cpp_native/interfaces/load_interfaces.dart';
 import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
+
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
@@ -12,7 +14,7 @@ import 'package:upstorage_desktop/utilites/repositories/file_repository.dart';
 import 'package:upstorage_desktop/utilites/repositories/media_repository.dart';
 import 'package:upstorage_desktop/utilites/services/files_service.dart';
 
-class FilesController extends IFilesController {
+class FilesController implements IFilesController {
   MediaRepository _mediaRepo =
       getIt<MediaRepository>(instanceName: 'media_repo');
   FilesRepository _filesRepo =
@@ -262,5 +264,11 @@ class FilesController extends IFilesController {
   @override
   Future<void> updateObject(FileInfo object) async {
     // TODO: implement updateObject
+  }
+
+  @override
+  Future<void> reportError(
+      {required String message, required CustomError error}) {
+    throw UnimplementedError();
   }
 }

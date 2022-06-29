@@ -11,10 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
 import 'package:upstorage_desktop/components/blur/delete.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
 import 'package:upstorage_desktop/components/blur/rename.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/properties.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
@@ -58,7 +57,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   Timer? timerForOpenFile;
   int _startTimer = 1;
   var _indexObject = -1;
-  bool youSeePopUp = false;
 
   void _initiatingControllers(OpenedFolderState state) {
     if (_popupControllers.isEmpty) {
@@ -112,23 +110,23 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         listener: (context, state) async {
           if (StateContainer.of(context).isPopUpShowing == false) {
             if (state.status == FormzStatus.submissionFailure) {
-              // youSeePopUp = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
-              youSeePopUp = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(youSeePopUp);
+                  return BlurCustomErrorPopUp(
+                    middleText: translate.something_goes_wrong,
+                  );
                 },
               );
-
               StateContainer.of(context).changeIsPopUpShowing(false);
             } else if (state.status == FormzStatus.submissionCanceled) {
-              // youSeePopUp = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
-              youSeePopUp = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurFailedServerConnection(youSeePopUp);
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
                 },
               );
               StateContainer.of(context).changeIsPopUpShowing(false);

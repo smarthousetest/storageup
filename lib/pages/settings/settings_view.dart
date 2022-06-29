@@ -5,9 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
 import 'package:upstorage_desktop/components/blur/change_password.dart';
+import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
 import 'package:upstorage_desktop/components/blur/delete_avatar.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/main.dart';
@@ -277,20 +276,29 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       BlocListener<SettingsBloc, SettingsState>(
         listener: (context, state) async {
-          if (state.status == FormzStatus.submissionFailure) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurSomethingGoesWrong(true);
-              },
-            );
-          } else if (state.status == FormzStatus.submissionCanceled) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurFailedServerConnection(true);
-              },
-            );
+          if (StateContainer.of(context).isPopUpShowing == false) {
+            if (state.status == FormzStatus.submissionFailure) {
+              StateContainer.of(context).changeIsPopUpShowing(true);
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                    middleText: translate.something_goes_wrong,
+                  );
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            } else if (state.status == FormzStatus.submissionCanceled) {
+              StateContainer.of(context).changeIsPopUpShowing(true);
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            }
           }
         },
         child:

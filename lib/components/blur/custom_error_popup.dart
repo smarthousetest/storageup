@@ -4,28 +4,27 @@ import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 
-class BlurSomethingGoesWrong extends StatefulWidget {
-  bool youSeePopUp;
-  @override
-  _ButtonTemplateState createState() => new _ButtonTemplateState();
-  BlurSomethingGoesWrong(this.youSeePopUp);
-}
+class BlurCustomErrorPopUp extends StatelessWidget {
+  BlurCustomErrorPopUp({
+    Key? key,
+    required this.middleText,
+  }) : super(key: key);
 
-class _ButtonTemplateState extends State<BlurSomethingGoesWrong> {
-  S translate = getIt<S>();
-  bool delete = true;
+  final String middleText;
+  final S translate = getIt<S>();
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 520,
-        height: 193,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Material(
-          type: MaterialType.transparency,
+    return Material(
+      type: MaterialType.transparency,
+      child: Center(
+        child: Container(
+          width: 520,
+          height: 215,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Row(
             children: [
               Padding(
@@ -35,6 +34,7 @@ class _ButtonTemplateState extends State<BlurSomethingGoesWrong> {
                   height: 193,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         translate.error,
@@ -46,9 +46,9 @@ class _ButtonTemplateState extends State<BlurSomethingGoesWrong> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: const EdgeInsets.only(top: 5),
                         child: Text(
-                          translate.something_goes_wrong,
+                          middleText,
                           style: TextStyle(
                             fontSize: 14,
                             fontFamily: kNormalTextFontFamily,
@@ -57,7 +57,7 @@ class _ButtonTemplateState extends State<BlurSomethingGoesWrong> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 26),
+                        padding: const EdgeInsets.only(bottom: 30),
                         child: Container(
                           width: 400,
                           child: Row(

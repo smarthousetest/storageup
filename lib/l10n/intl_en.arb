@@ -252,8 +252,7 @@
     "reboot_keeper": "It is possible to restart keeper locally",
     "of_percent": " of 100%",
     "error": "Error",
-    "server_connection_error": "The connection to the server cannot be established.",
-    "check_ethernet_connection": "Check your internet connection and try again.",
+    "no_internet": "The connection to the server cannot be established.\nCheck your internet connection and try again.",
     "ok": "Ok",
     "resend_letter_available": "Resend letter will be available in",
     "seconds": "{count} seconds",
@@ -262,12 +261,11 @@
     "create": "Create",
     "down": "Download",
     "update": "Update",
-    "name_contain": "The name must contain more than 2 characters"
+    "name_contain": "The name must contain more than 2 characters",
     "null_file": "Error with file",
     "no_available_space": "Not enough storage",
     "no_available_proxy": "Required proxy is missing",
     "no_available_keepers": "No keepers",
     "internal_server_error": "Server side error",
-    "no_internet": "No internet connection!\n Check network settings",
-    "technical_error": "A technical error has occurred. Try again later",
+    "technical_error": "A technical error has occurred. Try again later"
 }

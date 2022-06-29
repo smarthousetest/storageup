@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
+import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
 import 'package:upstorage_desktop/components/custom_text_field.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/generated/l10n.dart';
 import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_event.dart';
 import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 
 import 'forgot_password_bloc.dart';
 import 'forgot_password_state.dart';
@@ -80,20 +80,29 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         ),
         child: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
           listener: (context, state) async {
-            if (state.status == FormzStatus.submissionFailure) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(true);
-                },
-              );
-            } else if (state.status == FormzStatus.submissionCanceled) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurFailedServerConnection(true);
-                },
-              );
+            if (StateContainer.of(context).isPopUpShowing == false) {
+              if (state.status == FormzStatus.submissionFailure) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                      middleText: translate.something_goes_wrong,
+                    );
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              } else if (state.status == FormzStatus.submissionCanceled) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                        middleText: translate.no_internet);
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              }
             }
           },
           child: Material(
