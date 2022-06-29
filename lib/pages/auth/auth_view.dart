@@ -54,7 +54,7 @@ class _AuthViewState extends State<AuthView> {
       width = 1296 * os.getWinScreenScale();
     }
     if (Platform.isLinux) {
-      width = 1392.0;
+      width = 1332.0;
       height = 866.0;
     }
     DesktopWindow.setMinWindowSize(Size(width, height));
