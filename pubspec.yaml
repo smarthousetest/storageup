@@ -57,6 +57,11 @@ dependencies:
   file_typification:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/file_typification.git
+  
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding.git
+      path: plugins/window_size
 
 dev_dependencies:
   injectable_generator:

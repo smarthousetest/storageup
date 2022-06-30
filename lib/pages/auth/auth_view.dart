@@ -19,6 +19,7 @@ import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/auth_event.dart';
 import 'package:storageup/pages/home/home_view.dart';
 import 'package:storageup/utilities/injection.dart';
+import 'package:window_size/window_size.dart';
 
 import 'auth_bloc.dart';
 import 'auth_state.dart';
@@ -60,6 +61,12 @@ class _AuthViewState extends State<AuthView> {
     DesktopWindow.setMinWindowSize(Size(width, height));
     DesktopWindow.setMaxWindowSize(Size(width, height));
     DesktopWindow.setWindowSize(Size(width, height));
+
+    if (Platform.isLinux) {
+      setWindowMaxSize(Size(width, height));
+      setWindowMinSize(Size(width, height));
+    }
+
     super.initState();
   }
 

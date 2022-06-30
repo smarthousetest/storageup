@@ -32,6 +32,7 @@ import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:window_size/window_size.dart';
 
 import 'home_bloc.dart';
 import 'home_state.dart';
@@ -63,6 +64,10 @@ class _HomePageState extends State<HomePage> {
     DesktopWindow.setMinWindowSize(Size(width, height));
 
     DesktopWindow.resetMaxWindowSize();
+
+    if (Platform.isLinux) {
+      setWindowMinSize(Size(width, height));
+    }
   }
 
   @override
