@@ -435,7 +435,6 @@ class _HomePageState extends State<HomePage> {
       child: Padding(
         padding: const EdgeInsets.only(top: 30, left: 40, bottom: 30),
         child: Container(
-          width: 93,
           height: 24,
           child: GestureDetector(
             onTap: () async {
@@ -578,7 +577,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadFiles:
         final folderId = StateContainer.of(context).choosedFilesFolderId;
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -588,7 +587,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -597,7 +596,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
               ),
