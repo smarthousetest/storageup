@@ -179,8 +179,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "info": MessageLookupByLibrary.simpleMessage("Info"),
         "install_update":
             MessageLookupByLibrary.simpleMessage("Install update"),
-        "internal_server_error":
-            MessageLookupByLibrary.simpleMessage("Server side error"),
+        "internal_server_error": MessageLookupByLibrary.simpleMessage(
+            "Error on the server side.\nPlease repeat a little later."),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
@@ -217,12 +217,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password": MessageLookupByLibrary.simpleMessage("New password"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "The new password must be at least 8 characters long"),
-        "no_available_keepers":
-            MessageLookupByLibrary.simpleMessage("No keepers"),
-        "no_available_proxy":
-            MessageLookupByLibrary.simpleMessage("Required proxy is missing"),
-        "no_available_space":
-            MessageLookupByLibrary.simpleMessage("Not enough storage"),
+        "no_available_keepers": MessageLookupByLibrary.simpleMessage(
+            "There are no keepers at the moment.\nPlease repeat a little later."),
+        "no_available_proxy": MessageLookupByLibrary.simpleMessage(
+            "The necessary proxy is missing.\nPlease repeat a little later."),
+        "no_available_space": MessageLookupByLibrary.simpleMessage(
+            "You don\'t have enough space.\nDelete unnecessary files or change your subscription."),
         "no_internet": MessageLookupByLibrary.simpleMessage(
             "The connection to the server cannot be established.\nCheck your internet connection and try again."),
         "non_existent_email":
@@ -236,7 +236,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "notification_re_auth":
             MessageLookupByLibrary.simpleMessage("You need to log in again"),
-        "null_file": MessageLookupByLibrary.simpleMessage("Error with file"),
+        "null_file": MessageLookupByLibrary.simpleMessage(
+            "Error when working with the file.\nThe file cannot be downloaded."),
         "of_percent": MessageLookupByLibrary.simpleMessage(" of 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Off"),
         "offer": MessageLookupByLibrary.simpleMessage(
@@ -340,7 +341,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscription_pay_mounth": m12,
         "tb": m13,
         "technical_error": MessageLookupByLibrary.simpleMessage(
-            "A technical error has occurred. Try again later"),
+            "A technical error has occurred.\nPlease repeat a little later."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),

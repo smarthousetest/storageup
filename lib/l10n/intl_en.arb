@@ -262,10 +262,10 @@
     "down": "Download",
     "update": "Update",
     "name_contain": "The name must contain more than 2 characters",
-    "null_file": "Error with file",
-    "no_available_space": "Not enough storage",
-    "no_available_proxy": "Required proxy is missing",
-    "no_available_keepers": "No keepers",
-    "internal_server_error": "Server side error",
-    "technical_error": "A technical error has occurred. Try again later"
+    "technical_error": "A technical error has occurred.\nPlease repeat a little later.",
+    "internal_server_error": "Error on the server side.\nPlease repeat a little later.",
+    "no_available_keepers": "There are no keepers at the moment.\nPlease repeat a little later.",
+    "no_available_proxy": "The necessary proxy is missing.\nPlease repeat a little later.",
+    "no_available_space": "You don't have enough space.\nDelete unnecessary files or change your subscription.",
+    "null_file": "Error when working with the file.\nThe file cannot be downloaded."
 }

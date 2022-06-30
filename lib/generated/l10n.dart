@@ -2396,61 +2396,61 @@ class S {
     );
   }
 
-  /// `Error with file`
-  String get null_file {
+  /// `A technical error has occurred.\nPlease repeat a little later.`
+  String get technical_error {
     return Intl.message(
-      'Error with file',
-      name: 'null_file',
+      'A technical error has occurred.\nPlease repeat a little later.',
+      name: 'technical_error',
       desc: '',
       args: [],
     );
   }
 
-  /// `Not enough storage`
-  String get no_available_space {
-    return Intl.message(
-      'Not enough storage',
-      name: 'no_available_space',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Required proxy is missing`
-  String get no_available_proxy {
-    return Intl.message(
-      'Required proxy is missing',
-      name: 'no_available_proxy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No keepers`
-  String get no_available_keepers {
-    return Intl.message(
-      'No keepers',
-      name: 'no_available_keepers',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Server side error`
+  /// `Error on the server side.\nPlease repeat a little later.`
   String get internal_server_error {
     return Intl.message(
-      'Server side error',
+      'Error on the server side.\nPlease repeat a little later.',
       name: 'internal_server_error',
       desc: '',
       args: [],
     );
   }
 
-  /// `A technical error has occurred. Try again later`
-  String get technical_error {
+  /// `There are no keepers at the moment.\nPlease repeat a little later.`
+  String get no_available_keepers {
     return Intl.message(
-      'A technical error has occurred. Try again later',
-      name: 'technical_error',
+      'There are no keepers at the moment.\nPlease repeat a little later.',
+      name: 'no_available_keepers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The necessary proxy is missing.\nPlease repeat a little later.`
+  String get no_available_proxy {
+    return Intl.message(
+      'The necessary proxy is missing.\nPlease repeat a little later.',
+      name: 'no_available_proxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You don't have enough space.\nDelete unnecessary files or change your subscription.`
+  String get no_available_space {
+    return Intl.message(
+      'You don\'t have enough space.\nDelete unnecessary files or change your subscription.',
+      name: 'no_available_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error when working with the file.\nThe file cannot be downloaded.`
+  String get null_file {
+    return Intl.message(
+      'Error when working with the file.\nThe file cannot be downloaded.',
+      name: 'null_file',
       desc: '',
       args: [],
     );

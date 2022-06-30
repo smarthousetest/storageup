@@ -182,8 +182,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "info": MessageLookupByLibrary.simpleMessage("Свойства"),
         "install_update":
             MessageLookupByLibrary.simpleMessage("Установить обновление"),
-        "internal_server_error":
-            MessageLookupByLibrary.simpleMessage("Ошибка на стороне сервера"),
+        "internal_server_error": MessageLookupByLibrary.simpleMessage(
+            "Ошибка на стороне сервера.\nПовторите пожалуйста чуть позже."),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
@@ -220,12 +220,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),
-        "no_available_keepers":
-            MessageLookupByLibrary.simpleMessage("Нет киперов"),
+        "no_available_keepers": MessageLookupByLibrary.simpleMessage(
+            "На данный момент отсутствуют киперы.\n Повторите пожалуйста чуть позже."),
         "no_available_proxy": MessageLookupByLibrary.simpleMessage(
-            "Отсутствует необходимый прокси"),
-        "no_available_space":
-            MessageLookupByLibrary.simpleMessage("Недостаточно места"),
+            "Отсутствует необходимый прокси.\n Повторите пожалуйста чуть позже."),
+        "no_available_space": MessageLookupByLibrary.simpleMessage(
+            "У вас недостаточно места.\nУдалите ненужные файлы или смените подписку."),
         "no_internet": MessageLookupByLibrary.simpleMessage(
             "Не удаётся установить соединение с сервером.\nПроверьте соединение с Интернетом и повторите попытку."),
         "non_existent_email":
@@ -239,8 +239,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("На почту ничего не пришло?"),
         "notification_re_auth": MessageLookupByLibrary.simpleMessage(
             "Вам нужно снова зайти в аккаунт"),
-        "null_file":
-            MessageLookupByLibrary.simpleMessage("Ошибка при работе с файлом"),
+        "null_file": MessageLookupByLibrary.simpleMessage(
+            "Ошибка при работе с файлом.\n Файл не может быть загружен."),
         "of_percent": MessageLookupByLibrary.simpleMessage(" из 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Выкл"),
         "offer": MessageLookupByLibrary.simpleMessage(
@@ -345,7 +345,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscription_pay_mounth": m12,
         "tb": m13,
         "technical_error": MessageLookupByLibrary.simpleMessage(
-            "Произошла техническая ошибка. Попробуйте позднее"),
+            "Произошла техническая ошибка.\nПовторите пожалуйста чуть позже."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(

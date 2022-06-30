@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
 import 'package:upstorage_desktop/pages/auth/auth_view.dart';
 import 'package:upstorage_desktop/pages/home/home_view.dart';
 import 'package:upstorage_desktop/theme.dart';
@@ -84,6 +86,15 @@ class _MyAppState extends State<MyApp> {
       supportDirectory: (await getApplicationSupportDirectory()).path,
       backendUrl: kServerUrl.split('/').last,
       copyFileToDownloadDir: copyFileToDownloadDir,
+      reportError: (
+          {required CustomError error, required String message}) async {
+        final S translate = getIt<S>();
+        String errorText = await getErrorReasonDescription(
+            translate: translate, reason: error.errorReason);
+        showErrorPopUp(
+            context: NavigatorService.navigatorKey.currentContext!,
+            message: errorText);
+      },
     );
   }
 
@@ -96,6 +107,7 @@ class _MyAppState extends State<MyApp> {
       builder: (light, dark) => MaterialApp(
         darkTheme: dark,
         theme: light,
+        navigatorKey: NavigatorService.navigatorKey,
         locale: StateContainer.of(context).locale,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -162,4 +174,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.mouse,
         // etc.
       };
+}
+
+class NavigatorService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
