@@ -67,6 +67,7 @@ class _HomePageState extends State<HomePage> {
 
     if (Platform.isLinux) {
       setWindowMinSize(Size(width, height));
+      setWindowMaxSize(Size(double.infinity, double.infinity));
     }
   }
 
