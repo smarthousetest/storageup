@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/file_bloc.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/pages/files/file_bloc.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
 
 abstract class FilesEvent extends Equatable {
   const FilesEvent();

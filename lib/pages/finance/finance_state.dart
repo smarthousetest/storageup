@@ -1,11 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/packet/packet.dart';
-import 'package:upstorage_desktop/models/subscription.dart';
-import 'package:upstorage_desktop/models/tariff.dart';
-import 'package:upstorage_desktop/models/user.dart';
+import 'package:storageup/models/folder.dart';
+import 'package:storageup/models/packet/packet.dart';
+import 'package:storageup/models/subscription.dart';
+import 'package:storageup/models/tariff.dart';
+import 'package:storageup/models/user.dart';
 
 class FinanceState extends Equatable {
   final User? user;

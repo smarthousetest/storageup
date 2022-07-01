@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/utilities/injection.dart';
 
 class BlurRename extends StatefulWidget {
   final name;
@@ -32,6 +32,15 @@ class _ButtonTemplateState extends State<BlurRename> {
       baseOffset: 0,
       extentOffset: widget.name.length,
     );
+  }
+
+  void onSubmit() {
+    if (canSave == true) {
+      Navigator.pop(context, myController.value.text.trim());
+    } else {
+      null;
+    }
+    print(widget.name);
   }
 
   @override
@@ -93,7 +102,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                             ),
                           ),
                           Padding(
-                            padding: hintSymbols
+                            padding: hintSymbvols
                                 ? EdgeInsets.only(top: 0)
                                 : EdgeInsets.only(top: 20),
                             child: Text(
@@ -101,14 +110,14 @@ class _ButtonTemplateState extends State<BlurRename> {
                               style: TextStyle(
                                 fontSize: hintSymbols ? 0 : 14,
                                 fontFamily: kNormalTextFontFamily,
-                                color: hintSymbols
+                                color: hintSymbvols
                                     ? Colors.white
                                     : Theme.of(context).errorColor,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: hintColor && hintSymbols
+                            padding: hintColor && hintSymbvols
                                 ? EdgeInsets.only(top: 42)
                                 : EdgeInsets.only(top: 5),
                             child: Container(
@@ -122,6 +131,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                               child: TextFormField(
                                 controller: myController,
                                 autofocus: true,
+                                onFieldSubmitted: (_) {
+                                  onSubmit();
+                                },
                                 onChanged: (myController) {
                                   print(myController);
                                   myController = myController.trim();
@@ -213,15 +225,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
-                                      onPressed: () async {
-                                        if (canSave == true) {
-                                          Navigator.pop(context,
-                                              myController.value.text.trim());
-                                        } else {
-                                          null;
-                                        }
-                                        print(widget.name);
-                                      },
+                                      onPressed: onSubmit,
                                       child: Text(
                                         translate.save,
                                         style: TextStyle(

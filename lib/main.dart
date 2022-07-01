@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,22 +7,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/pages/auth/auth_view.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
-import 'package:upstorage_desktop/theme.dart';
-import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/local_server/local_server.dart'
-    as ui;
+import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/pages/home/home_view.dart';
+import 'package:storageup/theme.dart';
+import 'package:storageup/utilities/language_locale.dart';
+import 'package:storageup/utilities/local_server/local_server.dart' as ui;
+
 import 'constants.dart';
 import 'generated/l10n.dart';
-import 'utilites/injection.dart';
-import 'utilites/state_containers/state_container.dart';
+import 'utilities/injection.dart';
+import 'utilities/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
   readFromFileDomainName();
   await configureInjection();
-  //HttpOverrides.global = MyHttpOverrides();
   runApp(new StateContainer(child: new MyApp()));
 }
 
@@ -125,7 +125,7 @@ void readFromFileDomainName() {
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
   } else {
-    domainName = domainNameFile.readAsStringSync();
+    domainName = domainNameFile.readAsStringSync().trim();
   }
   print(domainName);
 }

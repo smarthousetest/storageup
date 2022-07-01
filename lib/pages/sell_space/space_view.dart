@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_view.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_bloc.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_view.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
+import 'package:storageup/pages/sell_space/space_event.dart';
+import 'package:storageup/pages/sell_space/space_state.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 class SpaceSellPage extends StatefulWidget {
   static const route = "sell_space_page";

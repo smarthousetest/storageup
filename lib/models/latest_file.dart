@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:upstorage_desktop/models/record.dart';
+import 'package:storageup/models/record.dart';
+
 part 'latest_file.g.dart';
 
 @HiveType(typeId: 3)

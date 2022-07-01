@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/pages/auth/models/email.dart';
-import 'package:upstorage_desktop/models/enums.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/auth/models/email.dart';
 
 class ForgotPasswordState extends Equatable {
   final Email email;
@@ -10,7 +10,10 @@ class ForgotPasswordState extends Equatable {
 
   final AuthError? error;
 
-  ForgotPasswordState({this.email = const Email.pure(), this.status = FormzStatus.pure, this.error});
+  ForgotPasswordState(
+      {this.email = const Email.pure(),
+      this.status = FormzStatus.pure,
+      this.error});
 
   ForgotPasswordState copyWith({
     Email? email,

@@ -1,16 +1,16 @@
 import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/finance/finance_event.dart';
-import 'package:upstorage_desktop/pages/finance/finance_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
-import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/finance/finance_event.dart';
+import 'package:storageup/pages/finance/finance_state.dart';
+import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/controllers/user_controller.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/services/subscription_service.dart';
 
 @injectable
 class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
