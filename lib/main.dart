@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
 import 'package:storageup/pages/home/home_view.dart';
@@ -48,13 +49,21 @@ class _MyAppState extends State<MyApp> {
           (loc) => setLocale(loc),
         );
       } else {
-        setLocale(Locale(Intl.systemLocale));
+        findSystemLocale().then((value) {
+          String systemLanguage = Intl.systemLocale;
+
+          if (systemLanguage.contains('_')) {
+            systemLanguage = systemLanguage.split('_')[0];
+          }
+
+          setLocale(Locale(systemLanguage));
+        });
       }
     });
   }
 
   void setLocale(Locale locale) async {
-    return StateContainer.of(context).changeLocale(locale);
+    await StateContainer.of(context).changeLocale(locale);
   }
 
 //  Locale? _locale = StateContainer.of(context).locale;

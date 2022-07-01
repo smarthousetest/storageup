@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:storageup/components/blur/term_of_use_registration.dart';
 import 'package:storageup/components/custom_text_field.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -292,7 +294,16 @@ class _RegistrationInProgressState extends State<RegistrationInProgress> {
                                   fontFamily: kNormalTextFontFamily,
                                   fontSize: 16,
                                   color: theme.accentColor,
-                                )),
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return TermOfUseBlur();
+                                      },
+                                    );
+                                  }),
                             TextSpan(text: translate.term_of_use_after),
                           ],
                         ),
