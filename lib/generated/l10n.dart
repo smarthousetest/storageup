@@ -2396,61 +2396,71 @@ class S {
     );
   }
 
-  /// `A technical error has occurred.\nPlease repeat a little later.`
+  /// `A technical error has occurred in the StorageUp application.\nPlease repeat a little later.`
   String get technical_error {
     return Intl.message(
-      'A technical error has occurred.\nPlease repeat a little later.',
+      'A technical error has occurred in the StorageUp application.\nPlease repeat a little later.',
       name: 'technical_error',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error on the server side.\nPlease repeat a little later.`
+  /// `A server-side error occurred in the Storage Up application.\nPlease repeat a little later.`
   String get internal_server_error {
     return Intl.message(
-      'Error on the server side.\nPlease repeat a little later.',
+      'A server-side error occurred in the Storage Up application.\nPlease repeat a little later.',
       name: 'internal_server_error',
       desc: '',
       args: [],
     );
   }
 
-  /// `There are no keepers at the moment.\nPlease repeat a little later.`
+  /// `There are no keepers in the StorageUp application at the moment.\nPlease repeat a little later.`
   String get no_available_keepers {
     return Intl.message(
-      'There are no keepers at the moment.\nPlease repeat a little later.',
+      'There are no keepers in the StorageUp application at the moment.\nPlease repeat a little later.',
       name: 'no_available_keepers',
       desc: '',
       args: [],
     );
   }
 
-  /// `The necessary proxy is missing.\nPlease repeat a little later.`
+  /// `There is no necessary proxy on the StorageUp server.\nPlease repeat a little later.`
   String get no_available_proxy {
     return Intl.message(
-      'The necessary proxy is missing.\nPlease repeat a little later.',
+      'There is no necessary proxy on the StorageUp server.\nPlease repeat a little later.',
       name: 'no_available_proxy',
       desc: '',
       args: [],
     );
   }
 
-  /// `You don't have enough space.\nDelete unnecessary files or change your subscription.`
-  String get no_available_space {
+  /// `An error occurred in the StorageUp application when working with a file. The file cannot be downloaded.`
+  String get null_file {
     return Intl.message(
-      'You don\'t have enough space.\nDelete unnecessary files or change your subscription.',
-      name: 'no_available_space',
+      'An error occurred in the StorageUp application when working with a file. The file cannot be downloaded.',
+      name: 'null_file',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error when working with the file.\nThe file cannot be downloaded.`
-  String get null_file {
+  /// `Not enought space`
+  String get not_enought_space {
     return Intl.message(
-      'Error when working with the file.\nThe file cannot be downloaded.',
-      name: 'null_file',
+      'Not enought space',
+      name: 'not_enought_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The current subscription does not allow you to download the selected files. You have filled all your free space.\nTo continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.`
+  String get no_available_space {
+    return Intl.message(
+      'The current subscription does not allow you to download the selected files. You have filled all your free space.\nTo continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.',
+      name: 'no_available_space',
       desc: '',
       args: [],
     );

@@ -180,7 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "install_update":
             MessageLookupByLibrary.simpleMessage("Install update"),
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
-            "Error on the server side.\nPlease repeat a little later."),
+            "A server-side error occurred in the Storage Up application.\nPlease repeat a little later."),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
@@ -218,15 +218,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "The new password must be at least 8 characters long"),
         "no_available_keepers": MessageLookupByLibrary.simpleMessage(
-            "There are no keepers at the moment.\nPlease repeat a little later."),
+            "There are no keepers in the StorageUp application at the moment.\nPlease repeat a little later."),
         "no_available_proxy": MessageLookupByLibrary.simpleMessage(
-            "The necessary proxy is missing.\nPlease repeat a little later."),
+            "There is no necessary proxy on the StorageUp server.\nPlease repeat a little later."),
         "no_available_space": MessageLookupByLibrary.simpleMessage(
-            "You don\'t have enough space.\nDelete unnecessary files or change your subscription."),
+            "The current subscription does not allow you to download the selected files. You have filled all your free space.\nTo continue downloading, switch to a subscription with a large number of gigabytes or free up the current space."),
         "no_internet": MessageLookupByLibrary.simpleMessage(
             "The connection to the server cannot be established.\nCheck your internet connection and try again."),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
+        "not_enought_space":
+            MessageLookupByLibrary.simpleMessage("Not enought space"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
             "The volume of the selected storage space does not exceed 32 GB"),
         "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
@@ -237,7 +239,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notification_re_auth":
             MessageLookupByLibrary.simpleMessage("You need to log in again"),
         "null_file": MessageLookupByLibrary.simpleMessage(
-            "Error when working with the file.\nThe file cannot be downloaded."),
+            "An error occurred in the StorageUp application when working with a file. The file cannot be downloaded."),
         "of_percent": MessageLookupByLibrary.simpleMessage(" of 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Off"),
         "offer": MessageLookupByLibrary.simpleMessage(
@@ -341,7 +343,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscription_pay_mounth": m12,
         "tb": m13,
         "technical_error": MessageLookupByLibrary.simpleMessage(
-            "A technical error has occurred.\nPlease repeat a little later."),
+            "A technical error has occurred in the StorageUp application.\nPlease repeat a little later."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),
