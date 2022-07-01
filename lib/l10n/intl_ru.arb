@@ -264,5 +264,6 @@
     "create": "Создать",
     "down": "Скачать",
     "update": "Обновить",
-    "name_contain": "Название должно содержать более 2 символов"
+    "name_contain": "Название должно содержать более 2 символов",
+    "many_files": "{count,plural, =0{0 файлов} =1{{count} файл} =2{{count} файла} few{{count} файла} many{{count} файлов} other{{count} файлов}}"
 }

@@ -2405,6 +2405,19 @@ class S {
       args: [],
     );
   }
+
+  /// `{count,plural, =0{0 files} =1{{count} file} other{{count} files}}`
+  String many_files(num count) {
+    return Intl.plural(
+      count,
+      zero: '0 files',
+      one: '$count file',
+      other: '$count files',
+      name: 'many_files',
+      desc: '',
+      args: [count],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

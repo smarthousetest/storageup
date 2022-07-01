@@ -262,5 +262,6 @@
     "create": "Create",
     "down": "Download",
     "update": "Update",
-    "name_contain": "The name must contain more than 2 characters"
+    "name_contain": "The name must contain more than 2 characters",
+    "many_files": "{count,plural, =0{0 files} =1{{count} file} other{{count} files}}"
 }

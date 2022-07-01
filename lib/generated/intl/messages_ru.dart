@@ -38,18 +38,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(count) => "${count} Кб";
 
-  static String m8(count) => "${count} Мб";
+  static String m8(count) =>
+      "${Intl.plural(count, zero: '0 файлов', one: '${count} файл', two: '${count} файла', few: '${count} файла', many: '${count} файлов', other: '${count} файлов')}";
 
-  static String m9(count) => "Минимальный размер хранилища: ${count} ГБ";
+  static String m9(count) => "${count} Мб";
 
-  static String m10(count) => "${count} Пб";
+  static String m10(count) => "Минимальный размер хранилища: ${count} ГБ";
 
-  static String m11(count) =>
+  static String m11(count) => "${count} Пб";
+
+  static String m12(count) =>
       "${Intl.plural(count, zero: '0 секунд', one: '${count} секунду', two: '${count} секунды', few: '${count} секунды', many: '${count} секунд', other: '${count} секунд')}";
 
-  static String m12(count) => "${count} ₽/месяц";
+  static String m13(count) => "${count} ₽/месяц";
 
-  static String m13(count) => "${count} Тб";
+  static String m14(count) => "${count} Тб";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -197,11 +200,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "диске - сдавайте пространство в аренду и зарабатывайте на нём!"),
         "management":
             MessageLookupByLibrary.simpleMessage("Управление подпиской"),
+        "many_files": m8,
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Максимальный размер для вашего диска: "),
-        "mb": m8,
+        "mb": m9,
         "media": MessageLookupByLibrary.simpleMessage("Медиа"),
-        "min_storage": m9,
+        "min_storage": m10,
         "money":
             MessageLookupByLibrary.simpleMessage("сможете на этом заработать."),
         "money_two_step": MessageLookupByLibrary.simpleMessage(
@@ -259,7 +263,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Пароли не совпадают"),
         "path": MessageLookupByLibrary.simpleMessage("Путь"),
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
-        "pb": m10,
+        "pb": m11,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -308,7 +312,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Русский"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
-        "seconds": m11,
+        "seconds": m12,
         "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Выберите папку на диске, где у вас есть свободное пространство."),
@@ -334,8 +338,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
-        "subscription_pay_mounth": m12,
-        "tb": m13,
+        "subscription_pay_mounth": m13,
+        "tb": m14,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(

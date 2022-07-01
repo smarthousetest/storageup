@@ -39,17 +39,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(count) => "${count} Kb";
 
-  static String m8(count) => "${count} Mb";
+  static String m8(count) =>
+      "${Intl.plural(count, zero: '0 files', one: '${count} file', other: '${count} files')}";
 
-  static String m9(count) => "Minimum storage size: ${count} GB";
+  static String m9(count) => "${count} Mb";
 
-  static String m10(count) => "${count} Pb";
+  static String m10(count) => "Minimum storage size: ${count} GB";
 
-  static String m11(count) => "${count} seconds";
+  static String m11(count) => "${count} Pb";
 
-  static String m12(count) => "${count} \$/mounth";
+  static String m12(count) => "${count} seconds";
 
-  static String m13(count) => "${count} Tb";
+  static String m13(count) => "${count} \$/mounth";
+
+  static String m14(count) => "${count} Tb";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -194,11 +197,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "disk - rent space and make money on it!"),
         "management":
             MessageLookupByLibrary.simpleMessage("Subscription management"),
+        "many_files": m8,
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Maximum size for your drive: "),
-        "mb": m8,
+        "mb": m9,
         "media": MessageLookupByLibrary.simpleMessage("Media"),
-        "min_storage": m9,
+        "min_storage": m10,
         "money":
             MessageLookupByLibrary.simpleMessage("can make money from it."),
         "money_two_step":
@@ -257,7 +261,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Passwords don\'t match"),
         "path": MessageLookupByLibrary.simpleMessage("Path"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
-        "pb": m10,
+        "pb": m11,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to permanently delete your account"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -305,7 +309,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Russian"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
-        "seconds": m11,
+        "seconds": m12,
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Select the folder on the drive where you have free space."),
@@ -330,8 +334,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m12,
-        "tb": m13,
+        "subscription_pay_mounth": m13,
+        "tb": m14,
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),
