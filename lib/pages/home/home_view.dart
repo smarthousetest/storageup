@@ -32,6 +32,7 @@ import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:window_size/window_size.dart';
 
 import 'home_bloc.dart';
 import 'home_state.dart';
@@ -63,6 +64,11 @@ class _HomePageState extends State<HomePage> {
     DesktopWindow.setMinWindowSize(Size(width, height));
 
     DesktopWindow.resetMaxWindowSize();
+
+    if (Platform.isLinux) {
+      setWindowMinSize(Size(width, height));
+      setWindowMaxSize(Size(double.infinity, double.infinity));
+    }
   }
 
   @override
@@ -435,7 +441,6 @@ class _HomePageState extends State<HomePage> {
       child: Padding(
         padding: const EdgeInsets.only(top: 30, left: 40, bottom: 30),
         child: Container(
-          width: 93,
           height: 24,
           child: GestureDetector(
             onTap: () async {
@@ -578,7 +583,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadFiles:
         final folderId = StateContainer.of(context).choosedFilesFolderId;
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -588,7 +593,7 @@ class _HomePageState extends State<HomePage> {
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -597,7 +602,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-          HomeUserActionChosen(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
               ),
