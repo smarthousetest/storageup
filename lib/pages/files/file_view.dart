@@ -21,7 +21,6 @@ import 'file_state.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
-
   //var index = 0;
   FilePage();
 }
@@ -58,12 +57,8 @@ class _FilePageState extends State<FilePage> {
     super.initState();
   }
 
-  //Timer? _timer;
-
   void _prepareFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    //final keyContext = stickyKey.currentContext;
-    //final keyInfoContext = propertiesWidthKey.currentContext;
     if (MediaQuery.of(context).size.width < 967) {
       setState(() {
         _searchFieldWidth =
@@ -110,12 +105,6 @@ class _FilePageState extends State<FilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // if (dirs_list.isEmpty) _init(context);
-
-    // eventBus.on().listen((event) {
-    //   var object = StateInfoContainer.of(context)?.object;
-
-    // });
     _prepareFields(context);
     return BlocProvider(
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
@@ -129,7 +118,7 @@ class _FilePageState extends State<FilePage> {
             }
           });
         },
-        child: _fileView(context),
+        child: FileInheritedWidget(state: this, child: _fileView(context)),
       ),
     );
   }
@@ -536,6 +525,26 @@ class _FilePageState extends State<FilePage> {
 
     StateContainer.of(context).changeChoosedFilesFolderId(choosedFolder);
   }
+}
+
+class FileInheritedWidget extends InheritedWidget {
+  final _FilePageState state;
+
+  FileInheritedWidget({
+    Key? key,
+    required this.state,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  static FileInheritedWidget of(BuildContext context) {
+    final FileInheritedWidget? result =
+        context.dependOnInheritedWidgetOfExactType<FileInheritedWidget>();
+
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(FileInheritedWidget old) => state != old.state;
 }
 
 class FileInfoViewEvent {}

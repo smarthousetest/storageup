@@ -588,17 +588,29 @@ class _HomePageState extends State<HomePage> {
         break;
 
       case UserAction.uploadFiles:
-        final folderId = StateContainer.of(context).choosedFilesFolderId;
-        context.read<HomeBloc>().add(
-              HomeUserActionChosen(
-                action: userAction.action,
-                values: userAction.result,
-                folderId: folderId,
-              ),
-            );
+        var result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MoveFileView(null, UserAction.uploadFiles);
+          },
+        );
+
+        if (result != null) {
+          final folder = result;
+
+          changePage(ChosenPage.file);
+          context.read<HomeBloc>().add(
+                HomeUserActionChoosed(
+                  action: userAction.action,
+                  values: userAction.result,
+                  folderId: folder.id,
+                ),
+              );
+        }
         break;
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
+        changePage(ChosenPage.media);
         context.read<HomeBloc>().add(
               HomeUserActionChosen(
                 action: userAction.action,
