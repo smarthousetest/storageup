@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/utilites/language_locale.dart';
+import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/utilities/language_locale.dart';
 
 class StateContainer extends StatefulWidget {
   final Widget child;

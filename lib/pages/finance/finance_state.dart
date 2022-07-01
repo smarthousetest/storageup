@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:formz/formz.dart';
 import 'package:storageup/models/folder.dart';
 import 'package:storageup/models/packet/packet.dart';
 import 'package:storageup/models/subscription.dart';

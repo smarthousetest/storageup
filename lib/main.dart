@@ -53,8 +53,8 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  setLocale(Locale locale) async {
-    await StateContainer.of(context).changeLocale(locale);
+  void setLocale(Locale locale) async {
+    return StateContainer.of(context).changeLocale(locale);
   }
 
 //  Locale? _locale = StateContainer.of(context).locale;
