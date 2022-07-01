@@ -16,6 +16,7 @@ import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
 import 'package:upstorage_desktop/constants.dart';
 import 'package:upstorage_desktop/models/enums.dart';
+import 'package:upstorage_desktop/models/folder.dart';
 import 'package:upstorage_desktop/models/latest_file.dart';
 import 'package:upstorage_desktop/pages/files/move_files/move_files_view.dart';
 import 'package:upstorage_desktop/pages/finance/finance_view.dart';
@@ -32,6 +33,7 @@ import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
 import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
+import '../files/opened_folder/opened_folder_view.dart';
 import 'home_bloc.dart';
 import 'home_state.dart';
 
@@ -581,8 +583,11 @@ class _HomePageState extends State<HomePage> {
             return MoveFileView(null, UserAction.uploadFiles);
           },
         );
+
         if (result != null) {
           final folder = result;
+
+          changePage(ChosenPage.file);
           context.read<HomeBloc>().add(
                 HomeUserActionChoosed(
                   action: userAction.action,
@@ -594,6 +599,7 @@ class _HomePageState extends State<HomePage> {
         break;
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
+        changePage(ChosenPage.media);
         context.read<HomeBloc>().add(
               HomeUserActionChoosed(
                 action: userAction.action,

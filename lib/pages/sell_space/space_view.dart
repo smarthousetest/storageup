@@ -788,7 +788,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             padding: const EdgeInsets.only(left: 40, top: 8),
                             child: Container(
                               child: Text(
-                                translate.max_storage + translate.gb(maxSpace),
+                                translate.max_storage +
+                                    translate.gb(
+                                      changeKeeper != null
+                                          ? changeKeeper!.countGb + maxSpace
+                                          : maxSpace,
+                                    ),
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -838,8 +843,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             inactiveColor: Theme.of(context).cardColor,
                             min: changeKeeper == null
                                 ? 32
-                                : changeKeeper!.countGb.toDouble(),
-                            max: maxSpace > 32 ? maxSpace.toDouble() : 180,
+                                : changeKeeper!.countGb.roundToDouble(),
+                            max: changeKeeper == null
+                                ? maxSpace > 32
+                                    ? maxSpace.roundToDouble()
+                                    : 180
+                                : changeKeeper!.countGb.roundToDouble() +
+                                    maxSpace.roundToDouble(),
                             value: _currentSliderValue,
                             onChanged: maxSpace < 32
                                 ? null
@@ -1045,9 +1055,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       keeper: changeKeeper!));
                                   setState(() {
                                     index = 2;
-                                    changeKeeper = null;
                                     myController.text = '';
-                                    _currentSliderValue = 0;
+                                    _currentSliderValue = 32;
+                                    changeKeeper = null;
                                   });
                                 } else {
                                   context.read<SpaceBloc>().add(SaveDirPath(
