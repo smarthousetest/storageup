@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/packet/packet.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/finance/finance_bloc.dart';
-import 'package:upstorage_desktop/pages/finance/finance_event.dart';
-import 'package:upstorage_desktop/pages/finance/finance_state.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:formz/formz.dart';
+import 'package:storageup/components/blur/cancel_sub.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/packet/packet.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/finance/finance_bloc.dart';
+import 'package:storageup/pages/finance/finance_event.dart';
+import 'package:storageup/pages/finance/finance_state.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 class FinancePage extends StatefulWidget {
   @override
   _FinancePageState createState() => _FinancePageState();
+
   FinancePage();
 }
 
@@ -76,11 +79,19 @@ class _FinancePageState extends State<FinancePage> {
       create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: BlocListener<FinanceBloc, FinanceState>(
         listener: (context, state) async {
-          if (state.sub?.tariff?.spaceGb == null) {
+          if (state.statusHttpRequest == FormzStatus.submissionFailure) {
             await showDialog(
               context: context,
               builder: (BuildContext context) {
                 return BlurFailedServerConnection(true);
+              },
+            );
+          } else if (state.statusHttpRequest ==
+              FormzStatus.submissionCanceled) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurSomethingGoesWrong(true);
               },
             );
           }
@@ -541,12 +552,12 @@ class _FinancePageState extends State<FinancePage> {
                               return BlocBuilder<FinanceBloc, FinanceState>(
                                   builder: (context, state) {
                                 var choosedSubGb = state.sub?.tariff?.spaceGb;
-                                var allFilledGb = value?.filledSpace;
+                                var allFilledGb = value?.filledSpace ?? 0;
                                 if (allFilledGb == null &&
                                     choosedSubGb == null) {
                                   return GestureDetector(
                                     onTap: () async {
-                                      var str = await showDialog(
+                                      await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return BlurFailedServerConnection(
@@ -576,7 +587,7 @@ class _FinancePageState extends State<FinancePage> {
                                 } else {
                                   return GestureDetector(
                                     onTap: () async {
-                                      var str = await showDialog(
+                                      await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return BlurCancelSub(choosedSubGb,

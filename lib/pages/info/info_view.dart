@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/components/custom_round_graph.dart';
-import 'package:upstorage_desktop/components/custom_progress_bar.dart';
-import 'package:upstorage_desktop/models/packet/packet.dart';
-import 'package:upstorage_desktop/pages/info/info_bloc.dart';
-import 'package:upstorage_desktop/pages/info/info_event.dart';
-import 'package:upstorage_desktop/pages/info/info_state.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/components/custom_progress_bar.dart';
+import 'package:storageup/components/custom_round_graph.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/packet/packet.dart';
+import 'package:storageup/pages/info/info_bloc.dart';
+import 'package:storageup/pages/info/info_event.dart';
+import 'package:storageup/pages/info/info_state.dart';
+import 'package:storageup/utilities/event_bus.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
+
 import '../../constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
-
-import 'package:upstorage_desktop/utilites/extensions.dart';
-
 import '../../models/user.dart';
 
 class InfoPage extends StatefulWidget {
@@ -253,13 +252,15 @@ class _InfoPageState extends State<InfoPage> {
         //     ?.length;
 
         var countMediaFolderPhoto = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Фото")
+                ?.firstWhere(
+                    (element) => ['Фото', 'Photos'].contains(element.name))
                 .records
                 ?.length ??
             0;
 
         var countMediaFolderVideo = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Видео")
+                ?.firstWhere(
+                    (element) => ['Видео', 'Video'].contains(element.name))
                 .records
                 ?.length ??
             0;
@@ -310,7 +311,7 @@ class _InfoPageState extends State<InfoPage> {
                           ),
                           Text(
                             //"${(filesFolder?.records?.length ?? 0)} файлов",
-                            "${(filesFolder)} файлов",
+                            "${translate.many_files(filesFolder)}",
                             //"${(filesFolder)}",
                             style: TextStyle(
                               fontSize: 12,
@@ -363,7 +364,7 @@ class _InfoPageState extends State<InfoPage> {
                             ),
                           ),
                           Text(
-                            "${(countMediaFolderPhoto)} файлов",
+                            "${translate.many_files(countMediaFolderPhoto)}",
                             // 's',
                             style: TextStyle(
                               fontSize: 12,
@@ -416,7 +417,7 @@ class _InfoPageState extends State<InfoPage> {
                             ),
                           ),
                           Text(
-                            "${(countMediaFolderVideo)} файлов",
+                            "${translate.many_files(countMediaFolderPhoto)}",
                             style: TextStyle(
                               fontSize: 12,
                               color: Theme.of(context).shadowColor,

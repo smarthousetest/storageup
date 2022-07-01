@@ -1,27 +1,28 @@
 import 'dart:io';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/pages/auth/auth_view.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
-import 'package:upstorage_desktop/theme.dart';
-import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/local_server/local_server.dart'
-    as ui;
+import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/pages/home/home_view.dart';
+import 'package:storageup/theme.dart';
+import 'package:storageup/utilities/language_locale.dart';
+import 'package:storageup/utilities/local_server/local_server.dart' as ui;
+
 import 'constants.dart';
 import 'generated/l10n.dart';
-import 'utilites/injection.dart';
-import 'utilites/state_containers/state_container.dart';
+import 'utilities/injection.dart';
+import 'utilities/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
   readFromFileDomainName();
   await configureInjection();
-  //HttpOverrides.global = MyHttpOverrides();
   runApp(new StateContainer(child: new MyApp()));
 }
 
@@ -41,20 +42,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  _MyAppState() : _locale = Locale(Intl.systemLocale) {
+  _MyAppState() {
     hasCurrentLocale().then((value) {
-      getLocale().then(
-            (loc) => setLocale(loc),
-      );
+      if (value) {
+        getLocale().then(
+          (loc) => setLocale(loc),
+        );
+      } else {
+        findSystemLocale().then((value) {
+          String systemLanguage = Intl.systemLocale;
+
+          if (systemLanguage.contains('_')) {
+            systemLanguage = systemLanguage.split('_')[0];
+          }
+
+          setLocale(Locale(systemLanguage));
+        });
+      }
     });
   }
 
-  Locale? _locale;
-
-  setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
+  void setLocale(Locale locale) async {
+    await StateContainer.of(context).changeLocale(locale);
   }
 
 //  Locale? _locale = StateContainer.of(context).locale;
@@ -120,11 +129,12 @@ void readFromFileDomainName() {
   if (os.appDirPath.isEmpty) {
     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
   }
-  var domainNameFile = File('${os.appDirPath}${Platform.pathSeparator}domainName');
+  var domainNameFile =
+      File('${os.appDirPath}${Platform.pathSeparator}domainName');
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
   } else {
-    domainName = domainNameFile.readAsStringSync();
+    domainName = domainNameFile.readAsStringSync().trim();
   }
   print(domainName);
 }
@@ -133,8 +143,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    // etc.
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

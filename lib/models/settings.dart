@@ -1,4 +1,4 @@
-import 'package:upstorage_desktop/models/file.dart';
+import 'package:storageup/models/file.dart';
 
 class Settings {
   String? sId;

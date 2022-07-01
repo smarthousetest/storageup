@@ -2,21 +2,21 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_view.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_info_container.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
+import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_view.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
+import 'package:storageup/utilities/state_containers/state_info_container.dart';
+import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
+
 import 'file_bloc.dart';
-import 'file_state.dart';
 import 'file_event.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
+import 'file_state.dart';
 
 class FilePage extends StatefulWidget {
   @override

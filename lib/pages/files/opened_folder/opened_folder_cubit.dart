@@ -1,35 +1,33 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:cpp_native/cpp_native.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
-
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/observable_utils.dart';
-import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/folder.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/load_controller.dart';
+import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/event_bus.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/observable_utils.dart';
+import 'package:storageup/utilities/repositories/latest_file_repository.dart';
 
 import '../../../constants.dart';
-import '../../../utilites/repositories/user_repository.dart';
-import '../../sell_space/space_bloc.dart';
+import '../../../utilities/repositories/user_repository.dart';
 
 enum ContextActionEnum {
   share,
@@ -437,31 +435,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> uploadFilesAction(String? folderId) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.any,
-    );
-    if (result != null) {
-      List<String?> filePaths = result.paths;
-
-      for (int i = 0; i < filePaths.length; i++) {
-        if (filePaths[i] != null &&
-            PathCheck().isPathCorrect(filePaths[i].toString())) {
-          if (folderId == null) folderId = state.currentFolder?.id;
-          await _loadController.uploadFile(
-              filePath: filePaths[i], folderId: folderId);
-        } else {
-          print(
-              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
-        }
-      }
-    } else {
-      return null;
-    }
-  }
-
-  Future<ErrorType?> onActionRenameChoosedFile(
+  Future<ErrorType?> onActionRenameChosenFile(
       BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
@@ -474,9 +448,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
-  Future<ErrorType?> onActionRenameChoosedFolder(
+  Future<ErrorType?> onActionRenameChosenFolder(
       BaseObject object, String newName) async {
     var result = await _filesController.renameFolder(newName, object.id);
     print(result);
@@ -489,6 +464,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
   void _syncWithLoadController() async {
@@ -515,23 +491,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
   }
 
-  // Future<void> _mapContextActionChoosed(
-  //    ContextActionEnum action,
-  // ) async {
-  //   // emit(state.copyWith(status: FormzStatus.submissionInProgress));
-
-  //   //print('${action} ${event.file}');
-  //   if (action == ContextActionEnum.delete) {
-  //     await _onActionDeleteChoosed();
-  //   } else if (action == ContextActionEnum.share) {
-  //     // await _mapDownloadFile(event, state, emit); //TODO remove this
-  //   } else if (action == ContextActionEnum.select) {
-  //     await _mapSelectFile(event, state, emit);
-  //   } else {
-  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
-  //   }
-  // }
-
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(
       representation: representation,
@@ -544,6 +503,29 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var res = await _filesController.setFavorite(object, favorite);
     if (res == ResponseStatus.ok) {
       update();
+    }
+  }
+
+  Future<void> uploadFilesAction(String? folderId) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.any,
+    );
+    if (result != null) {
+      List<String?> filePaths = result.paths;
+
+      for (int i = 0; i < filePaths.length; i++) {
+        if (filePaths[i] != null &&
+            PathCheck().isPathCorrect(filePaths[i].toString())) {
+          await _loadController.uploadFile(
+              filePath: filePaths[i], folderId: folderId);
+        } else {
+          print(
+              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+        }
+      }
+    } else {
+      return null;
     }
   }
 

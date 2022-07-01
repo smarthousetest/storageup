@@ -9,18 +9,18 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/observable_utils.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/folder.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_cubit.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/load_controller.dart';
+import 'package:storageup/utilities/controllers/user_controller.dart';
+import 'package:storageup/utilities/event_bus.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/observable_utils.dart';
 
 import '../../constants.dart';
 import 'media_state.dart';
@@ -104,9 +104,10 @@ class MediaCubit extends Cubit<MediaState> {
     List<Record> allMedia = [];
     for (int i = 1; i < allMediaFolders!.length; i++) {
       allMedia.addAll(allMediaFolders[i].records!);
+      print("all media $allMedia");
     }
     _syncWithLoadController(allMedia);
-
+    print("all media2 $allMedia");
     updatePageSubscription = eventBusUpdateAlbum.on().listen((event) {
       _update();
     });
@@ -157,13 +158,14 @@ class MediaCubit extends Cubit<MediaState> {
 
   void _syncWithLoadController(List<Record> filesInFolder) async {
     var loadState = _loadController.getState;
-
+    print("upload synh");
     filesInFolder.forEach((fileInFolder) {
       var index = loadState.uploadingFiles
           .indexWhere((loadingFile) => loadingFile.id == fileInFolder.id);
       if (index != -1 &&
           !_observers.any((element) =>
               element.id == loadState.uploadingFiles[index].localPath)) {
+        print("upload file ${loadState.uploadingFiles[index].localPath}");
         var observer = UploadObserver(
           loadState.uploadingFiles[index].localPath,
           (p0) {
@@ -172,7 +174,7 @@ class MediaCubit extends Cubit<MediaState> {
         );
 
         _observers.add(observer);
-
+        print("observesr $_observers");
         loadState.registerObserver(observer);
       }
     });
@@ -583,7 +585,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(state.copyWith(
       albums: albums,
       currentFolder: currentFolder,
-      currentFolderRecords: currentFolder.records,
+      currentFolderRecords: currentFolder.records?.reversed.toList(),
       status: FormzStatus.pure,
     ));
   }
@@ -592,7 +594,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(
       state.copyWith(
         currentFolder: newFolder,
-        currentFolderRecords: newFolder.records,
+        currentFolderRecords: newFolder.records?.reversed.toList(),
         status: FormzStatus.pure,
       ),
     );

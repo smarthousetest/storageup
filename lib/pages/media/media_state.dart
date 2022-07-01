@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/folder.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 
 class MediaState extends Equatable {
   final List<Record> currentFolderRecords;

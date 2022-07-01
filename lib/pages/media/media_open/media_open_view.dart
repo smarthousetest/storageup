@@ -6,13 +6,13 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/media/media_open/media_open_bloc.dart';
-import 'package:upstorage_desktop/pages/media/media_open/media_open_event.dart';
-import 'package:upstorage_desktop/pages/media/media_open/media_open_state.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/pages/media/media_open/media_open_bloc.dart';
+import 'package:storageup/pages/media/media_open/media_open_event.dart';
+import 'package:storageup/pages/media/media_open/media_open_state.dart';
+import 'package:storageup/utilities/injection.dart';
 
 class Positions {
   int last;

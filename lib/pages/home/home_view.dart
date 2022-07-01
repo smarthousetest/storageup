@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:desktop_window/desktop_window.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,33 +8,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:upstorage_desktop/components/blur/add_folder.dart';
-import 'package:upstorage_desktop/components/blur/create_album.dart';
-import 'package:upstorage_desktop/components/blur/exit.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/menu_upload.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/latest_file.dart';
-import 'package:upstorage_desktop/pages/files/move_files/move_files_view.dart';
-import 'package:upstorage_desktop/pages/finance/finance_view.dart';
-import 'package:upstorage_desktop/pages/home/home_event.dart';
-import 'package:upstorage_desktop/pages/like/like_view.dart';
-import 'package:upstorage_desktop/pages/files/file_view.dart';
-import 'package:upstorage_desktop/pages/info/info_view.dart';
-import 'package:upstorage_desktop/pages/media/media_view.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/settings/settings_view.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
+import 'package:storageup/components/blur/add_folder.dart';
+import 'package:storageup/components/blur/create_album.dart';
+import 'package:storageup/components/blur/exit.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/menu_upload.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/latest_file.dart';
+import 'package:storageup/pages/files/file_view.dart';
+import 'package:storageup/pages/files/move_files/move_files_view.dart';
+import 'package:storageup/pages/finance/finance_view.dart';
+import 'package:storageup/pages/home/home_event.dart';
+import 'package:storageup/pages/info/info_view.dart';
+import 'package:storageup/pages/like/like_view.dart';
+import 'package:storageup/pages/media/media_view.dart';
+import 'package:storageup/pages/sell_space/space_view.dart';
+import 'package:storageup/pages/settings/settings_view.dart';
+import 'package:storageup/utilities/event_bus.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
+import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 import 'package:web_socket_channel/io.dart';
-import '../files/opened_folder/opened_folder_view.dart';
+import 'package:window_size/window_size.dart';
+
 import 'home_bloc.dart';
 import 'home_state.dart';
 
@@ -64,6 +65,11 @@ class _HomePageState extends State<HomePage> {
     DesktopWindow.setMinWindowSize(Size(width, height));
 
     DesktopWindow.resetMaxWindowSize();
+
+    if (Platform.isLinux) {
+      setWindowMinSize(Size(width, height));
+      setWindowMaxSize(Size(double.infinity, double.infinity));
+    }
   }
 
   @override
@@ -436,7 +442,6 @@ class _HomePageState extends State<HomePage> {
       child: Padding(
         padding: const EdgeInsets.only(top: 30, left: 40, bottom: 30),
         child: Container(
-          width: 93,
           height: 24,
           child: GestureDetector(
             onTap: () async {
@@ -547,7 +552,7 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -568,7 +573,7 @@ class _HomePageState extends State<HomePage> {
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -589,7 +594,7 @@ class _HomePageState extends State<HomePage> {
 
           changePage(ChosenPage.file);
           context.read<HomeBloc>().add(
-                HomeUserActionChoosed(
+                HomeUserActionChosen(
                   action: userAction.action,
                   values: userAction.result,
                   folderId: folder.id,
@@ -601,7 +606,7 @@ class _HomePageState extends State<HomePage> {
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         changePage(ChosenPage.media);
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -610,7 +615,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
               ),

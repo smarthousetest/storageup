@@ -1,5 +1,5 @@
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/tenant.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/tenant.dart';
 
 class TenantUser {
   List<String>? roles;

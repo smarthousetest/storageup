@@ -6,21 +6,22 @@ import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/load_controller.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/observable_utils.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/load_controller.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/observable_utils.dart';
 
 import 'media_open_event.dart';
 import 'media_open_state.dart';
 
 @injectable
 class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
-  MediaOpenBloc(@Named('files_controller') this._controller) : super(MediaOpenState()) {
+  MediaOpenBloc(@Named('files_controller') this._controller)
+      : super(MediaOpenState()) {
     on((event, emit) async {
       if (event is MediaOpenPageOpened) {
         await _mapMediaOpenPageOpened(state, event, emit);
@@ -68,7 +69,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         }
       }
     } else {
-      mediaFromFolder = await _controller.getContentFromFolderById(event.choosedFolder?.id ?? state.choosedMedia.id);
+      mediaFromFolder = await _controller.getContentFromFolderById(
+          event.choosedFolder?.id ?? state.choosedMedia.id);
     }
     var box = await Hive.openBox(kPathDBName);
     var appPath = (await getApplicationDocumentsDirectory()).path;
@@ -94,7 +96,9 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
 
       choosedMedia.path = path;
 
-      (mediaFromFolder.firstWhere((element) => element.id == choosedMedia.id) as Record).path = path;
+      (mediaFromFolder.firstWhere((element) => element.id == choosedMedia.id)
+              as Record)
+          .path = path;
 
       emit(
         state.copyWith(
@@ -133,7 +137,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
   void _downloadListener(String id) async {
     var controllerState = _loadController.getState;
     try {
-      var currentFile = controllerState.downloadingFiles.firstWhere((element) => element.id == id);
+      var currentFile = controllerState.downloadingFiles
+          .firstWhere((element) => element.id == id);
 
       if (currentFile.downloadPercent == -1 && currentFile.endedWithException) {
         var observer = _listeners.firstWhere((element) => element.id == id);
@@ -149,18 +154,25 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         return;
       }
 
-      if (currentFile.downloadPercent > 0 && currentFile.downloadPercent < 100) {
-        Record media = state.mediaFromFolder.firstWhere((element) => element.id == id) as Record;
+      if (currentFile.downloadPercent > 0 &&
+          currentFile.downloadPercent < 100) {
+        Record media = state.mediaFromFolder
+            .firstWhere((element) => element.id == id) as Record;
         media.loadPercent = currentFile.downloadPercent.toDouble();
         add(MediaOpenChangeDownloadStatus(media: media));
       } else if (currentFile.downloadPercent == 100) {
-        Record media = state.mediaFromFolder.firstWhere((element) => element.id == id) as Record;
+        Record media = state.mediaFromFolder
+            .firstWhere((element) => element.id == id) as Record;
         var path = currentFile.localPath;
-        var np = path.split('/').skipWhile((value) => value != 'downloads').join('/');
+        var np = path
+            .split('/')
+            .skipWhile((value) => value != 'downloads')
+            .join('/');
         var box = await Hive.openBox(kPathDBName);
         box.put(media.id, np);
         add(MediaOpenChangeDownloadStatus(media: media));
-        var observer = _listeners.firstWhere((element) => element.id == media.id);
+        var observer =
+            _listeners.firstWhere((element) => element.id == media.id);
 
         controllerState.unregisterObserver(observer);
         _listeners.remove(observer);
@@ -168,7 +180,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     } catch (e) {
       print(e);
 
-      var ind = controllerState.downloadingFiles.indexWhere((element) => element.id == id);
+      var ind = controllerState.downloadingFiles
+          .indexWhere((element) => element.id == id);
 
       if (ind != -1) {
         var observer = _listeners.firstWhere((element) => element.id == id);
@@ -194,7 +207,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     print(!isFavorite);
     var res = await _controller.setFavorite(event.media, !isFavorite);
     print(res);
-    var mediaList = await _controller.getContentFromFolderById(state.openedFolder.id);
+    var mediaList =
+        await _controller.getContentFromFolderById(state.openedFolder.id);
     // MediaInfo choosedMedia =
     //     await _controller.addToFavorites(event.mediaId, state.openedFolder.id);
     // List<MediaInfo> mediaFromFolder =
@@ -202,7 +216,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     emit(
       state.copyWith(
         mediaFromFolder: mediaList,
-        choosedMedia: mediaList.firstWhere((element) => element.id == event.media.id),
+        choosedMedia:
+            mediaList.firstWhere((element) => element.id == event.media.id),
         status: FormzStatus.submissionSuccess,
       ),
     );
@@ -221,12 +236,14 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     MediaOpenDownload event,
     Emitter<MediaOpenState> emit,
   ) async {
-    print('need to download file with name ${state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId).name}');
+    print(
+        'need to download file with name ${state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId).name}');
     var id = event.mediaId;
     var cs = _loadController.getState;
 
     if (cs.downloadingFiles.any((element) => element.id == id)) {
-      print('file with name ${state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId).name} allready downloading, wait!');
+      print(
+          'file with name ${state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId).name} allready downloading, wait!');
       return;
     }
 
@@ -246,7 +263,9 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     MediaOpenDelete event,
     Emitter<MediaOpenState> emit,
   ) async {
-    await _controller.deleteFiles([state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId)]);
+    await _controller.deleteFiles([
+      state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId)
+    ]);
 
     List<BaseObject> mediaFromFolder = [];
     if (state.openedFolder.id == '-1') {
@@ -260,7 +279,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         }
       }
     } else {
-      mediaFromFolder = await _controller.getContentFromFolderById(state.openedFolder.id);
+      mediaFromFolder =
+          await _controller.getContentFromFolderById(state.openedFolder.id);
     }
 
     emit(
@@ -282,7 +302,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
 
     if (choosedMedia.path == null || choosedMedia.path!.isEmpty) {
       var loadState = _loadController.getState;
-      if (loadState.downloadingFiles.any((element) => element.id == choosedMedia.id)) {
+      if (loadState.downloadingFiles
+          .any((element) => element.id == choosedMedia.id)) {
         _loadController.increasePriorityOfRecord(choosedMedia.id);
       } else {
         add(MediaOpenDownload(mediaId: choosedMedia.id));
@@ -292,7 +313,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
       var loadState = _loadController.getState;
       var file = File(choosedMedia.path!);
       if (!file.existsSync()) {
-        if (loadState.downloadingFiles.any((element) => element.id == choosedMedia.id)) {
+        if (loadState.downloadingFiles
+            .any((element) => element.id == choosedMedia.id)) {
           _loadController.increasePriorityOfRecord(choosedMedia.id);
         } else {
           add(MediaOpenDownload(mediaId: choosedMedia.id));

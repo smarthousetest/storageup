@@ -4,17 +4,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/settings/settings_event.dart';
-import 'package:upstorage_desktop/pages/settings/settings_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
-import 'package:upstorage_desktop/utilites/services/auth_service.dart';
-import 'package:upstorage_desktop/utilites/services/files_service.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/settings/settings_event.dart';
+import 'package:storageup/pages/settings/settings_state.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/user_controller.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/language_locale.dart';
+import 'package:storageup/utilities/repositories/token_repository.dart';
+import 'package:storageup/utilities/services/auth_service.dart';
+import 'package:storageup/utilities/services/files_service.dart';
 
 @injectable
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {

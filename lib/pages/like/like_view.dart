@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/constants.dart';
+import 'package:storageup/constants.dart';
+
 import 'like_list/like_list.dart';
 
 class LikePage extends StatefulWidget {

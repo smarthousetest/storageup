@@ -3,15 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:storageup/components/blur/create_album.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/folder.dart';
+import 'package:storageup/pages/files/move_files/move_cubit.dart';
+import 'package:storageup/pages/files/move_files/move_state.dart';
+import 'package:storageup/utilities/injection.dart';
 import 'package:tree_view/tree_view.dart';
-import 'package:upstorage_desktop/components/blur/create_album.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/pages/files/move_files/move_cubit.dart';
-import 'package:upstorage_desktop/pages/files/move_files/move_state.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
 
 class MoveFileView extends StatefulWidget {
   final List<Folder>? folders;
@@ -19,6 +19,7 @@ class MoveFileView extends StatefulWidget {
 
   @override
   _MoveFileState createState() => new _MoveFileState();
+
   MoveFileView(
     this.folders,
     this.action,

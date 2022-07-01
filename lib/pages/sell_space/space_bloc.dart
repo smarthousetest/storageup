@@ -1,24 +1,26 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
-import 'package:upstorage_desktop/models/download_location.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/auth/models/name.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_event.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_state.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
-import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
+import 'package:storageup/models/download_location.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/auth/models/name.dart';
+import 'package:storageup/pages/sell_space/space_event.dart';
+import 'package:storageup/pages/sell_space/space_state.dart';
+import 'package:storageup/utilities/controllers/user_controller.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/space_repository.dart';
+import 'package:storageup/utilities/services/keeper_service.dart';
+
 import '../../constants.dart';
-import '../../utilites/keeper_data.dart';
-import '../../utilites/repositories/token_repository.dart';
+import '../../utilities/keeper_data.dart';
+import '../../utilities/repositories/token_repository.dart';
 
 class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   SpaceBloc() : super(SpaceState()) {

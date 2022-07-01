@@ -1,33 +1,34 @@
 import 'dart:async';
-import 'package:file_typification/file_typification.dart';
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
-import 'package:upstorage_desktop/components/blur/add_folder.dart';
-import 'package:upstorage_desktop/components/blur/delete.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/rename.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
-import 'package:upstorage_desktop/components/context_menu.dart';
-import 'package:upstorage_desktop/components/properties.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/base_object.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/folder.dart';
-import 'package:upstorage_desktop/models/record.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/move_files/move_files_view.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
+import 'package:storageup/components/blur/add_folder.dart';
+import 'package:storageup/components/blur/delete.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/rename.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/context_menu.dart';
+import 'package:storageup/components/properties.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/base_object.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/folder.dart';
+import 'package:storageup/models/record.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/move_files/move_files_view.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_cubit.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
+import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({
@@ -524,7 +525,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       newName += '.$extension';
       final res = await context
           .read<OpenedFolderCubit>()
-          .onActionRenameChoosedFile(record, newName);
+          .onActionRenameChosenFile(record, newName);
       if (res == ErrorType.alreadyExist) {
         _renameFile(
           context,
@@ -550,7 +551,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     if (newName != folder.name) {
       final res = await context
           .read<OpenedFolderCubit>()
-          .onActionRenameChoosedFolder(folder, newName);
+          .onActionRenameChosenFolder(folder, newName);
       if (res == ErrorType.alreadyExist) {
         _renameFolder(context, folder, newName);
       }
@@ -1421,7 +1422,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               folderId: object.id,
             );
           } else {
-            print('file tapped in properies');
+            print('file tapped in properties');
 
             context.read<OpenedFolderCubit>().fileTapped(object as Record);
           }
@@ -1429,7 +1430,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         break;
       case FileAction.rename:
         if (object is Record) {
-          var fileExtention =
+          var fileExtension =
               FileAttribute().getFileExtension(object.name ?? '');
           var result = await showDialog(
             context: context,
@@ -1441,12 +1442,15 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           if (result != null &&
               result is String &&
               result != FileAttribute().getFileName(object.name ?? '')) {
-            result = result + '.' + fileExtention;
+            if (fileExtension.isNotEmpty) {
+              fileExtension = ".$fileExtension";
+            }
+            result = "$result$fileExtension";
             final res = await context
                 .read<OpenedFolderCubit>()
-                .onActionRenameChoosedFile(object, result);
+                .onActionRenameChosenFile(object, result);
             if (res == ErrorType.alreadyExist) {
-              _renameFile(context, object, result, fileExtention);
+              _renameFile(context, object, result, fileExtension);
             }
           }
         } else {
@@ -1459,7 +1463,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           if (result != null && result is String && result != object.name) {
             final res = await context
                 .read<OpenedFolderCubit>()
-                .onActionRenameChoosedFolder(object, result);
+                .onActionRenameChosenFolder(object, result);
             if (res == ErrorType.alreadyExist) {
               _renameFolder(context, object, result);
             }

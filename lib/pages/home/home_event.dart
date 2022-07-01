@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:upstorage_desktop/components/custom_button_template.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/record.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/record.dart';
 
 abstract class HomeEvent extends Equatable {
   const HomeEvent();
@@ -17,14 +16,22 @@ class FileTapped extends HomeEvent {
   FileTapped({required this.record});
 }
 
-class HomeUserActionChoosed extends HomeEvent {
+class HomeUserActionChosen extends HomeEvent {
   final UserAction action;
   final List<String?>? values;
   final String? folderId;
 
-  HomeUserActionChoosed({
+  HomeUserActionChosen({
     required this.action,
     this.values,
     this.folderId,
   });
+}
+
+class UpdateRemoteVersion extends HomeEvent {
+  final String localVersion;
+  final String remoteVersion;
+
+  const UpdateRemoteVersion(
+      {required this.localVersion, required this.remoteVersion});
 }
