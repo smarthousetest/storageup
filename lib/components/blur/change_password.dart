@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:cpp_native/cpp_native.dart';
+import 'package:cpp_native/file_proc/encryption.dart';
 import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -113,10 +117,18 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
           wrongOldPass = false;
         });
       } else if (result == AuthenticationStatus.authenticated) {
-        var hashedPassword = new DBCrypt()
-            .hashpw(_confirmPass.value.text, new DBCrypt().gensalt());
+        var hashedPassword = aesCbcEncrypt(
+          // Encrypting password
+          passphraseToKey(widget.user.email!, bitLength: 128),
+          Uint8List.fromList(IV.codeUnits),
+          pad(
+            utf8.encode(_confirmPass.value.text) as Uint8List,
+            128,
+          ),
+        );
         var os = OsSpecifications.getOs();
         os.setKeeperHash(widget.user.email!, hashedPassword);
+
         setState(() {
           wrongOldPass = true;
           _showReAuthDialog();
