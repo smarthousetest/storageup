@@ -1,6 +1,7 @@
 import 'package:cpp_native/models/folder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/models/packet/packet.dart';
 import 'package:upstorage_desktop/models/subscription.dart';
 import 'package:upstorage_desktop/models/tariff.dart';

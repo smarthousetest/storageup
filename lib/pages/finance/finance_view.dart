@@ -77,7 +77,18 @@ class _FinancePageState extends State<FinancePage> {
       create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: BlocListener<FinanceBloc, FinanceState>(
         listener: (context, state) async {
-          if (state.sub?.tariff?.spaceGb == null) {
+          if (state.statusHttpRequest == FormzStatus.submissionFailure) {
+            StateContainer.of(context).changeIsPopUpShowing(true);
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurCustomErrorPopUp(
+                    middleText: translate.something_goes_wrong);
+              },
+            );
+            StateContainer.of(context).changeIsPopUpShowing(false);
+          } else if (state.statusHttpRequest ==
+              FormzStatus.submissionCanceled) {
             StateContainer.of(context).changeIsPopUpShowing(true);
             await showDialog(
               context: context,
