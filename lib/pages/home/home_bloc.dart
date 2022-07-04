@@ -182,10 +182,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       eventBusUpdateAlbum.fire(UpdateAlbumEvent);
 
       if (result == ResponseStatus.failed) {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
         emit(state.copyWith(status: FormzStatus.pure));
       } else if (result == ResponseStatus.noInternet) {
-        emit(state.copyWith(status: FormzStatus.submissionCanceled));
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
         emit(state.copyWith(status: FormzStatus.pure));
       }
     } else if (mediaRootFolderId == null) {

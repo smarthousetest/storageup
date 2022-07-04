@@ -10,10 +10,8 @@ import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
-
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -495,7 +493,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChoosedFile(
+  Future<ErrorType?> onActionRenameChosenFile(
       BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
@@ -508,9 +506,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
-  Future<ErrorType?> onActionRenameChoosedFolder(
+  Future<ErrorType?> onActionRenameChosenFolder(
       BaseObject object, String newName) async {
     var result = await _filesController.renameFolder(newName, object.id);
     print(result);
@@ -523,6 +522,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
   void _syncWithLoadController() async {
@@ -548,23 +548,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //   }
     // });
   }
-
-  // Future<void> _mapContextActionChoosed(
-  //    ContextActionEnum action,
-  // ) async {
-  //   // emit(state.copyWith(status: FormzStatus.submissionInProgress));
-
-  //   //print('${action} ${event.file}');
-  //   if (action == ContextActionEnum.delete) {
-  //     await _onActionDeleteChoosed();
-  //   } else if (action == ContextActionEnum.share) {
-  //     // await _mapDownloadFile(event, state, emit); //TODO remove this
-  //   } else if (action == ContextActionEnum.select) {
-  //     await _mapSelectFile(event, state, emit);
-  //   } else {
-  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
-  //   }
-  // }
 
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(

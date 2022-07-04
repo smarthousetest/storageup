@@ -4,9 +4,11 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cpp_native/local_update/local_update_server.dart';
 import 'package:dio/dio.dart';
+import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:upstorage_desktop/models/enums.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/models/user.dart';
 import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
@@ -90,24 +92,35 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
                       .firstWhere((keeper2) => keeper.name == keeper2.name))
                   .isRebooting));
         } else {
-          localKeepers.add(keeper);
+          serverKeepers.add(keeper);
         }
-        for (var locationInfo in locationsInfo) {
-          localPaths.add(locationInfo.dirPath);
-        }
-      } else {
-        serverKeepers.add(keeper);
       }
+      emit(
+        state.copyWith(
+          locationsInfo: locationsInfo,
+          localKeeper: localKeepers.reversed.toList(),
+          serverKeeper: serverKeepers,
+          localPath: localPaths.reversed.toList(),
+          needToValidatePopup: false,
+          statusHttpRequest: FormzStatus.pure,
+        ),
+      );
+    } else if (keepers.left == ResponseStatus.declined) {
+      emit(
+        state.copyWith(
+          statusHttpRequest: FormzStatus.submissionCanceled,
+          needToValidatePopup: true,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          statusHttpRequest: FormzStatus.submissionFailure,
+          needToValidatePopup: true,
+        ),
+      );
     }
     // print('5 seconds update keeper');
-    emit(
-      state.copyWith(
-        locationsInfo: locationsInfo,
-        localKeeper: localKeepers.reversed.toList(),
-        serverKeeper: serverKeepers,
-        localPath: localPaths.reversed.toList(),
-      ),
-    );
   }
 
   void _listener() {
@@ -132,7 +145,22 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     var keeperId = event.keeper.id;
     if (event.keeper.online == 1) {
       if (keeperId != null) {
-        await _keeperService.changeSleepStatus(keeperId);
+        var result = await _keeperService.changeSleepStatus(keeperId);
+        if (result.left == ResponseStatus.declined) {
+          emit(
+            state.copyWith(
+              statusHttpRequest: FormzStatus.submissionCanceled,
+              needToValidatePopup: true,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              statusHttpRequest: FormzStatus.submissionFailure,
+              needToValidatePopup: true,
+            ),
+          );
+        }
       }
       List<Keeper> localKeepers = [];
       List<Keeper> serverKeepers = [];
@@ -140,23 +168,43 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       var keepers = await _keeperService.getAllKeepers();
       final locationsInfo = _repository.locationsInfo;
 
-      for (var keeper in keepers!) {
-        if (locationsInfo.any((info) => info.keeperId == keeper.id)) {
-          localKeepers.add(keeper);
-          for (var locationInfo in locationsInfo) {
-            localPaths.add(locationInfo.dirPath);
+      if (keepers.right != null) {
+        for (var keeper in keepers.right!) {
+          if (locationsInfo.any((info) => info.keeperId == keeper.id)) {
+            localKeepers.add(keeper);
+            for (var locationInfo in locationsInfo) {
+              localPaths.add(locationInfo.dirPath);
+            }
+          } else {
+            serverKeepers.add(keeper);
           }
-        } else {
-          serverKeepers.add(keeper);
         }
+        emit(
+          state.copyWith(
+            localKeeper: localKeepers.reversed.toList(),
+            serverKeeper: serverKeepers,
+            localPath: localPaths.reversed.toList(),
+            statusHttpRequest: FormzStatus.pure,
+            needToValidatePopup: false,
+          ),
+        );
+      } else if (keepers.left == ResponseStatus.declined) {
+        emit(
+          state.copyWith(
+            statusHttpRequest: FormzStatus.submissionCanceled,
+            needToValidatePopup: true,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            statusHttpRequest: FormzStatus.submissionFailure,
+            needToValidatePopup: true,
+          ),
+        );
       }
-      emit(
-        state.copyWith(
-          localKeeper: localKeepers.reversed.toList(),
-          serverKeeper: serverKeepers,
-          localPath: localPaths.reversed.toList(),
-        ),
-      );
+      // print('5 seconds update keeper');
+
     }
   }
 
@@ -165,6 +213,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     FolderListState state,
     Emitter<FolderListState> emit,
   ) async {
+    emit(state.copyWith(
+        statusHttpRequest: FormzStatus.pure, needToValidatePopup: false));
     var idLocation = event.location.id;
     await _repository.deleteLocation(id: idLocation);
     var updateLocations = _repository.locationsInfo;
@@ -173,22 +223,24 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     var keeper = await _keeperService.getAllKeepers();
     List<Keeper> localKeeper = [];
     List<Keeper> serverKeeper = [];
-    if (keeper != null) {
-      for (var element in keeper) {
+    if (keeper.right != null) {
+      for (var element in keeper.right!) {
         if (updateLocations.any((info) => info.keeperId == element.id)) {
           localKeeper.add(element);
         } else {
           serverKeeper.add(element);
         }
       }
+      emit(
+        state.copyWith(
+          locationsInfo: updateLocations,
+          localKeeper: localKeeper.reversed.toList(),
+          serverKeeper: serverKeeper,
+          statusHttpRequest: FormzStatus.pure,
+          needToValidatePopup: false,
+        ),
+      );
     }
-    emit(
-      state.copyWith(
-        locationsInfo: updateLocations,
-        localKeeper: localKeeper.reversed.toList(),
-        serverKeeper: serverKeeper,
-      ),
-    );
   }
 
   Future _deleteKeeper(
@@ -196,6 +248,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     FolderListState state,
     Emitter<FolderListState> emit,
   ) async {
+    emit(
+      state.copyWith(statusHttpRequest: FormzStatus.pure),
+    );
     String? bearerToken = await TokenRepository().getApiToken();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
     var box = await Hive.openBox('keeper_data');
@@ -219,9 +274,46 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
             },
           ),
         );
-      } catch (e) {
-        print('Keeper does not exist');
+      } on DioError catch (e) {
+        print(e);
+        if (e.response?.statusCode == 401 ||
+            e.response?.statusCode == 429 ||
+            e.response?.statusCode == 500 ||
+            e.response?.statusCode == 502 ||
+            e.response?.statusCode == 504) {
+          emit(
+            state.copyWith(
+                statusHttpRequest: FormzStatus.pure,
+                needToValidatePopup: false),
+          );
+          emit(
+            state.copyWith(
+                statusHttpRequest: FormzStatus.submissionCanceled,
+                needToValidatePopup: true),
+          );
+        } else {
+          emit(
+            state.copyWith(
+                statusHttpRequest: FormzStatus.pure,
+                needToValidatePopup: false),
+          );
+          emit(
+            state.copyWith(
+                statusHttpRequest: FormzStatus.submissionFailure,
+                needToValidatePopup: true),
+          );
+        }
       }
+    } else {
+      emit(
+        state.copyWith(
+            statusHttpRequest: FormzStatus.pure, needToValidatePopup: false),
+      );
+      emit(
+        state.copyWith(
+            statusHttpRequest: FormzStatus.submissionFailure,
+            needToValidatePopup: true),
+      );
     }
 
     if (Directory(keeperDir).existsSync()) {

@@ -3,7 +3,6 @@ import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:file_typification/file_typification.dart';
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -527,7 +526,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       newName += '.$extension';
       final res = await context
           .read<OpenedFolderCubit>()
-          .onActionRenameChoosedFile(record, newName);
+          .onActionRenameChosenFile(record, newName);
       if (res == ErrorType.alreadyExist) {
         _renameFile(
           context,
@@ -553,7 +552,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     if (newName != folder.name) {
       final res = await context
           .read<OpenedFolderCubit>()
-          .onActionRenameChoosedFolder(folder, newName);
+          .onActionRenameChosenFolder(folder, newName);
       if (res == ErrorType.alreadyExist) {
         _renameFolder(context, folder, newName);
       }
@@ -1399,7 +1398,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               folderId: object.id,
             );
           } else {
-            print('file tapped in properies');
+            print('file tapped in properties');
 
             context.read<OpenedFolderCubit>().fileTapped(object as Record);
           }
@@ -1407,7 +1406,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         break;
       case FileAction.rename:
         if (object is Record) {
-          var fileExtention =
+          var fileExtension =
               FileAttribute().getFileExtension(object.name ?? '');
           var result = await showDialog(
             context: context,
@@ -1419,12 +1418,15 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           if (result != null &&
               result is String &&
               result != FileAttribute().getFileName(object.name ?? '')) {
-            result = result + '.' + fileExtention;
+            if (fileExtension.isNotEmpty) {
+              fileExtension = ".$fileExtension";
+            }
+            result = "$result$fileExtension";
             final res = await context
                 .read<OpenedFolderCubit>()
-                .onActionRenameChoosedFile(object, result);
+                .onActionRenameChosenFile(object, result);
             if (res == ErrorType.alreadyExist) {
-              _renameFile(context, object, result, fileExtention);
+              _renameFile(context, object, result, fileExtension);
             }
           }
         } else {
@@ -1437,7 +1439,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
           if (result != null && result is String && result != object.name) {
             final res = await context
                 .read<OpenedFolderCubit>()
-                .onActionRenameChoosedFolder(object, result);
+                .onActionRenameChosenFolder(object, result);
             if (res == ErrorType.alreadyExist) {
               _renameFolder(context, object, result);
             }

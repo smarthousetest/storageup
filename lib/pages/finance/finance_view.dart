@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/components/blur/cancel_sub.dart';
 import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
 import 'package:upstorage_desktop/components/custom_button_template.dart';
@@ -583,7 +584,7 @@ class _FinancePageState extends State<FinancePage> {
                                 } else {
                                   return GestureDetector(
                                     onTap: () async {
-                                      var str = await showDialog(
+                                      await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return BlurCancelSub(choosedSubGb,

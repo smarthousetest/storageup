@@ -14,6 +14,7 @@ class FinanceState extends Equatable {
   final ValueNotifier<User?>? valueNotifier;
 
   final ValueNotifier<Packet?>? packetNotifier;
+  final FormzStatus statusHttpRequest;
 
   FinanceState({
     this.user,
@@ -22,6 +23,7 @@ class FinanceState extends Equatable {
     this.allSub = const [],
     this.valueNotifier,
     this.packetNotifier,
+    this.statusHttpRequest = FormzStatus.pure,
   });
 
   FinanceState copyWith({
@@ -31,6 +33,7 @@ class FinanceState extends Equatable {
     List<Tariff>? allSub,
     ValueNotifier<User?>? valueNotifier,
     ValueNotifier<Packet?>? packetNotifier,
+    FormzStatus? statusHttpRequest,
   }) {
     return FinanceState(
       user: user ?? this.user,
@@ -39,6 +42,7 @@ class FinanceState extends Equatable {
       allSub: allSub ?? this.allSub,
       valueNotifier: valueNotifier ?? this.valueNotifier,
       packetNotifier: packetNotifier ?? this.packetNotifier,
+      statusHttpRequest: statusHttpRequest ?? FormzStatus.pure,
     );
   }
 
@@ -50,5 +54,6 @@ class FinanceState extends Equatable {
         rootFolders,
         valueNotifier,
         packetNotifier,
+        statusHttpRequest,
       ];
 }

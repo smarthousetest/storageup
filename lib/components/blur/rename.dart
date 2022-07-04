@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:upstorage_desktop/constants.dart';
@@ -20,7 +21,7 @@ class _ButtonTemplateState extends State<BlurRename> {
   var myController = TextEditingController();
   bool canSave = false;
   bool hintColor = false;
-  bool hintSymbvols = true;
+  bool hintSymbols = true;
 
   @override
   void initState() {
@@ -77,29 +78,39 @@ class _ButtonTemplateState extends State<BlurRename> {
                             ),
                           ),
                           Padding(
-                            padding: hintColor ? EdgeInsets.only(top: 0) : EdgeInsets.only(top: 20),
+                            padding: hintColor
+                                ? EdgeInsets.only(top: 0)
+                                : EdgeInsets.only(top: 20),
                             child: Text(
                               translate.wrong_filename,
                               style: TextStyle(
                                 fontSize: hintColor ? 0 : 14,
                                 fontFamily: kNormalTextFontFamily,
-                                color: hintColor ? Colors.white : Theme.of(context).errorColor,
+                                color: hintColor
+                                    ? Colors.white
+                                    : Theme.of(context).errorColor,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: hintSymbvols ? EdgeInsets.only(top: 0) : EdgeInsets.only(top: 20),
+                            padding: hintSymbols
+                                ? EdgeInsets.only(top: 0)
+                                : EdgeInsets.only(top: 20),
                             child: Text(
                               translate.wrong_symbvols,
                               style: TextStyle(
-                                fontSize: hintSymbvols ? 0 : 14,
+                                fontSize: hintSymbols ? 0 : 14,
                                 fontFamily: kNormalTextFontFamily,
-                                color: hintSymbvols ? Colors.white : Theme.of(context).errorColor,
+                                color: hintSymbols
+                                    ? Colors.white
+                                    : Theme.of(context).errorColor,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: hintColor && hintSymbvols ? EdgeInsets.only(top: 42) : EdgeInsets.only(top: 5),
+                            padding: hintColor && hintSymbols
+                                ? EdgeInsets.only(top: 42)
+                                : EdgeInsets.only(top: 5),
                             child: Container(
                               width: 400,
                               height: 36,
@@ -114,36 +125,47 @@ class _ButtonTemplateState extends State<BlurRename> {
                                 onChanged: (myController) {
                                   print(myController);
                                   myController = myController.trim();
-                                  if (myController.contains(RegExp(r'[\\/:*?\"<>|]'), 0) == true && myController.isNotEmpty) {
+                                  if (myController.contains(
+                                              RegExp(r'[\\/:*?\"<>|]'), 0) ==
+                                          true &&
+                                      myController.isNotEmpty) {
                                     setState(() {
-                                      hintSymbvols = false;
+                                      hintSymbols = false;
                                       canSave = false;
                                     });
                                   } else if (myController.isNotEmpty) {
                                     setState(() {
-                                      hintSymbvols = true;
+                                      hintSymbols = true;
                                       canSave = true;
                                     });
                                   } else {
                                     setState(() {
-                                      hintSymbvols = true;
+                                      hintSymbols = true;
                                       canSave = false;
                                     });
                                   }
                                 },
-                                style: TextStyle(color: Theme.of(context).disabledColor, fontSize: 14, fontFamily: kNormalTextFontFamily),
+                                style: TextStyle(
+                                    color: Theme.of(context).disabledColor,
+                                    fontSize: 14,
+                                    fontFamily: kNormalTextFontFamily),
                                 decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 15, bottom: 8),
+                                  contentPadding:
+                                      EdgeInsets.only(left: 15, bottom: 8),
                                   hoverColor: Theme.of(context).cardColor,
                                   focusColor: Theme.of(context).cardColor,
                                   fillColor: Theme.of(context).cardColor,
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(color: Theme.of(context).cardColor, width: 0.0),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).cardColor,
+                                        width: 0.0),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(color: Theme.of(context).cardColor, width: 0.0),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).cardColor,
+                                        width: 0.0),
                                   ),
                                 ),
                               ),
@@ -164,7 +186,9 @@ class _ButtonTemplateState extends State<BlurRename> {
                                       child: Text(
                                         translate.cancel,
                                         style: TextStyle(
-                                          color: Theme.of(context).colorScheme.onSurface,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
                                           fontSize: 16,
                                           fontFamily: kNormalTextFontFamily,
                                         ),
@@ -175,10 +199,13 @@ class _ButtonTemplateState extends State<BlurRename> {
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Theme.of(context).colorScheme.onSurface,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurface,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -188,7 +215,8 @@ class _ButtonTemplateState extends State<BlurRename> {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (canSave == true) {
-                                          Navigator.pop(context, myController.value.text.trim());
+                                          Navigator.pop(context,
+                                              myController.value.text.trim());
                                         } else {
                                           null;
                                         }
@@ -203,15 +231,22 @@ class _ButtonTemplateState extends State<BlurRename> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: canSave ? Theme.of(context).colorScheme.onSurface : Theme.of(context).canvasColor,
+                                        primary: canSave
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .onSurface
+                                            : Theme.of(context).canvasColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
+                                          color: canSave
+                                              ? Theme.of(context).splashColor
+                                              : Theme.of(context).canvasColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -232,7 +267,10 @@ class _ButtonTemplateState extends State<BlurRename> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: MouseRegion(cursor: SystemMouseCursors.click, child: SvgPicture.asset('assets/file_page/close.svg')),
+                        child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child:
+                                SvgPicture.asset('assets/file_page/close.svg')),
                       )),
                 ],
               ),

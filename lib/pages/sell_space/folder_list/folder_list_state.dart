@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/models/download_location.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -11,6 +12,8 @@ class FolderListState extends Equatable {
   final List<Keeper> serverKeepers;
   final List<String> localPaths;
   final bool sleepStatus;
+  final FormzStatus statusHttpRequest;
+  final bool needToValidatePopup;
 
   FolderListState({
     this.user,
@@ -20,6 +23,8 @@ class FolderListState extends Equatable {
     this.serverKeepers = const [],
     this.localPaths = const [],
     this.sleepStatus = true,
+    this.statusHttpRequest = FormzStatus.pure,
+    this.needToValidatePopup = false,
   });
 
   FolderListState copyWith({
@@ -30,6 +35,8 @@ class FolderListState extends Equatable {
     List<Keeper>? serverKeeper,
     List<String>? localPath,
     bool? sleepStatus,
+    FormzStatus? statusHttpRequest,
+    bool? needToValidatePopup,
   }) {
     return FolderListState(
       user: user ?? this.user,
@@ -39,6 +46,8 @@ class FolderListState extends Equatable {
       serverKeepers: serverKeeper ?? this.serverKeepers,
       localPaths: localPath ?? this.localPaths,
       sleepStatus: sleepStatus ?? this.sleepStatus,
+      statusHttpRequest: statusHttpRequest ?? FormzStatus.pure,
+      needToValidatePopup: needToValidatePopup ?? true,
     );
   }
 
@@ -51,5 +60,7 @@ class FolderListState extends Equatable {
         serverKeepers,
         localPaths,
         sleepStatus,
+        statusHttpRequest,
+        needToValidatePopup,
       ];
 }

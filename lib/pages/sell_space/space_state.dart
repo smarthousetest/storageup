@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:formz/formz.dart';
 import 'package:upstorage_desktop/models/download_location.dart';
 import 'package:upstorage_desktop/models/keeper/keeper.dart';
 import 'package:upstorage_desktop/models/user.dart';
@@ -15,6 +16,7 @@ class SpaceState extends Equatable {
   final String pathToKeeper;
   final int availableSpace;
   final Name name;
+  final FormzStatus statusHttpRequest; 
 
   SpaceState({
     this.user,
@@ -25,6 +27,7 @@ class SpaceState extends Equatable {
     this.pathToKeeper = '',
     this.availableSpace = 0,
     this.name = const Name.pure(),
+    this.statusHttpRequest = FormzStatus.pure,
   });
 
   SpaceState copyWith({
@@ -36,6 +39,7 @@ class SpaceState extends Equatable {
     Name? name,
     String? pathToKeeper,
     int? availableSpace,
+    FormzStatus? statusHttpRequest,
   }) {
     return SpaceState(
       user: user ?? this.user,
@@ -46,6 +50,7 @@ class SpaceState extends Equatable {
       pathToKeeper: pathToKeeper ?? this.pathToKeeper,
       name: name ?? this.name,
       availableSpace: availableSpace ?? this.availableSpace,
+      statusHttpRequest: statusHttpRequest ?? FormzStatus.pure,
     );
   }
 
@@ -59,5 +64,6 @@ class SpaceState extends Equatable {
         localKeeperVersion,
         pathToKeeper,
         availableSpace,
+        statusHttpRequest,
       ];
 }
