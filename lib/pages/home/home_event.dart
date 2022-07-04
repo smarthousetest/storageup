@@ -1,6 +1,6 @@
 import 'package:cpp_native/models/record.dart';
 import 'package:equatable/equatable.dart';
-import 'package:upstorage_desktop/models/enums.dart';
+import 'package:storageup/models/enums.dart';
 
 abstract class HomeEvent extends Equatable {
   const HomeEvent();
@@ -32,6 +32,8 @@ class UpdateRemoteVersion extends HomeEvent {
   final String localVersion;
   final String remoteVersion;
 
-  const UpdateRemoteVersion(
-      {required this.localVersion, required this.remoteVersion});
+  const UpdateRemoteVersion({
+    required this.localVersion,
+    required this.remoteVersion,
+  });
 }

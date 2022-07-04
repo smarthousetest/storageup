@@ -1,9 +1,10 @@
 import 'dart:async';
+
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:file_typification/file_typification.dart';
-import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,21 +12,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
-import 'package:upstorage_desktop/components/blur/delete.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/rename.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
-import 'package:upstorage_desktop/components/properties.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_cubit.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_sorted_container.dart';
+import 'package:storageup/components/blur/delete.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/rename.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/properties.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_cubit.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
+import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 
 class OpenedFolderView extends StatefulWidget {
   OpenedFolderView({

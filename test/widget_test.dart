@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:upstorage_desktop/pages/sell_space/space_view.dart';
-
+import 'package:storageup/pages/sell_space/space_view.dart';
 
 void main(){
   group('', (){

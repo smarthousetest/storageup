@@ -2,22 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
-import 'package:upstorage_desktop/pages/auth/auth_event.dart';
-import 'package:upstorage_desktop/pages/auth/auth_state.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/pages/auth/auth_bloc.dart';
+import 'package:storageup/pages/auth/auth_event.dart';
+import 'package:storageup/pages/auth/auth_state.dart';
+import 'package:storageup/utilities/injection.dart';
 
 class RegistrationSuccess extends StatefulWidget {
   RegistrationSuccess({
     Key? key,
-    required this.theme,
     required this.state,
     required this.changePage,
   }) : super(key: key);
 
-  final ThemeData theme;
   final AuthState state;
   final VoidCallback changePage;
 
@@ -73,6 +71,7 @@ class _RegistrationSuccessState extends State<RegistrationSuccess> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     var nowDateTime = DateTime.now();
 
     return Column(
@@ -90,7 +89,7 @@ class _RegistrationSuccessState extends State<RegistrationSuccess> {
               fontWeight: FontWeight.w400,
               fontFamily: kNormalTextFontFamily,
               fontSize: 28.0,
-              color: widget.theme.disabledColor,
+              color: theme.disabledColor,
             ),
           ),
         ),
@@ -105,7 +104,7 @@ class _RegistrationSuccessState extends State<RegistrationSuccess> {
             text: TextSpan(
               text: translate.email_confirming_confirm + "\n\n",
               style: TextStyle(
-                color: widget.theme.disabledColor,
+                color: theme.disabledColor,
                 fontFamily: kNormalTextFontFamily,
                 fontSize: 17.0,
               ),
@@ -113,21 +112,21 @@ class _RegistrationSuccessState extends State<RegistrationSuccess> {
                 TextSpan(
                     text: translate.email_confirming_letter,
                     style: TextStyle(
-                      color: widget.theme.disabledColor,
+                      color: theme.disabledColor,
                       fontFamily: kNormalTextFontFamily,
                       fontSize: 17.0,
                     )),
                 TextSpan(
                     text: widget.state.emailRegister.value + "\n",
                     style: TextStyle(
-                      color: widget.theme.disabledColor,
+                      color: theme.disabledColor,
                       fontFamily: kNormalTextFontFamily,
                       fontSize: 17.0,
                     )),
                 TextSpan(
                     text: translate.email_confirming_link,
                     style: TextStyle(
-                      color: widget.theme.disabledColor,
+                      color: theme.disabledColor,
                       fontFamily: kNormalTextFontFamily,
                       fontSize: 17.0,
                     )),
@@ -157,7 +156,7 @@ class _RegistrationSuccessState extends State<RegistrationSuccess> {
                 decoration: TextDecoration.underline,
                 fontFamily: kNormalTextFontFamily,
                 fontSize: 17.0,
-                color: widget.theme.splashColor,
+                color: theme.splashColor,
               ),
             ),
           ),
@@ -181,7 +180,7 @@ class _RegistrationSuccessState extends State<RegistrationSuccess> {
               //   horizontal: 140,
               //   vertical: 20,
               // ),
-              primary: widget.theme.splashColor,
+              primary: theme.splashColor,
               elevation: 1,
             ),
             child: Text(
@@ -189,7 +188,7 @@ class _RegistrationSuccessState extends State<RegistrationSuccess> {
               textAlign: TextAlign.center,
               maxLines: 1,
               style: TextStyle(
-                color: widget.theme.primaryColor,
+                color: theme.primaryColor,
                 fontFamily: kNormalTextFontFamily,
                 fontSize: 17,
               ),

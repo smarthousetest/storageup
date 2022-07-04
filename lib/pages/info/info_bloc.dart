@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/info/info_event.dart';
-import 'package:upstorage_desktop/pages/info/info_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
-import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/services/subscription_service.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/info/info_event.dart';
+import 'package:storageup/pages/info/info_state.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/controllers/user_controller.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/services/subscription_service.dart';
 
 @Injectable()
 class InfoBloc extends Bloc<InfoEvent, InfoState> {

@@ -1,5 +1,5 @@
 import 'package:cpp_native/models/file.dart';
-import 'package:upstorage_desktop/models/tenant_user.dart';
+import 'package:storageup/models/tenant_user.dart';
 
 class User {
   bool? emailVerified;

@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/pages/loadind_files.dart/loading_container_bloc.dart';
-import 'package:upstorage_desktop/pages/loadind_files.dart/loading_container_state.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/pages/loadind_files.dart/loading_container_bloc.dart';
+import 'package:storageup/pages/loadind_files.dart/loading_container_state.dart';
+import 'package:storageup/utilities/injection.dart';
 
 class LoadingContainer extends StatefulWidget {
   @override

@@ -1,26 +1,28 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:open_file/open_file.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
-import 'package:upstorage_desktop/utilites/services/files_service.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/event_bus.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/latest_file_repository.dart';
+import 'package:storageup/utilities/services/files_service.dart';
+
 import '../sell_space/space_view.dart';
 import 'home_event.dart';
 import 'home_state.dart';
-import 'package:os_specification/os_specification.dart';
 
 @Injectable()
 class HomeBloc extends Bloc<HomeEvent, HomeState> {

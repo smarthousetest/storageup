@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
-import 'package:upstorage_desktop/components/custom_text_field.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/auth/forgot_password/forgot_password_event.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/models/enums.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/custom_text_field.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/auth/forgot_password/forgot_password_event.dart';
+import 'package:storageup/utilities/injection.dart';
 
 import 'forgot_password_bloc.dart';
 import 'forgot_password_state.dart';
@@ -234,6 +234,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                       needValidation: true,
                     ),
                   );
+            },
+            onSubmitted: () {
+              var action = _buttonAction(state, context);
+
+              if (action is Function()) {
+                action();
+              }
             },
             invalid: state.email.invalid && state.email.value.isNotEmpty ||
                 state.error == AuthError.wrongCredentials,
