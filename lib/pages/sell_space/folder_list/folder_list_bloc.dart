@@ -94,8 +94,13 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
                         .firstWhere((keeper2) => keeper.name == keeper2.name))
                     .isRebooting));
           } else {
-            serverKeepers.add(keeper);
+            localKeepers.add(keeper);
           }
+          for (var locationInfo in locationsInfo) {
+            localPaths.add(locationInfo.dirPath);
+          }
+        } else {
+          serverKeepers.add(keeper);
         }
         emit(
           state.copyWith(
