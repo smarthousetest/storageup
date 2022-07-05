@@ -795,80 +795,80 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
       ),
-      Row(
-        children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: 450),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 40),
-                  child: Text(
-                    translate.date_format,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: kNormalTextFontFamily,
-                      color: Theme.of(context).disabledColor,
-                    ),
-                  ),
-                ),
-                Theme(
-                  data: Theme.of(context).copyWith(
-                      focusColor: Theme.of(context).dividerColor,
-                      hoverColor: Theme.of(context).dividerColor),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: SizedBox(
-                      width: 140,
-                      child: ButtonTheme(
-                        alignedDropdown: true,
-                        child: DropdownButton(
-                          dropdownColor: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          isExpanded: true,
-                          value: dropdownDateValue,
-                          icon: Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: SvgPicture.asset(
-                                "assets/file_page/array_down.svg"),
-                          ),
-                          underline: Container(
-                            height: 2,
-                            width: 140,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                          style:
-                              TextStyle(color: Theme.of(context).disabledColor),
-                          elevation: 10,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownDateValue = newValue!;
-                            });
-                          },
-                          items: <String>[
-                            'ДД/ММ/ГГГГ',
-                            'ДД/ММ/ГГ',
-                            'ММ/ГГ',
-                            'ДД/ММ',
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Center(
-                                  child:
-                                      Text(value, textAlign: TextAlign.center)),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      // Row(
+      //   children: [
+      //     Container(
+      //       constraints: BoxConstraints(maxWidth: 450),
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //         children: [
+      //           Padding(
+      //             padding: const EdgeInsets.only(top: 10, left: 40),
+      //             child: Text(
+      //               translate.date_format,
+      //               style: TextStyle(
+      //                 fontSize: 17,
+      //                 fontFamily: kNormalTextFontFamily,
+      //                 color: Theme.of(context).disabledColor,
+      //               ),
+      //             ),
+      //           ),
+      //           Theme(
+      //             data: Theme.of(context).copyWith(
+      //                 focusColor: Theme.of(context).dividerColor,
+      //                 hoverColor: Theme.of(context).dividerColor),
+      //             child: Padding(
+      //               padding: const EdgeInsets.only(top: 10),
+      //               child: SizedBox(
+      //                 width: 140,
+      //                 child: ButtonTheme(
+      //                   alignedDropdown: true,
+      //                   child: DropdownButton(
+      //                     dropdownColor: Theme.of(context).primaryColor,
+      //                     borderRadius: BorderRadius.circular(10),
+      //                     isExpanded: true,
+      //                     value: dropdownDateValue,
+      //                     icon: Padding(
+      //                       padding: const EdgeInsets.only(left: 6),
+      //                       child: SvgPicture.asset(
+      //                           "assets/file_page/array_down.svg"),
+      //                     ),
+      //                     underline: Container(
+      //                       height: 2,
+      //                       width: 140,
+      //                       color: Theme.of(context).dividerColor,
+      //                     ),
+      //                     style:
+      //                         TextStyle(color: Theme.of(context).disabledColor),
+      //                     elevation: 10,
+      //                     onChanged: (String? newValue) {
+      //                       setState(() {
+      //                         dropdownDateValue = newValue!;
+      //                       });
+      //                     },
+      //                     items: <String>[
+      //                       'ДД/ММ/ГГГГ',
+      //                       'ДД/ММ/ГГ',
+      //                       'ММ/ГГ',
+      //                       'ДД/ММ',
+      //                     ].map<DropdownMenuItem<String>>((String value) {
+      //                       return DropdownMenuItem<String>(
+      //                         value: value,
+      //                         child: Center(
+      //                             child:
+      //                                 Text(value, textAlign: TextAlign.center)),
+      //                       );
+      //                     }).toList(),
+      //                   ),
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
     ]);
   }
 
