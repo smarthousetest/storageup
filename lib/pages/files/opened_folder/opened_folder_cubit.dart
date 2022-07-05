@@ -15,20 +15,18 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
-
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/pages/files/opened_folder/opened_folder_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/controllers/packet_controllers.dart';
-import 'package:upstorage_desktop/utilites/event_bus.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/latest_file_repository.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/event_bus.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/latest_file_repository.dart';
 
 import '../../../constants.dart';
-import '../../../utilites/repositories/user_repository.dart';
+import '../../../utilities/repositories/user_repository.dart';
 
 enum ContextActionEnum {
   share,

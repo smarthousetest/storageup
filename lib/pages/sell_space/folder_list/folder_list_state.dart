@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/models/download_location.dart';
-import 'package:upstorage_desktop/models/keeper/keeper.dart';
-import 'package:upstorage_desktop/models/user.dart';
+import 'package:storageup/models/download_location.dart';
+import 'package:storageup/models/keeper/keeper.dart';
+import 'package:storageup/models/user.dart';
 
 class FolderListState extends Equatable {
   final User? user;

@@ -1,15 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/pages/auth/auth_view.dart';
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/token_repository.dart';
 
 class BlurExit extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
+
   BlurExit();
 }
 

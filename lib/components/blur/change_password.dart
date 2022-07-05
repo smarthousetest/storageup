@@ -1,21 +1,25 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui';
+
+import 'package:cpp_native/cpp_native.dart';
+import 'package:cpp_native/file_proc/encryption.dart';
 import 'package:dbcrypt/dbcrypt.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/auth/auth_bloc.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/pages/auth/auth_view.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
-
-import '../../utilites/services/auth_service.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/auth/auth_bloc.dart';
+import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/services/auth_service.dart';
 
 class BlurChangePassword extends StatefulWidget {
   //ValueSetter? callback;
@@ -60,6 +64,29 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
   bool hideText2 = true;
   bool hideText3 = true;
 
+  var oldPassnode = FocusNode();
+  var newPassNode = FocusNode();
+  var repeatNewPassNode = FocusNode();
+
+  @override
+  void initState() {
+    oldPassnode.onKeyEvent = ((node, event) {
+      if (event.logicalKey == LogicalKeyboardKey.tab && event is KeyDownEvent) {
+        newPassNode.requestFocus();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    });
+    newPassNode.onKeyEvent = ((node, event) {
+      if (event.logicalKey == LogicalKeyboardKey.tab && event is KeyDownEvent) {
+        repeatNewPassNode.requestFocus();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    });
+    super.initState();
+  }
+
   void _hider1() {
     setState(() {
       hideText1 = !hideText1;
@@ -76,6 +103,54 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
     setState(() {
       hideText3 = !hideText3;
     });
+  }
+
+  void onSubmit() async {
+    if (canSaveConfirm == true) {
+      _form.currentState!.validate();
+      final result = await _authController.changePassword(
+        oldPassword: _oldPass.value.text,
+        newPassword: _confirmPass.value.text,
+      );
+      if (result == AuthenticationStatus.wrongPassword) {
+        setState(() {
+          wrongOldPass = false;
+        });
+      } else if (result == AuthenticationStatus.authenticated) {
+        var hashedPassword = aesCbcEncrypt(
+          // Encrypting password
+          passphraseToKey(widget.user.email!, bitLength: 128),
+          Uint8List.fromList(IV.codeUnits),
+          pad(
+            utf8.encode(_confirmPass.value.text) as Uint8List,
+            128,
+          ),
+        );
+        var os = OsSpecifications.getOs();
+        os.setKeeperHash(widget.user.email!, hashedPassword);
+
+        setState(() {
+          wrongOldPass = true;
+          _showReAuthDialog();
+        });
+      } else if (result == AuthenticationStatus.unauthenticated) {
+        Navigator.pop(context);
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return BlurSomethingGoesWrong(true);
+          },
+        );
+      } else {
+        Navigator.pop(context);
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return BlurFailedServerConnection(true);
+          },
+        );
+      }
+    }
   }
 
   @override
@@ -147,6 +222,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: TextFormField(
+                                focusNode: oldPassnode,
                                 obscureText: hideText1,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.deny(
@@ -158,6 +234,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                     wrongOldPass = true;
                                   });
                                 },
+                                onFieldSubmitted: (_) => onSubmit(),
                                 style: TextStyle(
                                   color: Theme.of(context).disabledColor,
                                   fontSize: 14,
@@ -264,6 +341,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                 child: Column(
                                   children: [
                                     TextFormField(
+                                      focusNode: newPassNode,
                                       obscureText: hideText2,
                                       inputFormatters: [
                                         FilteringTextInputFormatter.deny(
@@ -301,6 +379,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                           });
                                         }
                                       },
+                                      onFieldSubmitted: (_) => onSubmit(),
                                       style: TextStyle(
                                         color: Theme.of(context).disabledColor,
                                         fontSize: 14,
@@ -358,6 +437,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10),
                                       child: TextFormField(
+                                        focusNode: repeatNewPassNode,
                                         obscureText: hideText3,
                                         inputFormatters: [
                                           FilteringTextInputFormatter.deny(
@@ -394,6 +474,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                             });
                                           }
                                         },
+                                        onFieldSubmitted: (_) => onSubmit(),
                                         style: TextStyle(
                                           color:
                                               Theme.of(context).disabledColor,
@@ -500,70 +581,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 20),
                                       child: ElevatedButton(
-                                        onPressed: () async {
-                                          if (canSaveConfirm == true) {
-                                            _form.currentState!.validate();
-                                            final result = await _authController
-                                                .changePassword(
-                                              oldPassword: _oldPass.value.text,
-                                              newPassword:
-                                                  _confirmPass.value.text,
-                                            );
-                                            if (result ==
-                                                AuthenticationStatus
-                                                    .wrongPassword) {
-                                              setState(() {
-                                                wrongOldPass = false;
-                                              });
-                                            } else if (result ==
-                                                AuthenticationStatus
-                                                    .authenticated) {
-                                              var hashedPassword = new DBCrypt()
-                                                  .hashpw(
-                                                      _confirmPass.value.text,
-                                                      new DBCrypt().gensalt());
-                                              var os = OsSpecifications.getOs();
-                                              os.setKeeperHash(
-                                                  widget.user.email!,
-                                                  hashedPassword);
-                                              setState(() {
-                                                wrongOldPass = true;
-                                                _showReAuthDialog();
-                                              });
-                                            } else if (result ==
-                                                AuthenticationStatus
-                                                    .unauthenticated) {
-                                              Navigator.pop(context);
-                                              await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurCustomErrorPopUp(
-                                                    middleText: translate
-                                                        .something_goes_wrong,
-                                                  );
-                                                },
-                                              );
-                                            } else {
-                                              Navigator.pop(context);
-                                              await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurCustomErrorPopUp(
-                                                      middleText: translate
-                                                          .no_internet);
-                                                },
-                                              );
-                                            }
-                                            /* Navigator.pop(
-                                              context,
-                                              ChangePasswordPopupResult(
-                                                  _oldPass.value.text,
-                                                  _confirmPass.value.text));
-                                                  */
-                                          }
-                                        },
+                                        onPressed: onSubmit,
                                         child: Text(
                                           translate.save,
                                           style: TextStyle(

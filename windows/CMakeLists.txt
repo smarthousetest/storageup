@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(upstorage_desktop LANGUAGES CXX)
+project(storageup LANGUAGES CXX)
 
-set(BINARY_NAME "upstorage_desktop")
+set(BINARY_NAME "storageup")
 
 cmake_policy(SET CMP0063 NEW)
 

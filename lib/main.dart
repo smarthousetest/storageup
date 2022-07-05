@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/cpp_native.dart';
@@ -6,24 +7,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
-import 'package:upstorage_desktop/pages/auth/auth_view.dart';
-import 'package:upstorage_desktop/pages/home/home_view.dart';
-import 'package:upstorage_desktop/theme.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/language_locale.dart';
-import 'package:upstorage_desktop/utilites/local_server/local_server.dart'
-    as ui;
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
+import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/pages/home/home_view.dart';
+import 'package:storageup/theme.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/language_locale.dart';
+import 'package:storageup/utilities/local_server/local_server.dart' as ui;
+import 'package:storageup/utilities/repositories/token_repository.dart';
+
 import 'constants.dart';
 import 'generated/l10n.dart';
-import 'utilites/injection.dart';
-import 'utilites/state_containers/state_container.dart';
+import 'utilities/injection.dart';
+import 'utilities/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
@@ -161,7 +160,7 @@ void readFromFileDomainName() {
   if (!domainNameFile.existsSync()) {
     domainName = "upstorage.net";
   } else {
-    domainName = domainNameFile.readAsStringSync();
+    domainName = domainNameFile.readAsStringSync().trim();
   }
   print(domainName);
 }

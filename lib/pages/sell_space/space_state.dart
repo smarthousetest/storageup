@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/models/download_location.dart';
-import 'package:upstorage_desktop/models/keeper/keeper.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/auth/models/name.dart';
+import 'package:storageup/models/download_location.dart';
+import 'package:storageup/models/keeper/keeper.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/auth/models/name.dart';
 
 class SpaceState extends Equatable {
   final User? user;

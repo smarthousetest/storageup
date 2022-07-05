@@ -2,14 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/components/blur/custom_error_popup.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/state_containers/state_container.dart';
+import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/utilities/injection.dart';
 
 import '../../models/enums.dart';
-import '../../utilites/services/auth_service.dart';
+import '../../utilities/services/auth_service.dart';
 
 class BlurRenameName extends StatefulWidget {
   final String name;
@@ -33,6 +33,31 @@ class _ButtonTemplateState extends State<BlurRenameName> {
     super.initState();
         myController.selection =
         TextSelection(baseOffset: 0, extentOffset: widget.name.length);
+  }
+
+  Future<void> onSave() async {
+    if (canSave) {
+      final result = await _authController.changeName(
+        name: myController.value.text.trim(),
+      );
+      Navigator.pop(context, myController.value.text.trim());
+      if (result == AuthenticationStatus.externalError) {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return BlurSomethingGoesWrong(true);
+          },
+        );
+      } else if (result == AuthenticationStatus.noInternet) {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return BlurFailedServerConnection(true);
+          },
+        );
+      }
+    }
+    print(widget.name);
   }
 
   @override
@@ -126,6 +151,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                     });
                                   }
                                 },
+                                onFieldSubmitted: (_) => onSave(),
                                 style: TextStyle(
                                   color: Theme.of(context).disabledColor,
                                   fontSize: 14,
@@ -193,56 +219,7 @@ class _ButtonTemplateState extends State<BlurRenameName> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
-                                      onPressed: () async {
-                                        if (canSave) {
-                                          final result =
-                                              await _authController.changeName(
-                                            name:
-                                                myController.value.text.trim(),
-                                          );
-                                          Navigator.pop(context,
-                                              myController.value.text.trim());
-                                          if (StateContainer.of(context)
-                                                  .isPopUpShowing ==
-                                              false) {
-                                            if (result ==
-                                                AuthenticationStatus
-                                                    .externalError) {
-                                              StateContainer.of(context)
-                                                  .changeIsPopUpShowing(true);
-                                              await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurCustomErrorPopUp(
-                                                    middleText: translate
-                                                        .something_goes_wrong,
-                                                  );
-                                                },
-                                              );
-                                              StateContainer.of(context)
-                                                  .changeIsPopUpShowing(false);
-                                            } else if (result ==
-                                                AuthenticationStatus
-                                                    .noInternet) {
-                                              StateContainer.of(context)
-                                                  .changeIsPopUpShowing(true);
-                                              await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BlurCustomErrorPopUp(
-                                                      middleText: translate
-                                                          .no_internet);
-                                                },
-                                              );
-                                              StateContainer.of(context)
-                                                  .changeIsPopUpShowing(false);
-                                            }
-                                          }
-                                        }
-                                        print(widget.name);
-                                      },
+                                      onPressed: onSave,
                                       child: Text(
                                         translate.save,
                                         style: TextStyle(

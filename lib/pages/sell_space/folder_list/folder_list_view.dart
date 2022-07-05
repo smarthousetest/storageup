@@ -2,23 +2,20 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/components/blur/failed_server_conection.dart';
-import 'package:upstorage_desktop/components/blur/something_goes_wrong.dart';
-import 'package:upstorage_desktop/components/custom_arc_indicator.dart';
-import 'package:upstorage_desktop/components/custom_percent_indicator.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/models/download_location.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_bloc.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
-import 'package:upstorage_desktop/utilites/extensions.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:upstorage_desktop/components/blur/keeper_delete_confirm.dart';
-import 'package:upstorage_desktop/models/keeper/keeper.dart';
+import 'package:storageup/components/blur/keeper_delete_confirm.dart';
+import 'package:storageup/components/custom_arc_indicator.dart';
+import 'package:storageup/components/custom_percent_indicator.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/download_location.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/keeper/keeper.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_bloc.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_event.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_state.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/injection.dart';
 
 class FolderList extends StatefulWidget {
   @override

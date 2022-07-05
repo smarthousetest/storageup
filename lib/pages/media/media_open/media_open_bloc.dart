@@ -11,9 +11,9 @@ import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 
 import 'media_open_event.dart';
 import 'media_open_state.dart';

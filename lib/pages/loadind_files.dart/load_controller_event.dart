@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:upstorage_desktop/pages/loadind_files.dart/loading_container_state.dart';
+import 'package:storageup/pages/loadind_files.dart/loading_container_state.dart';
 
 abstract class LoadContainerEvent extends Equatable {
   const LoadContainerEvent();

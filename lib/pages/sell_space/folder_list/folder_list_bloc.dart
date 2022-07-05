@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:cpp_native/local_update/local_update_server.dart';
 import 'package:dio/dio.dart';
@@ -8,17 +9,16 @@ import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/keeper/keeper.dart';
-import 'package:upstorage_desktop/models/user.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_event.dart';
-import 'package:upstorage_desktop/pages/sell_space/folder_list/folder_list_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/user_controller.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/space_repository.dart';
+import 'package:storageup/models/keeper/keeper.dart';
+import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_event.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_state.dart';
+import 'package:storageup/utilities/controllers/user_controller.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/space_repository.dart';
+import 'package:storageup/utilities/repositories/token_repository.dart';
+import 'package:storageup/utilities/services/keeper_service.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
-import 'package:upstorage_desktop/utilites/services/keeper_service.dart';
 
 class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   FolderListBloc() : super(FolderListState()) {

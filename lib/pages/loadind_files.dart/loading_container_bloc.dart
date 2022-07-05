@@ -3,11 +3,9 @@ import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:cpp_native/models/base_object.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
-import 'package:upstorage_desktop/pages/loadind_files.dart/load_controller_event.dart';
-import 'package:upstorage_desktop/pages/loadind_files.dart/loading_container_state.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
+import 'package:storageup/pages/loadind_files.dart/load_controller_event.dart';
+import 'package:storageup/pages/loadind_files.dart/loading_container_state.dart';
 
 @Injectable()
 class LoadingContainerBloc
@@ -16,7 +14,6 @@ class LoadingContainerBloc
     on<MainPageOpened>((event, emit) async {
       List<BaseObject>? files = []; // await _filesController.getFiles();
 
-      _filesController = await GetIt.I.getAsync<FilesController>();
       _loadController = LoadController.instance;
       // final valueListenable = _filesController.getObjectsValueListenable(null);
 
@@ -43,7 +40,6 @@ class LoadingContainerBloc
         emit(state.copyWith(downloadInfo: event.downloadInfo)));
   }
 
-  late FilesController _filesController;
   late LoadController _loadController;
   late Observer loadControllerObserver;
 

@@ -1,16 +1,19 @@
-import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:cpp_native/cpp_native.dart';
+import 'package:cpp_native/file_proc/encryption.dart';
 import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:upstorage_desktop/pages/auth/models/email.dart';
-import 'package:upstorage_desktop/pages/auth/models/name.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/auth_repository.dart';
-import 'package:upstorage_desktop/utilites/repositories/token_repository.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/auth/models/email.dart';
+import 'package:storageup/pages/auth/models/name.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/auth_repository.dart';
+import 'package:storageup/utilities/repositories/token_repository.dart';
 
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -47,7 +50,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
   }
-  final AuthenticationRepository _authenticationRepository = getIt<AuthenticationRepository>();
+  final AuthenticationRepository _authenticationRepository =
+      getIt<AuthenticationRepository>();
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
 
   void _mapLoginEmailChanged(
@@ -158,13 +162,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     print(state.status.isValidated);
     if (state.status.isValidated) {
-      //DBCrypt dBCrypt = DBCrypt();
       var plainPwd = state.passwordLogin.value;
-      var hashedPassword = new DBCrypt().hashpw(plainPwd, new DBCrypt().gensalt());
+      var hashedPassword = aesCbcEncrypt(
+        // Encrypting password
+        passphraseToKey(state.emailLogin.value, bitLength: 128),
+        Uint8List.fromList(IV.codeUnits),
+        pad(
+          utf8.encode(plainPwd) as Uint8List,
+          128,
+        ),
+      );
       var os = OsSpecifications.getOs();
       os.setKeeperHash(state.emailLogin.value, hashedPassword);
 
-      emit(state.copyWith(status: FormzStatus.submissionInProgress, action: RequestedAction.login));
+      emit(state.copyWith(
+          status: FormzStatus.submissionInProgress,
+          action: RequestedAction.login));
       print('authorization in progress');
       try {
         final result = await _authenticationRepository.logIn(
@@ -172,7 +185,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: state.passwordLogin.value,
         );
         if (result == AuthenticationStatus.authenticated) {
-          emit(state.copyWith(status: FormzStatus.submissionSuccess, action: RequestedAction.login));
+          emit(state.copyWith(
+              status: FormzStatus.submissionSuccess,
+              action: RequestedAction.login));
         } else if (result == AuthenticationStatus.wrongPassword) {
           emit(state.copyWith(
             status: FormzStatus.submissionFailure,
@@ -206,7 +221,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     if (state.status.isValidated) {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress, action: RequestedAction.registration));
+      emit(state.copyWith(
+          status: FormzStatus.submissionInProgress,
+          action: RequestedAction.registration));
 
       print('registration in progress');
       try {
@@ -243,7 +260,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (token != null && token.isNotEmpty) {
       var result = await _authenticationRepository.updateUserInfo();
       if (result == AuthenticationStatus.authenticated) {
-        emit(state.copyWith(status: FormzStatus.submissionSuccess, action: RequestedAction.login));
+        emit(state.copyWith(
+            status: FormzStatus.submissionSuccess,
+            action: RequestedAction.login));
       }
     }
   }

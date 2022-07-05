@@ -6,20 +6,22 @@ import '../constants.dart';
 final BorderRadius fCustomTextFormBorderRadius = BorderRadius.circular(15.0);
 
 class CustomTextField extends StatefulWidget {
-  CustomTextField({
-    required this.hint,
-    this.errorMessage = '',
-    required this.onChange,
-    required this.invalid,
-    required this.isPassword,
-    this.needErrorValidation = true,
-    required this.onFinishEditing,
-    this.horizontalPadding = 120,
-    this.autofocus = false,
-    FocusNode? focusNode,
-    List<TextInputFormatter>? inputFormatters,
-  })  : this.focusNode = focusNode ?? FocusNode(),
-        this.inputFormatters = inputFormatters ?? [FilteringTextInputFormatter.deny(RegExp('[ ]'))];
+  CustomTextField(
+      {required this.hint,
+      this.errorMessage = '',
+      required this.onChange,
+      required this.invalid,
+      required this.isPassword,
+      this.needErrorValidation = true,
+      required this.onFinishEditing,
+      this.horizontalPadding = 120,
+      this.autofocus = false,
+      FocusNode? focusNode,
+      List<TextInputFormatter>? inputFormatters,
+      this.onSubmitted})
+      : this.focusNode = focusNode ?? FocusNode(),
+        this.inputFormatters = inputFormatters ??
+            [FilteringTextInputFormatter.deny(RegExp('[ ]'))];
 
   final bool autofocus;
 
@@ -29,6 +31,7 @@ class CustomTextField extends StatefulWidget {
   final String errorMessage;
   final Function(String) onChange;
   final Function(String) onFinishEditing;
+  final Function()? onSubmitted;
   final bool invalid;
   final bool isPassword;
   final bool needErrorValidation;
@@ -83,7 +86,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 child: Image(
                   width: 26.0,
                   height: 26.0,
-                  image: AssetImage(_hidePassword ? 'assets/hide_password.png' : 'assets/show_password.png'),
+                  image: AssetImage(_hidePassword
+                      ? 'assets/hide_password.png'
+                      : 'assets/show_password.png'),
                 ),
               ),
             ),
@@ -134,6 +139,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   child: TextFormField(
                     textAlignVertical: TextAlignVertical.center,
                     onChanged: widget.onChange,
+                    onFieldSubmitted: (_) {
+                      var onSubmitted = widget.onSubmitted;
+
+                      if (onSubmitted is Function()) {
+                        onSubmitted();
+                      }
+                    },
                     obscureText: _hidePassword,
                     controller: _controller,
                     style: TextStyle(

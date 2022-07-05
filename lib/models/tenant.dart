@@ -1,5 +1,5 @@
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/models/settings.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/settings.dart';
 
 class Tenant {
   Plan? plan;

@@ -15,16 +15,16 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:upstorage_desktop/models/enums.dart';
-import 'package:upstorage_desktop/pages/files/file_state.dart';
-import 'package:upstorage_desktop/pages/files/file_event.dart';
-import 'package:upstorage_desktop/pages/files/models/sorting_element.dart';
-import 'package:upstorage_desktop/utilites/controllers/files_controller.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
-import 'package:upstorage_desktop/utilites/repositories/user_repository.dart';
+import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/files/file_event.dart';
+import 'package:storageup/pages/files/file_state.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/user_repository.dart';
 
 import '../../constants.dart';
-import '../../utilites/repositories/latest_file_repository.dart';
+import '../../utilities/repositories/latest_file_repository.dart';
 
 //enum SortingDirection { neutral, up, down }
 enum ContextActionEnum {

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
-import 'package:upstorage_desktop/models/user.dart';
+import 'package:storageup/models/user.dart';
 
 class SettingsState extends Equatable {
   final User? user;
