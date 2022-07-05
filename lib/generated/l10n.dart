@@ -2266,74 +2266,6 @@ class S {
     );
   }
 
-  String get no_internet {
-    return Intl.message(
-      'No internet connection!\n Check network settings',
-      name: 'no_internet',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Error with file`
-  String get null_file {
-    return Intl.message(
-      'Error with file',
-      name: 'null_file',
-      desc: '',
-      args: [],
-    );
-  }
-
-  String get no_available_space {
-    return Intl.message(
-      'Not enough storage',
-      name: 'no_available_space',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Required proxy is missing`
-  String get no_available_proxy {
-    return Intl.message(
-      'Required proxy is missing',
-      name: 'no_available_proxy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No keepers`
-  String get no_available_keepers {
-    return Intl.message(
-      'No keepers',
-      name: 'no_available_keepers',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Server side error`
-  String get internal_server_error {
-    return Intl.message(
-      'Server side error',
-      name: 'internal_server_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `A technical error has occurred. Try again later`
-  String get technical_error {
-    return Intl.message(
-      'A technical error has occurred. Try again later',
-      name: 'technical_error',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `It is possible to restart keeper locally`
   String get reboot_keeper {
     return Intl.message(
@@ -2364,21 +2296,11 @@ class S {
     );
   }
 
-  /// `The connection to the server cannot be established.`
-  String get server_connection_error {
+  /// `The connection to the server cannot be established.\nCheck your internet connection and try again.`
+  String get no_internet {
     return Intl.message(
-      'The connection to the server cannot be established.',
-      name: 'server_connection_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Check your internet connection and try again.`
-  String get check_ethernet_connection {
-    return Intl.message(
-      'Check your internet connection and try again.',
-      name: 'check_ethernet_connection',
+      'The connection to the server cannot be established.\nCheck your internet connection and try again.',
+      name: 'no_internet',
       desc: '',
       args: [],
     );
@@ -2469,6 +2391,76 @@ class S {
     return Intl.message(
       'The name must contain more than 2 characters',
       name: 'name_contain',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A technical error has occurred in the StorageUp application. Please repeat a little later.`
+  String get technical_error {
+    return Intl.message(
+      'A technical error has occurred in the StorageUp application. Please repeat a little later.',
+      name: 'technical_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A server-side error occurred in the Storage Up application. Please repeat a little later.`
+  String get internal_server_error {
+    return Intl.message(
+      'A server-side error occurred in the Storage Up application. Please repeat a little later.',
+      name: 'internal_server_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no keepers in the StorageUp application at the moment. Please repeat a little later.`
+  String get no_available_keepers {
+    return Intl.message(
+      'There are no keepers in the StorageUp application at the moment. Please repeat a little later.',
+      name: 'no_available_keepers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is no necessary proxy on the StorageUp server. Please repeat a little later.`
+  String get no_available_proxy {
+    return Intl.message(
+      'There is no necessary proxy on the StorageUp server. Please repeat a little later.',
+      name: 'no_available_proxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An error occurred in the StorageUp application when working with a file. The file cannot be downloaded.`
+  String get null_file {
+    return Intl.message(
+      'An error occurred in the StorageUp application when working with a file. The file cannot be downloaded.',
+      name: 'null_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not enought space`
+  String get not_enought_space {
+    return Intl.message(
+      'Not enought space',
+      name: 'not_enought_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.`
+  String get no_available_space {
+    return Intl.message(
+      'The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.',
+      name: 'no_available_space',
       desc: '',
       args: [],
     );

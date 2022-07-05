@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
-import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_text_field.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/forgot_password/forgot_password_event.dart';
 import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 import 'forgot_password_bloc.dart';
 import 'forgot_password_state.dart';
@@ -80,20 +81,29 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         ),
         child: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
           listener: (context, state) async {
-            if (state.status == FormzStatus.submissionFailure) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(true);
-                },
-              );
-            } else if (state.status == FormzStatus.submissionCanceled) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurFailedServerConnection(true);
-                },
-              );
+            if (StateContainer.of(context).isPopUpShowing == false) {
+              if (state.status == FormzStatus.submissionFailure) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                      middleText: translate.something_goes_wrong,
+                    );
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              } else if (state.status == FormzStatus.submissionCanceled) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                        middleText: translate.no_internet);
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              }
             }
           },
           child: Material(
@@ -216,41 +226,43 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       ),
       BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
         builder: (context, state) {
-          return CustomTextField(
-            autofocus: true,
-            hint: translate.email,
-            onChange: (email) {
-              context.read<ForgotPasswordBloc>().add(
-                    ForgotPasswordEmailChanged(
-                      email: email,
-                      needValidation: true,
-                    ),
-                  );
-            },
-            onFinishEditing: (email) {
-              context.read<ForgotPasswordBloc>().add(
-                    ForgotPasswordEmailChanged(
-                      email: email,
-                      needValidation: true,
-                    ),
-                  );
-            },
-            onSubmitted: () {
-              var action = _buttonAction(state, context);
+          return RawKeyboardListener(
+              focusNode: FocusNode(),
+              onKey: (event) {
+                if (event.isKeyPressed(LogicalKeyboardKey.backspace) ||
+                    event.isKeyPressed(LogicalKeyboardKey.delete)) {
+                  FocusScope.of(context).requestFocus(node);
+                }
+              },
+              child: CustomTextField(
+                autofocus: true,
+                hint: translate.email,
+                focusNode: node,
+                onChange: (email) {
+                  context.read<ForgotPasswordBloc>().add(
+                        ForgotPasswordEmailChanged(
+                          email: email,
+                          needValidation: true,
+                        ),
+                      );
+                },
+                onSubmitted: () {
+                  var action = _buttonAction(state, context);
 
-              if (action is Function()) {
-                action();
-              }
-            },
-            invalid: state.email.invalid && state.email.value.isNotEmpty ||
-                state.error == AuthError.wrongCredentials,
-            errorMessage: state.error == AuthError.wrongCredentials
-                ? translate.non_existent_email
-                : translate.wrong_email,
-            needErrorValidation: true,
-            isPassword: false,
-            horizontalPadding: 170,
-          );
+                  if (action is Function()) {
+                    action();
+                  }
+                },
+                invalid: state.email.invalid && state.email.value.isNotEmpty ||
+                    state.error == AuthError.wrongCredentials,
+                errorMessage: state.error == AuthError.wrongCredentials
+                    ? translate.non_existent_email
+                    : translate.wrong_email,
+                needErrorValidation: true,
+                isPassword: false,
+                horizontalPadding: 170,
+                onFinishEditing: (String) {},
+              ));
         },
       ),
       Expanded(

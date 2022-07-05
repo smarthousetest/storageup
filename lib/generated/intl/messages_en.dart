@@ -92,8 +92,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
-        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
-            "Check your internet connection and try again."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
@@ -181,6 +179,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "info": MessageLookupByLibrary.simpleMessage("Info"),
         "install_update":
             MessageLookupByLibrary.simpleMessage("Install update"),
+        "internal_server_error": MessageLookupByLibrary.simpleMessage(
+            "A server-side error occurred in the Storage Up application. Please repeat a little later."),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
@@ -217,8 +217,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password": MessageLookupByLibrary.simpleMessage("New password"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "The new password must be at least 8 characters long"),
+        "no_available_keepers": MessageLookupByLibrary.simpleMessage(
+            "There are no keepers in the StorageUp application at the moment. Please repeat a little later."),
+        "no_available_proxy": MessageLookupByLibrary.simpleMessage(
+            "There is no necessary proxy on the StorageUp server. Please repeat a little later."),
+        "no_available_space": MessageLookupByLibrary.simpleMessage(
+            "The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space."),
+        "no_internet": MessageLookupByLibrary.simpleMessage(
+            "The connection to the server cannot be established.\nCheck your internet connection and try again."),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
+        "not_enought_space":
+            MessageLookupByLibrary.simpleMessage("Not enought space"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
             "The volume of the selected storage space does not exceed 32 GB"),
         "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
@@ -228,6 +238,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Nothing came to Email?"),
         "notification_re_auth":
             MessageLookupByLibrary.simpleMessage("You need to log in again"),
+        "null_file": MessageLookupByLibrary.simpleMessage(
+            "An error occurred in the StorageUp application when working with a file. The file cannot be downloaded."),
         "of_percent": MessageLookupByLibrary.simpleMessage(" of 100%"),
         "off": MessageLookupByLibrary.simpleMessage("Off"),
         "offer": MessageLookupByLibrary.simpleMessage(
@@ -281,8 +293,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "reboot": MessageLookupByLibrary.simpleMessage("Reboot"),
         "reboot_keeper": MessageLookupByLibrary.simpleMessage(
             "It is possible to restart keeper locally"),
-        "no_internet": MessageLookupByLibrary.simpleMessage(
-            "No internet connection!\n Check network settings"),
         "recent": MessageLookupByLibrary.simpleMessage("Recent"),
         "register": MessageLookupByLibrary.simpleMessage("Register now"),
         "register_complete":
@@ -314,8 +324,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Choose storage location"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Renting a place"),
-        "server_connection_error": MessageLookupByLibrary.simpleMessage(
-            "The connection to the server cannot be established."),
         "set_size": MessageLookupByLibrary.simpleMessage("Set storage size"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
@@ -334,6 +342,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "We use this space to store files, and you "),
         "subscription_pay_mounth": m12,
         "tb": m13,
+        "technical_error": MessageLookupByLibrary.simpleMessage(
+            "A technical error has occurred in the StorageUp application. Please repeat a little later."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),
@@ -392,17 +402,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "you_turn_in": MessageLookupByLibrary.simpleMessage("You turn in"),
         "your_balance":
             MessageLookupByLibrary.simpleMessage("to your balance."),
-        "your_income": MessageLookupByLibrary.simpleMessage("Your income"),
-        "technical_error": MessageLookupByLibrary.simpleMessage(
-            "A technical error has occurred. Try again later"),
-        "internal_server_error":
-            MessageLookupByLibrary.simpleMessage("Server side error"),
-        "no_available_keepers":
-            MessageLookupByLibrary.simpleMessage("No keepers"),
-        "no_available_proxy":
-            MessageLookupByLibrary.simpleMessage("Required proxy is missing"),
-        "no_available_space":
-            MessageLookupByLibrary.simpleMessage("Not enough storage"),
-        "null_file": MessageLookupByLibrary.simpleMessage("Error with file"),
+        "your_income": MessageLookupByLibrary.simpleMessage("Your income")
       };
 }

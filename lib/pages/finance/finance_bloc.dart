@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
@@ -42,22 +43,43 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     var packetNotifier = _packetController.getValueNotifier();
 
     var valueNotifier = _userController.getValueNotifier();
-    if (sub == null && allSub == null) {
+    if (sub.right == ResponseStatus.declined) {
       emit(state.copyWith(
         user: user,
-        sub: sub,
+        sub: sub.left,
         allSub: allSub,
         valueNotifier: valueNotifier,
         packetNotifier: packetNotifier,
+        statusHttpRequest: FormzStatus.submissionCanceled,
+      ));
+    } else if (sub.right == ResponseStatus.failed) {
+      emit(state.copyWith(
+        user: user,
+        sub: sub.left,
+        allSub: allSub,
+        valueNotifier: valueNotifier,
+        packetNotifier: packetNotifier,
+        statusHttpRequest: FormzStatus.submissionFailure,
+      ));
+    }
+    if (sub.left == null && allSub == null) {
+      emit(state.copyWith(
+        user: user,
+        sub: sub.left,
+        allSub: allSub,
+        valueNotifier: valueNotifier,
+        packetNotifier: packetNotifier,
+        statusHttpRequest: FormzStatus.pure,
       ));
     }
     emit(state.copyWith(
       user: user,
-      sub: sub,
+      sub: sub.left,
       allSub: allSub,
       // rootFolders: rootFolder,
       valueNotifier: valueNotifier,
       packetNotifier: packetNotifier,
+      statusHttpRequest: FormzStatus.pure,
     ));
   }
 
@@ -67,13 +89,24 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     Emitter<FinanceState> emit,
   ) async {
     var choosedSub = event.choosedSub;
-
+emit(state.copyWith(
+      statusHttpRequest: FormzStatus.pure,
+    ));
     var status = await _subscriptionService.changeSubscription(choosedSub);
     if (status == ResponseStatus.ok) {
       var updatedSubscription =
           await _subscriptionService.getCurrentSubscription();
       emit(state.copyWith(
-        sub: updatedSubscription,
+        sub: updatedSubscription.left,
+        statusHttpRequest: FormzStatus.pure, 
+      ));
+    } else if (status == ResponseStatus.declined) {
+      emit(state.copyWith(
+        statusHttpRequest: FormzStatus.submissionCanceled,
+      ));
+    } else if (status == ResponseStatus.failed) {
+      emit(state.copyWith(
+        statusHttpRequest: FormzStatus.submissionFailure,
       ));
     }
   }

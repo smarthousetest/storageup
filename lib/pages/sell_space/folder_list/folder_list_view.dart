@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:formz/formz.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/keeper_delete_confirm.dart';
 import 'package:storageup/components/custom_arc_indicator.dart';
 import 'package:storageup/components/custom_percent_indicator.dart';
@@ -39,6 +41,7 @@ class _ButtonTemplateState extends State<FolderList> {
   var customPopupMenuController = CustomPopupMenuController();
   S translate = getIt<S>();
   var bloc = FolderListBloc();
+  bool popUpWasShown = false;
 
   @override
   void deactivate() {
@@ -58,25 +61,53 @@ class _ButtonTemplateState extends State<FolderList> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => bloc..add(FolderListPageOpened()),
-      child: BlocBuilder<FolderListBloc, FolderListState>(
-        builder: (context, state) {
-          _initiatingControllers(state);
-          locationsInfo = state.localKeepers;
-          return SingleChildScrollView(
-            controller: ScrollController(),
-            child: Column(
-              children: [
-                state.localKeepers.isNotEmpty ? _thisKeeper(context, state) : Container(),
-                state.serverKeepers.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: _otherKeeper(context, state),
-                      )
-                    : Container(),
-              ],
-            ),
-          );
+      child: BlocListener<FolderListBloc, FolderListState>(
+        listener: (context, state) async {
+          if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
+              popUpWasShown == false) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurCustomErrorPopUp(middleText: translate.no_internet);
+              },
+            );
+          } else if (state.statusHttpRequest == FormzStatus.submissionFailure &&
+              popUpWasShown == false) {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurCustomErrorPopUp(middleText: translate.no_internet);
+              },
+            );
+          }
+          if (state.needToValidatePopup == true) {
+            popUpWasShown = true;
+          } else {
+            popUpWasShown = false;
+          }
         },
+        child: BlocBuilder<FolderListBloc, FolderListState>(
+          builder: (context, state) {
+            _initiatingControllers(state);
+            locationsInfo = state.localKeepers;
+            return SingleChildScrollView(
+              controller: ScrollController(),
+              child: Column(
+                children: [
+                  state.localKeepers.isNotEmpty
+                      ? _thisKeeper(context, state)
+                      : Container(),
+                  state.serverKeepers.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: _otherKeeper(context, state),
+                        )
+                      : Container(),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -106,7 +137,8 @@ class _ButtonTemplateState extends State<FolderList> {
         LayoutBuilder(
           builder: (context, constrains) {
             var countOnElementsInRow = constrains.maxWidth ~/ 354;
-            final elementsWidthWithoutSpacing = constrains.maxWidth - countOnElementsInRow * 20;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
             final actualElementsWidth = countOnElementsInRow * 354;
             if (actualElementsWidth > elementsWidthWithoutSpacing) {
               countOnElementsInRow--;
@@ -185,13 +217,16 @@ class _ButtonTemplateState extends State<FolderList> {
                       showArrow: false,
                       horizontalMargin: 10,
                       verticalMargin: 0,
-                      controller: _popupControllers[state.localKeepers.indexOf(keeper)],
+                      controller:
+                          _popupControllers[state.localKeepers.indexOf(keeper)],
                       menuBuilder: () {
                         return KeeperPopupMenuActions(
                           theme: Theme.of(context),
                           translate: translate,
                           onTap: (action) async {
-                            _popupControllers[state.localKeepers.indexOf(keeper)].hideMenu();
+                            _popupControllers[
+                                    state.localKeepers.indexOf(keeper)]
+                                .hideMenu();
                             if (action == KeeperAction.change) {
                             } else {
                               var result = await showDialog(
@@ -209,7 +244,8 @@ class _ButtonTemplateState extends State<FolderList> {
                                   }
                                 }
                                 if (deleteKeeper != null) {
-                                  context.read<FolderListBloc>().add(DeleteLocation(location: deleteKeeper));
+                                  context.read<FolderListBloc>().add(
+                                      DeleteLocation(location: deleteKeeper));
                                 }
                               }
                               setState(() {});
@@ -360,7 +396,9 @@ class _ButtonTemplateState extends State<FolderList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  usedSpace != null ? fileSize(usedSpace, translate, 0) : "null",
+                  usedSpace != null
+                      ? fileSize(usedSpace, translate, 0)
+                      : "null",
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -417,15 +455,21 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: keeper.online == 1 ? Theme.of(context).selectedRowColor : Color(0xFFFFE0DE),
+              color: keeper.online == 1
+                  ? Theme.of(context).selectedRowColor
+                  : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                keeper.online == 1 ? "• ${translate.active}" : "• ${translate.inactive}",
+                keeper.online == 1
+                    ? "• ${translate.active}"
+                    : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: keeper.online == 1 ? Color(0xFF25B885) : Theme.of(context).indicatorColor,
+                  color: keeper.online == 1
+                      ? Color(0xFF25B885)
+                      : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 14,
                 ),
@@ -463,7 +507,9 @@ class _ButtonTemplateState extends State<FolderList> {
                           height: 20.0,
                           width: 40.0,
                           onToggle: (_) {
-                            context.read<FolderListBloc>().add(SleepStatus(keeper: keeper));
+                            context
+                                .read<FolderListBloc>()
+                                .add(SleepStatus(keeper: keeper));
                           },
                           toggleSize: 16,
                           padding: 2,
@@ -475,7 +521,9 @@ class _ButtonTemplateState extends State<FolderList> {
                     Padding(
                       padding: const EdgeInsets.only(left: 5.0),
                       child: Text(
-                        keeper.sleepStatus == false && keeper.online == 1 ? translate.on : translate.off,
+                        keeper.sleepStatus == false && keeper.online == 1
+                            ? translate.on
+                            : translate.off,
                         //textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).disabledColor,
@@ -488,10 +536,12 @@ class _ButtonTemplateState extends State<FolderList> {
                 )
               : BlocBuilder<FolderListBloc, FolderListState>(
                   builder: (context, state) {
-                    var kk = state.localKeepers.firstWhere((element) => element.name == keeper.name);
+                    var kk = state.localKeepers
+                        .firstWhere((element) => element.name == keeper.name);
                     return GestureDetector(
                       onTap: () {
                         if (!kk.isRebooting!) {
+                          popUpWasShown = false;
                           print("Press reboot keeper");
                           DownloadLocation? rebootedKeeper;
                           for (var location in state.locationsInfo) {
@@ -501,12 +551,17 @@ class _ButtonTemplateState extends State<FolderList> {
                             }
                           }
                           if (rebootedKeeper != null) {
-                            context.read<FolderListBloc>().add(KeeperReboot(location: rebootedKeeper));
+                            context
+                                .read<FolderListBloc>()
+                                .add(KeeperReboot(location: rebootedKeeper));
                           }
                         }
                       },
                       child: (kk.isRebooting!)
-                          ? Container(child: CircularProgressIndicator(), width: 24, height: 24)
+                          ? Container(
+                              child: CircularProgressIndicator(),
+                              width: 24,
+                              height: 24)
                           : MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: Container(
@@ -614,7 +669,8 @@ class _ButtonTemplateState extends State<FolderList> {
         LayoutBuilder(
           builder: (context, constrains) {
             var countOnElementsInRow = constrains.maxWidth ~/ 354;
-            final elementsWidthWithoutSpacing = constrains.maxWidth - countOnElementsInRow * 20;
+            final elementsWidthWithoutSpacing =
+                constrains.maxWidth - countOnElementsInRow * 20;
             final actualElementsWidth = countOnElementsInRow * 354;
             if (actualElementsWidth > elementsWidthWithoutSpacing) {
               countOnElementsInRow--;
@@ -711,15 +767,21 @@ class _ButtonTemplateState extends State<FolderList> {
             width: 98,
             height: 28,
             decoration: BoxDecoration(
-              color: keeper.online == 1 ? Theme.of(context).selectedRowColor : Color(0xFFFFE0DE),
+              color: keeper.online == 1
+                  ? Theme.of(context).selectedRowColor
+                  : Color(0xFFFFE0DE),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Align(
               alignment: Alignment.center,
               child: Text(
-                keeper.online == 1 ? "• ${translate.active}" : "• ${translate.inactive}",
+                keeper.online == 1
+                    ? "• ${translate.active}"
+                    : "• ${translate.inactive}",
                 style: TextStyle(
-                  color: keeper.online == 1 ? Color(0xFF25B885) : Theme.of(context).indicatorColor,
+                  color: keeper.online == 1
+                      ? Color(0xFF25B885)
+                      : Theme.of(context).indicatorColor,
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 14,
                 ),
@@ -923,7 +985,9 @@ class _KeeperPopupMenuActionsState extends State<KeeperPopupMenuActions> {
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1 ? widget.theme.indicatorColor.withOpacity(0.1) : null,
+                      color: ind == 1
+                          ? widget.theme.indicatorColor.withOpacity(0.1)
+                          : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -938,7 +1002,8 @@ class _KeeperPopupMenuActionsState extends State<KeeperPopupMenuActions> {
                           ),
                           Text(
                             widget.translate.delete,
-                            style: style.copyWith(color: Theme.of(context).errorColor),
+                            style: style.copyWith(
+                                color: Theme.of(context).errorColor),
                           ),
                         ],
                       ),

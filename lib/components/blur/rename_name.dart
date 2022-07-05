@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
-import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -31,6 +30,8 @@ class _ButtonTemplateState extends State<BlurRenameName> {
   void initState() {
     myController = TextEditingController(text: widget.name);
     super.initState();
+    myController.selection =
+        TextSelection(baseOffset: 0, extentOffset: widget.name.length);
   }
 
   Future<void> onSave() async {
@@ -43,14 +44,15 @@ class _ButtonTemplateState extends State<BlurRenameName> {
         await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return BlurSomethingGoesWrong(true);
+            return BlurCustomErrorPopUp(
+                middleText: translate.something_goes_wrong);
           },
         );
       } else if (result == AuthenticationStatus.noInternet) {
         await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return BlurFailedServerConnection(true);
+            return BlurCustomErrorPopUp(middleText: translate.no_internet);
           },
         );
       }

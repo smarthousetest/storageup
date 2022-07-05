@@ -44,6 +44,7 @@ enum ErrorType {
   noInternet,
   technicalError,
   alreadyExist,
+  other,
 }
 
 enum Status {

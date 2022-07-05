@@ -441,9 +441,17 @@ class FilesService {
         return ResponseStatus.ok;
       else
         return ResponseStatus.failed;
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
-      return ResponseStatus.failed;
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.declined;
+      } else {
+        return ResponseStatus.failed;
+      }
     }
   }
 

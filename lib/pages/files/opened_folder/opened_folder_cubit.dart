@@ -491,7 +491,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChoosedFile(
+  Future<ErrorType?> onActionRenameChosenFile(
       BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
@@ -504,9 +504,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
-  Future<ErrorType?> onActionRenameChoosedFolder(
+  Future<ErrorType?> onActionRenameChosenFolder(
       BaseObject object, String newName) async {
     var result = await _filesController.renameFolder(newName, object.id);
     print(result);
@@ -519,6 +520,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     } else {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
+    return null;
   }
 
   void _syncWithLoadController() async {
@@ -544,23 +546,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //   }
     // });
   }
-
-  // Future<void> _mapContextActionChoosed(
-  //    ContextActionEnum action,
-  // ) async {
-  //   // emit(state.copyWith(status: FormzStatus.submissionInProgress));
-
-  //   //print('${action} ${event.file}');
-  //   if (action == ContextActionEnum.delete) {
-  //     await _onActionDeleteChoosed();
-  //   } else if (action == ContextActionEnum.share) {
-  //     // await _mapDownloadFile(event, state, emit); //TODO remove this
-  //   } else if (action == ContextActionEnum.select) {
-  //     await _mapSelectFile(event, state, emit);
-  //   } else {
-  //     emit(state.copyWith(status: FormzStatus.submissionSuccess));
-  //   }
-  // }
 
   void changeRepresentation(FilesRepresentation representation) {
     emit(state.copyWith(
@@ -799,37 +784,43 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> fileTapped(Record record) async {
-    await _filesController.setRecentFile(record, DateTime.now());
-    var recentsFile = await _filesController.getRecentFiles();
-    if (recentsFile != null) {
-      // recentsFile.forEach((element) {
-      await _repository.addFiles(latestFile: recentsFile);
-      // });
-    }
-    //_repository.addFile(latestFile: record);
-
-    var box = await Hive.openBox(kPathDBName);
-    String path = box.get(record.id, defaultValue: '');
-    // idTappedFile = record.id;
-    if (path.isNotEmpty) {
-      var appPath = await getDownloadAppFolder();
-      if (path.contains("()")) {
-        path.replaceAll(('('), '"("');
-        path.replaceAll((')'), '")"');
+    final result = await _filesController.setRecentFile(record, DateTime.now());
+    if (result == ResponseStatus.ok) {
+      var recentsFile = await _filesController.getRecentFiles();
+      if (recentsFile != null) {
+        // recentsFile.forEach((element) {
+        await _repository.addFiles(latestFile: recentsFile);
+        // });
       }
+      //_repository.addFile(latestFile: record);
 
-      var fullPathToFile = "$appPath/$path";
-      var isExisting = await File(fullPathToFile).exists();
-      //var isExistingSync = File(fullPathToFile).watch();
-      print(fullPathToFile);
-      if (isExisting) {
-        var res = await OpenFile.open(fullPathToFile);
-        print(res.message);
+      var box = await Hive.openBox(kPathDBName);
+      String path = box.get(record.id, defaultValue: '');
+      // idTappedFile = record.id;
+      if (path.isNotEmpty) {
+        var appPath = await getDownloadAppFolder();
+        if (path.contains("()")) {
+          path.replaceAll(('('), '"("');
+          path.replaceAll((')'), '")"');
+        }
+
+        var fullPathToFile = "$appPath/$path";
+        var isExisting = await File(fullPathToFile).exists();
+        //var isExistingSync = File(fullPathToFile).watch();
+        print(fullPathToFile);
+        if (isExisting) {
+          var res = await OpenFile.open(fullPathToFile);
+          print(res.message);
+        } else {
+          _downloadFile(record.id, null);
+        }
       } else {
         _downloadFile(record.id, null);
       }
+    } else if (result == ResponseStatus.failed) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
     } else {
-      _downloadFile(record.id, null);
+      emit(state.copyWith(status: FormzStatus.submissionCanceled));
     }
   }
 
