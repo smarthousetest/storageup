@@ -2396,40 +2396,40 @@ class S {
     );
   }
 
-  /// `A technical error has occurred in the StorageUp application.\nPlease repeat a little later.`
+  /// `A technical error has occurred in the StorageUp application. Please repeat a little later.`
   String get technical_error {
     return Intl.message(
-      'A technical error has occurred in the StorageUp application.\nPlease repeat a little later.',
+      'A technical error has occurred in the StorageUp application. Please repeat a little later.',
       name: 'technical_error',
       desc: '',
       args: [],
     );
   }
 
-  /// `A server-side error occurred in the Storage Up application.\nPlease repeat a little later.`
+  /// `A server-side error occurred in the Storage Up application. Please repeat a little later.`
   String get internal_server_error {
     return Intl.message(
-      'A server-side error occurred in the Storage Up application.\nPlease repeat a little later.',
+      'A server-side error occurred in the Storage Up application. Please repeat a little later.',
       name: 'internal_server_error',
       desc: '',
       args: [],
     );
   }
 
-  /// `There are no keepers in the StorageUp application at the moment.\nPlease repeat a little later.`
+  /// `There are no keepers in the StorageUp application at the moment. Please repeat a little later.`
   String get no_available_keepers {
     return Intl.message(
-      'There are no keepers in the StorageUp application at the moment.\nPlease repeat a little later.',
+      'There are no keepers in the StorageUp application at the moment. Please repeat a little later.',
       name: 'no_available_keepers',
       desc: '',
       args: [],
     );
   }
 
-  /// `There is no necessary proxy on the StorageUp server.\nPlease repeat a little later.`
+  /// `There is no necessary proxy on the StorageUp server. Please repeat a little later.`
   String get no_available_proxy {
     return Intl.message(
-      'There is no necessary proxy on the StorageUp server.\nPlease repeat a little later.',
+      'There is no necessary proxy on the StorageUp server. Please repeat a little later.',
       name: 'no_available_proxy',
       desc: '',
       args: [],
@@ -2456,10 +2456,10 @@ class S {
     );
   }
 
-  /// `The current subscription does not allow you to download the selected files. You have filled all your free space.\nTo continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.`
+  /// `The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.`
   String get no_available_space {
     return Intl.message(
-      'The current subscription does not allow you to download the selected files. You have filled all your free space.\nTo continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.',
+      'The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.',
       name: 'no_available_space',
       desc: '',
       args: [],

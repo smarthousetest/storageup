@@ -9,6 +9,7 @@ import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/keeper/keeper.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_event.dart';
@@ -83,28 +84,30 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     List<String> localPaths = [];
     var keepers = await _keeperService.getAllKeepers();
     final locationsInfo = await _repository.locationsInfo;
-    for (var keeper in keepers ?? []) {
-      if (locationsInfo
-          .any((_locationInfo) => _locationInfo.keeperId == keeper.id)) {
-        if (state.localKeepers.isNotEmpty) {
-          localKeepers.add(keeper.copyWith(
-              isRebooting: (state.localKeepers
-                      .firstWhere((keeper2) => keeper.name == keeper2.name))
-                  .isRebooting));
-        } else {
-          serverKeepers.add(keeper);
+    if (keepers.right != null) {
+      for (var keeper in keepers.right ?? []) {
+        if (locationsInfo
+            .any((_locationInfo) => _locationInfo.keeperId == keeper.id)) {
+          if (state.localKeepers.isNotEmpty) {
+            localKeepers.add(keeper.copyWith(
+                isRebooting: (state.localKeepers
+                        .firstWhere((keeper2) => keeper.name == keeper2.name))
+                    .isRebooting));
+          } else {
+            serverKeepers.add(keeper);
+          }
         }
+        emit(
+          state.copyWith(
+            locationsInfo: locationsInfo,
+            localKeeper: localKeepers.reversed.toList(),
+            serverKeeper: serverKeepers,
+            localPath: localPaths.reversed.toList(),
+            needToValidatePopup: false,
+            statusHttpRequest: FormzStatus.pure,
+          ),
+        );
       }
-      emit(
-        state.copyWith(
-          locationsInfo: locationsInfo,
-          localKeeper: localKeepers.reversed.toList(),
-          serverKeeper: serverKeepers,
-          localPath: localPaths.reversed.toList(),
-          needToValidatePopup: false,
-          statusHttpRequest: FormzStatus.pure,
-        ),
-      );
     } else if (keepers.left == ResponseStatus.declined) {
       emit(
         state.copyWith(

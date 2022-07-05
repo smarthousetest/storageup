@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -95,7 +97,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(true);
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.something_goes_wrong);
                 },
               );
             } else if (state.statusHttpRequest ==
@@ -103,7 +106,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurFailedServerConnection(true);
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
                 },
               );
             }

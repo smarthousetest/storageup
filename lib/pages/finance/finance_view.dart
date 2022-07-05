@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:storageup/components/blur/cancel_sub.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';

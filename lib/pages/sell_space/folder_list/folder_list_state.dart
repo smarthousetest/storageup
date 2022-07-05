@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
 import 'package:storageup/models/download_location.dart';
 import 'package:storageup/models/keeper/keeper.dart';
 import 'package:storageup/models/user.dart';

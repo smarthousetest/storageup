@@ -9,6 +9,7 @@ import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/auth/models/name.dart';
 import 'package:storageup/pages/sell_space/space_event.dart';

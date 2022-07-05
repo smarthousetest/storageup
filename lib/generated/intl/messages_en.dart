@@ -180,7 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "install_update":
             MessageLookupByLibrary.simpleMessage("Install update"),
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
-            "A server-side error occurred in the Storage Up application.\nPlease repeat a little later."),
+            "A server-side error occurred in the Storage Up application. Please repeat a little later."),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
@@ -218,11 +218,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "The new password must be at least 8 characters long"),
         "no_available_keepers": MessageLookupByLibrary.simpleMessage(
-            "There are no keepers in the StorageUp application at the moment.\nPlease repeat a little later."),
+            "There are no keepers in the StorageUp application at the moment. Please repeat a little later."),
         "no_available_proxy": MessageLookupByLibrary.simpleMessage(
-            "There is no necessary proxy on the StorageUp server.\nPlease repeat a little later."),
+            "There is no necessary proxy on the StorageUp server. Please repeat a little later."),
         "no_available_space": MessageLookupByLibrary.simpleMessage(
-            "The current subscription does not allow you to download the selected files. You have filled all your free space.\nTo continue downloading, switch to a subscription with a large number of gigabytes or free up the current space."),
+            "The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space."),
         "no_internet": MessageLookupByLibrary.simpleMessage(
             "The connection to the server cannot be established.\nCheck your internet connection and try again."),
         "non_existent_email":
@@ -343,7 +343,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscription_pay_mounth": m12,
         "tb": m13,
         "technical_error": MessageLookupByLibrary.simpleMessage(
-            "A technical error has occurred in the StorageUp application.\nPlease repeat a little later."),
+            "A technical error has occurred in the StorageUp application. Please repeat a little later."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Tell us why you decided to delete your account"),
         "term_of_use": MessageLookupByLibrary.simpleMessage("User Agreement"),

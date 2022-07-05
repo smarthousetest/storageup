@@ -183,7 +183,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "install_update":
             MessageLookupByLibrary.simpleMessage("Установить обновление"),
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
-            "В приложении StorageUp произошла ошибка на стороне сервера.\nПовторите, пожалуйста, чуть позже."),
+            "В приложении StorageUp произошла ошибка на стороне сервера. Повторите, пожалуйста, чуть позже."),
         "kb": m7,
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
@@ -221,11 +221,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),
         "no_available_keepers": MessageLookupByLibrary.simpleMessage(
-            "В приложении StorageUp на данный момент отсутствуют киперы.\nПовторите, пожалуйста, чуть позже."),
+            "В приложении StorageUp на данный момент отсутствуют киперы. Повторите, пожалуйста, чуть позже."),
         "no_available_proxy": MessageLookupByLibrary.simpleMessage(
-            "На сервере StorageUp отсутствует необходимый прокси.\nПовторите, пожалуйста, чуть позже."),
+            "На сервере StorageUp отсутствует необходимый прокси. Повторите, пожалуйста, чуть позже."),
         "no_available_space": MessageLookupByLibrary.simpleMessage(
-            "Текущая подписка не позволяет загрузить выбранные файлы. Вы заполнили всё своё свободное пространство.\nЧтобы продолжить загрузку, перейдите на подписку с большим количеством гигабайт или осободите текущее пространство."),
+            "Текущая подписка не позволяет загрузить выбранные файлы. Вы заполнили всё своё свободное пространство. Чтобы продолжить загрузку, перейдите на подписку с большим количеством гигабайт или осободите текущее пространство."),
         "no_internet": MessageLookupByLibrary.simpleMessage(
             "Не удаётся установить соединение с сервером.\nПроверьте соединение с Интернетом и повторите попытку."),
         "non_existent_email":
@@ -347,7 +347,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "subscription_pay_mounth": m12,
         "tb": m13,
         "technical_error": MessageLookupByLibrary.simpleMessage(
-            "В приложении StorageUp произошла техническая ошибка.\nПовторите, пожалуйста, чуть позже."),
+            "В приложении StorageUp произошла техническая ошибка. Повторите, пожалуйста, чуть позже."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
             "Расскажите нам, почему вы решили удалить аккаунт"),
         "term_of_use": MessageLookupByLibrary.simpleMessage(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/utilites/injection.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/utilities/injection.dart';
 
 class BlurCustomErrorPopUp extends StatelessWidget {
   BlurCustomErrorPopUp({

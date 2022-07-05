@@ -262,11 +262,11 @@
     "down": "Download",
     "update": "Update",
     "name_contain": "The name must contain more than 2 characters",
-    "technical_error": "A technical error has occurred in the StorageUp application.\nPlease repeat a little later.",
-    "internal_server_error": "A server-side error occurred in the Storage Up application.\nPlease repeat a little later.",
-    "no_available_keepers": "There are no keepers in the StorageUp application at the moment.\nPlease repeat a little later.",
-    "no_available_proxy": "There is no necessary proxy on the StorageUp server.\nPlease repeat a little later.",
+    "technical_error": "A technical error has occurred in the StorageUp application. Please repeat a little later.",
+    "internal_server_error": "A server-side error occurred in the Storage Up application. Please repeat a little later.",
+    "no_available_keepers": "There are no keepers in the StorageUp application at the moment. Please repeat a little later.",
+    "no_available_proxy": "There is no necessary proxy on the StorageUp server. Please repeat a little later.",
     "null_file": "An error occurred in the StorageUp application when working with a file. The file cannot be downloaded.",
     "not_enought_space": "Not enought space",
-    "no_available_space": "The current subscription does not allow you to download the selected files. You have filled all your free space.\nTo continue downloading, switch to a subscription with a large number of gigabytes or free up the current space."
+    "no_available_space": "The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space."
 }

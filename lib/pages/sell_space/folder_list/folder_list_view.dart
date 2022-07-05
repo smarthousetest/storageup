@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:formz/formz.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/keeper_delete_confirm.dart';
 import 'package:storageup/components/custom_arc_indicator.dart';
 import 'package:storageup/components/custom_percent_indicator.dart';
@@ -66,7 +68,7 @@ class _ButtonTemplateState extends State<FolderList> {
             await showDialog(
               context: context,
               builder: (BuildContext context) {
-                return BlurSomethingGoesWrong(true);
+                return BlurCustomErrorPopUp(middleText: translate.no_internet);
               },
             );
           } else if (state.statusHttpRequest == FormzStatus.submissionFailure &&
@@ -74,7 +76,7 @@ class _ButtonTemplateState extends State<FolderList> {
             await showDialog(
               context: context,
               builder: (BuildContext context) {
-                return BlurFailedServerConnection(true);
+                return BlurCustomErrorPopUp(middleText: translate.no_internet);
               },
             );
           }

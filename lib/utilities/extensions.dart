@@ -1,12 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/user.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -161,5 +165,60 @@ Future<void> copyFileToDownloadDir({
     }
   } catch (e) {
     print('cannot copy file with exception: $e');
+  }
+}
+
+String getErrorReasonDescription({
+  required S translate,
+  required ErrorReason reason,
+}) {
+  switch (reason) {
+    case ErrorReason.internalServerError:
+      return translate.internal_server_error;
+    case ErrorReason.noAvailableKeepers:
+      return translate.no_available_keepers;
+    case ErrorReason.noAvailableProxy:
+      return translate.no_available_proxy;
+    case ErrorReason.noAvailableSpace:
+      return translate.no_available_space;
+    case ErrorReason.nullFile:
+      return translate.null_file;
+    case ErrorReason.noInternetConnection:
+      return translate.no_internet;
+    default:
+      return "";
+  }
+}
+
+///Checks if a popup is shown with an error and if not, shows it
+///
+///Use this method only under bottom bar
+Future<void> showErrorPopUp({
+  required BuildContext context,
+  required String message,
+}) async {
+  final tag = 'Extensions: showErrorPopUp -> ';
+  final container = StateContainer.of(context);
+  final bool canNotShowPopUp = container.isErrorPopUpShowing;
+  log('$tag canNotShowPopUp: $canNotShowPopUp');
+  if (!canNotShowPopUp) {
+    log('$tag will set isErrorPopUpShowing to true');
+    StateContainer.of(context).isErrorPopUpShowing = true;
+    log('$tag has set isErrorPopUpShowing to true');
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BlurCustomErrorPopUp(
+          middleText: message,
+        );
+      },
+    );
+
+    // dialogFuture.whenComplete(
+    //   () =>
+    StateContainer.of(context).isErrorPopUpShowing = false;
+    // );
+
+    // await dialogFuture;
   }
 }

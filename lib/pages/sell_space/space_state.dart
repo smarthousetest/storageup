@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:formz/formz.dart';
 import 'package:storageup/models/download_location.dart';
 import 'package:storageup/models/keeper/keeper.dart';
 import 'package:storageup/models/user.dart';
@@ -15,7 +16,7 @@ class SpaceState extends Equatable {
   final String pathToKeeper;
   final int availableSpace;
   final Name name;
-  final FormzStatus statusHttpRequest; 
+  final FormzStatus statusHttpRequest;
 
   SpaceState({
     this.user,

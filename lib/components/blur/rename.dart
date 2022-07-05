@@ -102,7 +102,7 @@ class _ButtonTemplateState extends State<BlurRename> {
                             ),
                           ),
                           Padding(
-                            padding: hintSymbvols
+                            padding: hintSymbols
                                 ? EdgeInsets.only(top: 0)
                                 : EdgeInsets.only(top: 20),
                             child: Text(
@@ -110,14 +110,14 @@ class _ButtonTemplateState extends State<BlurRename> {
                               style: TextStyle(
                                 fontSize: hintSymbols ? 0 : 14,
                                 fontFamily: kNormalTextFontFamily,
-                                color: hintSymbvols
+                                color: hintSymbols
                                     ? Colors.white
                                     : Theme.of(context).errorColor,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: hintColor && hintSymbvols
+                            padding: hintColor && hintSymbols
                                 ? EdgeInsets.only(top: 42)
                                 : EdgeInsets.only(top: 5),
                             child: Container(
