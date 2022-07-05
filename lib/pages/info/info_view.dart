@@ -417,7 +417,7 @@ class _InfoPageState extends State<InfoPage> {
                             ),
                           ),
                           Text(
-                            "${translate.many_files(countMediaFolderPhoto)}",
+                            "${translate.many_files(countMediaFolderVideo)}",
                             style: TextStyle(
                               fontSize: 12,
                               color: Theme.of(context).shadowColor,
