@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   cpp_native
   desktop_window
+  objectbox_flutter_libs
   window_size
 )
 

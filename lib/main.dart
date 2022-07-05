@@ -1,17 +1,23 @@
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:cpp_native/controllers/load/load_controller.dart';
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
 import 'package:storageup/pages/home/home_view.dart';
 import 'package:storageup/theme.dart';
+import 'package:storageup/utilities/extensions.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/language_locale.dart';
 import 'package:storageup/utilities/local_server/local_server.dart' as ui;
+import 'package:storageup/utilities/repositories/token_repository.dart';
 
 import 'constants.dart';
 import 'generated/l10n.dart';
@@ -22,6 +28,8 @@ void main() async {
   ui.Server().startServer();
   readFromFileDomainName();
   await configureInjection();
+  //HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(new StateContainer(child: new MyApp()));
 }
 
@@ -64,6 +72,32 @@ class _MyAppState extends State<MyApp> {
 //     });
 //   }
   @override
+  void initState() {
+    initLoadController();
+    super.initState();
+  }
+
+  void initLoadController() async {
+    LoadController.instance.init(
+      filesController: getIt<FilesController>(instanceName: 'files_controller'),
+      tokenRepository: getIt<TokenRepository>(),
+      documentsDirectory: (await getApplicationSupportDirectory()).path,
+      supportDirectory: (await getApplicationSupportDirectory()).path,
+      backendUrl: kServerUrl.split('/').last,
+      copyFileToDownloadDir: copyFileToDownloadDir,
+      reportError: (
+          {required CustomError error, required String message}) async {
+        final S translate = getIt<S>();
+        String errorText = await getErrorReasonDescription(
+            translate: translate, reason: error.errorReason);
+        showErrorPopUp(
+            context: NavigatorService.navigatorKey.currentContext!,
+            message: errorText);
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
       light: kLightTheme,
@@ -72,6 +106,7 @@ class _MyAppState extends State<MyApp> {
       builder: (light, dark) => MaterialApp(
         darkTheme: dark,
         theme: light,
+        navigatorKey: NavigatorService.navigatorKey,
         locale: StateContainer.of(context).locale,
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
@@ -138,4 +173,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.mouse,
         // etc.
       };
+}
+
+class NavigatorService {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }

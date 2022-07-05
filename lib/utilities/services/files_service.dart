@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/models/enums.dart';
-import 'package:storageup/models/folder.dart';
 import 'package:storageup/models/list.dart';
-import 'package:storageup/models/record.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';
 
@@ -207,7 +207,8 @@ class FilesService {
     return null;
   }
 
-  Future<ResponseStatus> createFolder(String name, String? parentFolderId) async {
+  Future<ResponseStatus> createFolder(
+      String name, String? parentFolderId) async {
     try {
       String? token = await _tokenRepository.getApiToken();
 
@@ -288,7 +289,11 @@ class FilesService {
         return ResponseStatus.failed;
     } on DioError catch (e) {
       print(e);
-      if (e.response?.statusCode == 401 || e.response?.statusCode == 429 || e.response?.statusCode == 500 || e.response?.statusCode == 502 || e.response?.statusCode == 504) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
         return ResponseStatus.failed;
       } else if (e.response?.statusCode == 403) {
         return ResponseStatus.notExecuted;
@@ -325,7 +330,11 @@ class FilesService {
       }
     } on DioError catch (e) {
       print(e);
-      if (e.response?.statusCode == 401 || e.response?.statusCode == 429 || e.response?.statusCode == 500 || e.response?.statusCode == 502 || e.response?.statusCode == 504) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
         return ResponseStatus.failed;
       } else if (e.response?.statusCode == 403) {
         return ResponseStatus.notExecuted;
@@ -432,9 +441,17 @@ class FilesService {
         return ResponseStatus.ok;
       else
         return ResponseStatus.failed;
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
-      return ResponseStatus.failed;
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.declined;
+      } else {
+        return ResponseStatus.failed;
+      }
     }
   }
 
@@ -546,7 +563,8 @@ class FilesService {
       String? token = await _tokenRepository.getApiToken();
 
       String path = '/file';
-      path += '/credentials?filename=${file.path.split('/').last}&storageId=userAvatarsProfiles';
+      path +=
+          '/credentials?filename=${file.path.split('/').last}&storageId=userAvatarsProfiles';
 
       if (token != null && token.isNotEmpty) {
         final resFileCreate = await _dio.get(
@@ -581,7 +599,12 @@ class FilesService {
       String? token = await _tokenRepository.getApiToken();
 
       var data = {
-        'data': {'firstName': user.firstName, 'lastName': user.lastName, 'phoneNumber': user.phoneNumber, 'avatars': []}
+        'data': {
+          'firstName': user.firstName,
+          'lastName': user.lastName,
+          'phoneNumber': user.phoneNumber,
+          'avatars': []
+        }
       };
       var path = kServerUrl;
       path += '/api/auth/profile';
@@ -597,9 +620,13 @@ class FilesService {
         return ResponseStatus.failed;
     } on DioError catch (e) {
       print(e);
-      if (e.response?.statusCode == 401 || e.response?.statusCode == 403 || e.response?.statusCode == 429) {
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 403 ||
+          e.response?.statusCode == 429) {
         return ResponseStatus.declined;
-      } else if (e.response?.statusCode == 500 || e.response?.statusCode == 502 || e.response?.statusCode == 504) {
+      } else if (e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
         return ResponseStatus.failed;
       } else {
         return ResponseStatus.noInternet;
@@ -622,7 +649,13 @@ class FilesService {
           "path": "",
           "numOfParts": numOfParts,
           "thumbnail": [
-            {"name": "string", "sizeInBytes": 0, "privateUrl": "string", "publicUrl": "string", "new": true}
+            {
+              "name": "string",
+              "sizeInBytes": 0,
+              "privateUrl": "string",
+              "publicUrl": "string",
+              "new": true
+            }
           ],
           "size": file.statSync().size,
           "copyStatus": 0

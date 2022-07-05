@@ -20,3 +20,4 @@ const kLightGreenColor = Color(0xFF59D7AB);
 const kPurpleColor = Color(0xFF868FFF);
 
 const GB = 1024 * 1024 * 1024;
+const kNeedSendEmail = false;

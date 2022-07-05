@@ -5,9 +5,11 @@ import 'package:bloc/bloc.dart';
 import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/auth/models/name.dart';
 import 'package:storageup/pages/sell_space/space_event.dart';
@@ -57,12 +59,14 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     final locationsInfo = _repository.locationsInfo;
     var keeper = await _subscriptionService.getAllKeepers();
     var valueNotifier = _userController.getValueNotifier();
-    emit(state.copyWith(
-      user: user,
-      locationsInfo: locationsInfo,
-      keeper: keeper,
-      valueNotifier: valueNotifier,
-    ));
+    if (keeper.left == null) {
+      emit(state.copyWith(
+        user: user,
+        locationsInfo: locationsInfo,
+        keeper: keeper.right,
+        valueNotifier: valueNotifier,
+      ));
+    }
   }
 
   // DiskSpaceController()
@@ -118,7 +122,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File('${state.pathToKeeper}${Platform.pathSeparator}keeperName');
+    var keeperNameFile =
+        File('${state.pathToKeeper}${Platform.pathSeparator}keeperName');
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -126,11 +131,13 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File('${state.pathToKeeper}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile =
+        File('${state.pathToKeeper}${Platform.pathSeparator}memorySize');
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile
+        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperIdFilePath, String keeper_id) {
@@ -146,23 +153,28 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
+    emit(state.copyWith(statusHttpRequest: FormzStatus.pure));
     var countOfGb = event.countGb;
     var path = state.pathToKeeper;
 
     var id =
         await _subscriptionService.addNewKeeper(state.name.value, countOfGb);
-    if (id != null) {
+    if (id.right != null) {
       int keeperDataId = _repository.createLocation(
           countOfGb: countOfGb,
           path: path,
           name: state.name.value,
-          idForCompare: id);
+          idForCompare: id.right!);
       var locationsInfo = _repository.locationsInfo;
       final tmpState = state.copyWith(locationsInfo: locationsInfo);
       emit(tmpState);
       var box = await Hive.openBox('keeper_data');
       await box.put(keeperDataId.toString(), Uri.encodeFull(path));
-      _mapRunSoft(tmpState, id);
+      _mapRunSoft(tmpState, id.right!);
+    } else if (id.left == ResponseStatus.declined) {
+      emit(state.copyWith(statusHttpRequest: FormzStatus.submissionCanceled));
+    } else {
+      emit(state.copyWith(statusHttpRequest: FormzStatus.submissionFailure));
     }
   }
 
@@ -188,7 +200,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
               null,
               keeperVersion,
             ).toJson(),
-            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
+            options:
+                Options(headers: {"Authorisation": "Bearer $bearerToken"}));
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");

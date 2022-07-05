@@ -10,10 +10,9 @@ import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/create_album.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/exit.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
 import 'package:storageup/components/blur/menu_upload.dart';
-import 'package:storageup/components/blur/something_goes_wrong.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -137,21 +136,29 @@ class _HomePageState extends State<HomePage> {
         create: (context) => HomeBloc()..add(HomePageOpened()),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) async {
-            // context.read()<SpaceBloc>().add(SendKeeperVersion());
-            if (state.status == FormzStatus.submissionFailure) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(true);
-                },
-              );
-            } else if (state.status == FormzStatus.submissionCanceled) {
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurFailedServerConnection(true);
-                },
-              );
+            if (StateContainer.of(context).isPopUpShowing == false) {
+              if (state.status == FormzStatus.submissionFailure) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                      middleText: translate.something_goes_wrong,
+                    );
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              } else if (state.status == FormzStatus.submissionCanceled) {
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                        middleText: translate.no_internet);
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              }
             }
           },
           child: Row(

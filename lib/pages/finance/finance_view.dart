@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 import 'package:storageup/components/blur/cancel_sub.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -77,13 +78,26 @@ class _FinancePageState extends State<FinancePage> {
       create: (context) => getIt<FinanceBloc>()..add(FinancePageOpened()),
       child: BlocListener<FinanceBloc, FinanceState>(
         listener: (context, state) async {
-          if (state.sub?.tariff?.spaceGb == null) {
+          if (state.statusHttpRequest == FormzStatus.submissionFailure) {
+            StateContainer.of(context).changeIsPopUpShowing(true);
             await showDialog(
               context: context,
               builder: (BuildContext context) {
-                return BlurFailedServerConnection(true);
+                return BlurCustomErrorPopUp(
+                    middleText: translate.something_goes_wrong);
               },
             );
+            StateContainer.of(context).changeIsPopUpShowing(false);
+          } else if (state.statusHttpRequest ==
+              FormzStatus.submissionCanceled) {
+            StateContainer.of(context).changeIsPopUpShowing(true);
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return BlurCustomErrorPopUp(middleText: translate.no_internet);
+              },
+            );
+            StateContainer.of(context).changeIsPopUpShowing(false);
           }
         },
         child: Column(
@@ -547,13 +561,18 @@ class _FinancePageState extends State<FinancePage> {
                                     choosedSubGb == null) {
                                   return GestureDetector(
                                     onTap: () async {
-                                      var str = await showDialog(
+                                      StateContainer.of(context)
+                                          .changeIsPopUpShowing(true);
+                                      await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return BlurFailedServerConnection(
-                                              true);
+                                          return BlurCustomErrorPopUp(
+                                              middleText:
+                                                  translate.no_internet);
                                         },
                                       );
+                                      StateContainer.of(context)
+                                          .changeIsPopUpShowing(false);
                                     },
                                     child: Padding(
                                       padding:
@@ -577,7 +596,7 @@ class _FinancePageState extends State<FinancePage> {
                                 } else {
                                   return GestureDetector(
                                     onTap: () async {
-                                      var str = await showDialog(
+                                      await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return BlurCancelSub(choosedSubGb,

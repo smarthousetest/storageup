@@ -1,3 +1,4 @@
+import 'package:cpp_native/cpp_native.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/models/enums.dart';
@@ -18,7 +19,7 @@ class SubscriptionService {
   final PacketRepository _packetRepository =
       getIt<PacketRepository>(instanceName: 'packet_repo');
 
-  Future<Subscription?> getCurrentSubscription() async {
+  Future<Either<Subscription?, ResponseStatus>> getCurrentSubscription() async {
     try {
       String? token = await _tokenRepository.getApiToken();
       if (token != null && token.isNotEmpty) {
@@ -31,13 +32,22 @@ class SubscriptionService {
 
         if (response.statusCode == 200) {
           var currentSub = Subscription.fromMap(response.data);
-          return currentSub;
+          return Either(left: currentSub);
         }
       }
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return Either(right: ResponseStatus.declined);
+      } else {
+        return Either(right: ResponseStatus.failed);
+      }
     }
-    return null;
+    return Either(right: ResponseStatus.ok);
   }
 
   Future<List<Tariff>?> getAllTariffs() async {
@@ -84,9 +94,17 @@ class SubscriptionService {
         return ResponseStatus.ok;
       } else
         return ResponseStatus.failed;
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
-      return ResponseStatus.failed;
+      if (e.response?.statusCode == 401 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504) {
+        return ResponseStatus.declined;
+      } else {
+        return ResponseStatus.failed;
+      }
     }
   }
 

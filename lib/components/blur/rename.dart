@@ -21,7 +21,7 @@ class _ButtonTemplateState extends State<BlurRename> {
   var myController = TextEditingController();
   bool canSave = false;
   bool hintColor = false;
-  bool hintSymbvols = true;
+  bool hintSymbols = true;
 
   @override
   void initState() {
@@ -102,22 +102,22 @@ class _ButtonTemplateState extends State<BlurRename> {
                             ),
                           ),
                           Padding(
-                            padding: hintSymbvols
+                            padding: hintSymbols
                                 ? EdgeInsets.only(top: 0)
                                 : EdgeInsets.only(top: 20),
                             child: Text(
                               translate.wrong_symbvols,
                               style: TextStyle(
-                                fontSize: hintSymbvols ? 0 : 14,
+                                fontSize: hintSymbols ? 0 : 14,
                                 fontFamily: kNormalTextFontFamily,
-                                color: hintSymbvols
+                                color: hintSymbols
                                     ? Colors.white
                                     : Theme.of(context).errorColor,
                               ),
                             ),
                           ),
                           Padding(
-                            padding: hintColor && hintSymbvols
+                            padding: hintColor && hintSymbols
                                 ? EdgeInsets.only(top: 42)
                                 : EdgeInsets.only(top: 5),
                             child: Container(
@@ -142,17 +142,17 @@ class _ButtonTemplateState extends State<BlurRename> {
                                           true &&
                                       myController.isNotEmpty) {
                                     setState(() {
-                                      hintSymbvols = false;
+                                      hintSymbols = false;
                                       canSave = false;
                                     });
                                   } else if (myController.isNotEmpty) {
                                     setState(() {
-                                      hintSymbvols = true;
+                                      hintSymbols = true;
                                       canSave = true;
                                     });
                                   } else {
                                     setState(() {
-                                      hintSymbvols = true;
+                                      hintSymbols = true;
                                       canSave = false;
                                     });
                                   }
