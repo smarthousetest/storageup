@@ -51,7 +51,7 @@ class UserInfo extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Text(
                         user?.firstName ??
                             user?.email?.split('@').first ??
