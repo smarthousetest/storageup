@@ -70,3 +70,7 @@ class SendKeeperVersion extends SpaceEvent {
 class UpdateKeepersList extends SpaceEvent {
   UpdateKeepersList();
 }
+
+class GetUserDisks extends SpaceEvent {
+  GetUserDisks();
+}

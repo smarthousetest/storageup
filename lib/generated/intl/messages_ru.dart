@@ -191,7 +191,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "В приложении StorageUp произошла ошибка на стороне сервера. Повторите, пожалуйста, чуть позже."),
         "kb": m7,
         "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
-            "Имя кипера совпадает с уже существующими киперами.\nПереименуйте свой кипер."),
+            "Указанное имя кипера уже существует, пожалуйста, переименуйте место хранения"),
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Узнать подробнее"),

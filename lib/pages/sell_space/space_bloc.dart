@@ -34,6 +34,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         _sendLocalKeeperVersion(state, emit);
       } else if (event is UpdateKeepersList) {
         await _mapUpdateKeepersList(event, state, emit);
+      } else if (event is GetUserDisks) {
+        await _mapGetUserDisks(event, state, emit);
       }
       if (event is GetPathToKeeper) {
         await _getPathToKeeper(event, state, emit);
@@ -279,6 +281,17 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       emit(state.copyWith(
         keeper: keeper,
       ));
+  }
+
+  Future _mapGetUserDisks(
+    GetUserDisks event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) async {
+    final diskList = await getDisksList();
+    emit(state.copyWith(
+      diskList: diskList,
+    ));
   }
 }
 
