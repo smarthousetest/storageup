@@ -2306,6 +2306,26 @@ class S {
     );
   }
 
+  /// `Check your internet connection and try again.`
+  String get check_ethernet_connection {
+    return Intl.message(
+      'Check your internet connection and try again.',
+      name: 'check_ethernet_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The connection to the server cannot be established.\nCheck your internet connection and try again.`
+  String get no_internet {
+    return Intl.message(
+      'The connection to the server cannot be established.\nCheck your internet connection and try again.',
+      name: 'no_internet',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ok`
   String get ok {
     return Intl.message(
@@ -2504,6 +2524,16 @@ class S {
     return Intl.message(
       'Where download?',
       name: 'where_download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `That keeper name are already used.\nRename your keeper`
+  String get keeper_name_are_the_same {
+    return Intl.message(
+      'That keeper name are already used.\nRename your keeper',
+      name: 'keeper_name_are_the_same',
       desc: '',
       args: [],
     );

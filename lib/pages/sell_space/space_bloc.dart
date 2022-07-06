@@ -32,6 +32,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         await _mapSaveDirPath(event, state, emit);
       } else if (event is SendKeeperVersion) {
         _sendLocalKeeperVersion(state, emit);
+      } else if (event is UpdateKeepersList) {
+        await _mapUpdateKeepersList(event, state, emit);
       }
       if (event is GetPathToKeeper) {
         await _getPathToKeeper(event, state, emit);
@@ -130,7 +132,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     NameChanged event,
     Emitter<SpaceState> emit,
-  ) {
+  ) async {
     Name name = Name.dirty(event.name, event.needValidation);
     print(name.value);
     emit(state.copyWith(
@@ -265,6 +267,18 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       keeperVersion = keeperVersionFile.readAsStringSync().trim();
     }
     return keeperVersion;
+  }
+
+  Future _mapUpdateKeepersList(
+    UpdateKeepersList event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) async {
+    var keeper = await _subscriptionService.getAllKeepers();
+    if (keeper != null)
+      emit(state.copyWith(
+        keeper: keeper,
+      ));
   }
 }
 

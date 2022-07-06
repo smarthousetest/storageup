@@ -77,7 +77,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
   final myController = TextEditingController();
-  DownloadLocation? changeKeeper;
+  bool canSave = true;
+  int countOfNotSameName = 0;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -192,7 +193,34 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     ),
-                    Container(
+                  ),
+                  Container(
+                    child: BlocListener<SpaceBloc, SpaceState>(
+                      listener: (context, state) async {
+                        if (state.status == FormzStatus.submissionCanceled) {
+                          canSave = true;
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return BlurCustomErrorPopUp(
+                                  middleText: translate.something_goes_wrong);
+                            },
+                          );
+                        } else if (state.status ==
+                            FormzStatus.submissionFailure) {
+                          canSave = true;
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return BlurCustomErrorPopUp(
+                                  middleText: translate.no_internet);
+                            },
+                          );
+                        } else if (state.status ==
+                            FormzStatus.submissionSuccess) {
+                          canSave = true;
+                        }
+                      },
                       child: BlocBuilder<SpaceBloc, SpaceState>(
                           builder: (context, state) {
                         return state.valueNotifier != null
@@ -270,8 +298,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             : Container();
                       }),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -325,6 +353,40 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     );
                   },
                 ),
+              ),
+              child: BlocBuilder<SpaceBloc, SpaceState>(
+                builder: (context, state) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 40, right: 40, top: 20),
+                        child: _title(context, state),
+                      ),
+                      BlocBuilder<SpaceBloc, SpaceState>(
+                        builder: (context, state) {
+                          var fl = folderList(context);
+                          return Expanded(
+                              child: IndexedStack(
+                            sizing: StackFit.passthrough,
+                            key: ValueKey<int>(index),
+                            index: index,
+                            children: [
+                              state.keeper.isEmpty
+                                  ? rentingAPlace(context)
+                                  : fl,
+                              addSpace(context),
+                              fl
+                            ],
+                          ));
+                        },
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ]),
@@ -1072,17 +1134,21 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
-                                if (changeKeeper != null) {
-                                  context.read<SpaceBloc>().add(ChangeKeeper(
-                                      countGb: _currentSliderValue.toInt(),
-                                      keeper: changeKeeper!));
-                                  setState(() {
-                                    index = 2;
-                                    myController.text = '';
-                                    _currentSliderValue = 32;
-                                    changeKeeper = null;
-                                  });
+                                context
+                                    .read<SpaceBloc>()
+                                    .add(UpdateKeepersList());
+                                countOfNotSameName = 0;
+                                for (var keeper in state.keeper) {
+                                  if (state.name.value != keeper.name) {
+                                    countOfNotSameName = countOfNotSameName + 1;
+                                  }
+                                }
+                                if (countOfNotSameName == state.keeper.length) {
+                                  canSave = true;
                                 } else {
+                                  canSave = false;
+                                }
+                                if (canSave == true) {
                                   context.read<SpaceBloc>().add(SaveDirPath(
                                         pathDir: dirPath,
                                         countGb: _currentSliderValue.toInt(),
@@ -1090,9 +1156,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   await context.read<SpaceBloc>().stream.first;
                                   setState(() {
                                     index = 2;
-                                    _currentSliderValue = 32;
-                                    myController.text = '';
                                   });
+                                  canSave = false;
+                                } else {
+                                  canSave = false;
+                                  await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return BlurCustomErrorPopUp(
+                                          middleText: translate
+                                              .keeper_name_are_the_same);
+                                    },
+                                  );
                                 }
                               }
                             : null,
@@ -1100,7 +1175,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           minimumSize: Size(double.maxFinite, 60),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: _isFieldsValid(state)
+                          backgroundColor: _isFieldsValid(state) && canSave
                               ? Theme.of(context).splashColor
                               : Theme.of(context).canvasColor,
                         ),
@@ -1194,6 +1269,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     context
                         .read<SpaceBloc>()
                         .add(NameChanged(name: value, needValidation: true));
+                    canSave = true;
                   },
                   textAlignVertical: TextAlignVertical.bottom,
                   textAlign: TextAlign.start,

@@ -66,3 +66,7 @@ class SaveDirPath extends SpaceEvent {
 class SendKeeperVersion extends SpaceEvent {
   SendKeeperVersion();
 }
+
+class UpdateKeepersList extends SpaceEvent {
+  UpdateKeepersList();
+}
