@@ -2429,10 +2429,10 @@ class S {
     );
   }
 
-  /// `That keeper name are already used.\nRename your keeper`
+  /// `The specified keeper name already exists, please rename the storage location`
   String get keeper_name_are_the_same {
     return Intl.message(
-      'That keeper name are already used.\nRename your keeper',
+      'The specified keeper name already exists, please rename the storage location',
       name: 'keeper_name_are_the_same',
       desc: '',
       args: [],

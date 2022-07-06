@@ -186,7 +186,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Install update"),
         "kb": m7,
         "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
-            "That keeper name are already used.\nRename your keeper"),
+            "The specified keeper name already exists, please rename the storage location"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Learn more"),
