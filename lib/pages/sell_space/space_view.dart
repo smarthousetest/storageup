@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -76,6 +78,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
   final myController = TextEditingController();
+  bool canSave = true;
+  int countOfNotSameName = 0;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -161,81 +165,109 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     ),
                   ),
                   Container(
-                    child: BlocBuilder<SpaceBloc, SpaceState>(
-                        builder: (context, state) {
-                      return state.valueNotifier != null
-                          ? ValueListenableBuilder<User?>(
-                              valueListenable: state.valueNotifier!,
-                              builder: (context, value, _) {
-                                return Row(
-                                  key: nameWidthKey,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        right: 20,
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          StateContainer.of(context)
-                                              .changePage(ChosenPage.settings);
-                                        },
-                                        child: MouseRegion(
-                                          cursor: SystemMouseCursors.click,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(23.0),
-                                            child:
-                                                Container(child: value.image),
+                    child: BlocListener<SpaceBloc, SpaceState>(
+                      listener: (context, state) async {
+                        if (state.status == FormzStatus.submissionCanceled) {
+                          canSave = true;
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return BlurCustomErrorPopUp(
+                                  middleText: translate.something_goes_wrong);
+                            },
+                          );
+                        } else if (state.status ==
+                            FormzStatus.submissionFailure) {
+                          canSave = true;
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return BlurCustomErrorPopUp(
+                                  middleText: translate.no_internet);
+                            },
+                          );
+                        } else if (state.status ==
+                            FormzStatus.submissionSuccess) {
+                          canSave = true;
+                        }
+                      },
+                      child: BlocBuilder<SpaceBloc, SpaceState>(
+                          builder: (context, state) {
+                        return state.valueNotifier != null
+                            ? ValueListenableBuilder<User?>(
+                                valueListenable: state.valueNotifier!,
+                                builder: (context, value, _) {
+                                  return Row(
+                                    key: nameWidthKey,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          right: 20,
+                                        ),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            StateContainer.of(context)
+                                                .changePage(
+                                                    ChosenPage.settings);
+                                          },
+                                          child: MouseRegion(
+                                            cursor: SystemMouseCursors.click,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(23.0),
+                                              child:
+                                                  Container(child: value.image),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    (MediaQuery.of(context).size.width > 965)
-                                        ? Container(
-                                            constraints:
-                                                BoxConstraints(maxWidth: 110),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 5),
-                                                  child: Text(
-                                                    value?.firstName ??
-                                                        value?.email
-                                                            ?.split('@')
-                                                            .first ??
-                                                        'Name',
+                                      (MediaQuery.of(context).size.width > 965)
+                                          ? Container(
+                                              constraints:
+                                                  BoxConstraints(maxWidth: 110),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    child: Text(
+                                                      value?.firstName ??
+                                                          value?.email
+                                                              ?.split('@')
+                                                              .first ??
+                                                          'Name',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 17,
+                                                        color: Theme.of(context)
+                                                            .bottomAppBarColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    value?.email ?? '',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                      fontSize: 17,
+                                                      fontSize: 12,
                                                       color: Theme.of(context)
                                                           .bottomAppBarColor,
+                                                      height: 1,
                                                     ),
                                                   ),
-                                                ),
-                                                Text(
-                                                  value?.email ?? '',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Theme.of(context)
-                                                        .bottomAppBarColor,
-                                                    height: 1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        : Container(),
-                                  ],
-                                );
-                              })
-                          : Container();
-                    }),
+                                                ],
+                                              ),
+                                            )
+                                          : Container(),
+                                    ],
+                                  );
+                                })
+                            : Container();
+                      }),
+                    ),
                   ),
                 ],
               ),
@@ -263,7 +295,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     children: [
                       Padding(
                         padding:
-                        const EdgeInsets.only(left: 40, right: 40, top: 20),
+                            const EdgeInsets.only(left: 40, right: 40, top: 20),
                         child: _title(context, state),
                       ),
                       BlocBuilder<SpaceBloc, SpaceState>(
@@ -271,17 +303,17 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           var fl = folderList(context);
                           return Expanded(
                               child: IndexedStack(
-                                sizing: StackFit.passthrough,
-                                key: ValueKey<int>(index),
-                                index: index,
-                                children: [
-                                  state.keeper.isEmpty
-                                      ? rentingAPlace(context)
-                                      : fl,
-                                  addSpace(context),
-                                  fl
-                                ],
-                              ));
+                            sizing: StackFit.passthrough,
+                            key: ValueKey<int>(index),
+                            index: index,
+                            children: [
+                              state.keeper.isEmpty
+                                  ? rentingAPlace(context)
+                                  : fl,
+                              addSpace(context),
+                              fl
+                            ],
+                          ));
                         },
                       ),
                     ],
@@ -1006,21 +1038,48 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
-                                context.read<SpaceBloc>().add(SaveDirPath(
-                                      pathDir: dirPath,
-                                      countGb: _currentSliderValue.toInt(),
-                                    ));
-                                await context.read<SpaceBloc>().stream.first;
-                                setState(() {
-                                  index = 2;
-                                });
+                                context
+                                    .read<SpaceBloc>()
+                                    .add(UpdateKeepersList());
+                                countOfNotSameName = 0;
+                                for (var keeper in state.keeper) {
+                                  if (state.name.value != keeper.name) {
+                                    countOfNotSameName = countOfNotSameName + 1;
+                                  }
+                                }
+                                if (countOfNotSameName == state.keeper.length) {
+                                  canSave = true;
+                                } else {
+                                  canSave = false;
+                                }
+                                if (canSave == true) {
+                                  context.read<SpaceBloc>().add(SaveDirPath(
+                                        pathDir: dirPath,
+                                        countGb: _currentSliderValue.toInt(),
+                                      ));
+                                  await context.read<SpaceBloc>().stream.first;
+                                  setState(() {
+                                    index = 2;
+                                  });
+                                  canSave = false;
+                                } else {
+                                  canSave = false;
+                                  await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return BlurCustomErrorPopUp(
+                                          middleText: translate
+                                              .keeper_name_are_the_same);
+                                    },
+                                  );
+                                }
                               }
                             : null,
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size(double.maxFinite, 60),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: _isFieldsValid(state)
+                          backgroundColor: _isFieldsValid(state) && canSave
                               ? Theme.of(context).splashColor
                               : Theme.of(context).canvasColor,
                         ),
@@ -1111,6 +1170,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     context
                         .read<SpaceBloc>()
                         .add(NameChanged(name: value, needValidation: true));
+                    canSave = true;
                   },
                   textAlignVertical: TextAlignVertical.bottom,
                   textAlign: TextAlign.start,

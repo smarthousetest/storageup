@@ -185,6 +185,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "install_update":
             MessageLookupByLibrary.simpleMessage("Install update"),
         "kb": m7,
+        "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
+            "That keeper name are already used.\nRename your keeper"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Learn more"),
@@ -221,6 +223,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password": MessageLookupByLibrary.simpleMessage("New password"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "The new password must be at least 8 characters long"),
+        "no_internet": MessageLookupByLibrary.simpleMessage(
+            "The connection to the server cannot be established.\nCheck your internet connection and try again."),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(

@@ -188,6 +188,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "install_update":
             MessageLookupByLibrary.simpleMessage("Установить обновление"),
         "kb": m7,
+        "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
+            "Имя кипера совпадает с уже существующими киперами.\nПереименуйте свой кипер."),
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Узнать подробнее"),
@@ -224,6 +226,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_password": MessageLookupByLibrary.simpleMessage("Новый пароль"),
         "new_password_8": MessageLookupByLibrary.simpleMessage(
             "Новый пароль должен содержать не менее 8 символов"),
+        "no_internet": MessageLookupByLibrary.simpleMessage(
+            "Не удаётся установить соединение с сервером.\nПроверьте соединение с Интернетом и повторите попытку."),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(

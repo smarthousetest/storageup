@@ -256,6 +256,7 @@
     "error": "Ошибка",
     "server_connection_error": "Не удаётся установить соединение с сервером.",
     "check_ethernet_connection": "Проверьте соединение с Интернетом и повторите попытку.",
+    "no_internet": "Не удаётся установить соединение с сервером.\nПроверьте соединение с Интернетом и повторите попытку.",
     "ok": "Ок",
     "resend_letter_available": "Повторная отправка письма будет доступна через",
     "seconds": "{count,plural, =0{0 секунд} =1{{count} секунду} =2{{count} секунды} few{{count} секунды} many{{count} секунд} other{{count} секунд}}",
@@ -265,5 +266,6 @@
     "down": "Скачать",
     "update": "Обновить",
     "name_contain": "Название должно содержать более 2 символов",
-    "many_files": "{count,plural, =0{0 файлов} =1{{count} файл} =2{{count} файла} few{{count} файла} many{{count} файлов} other{{count} файлов}}"
+    "many_files": "{count,plural, =0{0 файлов} =1{{count} файл} =2{{count} файла} few{{count} файла} many{{count} файлов} other{{count} файлов}}",
+    "keeper_name_are_the_same": "Имя кипера совпадает с уже существующими киперами.\nПереименуйте свой кипер."
 }

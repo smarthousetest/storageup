@@ -2316,6 +2316,16 @@ class S {
     );
   }
 
+  /// `The connection to the server cannot be established.\nCheck your internet connection and try again.`
+  String get no_internet {
+    return Intl.message(
+      'The connection to the server cannot be established.\nCheck your internet connection and try again.',
+      name: 'no_internet',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ok`
   String get ok {
     return Intl.message(
@@ -2416,6 +2426,16 @@ class S {
       name: 'many_files',
       desc: '',
       args: [count],
+    );
+  }
+
+  /// `That keeper name are already used.\nRename your keeper`
+  String get keeper_name_are_the_same {
+    return Intl.message(
+      'That keeper name are already used.\nRename your keeper',
+      name: 'keeper_name_are_the_same',
+      desc: '',
+      args: [],
     );
   }
 }
