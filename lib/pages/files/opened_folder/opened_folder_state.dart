@@ -1,9 +1,9 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
-import 'package:storageup/models/base_object.dart';
 import 'package:storageup/models/enums.dart';
-import 'package:storageup/models/folder.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
 

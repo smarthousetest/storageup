@@ -1,4 +1,4 @@
-import 'package:storageup/models/file.dart';
+import 'package:cpp_native/models/file.dart';
 import 'package:storageup/models/tenant_user.dart';
 
 class User {
@@ -90,7 +90,8 @@ class User {
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
-    data['emailVerificationTokenExpiresAt'] = this.emailVerificationTokenExpiresAt;
+    data['emailVerificationTokenExpiresAt'] =
+        this.emailVerificationTokenExpiresAt;
     data['updatedBy'] = this.updatedBy;
     data['lastName'] = this.lastName;
     data['phoneNumber'] = this.phoneNumber;

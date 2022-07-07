@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
-
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,18 +12,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
 import 'package:storageup/components/blur/rename.dart';
-import 'package:storageup/components/blur/something_goes_wrong.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
-import 'package:storageup/models/base_object.dart';
 import 'package:storageup/models/enums.dart';
-import 'package:storageup/models/folder.dart';
-import 'package:storageup/models/record.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/media/media_cubit.dart';
@@ -108,26 +106,25 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         listener: (context, state) async {
           if (StateContainer.of(context).isPopUpShowing == false) {
             if (state.status == FormzStatus.submissionFailure) {
-              // youSeePopUp = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
-              youSeePopUp = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(youSeePopUp);
+                  return BlurCustomErrorPopUp(
+                    middleText: translate.something_goes_wrong,
+                  );
                 },
               );
-
               StateContainer.of(context).changeIsPopUpShowing(false);
             } else if (state.status == FormzStatus.submissionCanceled) {
-              // youSeePopUp = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
-              youSeePopUp = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurFailedServerConnection(youSeePopUp);
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
                 },
               );
-
               StateContainer.of(context).changeIsPopUpShowing(false);
             }
           }
@@ -357,13 +354,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       child: RawMaterialButton(
                                         onPressed: () {
                                           _folderListScrollController.animateTo(
-                                              _folderListScrollController
-                                                      .offset -
-                                                  _folderButtonSize -
-                                                  14,
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              curve: Curves.ease);
+                                            _folderListScrollController.offset -
+                                                _folderButtonSize -
+                                                14,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            curve: Curves.ease,
+                                          );
                                         },
                                         fillColor:
                                             Theme.of(context).primaryColor,

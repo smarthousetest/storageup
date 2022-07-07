@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cpp_native/interfaces/load_interfaces.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +10,7 @@ const _api_token = "bearer_token";
 enum RepositoryEnum { goodResponse, error }
 
 @injectable
-class TokenRepository {
+class TokenRepository extends ITokenRepository {
   Future<RepositoryEnum> setApiToken(String token) async {
     try {
       writeBearerTokenToFile(token);

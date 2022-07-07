@@ -1,7 +1,7 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:storageup/models/base_object.dart';
-import 'package:storageup/models/record.dart';
 import 'package:storageup/pages/files/file_bloc.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
 

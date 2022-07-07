@@ -7,6 +7,7 @@ import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/finance/finance_event.dart';
 import 'package:storageup/pages/finance/finance_state.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/packet_controllers.dart';
 import 'package:storageup/utilities/controllers/user_controller.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -14,7 +15,8 @@ import 'package:storageup/utilities/services/subscription_service.dart';
 
 @injectable
 class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
-  FinanceBloc() : super(FinanceState()) {
+  FinanceBloc(@Named('files_controller') FilesController filesController)
+      : super(FinanceState()) {
     on<FinanceEvent>((event, emit) async {
       if (event is FinancePageOpened) {
         await _mapFinancePageOpened(event, state, emit);
@@ -88,12 +90,12 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
   ) async {
     var choosedSub = event.choosedSub;
 emit(state.copyWith(
-        
       statusHttpRequest: FormzStatus.pure,
     ));
     var status = await _subscriptionService.changeSubscription(choosedSub);
     if (status == ResponseStatus.ok) {
-      var updatedSubscription = await _subscriptionService.getCurrentSubscription();
+      var updatedSubscription =
+          await _subscriptionService.getCurrentSubscription();
       emit(state.copyWith(
         sub: updatedSubscription.left,
         statusHttpRequest: FormzStatus.pure, 

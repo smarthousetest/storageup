@@ -1,14 +1,14 @@
 import 'dart:ui';
 
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
-import 'package:storageup/models/base_object.dart';
-import 'package:storageup/models/folder.dart';
-import 'package:storageup/models/record.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';

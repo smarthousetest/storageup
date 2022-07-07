@@ -1,8 +1,8 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:storageup/models/base_object.dart';
 import 'package:storageup/models/enums.dart';
-import 'package:storageup/models/record.dart';
 
 class MediaOpenState extends Equatable {
   final BaseObject openedFolder;

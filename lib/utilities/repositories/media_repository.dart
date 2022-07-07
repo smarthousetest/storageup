@@ -1,5 +1,5 @@
+import 'package:cpp_native/models/base_object.dart';
 import 'package:injectable/injectable.dart';
-import 'package:storageup/models/base_object.dart';
 
 @Injectable()
 class MediaRepository {

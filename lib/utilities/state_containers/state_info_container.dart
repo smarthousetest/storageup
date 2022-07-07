@@ -1,6 +1,6 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:flutter/material.dart';
-import 'package:storageup/models/base_object.dart';
-import 'package:storageup/models/record.dart';
 
 class StateInfoContainer extends StatefulWidget {
   final Widget child;
