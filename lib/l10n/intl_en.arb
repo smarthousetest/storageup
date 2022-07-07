@@ -265,5 +265,6 @@
     "update": "Update",
     "name_contain": "The name must contain more than 2 characters",
     "many_files": "{count,plural, =0{0 files} =1{{count} file} other{{count} files}}",
-    "keeper_name_are_the_same": "The specified keeper name already exists, please rename the storage location"
+    "keeper_name_are_the_same": "The specified keeper name already exists, please rename the storage location",
+    "not_selected": "Not selected"
 }

@@ -64,3 +64,10 @@ class UpdateKeepersList extends SpaceEvent {
 class GetUserDisks extends SpaceEvent {
   GetUserDisks();
 }
+
+class GetDiskToKeeper extends SpaceEvent {
+  final String? selectedDisk;
+  GetDiskToKeeper({
+    required this.selectedDisk,
+  });
+}

@@ -80,8 +80,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   final myController = TextEditingController();
   bool canSave = true;
   int countOfNotSameName = 0;
-  String dropdownValue = "Локальный диск (C:)";
-  // String dropdownValue = state.diskList.first;
+  String? dropdownValue;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -312,11 +311,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               state.keeper.isEmpty
                                   ? rentingAPlace(context)
                                   : fl,
-                              // Platform.isWindows
-                              //     ? addSpaceWindows(context)
-                              //     : addSpace(context),
-                              addSpaceWindows(context),
-                              fl
+                              Platform.isWindows
+                                  ? addSpaceWindows(context) != null
+                                      ? addSpaceWindows(context)
+                                      : fl
+                                  : addSpace(context),
                             ],
                           ));
                         },
@@ -1173,6 +1172,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 child: DropdownButton<String>(
                                   dropdownColor: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.circular(10),
+                                  hint: Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      translate.not_selected,
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).disabledColor),
+                                    ),
+                                  ),
                                   value: dropdownValue,
                                   underline: Container(
                                     height: 0,
@@ -1186,23 +1194,24 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   elevation: 16,
                                   style: TextStyle(
                                       color: Theme.of(context).disabledColor),
-                                  onChanged: (String? newValue) {
+                                  onChanged: (String? selectedDisk) {
                                     setState(() {
-                                      dropdownValue = newValue!;
+                                      dropdownValue = selectedDisk ?? '';
+                                      context.read<SpaceBloc>().add(
+                                          GetDiskToKeeper(
+                                              selectedDisk:
+                                                  dropdownValue?.trim()));
+                                      dirPath = state.pathToKeeper;
                                     });
                                   },
-                                  // items: state.diskList
-                                  items: <String>[
-                                    "Локальный диск (C:)",
-                                    "Локальный диск (D:)",
-                                    "Локальный диск (E:)"
-                                  ].map<DropdownMenuItem<String>>(
-                                      (String value) {
+                                  items: state.diskList
+                                      .map<DropdownMenuItem<String>>(
+                                          (String disk) {
                                     return DropdownMenuItem<String>(
-                                      value: value,
+                                      value: disk,
                                       child: Padding(
                                         padding: EdgeInsets.only(left: 15),
-                                        child: Text(value),
+                                        child: Text(disk),
                                       ),
                                     );
                                   }).toList(),

@@ -232,6 +232,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
             "Объем выбранного места хранения не превышает 32 Гб"),
+        "not_selected": MessageLookupByLibrary.simpleMessage("Не выбрано"),
         "not_space": MessageLookupByLibrary.simpleMessage("Не хватает места?"),
         "not_storage":
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),

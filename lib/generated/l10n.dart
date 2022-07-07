@@ -2438,6 +2438,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Not selected`
+  String get not_selected {
+    return Intl.message(
+      'Not selected',
+      name: 'not_selected',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
