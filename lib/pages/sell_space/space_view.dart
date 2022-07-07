@@ -380,9 +380,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   ? rentingAPlace(context)
                                   : fl,
                               Platform.isWindows
-                                  ? addSpaceWindows(context) != null
-                                      ? addSpaceWindows(context)
-                                      : fl
+                                  ? addSpaceWindows(context)
                                   : addSpace(context),
                             ],
                           ));
@@ -1423,8 +1421,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             thumbColor: Theme.of(context).primaryColor,
                             overlayShape:
                                 RoundSliderOverlayShape(overlayRadius: 0),
-                            //thumbShape:
-                            //RoundSliderThumbShape(enabledThumbRadius: 10),
                           ),
                           child: Slider(
                             activeColor: Theme.of(context).splashColor,
