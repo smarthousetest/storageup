@@ -239,6 +239,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Not enought space"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
             "The volume of the selected storage space does not exceed 32 GB"),
+        "not_selected": MessageLookupByLibrary.simpleMessage("Not selected"),
         "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
         "not_storage": MessageLookupByLibrary.simpleMessage(
             "You have no storage locations yet"),

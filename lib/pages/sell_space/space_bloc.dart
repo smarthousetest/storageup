@@ -36,12 +36,12 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         await _mapUpdateKeepersList(event, state, emit);
       } else if (event is GetUserDisks) {
         await _mapGetUserDisks(event, state, emit);
-      }
-      if (event is GetPathToKeeper) {
+      } else if (event is GetPathToKeeper) {
         await _getPathToKeeper(event, state, emit);
-      }
-      if (event is NameChanged) {
+      } else if (event is NameChanged) {
         _mapNameChanged(state, event, emit);
+      } else if (event is GetDiskToKeeper) {
+        await _mapGetDiskToKeeper(event, state, emit);
       }
       if (event is ChangeKeeper) {
         _changeKeeper(state, event, emit);
@@ -66,14 +66,17 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     final locationsInfo = _repository.locationsInfo;
     var keeper = await _keeperService.getAllKeepers();
     var valueNotifier = _userController.getValueNotifier();
+    final diskList = await getDisksList();
     if (keeper.left == null) {
       emit(state.copyWith(
         user: user,
         locationsInfo: locationsInfo,
         keeper: keeper.right,
         valueNotifier: valueNotifier,
+         diskList: diskList,
       ));
     }
+     
   }
 
   // DiskSpaceController()
@@ -140,6 +143,20 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(
       name: name,
     ));
+  }
+
+  Future<void> _mapGetDiskToKeeper(
+      GetDiskToKeeper event, SpaceState state, Emitter<SpaceState> emit) async {
+    String? selectedDisk = event.selectedDisk;
+    if (selectedDisk != null) {
+      var path = DiskSpaceController(pathToDir: selectedDisk);
+      var availableBytes = await path.getAvailableDiskSpace();
+      print(availableBytes);
+      emit(state.copyWith(
+        pathToKeeper: PathCheck.doPathCorrect(selectedDisk),
+        availableSpace: availableBytes,
+      ));
+    }
   }
 
   Future _mapRunSoft(

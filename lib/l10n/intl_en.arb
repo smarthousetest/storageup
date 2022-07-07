@@ -275,5 +275,6 @@
     "add_files": "Add files",
     "change_place": "Change place",
     "where_download": "Where download?",
-    "keeper_name_are_the_same": "That keeper name are already used.\nRename your keeper"
+    "keeper_name_are_the_same": "That keeper name are already used.\nRename your keeper",
+    "not_selected": "Not selected"
 }
