@@ -80,6 +80,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   bool canSave = true;
   int countOfNotSameName = 0;
   String? dropdownValue;
+  DownloadLocation? changeKeeper;
+  bool needToCheck = true;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -696,7 +698,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
-          if (changeKeeper != null) {
+          if (changeKeeper != null && needToCheck == true) {
+            needToCheck = false;
             context
                 .read<SpaceBloc>()
                 .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
@@ -1137,6 +1140,17 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
+                                if (changeKeeper != null) {
+                                  context.read<SpaceBloc>().add(ChangeKeeper(
+                                      countGb: _currentSliderValue.toInt(),
+                                      keeper: changeKeeper!));
+                                  setState(() {
+                                    index = 2;
+                                    myController.text = '';
+                                    _currentSliderValue = 32;
+                                    changeKeeper = null;
+                                    needToCheck = true;
+                                  });
                                 context
                                     .read<SpaceBloc>()
                                     .add(UpdateKeepersList());
