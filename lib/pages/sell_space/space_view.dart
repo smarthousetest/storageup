@@ -77,6 +77,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   GlobalKey nameWidthKey = GlobalKey();
   final myController = TextEditingController();
   DownloadLocation? changeKeeper;
+  bool needToCheck = true;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -607,7 +608,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
-          if (changeKeeper != null) {
+          if (changeKeeper != null && needToCheck == true) {
+            needToCheck = false;
             context
                 .read<SpaceBloc>()
                 .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
@@ -1057,6 +1059,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     myController.text = '';
                                     _currentSliderValue = 32;
                                     changeKeeper = null;
+                                    needToCheck = true;
                                   });
                                 } else {
                                   context.read<SpaceBloc>().add(SaveDirPath(
