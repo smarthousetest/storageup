@@ -42,7 +42,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         _mapNameChanged(state, event, emit);
       } else if (event is GetDiskToKeeper) {
         await _mapGetDiskToKeeper(event, state, emit);
-      }
+      } 
+      // else if (event is GetAlreadyUsedDisk){
+      //   await _
+      
+      // }
     });
   }
 
