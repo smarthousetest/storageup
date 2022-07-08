@@ -691,6 +691,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
       child: GestureDetector(
         onTap: () {
           print('folder tapped: ${album.name}');
+          _searchingFieldController.clear();
           blocContext.read<MediaCubit>().changeFolder(album);
 
           final mediaAlbumId = album.id == '-1' ? null : album.id;

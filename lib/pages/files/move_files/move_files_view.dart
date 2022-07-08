@@ -69,10 +69,10 @@ class _MoveFileState extends State<MoveFileView> {
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(50, 30, 0, 30),
+                          padding: const EdgeInsets.fromLTRB(50, 30, 0, 20),
                           child: Container(
                             width: 600,
-                            height: 470,
+                            height: 480,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -160,7 +160,8 @@ class _MoveFileState extends State<MoveFileView> {
                                 ),
                                 _allFolders(context),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0, bottom: 10),
                                   child: Divider(
                                     color: Theme.of(context).dividerColor,
                                     height: 1,
@@ -211,6 +212,7 @@ class _MoveFileState extends State<MoveFileView> {
                                                 fontSize: 17,
                                                 fontFamily:
                                                     kNormalTextFontFamily,
+                                                height: 1.1,
                                               ),
                                             ),
                                           ],
@@ -223,7 +225,7 @@ class _MoveFileState extends State<MoveFileView> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 15),
+                                      padding: const EdgeInsets.only(top: 14),
                                       child: Container(
                                         child: Row(
                                           mainAxisAlignment:

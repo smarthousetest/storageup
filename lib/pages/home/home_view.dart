@@ -597,7 +597,6 @@ class _HomePageState extends State<HomePage> {
 
         if (result != null) {
           final folder = result;
-
           changePage(ChosenPage.file);
           context.read<HomeBloc>().add(
                 HomeUserActionChoosed(
