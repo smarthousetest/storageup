@@ -382,6 +382,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               Platform.isWindows
                                   ? addSpaceWindows(context)
                                   : addSpace(context),
+                                  fl,
                             ],
                           ));
                         },
