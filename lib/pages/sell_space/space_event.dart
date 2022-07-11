@@ -81,3 +81,7 @@ class GetDiskToKeeper extends SpaceEvent {
     required this.selectedDisk,
   });
 }
+
+class GetAlreadyUsedDisk extends SpaceEvent{
+  GetAlreadyUsedDisk();
+}
