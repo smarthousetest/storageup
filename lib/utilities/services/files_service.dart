@@ -432,11 +432,13 @@ class FilesService {
       String? token = await _tokenRepository.getApiToken();
 
       var data = {
-        'accessDate': time.toString(),
+        'data': {
+          'accessDate': time.toString(),
+        }
       };
 
-      var response = await _dio.post(
-        '/record/$id/accessDateCommit',
+      var response = await _dio.put(
+        '/record/$id',
         options: Options(headers: {'Authorization': ' Bearer $token'}),
         data: data,
       );
