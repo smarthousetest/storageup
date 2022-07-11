@@ -211,8 +211,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
           ),
         );
       }
-      // print('5 seconds update keeper');
-
     }
   }
 
@@ -222,7 +220,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     Emitter<FolderListState> emit,
   ) async {
     emit(state.copyWith(
-        statusHttpRequest: FormzStatus.pure, needToValidatePopup: false));
+      statusHttpRequest: FormzStatus.pure,
+      needToValidatePopup: false,
+    ));
     var idLocation = event.location.id;
     await _repository.deleteLocation(id: idLocation);
     var updateLocations = _repository.locationsInfo;

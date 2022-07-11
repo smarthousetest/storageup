@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/cpp_native.dart';
@@ -8,13 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
 import 'package:storageup/pages/home/home_view.dart';
 import 'package:storageup/theme.dart';
-import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/language_locale.dart';
 import 'package:storageup/utilities/local_server/local_server.dart' as ui;
 import 'package:storageup/utilities/repositories/token_repository.dart';
@@ -26,7 +23,6 @@ import 'utilities/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
-  readFromFileDomainName();
   await configureInjection();
   //HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
@@ -136,33 +132,6 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-
-// void writeToFileDomainName() {
-//   var os = OsSpecifications.getOs();
-//   if (os.appDirPath.isEmpty) {
-//     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
-//   }
-//   var domainNameFile = File('${os.appDirPath}domainName');
-//   if (!domainNameFile.existsSync()) {
-//     domainNameFile.createSync(recursive: true);
-//   }
-//   domainNameFile.writeAsStringSync(domainName);
-// }
-
-void readFromFileDomainName() {
-  var os = OsSpecifications.getOs();
-  if (os.appDirPath.isEmpty) {
-    os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
-  }
-  var domainNameFile =
-      File('${os.appDirPath}${Platform.pathSeparator}domainName');
-  if (!domainNameFile.existsSync()) {
-    domainName = "upstorage.net";
-  } else {
-    domainName = domainNameFile.readAsStringSync().trim();
-  }
-  print(domainName);
 }
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
