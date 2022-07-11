@@ -295,7 +295,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
-    var keeper = await _subscriptionService.getAllKeepers();
+    var keeper = await _keeperService.getAllKeepers();
     if (keeper != null) {
       emit(state.copyWith(keeper: keeper, status: FormzStatus.valid));
     }
