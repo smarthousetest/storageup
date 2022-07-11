@@ -62,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Active subscription"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
+        "add_files": MessageLookupByLibrary.simpleMessage("Add files"),
         "add_location": MessageLookupByLibrary.simpleMessage("Add location"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "all_files": MessageLookupByLibrary.simpleMessage("All files"),
@@ -94,6 +95,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_password":
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
+        "change_place": MessageLookupByLibrary.simpleMessage("Change place"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
         "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
             "Check your internet connection and try again."),
@@ -375,6 +377,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Well"),
+        "where_download":
+            MessageLookupByLibrary.simpleMessage("Where download?"),
         "where_move":
             MessageLookupByLibrary.simpleMessage("Where to move it to?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(

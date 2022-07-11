@@ -3,16 +3,17 @@ import 'dart:async';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/delete.dart';
 import 'package:storageup/components/blur/failed_server_conection.dart';
 import 'package:storageup/components/blur/rename.dart';
 import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/context_menu.dart';
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -21,6 +22,7 @@ import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/folder.dart';
 import 'package:storageup/models/record.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/move_files/move_files_view.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/utilities/extensions.dart';
@@ -154,18 +156,26 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
             child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
               builder: (context, state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _pathSection(),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                    ),
-                    state.progress == true
-                        ? _filesSection()
-                        : _progressIndicator(context),
-                  ],
+                return ContextMenuRightTap(
+                  translate: translate,
+                  theme: Theme.of(context),
+                  onTap: (action) {
+                    Navigator.of(context).pop();
+                    _contextAction(state, context, action);
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _pathSection(),
+                      Divider(
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      state.progress == true
+                          ? _filesSection()
+                          : _progressIndicator(context),
+                    ],
+                  ),
                 );
               },
             ),
@@ -233,13 +243,15 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         width: 7,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 2.0),
+                        padding: const EdgeInsets.only(top: 0.0),
                         child: Text(
                           translate.update,
+                          textAlign: TextAlign.center,
                           maxLines: 1,
                           style: TextStyle(
                             color: Theme.of(context).splashColor,
                             fontFamily: kNormalTextFontFamily,
+                            height: 1.5,
                             fontSize: 16,
                           ),
                         ),
@@ -312,12 +324,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       bloc: _bloc,
       builder: (context, state) {
         var searchText = StateSortedContainer.of(context).search;
-
-        // if (state.search != searchText) {
-        //   context.read<OpenedFolderCubit>().mapSortedFieldChanged(
-        //         searchText,
-        //       );
-        // }
         var sortedCriterion = StateSortedContainer.of(context).sortedCriterion;
         var direction = StateSortedContainer.of(context).direction;
         context.read<OpenedFolderCubit>()
@@ -326,9 +332,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         if (state.representation == FilesRepresentation.grid) {
           return state.criterion == SortingCriterion.byType
               ? _filesGridForType(state)
-              : // state.objects.isNotEmpty
-              _filesGrid(state);
-          //: Center(child: _progressIndicator(context));
+              : _filesGrid(state);
         } else {
           return state.criterion == SortingCriterion.byType
               ? _filesListSortType(context, state)
@@ -427,15 +431,10 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         final controller = CustomPopupMenuController();
                         _popupControllers.add(controller);
                       }
-                      _onPointerDown(PointerDownEvent event) {
-                        if (event.kind == PointerDeviceKind.mouse &&
-                            event.buttons == kSecondaryMouseButton) {
-                          print("right button click");
-
-                          _popupControllers[state.sortedFiles.indexOf(obj)]
-                              .showMenu();
-                          //controller.showMenu();
-                        }
+                      _onPointerDown() {
+                        _popupControllers[state.sortedFiles.indexOf(obj)]
+                            .showMenu();
+                        //controller.showMenu();
                       }
 
                       if (obj is Folder) {
@@ -473,36 +472,36 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
+                            onSecondaryTapUp: (_) {
+                              _onPointerDown();
+                            },
                             onTap: onTap,
-                            child: Listener(
-                              onPointerDown: _onPointerDown,
-                              behavior: HitTestBehavior.opaque,
-                              child: IgnorePointer(
-                                child: CustomPopupMenu(
-                                    pressType: PressType.singleClick,
-                                    barrierColor: Colors.transparent,
-                                    showArrow: false,
-                                    enablePassEvent: false,
-                                    horizontalMargin: -90,
-                                    verticalMargin: -90,
-                                    controller: _popupControllers[
-                                        state.sortedFiles.indexOf(obj)],
-                                    menuBuilder: () {
-                                      return FilesPopupMenuActions(
-                                        theme: Theme.of(context),
-                                        translate: translate,
-                                        onTap: (action) async {
-                                          _popupControllers[state.sortedFiles
-                                                  .indexOf(obj)]
-                                              .hideMenu();
-                                          _popupActions(
-                                              state, context, action, obj);
-                                        },
-                                      );
-                                    },
-                                    child: ObjectView(
-                                        object: state.sortedFiles[index])),
-                              ),
+                            child: IgnorePointer(
+                              child: CustomPopupMenu(
+                                  pressType: PressType.singleClick,
+                                  barrierColor: Colors.transparent,
+                                  showArrow: false,
+                                  enablePassEvent: false,
+                                  horizontalMargin: -90,
+                                  verticalMargin: -90,
+                                  controller: _popupControllers[
+                                      state.sortedFiles.indexOf(obj)],
+                                  menuBuilder: () {
+                                    return FilesPopupMenuActions(
+                                      theme: Theme.of(context),
+                                      translate: translate,
+                                      object: obj,
+                                      onTap: (action) async {
+                                        _popupControllers[
+                                                state.sortedFiles.indexOf(obj)]
+                                            .hideMenu();
+                                        _popupActions(
+                                            state, context, action, obj);
+                                      },
+                                    );
+                                  },
+                                  child: ObjectView(
+                                      object: state.sortedFiles[index])),
                             ),
                           ));
                       //folderId: obj.id,
@@ -587,14 +586,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                   _initiatingControllersForGroupedFiles(state);
                 }
 
-                Future<void> _onPointerDown(PointerDownEvent event) async {
-                  if (event.kind == PointerDeviceKind.mouse &&
-                      event.buttons == kSecondaryMouseButton) {
-                    //print("right button click");
-                    _popupControllersGrouped[state.sortedFiles
-                            .indexWhere((element) => element.id == obj.id)]
-                        .showMenu();
-                  }
+                _onPointerDown() {
+                  //print("right button click");
+                  _popupControllersGrouped[state.sortedFiles
+                          .indexWhere((element) => element.id == obj.id)]
+                      .showMenu();
                 }
 
                 final object = files[index];
@@ -632,35 +628,35 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 return MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
+                    onSecondaryTapDown: (_) {
+                      _onPointerDown();
+                    },
                     behavior: HitTestBehavior.opaque,
                     onTap: onTap,
-                    child: Listener(
-                      onPointerDown: _onPointerDown,
-                      behavior: HitTestBehavior.opaque,
-                      child: IgnorePointer(
-                        child: CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            enablePassEvent: false,
-                            horizontalMargin: -90,
-                            verticalMargin: -90,
-                            controller: _popupControllersGrouped[state.objects
-                                .indexWhere((element) => element.id == obj.id)],
-                            menuBuilder: () {
-                              return FilesPopupMenuActions(
-                                  theme: Theme.of(context),
-                                  translate: translate,
-                                  onTap: (action) async {
-                                    _popupControllersGrouped[state.objects
-                                            .indexWhere((element) =>
-                                                element.id == obj.id)]
-                                        .hideMenu();
-                                    _popupActions(state, context, action, obj);
-                                  });
-                            },
-                            child: ObjectView(object: value[index])),
-                      ),
+                    child: IgnorePointer(
+                      child: CustomPopupMenu(
+                          pressType: PressType.singleClick,
+                          barrierColor: Colors.transparent,
+                          showArrow: false,
+                          enablePassEvent: false,
+                          horizontalMargin: -90,
+                          verticalMargin: -90,
+                          controller: _popupControllersGrouped[state.objects
+                              .indexWhere((element) => element.id == obj.id)],
+                          menuBuilder: () {
+                            return FilesPopupMenuActions(
+                                theme: Theme.of(context),
+                                translate: translate,
+                                object: obj,
+                                onTap: (action) async {
+                                  _popupControllersGrouped[state.objects
+                                          .indexWhere((element) =>
+                                              element.id == obj.id)]
+                                      .hideMenu();
+                                  _popupActions(state, context, action, obj);
+                                });
+                          },
+                          child: ObjectView(object: value[index])),
                     ),
                   ),
                 );
@@ -995,6 +991,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   return FilesPopupMenuActions(
                                       theme: Theme.of(context),
                                       translate: translate,
+                                      object: element,
                                       onTap: (action) async {
                                         _popupControllers[state.sortedFiles
                                                 .indexOf(element)]
@@ -1339,6 +1336,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         return FilesPopupMenuActions(
                           theme: Theme.of(context),
                           translate: translate,
+                          object: obj,
                           onTap: (action) async {
                             _popupControllersGrouped[state.objects.indexOf(obj)]
                                 .hideMenu();
@@ -1370,6 +1368,32 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     });
 
     return keyFiles;
+  }
+
+  _contextAction(
+    OpenedFolderState state,
+    BuildContext context,
+    ContextMenuAction action,
+  ) async {
+    switch (action) {
+      case ContextMenuAction.addFiles:
+        final folderId = StateContainer.of(context).choosedFilesFolderId;
+        context.read<OpenedFolderCubit>().uploadFilesAction(folderId);
+        break;
+      case ContextMenuAction.createFolder:
+        final folderId = StateContainer.of(context).choosedFilesFolderId;
+        var folderName = await showDialog<String?>(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurAddFolder();
+            });
+        if (folderName != null) {
+          context.read<OpenedFolderCubit>().createFolder(folderName, folderId);
+        }
+
+        break;
+      default:
+    }
   }
 
   _popupActions(OpenedFolderState state, BuildContext context,
@@ -1460,26 +1484,28 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               .onRecordActionChoosed(action, object);
         }
         break;
-      // case FileAction.move:
-      //   var result = await showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return MoveFileView(
-      //         object is Folder ? [object] : null,
-      //       );
-      //     },
-      //   );
-      //   if (result != null) {
-      //     List<BaseObject> objects = [];
-      //     objects.add(object);
+      case FileAction.move:
+        var result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MoveFileView(
+                object is Folder ? [object] : null, UserAction.moveFiles);
+          },
+        );
+        if (result != null) {
+          List<BaseObject> objects = [];
+          objects.add(object);
 
-      //     context.read<OpenedFolderCubit>().onActionMoveFiles(objects, result);
-      //   }
-      //   break;
-      // case FileAction.save:
-      //   context.read<OpenedFolderCubit>().fileSave(object as Record);
-      //   print('save objects');
-      //   break;
+          context.read<OpenedFolderCubit>().onActionMoveFiles(objects, result);
+        }
+        break;
+      case FileAction.save:
+        context.read<OpenedFolderCubit>().fileSave(object as Record);
+        print('save objects');
+        break;
+      case FileAction.addFiles:
+        context.read<OpenedFolderCubit>().uploadFilesAction(object.id);
+        break;
       default:
     }
   }
@@ -1505,6 +1531,8 @@ class ObjectView extends StatelessWidget {
           ) {
         thumbnail = record.thumbnail?.first.publicUrl;
         type = FileAttribute().getFilesType(record.name!.toLowerCase());
+        var typeDefault = ['ico', 'bmp', 'eps', 'mac', 'psd', 'vsd'];
+        if (typeDefault.contains(type)) type = 'image_default';
       }
     }
 
@@ -1530,10 +1558,17 @@ class ObjectView extends StatelessWidget {
                             fit: BoxFit.contain,
                           )
                     : type == 'image' || type == 'video' && thumbnail != null
-                        ? Image.network(
-                            thumbnail!,
-                            fit: BoxFit.contain,
-                          )
+                        ? type == 'image' &&
+                                thumbnail != null &&
+                                thumbnail.isNotEmpty
+                            ? Image.network(
+                                thumbnail,
+                                fit: BoxFit.contain,
+                              )
+                            : Image.asset(
+                                'assets/file_icons/files.png',
+                                fit: BoxFit.contain,
+                              )
                         : type == 'video' && thumbnail == null
                             ? Image.asset(
                                 'assets/file_icons/$type.png',
@@ -1590,12 +1625,14 @@ class FilesPopupMenuActions extends StatefulWidget {
       {required this.theme,
       required this.translate,
       required this.onTap,
+      required this.object,
       Key? key})
       : super(key: key);
 
   final ThemeData theme;
   final S translate;
   final Function(FileAction) onTap;
+  final BaseObject object;
 
   @override
   _FilesPopupMenuActionsState createState() => _FilesPopupMenuActionsState();
@@ -1617,9 +1654,9 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
         boxShadow: [
           BoxShadow(
             color: mainColor,
-            spreadRadius: 3,
-            blurRadius: 3,
-            offset: Offset(0, 3), // changes position of shadow
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(0, 1), // changes position of shadow
           ),
         ],
       ),
@@ -1632,127 +1669,130 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
           child: IntrinsicWidth(
             child: Column(
               children: [
-                // MouseRegion(
-                //   onEnter: (event) {
-                //     setState(() {
-                //       ind = 0;
-                //     });
-                //   },
-                //   child: Container(
-                //     width: 190,
-                //     height: 40,
-                //     color: ind == 0 ? mainColor : null,
-                //     padding: EdgeInsets.symmetric(horizontal: 15),
-                //     child: Row(
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       children: [
-                //         // Image.asset(
-                //         //   'assets/file_page/file_options/share.png',
-                //         //   height: 20,
-                //         // ),
-                //         SvgPicture.asset(
-                //           'assets/options/share.svg',
-                //           height: 20,
-                //         ),
-                //         Container(
-                //           width: 15,
-                //         ),
-                //         Text(
-                //           widget.translate.share,
-                //           style: style,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                // Divider(
-                //   color: mainColor,
-                //   height: 1,
-                // ),
-                // GestureDetector(
-                //   onTap: () {
-                //     widget.onTap(FileAction.move);
-                //   },
-                //   child: MouseRegion(
-                //     onEnter: (event) {
-                //       setState(() {
-                //         ind = 0;
-                //       });
-                //     },
-                //     child: Container(
-                //       width: 190,
-                //       height: 40,
-                //       color: ind == 0 ? mainColor : null,
-                //       padding: EdgeInsets.symmetric(horizontal: 15),
-                //       child: Row(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           // Image.asset(
-                //           //   'assets/file_page/file_options/move.png',
-                //           //   height: 20,
-                //           // ),
-                //           SvgPicture.asset(
-                //             'assets/options/folder.svg',
-                //             height: 20,
-                //           ),
-                //           Container(
-                //             width: 15,
-                //           ),
-                //           Text(
-                //             widget.translate.move,
-                //             style: style,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Divider(
-                //   color: mainColor,
-                //   height: 1,
-                // ),
-                // GestureDetector(
-                //   onTap: () {
-                //     widget.onTap(FileAction.save);
-                //   },
-                //   child: MouseRegion(
-                //     onEnter: (event) {
-                //       setState(() {
-                //         ind = 1;
-                //       });
-                //     },
-                //     child: Container(
-                //       width: 190,
-                //       height: 40,
-                //       color: ind == 1 ? mainColor : null,
-                //       padding: EdgeInsets.symmetric(horizontal: 15),
-                //       child: Row(
-                //         crossAxisAlignment: CrossAxisAlignment.center,
-                //         children: [
-                //           // Image.asset(
-                //           //   'assets/file_page/file_options/download.png',
-                //           //   height: 20,
-                //           // ),
-                //           SvgPicture.asset(
-                //             'assets/options/download.svg',
-                //             height: 20,
-                //           ),
-                //           Container(
-                //             width: 15,
-                //           ),
-                //           Text(
-                //             widget.translate.down,
-                //             style: style,
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Divider(
-                //   color: mainColor,
-                //   height: 1,
-                // ),
+                widget.object is Folder
+                    ? GestureDetector(
+                        onTap: () {
+                          widget.onTap(FileAction.addFiles);
+                        },
+                        child: MouseRegion(
+                          onEnter: (event) {
+                            setState(() {
+                              ind = 0;
+                            });
+                          },
+                          child: Container(
+                            width: 190,
+                            height: 40,
+                            color: ind == 0 ? mainColor : null,
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/options/add_files.svg',
+                                  height: 20,
+                                ),
+                                Container(
+                                  width: 15,
+                                ),
+                                Text(
+                                  widget.translate.add_files,
+                                  style: style,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.move);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 1;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 1 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/move.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/folder.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.move,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(FileAction.save);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 2;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 2 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/download.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/download.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.down,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
                 GestureDetector(
                   onTap: () {
                     widget.onTap(FileAction.rename);
@@ -1760,13 +1800,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 0;
+                        ind = 3;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 0 ? mainColor : null,
+                      color: ind == 3 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       margin: EdgeInsets.zero,
                       child: Row(
@@ -1799,13 +1839,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 1;
+                        ind = 4;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1 ? mainColor : null,
+                      color: ind == 4 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       margin: EdgeInsets.zero,
                       child: Row(
@@ -1842,13 +1882,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 2;
+                        ind = 5;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 2
+                      color: ind == 5
                           ? widget.theme.indicatorColor.withOpacity(0.1)
                           : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),

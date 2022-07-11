@@ -62,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
+        "add_files": MessageLookupByLibrary.simpleMessage("Добавить файлы"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
         "all": MessageLookupByLibrary.simpleMessage("Все"),
         "all_files": MessageLookupByLibrary.simpleMessage("Все файлы"),
@@ -95,6 +96,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_password":
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
+        "change_place": MessageLookupByLibrary.simpleMessage("Изменить место"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
         "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
             "Проверьте соединение с Интернетом и повторите попытку."),
@@ -381,6 +383,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Хорошо"),
+        "where_download":
+            MessageLookupByLibrary.simpleMessage("Куда загрузить?"),
         "where_move": MessageLookupByLibrary.simpleMessage("Куда переместить?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "пространства, будут удалены без возможности восстановления."),

@@ -2448,6 +2448,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Add files`
+  String get add_files {
+    return Intl.message(
+      'Add files',
+      name: 'add_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change place`
+  String get change_place {
+    return Intl.message(
+      'Change place',
+      name: 'change_place',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Where download?`
+  String get where_download {
+    return Intl.message(
+      'Where download?',
+      name: 'where_download',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

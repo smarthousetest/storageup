@@ -10,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/download_location.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/auth/models/name.dart';
 import 'package:storageup/pages/sell_space/space_event.dart';
@@ -45,6 +46,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       } else if (event is GetAlreadyUsedDisk) {
         await _mapGetAlreadyUsedDisk(event, state, emit);
       }
+      if (event is ChangeKeeper) {
+        _changeKeeper(state, event, emit);
+      }
     });
   }
 
@@ -53,7 +57,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
 
   UserController _userController = getIt<UserController>();
   late final DownloadLocationsRepository _repository;
-  final KeeperService _subscriptionService = getIt<KeeperService>();
+  final KeeperService _keeperService = getIt<KeeperService>();
 
   Future _mapSpacePageOpened(
     SpacePageOpened event,
@@ -63,7 +67,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.locationsInfo;
-    var keeper = await _subscriptionService.getAllKeepers();
+    var keeper = await _keeperService.getAllKeepers();
     var valueNotifier = _userController.getValueNotifier();
     final diskList = await getDisksList();
     emit(state.copyWith(
@@ -81,15 +85,51 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
-    String? result = await FilePicker.platform.getDirectoryPath();
-    if (result != null) {
-      var path = DiskSpaceController(pathToDir: result);
+    if (event.pathForChange != null) {
+      var path = DiskSpaceController(pathToDir: event.pathForChange!);
       var availableBytes = await path.getAvailableDiskSpace();
       print(availableBytes);
       emit(state.copyWith(
-        pathToKeeper: PathCheck.doPathCorrect(result),
         availableSpace: availableBytes,
       ));
+    } else {
+      String? result = await FilePicker.platform.getDirectoryPath();
+
+      if (result != null) {
+        var path = DiskSpaceController(pathToDir: result);
+        var availableBytes = await path.getAvailableDiskSpace();
+        print(availableBytes);
+        emit(state.copyWith(
+          pathToKeeper: PathCheck.doPathCorrect(result),
+          availableSpace: availableBytes,
+        ));
+      }
+    }
+  }
+
+  Future<void> _changeKeeper(
+    SpaceState state,
+    ChangeKeeper event,
+    Emitter<SpaceState> emit,
+  ) async {
+    var countOfGb = event.countGb;
+
+    var id = await _keeperService.changeKeeper(
+        state.name.value, countOfGb, event.keeper.keeperId);
+    DownloadLocation keeper = DownloadLocation(
+        countGb: countOfGb,
+        name: state.name.value,
+        keeperId: event.keeper.keeperId,
+        dirPath: event.keeper.dirPath,
+        id: event.keeper.id);
+    if (id != null) {
+      _repository.changeLocation(location: keeper);
+      // var locationsInfo = _repository.locationsInfo;
+      // final tmpState = state.copyWith(locationsInfo: locationsInfo);
+      // emit(tmpState);
+      // var box = await Hive.openBox('keeper_data');
+      // await box.put(keeperDataId.toString(), Uri.encodeFull(path));
+      // _mapRunSoft(tmpState, id);
     }
   }
 
@@ -179,9 +219,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var countOfGb = event.countGb;
     var path = state.pathToKeeper;
 
-    var id =
-        await _subscriptionService.addNewKeeper(state.name.value, countOfGb);
-    if (id.right != null) {
+    var id = await _keeperService.addNewKeeper(state.name.value, countOfGb);
+if (id.right != null) {
       int keeperDataId = _repository.createLocation(
           countOfGb: countOfGb,
           path: path,
@@ -301,6 +340,18 @@ class PathCheck {
     'Program Files (x86)',
   ];
 
+  bool isPathCorrect(String path) {
+    var partsOfPath = path.split(Platform.pathSeparator);
+    for (var part in partsOfPath) {
+      for (var restrictedWord in _restrictedWords) {
+        if (part == restrictedWord) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   ///Function check is a path contain "OneDrive" part
   ///If contain, return path before "OneDrive" part
   static String doPathCorrect(String path) {
@@ -315,5 +366,10 @@ class PathCheck {
       }
     }
     return path;
+  }
+
+  @override
+  String toString() {
+    return _restrictedWords.toString();
   }
 }

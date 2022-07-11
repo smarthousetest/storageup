@@ -268,5 +268,8 @@
     "name_contain": "Название должно содержать более 2 символов",
     "many_files": "{count,plural, =0{0 файлов} =1{{count} файл} =2{{count} файла} few{{count} файла} many{{count} файлов} other{{count} файлов}}",
     "keeper_name_are_the_same": "Указанное имя кипера уже существует, пожалуйста, переименуйте место хранения",
-    "not_selected": "Не выбрано"
+    "not_selected": "Не выбрано",
+    "add_files": "Добавить файлы",
+    "change_place": "Изменить место",
+    "where_download": "Куда загрузить?"
 }

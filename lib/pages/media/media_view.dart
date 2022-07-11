@@ -694,6 +694,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
       child: GestureDetector(
         onTap: () {
           print('folder tapped: ${album.name}');
+          _searchingFieldController.clear();
           blocContext.read<MediaCubit>().changeFolder(album);
 
           final mediaAlbumId = album.id == '-1' ? null : album.id;
@@ -780,10 +781,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
               controller: ScrollController(),
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constrains.smallest.width ~/ 100,
-                crossAxisSpacing: 30,
-                childAspectRatio: (1.1 / 1.50),
-                mainAxisSpacing: 35,
+                crossAxisCount: constrains.smallest.width ~/ 110,
+                childAspectRatio: (1 / 1.22),
+                mainAxisSpacing: 15,
               ),
               itemBuilder: (context, index) {
                 var record = state.currentFolderRecords[index];
@@ -1256,11 +1256,12 @@ class MediaGridElement extends StatelessWidget {
           record.name ?? ':(',
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
+          maxLines: 2,
           style: TextStyle(
             color: Theme.of(context).disabledColor,
             fontFamily: kNormalTextFontFamily,
             fontSize: 14,
-            height: 1.1,
+            // height: 1.1,
           ),
         ),
       ],

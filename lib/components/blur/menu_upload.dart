@@ -107,12 +107,13 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                 onTap: () async {
                                   List<String?>? list = await getFilesPaths();
                                   print(list);
-                                  Navigator.pop(
-                                      context,
-                                      AddMenuResult(
-                                        action: UserAction.uploadFiles,
-                                        result: list,
-                                      ));
+                                  if (list != null)
+                                    Navigator.pop(
+                                        context,
+                                        AddMenuResult(
+                                          action: UserAction.uploadFiles,
+                                          result: list,
+                                        ));
                                 },
                                 child: Column(
                                   children: [
@@ -162,7 +163,8 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                         style: TextStyle(
                                           fontFamily: kNormalTextFontFamily,
                                           fontSize: 14,
-                                          color: Theme.of(context).disabledColor,
+                                          color:
+                                              Theme.of(context).disabledColor,
                                         ),
                                       )
                                     ],
@@ -258,7 +260,8 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                             style: TextStyle(
                                               fontFamily: kNormalTextFontFamily,
                                               fontSize: 14,
-                                              color: Theme.of(context).disabledColor,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
                                             ),
                                           )
                                         ],
@@ -291,7 +294,8 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                             style: TextStyle(
                                               fontFamily: kNormalTextFontFamily,
                                               fontSize: 14,
-                                              color: Theme.of(context).disabledColor,
+                                              color: Theme.of(context)
+                                                  .disabledColor,
                                             ),
                                           )
                                         ],
@@ -315,7 +319,8 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                           padding: const EdgeInsets.only(top: 20, right: 15),
                           child: MouseRegion(
                             cursor: SystemMouseCursors.click,
-                            child: SvgPicture.asset("assets/file_page/close.svg"),
+                            child:
+                                SvgPicture.asset("assets/file_page/close.svg"),
                           ),
                         ),
                       ),

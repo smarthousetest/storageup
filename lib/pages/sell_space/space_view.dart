@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +6,7 @@ import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/download_location.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_view.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
@@ -26,50 +25,51 @@ class SpaceSellPage extends StatefulWidget {
   SpaceSellPage();
 }
 
-class PathCheck {
-  static List<String> _restrictedWords = [
-    'OneDrive',
-    'Program Files',
-    'Program Files (x86)',
-  ];
+// class PathCheck {
+//   static List<String> _restrictedWords = [
+//     'OneDrive',
+//     'Program Files',
+//     'Program Files (x86)',
+//   ];
 
-  bool isPathCorrect(String path) {
-    var partsOfPath = path.split(Platform.pathSeparator);
-    for (var part in partsOfPath) {
-      for (var restrictedWord in _restrictedWords) {
-        if (part == restrictedWord) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+//   bool isPathCorrect(String path) {
+//     var partsOfPath = path.split(Platform.pathSeparator);
+//     for (var part in partsOfPath) {
+//       for (var restrictedWord in _restrictedWords) {
+//         if (part == restrictedWord) {
+//           return false;
+//         }
+//       }
+//     }
+//     return true;
+//   }
 
-  ///Function check is a path contain "OneDrive" part
-  ///If contain, return path before "OneDrive" part
-  static String doPathCorrect(String path) {
-    var partPath = path.split(Platform.pathSeparator);
-    for (int i = 0; i < partPath.length; i++) {
-      for (var restrictedWord in _restrictedWords) {
-        if (partPath[i] == restrictedWord) {
-          var result = partPath.sublist(0, i);
-          result.add(path.split(Platform.pathSeparator).last);
-          return result.join(Platform.pathSeparator);
-        }
-      }
-    }
-    return path;
-  }
+//   ///Function check is a path contain "OneDrive" part
+//   ///If contain, return path before "OneDrive" part
+//   static String doPathCorrect(String path) {
+//     var partPath = path.split(Platform.pathSeparator);
+//     for (int i = 0; i < partPath.length; i++) {
+//       for (var restrictedWord in _restrictedWords) {
+//         if (partPath[i] == restrictedWord) {
+//           var result = partPath.sublist(0, i);
+//           result.add(path.split(Platform.pathSeparator).last);
+//           return result.join(Platform.pathSeparator);
+//         }
+//       }
+//     }
+//     return path;
+//   }
 
-  @override
-  String toString() {
-    return _restrictedWords.toString();
-  }
-}
+//   @override
+//   String toString() {
+//     return _restrictedWords.toString();
+//   }
+// }
 
 class _SpaceSellPageState extends State<SpaceSellPage> {
   //final List<DownloadLocation> locationsInfo;
   double? _searchFieldWidth;
+
   var index = 0;
   S translate = getIt<S>();
   String dirPath = '';
@@ -82,10 +82,21 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   int countOfNotSameName = 0;
   String? dropdownValue;
   bool firstOpen = true;
+  DownloadLocation? changeKeeper;
+  bool needToCheck = true;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     _searchFieldWidth = width - _rowPadding * 4 - 274 - 222;
+  }
+
+  changePageIndex(int newIndex, DownloadLocation keeper) {
+    setState(() {
+      index = newIndex;
+      changeKeeper = keeper;
+      myController.text = keeper.name;
+      _currentSliderValue = changeKeeper!.countGb.toDouble();
+    });
   }
 
   Widget build(BuildContext context) {
@@ -275,54 +286,58 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ),
             ),
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(30),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Color.fromARGB(25, 23, 69, 139),
-                      blurRadius: 4,
-                      offset: Offset(1, 4))
-                ],
-              ),
-              child: BlocBuilder<SpaceBloc, SpaceState>(
-                builder: (context, state) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 40, right: 40, top: 20),
-                        child: _title(context, state),
-                      ),
-                      BlocBuilder<SpaceBloc, SpaceState>(
-                        builder: (context, state) {
-                          var fl = folderList(context);
-                          return Expanded(
-                              child: IndexedStack(
-                            sizing: StackFit.passthrough,
-                            key: ValueKey<int>(index),
-                            index: index,
-                            children: [
-                              state.keeper.isEmpty
-                                  ? rentingAPlace(context)
-                                  : fl,
-                              Platform.isWindows
-                                  ? addSpaceWindows(context)
-                                  : addSpace(context),
-                              fl,
-                            ],
-                          ));
-                        },
-                      ),
-                    ],
-                  );
-                },
+          SpaceInheritedWidget(
+            index: index,
+            state: this,
+            child: Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4))
+                  ],
+                ),
+                child: BlocBuilder<SpaceBloc, SpaceState>(
+                  builder: (context, state) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 40, right: 40, top: 20),
+                          child: _title(context, state),
+                        ),
+                        BlocBuilder<SpaceBloc, SpaceState>(
+                          builder: (context, state) {
+                            var fl = folderList(context);
+                            return Expanded(
+                                child: IndexedStack(
+                              sizing: StackFit.passthrough,
+                              key: ValueKey<int>(index),
+                              index: index,
+                              children: [
+                                state.keeper.isEmpty
+                                    ? rentingAPlace(context)
+                                    : fl,
+Platform.isWindows
+? addSpaceWindows(context, changeKeeper)
+: addSpace(context, changeKeeper),
+                                fl
+                              ],
+                            ));
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -336,6 +351,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           onTap: () {
             setState(() {
               index = 0;
+              changeKeeper = null;
+              myController.text = '';
+              _currentSliderValue = 32;
             });
           },
           child: MouseRegion(
@@ -355,7 +373,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         ),
         Container(
           child: Text(
-            translate.add_location,
+            changeKeeper?.id == null
+                ? translate.add_location
+                : translate.change_place,
             style: TextStyle(
               color: Theme.of(context).focusColor,
               fontFamily: kNormalTextFontFamily,
@@ -597,7 +617,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               onPressed: () {
                 setState(() {
                   index = 1;
-                  print(index);
                 });
               },
               style: OutlinedButton.styleFrom(
@@ -621,7 +640,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     ]);
   }
 
-  Widget addSpace(BuildContext context) {
+  Widget addSpace(BuildContext context, DownloadLocation? changeKepper) {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
@@ -635,8 +654,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               firstOpen = true;
             }
           }
+          if (changeKeeper != null && needToCheck == true) {
+            needToCheck = false;
+            context
+                .read<SpaceBloc>()
+                .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+          }
+
           var maxSpace = (state.availableSpace / GB).round();
-          print(maxSpace);
+          //print(maxSpace);
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -693,7 +719,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             return Padding(
                               padding: const EdgeInsets.only(left: 15, top: 11),
                               child: Text(
-                                state.pathToKeeper,
+                                changeKeeper == null
+                                    ? state.pathToKeeper
+                                    : changeKeeper!.dirPath,
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: Theme.of(context).disabledColor),
@@ -712,21 +740,25 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           width: 101,
                           child: OutlinedButton(
                             onPressed: () async {
-                              //String? path = await getFilesPaths();
-                              context.read<SpaceBloc>().add(GetPathToKeeper());
-
-                              print(state.pathToKeeper);
-                              setState(
-                                () {
-                                  dirPath = state.pathToKeeper;
-                                },
-                              );
+                              if (changeKeeper == null) {
+                                context
+                                    .read<SpaceBloc>()
+                                    .add(GetPathToKeeper());
+                                print(state.pathToKeeper);
+                                setState(
+                                  () {
+                                    dirPath = state.pathToKeeper;
+                                  },
+                                );
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               minimumSize: Size(double.maxFinite, 60),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: Theme.of(context).splashColor,
+                              backgroundColor: changeKeeper == null
+                                  ? Theme.of(context).splashColor
+                                  : Theme.of(context).canvasColor,
                             ),
                             child: Text(
                               translate.overview,
@@ -775,7 +807,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: Container(
                       child: Text(
                         translate.min_storage(
-                          32,
+                          changeKeeper == null ? 32 : changeKeeper!.countGb,
                         ),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onBackground,
@@ -784,7 +816,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     )),
-                state.pathToKeeper.isNotEmpty
+                state.pathToKeeper.isNotEmpty || changeKeeper != null
                     ? maxSpace < 32
                         ? Padding(
                             padding: const EdgeInsets.only(left: 40, top: 8),
@@ -803,7 +835,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             padding: const EdgeInsets.only(left: 40, top: 8),
                             child: Container(
                               child: Text(
-                                translate.max_storage + translate.gb(maxSpace),
+                                translate.max_storage +
+                                    translate.gb(
+                                      changeKeeper != null
+                                          ? changeKeeper!.countGb + maxSpace
+                                          : maxSpace,
+                                    ),
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -851,8 +888,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           child: Slider(
                             activeColor: Theme.of(context).splashColor,
                             inactiveColor: Theme.of(context).cardColor,
-                            min: 32,
-                            max: maxSpace > 32 ? maxSpace.toDouble() : 180,
+                            min: changeKeeper == null
+                                ? 32
+                                : changeKeeper!.countGb.roundToDouble(),
+                            max: changeKeeper == null
+                                ? maxSpace > 32
+                                    ? maxSpace.roundToDouble()
+                                    : 180
+                                : changeKeeper!.countGb.roundToDouble() +
+                                    maxSpace.roundToDouble(),
                             value: _currentSliderValue,
                             onChanged: maxSpace < 32
                                 ? null
@@ -1052,6 +1096,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
+if (changeKeeper != null) {
+context.read<SpaceBloc>().add(ChangeKeeper(
+countGb: _currentSliderValue.toInt(),
+keeper: changeKeeper!));
+setState(() {
+index = 2;
+myController.text = '';
+_currentSliderValue = 32;
+changeKeeper = null;
+needToCheck = true;
+});
+} else {
                                 context
                                     .read<SpaceBloc>()
                                     .add(UpdateKeepersList());
@@ -1074,6 +1130,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   await context.read<SpaceBloc>().stream.first;
                                   setState(() {
                                     index = 2;
+_currentSliderValue = 32;
+myController.text = '';
                                   });
                                   canSave = false;
                                 } else {
@@ -1087,7 +1145,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     },
                                   );
                                 }
-                              }
+}}
                             : null,
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size(double.maxFinite, 60),
@@ -1098,7 +1156,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               : Theme.of(context).canvasColor,
                         ),
                         child: Text(
-                          translate.save,
+changeKeeper == null
+? translate.save
+: translate.change,
+
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontFamily: kNormalTextFontFamily,
@@ -1595,7 +1656,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               : Theme.of(context).canvasColor,
                         ),
                         child: Text(
-                          translate.save,
+                          changeKeeper == null
+                              ? translate.save
+                              : translate.change,
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontFamily: kNormalTextFontFamily,
@@ -1615,7 +1678,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   bool _isFieldsValid(SpaceState state) {
     return state.name.valid &&
         state.name.value.isNotEmpty &&
-        state.pathToKeeper.isNotEmpty;
+        (state.pathToKeeper.isNotEmpty || changeKeeper != null);
   }
 
   _setName(BuildContext context, SpaceState state) {
@@ -1677,6 +1740,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               builder: (context, state) {
                 return TextField(
                   controller: myController,
+
                   onChanged: (value) {
                     context
                         .read<SpaceBloc>()
@@ -1726,4 +1790,26 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
       child: FolderList(),
     );
   }
+}
+
+class SpaceInheritedWidget extends InheritedWidget {
+  final int index;
+  final _SpaceSellPageState state;
+
+  SpaceInheritedWidget({
+    Key? key,
+    required this.index,
+    required this.state,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  static SpaceInheritedWidget of(BuildContext context) {
+    final SpaceInheritedWidget? result =
+        context.dependOnInheritedWidgetOfExactType<SpaceInheritedWidget>();
+
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(SpaceInheritedWidget old) => index != old.index;
 }
