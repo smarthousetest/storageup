@@ -1,11 +1,11 @@
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/file.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:storageup/models/base_object.dart';
-import 'package:storageup/models/file.dart';
-import 'package:storageup/models/folder.dart';
-import 'package:storageup/models/record.dart';
 
 const _objectsBoxName = 'LocalStorage.objectsBox.name';
 const _relationsBoxName = 'LocalStorage.relationsBox.name';
@@ -53,7 +53,10 @@ class LocalStorage {
     required Box<List<String>> relationsBox,
   })  : _objectsBox = objectsBox,
         _relationsBox = relationsBox {
-    _objectsToDelete.addAll(_objectsBox.values.where((element) => element.isInProgress || element.loadPercent != null || element.endedWithException));
+    _objectsToDelete.addAll(_objectsBox.values.where((element) =>
+        element.isInProgress ||
+        element.loadPercent != null ||
+        element.endedWithException));
   }
 
   ///Adding [Folder] and it's childs to local storage

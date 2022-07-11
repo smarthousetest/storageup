@@ -10,8 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
-import 'package:storageup/components/blur/something_goes_wrong.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
@@ -138,7 +137,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
         await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return BlurSomethingGoesWrong(true);
+            return BlurCustomErrorPopUp(
+                middleText: translate.something_goes_wrong);
           },
         );
       } else {
@@ -146,7 +146,7 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
         await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return BlurFailedServerConnection(true);
+            return BlurCustomErrorPopUp(middleText: translate.no_internet);
           },
         );
       }

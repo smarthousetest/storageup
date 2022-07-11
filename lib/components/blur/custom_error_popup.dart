@@ -4,17 +4,15 @@ import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/utilities/injection.dart';
 
-class BlurFailedServerConnection extends StatefulWidget {
-  bool youSeePopUp;
+class BlurCustomErrorPopUp extends StatelessWidget {
+  BlurCustomErrorPopUp({
+    Key? key,
+    required this.middleText,
+  }) : super(key: key);
 
-  @override
-  _ButtonTemplateState createState() => new _ButtonTemplateState();
+  final String middleText;
+  final S translate = getIt<S>();
 
-  BlurFailedServerConnection(this.youSeePopUp);
-}
-
-class _ButtonTemplateState extends State<BlurFailedServerConnection> {
-  S translate = getIt<S>();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -36,6 +34,7 @@ class _ButtonTemplateState extends State<BlurFailedServerConnection> {
                   height: 193,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         translate.error,
@@ -47,20 +46,9 @@ class _ButtonTemplateState extends State<BlurFailedServerConnection> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
-                        child: Text(
-                          translate.server_connection_error,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: kNormalTextFontFamily,
-                            color: Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      ),
-                      Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: Text(
-                          translate.check_ethernet_connection,
+                          middleText,
                           style: TextStyle(
                             fontSize: 14,
                             fontFamily: kNormalTextFontFamily,
@@ -69,7 +57,7 @@ class _ButtonTemplateState extends State<BlurFailedServerConnection> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 26),
+                        padding: const EdgeInsets.only(bottom: 30),
                         child: Container(
                           width: 400,
                           child: Row(

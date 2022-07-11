@@ -1,12 +1,12 @@
 import 'dart:ui';
 
+import 'package:cpp_native/models/folder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storageup/components/blur/create_album.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
-import 'package:storageup/models/folder.dart';
 import 'package:storageup/pages/files/move_files/move_cubit.dart';
 import 'package:storageup/pages/files/move_files/move_state.dart';
 import 'package:storageup/utilities/injection.dart';

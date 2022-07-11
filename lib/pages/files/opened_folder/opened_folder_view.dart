@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
+import 'package:cpp_native/models/record.dart';
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -9,17 +13,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
-import 'package:storageup/components/blur/failed_server_conection.dart';
 import 'package:storageup/components/blur/rename.dart';
-import 'package:storageup/components/blur/something_goes_wrong.dart';
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
-import 'package:storageup/models/base_object.dart';
 import 'package:storageup/models/enums.dart';
-import 'package:storageup/models/folder.dart';
-import 'package:storageup/models/record.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
@@ -59,7 +59,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   Timer? timerForOpenFile;
   int _startTimer = 1;
   var _indexObject = -1;
-  bool youSeePopUp = false;
 
   void _initiatingControllers(OpenedFolderState state) {
     if (_popupControllers.isEmpty) {
@@ -113,23 +112,23 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         listener: (context, state) async {
           if (StateContainer.of(context).isPopUpShowing == false) {
             if (state.status == FormzStatus.submissionFailure) {
-              // youSeePopUp = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
-              youSeePopUp = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurSomethingGoesWrong(youSeePopUp);
+                  return BlurCustomErrorPopUp(
+                    middleText: translate.something_goes_wrong,
+                  );
                 },
               );
-
               StateContainer.of(context).changeIsPopUpShowing(false);
             } else if (state.status == FormzStatus.submissionCanceled) {
-              // youSeePopUp = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
-              youSeePopUp = await showDialog(
+              await showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return BlurFailedServerConnection(youSeePopUp);
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
                 },
               );
               StateContainer.of(context).changeIsPopUpShowing(false);
@@ -513,8 +512,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     );
   }
 
-  void _renameFile(BuildContext context, BaseObject record, String name,
-      String extension) async {
+  void _renameFile(
+    BuildContext context,
+    BaseObject record,
+    String name,
+    String extension,
+  ) async {
     String newName = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1529,12 +1532,16 @@ class ObjectView extends StatelessWidget {
                             'assets/file_icons/files.png',
                             fit: BoxFit.contain,
                           )
-                    : type == 'image' || type == 'video' && thumbnail != null
+                    : type == 'image' ||
+                            type == 'video' &&
+                                thumbnail != null &&
+                                thumbnail.isNotEmpty
                         ? Image.network(
                             thumbnail!,
                             fit: BoxFit.contain,
                           )
-                        : type == 'video' && thumbnail == null
+                        : type == 'video' &&
+                                (thumbnail == null || thumbnail.isEmpty)
                             ? Image.asset(
                                 'assets/file_icons/$type.png',
                                 fit: BoxFit.contain,

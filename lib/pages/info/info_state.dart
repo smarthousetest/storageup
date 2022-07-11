@@ -1,6 +1,6 @@
+import 'package:cpp_native/models/folder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:storageup/models/folder.dart';
 import 'package:storageup/models/packet/packet.dart';
 import 'package:storageup/models/subscription.dart';
 import 'package:storageup/models/user.dart';
@@ -76,7 +76,8 @@ class InfoState extends Equatable {
       usingSpace: usingSpace ?? this.usingSpace,
       allSpace: allSpace ?? this.allSpace,
       loadPercentRentPlace: loadPercentRentPlace ?? this.loadPercentRentPlace,
-      loadPercentPentPlaceFull: loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
+      loadPercentPentPlaceFull:
+          loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
       dailyProfit: dailyProfit ?? this.dailyProfit,
       yourBalance: yourBalance ?? this.yourBalance,
       homeTab: homeTab ?? this.homeTab,

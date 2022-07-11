@@ -1,0 +1,155 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:5442721645711944753",
+      "lastPropertyId": "9:2645665791868331397",
+      "name": "DownloadFileInfo",
+      "properties": [
+        {
+          "id": "1:7131650269936570179",
+          "name": "dbID",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5523320755081966860",
+          "name": "localPath",
+          "type": 9
+        },
+        {
+          "id": "3:7198582829531229872",
+          "name": "id",
+          "type": 9
+        },
+        {
+          "id": "4:2356738217894868107",
+          "name": "loadPercent",
+          "type": 6
+        },
+        {
+          "id": "5:7298926203551637047",
+          "name": "isInProgress",
+          "type": 1
+        },
+        {
+          "id": "6:9155369585739726996",
+          "name": "endedWithException",
+          "type": 1
+        },
+        {
+          "id": "7:1077904676258907595",
+          "name": "needToShowPopup",
+          "type": 1
+        },
+        {
+          "id": "8:2018510428952180314",
+          "name": "copiedToAppFolder",
+          "type": 1
+        },
+        {
+          "id": "9:2645665791868331397",
+          "name": "isFinished",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:4047182906896864951",
+      "lastPropertyId": "1:7442590144213771731",
+      "name": "OBQueue",
+      "properties": [
+        {
+          "id": "1:7442590144213771731",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8830529718487384322",
+      "lastPropertyId": "12:227331051525847338",
+      "name": "UploadFileInfo",
+      "properties": [
+        {
+          "id": "1:639894055484879931",
+          "name": "dbID",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3152695684487916570",
+          "name": "localPath",
+          "type": 9
+        },
+        {
+          "id": "3:4034258858572258316",
+          "name": "id",
+          "type": 9
+        },
+        {
+          "id": "4:3583229592037109033",
+          "name": "localStorageId",
+          "type": 9
+        },
+        {
+          "id": "5:4491956886229127746",
+          "name": "loadPercent",
+          "type": 6
+        },
+        {
+          "id": "6:3697320795623611777",
+          "name": "isInProgress",
+          "type": 1
+        },
+        {
+          "id": "7:6441769838209169860",
+          "name": "folderId",
+          "type": 9
+        },
+        {
+          "id": "8:2728166587279381200",
+          "name": "auto",
+          "type": 1
+        },
+        {
+          "id": "9:7837833013688866893",
+          "name": "endedWithException",
+          "type": 1
+        },
+        {
+          "id": "10:3161242994337272973",
+          "name": "copiedToAppFolder",
+          "type": 1
+        },
+        {
+          "id": "11:2442321924732918033",
+          "name": "needToShowPopup",
+          "type": 1
+        },
+        {
+          "id": "12:227331051525847338",
+          "name": "isFinished",
+          "type": 1
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:8830529718487384322",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

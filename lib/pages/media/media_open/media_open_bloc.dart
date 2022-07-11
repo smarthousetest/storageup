@@ -1,19 +1,19 @@
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:cpp_native/controllers/load/load_controller.dart';
+import 'package:cpp_native/controllers/load/models.dart';
+import 'package:cpp_native/controllers/load/observable_utils.dart';
+import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/constants.dart';
-import 'package:storageup/models/base_object.dart';
 import 'package:storageup/models/enums.dart';
-import 'package:storageup/models/record.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
-import 'package:storageup/utilities/controllers/load_controller.dart';
-import 'package:storageup/utilities/injection.dart';
-import 'package:storageup/utilities/observable_utils.dart';
 
 import 'media_open_event.dart';
 import 'media_open_state.dart';
@@ -42,10 +42,39 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
       }
     });
   }
+  @override
+  Future<void> close() {
+    _loadController.getState.unregisterObserver(_loadObserver);
+    return super.close();
+  }
 
   FilesController _controller;
-  final LoadController _loadController = getIt<LoadController>();
-  List<DownloadObserver> _listeners = [];
+  final LoadController _loadController = LoadController.instance;
+  late var _loadObserver = Observer<LoadNotification>(
+    (notification) {
+      final downloadingFile = notification.downloadFileInfo;
+
+      if (downloadingFile != null &&
+          state.choosedMedia.id == downloadingFile.id) {
+        var choosedMedia = state.choosedMedia as Record;
+
+        choosedMedia = choosedMedia.copyWith(
+          isDownloading: downloadingFile.localPath.isEmpty,
+          isInProgress: downloadingFile.localPath.isEmpty,
+          path: downloadingFile.localPath.isEmpty
+              ? null
+              : downloadingFile.localPath,
+        );
+
+        var indexOfChoosedFile = state.mediaFromFolder
+            .indexWhere((element) => element.id == choosedMedia.id);
+
+        final mediaFromFolder = List<Record>.from(state.mediaFromFolder);
+
+        mediaFromFolder[indexOfChoosedFile] = choosedMedia;
+      }
+    },
+  );
 
   Future<void> _mapMediaOpenPageOpened(
     MediaOpenState state,
@@ -58,6 +87,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     }
 
     List<BaseObject> mediaFromFolder = [];
+    _loadController.getState.registerObserver(_loadObserver);
     if (event.choosedFolder?.id == '-1') {
       var allMediaFolders = await _controller.getMediaFolders(true);
 
@@ -116,13 +146,6 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         _loadController.downloadFile(fileId: id);
       }
 
-      var observer = DownloadObserver(id, (_) {
-        _downloadListener(id);
-      });
-
-      _listeners.add(observer);
-      _loadController.getState.registerObserver(observer);
-
       emit(
         state.copyWith(
           choosedMedia: event.choosedMedia,
@@ -134,69 +157,70 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     }
   }
 
-  void _downloadListener(String id) async {
-    var controllerState = _loadController.getState;
-    try {
-      var currentFile = controllerState.downloadingFiles
-          .firstWhere((element) => element.id == id);
+  // void _downloadListener(String id) async {
+  //   var controllerState = _loadController.getState;
+  //   try {
 
-      if (currentFile.downloadPercent == -1 && currentFile.endedWithException) {
-        var observer = _listeners.firstWhere((element) => element.id == id);
+  //     var currentFile = controllerState.downloadingFiles
+  //         .firstWhere((element) => element.id == id);
 
-        controllerState.unregisterObserver(observer);
-        _listeners.remove(observer);
+  //     if (currentFile.downloadPercent == -1 && currentFile.endedWithException) {
+  //       var observer = _listeners.firstWhere((element) => element.id == id);
 
-        var connect = await Connectivity().checkConnectivity();
-        if (connect == ConnectivityResult.none)
-          add(MediaOpenError(ErrorType.noInternet));
-        else
-          add(MediaOpenError(ErrorType.technicalError));
-        return;
-      }
+  //       controllerState.unregisterObserver(observer);
+  //       _listeners.remove(observer);
 
-      if (currentFile.downloadPercent > 0 &&
-          currentFile.downloadPercent < 100) {
-        Record media = state.mediaFromFolder
-            .firstWhere((element) => element.id == id) as Record;
-        media.loadPercent = currentFile.downloadPercent.toDouble();
-        add(MediaOpenChangeDownloadStatus(media: media));
-      } else if (currentFile.downloadPercent == 100) {
-        Record media = state.mediaFromFolder
-            .firstWhere((element) => element.id == id) as Record;
-        var path = currentFile.localPath;
-        var np = path
-            .split('/')
-            .skipWhile((value) => value != 'downloads')
-            .join('/');
-        var box = await Hive.openBox(kPathDBName);
-        box.put(media.id, np);
-        add(MediaOpenChangeDownloadStatus(media: media));
-        var observer =
-            _listeners.firstWhere((element) => element.id == media.id);
+  //       var connect = await Connectivity().checkConnectivity();
+  //       if (connect == ConnectivityResult.none)
+  //         add(MediaOpenError(ErrorType.noInternet));
+  //       else
+  //         add(MediaOpenError(ErrorType.technicalError));
+  //       return;
+  //     }
 
-        controllerState.unregisterObserver(observer);
-        _listeners.remove(observer);
-      }
-    } catch (e) {
-      print(e);
+  //     if (currentFile.downloadPercent > 0 &&
+  //         currentFile.downloadPercent < 100) {
+  //       Record media = state.mediaFromFolder
+  //           .firstWhere((element) => element.id == id) as Record;
+  //       media.loadPercent = currentFile.downloadPercent.toDouble();
+  //       add(MediaOpenChangeDownloadStatus(media: media));
+  //     } else if (currentFile.downloadPercent == 100) {
+  //       Record media = state.mediaFromFolder
+  //           .firstWhere((element) => element.id == id) as Record;
+  //       var path = currentFile.localPath;
+  //       var np = path
+  //           .split('/')
+  //           .skipWhile((value) => value != 'downloads')
+  //           .join('/');
+  //       var box = await Hive.openBox(kPathDBName);
+  //       box.put(media.id, np);
+  //       add(MediaOpenChangeDownloadStatus(media: media));
+  //       var observer =
+  //           _listeners.firstWhere((element) => element.id == media.id);
 
-      var ind = controllerState.downloadingFiles
-          .indexWhere((element) => element.id == id);
+  //       controllerState.unregisterObserver(observer);
+  //       _listeners.remove(observer);
+  //     }
+  //   } catch (e) {
+  //     print(e);
 
-      if (ind != -1) {
-        var observer = _listeners.firstWhere((element) => element.id == id);
+  //     var ind = controllerState.downloadingFiles
+  //         .indexWhere((element) => element.id == id);
 
-        controllerState.unregisterObserver(observer);
-        _listeners.remove(observer);
+  //     if (ind != -1) {
+  //       var observer = _listeners.firstWhere((element) => element.id == id);
 
-        var connect = await Connectivity().checkConnectivity();
-        if (connect == ConnectivityResult.none)
-          add(MediaOpenError(ErrorType.noInternet));
-        else
-          add(MediaOpenError(ErrorType.technicalError));
-      }
-    }
-  }
+  //       controllerState.unregisterObserver(observer);
+  //       _listeners.remove(observer);
+
+  //       var connect = await Connectivity().checkConnectivity();
+  //       if (connect == ConnectivityResult.none)
+  //         add(MediaOpenError(ErrorType.noInternet));
+  //       else
+  //         add(MediaOpenError(ErrorType.technicalError));
+  //     }
+  //   }
+  // }
 
   Future<void> _mapMediaOpenChangeFavoriteState(
     MediaOpenState state,
@@ -241,21 +265,21 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     var id = event.mediaId;
     var cs = _loadController.getState;
 
-    if (cs.downloadingFiles.any((element) => element.id == id)) {
-      print(
-          'file with name ${state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId).name} allready downloading, wait!');
-      return;
-    }
+    // if (cs.downloadingFiles.any((element) => element.id == id)) {
+    //   print(
+    //       'file with name ${state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId).name} allready downloading, wait!');
+    //   return;
+    // }
 
     _loadController.downloadFile(fileId: event.mediaId);
 
-    var observer = DownloadObserver(id, (_) {
-      _downloadListener(id);
-    });
+    // var observer = DownloadObserver(id, (_) {
+    //   _downloadListener(id);
+    // });
 
-    _listeners.add(observer);
-    _loadController.getState.registerObserver(observer);
-    emit(state);
+    // _listeners.add(observer);
+    // _loadController.getState.registerObserver(observer);
+    // emit(state);
   }
 
   Future<void> _mapMediaOpenDelete(
@@ -300,27 +324,27 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
       state.copyWith(choosedMedia: choosedMedia),
     );
 
-    if (choosedMedia.path == null || choosedMedia.path!.isEmpty) {
-      var loadState = _loadController.getState;
-      if (loadState.downloadingFiles
-          .any((element) => element.id == choosedMedia.id)) {
-        _loadController.increasePriorityOfRecord(choosedMedia.id);
-      } else {
-        add(MediaOpenDownload(mediaId: choosedMedia.id));
-      }
-    }
-    if (choosedMedia.path != null) {
-      var loadState = _loadController.getState;
-      var file = File(choosedMedia.path!);
-      if (!file.existsSync()) {
-        if (loadState.downloadingFiles
-            .any((element) => element.id == choosedMedia.id)) {
-          _loadController.increasePriorityOfRecord(choosedMedia.id);
-        } else {
-          add(MediaOpenDownload(mediaId: choosedMedia.id));
-        }
-      }
-    }
+    // if (choosedMedia.path == null || choosedMedia.path!.isEmpty) {
+    //   var loadState = _loadController.getState;
+    //   if (loadState.downloadingFiles
+    //       .any((element) => element.id == choosedMedia.id)) {
+    //     _loadController.increasePriorityOfRecord(choosedMedia.id);
+    //   } else {
+    //     add(MediaOpenDownload(mediaId: choosedMedia.id));
+    //   }
+    // }
+    // if (choosedMedia.path != null) {
+    //   var loadState = _loadController.getState;
+    //   var file = File(choosedMedia.path!);
+    //   if (!file.existsSync()) {
+    //     if (loadState.downloadingFiles
+    //         .any((element) => element.id == choosedMedia.id)) {
+    //       _loadController.increasePriorityOfRecord(choosedMedia.id);
+    //     } else {
+    //       add(MediaOpenDownload(mediaId: choosedMedia.id));
+    //     }
+    //   }
+    // }
   }
 
   Future<void> _mapChangeDownloadStatus(
