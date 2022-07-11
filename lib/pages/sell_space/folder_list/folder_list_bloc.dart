@@ -153,7 +153,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     var keeperId = event.keeper.id;
     if (event.keeper.online == 1) {
       if (keeperId != null) {
-        var result = await _keeperService.changeSleepStatus(keeperId);
+        var result =
+            await _keeperService.changeSleepStatus(keeperId, event.sleepStatus);
         if (result.left == ResponseStatus.declined) {
           emit(
             state.copyWith(

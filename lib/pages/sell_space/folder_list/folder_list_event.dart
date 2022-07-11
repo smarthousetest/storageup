@@ -28,8 +28,9 @@ class GetKeeperInfo extends FolderListEvent {
 
 class SleepStatus extends FolderListEvent {
   final Keeper keeper;
+  final bool sleepStatus;
 
-  SleepStatus({required this.keeper});
+  SleepStatus({required this.keeper, required this.sleepStatus});
 }
 
 class DeleteLocation extends FolderListEvent {

@@ -82,13 +82,19 @@ class KeeperService {
     return Either.left(ResponseStatus.ok);
   }
 
-  Future<Either<ResponseStatus, bool?>> changeSleepStatus(String id) async {
+  Future<Either<ResponseStatus, bool?>> changeSleepStatus(
+      String id, bool sleepStatus) async {
     try {
       String? token = await _tokenRepository.getApiToken();
 
-      var response = await _dio.get(
-        '/keeper/$id/change/sleepStatus',
+      var response = await _dio.put(
+        '/keeper/$id',
         options: Options(headers: {'Authorization': ' Bearer $token'}),
+        data: {
+          'data': {
+            'sleepStatus': sleepStatus,
+          }
+        },
       );
 
       if (response.statusCode == 200) {
