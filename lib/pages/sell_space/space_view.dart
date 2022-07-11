@@ -81,6 +81,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   bool canSave = true;
   int countOfNotSameName = 0;
   String? dropdownValue;
+  bool firstOpen = true;
 
   void _setWidthSearchFields(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -190,7 +191,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         } else if (state.status ==
                             FormzStatus.submissionSuccess) {
                           canSave = true;
-                        }
+                        } else if (state.status == FormzStatus.valid) {}
                       },
                       child: BlocBuilder<SpaceBloc, SpaceState>(
                           builder: (context, state) {
@@ -314,7 +315,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               Platform.isWindows
                                   ? addSpaceWindows(context)
                                   : addSpace(context),
-                                  fl,
+                              fl,
                             ],
                           ));
                         },
@@ -624,6 +625,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
+          int counter1 = 0;
+          if (firstOpen == true) {
+            context.read<SpaceBloc>().add(UpdateKeepersList());
+            firstOpen = false;
+          } else {
+            counter1 = counter1 + 1;
+            if (counter1 == 1) {
+              firstOpen = true;
+            }
+          }
           var maxSpace = (state.availableSpace / GB).round();
           print(maxSpace);
           return Column(
@@ -1108,6 +1119,17 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
+          int counter = 0;
+          if (firstOpen == true) {
+            context.read<SpaceBloc>().add(UpdateKeepersList());
+            context.read<SpaceBloc>().add(GetAlreadyUsedDisk());
+            firstOpen = false;
+          } else {
+            counter = counter + 1;
+            if (counter == 1) {
+              firstOpen = true;
+            }
+          }
           var maxSpace = (state.availableSpace / GB).round();
           print(maxSpace);
           return Column(
@@ -1161,13 +1183,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Color(0xffE4E7ED))),
-                        child: BlocBuilder<SpaceBloc, SpaceState>(
+                        child: new BlocBuilder<SpaceBloc, SpaceState>(
                           builder: (context, state) {
                             return Theme(
                                 data: Theme.of(context).copyWith(
-                                    focusColor: Theme.of(context).dividerColor,
-                                    hoverColor:
-                                        Theme.of(context).highlightColor),
+                                    focusColor: Theme.of(context).primaryColor,
+                                    hoverColor: Theme.of(context).dividerColor),
                                 child: DropdownButton<String>(
                                   dropdownColor: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.circular(10),
@@ -1200,7 +1221,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                           GetDiskToKeeper(
                                               selectedDisk:
                                                   dropdownValue?.trim()));
-                                      dirPath = state.pathToKeeper;
                                     });
                                   },
                                   items: state.diskList
@@ -1529,30 +1549,30 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
-                                context
-                                    .read<SpaceBloc>()
-                                    .add(UpdateKeepersList());
+                                firstOpen = true;
                                 countOfNotSameName = 0;
                                 for (var keeper in state.keeper) {
                                   if (state.name.value != keeper.name) {
                                     countOfNotSameName = countOfNotSameName + 1;
                                   }
                                 }
-                                if (countOfNotSameName == state.keeper.length) {
+                                if (countOfNotSameName == state.keeper.length &&
+                                    dropdownValue != null) {
                                   canSave = true;
                                 } else {
                                   canSave = false;
                                 }
                                 if (canSave == true) {
                                   context.read<SpaceBloc>().add(SaveDirPath(
-                                        pathDir: dirPath,
+                                        pathDir: dropdownValue ?? '',
                                         countGb: _currentSliderValue.toInt(),
                                       ));
                                   await context.read<SpaceBloc>().stream.first;
                                   setState(() {
                                     index = 2;
+                                    canSave = false;
+                                    dropdownValue = null;
                                   });
-                                  canSave = false;
                                 } else {
                                   canSave = false;
                                   await showDialog(

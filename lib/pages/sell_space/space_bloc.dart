@@ -42,11 +42,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         _mapNameChanged(state, event, emit);
       } else if (event is GetDiskToKeeper) {
         await _mapGetDiskToKeeper(event, state, emit);
-      } 
-      // else if (event is GetAlreadyUsedDisk){
-      //   await _
-      
-      // }
+      } else if (event is GetAlreadyUsedDisk) {
+        await _mapGetAlreadyUsedDisk(event, state, emit);
+      }
     });
   }
 
@@ -262,10 +260,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     Emitter<SpaceState> emit,
   ) async {
     var keeper = await _subscriptionService.getAllKeepers();
-    if (keeper != null)
-      emit(state.copyWith(
-        keeper: keeper,
-      ));
+    if (keeper != null) {
+      emit(state.copyWith(keeper: keeper, status: FormzStatus.valid));
+    }
   }
 
   Future _mapGetUserDisks(
@@ -277,6 +274,23 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     emit(state.copyWith(
       diskList: diskList,
     ));
+  }
+
+  Future _mapGetAlreadyUsedDisk(
+    GetAlreadyUsedDisk event,
+    SpaceState state,
+    Emitter<SpaceState> emit,
+  ) async {
+    final locationsInfo = await _repository.locationsInfo;
+    final diskList = await getDisksList();
+    List<String> checkedDisk = [];
+    for (String availableDisk in diskList)
+      if (locationsInfo.any(
+          (_locationInfo) => _locationInfo.dirPath == availableDisk.trim())) {
+      } else {
+        checkedDisk.add(availableDisk.trim());
+      }
+    emit(state.copyWith(diskList: checkedDisk, status: FormzStatus.valid));
   }
 }
 

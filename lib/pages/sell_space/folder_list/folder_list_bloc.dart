@@ -80,7 +80,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     List<Keeper> serverKeepers = [];
     List<String> localPaths = [];
     var keepers = await _keeperService.getAllKeepers(); 
-    final locationsInfo = await _repository.locationsInfo;  //получение листа с тем где расположены киперы.
+    final locationsInfo = await _repository.locationsInfo; 
     for (var keeper in keepers!) {
       if (locationsInfo.any((_locationInfo) => _locationInfo.keeperId == keeper.id)) { 
         if (state.localKeepers.isNotEmpty) {
