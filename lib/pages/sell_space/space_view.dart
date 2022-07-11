@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -326,9 +328,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 state.keeper.isEmpty
                                     ? rentingAPlace(context)
                                     : fl,
-Platform.isWindows
-? addSpaceWindows(context, changeKeeper)
-: addSpace(context, changeKeeper),
+                                Platform.isWindows
+                                    ? addSpaceWindows(context, changeKeeper)
+                                    : addSpace(context, changeKeeper),
                                 fl
                               ],
                             ));
@@ -1096,56 +1098,62 @@ Platform.isWindows
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
-if (changeKeeper != null) {
-context.read<SpaceBloc>().add(ChangeKeeper(
-countGb: _currentSliderValue.toInt(),
-keeper: changeKeeper!));
-setState(() {
-index = 2;
-myController.text = '';
-_currentSliderValue = 32;
-changeKeeper = null;
-needToCheck = true;
-});
-} else {
-                                context
-                                    .read<SpaceBloc>()
-                                    .add(UpdateKeepersList());
-                                countOfNotSameName = 0;
-                                for (var keeper in state.keeper) {
-                                  if (state.name.value != keeper.name) {
-                                    countOfNotSameName = countOfNotSameName + 1;
-                                  }
-                                }
-                                if (countOfNotSameName == state.keeper.length) {
-                                  canSave = true;
-                                } else {
-                                  canSave = false;
-                                }
-                                if (canSave == true) {
-                                  context.read<SpaceBloc>().add(SaveDirPath(
-                                        pathDir: dirPath,
-                                        countGb: _currentSliderValue.toInt(),
-                                      ));
-                                  await context.read<SpaceBloc>().stream.first;
+                                if (changeKeeper != null) {
+                                  context.read<SpaceBloc>().add(ChangeKeeper(
+                                      countGb: _currentSliderValue.toInt(),
+                                      keeper: changeKeeper!));
                                   setState(() {
                                     index = 2;
-_currentSliderValue = 32;
-myController.text = '';
+                                    myController.text = '';
+                                    _currentSliderValue = 32;
+                                    changeKeeper = null;
+                                    needToCheck = true;
                                   });
-                                  canSave = false;
                                 } else {
-                                  canSave = false;
-                                  await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return BlurCustomErrorPopUp(
-                                          middleText: translate
-                                              .keeper_name_are_the_same);
-                                    },
-                                  );
+                                  context
+                                      .read<SpaceBloc>()
+                                      .add(UpdateKeepersList());
+                                  countOfNotSameName = 0;
+                                  for (var keeper in state.keeper) {
+                                    if (state.name.value != keeper.name) {
+                                      countOfNotSameName =
+                                          countOfNotSameName + 1;
+                                    }
+                                  }
+                                  if (countOfNotSameName ==
+                                      state.keeper.length) {
+                                    canSave = true;
+                                  } else {
+                                    canSave = false;
+                                  }
+                                  if (canSave == true) {
+                                    context.read<SpaceBloc>().add(SaveDirPath(
+                                          pathDir: dirPath,
+                                          countGb: _currentSliderValue.toInt(),
+                                        ));
+                                    await context
+                                        .read<SpaceBloc>()
+                                        .stream
+                                        .first;
+                                    setState(() {
+                                      index = 2;
+                                      _currentSliderValue = 32;
+                                      myController.text = '';
+                                    });
+                                    canSave = false;
+                                  } else {
+                                    canSave = false;
+                                    await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return BlurCustomErrorPopUp(
+                                            middleText: translate
+                                                .keeper_name_are_the_same);
+                                      },
+                                    );
+                                  }
                                 }
-}}
+                              }
                             : null,
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size(double.maxFinite, 60),
@@ -1156,10 +1164,9 @@ myController.text = '';
                               : Theme.of(context).canvasColor,
                         ),
                         child: Text(
-changeKeeper == null
-? translate.save
-: translate.change,
-
+                          changeKeeper == null
+                              ? translate.save
+                              : translate.change,
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontFamily: kNormalTextFontFamily,
@@ -1176,7 +1183,7 @@ changeKeeper == null
     ]);
   }
 
-  Widget addSpaceWindows(BuildContext context) {
+  Widget addSpaceWindows(BuildContext context, DownloadLocation? changeKepper) {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {

@@ -220,7 +220,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var path = state.pathToKeeper;
 
     var id = await _keeperService.addNewKeeper(state.name.value, countOfGb);
-if (id.right != null) {
+    if (id.right != null) {
       int keeperDataId = _repository.createLocation(
           countOfGb: countOfGb,
           path: path,
@@ -298,7 +298,7 @@ if (id.right != null) {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
-    var keeper = await _subscriptionService.getAllKeepers();
+    var keeper = await _keeperService.getAllKeepers();
     if (keeper != null) {
       emit(state.copyWith(keeper: keeper, status: FormzStatus.valid));
     }
