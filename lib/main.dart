@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,21 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
-import 'package:os_specification/os_specification.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
 import 'package:storageup/pages/home/home_view.dart';
 import 'package:storageup/theme.dart';
 import 'package:storageup/utilities/language_locale.dart';
 import 'package:storageup/utilities/local_server/local_server.dart' as ui;
 
-import 'constants.dart';
 import 'generated/l10n.dart';
 import 'utilities/injection.dart';
 import 'utilities/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
-  readFromFileDomainName();
+
   await configureInjection();
   runApp(new StateContainer(child: new MyApp()));
 }
@@ -110,33 +106,6 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-
-// void writeToFileDomainName() {
-//   var os = OsSpecifications.getOs();
-//   if (os.appDirPath.isEmpty) {
-//     os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
-//   }
-//   var domainNameFile = File('${os.appDirPath}domainName');
-//   if (!domainNameFile.existsSync()) {
-//     domainNameFile.createSync(recursive: true);
-//   }
-//   domainNameFile.writeAsStringSync(domainName);
-// }
-
-void readFromFileDomainName() {
-  var os = OsSpecifications.getOs();
-  if (os.appDirPath.isEmpty) {
-    os.appDirPath = '${Directory.current.path}${Platform.pathSeparator}';
-  }
-  var domainNameFile =
-      File('${os.appDirPath}${Platform.pathSeparator}domainName');
-  if (!domainNameFile.existsSync()) {
-    domainName = "upstorage.net";
-  } else {
-    domainName = domainNameFile.readAsStringSync().trim();
-  }
-  print(domainName);
 }
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {

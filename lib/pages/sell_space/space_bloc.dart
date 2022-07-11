@@ -118,7 +118,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperName(SpaceState state) {
-    var keeperNameFile = File('${state.pathToKeeper}${Platform.pathSeparator}keeperName');
+    var keeperNameFile = File(
+      '${state.pathToKeeper}${Platform.pathSeparator}.keeper${Platform.pathSeparator}keeperName',
+    );
     if (!keeperNameFile.existsSync()) {
       keeperNameFile.createSync(recursive: true);
     }
@@ -126,19 +128,23 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   }
 
   void _writeKeeperMemorySize(SpaceState state) {
-    var keeperMemorySizeFile = File('${state.pathToKeeper}${Platform.pathSeparator}memorySize');
+    var keeperMemorySizeFile = File(
+      '${state.pathToKeeper}${Platform.pathSeparator}.keeper${Platform.pathSeparator}memorySize',
+    );
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile
+        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
-  void _writeKeeperId(String keeperIdFilePath, String keeper_id) {
-    var keeperIdFile = File(keeperIdFilePath);
+  void _writeKeeperId(String keeperDisk, String keeperId) {
+    var partsList = [keeperDisk, ".keeper", "keeper_id.txt"];
+    var keeperIdFile = File(partsList.join(Platform.pathSeparator));
     if (!keeperIdFile.existsSync()) {
       keeperIdFile.createSync(recursive: true);
     }
-    keeperIdFile.writeAsStringSync(keeper_id);
+    keeperIdFile.writeAsStringSync(keeperId);
   }
 
   _mapSaveDirPath(
@@ -188,7 +194,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
               null,
               keeperVersion,
             ).toJson(),
-            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
+            options:
+                Options(headers: {"Authorisation": "Bearer $bearerToken"}));
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");
