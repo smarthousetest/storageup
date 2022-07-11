@@ -1286,6 +1286,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               firstOpen = true;
             }
           }
+          if (changeKeeper != null && needToCheck == true) {
+            needToCheck = false;
+            context
+                .read<SpaceBloc>()
+                .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+          }
           var maxSpace = (state.availableSpace / GB).round();
           print(maxSpace);
           return Column(
@@ -1430,7 +1436,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     child: Container(
                       child: Text(
                         translate.min_storage(
-                          32,
+                          changeKeeper == null ? 32 : changeKeeper!.countGb,
                         ),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onBackground,
@@ -1439,7 +1445,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     )),
-                state.pathToKeeper.isNotEmpty
+                state.pathToKeeper.isNotEmpty || changeKeeper != null
                     ? maxSpace < 32
                         ? Padding(
                             padding: const EdgeInsets.only(left: 40, top: 8),
@@ -1458,7 +1464,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             padding: const EdgeInsets.only(left: 40, top: 8),
                             child: Container(
                               child: Text(
-                                translate.max_storage + translate.gb(maxSpace),
+                                translate.max_storage +
+                                    translate.gb(
+                                      changeKeeper != null
+                                          ? changeKeeper!.countGb + maxSpace
+                                          : maxSpace,
+                                    ),
                                 style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
@@ -1504,8 +1515,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           child: Slider(
                             activeColor: Theme.of(context).splashColor,
                             inactiveColor: Theme.of(context).cardColor,
-                            min: 32,
-                            max: maxSpace > 32 ? maxSpace.toDouble() : 180,
+                            min: changeKeeper == null
+                                ? 32
+                                : changeKeeper!.countGb.roundToDouble(),
+                            max: changeKeeper == null
+                                ? maxSpace > 32
+                                    ? maxSpace.roundToDouble()
+                                    : 180
+                                : changeKeeper!.countGb.roundToDouble() +
+                                    maxSpace.roundToDouble(),
                             value: _currentSliderValue,
                             onChanged: maxSpace < 32
                                 ? null
@@ -1705,40 +1723,58 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
-                                firstOpen = true;
-                                countOfNotSameName = 0;
-                                for (var keeper in state.keeper) {
-                                  if (state.name.value != keeper.name) {
-                                    countOfNotSameName = countOfNotSameName + 1;
-                                  }
-                                }
-                                if (countOfNotSameName == state.keeper.length &&
-                                    dropdownValue != null) {
-                                  canSave = true;
-                                } else {
-                                  canSave = false;
-                                }
-                                if (canSave == true) {
-                                  context.read<SpaceBloc>().add(SaveDirPath(
-                                        pathDir: dropdownValue ?? '',
-                                        countGb: _currentSliderValue.toInt(),
-                                      ));
-                                  await context.read<SpaceBloc>().stream.first;
+                                if (changeKeeper != null) {
+                                  context.read<SpaceBloc>().add(ChangeKeeper(
+                                      countGb: _currentSliderValue.toInt(),
+                                      keeper: changeKeeper!));
                                   setState(() {
                                     index = 2;
-                                    canSave = false;
-                                    dropdownValue = null;
+                                    myController.text = '';
+                                    _currentSliderValue = 32;
+                                    changeKeeper = null;
+                                    needToCheck = true;
                                   });
                                 } else {
-                                  canSave = false;
-                                  await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return BlurCustomErrorPopUp(
-                                          middleText: translate
-                                              .keeper_name_are_the_same);
-                                    },
-                                  );
+                                  firstOpen = true;
+                                  countOfNotSameName = 0;
+                                  for (var keeper in state.keeper) {
+                                    if (state.name.value != keeper.name) {
+                                      countOfNotSameName =
+                                          countOfNotSameName + 1;
+                                    }
+                                  }
+                                  if (countOfNotSameName ==
+                                          state.keeper.length &&
+                                      dropdownValue != null) {
+                                    canSave = true;
+                                  } else {
+                                    canSave = false;
+                                  }
+                                  if (canSave == true) {
+                                    context.read<SpaceBloc>().add(SaveDirPath(
+                                          pathDir: dropdownValue ?? '',
+                                          countGb: _currentSliderValue.toInt(),
+                                        ));
+                                    await context
+                                        .read<SpaceBloc>()
+                                        .stream
+                                        .first;
+                                    setState(() {
+                                      index = 2;
+                                      canSave = false;
+                                      dropdownValue = null;
+                                    });
+                                  } else {
+                                    canSave = false;
+                                    await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return BlurCustomErrorPopUp(
+                                            middleText: translate
+                                                .keeper_name_are_the_same);
+                                      },
+                                    );
+                                  }
                                 }
                               }
                             : null,
