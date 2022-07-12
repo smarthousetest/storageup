@@ -181,6 +181,8 @@ class _HomePageState extends State<HomePage> {
                 child:
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(30, 30, 47, 15),
@@ -188,6 +190,16 @@ class _HomePageState extends State<HomePage> {
                           'assets/home_page/storage_title.svg',
                         ),
                       ),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 30),
+                          child: Text(
+                            '© АО "НПП "Радар ммс"',
+                            style: TextStyle(
+                              color: Theme.of(context).splashColor,
+                              fontSize: 17,
+                              fontFamily: kNormalTextFontFamily,
+                            ),
+                          )),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(30, 15, 30, 25),
                         child: SvgPicture.asset(

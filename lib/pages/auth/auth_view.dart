@@ -15,6 +15,7 @@ import 'package:storageup/components/auth/sign_in_main.dart';
 import 'package:storageup/components/auth/sign_in_welcome.dart';
 import 'package:storageup/components/expanded_section.dart';
 import 'package:storageup/components/registration_success.dart';
+import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/auth_event.dart';
@@ -142,32 +143,51 @@ class _AuthViewState extends State<AuthView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 25, top: 25),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        radius: 22.5,
-                        child: SvgPicture.asset(
-                          'assets/auth/logo.svg',
-                          color: _isSignIn
-                              ? theme.accentColor
-                              : theme.primaryColor,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 22.5,
+                            child: SvgPicture.asset(
+                              'assets/auth/logo.svg',
+                              color: _isSignIn
+                                  ? theme.accentColor
+                                  : theme.primaryColor,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'StorageUp',
+                            style: TextStyle(
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w900,
+                              fontSize: 24,
+                              color: _isSignIn
+                                  ? theme.accentColor
+                                  : theme.primaryColor,
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'StorageUp',
-                        style: TextStyle(
-                          fontFamily: 'Ubuntu',
-                          fontWeight: FontWeight.w900,
-                          fontSize: 24,
-                          color: _isSignIn
-                              ? theme.accentColor
-                              : theme.primaryColor,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 0.0, left: 50),
+                        child: Text(
+                          '© АО "НПП "Радар ммс"',
+                          style: TextStyle(
+                            color: _isSignIn
+                                ? theme.accentColor
+                                : theme.primaryColor,
+                            fontSize: 11,
+                            fontFamily: kNormalTextFontFamily,
+                          ),
                         ),
                       ),
                     ],
