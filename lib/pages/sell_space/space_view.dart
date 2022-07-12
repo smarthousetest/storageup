@@ -109,30 +109,37 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ..add(SendKeeperVersion()),
         child: BlocListener<SpaceBloc, SpaceState>(
           listener: (context, state) async {
-            if (state.statusHttpRequest == FormzStatus.submissionCanceled) {
-              canSave = true;
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurCustomErrorPopUp(
-                      middleText: translate.something_goes_wrong);
-                },
-              );
-            } else if (state.statusHttpRequest ==
-                FormzStatus.submissionFailure) {
-              canSave = true;
-              await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return BlurCustomErrorPopUp(
-                      middleText: translate.no_internet);
-                },
-              );
-            } else if (state.statusHttpRequest ==
-                FormzStatus.submissionSuccess) {
-              canSave = true;
-            } else if (state.statusHttpRequest == FormzStatus.valid) {
-              canSave = true;
+            if (StateContainer.of(context).isPopUpShowing == false) {
+              if (state.statusHttpRequest == FormzStatus.submissionFailure) {
+                canSave = true;
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                      middleText: translate.something_goes_wrong,
+                    );
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              } else if (state.statusHttpRequest ==
+                  FormzStatus.submissionCanceled) {
+                canSave = true;
+                StateContainer.of(context).changeIsPopUpShowing(true);
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                        middleText: translate.no_internet);
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              } else if (state.statusHttpRequest ==
+                  FormzStatus.submissionSuccess) {
+                canSave = true;
+              } else if (state.statusHttpRequest == FormzStatus.valid) {
+                canSave = true;
+              }
             }
           },
           child:

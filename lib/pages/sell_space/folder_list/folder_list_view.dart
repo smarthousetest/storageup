@@ -19,6 +19,7 @@ import 'package:storageup/pages/sell_space/folder_list/folder_list_state.dart';
 import 'package:storageup/pages/sell_space/space_view.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 class FolderList extends StatefulWidget {
   @override
@@ -64,27 +65,35 @@ class _ButtonTemplateState extends State<FolderList> {
       create: (context) => bloc..add(FolderListPageOpened()),
       child: BlocListener<FolderListBloc, FolderListState>(
         listener: (context, state) async {
-          if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
-              popUpWasShown == false) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurCustomErrorPopUp(middleText: translate.no_internet);
-              },
-            );
-          } else if (state.statusHttpRequest == FormzStatus.submissionFailure &&
-              popUpWasShown == false) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurCustomErrorPopUp(middleText: translate.no_internet);
-              },
-            );
-          }
-          if (state.needToValidatePopup == true) {
-            popUpWasShown = true;
-          } else {
-            popUpWasShown = false;
+          if (StateContainer.of(context).isPopUpShowing == false) {
+            if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
+                popUpWasShown == false) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            } else if (state.statusHttpRequest ==
+                    FormzStatus.submissionFailure &&
+                popUpWasShown == false) {
+              StateContainer.of(context).changeIsPopUpShowing(true);
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            }
+            if (state.needToValidatePopup == true) {
+              popUpWasShown = true;
+            } else {
+              popUpWasShown = false;
+            }
           }
         },
         child: BlocBuilder<FolderListBloc, FolderListState>(
