@@ -9,6 +9,7 @@ import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:storageup/keeper_ws/keeper_ws.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/keeper/keeper.dart';
 import 'package:storageup/models/user.dart';
@@ -262,26 +263,21 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     String? bearerToken = await TokenRepository().getApiToken();
     Dio dio = getIt<Dio>(instanceName: 'record_dio');
     var box = await Hive.openBox('keeper_data');
-    String keeperDir =
-        Uri.decodeFull(await box.get(event.location.id.toString()));
+    String keeperDir = Uri.decodeFull(
+      await box.get(event.location.id.toString()),
+    );
     await box.delete(event.location.id.toString());
     String keeperId = '';
     var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
     if (keeperIdFile.existsSync()) {
       keeperId = keeperIdFile.readAsStringSync().trim();
     }
-    if (bearerToken != null) {
+    if (bearerToken != null && keeperId.isNotEmpty) {
       await _getKeeperSession(keeperId, dio, bearerToken);
       try {
-        await dio.delete(
-          '/keeper',
-          queryParameters: {'ids[]': keeperId},
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $bearerToken',
-            },
-          ),
-        );
+        KeeperWs(bearerToken: bearerToken)
+          ..setProxyUrl()
+          ..sendKeeperDeleteToProxy(keeperId);
       } on DioError catch (e) {
         print(e);
         if (e.response?.statusCode == 401 ||

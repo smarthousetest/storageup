@@ -57,7 +57,11 @@ class KeeperService {
         String? token = await _tokenRepository.getApiToken();
         var response = await _dio.post(
           '/keeper',
-          options: Options(headers: {'Authorization': ' Bearer $token'}),
+          options: Options(
+            headers: {
+              'Authorization': ' Bearer $token',
+            },
+          ),
           data: {
             'data': {
               'name': name,
@@ -88,7 +92,11 @@ class KeeperService {
 
       var response = await _dio.get(
         '/keeper/$id/change/sleepStatus',
-        options: Options(headers: {'Authorization': ' Bearer $token'}),
+        options: Options(
+          headers: {
+            'Authorization': ' Bearer $token',
+          },
+        ),
       );
 
       if (response.statusCode == 200) {

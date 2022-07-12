@@ -105,7 +105,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     var os = OsSpecifications.getOs();
     _writeKeeperId(
-      '${state.pathToKeeper}${Platform.pathSeparator}keeper_id.txt',
+      '${state.pathToKeeper}',
       keeperId,
     );
     var bearerToken = await TokenRepository().getApiToken();
@@ -138,7 +138,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     if (!keeperMemorySizeFile.existsSync()) {
       keeperMemorySizeFile.createSync(recursive: true);
     }
-    keeperMemorySizeFile.writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
+    keeperMemorySizeFile
+        .writeAsStringSync('${state.locationsInfo.last.countGb * GB}');
   }
 
   void _writeKeeperId(String keeperDisk, String keeperId) {
@@ -194,15 +195,21 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     String? bearerToken = await getIt<TokenRepository>().getApiToken();
     for (var location in state.locationsInfo) {
       try {
-        dio.put("/keeper/${location.keeperId}",
-            data: KeeperData(
-              null,
-              null,
-              null,
-              null,
-              keeperVersion,
-            ).toJson(),
-            options: Options(headers: {"Authorisation": "Bearer $bearerToken"}));
+        dio.put(
+          "/keeper/${location.keeperId}",
+          data: KeeperData(
+            null,
+            null,
+            null,
+            null,
+            keeperVersion,
+          ).toJson(),
+          options: Options(
+            headers: {
+              "Authorisation": "Bearer $bearerToken",
+            },
+          ),
+        );
         print("Keeper info is sent");
       } catch (e) {
         print("_putLocalKeeperVersion");
