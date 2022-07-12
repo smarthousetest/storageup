@@ -554,9 +554,9 @@ class _HomePageState extends State<HomePage> {
           //   action: userAction.action,
           //   result: [name],
           // );
-          final folderId = StateContainer.of(context).choosedFilesFolderId;
+          final folderId = StateContainer.of(context).chosenFilesFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -577,7 +577,7 @@ class _HomePageState extends State<HomePage> {
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChoosed(
+          context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -597,7 +597,7 @@ class _HomePageState extends State<HomePage> {
           final folder = result;
           changePage(ChosenPage.file);
           context.read<HomeBloc>().add(
-                HomeUserActionChoosed(
+                HomeUserActionChosen(
                   action: userAction.action,
                   values: userAction.result,
                   folderId: folder.id,
@@ -609,7 +609,7 @@ class _HomePageState extends State<HomePage> {
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         changePage(ChosenPage.media);
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -618,7 +618,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-              HomeUserActionChoosed(
+              HomeUserActionChosen(
                 action: userAction.action,
                 values: userAction.result,
               ),

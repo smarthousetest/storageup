@@ -28,7 +28,7 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
   @override
   Widget build(BuildContext context) {
     var mainColor = widget.theme.colorScheme.onSecondary;
-    int ind = -1;
+    int widgetIndex = -1;
     return ContextMenuArea(
       builder: (context) => [
         Container(
@@ -45,13 +45,13 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 0;
+                        widgetIndex = 0;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 0 ? mainColor : null,
+                      color: widgetIndex == 0 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,7 +59,7 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                           SvgPicture.asset(
                             'assets/options/add_files.svg',
                             height: 20,
-                            color: ind == 0
+                            color: widgetIndex == 0
                                 ? widget.theme.splashColor
                                 : widget.theme.disabledColor,
                           ),
@@ -70,7 +70,7 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                               style: TextStyle(
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 14,
-                                color: ind == 0
+                                color: widgetIndex == 0
                                     ? widget.theme.splashColor
                                     : widget.theme.disabledColor,
                               )),
@@ -86,13 +86,13 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 1;
+                        widgetIndex = 1;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 1 ? mainColor : null,
+                      color: widgetIndex == 1 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,7 +100,7 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                           SvgPicture.asset(
                             'assets/options/create_folder.svg',
                             height: 20,
-                            color: ind == 1
+                            color: widgetIndex == 1
                                 ? widget.theme.splashColor
                                 : widget.theme.disabledColor,
                           ),
@@ -111,7 +111,7 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
                               style: TextStyle(
                                 fontFamily: kNormalTextFontFamily,
                                 fontSize: 14,
-                                color: ind == 1
+                                color: widgetIndex == 1
                                     ? widget.theme.splashColor
                                     : widget.theme.disabledColor,
                               )),

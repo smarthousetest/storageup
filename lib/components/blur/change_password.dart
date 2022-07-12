@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:cpp_native/cpp_native.dart';
 import 'package:cpp_native/file_proc/encryption.dart';
-import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
