@@ -16,14 +16,18 @@ class AuthService {
   AuthService(@Named('auth_dio') this._dio);
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
-  final UserRepository _userRepository = getIt<UserRepository>(instanceName: 'user_repo');
+  final UserRepository _userRepository =
+      getIt<UserRepository>(instanceName: 'user_repo');
 
-  Future<AuthenticationStatus> signInByCredentials({required String email, required String password}) async {
+  Future<AuthenticationStatus> signInByCredentials(
+      {required String email,
+      required String password,
+      bool isNeedSave = true}) async {
     try {
       final query = {'email': email, 'password': password};
       final response = await _dio.post('/sign-in', data: query);
       if (response.statusCode == 200) {
-        await _tokenRepository.setApiToken(response.toString());
+        await _tokenRepository.setApiToken(response.toString(), isNeedSave);
         await getUserInfo();
         return AuthenticationStatus.authenticated;
       } else {
@@ -43,7 +47,8 @@ class AuthService {
   Future<AuthenticationStatus> restorePassword({required String email}) async {
     try {
       final query = {'email': email};
-      final response = await _dio.post('/send-password-reset-email', data: query);
+      final response =
+          await _dio.post('/send-password-reset-email', data: query);
       if (response.statusCode == 200) {
         return AuthenticationStatus.authenticated;
       } else {
@@ -53,7 +58,10 @@ class AuthService {
       _printDioError(e);
       if (e.response?.statusCode == 400) {
         return AuthenticationStatus.unauthenticated;
-      } else if (e.response?.statusCode == 429 || e.response?.statusCode == 500 || e.response?.statusCode == 502 || e.response?.statusCode == 504)
+      } else if (e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504)
         return AuthenticationStatus.externalError;
       else
         return AuthenticationStatus.noInternet;
@@ -88,7 +96,11 @@ class AuthService {
         return AuthenticationStatus.wrongPassword;
       else if (e.response?.statusCode == 401)
         return AuthenticationStatus.unauthenticated;
-      else if (e.response?.statusCode == 403 || e.response?.statusCode == 429 || e.response?.statusCode == 500 || e.response?.statusCode == 502 || e.response?.statusCode == 504)
+      else if (e.response?.statusCode == 403 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504)
         return AuthenticationStatus.externalError;
       else
         return AuthenticationStatus.noInternet;
@@ -104,7 +116,8 @@ class AuthService {
   //   }
   // }
 
-  Future<AuthenticationStatus> register({required String email, required String password}) async {
+  Future<AuthenticationStatus> register(
+      {required String email, required String password}) async {
     try {
       final query = {'email': email, 'password': password};
       final response = await _dio.post('/sign-up', data: query);
@@ -153,7 +166,8 @@ class AuthService {
           '/me',
           options: Options(headers: {'Authorization': ' Bearer $token'}),
         );
-        if (response.statusCode == 200 && response.data['emailVerified'] == true) {
+        if (response.statusCode == 200 &&
+            response.data['emailVerified'] == true) {
           _userRepository.setUser = User.fromJson(response.data);
           return AuthenticationStatus.authenticated;
         } else
@@ -169,7 +183,8 @@ class AuthService {
     try {
       var user = _userRepository.getUser;
       String? url = '';
-      if (user?.avatars != null && user!.avatars!.isNotEmpty) url = user.avatars?.first.publicUrl;
+      if (user?.avatars != null && user!.avatars!.isNotEmpty)
+        url = user.avatars?.first.publicUrl;
       final query = {
         'data': {
           "firstName": name,

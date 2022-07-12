@@ -77,7 +77,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.singleton<_i20.S>(serviceModule.s);
   gh.factory<_i21.SettingsBloc>(() => _i21.SettingsBloc());
   gh.factory<_i22.SubscriptionService>(() => _i22.SubscriptionService());
-  gh.factory<_i23.TokenRepository>(() => _i23.TokenRepository());
+  gh.singleton<_i23.TokenRepository>(_i23.TokenRepository());
   gh.factory<_i24.UserController>(() => _i24.UserController());
   gh.lazySingleton<_i25.UserRepository>(() => serviceModule.userRepository,
       instanceName: 'user_repo');

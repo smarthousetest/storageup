@@ -9,14 +9,22 @@ const _api_token = "bearer_token";
 
 enum RepositoryEnum { goodResponse, error }
 
-@injectable
+@singleton
 class TokenRepository extends ITokenRepository {
-  Future<RepositoryEnum> setApiToken(String token) async {
+  String? token = null;
+
+  Future<RepositoryEnum> setApiToken(String token,
+      [bool isNeedSave = true]) async {
     try {
-      writeBearerTokenToFile(token);
-      var prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_api_token, token);
-      return RepositoryEnum.goodResponse;
+      if (isNeedSave) {
+        writeBearerTokenToFile(token);
+        var prefs = await SharedPreferences.getInstance();
+        await prefs.setString(_api_token, token);
+        return RepositoryEnum.goodResponse;
+      } else {
+        this.token = token;
+        return RepositoryEnum.goodResponse;
+      }
     } on Exception {
       return RepositoryEnum.error;
     }
@@ -24,6 +32,11 @@ class TokenRepository extends ITokenRepository {
 
   Future<String?> getApiToken() async {
     try {
+      await null;
+      if (token != null) {
+        return token;
+      }
+
       var prefs = await SharedPreferences.getInstance();
       final result = prefs.getString(_api_token);
       return result;

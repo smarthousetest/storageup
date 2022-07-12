@@ -183,6 +183,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final result = await _authenticationRepository.logIn(
           email: state.emailLogin.value,
           password: state.passwordLogin.value,
+          isNeedSave: state.rememberMe,
         );
         if (result == AuthenticationStatus.authenticated) {
           emit(state.copyWith(

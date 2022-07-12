@@ -16,11 +16,12 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  Future<AuthenticationStatus> logIn({
-    required String email,
-    required String password,
-  }) async {
-    final response = await _authService.signInByCredentials(email: email, password: password);
+  Future<AuthenticationStatus> logIn(
+      {required String email,
+      required String password,
+      bool isNeedSave = true}) async {
+    final response = await _authService.signInByCredentials(
+        email: email, password: password, isNeedSave: isNeedSave);
     _controller.add(response);
     return response;
   }
@@ -35,7 +36,8 @@ class AuthenticationRepository {
     required String oldPassword,
     required String newPassword,
   }) async {
-    final response = await _authService.changePassword(oldPassword: oldPassword, newPassword: newPassword);
+    final response = await _authService.changePassword(
+        oldPassword: oldPassword, newPassword: newPassword);
     _controller.add(response);
     return response;
   }
@@ -50,8 +52,10 @@ class AuthenticationRepository {
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  Future<AuthenticationStatus> register({required String email, required String password}) async {
-    final response = await _authService.register(email: email, password: password);
+  Future<AuthenticationStatus> register(
+      {required String email, required String password}) async {
+    final response =
+        await _authService.register(email: email, password: password);
     _controller.add(response);
     return response;
   }
