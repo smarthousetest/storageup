@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:storageup/models/download_location.dart';
 import 'package:storageup/pages/sell_space/space_state.dart';
 
 abstract class SpaceEvent extends Equatable {

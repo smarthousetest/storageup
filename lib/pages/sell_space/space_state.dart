@@ -16,8 +16,8 @@ class SpaceState extends Equatable {
   final String pathToKeeper;
   final int availableSpace;
   final Name name;
-  final List<String> diskList;
   final FormzStatus statusHttpRequest;
+  final List<String> diskList;
   final List<String> usedDisk;
 
   SpaceState({

@@ -8,6 +8,7 @@ import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/download_location.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_view.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
@@ -362,42 +363,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   },
                 ),
               ),
-              child: BlocBuilder<SpaceBloc, SpaceState>(
-                builder: (context, state) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    //mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 40, right: 40, top: 20),
-                        child: _title(context, state),
-                      ),
-                      BlocBuilder<SpaceBloc, SpaceState>(
-                        builder: (context, state) {
-                          var fl = folderList(context);
-                          return Expanded(
-                              child: IndexedStack(
-                            sizing: StackFit.passthrough,
-                            key: ValueKey<int>(index),
-                            index: index,
-                            children: [
-                              state.keeper.isEmpty
-                                  ? rentingAPlace(context)
-                                  : fl,
-                              Platform.isWindows
-                                  ? addSpaceWindows(context)
-                                  : addSpace(context),
-                              fl,
-                            ],
-                          ));
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
             ),
           ]),
         ));
@@ -703,13 +668,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
-          if (changeKeeper != null && needToCheck == true) {
-            needToCheck = false;
-            context
-                .read<SpaceBloc>()
-                .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
-          }
-
           int counter1 = 0;
           if (firstOpen == true) {
             context.read<SpaceBloc>().add(UpdateKeepersList());
@@ -720,6 +678,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               firstOpen = true;
             }
           }
+          if (changeKeeper != null && needToCheck == true) {
+            needToCheck = false;
+            context
+                .read<SpaceBloc>()
+                .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+          }
+
           var maxSpace = (state.availableSpace / GB).round();
           //print(maxSpace);
           return Column(
@@ -1155,37 +1120,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       return OutlinedButton(
                         onPressed: _isFieldsValid(state)
                             ? () async {
-                                if (changeKeeper != null) {
-                                  context.read<SpaceBloc>().add(ChangeKeeper(
-                                      countGb: _currentSliderValue.toInt(),
-                                      keeper: changeKeeper!));
-                                  setState(() {
-                                    index = 2;
-                                    myController.text = '';
-                                    _currentSliderValue = 32;
-                                    changeKeeper = null;
-                                    needToCheck = true;
-                                  });
-                                context
-                                    .read<SpaceBloc>()
-                                    .add(UpdateKeepersList());
-                                countOfNotSameName = 0;
-                                for (var keeper in state.keeper) {
-                                  if (state.name.value != keeper.name) {
-                                    countOfNotSameName = countOfNotSameName + 1;
-                                  }
-                                }
-                                if (countOfNotSameName == state.keeper.length) {
-                                  canSave = true;
-                                } else {
-                                  canSave = false;
-                                }
-                                if (canSave == true) {
-                                  context.read<SpaceBloc>().add(SaveDirPath(
-                                        pathDir: dirPath,
-                                        countGb: _currentSliderValue.toInt(),
-                                      ));
-                                  await context.read<SpaceBloc>().stream.first;
                                 if (changeKeeper != null) {
                                   context.read<SpaceBloc>().add(ChangeKeeper(
                                       countGb: _currentSliderValue.toInt(),
@@ -1787,7 +1721,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               : Theme.of(context).canvasColor,
                         ),
                         child: Text(
-                          translate.save,
+                          changeKeeper == null
+                              ? translate.save
+                              : translate.change,
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontFamily: kNormalTextFontFamily,

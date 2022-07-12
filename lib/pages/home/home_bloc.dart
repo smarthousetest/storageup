@@ -14,6 +14,7 @@ import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/injection.dart';

@@ -135,7 +135,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     }
   }
 
-  void _mapNameChanged(
+  Future<void> _mapNameChanged(
     SpaceState state,
     NameChanged event,
     Emitter<SpaceState> emit,

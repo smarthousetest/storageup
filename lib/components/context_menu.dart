@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:upstorage_desktop/constants.dart';
-import 'package:upstorage_desktop/generated/l10n.dart';
-import 'package:upstorage_desktop/components/context_menu_lib.dart';
+import 'package:storageup/constants.dart';
+import 'package:storageup/generated/l10n.dart';
 
 import '../models/enums.dart';
+import 'context_menu_lib.dart';
 
 class ContextMenuRightTap extends StatefulWidget {
   ContextMenuRightTap(

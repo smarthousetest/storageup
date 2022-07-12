@@ -18,6 +18,7 @@ import 'package:open_file/open_file.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/packet_controllers.dart';
 import 'package:storageup/utilities/event_bus.dart';
@@ -581,6 +582,29 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var res = await _filesController.setFavorite(object, favorite);
     if (res == ResponseStatus.ok) {
       update();
+    }
+  }
+
+  Future<void> uploadFilesAction(String? folderId) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.any,
+    );
+    if (result != null) {
+      List<String?> filePaths = result.paths;
+
+      for (int i = 0; i < filePaths.length; i++) {
+        if (filePaths[i] != null &&
+            PathCheck().isPathCorrect(filePaths[i].toString())) {
+          await _loadController.uploadFile(
+              filePath: filePaths[i], folderId: folderId);
+        } else {
+          print(
+              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+        }
+      }
+    } else {
+      return null;
     }
   }
 

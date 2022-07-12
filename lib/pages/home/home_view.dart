@@ -19,6 +19,7 @@ import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/latest_file.dart';
 import 'package:storageup/pages/files/file_view.dart';
+import 'package:storageup/pages/files/move_files/move_files_view.dart';
 import 'package:storageup/pages/finance/finance_view.dart';
 import 'package:storageup/pages/home/home_event.dart';
 import 'package:storageup/pages/info/info_view.dart';

@@ -16,6 +16,7 @@ import 'package:storageup/models/keeper/keeper.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_bloc.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_state.dart';
+import 'package:storageup/pages/sell_space/space_view.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 
