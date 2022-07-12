@@ -59,55 +59,52 @@ class _ButtonTemplateState extends State<FolderList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => bloc..add(FolderListPageOpened()),
-      child: BlocListener<FolderListBloc, FolderListState>(
-        listener: (context, state) async {
-          if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
-              popUpWasShown == false) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurCustomErrorPopUp(middleText: translate.no_internet);
-              },
-            );
-          } else if (state.statusHttpRequest == FormzStatus.submissionFailure &&
-              popUpWasShown == false) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurCustomErrorPopUp(middleText: translate.no_internet);
-              },
-            );
-          }
-          if (state.needToValidatePopup == true) {
-            popUpWasShown = true;
-          } else {
-            popUpWasShown = false;
-          }
+    return BlocListener<FolderListBloc, FolderListState>(
+      listener: (context, state) async {
+        if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
+            popUpWasShown == false) {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurCustomErrorPopUp(middleText: translate.no_internet);
+            },
+          );
+        } else if (state.statusHttpRequest == FormzStatus.submissionFailure &&
+            popUpWasShown == false) {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurCustomErrorPopUp(middleText: translate.no_internet);
+            },
+          );
+        }
+        if (state.needToValidatePopup == true) {
+          popUpWasShown = true;
+        } else {
+          popUpWasShown = false;
+        }
+      },
+      child: BlocBuilder<FolderListBloc, FolderListState>(
+        builder: (context, state) {
+          _initiatingControllers(state);
+          locationsInfo = state.localKeepers;
+          return SingleChildScrollView(
+            controller: ScrollController(),
+            child: Column(
+              children: [
+                state.localKeepers.isNotEmpty
+                    ? _thisKeeper(context, state)
+                    : Container(),
+                state.serverKeepers.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: _otherKeeper(context, state),
+                      )
+                    : Container(),
+              ],
+            ),
+          );
         },
-        child: BlocBuilder<FolderListBloc, FolderListState>(
-          builder: (context, state) {
-            _initiatingControllers(state);
-            locationsInfo = state.localKeepers;
-            return SingleChildScrollView(
-              controller: ScrollController(),
-              child: Column(
-                children: [
-                  state.localKeepers.isNotEmpty
-                      ? _thisKeeper(context, state)
-                      : Container(),
-                  state.serverKeepers.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: _otherKeeper(context, state),
-                        )
-                      : Container(),
-                ],
-              ),
-            );
-          },
-        ),
       ),
     );
   }

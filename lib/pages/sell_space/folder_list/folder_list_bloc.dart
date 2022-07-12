@@ -41,7 +41,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   }
 
   UserController _userController = getIt<UserController>();
-  late final DownloadLocationsRepository _repository;
+  late DownloadLocationsRepository _repository;
   final KeeperService _keeperService = getIt<KeeperService>();
   static Timer? timerUpdateKeeperInfo;
 
@@ -55,22 +55,22 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     emit(state.copyWith(user: user));
     add(GetKeeperInfo());
-    try {
-      // if (timerUpdateKeeperInfo == null || !timerUpdateKeeperInfo!.isActive) {
-      timerUpdateKeeperInfo?.cancel();
-      timerUpdateKeeperInfo = Timer.periodic(
-        Duration(seconds: updateKeeperInfoDelay),
-        (Timer t) async {
-          add(GetKeeperInfo());
-          print("Update keeper info");
-        },
-      );
-      print("Timer of updating keeper info started");
-      // }
+    // try {
+    //   // if (timerUpdateKeeperInfo == null || !timerUpdateKeeperInfo!.isActive) {
+    //   timerUpdateKeeperInfo?.cancel();
+    //   timerUpdateKeeperInfo = Timer.periodic(
+    //     Duration(seconds: updateKeeperInfoDelay),
+    //     (Timer t) async {
+    //       add(GetKeeperInfo());
+    //       print("Update keeper info");
+    //     },
+    //   );
+    //   print("Timer of updating keeper info started");
+    //   // }
 
-    } catch (e) {
-      print('error timer in get keeper');
-    }
+    // } catch (e) {
+    //   print('error timer in get keeper');
+    // }
     _repository.getDownloadLocationsValueListenable.addListener(_listener);
   }
 
@@ -82,6 +82,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     List<Keeper> localKeepers = [];
     List<Keeper> serverKeepers = [];
     List<String> localPaths = [];
+    _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     var keepers = await _keeperService.getAllKeepers();
     final locationsInfo = await _repository.locationsInfo;
     if (keepers.right != null) {
