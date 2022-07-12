@@ -9,6 +9,7 @@ import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:os_specification/os_specification.dart';
+import 'package:storageup/models/download_location.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/auth/models/name.dart';
@@ -44,8 +45,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         await _mapGetDiskToKeeper(event, state, emit);
       } else if (event is GetAlreadyUsedDisk) {
         await _mapGetAlreadyUsedDisk(event, state, emit);
-      }
-     else if (event is ChangeKeeper) {
+      } else if (event is ChangeKeeper) {
         _changeKeeper(state, event, emit);
       }
     });
@@ -75,10 +75,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         locationsInfo: locationsInfo,
         keeper: keeper.right,
         valueNotifier: valueNotifier,
-         diskList: diskList,
+        diskList: diskList,
       ));
     }
-     
   }
 
   // DiskSpaceController()
@@ -222,8 +221,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var countOfGb = event.countGb;
     var path = state.pathToKeeper;
 
-    var id =
-        await _subscriptionService.addNewKeeper(state.name.value, countOfGb);
+    var id = await _keeperService.addNewKeeper(state.name.value, countOfGb);
     if (id.right != null) {
       int keeperDataId = _repository.createLocation(
           countOfGb: countOfGb,
@@ -296,8 +294,9 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     Emitter<SpaceState> emit,
   ) async {
     var keeper = await _keeperService.getAllKeepers();
-    if (keeper != null) {
-      emit(state.copyWith(keeper: keeper, status: FormzStatus.valid));
+    if (keeper.right != null) {
+      emit(state.copyWith(
+          keeper: keeper.right, statusHttpRequest: FormzStatus.valid));
     }
   }
 
@@ -326,7 +325,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       } else {
         checkedDisk.add(availableDisk.trim());
       }
-    emit(state.copyWith(diskList: checkedDisk, status: FormzStatus.valid));
+    emit(state.copyWith(
+        diskList: checkedDisk, statusHttpRequest: FormzStatus.valid));
   }
 }
 

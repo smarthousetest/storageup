@@ -585,29 +585,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> uploadFilesAction(String? folderId) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.any,
-    );
-    if (result != null) {
-      List<String?> filePaths = result.paths;
-
-      for (int i = 0; i < filePaths.length; i++) {
-        if (filePaths[i] != null &&
-            PathCheck().isPathCorrect(filePaths[i].toString())) {
-          await _loadController.uploadFile(
-              filePath: filePaths[i], folderId: folderId);
-        } else {
-          print(
-              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
-        }
-      }
-    } else {
-      return null;
-    }
-  }
-
   Future<void> createFolder(
     String? name,
     String? folderId,

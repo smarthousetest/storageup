@@ -559,7 +559,7 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChosen(
+          context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -580,7 +580,7 @@ class _HomePageState extends State<HomePage> {
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChosen(
+          context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -612,7 +612,7 @@ class _HomePageState extends State<HomePage> {
         final folderId = StateContainer.of(context).choosedMediaFolderId;
         changePage(ChosenPage.media);
         context.read<HomeBloc>().add(
-              HomeUserActionChosen(
+              HomeUserActionChoosed(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -621,7 +621,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-              HomeUserActionChosen(
+              HomeUserActionChoosed(
                 action: userAction.action,
                 values: userAction.result,
               ),

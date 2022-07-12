@@ -98,6 +98,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "change_place": MessageLookupByLibrary.simpleMessage("Изменить место"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Проверьте соединение с Интернетом и повторите попытку."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
@@ -191,7 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "В приложении StorageUp произошла ошибка на стороне сервера. Повторите, пожалуйста, чуть позже."),
         "kb": m7,
         "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
-            "Указанное имя кипера уже существует, пожалуйста, переименуйте место хранения"),
+            "Имя кипера совпадает с уже существующими киперами.\nПереименуйте свой кипер."),
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Узнать подробнее"),
@@ -336,6 +338,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Выберите место хранения"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Сдача места"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "Не удаётся установить соединение с сервером."),
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
@@ -353,8 +357,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
-        "subscription_pay_mounth": m12,
-        "tb": m13,
+        "subscription_pay_mounth": m13,
+        "tb": m14,
         "technical_error": MessageLookupByLibrary.simpleMessage(
             "В приложении StorageUp произошла техническая ошибка. Повторите, пожалуйста, чуть позже."),
         "tell_us": MessageLookupByLibrary.simpleMessage(

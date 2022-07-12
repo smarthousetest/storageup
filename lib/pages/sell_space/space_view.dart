@@ -103,7 +103,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
-
     return BlocProvider(
         create: (context) => SpaceBloc()
           ..add(SpacePageOpened())
@@ -111,6 +110,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         child: BlocListener<SpaceBloc, SpaceState>(
           listener: (context, state) async {
             if (state.statusHttpRequest == FormzStatus.submissionCanceled) {
+              canSave = true;
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -120,6 +120,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               );
             } else if (state.statusHttpRequest ==
                 FormzStatus.submissionFailure) {
+              canSave = true;
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -127,6 +128,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       middleText: translate.no_internet);
                 },
               );
+            } else if (state.statusHttpRequest ==
+                FormzStatus.submissionSuccess) {
+              canSave = true;
+            } else if (state.statusHttpRequest == FormzStatus.valid) {
+              canSave = true;
             }
           },
           child:
@@ -138,9 +144,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 top: 30,
               ),
               child: Container(
-                height: 46,
-                child: Row(
-                  children: [
+                  height: 46,
+                  child: Row(children: [
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20),
@@ -200,170 +205,138 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: BlocListener<SpaceBloc, SpaceState>(
-                      listener: (context, state) async {
-                        if (state.status == FormzStatus.submissionCanceled) {
-                          canSave = true;
-                          await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return BlurCustomErrorPopUp(
-                                  middleText: translate.something_goes_wrong);
-                            },
-                          );
-                        } else if (state.status ==
-                            FormzStatus.submissionFailure) {
-                          canSave = true;
-                          await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return BlurCustomErrorPopUp(
-                                  middleText: translate.no_internet);
-                            },
-                          );
-                        } else if (state.status ==
-                            FormzStatus.submissionSuccess) {
-                          canSave = true;
-                        } else if (state.status == FormzStatus.valid) {}
-                      },
-                      child: BlocBuilder<SpaceBloc, SpaceState>(
-                          builder: (context, state) {
-                        return state.valueNotifier != null
-                            ? ValueListenableBuilder<User?>(
-                                valueListenable: state.valueNotifier!,
-                                builder: (context, value, _) {
-                                  return Row(
-                                    key: nameWidthKey,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: 20,
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            StateContainer.of(context)
-                                                .changePage(
-                                                    ChosenPage.settings);
-                                          },
-                                          child: MouseRegion(
-                                            cursor: SystemMouseCursors.click,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(23.0),
-                                              child:
-                                                  Container(child: value.image),
-                                            ),
+                    BlocBuilder<SpaceBloc, SpaceState>(
+                        builder: (context, state) {
+                      return state.valueNotifier != null
+                          ? ValueListenableBuilder<User?>(
+                              valueListenable: state.valueNotifier!,
+                              builder: (context, value, _) {
+                                return Row(
+                                  key: nameWidthKey,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 20),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          StateContainer.of(context)
+                                              .changePage(ChosenPage.settings);
+                                        },
+                                        child: MouseRegion(
+                                          cursor: SystemMouseCursors.click,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(23.0),
+                                            child:
+                                                Container(child: value.image),
                                           ),
                                         ),
                                       ),
-                                      (MediaQuery.of(context).size.width > 965)
-                                          ? Container(
-                                              constraints:
-                                                  BoxConstraints(maxWidth: 110),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 5),
-                                                    child: Text(
-                                                      value?.firstName ??
-                                                          value?.email
-                                                              ?.split('@')
-                                                              .first ??
-                                                          'Name',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                        fontSize: 17,
-                                                        color: Theme.of(context)
-                                                            .bottomAppBarColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    value?.email ?? '',
+                                    ),
+                                    (MediaQuery.of(context).size.width > 966)
+                                        ? Container(
+                                            constraints: BoxConstraints(
+                                                maxWidth: 95, minWidth: 50),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 5),
+                                                  child: Text(
+                                                    value?.firstName ??
+                                                        value?.email
+                                                            ?.split('@')
+                                                            .first ??
+                                                        'Name',
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                      fontSize: 12,
+                                                      fontSize: 17,
                                                       color: Theme.of(context)
                                                           .bottomAppBarColor,
-                                                      height: 1,
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            )
-                                          : Container(),
-                                    ],
-                                  );
-                                })
-                            : Container();
-                      }),
-                    ),
+                                                ),
+                                                Text(
+                                                  value?.email ?? 'email',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .bottomAppBarColor,
+                                                    height: 1,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                  ],
+                                );
+                              })
+                          : Container();
+                    }),
+                  ])),
+            ),
+            SpaceInheritedWidget(
+              index: index,
+              state: this,
+              child: Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(30),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Color.fromARGB(25, 23, 69, 139),
+                          blurRadius: 4,
+                          offset: Offset(1, 4))
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ),
-          SpaceInheritedWidget(
-            index: index,
-            state: this,
-            child: Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(30),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Color.fromARGB(25, 23, 69, 139),
-                        blurRadius: 4,
-                        offset: Offset(1, 4))
-                  ],
-                ),
-                child: BlocBuilder<SpaceBloc, SpaceState>(
-                  builder: (context, state) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      //mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 40, right: 40, top: 20),
-                          child: _title(context, state),
-                        ),
-                        BlocBuilder<SpaceBloc, SpaceState>(
-                          builder: (context, state) {
-                            var fl = folderList(context);
-                            return Expanded(
-                                child: IndexedStack(
-                              sizing: StackFit.passthrough,
-                              key: ValueKey<int>(index),
-                              index: index,
-                              children: [
-                                state.keeper.isEmpty
-                                    ? rentingAPlace(context)
-                                    : fl,
-                                Platform.isWindows
-                                    ? addSpaceWindows(context, changeKeeper)
-                                    : addSpace(context, changeKeeper),
-                                fl
-                              ],
-                            ));
-                          },
-                        ),
-                      ],
-                    );
-                  },
+                  child: BlocBuilder<SpaceBloc, SpaceState>(
+                    builder: (context, state) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        //mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 40, right: 40, top: 20),
+                            child: _title(context, state),
+                          ),
+                          BlocBuilder<SpaceBloc, SpaceState>(
+                            builder: (context, state) {
+                              var fl = folderList(context);
+                              return Expanded(
+                                  child: IndexedStack(
+                                sizing: StackFit.passthrough,
+                                key: ValueKey<int>(index),
+                                index: index,
+                                children: [
+                                  state.keeper.isEmpty
+                                      ? rentingAPlace(context)
+                                      : fl,
+                                  Platform.isWindows
+                                      ? addSpaceWindows(context, changeKeeper)
+                                      : addSpace(context, changeKeeper),
+                                  fl
+                                ],
+                              ));
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
+            )
           ]),
         ));
   }
@@ -668,15 +641,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
-          int counter1 = 0;
           if (firstOpen == true) {
             context.read<SpaceBloc>().add(UpdateKeepersList());
             firstOpen = false;
-          } else {
-            counter1 = counter1 + 1;
-            if (counter1 == 1) {
-              firstOpen = true;
-            }
           }
           if (changeKeeper != null && needToCheck == true) {
             needToCheck = false;
@@ -861,9 +828,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               child: Text(
                                 translate.max_storage +
                                     translate.gb(
-                                      changeKeeper != null
-                                          ? changeKeeper!.countGb + maxSpace
-                                          : maxSpace,
+                                      maxSpace,
                                     ),
                                 style: TextStyle(
                                   color: Theme.of(context)
@@ -1209,22 +1174,19 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     return ListView(controller: ScrollController(), children: [
       BlocBuilder<SpaceBloc, SpaceState>(
         builder: (context, state) {
-          int counter = 0;
           if (firstOpen == true) {
             context.read<SpaceBloc>().add(UpdateKeepersList());
             context.read<SpaceBloc>().add(GetAlreadyUsedDisk());
             firstOpen = false;
-          } else {
-            counter = counter + 1;
-            if (counter == 1) {
-              firstOpen = true;
-            }
           }
           if (changeKeeper != null && needToCheck == true) {
             needToCheck = false;
             context
                 .read<SpaceBloc>()
                 .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+            context
+                .read<SpaceBloc>()
+                .add(NameChanged(name: changeKeeper!.name));
           }
           var maxSpace = (state.availableSpace / GB).round();
           print(maxSpace);
@@ -1282,55 +1244,86 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         child: new BlocBuilder<SpaceBloc, SpaceState>(
                           builder: (context, state) {
                             return Theme(
-                                data: Theme.of(context).copyWith(
-                                    focusColor: Theme.of(context).primaryColor,
-                                    hoverColor: Theme.of(context).dividerColor),
-                                child: DropdownButton<String>(
-                                  dropdownColor: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                  hint: Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      translate.not_selected,
+                              data: Theme.of(context).copyWith(
+                                  focusColor: Theme.of(context).primaryColor,
+                                  hoverColor: Theme.of(context).dividerColor),
+                              child: changeKeeper == null
+                                  ? DropdownButton<String>(
+                                      dropdownColor:
+                                          Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      hint: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          translate.not_selected,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .disabledColor),
+                                        ),
+                                      ),
+                                      value: dropdownValue,
+                                      underline: Container(
+                                        height: 0,
+                                      ),
+                                      isExpanded: true,
+                                      icon: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: SvgPicture.asset(
+                                            "assets/file_page/array_down.svg"),
+                                      ),
+                                      elevation: 16,
                                       style: TextStyle(
                                           color:
                                               Theme.of(context).disabledColor),
-                                    ),
-                                  ),
-                                  value: dropdownValue,
-                                  underline: Container(
-                                    height: 0,
-                                  ),
-                                  isExpanded: true,
-                                  icon: Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: SvgPicture.asset(
-                                        "assets/file_page/array_down.svg"),
-                                  ),
-                                  elevation: 16,
-                                  style: TextStyle(
-                                      color: Theme.of(context).disabledColor),
-                                  onChanged: (String? selectedDisk) {
-                                    setState(() {
-                                      dropdownValue = selectedDisk ?? '';
-                                      context.read<SpaceBloc>().add(
-                                          GetDiskToKeeper(
-                                              selectedDisk:
-                                                  dropdownValue?.trim()));
-                                    });
-                                  },
-                                  items: state.diskList
-                                      .map<DropdownMenuItem<String>>(
-                                          (String disk) {
-                                    return DropdownMenuItem<String>(
-                                      value: disk,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 15),
-                                        child: Text(disk),
+                                      onChanged: (String? selectedDisk) {
+                                        setState(() {
+                                          dropdownValue = selectedDisk ?? '';
+                                          context.read<SpaceBloc>().add(
+                                              GetDiskToKeeper(
+                                                  selectedDisk:
+                                                      dropdownValue?.trim()));
+                                        });
+                                      },
+                                      items: state.diskList
+                                          .map<DropdownMenuItem<String>>(
+                                              (String disk) {
+                                        return DropdownMenuItem<String>(
+                                          value: disk,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 15),
+                                            child: Text(disk),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    )
+                                  : Container(
+                                      height: 42,
+                                      width: 350,
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context).cardColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: Color(0xffE4E7ED))),
+                                      child: BlocBuilder<SpaceBloc, SpaceState>(
+                                        builder: (context, state) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15, top: 11),
+                                            child: Text(
+                                              changeKeeper!.dirPath,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .disabledColor),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                    );
-                                  }).toList(),
-                                ));
+                                    ),
+                            );
                           },
                         ),
                       ),
@@ -1400,9 +1393,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               child: Text(
                                 translate.max_storage +
                                     translate.gb(
-                                      changeKeeper != null
-                                          ? changeKeeper!.countGb + maxSpace
-                                          : maxSpace,
+                                      maxSpace,
                                     ),
                                 style: TextStyle(
                                   color: Theme.of(context)

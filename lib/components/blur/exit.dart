@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
-import 'package:storageup/utilites/state_containers/state_container.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';
 

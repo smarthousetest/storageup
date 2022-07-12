@@ -45,7 +45,7 @@ class SpaceState extends Equatable {
     int? availableSpace,
     FormzStatus? statusHttpRequest,
     List<String>? diskList,
-     List<String>? usedDisk,
+    List<String>? usedDisk,
   }) {
     return SpaceState(
       user: user ?? this.user,

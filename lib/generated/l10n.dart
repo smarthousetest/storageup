@@ -2296,11 +2296,11 @@ class S {
     );
   }
 
-  /// `The connection to the server cannot be established.\nCheck your internet connection and try again.`
-  String get no_internet {
+  /// `The connection to the server cannot be established.`
+  String get server_connection_error {
     return Intl.message(
-      'The connection to the server cannot be established.\nCheck your internet connection and try again.',
-      name: 'no_internet',
+      'The connection to the server cannot be established.',
+      name: 'server_connection_error',
       desc: '',
       args: [],
     );
@@ -2532,7 +2532,7 @@ class S {
   /// `That keeper name are already used.\nRename your keeper`
   String get keeper_name_are_the_same {
     return Intl.message(
-      'The specified keeper name already exists, please rename the storage location',
+      'That keeper name are already used.\nRename your keeper',
       name: 'keeper_name_are_the_same',
       desc: '',
       args: [],

@@ -16,6 +16,7 @@ import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
 import 'package:storageup/components/blur/rename.dart';
+import 'package:storageup/components/context_menu.dart';
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -527,7 +528,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       newName += '.$extension';
       final res = await context
           .read<OpenedFolderCubit>()
-          .onActionRenameChosenFile(record, newName);
+          .onActionRenameChoosedFile(record, newName);
       if (res == ErrorType.alreadyExist) {
         _renameFile(
           context,
@@ -1450,7 +1451,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             result = "$result$fileExtension";
             final res = await context
                 .read<OpenedFolderCubit>()
-                .onActionRenameChosenFile(object, result);
+                .onActionRenameChoosedFile(object, result);
             if (res == ErrorType.alreadyExist) {
               _renameFile(context, object, result, fileExtension);
             }
@@ -1746,48 +1747,48 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                     ),
                   ),
                 ),
-                Divider(
-                  color: mainColor,
-                  height: 1,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    widget.onTap(FileAction.save);
-                  },
-                  child: MouseRegion(
-                    onEnter: (event) {
-                      setState(() {
-                        ind = 2;
-                      });
-                    },
-                    child: Container(
-                      width: 190,
-                      height: 40,
-                      color: ind == 2 ? mainColor : null,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Image.asset(
-                          //   'assets/file_page/file_options/download.png',
-                          //   height: 20,
-                          // ),
-                          SvgPicture.asset(
-                            'assets/options/download.svg',
-                            height: 20,
-                          ),
-                          Container(
-                            width: 15,
-                          ),
-                          Text(
-                            widget.translate.down,
-                            style: style,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Divider(
+                //   color: mainColor,
+                //   height: 1,
+                // ),
+                // GestureDetector(
+                //   onTap: () {
+                //     widget.onTap(FileAction.save);
+                //   },
+                //   child: MouseRegion(
+                //     onEnter: (event) {
+                //       setState(() {
+                //         ind = 2;
+                //       });
+                //     },
+                //     child: Container(
+                //       width: 190,
+                //       height: 40,
+                //       color: ind == 2 ? mainColor : null,
+                //       padding: EdgeInsets.symmetric(horizontal: 15),
+                //       child: Row(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         children: [
+                //           // Image.asset(
+                //           //   'assets/file_page/file_options/download.png',
+                //           //   height: 20,
+                //           // ),
+                //           SvgPicture.asset(
+                //             'assets/options/download.svg',
+                //             height: 20,
+                //           ),
+                //           Container(
+                //             width: 15,
+                //           ),
+                //           Text(
+                //             widget.translate.down,
+                //             style: style,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Divider(
                   color: mainColor,
                   height: 1,
