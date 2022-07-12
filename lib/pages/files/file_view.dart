@@ -449,71 +449,23 @@ class _FilePageState extends State<FilePage> {
                 builder: (context, state) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 10.0),
-                    child: Center(
-                      child: TextField(
-                        autofocus: true,
-                        style: TextStyle(
+                    child: TextField(
+                      autofocus: true,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Theme.of(context).disabledColor,
+                      ),
+                      onChanged: (value) {
+                        StateSortedContainer.of(context).searchAction(value);
+                      },
+                      controller: _searchingFieldController,
+                      decoration: InputDecoration.collapsed(
+                        hintText: translate.search,
+                        hintStyle: TextStyle(
                           fontSize: 16.0,
                           color: Theme.of(context).disabledColor,
                         ),
-                        onChanged: (value) {
-                          StateSortedContainer.of(context).searchAction(value);
-                        },
-                        controller: _searchingFieldController,
-                        textAlignVertical: TextAlignVertical.center,
-                        decoration: InputDecoration(
-                          hintText: translate.search,
-                          hintStyle: TextStyle(
-                            fontSize: 16.0,
-                            color: Theme.of(context).disabledColor,
-                          ),
-                          border: InputBorder.none,
-                          suffixIcon: _searchingFieldController.text.isNotEmpty
-                              ? Container(
-                                  padding: EdgeInsets.all(15),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isClearSearchTextButtonHovered = false;
-                                      });
-                                      StateSortedContainer.of(context)
-                                          .searchAction('');
-                                      _searchingFieldController.text = '';
-                                    },
-                                    child: MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      onEnter: (event) {
-                                        setState(() {
-                                          isClearSearchTextButtonHovered =
-                                              false;
-                                        });
-                                      },
-                                      onHover: (event) {
-                                        setState(() {
-                                          isClearSearchTextButtonHovered = true;
-                                        });
-                                      },
-                                      onExit: (event) {
-                                        setState(() {
-                                          isClearSearchTextButtonHovered =
-                                              false;
-                                        });
-                                      },
-                                      child: SvgPicture.asset(
-                                        'assets/file_page/close.svg',
-                                        height: 16,
-                                        width: 16,
-                                        alignment: Alignment.center,
-                                        color: isClearSearchTextButtonHovered
-                                            ? null
-                                            : Theme.of(context).disabledColor,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : SizedBox.shrink(),
-                        ),
-                      ),
+                      ).copyWith(suffix: _clearSearchButton(context)),
                     ),
                   );
                 },
@@ -521,6 +473,48 @@ class _FilePageState extends State<FilePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _clearSearchButton(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(right: 15, top: 3),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            isClearSearchTextButtonHovered = false;
+          });
+          StateSortedContainer.of(context).searchAction('');
+          _searchingFieldController.text = '';
+        },
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (event) {
+            setState(() {
+              isClearSearchTextButtonHovered = false;
+            });
+          },
+          onHover: (event) {
+            setState(() {
+              isClearSearchTextButtonHovered = true;
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              isClearSearchTextButtonHovered = false;
+            });
+          },
+          child: SvgPicture.asset(
+            'assets/file_page/close.svg',
+            height: 16,
+            width: 16,
+            alignment: Alignment.center,
+            color: isClearSearchTextButtonHovered
+                ? null
+                : Theme.of(context).disabledColor,
+          ),
+        ),
       ),
     );
   }
