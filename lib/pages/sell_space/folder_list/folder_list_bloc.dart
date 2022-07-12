@@ -286,6 +286,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         print(e);
         if (e.response?.statusCode == 401 ||
             e.response?.statusCode == 429 ||
+            e.response?.statusCode == 404 ||
             e.response?.statusCode == 500 ||
             e.response?.statusCode == 502 ||
             e.response?.statusCode == 504) {

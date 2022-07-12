@@ -166,7 +166,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
   ) async {
     var os = OsSpecifications.getOs();
     _writeKeeperId(
-      '${state.pathToKeeper}${Platform.pathSeparator}keeper_id.txt',
+      '${state.pathToKeeper}',
       keeperId,
     );
     var bearerToken = await TokenRepository().getApiToken();

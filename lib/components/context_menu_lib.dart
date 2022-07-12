@@ -119,8 +119,8 @@ class _ContextMenuState extends State<ContextMenu> {
 
     double height = 2 * widget.verticalPadding;
 
-    _heights.values.forEach((element) {
-      height += element;
+    _heights.values.forEach((elementOfMap) {
+      height += elementOfMap;
     });
 
     final heightsNotAvailable = children.length - _heights.length;
@@ -192,9 +192,11 @@ class _GrowingWidget extends StatefulWidget {
   final Widget child;
   final ValueChanged<double> onHeightChange;
 
-  const _GrowingWidget(
-      {Key? key, required this.child, required this.onHeightChange})
-      : super(key: key);
+  const _GrowingWidget({
+    Key? key,
+    required this.child,
+    required this.onHeightChange,
+  }) : super(key: key);
 
   @override
   __GrowingWidgetState createState() => __GrowingWidgetState();

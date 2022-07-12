@@ -26,7 +26,7 @@ import 'home_state.dart';
 @Injectable()
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeState()) {
-    on<HomeUserActionChoosed>((event, emit) async {
+    on<HomeUserActionChosen>((event, emit) async {
       switch (event.action) {
         case UserAction.uploadFiles:
           _uploadFiles(event, emit);
@@ -112,7 +112,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _uploadFiles(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     if (event.values != null) {
@@ -130,7 +130,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _createFolder(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     String? folderId;
@@ -162,7 +162,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _createAlbum(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     String? mediaRootFolderId;
@@ -196,7 +196,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _uploadMedia(
-    HomeUserActionChoosed event,
+    HomeUserActionChosen event,
     Emitter<HomeState> emit,
   ) async {
     if (event.values != null && event.values!.isNotEmpty) {
