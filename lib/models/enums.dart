@@ -16,12 +16,18 @@ enum AuthenticationStatus {
   noInternet,
 }
 
+enum ContextMenuAction {
+  createFolder,
+  addFiles,
+}
+
 enum FileAction {
   delete,
   properties,
   rename,
   move,
   save,
+  addFiles,
 }
 
 enum MediaAction {
@@ -60,6 +66,7 @@ enum UserAction {
   createFolder,
   createAlbum,
   uploadFolder,
+  moveFiles,
 }
 
 enum ResponseStatus {

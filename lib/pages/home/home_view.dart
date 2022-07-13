@@ -19,6 +19,7 @@ import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/latest_file.dart';
 import 'package:storageup/pages/files/file_view.dart';
+import 'package:storageup/pages/files/move_files/move_files_view.dart';
 import 'package:storageup/pages/finance/finance_view.dart';
 import 'package:storageup/pages/home/home_event.dart';
 import 'package:storageup/pages/info/info_view.dart';
@@ -556,7 +557,7 @@ class _HomePageState extends State<HomePage> {
           //   action: userAction.action,
           //   result: [name],
           // );
-          final folderId = StateContainer.of(context).choosedFilesFolderId;
+          final folderId = StateContainer.of(context).chosenFilesFolderId;
 
           context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
@@ -588,17 +589,28 @@ class _HomePageState extends State<HomePage> {
         break;
 
       case UserAction.uploadFiles:
-        final folderId = StateContainer.of(context).choosedFilesFolderId;
-        context.read<HomeBloc>().add(
-              HomeUserActionChosen(
-                action: userAction.action,
-                values: userAction.result,
-                folderId: folderId,
-              ),
-            );
+        var result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MoveFileView(null, UserAction.uploadFiles);
+          },
+        );
+
+        if (result != null) {
+          final folder = result;
+          changePage(ChosenPage.file);
+          context.read<HomeBloc>().add(
+                HomeUserActionChosen(
+                  action: userAction.action,
+                  values: userAction.result,
+                  folderId: folder.id,
+                ),
+              );
+        }
         break;
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
+        changePage(ChosenPage.media);
         context.read<HomeBloc>().add(
               HomeUserActionChosen(
                 action: userAction.action,

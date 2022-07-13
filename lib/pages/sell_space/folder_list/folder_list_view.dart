@@ -16,8 +16,10 @@ import 'package:storageup/models/keeper/keeper.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_bloc.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_state.dart';
+import 'package:storageup/pages/sell_space/space_view.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 class FolderList extends StatefulWidget {
   @override
@@ -59,52 +61,63 @@ class _ButtonTemplateState extends State<FolderList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FolderListBloc, FolderListState>(
-      listener: (context, state) async {
-        if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
-            popUpWasShown == false) {
-          await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return BlurCustomErrorPopUp(middleText: translate.no_internet);
-            },
-          );
-        } else if (state.statusHttpRequest == FormzStatus.submissionFailure &&
-            popUpWasShown == false) {
-          await showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return BlurCustomErrorPopUp(middleText: translate.no_internet);
-            },
-          );
-        }
-        if (state.needToValidatePopup == true) {
-          popUpWasShown = true;
-        } else {
-          popUpWasShown = false;
-        }
-      },
-      child: BlocBuilder<FolderListBloc, FolderListState>(
-        builder: (context, state) {
-          _initiatingControllers(state);
-          locationsInfo = state.localKeepers;
-          return SingleChildScrollView(
-            controller: ScrollController(),
-            child: Column(
-              children: [
-                state.localKeepers.isNotEmpty
-                    ? _thisKeeper(context, state)
-                    : Container(),
-                state.serverKeepers.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: _otherKeeper(context, state),
-                      )
-                    : Container(),
-              ],
-            ),
-          );
+    return BlocProvider(
+      create: (context) => bloc..add(FolderListPageOpened()),
+      child: BlocListener<FolderListBloc, FolderListState>(
+        listener: (context, state) async {
+          if (StateContainer.of(context).isPopUpShowing == false) {
+            if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
+                popUpWasShown == false) {
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            } else if (state.statusHttpRequest ==
+                    FormzStatus.submissionFailure &&
+                popUpWasShown == false) {
+              StateContainer.of(context).changeIsPopUpShowing(true);
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            }
+            if (state.needToValidatePopup == true) {
+              popUpWasShown = true;
+            } else {
+              popUpWasShown = false;
+            }
+          }
         },
+        child: BlocBuilder<FolderListBloc, FolderListState>(
+          builder: (context, state) {
+            _initiatingControllers(state);
+            locationsInfo = state.localKeepers;
+            return SingleChildScrollView(
+              controller: ScrollController(),
+              child: Column(
+                children: [
+                  state.localKeepers.isNotEmpty
+                      ? _thisKeeper(context, state)
+                      : Container(),
+                  state.serverKeepers.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: _otherKeeper(context, state),
+                        )
+                      : Container(),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -225,6 +238,16 @@ class _ButtonTemplateState extends State<FolderList> {
                                     state.localKeepers.indexOf(keeper)]
                                 .hideMenu();
                             if (action == KeeperAction.change) {
+                              var changeKeeper;
+                              for (var element in state.locationsInfo) {
+                                if (element.keeperId == keeper.id) {
+                                  changeKeeper = element;
+                                  break;
+                                }
+                              }
+                              SpaceInheritedWidget.of(context)
+                                  .state
+                                  .changePageIndex(1, changeKeeper);
                             } else {
                               var result = await showDialog(
                                 context: context,
@@ -305,7 +328,7 @@ class _ButtonTemplateState extends State<FolderList> {
     }
 
     return Container(
-      width: 143,
+      width: 146,
       padding: const EdgeInsets.only(left: 20.0, top: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -388,7 +411,7 @@ class _ButtonTemplateState extends State<FolderList> {
             height: 5,
           ),
           Container(
-            constraints: BoxConstraints(maxWidth: 180),
+            constraints: BoxConstraints(maxWidth: 185),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

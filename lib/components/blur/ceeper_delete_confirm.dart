@@ -7,7 +7,6 @@ import 'package:storageup/utilities/injection.dart';
 class BlurDeleteKeeper extends StatefulWidget {
   @override
   _ButtonTemplateState createState() => new _ButtonTemplateState();
-
   BlurDeleteKeeper();
 }
 
@@ -40,7 +39,7 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                       style: TextStyle(
                         fontSize: 20,
                         fontFamily: kNormalTextFontFamily,
-                        color: Theme.of(context).focusColor,
+                        color: Color(0xff5F5F5F),
                       ),
                     ),
                     Padding(
@@ -121,12 +120,12 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                                       ),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Theme.of(context).indicatorColor,
+                                      primary: Color(0xffFF847E),
                                       fixedSize: Size(115, 42),
                                       elevation: 0,
                                       side: BorderSide(
                                         style: BorderStyle.solid,
-                                        color: Theme.of(context).indicatorColor,
+                                        color: Color(0xffFF847E),
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -154,10 +153,7 @@ class _ButtonTemplateState extends State<BlurDeleteKeeper> {
                   },
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
-                    child: Icon(
-                      Icons.close,
-                      color: Theme.of(context).splashColor,
-                    ),
+                    child: SvgPicture.asset("assets/file_page/close.svg"),
                   ),
                 ),
               ),

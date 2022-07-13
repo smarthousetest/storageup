@@ -18,6 +18,7 @@ import 'package:open_file/open_file.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/packet_controllers.dart';
 import 'package:storageup/utilities/event_bus.dart';
@@ -248,7 +249,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> mapFileSortingByCriterion() async {
     emit(state.copyWith(status: FormzStatus.pure));
-    OpenedFolderState newState = _clearGroupedMap(state);
+    OpenedFolderState newState = state;
     var criterion = newState.criterion;
     var direction = newState.direction;
     switch (criterion) {
@@ -323,10 +324,12 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     if (direction == SortingDirection.down) {
       emit(state.copyWith(
         groupedFiles: groupedFiles,
+        criterion: SortingCriterion.byType,
         status: FormzStatus.pure,
       ));
     } else {
       emit(state.copyWith(
+        criterion: SortingCriterion.byType,
         groupedFiles:
             // SplayTreeMap<String, List<BaseObject>>.from(
             //     groupedFiles, (a, b) => a.compareTo(b))
@@ -467,15 +470,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     });
 
     try {
-      if (folders!.contains(currentFolder.id)) {
-        print('do not move the folder to the same folder');
-      } else {
-        await _filesController.moveToFolder(
-          folderId: currentFolder.id,
-          folders: folders,
-          records: records,
-        );
-      }
+      await _filesController.moveToFolder(
+        folderId: currentFolder.id,
+        folders: folders,
+        records: records,
+      );
       await update();
       emit(
         state.copyWith(
@@ -491,7 +490,31 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<ErrorType?> onActionRenameChosenFile(
+  Future<void> uploadFilesAction(String? folderId) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.any,
+    );
+    if (result != null) {
+      List<String?> filePaths = result.paths;
+
+      for (int i = 0; i < filePaths.length; i++) {
+        if (filePaths[i] != null &&
+            PathCheck().isPathCorrect(filePaths[i].toString())) {
+          if (folderId == null) folderId = state.currentFolder?.id;
+          await _loadController.uploadFile(
+              filePath: filePaths[i], folderId: folderId);
+        } else {
+          print(
+              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+        }
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<ErrorType?> onActionRenameChoosedFile(
       BaseObject object, String newName) async {
     var result = await _filesController.renameRecord(newName, object.id);
     print(result);
@@ -562,7 +585,32 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  void updateForCreateFolder() async {}
+  Future<void> createFolder(
+    String? name,
+    String? folderId,
+  ) async {
+    if (folderId == null) {
+      try {
+        await _filesController.updateFilesList();
+      } catch (_) {}
+      folderId = _filesController.getFilesRootFolder?.id;
+    } else {
+      folderId = folderId;
+    }
+
+    if (name != null && folderId != null) {
+      final result = await _filesController.createFolder(name, folderId);
+      update();
+
+      if (result == ResponseStatus.failed) {
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+      } else if (result == ResponseStatus.noInternet) {
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
+      }
+    } else if (folderId == null) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    }
+  }
 
   Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
       SortingDirection direction, String sortText) async {

@@ -17,6 +17,7 @@ final kLightTheme = ThemeData.light().copyWith(
   splashColor: Color(0xff70BBF6),
   canvasColor: Color(0xffE4E7ED),
   hoverColor: Color(0xff767676),
+  highlightColor: Color(0xffF1F8FE),
   buttonTheme: ThemeData.light().buttonTheme.copyWith(
           colorScheme: ColorScheme.light(
         primary: Color(0xFFEBF5FF),

@@ -28,7 +28,7 @@ class StateContainerState extends State<StateContainer> {
   Locale get locale => _locale;
 
   String? _choosedFilesFolderId;
-  String? get choosedFilesFolderId => _choosedFilesFolderId;
+  String? get chosenFilesFolderId => _choosedFilesFolderId;
   String? _choosedMediaFolderId;
   String? get choosedMediaFolderId => _choosedMediaFolderId;
   bool _isPopUpShowing = false;

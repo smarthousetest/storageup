@@ -10,8 +10,8 @@ import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/forgot_password/forgot_password_event.dart';
-import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
+import 'package:storageup/utilities/injection.dart';
 
 import 'forgot_password_bloc.dart';
 import 'forgot_password_state.dart';

@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';
 
@@ -71,7 +73,9 @@ class _ButtonTemplateState extends State<BlurExit> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: kNormalTextFontFamily,
-                                  color: Theme.of(context).colorScheme.onBackground,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
                                 ),
                               ),
                             ),
@@ -105,7 +109,8 @@ class _ButtonTemplateState extends State<BlurExit> {
                                           color: Theme.of(context).splashColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
@@ -115,7 +120,12 @@ class _ButtonTemplateState extends State<BlurExit> {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         await _tokenRepository.setApiToken('');
-                                        Navigator.pushNamedAndRemoveUntil(context, AuthView.route, (route) => false);
+                                        StateContainer.of(context)
+                                            .changePage(ChosenPage.home);
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            AuthView.route,
+                                            (route) => false);
                                       },
                                       child: Text(
                                         translate.exit,
@@ -126,15 +136,18 @@ class _ButtonTemplateState extends State<BlurExit> {
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Theme.of(context).indicatorColor,
+                                        primary:
+                                            Theme.of(context).indicatorColor,
                                         fixedSize: Size(240, 42),
                                         elevation: 0,
                                         side: BorderSide(
                                           style: BorderStyle.solid,
-                                          color: Theme.of(context).indicatorColor,
+                                          color:
+                                              Theme.of(context).indicatorColor,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),
