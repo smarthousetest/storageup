@@ -161,7 +161,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
               needToValidatePopup: true,
             ),
           );
-        } else {
+        } else if (result.left == ResponseStatus.failed) {
           emit(
             state.copyWith(
               statusHttpRequest: FormzStatus.submissionFailure,
