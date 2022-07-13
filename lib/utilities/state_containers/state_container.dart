@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class StateContainer extends StatefulWidget {
 class StateContainerState extends State<StateContainer> {
   var _choosedPage = ChosenPage.home;
   var _locale = Locale('ru');
+  var localeChangedController = StreamController<Locale>();
   ChosenPage get choosedPage => _choosedPage;
   Locale get locale => _locale;
 
@@ -59,6 +61,7 @@ class StateContainerState extends State<StateContainer> {
   }
 
   Future<void> changeLocale(Locale newLocale) async {
+    localeChangedController.add(Locale(newLocale.languageCode));
     await setLocale(newLocale.languageCode);
 
     setState(() {
