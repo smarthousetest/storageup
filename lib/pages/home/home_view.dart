@@ -350,15 +350,12 @@ class _HomePageState extends State<HomePage> {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Text(
-                      translate.download,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                      ),
+                  Text(
+                    translate.upload,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 17,
+                      fontFamily: kNormalTextFontFamily,
                     ),
                   ),
                 ],
