@@ -69,6 +69,14 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     var keeper = await _keeperService.getAllKeepers();
     var valueNotifier = _userController.getValueNotifier();
     final diskList = await getDisksList();
+    List<String> checkedDisk = [];
+    for (String availableDisk in diskList)
+      if (locationsInfo.any(
+          (_locationInfo) => _locationInfo.dirPath == availableDisk.trim())) {
+      } else {
+        checkedDisk.add(availableDisk.trim());
+        // print(checkedDisk);
+      }
     if (keeper.left == null) {
       emit(state.copyWith(
         user: user,
@@ -325,6 +333,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           (_locationInfo) => _locationInfo.dirPath == availableDisk.trim())) {
       } else {
         checkedDisk.add(availableDisk.trim());
+        // print(checkedDisk);
       }
     emit(state.copyWith(
         diskList: checkedDisk, statusHttpRequest: FormzStatus.valid));

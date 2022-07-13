@@ -1302,6 +1302,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                                       dropdownValue?.trim()));
                                         });
                                       },
+                                      // onTap: () => {
+                                      //   context
+                                      //       .read<SpaceBloc>()
+                                      //       .add(GetAlreadyUsedDisk()),
+                                      // },
                                       items: state.diskList
                                           .map<DropdownMenuItem<String>>(
                                               (String disk) {
