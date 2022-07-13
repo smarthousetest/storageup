@@ -27,46 +27,7 @@ class SpaceSellPage extends StatefulWidget {
   SpaceSellPage();
 }
 
-// class PathCheck {
-//   static List<String> _restrictedWords = [
-//     'OneDrive',
-//     'Program Files',
-//     'Program Files (x86)',
-//   ];
 
-//   bool isPathCorrect(String path) {
-//     var partsOfPath = path.split(Platform.pathSeparator);
-//     for (var part in partsOfPath) {
-//       for (var restrictedWord in _restrictedWords) {
-//         if (part == restrictedWord) {
-//           return false;
-//         }
-//       }
-//     }
-//     return true;
-//   }
-
-//   ///Function check is a path contain "OneDrive" part
-//   ///If contain, return path before "OneDrive" part
-//   static String doPathCorrect(String path) {
-//     var partPath = path.split(Platform.pathSeparator);
-//     for (int i = 0; i < partPath.length; i++) {
-//       for (var restrictedWord in _restrictedWords) {
-//         if (partPath[i] == restrictedWord) {
-//           var result = partPath.sublist(0, i);
-//           result.add(path.split(Platform.pathSeparator).last);
-//           return result.join(Platform.pathSeparator);
-//         }
-//       }
-//     }
-//     return path;
-//   }
-
-//   @override
-//   String toString() {
-//     return _restrictedWords.toString();
-//   }
-// }
 
 class _SpaceSellPageState extends State<SpaceSellPage> {
   //final List<DownloadLocation> locationsInfo;
@@ -1293,11 +1254,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                                       dropdownValue?.trim()));
                                         });
                                       },
-                                      // onTap: () => {
-                                      //   context
-                                      //       .read<SpaceBloc>()
-                                      //       .add(GetAlreadyUsedDisk()),
-                                      // },
                                       items: state.diskList
                                           .map<DropdownMenuItem<String>>(
                                               (String disk) {
@@ -1671,7 +1627,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     changeKeeper = null;
                                     needToCheck = true;
                                   });
-                                } else {
+                                } else if (maxSpace > 32) {
                                   firstOpen = true;
                                   countOfNotSameName = 0;
                                   for (var keeper in state.keeper) {
@@ -1719,9 +1675,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           minimumSize: Size(double.maxFinite, 60),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: _isFieldsValid(state) && canSave
-                              ? Theme.of(context).splashColor
-                              : Theme.of(context).canvasColor,
+                          backgroundColor:
+                              _isFieldsValid(state) && canSave && maxSpace > 32
+                                  ? Theme.of(context).splashColor
+                                  : Theme.of(context).canvasColor,
                         ),
                         child: Text(
                           changeKeeper == null
