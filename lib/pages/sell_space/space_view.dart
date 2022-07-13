@@ -421,6 +421,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
           GestureDetector(
             onTap: (() {
+              // context.read<SpaceBloc>().add(SpacePageOpened());
               context.read<FolderListBloc>().add(GetKeeperInfo());
             }),
             child: MouseRegion(
