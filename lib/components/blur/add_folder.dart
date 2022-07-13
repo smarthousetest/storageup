@@ -14,7 +14,7 @@ class BlurAddFolder extends StatefulWidget {
 
 class _ButtonTemplateState extends State<BlurAddFolder> {
   S translate = getIt<S>();
-  final myController = TextEditingController();
+  final addFolderController = TextEditingController();
   bool canSave = false;
   bool hintSymbvols = true;
 
@@ -89,7 +89,7 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                               ),
                               alignment: Alignment.center,
                               child: TextField(
-                                controller: myController,
+                                controller: addFolderController,
                                 textAlignVertical: TextAlignVertical.bottom,
                                 textAlign: TextAlign.start,
                                 autofocus: true,
@@ -189,7 +189,7 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                       onPressed: () async {
                                         if (canSave == true) {
                                           Navigator.pop(context,
-                                              myController.text.trim());
+                                              addFolderController.text.trim());
                                         } else {
                                           null;
                                         }

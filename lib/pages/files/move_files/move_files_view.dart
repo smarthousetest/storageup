@@ -4,7 +4,7 @@ import 'package:cpp_native/models/folder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:storageup/components/blur/create_album.dart';
+import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
@@ -175,7 +175,7 @@ class _MoveFileState extends State<MoveFileView> {
                                         var name = await showDialog<String?>(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return BlurCreateAlbum();
+                                              return BlurAddFolder();
                                             });
                                         if (name != null) {
                                           await context
@@ -265,8 +265,15 @@ class _MoveFileState extends State<MoveFileView> {
                                                   left: 20),
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  Navigator.pop(
-                                                      context, moveToFolder);
+                                                  if (moveToFolder == null) {
+                                                    var rootFolder =
+                                                        state.currentFolder;
+                                                    Navigator.pop(
+                                                        context, rootFolder);
+                                                  } else {
+                                                    Navigator.pop(
+                                                        context, moveToFolder);
+                                                  }
                                                 },
                                                 child: Text(
                                                   widget.action ==

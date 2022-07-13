@@ -1380,11 +1380,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   ) async {
     switch (action) {
       case ContextMenuAction.addFiles:
-        final folderId = StateContainer.of(context).choosedFilesFolderId;
+        final folderId = StateContainer.of(context).chosenFilesFolderId;
         context.read<OpenedFolderCubit>().uploadFilesAction(folderId);
         break;
       case ContextMenuAction.createFolder:
-        final folderId = StateContainer.of(context).choosedFilesFolderId;
+        final folderId = StateContainer.of(context).chosenFilesFolderId;
         var folderName = await showDialog<String?>(
             context: context,
             builder: (BuildContext context) {

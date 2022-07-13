@@ -30,7 +30,7 @@ class FolderListState extends Equatable {
   FolderListState copyWith({
     User? user,
     List<DownloadLocation>? locationsInfo,
-    List<Keeper>? keeper,
+    List<Keeper>? keepers,
     List<Keeper>? localKeeper,
     List<Keeper>? serverKeeper,
     List<String>? localPath,
@@ -41,7 +41,7 @@ class FolderListState extends Equatable {
     return FolderListState(
       user: user ?? this.user,
       locationsInfo: locationsInfo ?? this.locationsInfo,
-      keepers: keeper ?? this.keepers,
+      keepers: keepers ?? this.keepers,
       localKeepers: localKeeper ?? this.localKeepers,
       serverKeepers: serverKeeper ?? this.serverKeepers,
       localPaths: localPath ?? this.localPaths,
