@@ -19,6 +19,7 @@ import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/latest_file.dart';
 import 'package:storageup/pages/files/file_view.dart';
+import 'package:storageup/pages/files/move_files/move_files_view.dart';
 import 'package:storageup/pages/finance/finance_view.dart';
 import 'package:storageup/pages/home/home_event.dart';
 import 'package:storageup/pages/info/info_view.dart';
@@ -361,15 +362,12 @@ class _HomePageState extends State<HomePage> {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Text(
-                      translate.download,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 17,
-                        fontFamily: kNormalTextFontFamily,
-                      ),
+                  Text(
+                    translate.upload,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 17,
+                      fontFamily: kNormalTextFontFamily,
                     ),
                   ),
                 ],
@@ -570,7 +568,7 @@ class _HomePageState extends State<HomePage> {
           // );
           final folderId = StateContainer.of(context).choosedFilesFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChosen(
+          context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -591,7 +589,7 @@ class _HomePageState extends State<HomePage> {
 
           final folderId = StateContainer.of(context).choosedMediaFolderId;
 
-          context.read<HomeBloc>().add(HomeUserActionChosen(
+          context.read<HomeBloc>().add(HomeUserActionChoosed(
                 action: userAction.action,
                 values: [name],
                 folderId: folderId,
@@ -600,19 +598,30 @@ class _HomePageState extends State<HomePage> {
         break;
 
       case UserAction.uploadFiles:
-        final folderId = StateContainer.of(context).choosedFilesFolderId;
-        context.read<HomeBloc>().add(
-              HomeUserActionChosen(
-                action: userAction.action,
-                values: userAction.result,
-                folderId: folderId,
-              ),
-            );
+        var result = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return MoveFileView(null, UserAction.uploadFiles);
+          },
+        );
+
+        if (result != null) {
+          final folder = result;
+          changePage(ChosenPage.file);
+          context.read<HomeBloc>().add(
+                HomeUserActionChoosed(
+                  action: userAction.action,
+                  values: userAction.result,
+                  folderId: folder.id,
+                ),
+              );
+        }
         break;
       case UserAction.uploadMedia:
         final folderId = StateContainer.of(context).choosedMediaFolderId;
+        changePage(ChosenPage.media);
         context.read<HomeBloc>().add(
-              HomeUserActionChosen(
+              HomeUserActionChoosed(
                 action: userAction.action,
                 values: userAction.result,
                 folderId: folderId,
@@ -621,7 +630,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         context.read<HomeBloc>().add(
-              HomeUserActionChosen(
+              HomeUserActionChoosed(
                 action: userAction.action,
                 values: userAction.result,
               ),

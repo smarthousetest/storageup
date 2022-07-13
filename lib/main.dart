@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
 import 'package:storageup/pages/home/home_view.dart';
@@ -23,6 +24,7 @@ import 'utilities/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
+
   await configureInjection();
   //HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,20 +47,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  _MyAppState() : _locale = Locale(Intl.systemLocale) {
+  _MyAppState() {
     hasCurrentLocale().then((value) {
-      getLocale().then(
-        (loc) => setLocale(loc),
-      );
+      if (value) {
+        getLocale().then(
+          (loc) => setLocale(loc),
+        );
+      } else {
+        findSystemLocale().then((value) {
+          String systemLanguage = Intl.systemLocale;
+
+          if (systemLanguage.contains('_')) {
+            systemLanguage = systemLanguage.split('_')[0];
+          }
+
+          setLocale(Locale(systemLanguage));
+        });
+      }
     });
   }
 
-  Locale? _locale;
-
-  setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
+  void setLocale(Locale locale) async {
+    await StateContainer.of(context).changeLocale(locale);
   }
 
 //  Locale? _locale = StateContainer.of(context).locale;

@@ -1,6 +1,6 @@
 name: storageup
 description: StorageUp
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -55,11 +55,13 @@ dependencies:
   cpp_native:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/us-core/cpp_native.git
-      ref: load_controller
+      # ref: load_controller
   file_typification:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/file_typification.git
-  
+  syncfusion_flutter_sliders: ^20.1.61
+  contextmenu: ^3.0.0
+
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git

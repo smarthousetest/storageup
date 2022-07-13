@@ -2296,6 +2296,26 @@ class S {
     );
   }
 
+  /// `The connection to the server cannot be established.`
+  String get server_connection_error {
+    return Intl.message(
+      'The connection to the server cannot be established.',
+      name: 'server_connection_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your internet connection and try again.`
+  String get check_ethernet_connection {
+    return Intl.message(
+      'Check your internet connection and try again.',
+      name: 'check_ethernet_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The connection to the server cannot be established.\nCheck your internet connection and try again.`
   String get no_internet {
     return Intl.message(
@@ -2461,6 +2481,69 @@ class S {
     return Intl.message(
       'The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.',
       name: 'no_available_space',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count,plural, =0{0 files} =1{{count} file} other{{count} files}}`
+  String many_files(num count) {
+    return Intl.plural(
+      count,
+      zero: '0 files',
+      one: '$count file',
+      other: '$count files',
+      name: 'many_files',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Add files`
+  String get add_files {
+    return Intl.message(
+      'Add files',
+      name: 'add_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change place`
+  String get change_place {
+    return Intl.message(
+      'Change place',
+      name: 'change_place',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Where download?`
+  String get where_download {
+    return Intl.message(
+      'Where download?',
+      name: 'where_download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `That keeper name are already used.\nRename your keeper`
+  String get keeper_name_are_the_same {
+    return Intl.message(
+      'That keeper name are already used.\nRename your keeper',
+      name: 'keeper_name_are_the_same',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not selected`
+  String get not_selected {
+    return Intl.message(
+      'Not selected',
+      name: 'not_selected',
       desc: '',
       args: [],
     );

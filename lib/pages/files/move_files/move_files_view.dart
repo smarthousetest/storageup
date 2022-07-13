@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storageup/components/blur/create_album.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/move_files/move_cubit.dart';
 import 'package:storageup/pages/files/move_files/move_state.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -14,12 +15,14 @@ import 'package:tree_view/tree_view.dart';
 
 class MoveFileView extends StatefulWidget {
   final List<Folder>? folders;
+  final UserAction action;
 
   @override
   _MoveFileState createState() => new _MoveFileState();
 
   MoveFileView(
     this.folders,
+    this.action,
   );
 }
 
@@ -67,15 +70,17 @@ class _MoveFileState extends State<MoveFileView> {
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(50, 30, 0, 30),
+                          padding: const EdgeInsets.fromLTRB(50, 30, 0, 20),
                           child: Container(
                             width: 600,
-                            height: 470,
+                            height: 480,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  translate.where_move,
+                                  widget.action == UserAction.moveFiles
+                                      ? translate.where_move
+                                      : translate.where_download,
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontFamily: kNormalTextFontFamily,
@@ -156,7 +161,8 @@ class _MoveFileState extends State<MoveFileView> {
                                 ),
                                 _allFolders(context),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0, bottom: 10),
                                   child: Divider(
                                     color: Theme.of(context).dividerColor,
                                     height: 1,
@@ -194,16 +200,20 @@ class _MoveFileState extends State<MoveFileView> {
                                               padding: const EdgeInsets.only(
                                                   right: 8),
                                               child: Image.asset(
-                                                  'assets/file_page/plus.png'),
+                                                'assets/file_page/plus.png',
+                                                color: Theme.of(context)
+                                                    .accentColor,
+                                              ),
                                             ),
                                             Text(
                                               translate.create,
                                               style: TextStyle(
                                                 color: Theme.of(context)
-                                                    .splashColor,
+                                                    .accentColor,
                                                 fontSize: 17,
                                                 fontFamily:
                                                     kNormalTextFontFamily,
+                                                height: 1.1,
                                               ),
                                             ),
                                           ],
@@ -216,7 +226,7 @@ class _MoveFileState extends State<MoveFileView> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 15),
+                                      padding: const EdgeInsets.only(top: 14),
                                       child: Container(
                                         child: Row(
                                           mainAxisAlignment:
@@ -259,7 +269,10 @@ class _MoveFileState extends State<MoveFileView> {
                                                       context, moveToFolder);
                                                 },
                                                 child: Text(
-                                                  translate.move,
+                                                  widget.action ==
+                                                          UserAction.moveFiles
+                                                      ? translate.move
+                                                      : translate.download,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 17,
@@ -269,13 +282,13 @@ class _MoveFileState extends State<MoveFileView> {
                                                 ),
                                                 style: ElevatedButton.styleFrom(
                                                   primary: Theme.of(context)
-                                                      .splashColor,
+                                                      .accentColor,
                                                   fixedSize: Size(155, 42),
                                                   elevation: 0,
                                                   side: BorderSide(
                                                     style: BorderStyle.solid,
                                                     color: Theme.of(context)
-                                                        .splashColor,
+                                                        .accentColor,
                                                   ),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:

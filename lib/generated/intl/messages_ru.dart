@@ -38,18 +38,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(count) => "${count} Кб";
 
-  static String m8(count) => "${count} Мб";
+  static String m8(count) =>
+      "${Intl.plural(count, zero: '0 файлов', one: '${count} файл', two: '${count} файла', few: '${count} файла', many: '${count} файлов', other: '${count} файлов')}";
 
-  static String m9(count) => "Минимальный размер хранилища: ${count} ГБ";
+  static String m9(count) => "${count} Мб";
 
-  static String m10(count) => "${count} Пб";
+  static String m10(count) => "Минимальный размер хранилища: ${count} ГБ";
 
-  static String m11(count) =>
+  static String m11(count) => "${count} Пб";
+
+  static String m12(count) =>
       "${Intl.plural(count, zero: '0 секунд', one: '${count} секунду', two: '${count} секунды', few: '${count} секунды', many: '${count} секунд', other: '${count} секунд')}";
 
-  static String m12(count) => "${count} ₽/месяц";
+  static String m13(count) => "${count} ₽/месяц";
 
-  static String m13(count) => "${count} Тб";
+  static String m14(count) => "${count} Тб";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -59,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Действующая подписка"),
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
+        "add_files": MessageLookupByLibrary.simpleMessage("Добавить файлы"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
         "all": MessageLookupByLibrary.simpleMessage("Все"),
         "all_files": MessageLookupByLibrary.simpleMessage("Все файлы"),
@@ -92,7 +96,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_password":
             MessageLookupByLibrary.simpleMessage("Изменить пароль"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
+        "change_place": MessageLookupByLibrary.simpleMessage("Изменить место"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Проверьте соединение с Интернетом и повторите попытку."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
@@ -185,6 +192,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
             "В приложении StorageUp произошла ошибка на стороне сервера. Повторите, пожалуйста, чуть позже."),
         "kb": m7,
+        "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
+            "Имя кипера совпадает с уже существующими киперами.\nПереименуйте свой кипер."),
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Последние файлы"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Узнать подробнее"),
@@ -197,11 +206,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "диске - сдавайте пространство в аренду и зарабатывайте на нём!"),
         "management":
             MessageLookupByLibrary.simpleMessage("Управление подпиской"),
+        "many_files": m8,
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Максимальный размер для вашего диска: "),
-        "mb": m8,
+        "mb": m9,
         "media": MessageLookupByLibrary.simpleMessage("Медиа"),
-        "min_storage": m9,
+        "min_storage": m10,
         "money":
             MessageLookupByLibrary.simpleMessage("сможете на этом заработать."),
         "money_two_step": MessageLookupByLibrary.simpleMessage(
@@ -234,6 +244,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Недостаточно места"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
             "Объем выбранного места хранения не превышает 32 Гб"),
+        "not_selected": MessageLookupByLibrary.simpleMessage("Не выбрано"),
         "not_space": MessageLookupByLibrary.simpleMessage("Не хватает места?"),
         "not_storage":
             MessageLookupByLibrary.simpleMessage("У вас ещё нет мест хранения"),
@@ -271,7 +282,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Пароли не совпадают"),
         "path": MessageLookupByLibrary.simpleMessage("Путь"),
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
-        "pb": m10,
+        "pb": m11,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -320,13 +331,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Русский"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
-        "seconds": m11,
+        "seconds": m12,
         "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Выберите папку на диске, где у вас есть свободное пространство."),
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Выберите место хранения"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Сдача места"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "Не удаётся установить соединение с сервером."),
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
@@ -344,8 +357,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
-        "subscription_pay_mounth": m12,
-        "tb": m13,
+        "subscription_pay_mounth": m13,
+        "tb": m14,
         "technical_error": MessageLookupByLibrary.simpleMessage(
             "В приложении StorageUp произошла техническая ошибка. Повторите, пожалуйста, чуть позже."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
@@ -384,6 +397,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Хорошо"),
+        "where_download":
+            MessageLookupByLibrary.simpleMessage("Куда загрузить?"),
         "where_move": MessageLookupByLibrary.simpleMessage("Куда переместить?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(
             "пространства, будут удалены без возможности восстановления."),

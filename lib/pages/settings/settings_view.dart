@@ -715,7 +715,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     //   languageRu = translate.russian;
                     // }
 
-                    if (StateContainer.of(context).locale == Locale('en'))
+                    if (StateContainer.of(context).locale.languageCode == 'en')
                       dropdownValue = 'English';
                     else
                       dropdownValue = 'Русский';
@@ -725,68 +725,73 @@ class _SettingsPageState extends State<SettingsPage> {
                     // state.language.contains('en') ? translate.english : translate.russian;
                     var russian =
                         Intl.withLocale('ru', () => translate.russian);
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: SizedBox(
-                        width: 140,
-                        child: ButtonTheme(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 1,
-                                color: Theme.of(context).dividerColor),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          alignedDropdown: true,
-                          child: DropdownButton(
-                            dropdownColor: Theme.of(context).primaryColor,
-                            focusColor: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(10),
-                            isExpanded: true,
-                            value: dropdownValue,
-                            icon: Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: SvgPicture.asset(
-                                  "assets/file_page/array_down.svg"),
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                          focusColor: Theme.of(context).dividerColor,
+                          hoverColor: Theme.of(context).dividerColor),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: SizedBox(
+                          width: 140,
+                          child: ButtonTheme(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 1,
+                                  color: Theme.of(context).dividerColor),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            underline: Container(
-                              height: 2,
-                              width: 140,
-                              color: Theme.of(context).dividerColor,
-                            ),
-                            style: TextStyle(
-                                color: Theme.of(context).disabledColor),
-                            elevation: 10,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                dropdownValue = newValue!;
-                                // if (newValue == russian) {
-                                //   context.read<SettingsBloc>().add(
-                                //       LanguageChanged(newLanguage: RUSSIAN));
-                                //   _changeLanguage(RUSSIAN);
-                                // } else {
-                                //   context.read<SettingsBloc>().add(
-                                //       LanguageChanged(newLanguage: ENGLISH));
-                                //   _changeLanguage(ENGLISH);
-                                // }
-                                StateContainer.of(context).changeLocale(
-                                  Locale(
-                                    newValue == 'English' ? 'en' : 'ru',
-                                  ),
+                            alignedDropdown: true,
+                            child: DropdownButton(
+                              dropdownColor: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                              isExpanded: true,
+                              focusColor: Colors.green,
+                              value: dropdownValue,
+                              icon: Padding(
+                                padding: const EdgeInsets.only(left: 6),
+                                child: SvgPicture.asset(
+                                    "assets/file_page/array_down.svg"),
+                              ),
+                              underline: Container(
+                                height: 2,
+                                width: 140,
+                                color: Theme.of(context).dividerColor,
+                              ),
+                              style: TextStyle(
+                                  color: Theme.of(context).disabledColor),
+                              elevation: 20,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownValue = newValue!;
+                                  // if (newValue == russian) {
+                                  //   context.read<SettingsBloc>().add(
+                                  //       LanguageChanged(newLanguage: RUSSIAN));
+                                  //   _changeLanguage(RUSSIAN);
+                                  // } else {
+                                  //   context.read<SettingsBloc>().add(
+                                  //       LanguageChanged(newLanguage: ENGLISH));
+                                  //   _changeLanguage(ENGLISH);
+                                  // }
+                                  StateContainer.of(context).changeLocale(
+                                    Locale(
+                                      newValue == 'English' ? 'en' : 'ru',
+                                    ),
+                                  );
+                                });
+                              },
+                              items: <String>[
+                                russian,
+                                english,
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Center(
+                                      child: Text(
+                                    value,
+                                  )),
                                 );
-                              });
-                            },
-                            items: <String>[
-                              russian,
-                              english,
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Center(
-                                    child: Text(
-                                  value,
-                                )),
-                              );
-                            }).toList(),
+                              }).toList(),
+                            ),
                           ),
                         ),
                       ),
@@ -798,83 +803,81 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
       ),
-      Row(
-        children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: 450),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 40),
-                  child: Text(
-                    translate.date_format,
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: kNormalTextFontFamily,
-                      color: Theme.of(context).disabledColor,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: SizedBox(
-                    width: 140,
-                    child: ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButton(
-                        dropdownColor: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                        isExpanded: true,
-                        value: dropdownDateValue,
-                        icon: Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: SvgPicture.asset(
-                              "assets/file_page/array_down.svg"),
-                        ),
-                        underline: Container(
-                          height: 2,
-                          width: 140,
-                          color: Theme.of(context).dividerColor,
-                        ),
-                        style:
-                            TextStyle(color: Theme.of(context).disabledColor),
-                        elevation: 10,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownDateValue = newValue!;
-                          });
-                        },
-                        items: <String>[
-                          'ДД/ММ/ГГГГ',
-                          'ДД/ММ/ГГ',
-                          'ММ/ГГ',
-                          'ДД/ММ',
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Center(
-                                child:
-                                    Text(value, textAlign: TextAlign.center)),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      // Row(
+      //   children: [
+      //     Container(
+      //       constraints: BoxConstraints(maxWidth: 450),
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //         children: [
+      //           Padding(
+      //             padding: const EdgeInsets.only(top: 10, left: 40),
+      //             child: Text(
+      //               translate.date_format,
+      //               style: TextStyle(
+      //                 fontSize: 17,
+      //                 fontFamily: kNormalTextFontFamily,
+      //                 color: Theme.of(context).disabledColor,
+      //               ),
+      //             ),
+      //           ),
+      //           Theme(
+      //             data: Theme.of(context).copyWith(
+      //                 focusColor: Theme.of(context).dividerColor,
+      //                 hoverColor: Theme.of(context).dividerColor),
+      //             child: Padding(
+      //               padding: const EdgeInsets.only(top: 10),
+      //               child: SizedBox(
+      //                 width: 140,
+      //                 child: ButtonTheme(
+      //                   alignedDropdown: true,
+      //                   child: DropdownButton(
+      //                     dropdownColor: Theme.of(context).primaryColor,
+      //                     borderRadius: BorderRadius.circular(10),
+      //                     isExpanded: true,
+      //                     value: dropdownDateValue,
+      //                     icon: Padding(
+      //                       padding: const EdgeInsets.only(left: 6),
+      //                       child: SvgPicture.asset(
+      //                           "assets/file_page/array_down.svg"),
+      //                     ),
+      //                     underline: Container(
+      //                       height: 2,
+      //                       width: 140,
+      //                       color: Theme.of(context).dividerColor,
+      //                     ),
+      //                     style:
+      //                         TextStyle(color: Theme.of(context).disabledColor),
+      //                     elevation: 10,
+      //                     onChanged: (String? newValue) {
+      //                       setState(() {
+      //                         dropdownDateValue = newValue!;
+      //                       });
+      //                     },
+      //                     items: <String>[
+      //                       'ДД/ММ/ГГГГ',
+      //                       'ДД/ММ/ГГ',
+      //                       'ММ/ГГ',
+      //                       'ДД/ММ',
+      //                     ].map<DropdownMenuItem<String>>((String value) {
+      //                       return DropdownMenuItem<String>(
+      //                         value: value,
+      //                         child: Center(
+      //                             child:
+      //                                 Text(value, textAlign: TextAlign.center)),
+      //                       );
+      //                     }).toList(),
+      //                   ),
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ],
+      // ),
     ]);
-  }
-
-  Future<void> _changeLanguage(String langCode) async {
-    Locale locale = await setLocale(langCode);
-
-    MyApp.setLocale(context, locale);
-    await Future.delayed(Duration(milliseconds: 500));
   }
 
   Widget regulations(BuildContext context) {

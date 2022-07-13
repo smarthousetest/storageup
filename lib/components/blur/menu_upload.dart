@@ -122,12 +122,13 @@ class _ButtonTemplateState extends State<BlurMenuUpload> {
                                 onTap: () async {
                                   List<String?>? list = await getFilesPaths();
                                   print(list);
-                                  Navigator.pop(
-                                      context,
-                                      AddMenuResult(
-                                        action: UserAction.uploadFiles,
-                                        result: list,
-                                      ));
+                                  if (list != null)
+                                    Navigator.pop(
+                                        context,
+                                        AddMenuResult(
+                                          action: UserAction.uploadFiles,
+                                          result: list,
+                                        ));
                                 },
                                 child: Column(
                                   children: [

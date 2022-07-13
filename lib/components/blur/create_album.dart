@@ -11,9 +11,10 @@ class BlurCreateAlbum extends StatefulWidget {
 }
 
 class _ButtonTemplateState extends State<BlurCreateAlbum> {
-  var _textController = TextEditingController();
+  var textController = TextEditingController();
   S translate = getIt<S>();
   bool canSave = false;
+  bool hintSymbvols = true;
 
   String? get mediaRootFolderId => mediaRootFolderId;
 
@@ -48,7 +49,24 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 25),
+                        padding: hintSymbvols
+                            ? EdgeInsets.only(top: 0)
+                            : EdgeInsets.only(top: 5),
+                        child: Text(
+                          translate.wrong_symbvols,
+                          style: TextStyle(
+                            fontSize: hintSymbvols ? 0 : 14,
+                            fontFamily: kNormalTextFontFamily,
+                            color: hintSymbvols
+                                ? Colors.white
+                                : Theme.of(context).errorColor,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: hintSymbvols
+                            ? EdgeInsets.only(top: 25)
+                            : EdgeInsets.only(top: 5),
                         child: Container(
                           width: 400,
                           height: 36,
@@ -61,18 +79,28 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                             textAlignVertical: TextAlignVertical.bottom,
                             textAlign: TextAlign.start,
                             autofocus: true,
-                            controller: _textController,
-                            onChanged: (_textController) {
-                              _textController = _textController.trim();
-
-                              if (_textController.length != 0)
+                            controller: textController,
+                            onChanged: (textController) {
+                              textController = textController.trim();
+                              if (textController.contains(
+                                          RegExp(r'[\\/:*?\"<>|]'), 0) ==
+                                      true &&
+                                  textController.isNotEmpty) {
                                 setState(() {
-                                  canSave = true;
-                                });
-                              if (_textController.length < 1)
-                                setState(() {
+                                  hintSymbvols = false;
                                   canSave = false;
                                 });
+                              } else if (textController.isNotEmpty) {
+                                setState(() {
+                                  hintSymbvols = true;
+                                  canSave = true;
+                                });
+                              } else {
+                                setState(() {
+                                  hintSymbvols = true;
+                                  canSave = false;
+                                });
+                              }
                             },
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.only(
@@ -98,7 +126,10 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                                 ),
                                 hintText: translate.new_album,
                                 hintStyle: TextStyle(
-                                  color: Theme.of(context).textTheme.headline1?.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline1
+                                      ?.color,
                                   fontFamily: kNormalTextFontFamily,
                                   fontSize: 14,
                                 )),
@@ -151,7 +182,7 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                                     if (canSave == true) {
                                       Navigator.pop(
                                         context,
-                                        _textController.value.text.trim(),
+                                        textController.value.text.trim(),
                                       );
                                     } else {
                                       null;
@@ -166,12 +197,16 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                                     ),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    primary: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
+                                    primary: canSave
+                                        ? Theme.of(context).splashColor
+                                        : Theme.of(context).canvasColor,
                                     fixedSize: Size(240, 42),
                                     elevation: 0,
                                     side: BorderSide(
                                       style: BorderStyle.solid,
-                                      color: canSave ? Theme.of(context).splashColor : Theme.of(context).canvasColor,
+                                      color: canSave
+                                          ? Theme.of(context).splashColor
+                                          : Theme.of(context).canvasColor,
                                     ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),

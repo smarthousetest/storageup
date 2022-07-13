@@ -17,6 +17,8 @@ class SpaceState extends Equatable {
   final int availableSpace;
   final Name name;
   final FormzStatus statusHttpRequest;
+  final List<String> diskList;
+  final List<String> usedDisk;
 
   SpaceState({
     this.user,
@@ -28,6 +30,8 @@ class SpaceState extends Equatable {
     this.availableSpace = 0,
     this.name = const Name.pure(),
     this.statusHttpRequest = FormzStatus.pure,
+    this.diskList = const [],
+    this.usedDisk = const [],
   });
 
   SpaceState copyWith({
@@ -40,6 +44,8 @@ class SpaceState extends Equatable {
     String? pathToKeeper,
     int? availableSpace,
     FormzStatus? statusHttpRequest,
+    List<String>? diskList,
+    List<String>? usedDisk,
   }) {
     return SpaceState(
       user: user ?? this.user,
@@ -51,6 +57,8 @@ class SpaceState extends Equatable {
       name: name ?? this.name,
       availableSpace: availableSpace ?? this.availableSpace,
       statusHttpRequest: statusHttpRequest ?? FormzStatus.pure,
+      diskList: diskList ?? this.diskList,
+      usedDisk: usedDisk ?? this.usedDisk,
     );
   }
 
@@ -65,5 +73,7 @@ class SpaceState extends Equatable {
         pathToKeeper,
         availableSpace,
         statusHttpRequest,
+        diskList,
+        usedDisk,
       ];
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:storageup/models/download_location.dart';
 import 'package:storageup/pages/sell_space/space_state.dart';
 
 abstract class SpaceEvent extends Equatable {
@@ -21,7 +22,17 @@ class SpacePageOpened extends SpaceEvent {
 }
 
 class GetPathToKeeper extends SpaceEvent {
-  const GetPathToKeeper();
+  final String? pathForChange;
+  const GetPathToKeeper({this.pathForChange});
+}
+
+class ChangeKeeper extends SpaceEvent {
+  final int countGb;
+  final DownloadLocation keeper;
+  ChangeKeeper({
+    required this.countGb,
+    required this.keeper,
+  });
 }
 
 class RunSoft extends SpaceEvent {
@@ -55,4 +66,23 @@ class SaveDirPath extends SpaceEvent {
 
 class SendKeeperVersion extends SpaceEvent {
   SendKeeperVersion();
+}
+
+class UpdateKeepersList extends SpaceEvent {
+  UpdateKeepersList();
+}
+
+class GetUserDisks extends SpaceEvent {
+  GetUserDisks();
+}
+
+class GetDiskToKeeper extends SpaceEvent {
+  final String? selectedDisk;
+  GetDiskToKeeper({
+    required this.selectedDisk,
+  });
+}
+
+class GetAlreadyUsedDisk extends SpaceEvent{
+  GetAlreadyUsedDisk();
 }

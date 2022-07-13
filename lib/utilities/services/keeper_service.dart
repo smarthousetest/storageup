@@ -57,7 +57,11 @@ class KeeperService {
         String? token = await _tokenRepository.getApiToken();
         var response = await _dio.post(
           '/keeper',
-          options: Options(headers: {'Authorization': ' Bearer $token'}),
+          options: Options(
+            headers: {
+              'Authorization': ' Bearer $token',
+            },
+          ),
           data: {
             'data': {
               'name': name,
@@ -88,7 +92,11 @@ class KeeperService {
 
       var response = await _dio.get(
         '/keeper/$id/change/sleepStatus',
-        options: Options(headers: {'Authorization': ' Bearer $token'}),
+        options: Options(
+          headers: {
+            'Authorization': ' Bearer $token',
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
@@ -108,5 +116,27 @@ class KeeperService {
         return Either.left(ResponseStatus.failed);
       }
     }
+  }
+
+  Future<String?> changeKeeper(String name, int countGb, String id) async {
+    for (int i = 0; i < 5; i++) {
+      try {
+        String? token = await _tokenRepository.getApiToken();
+        var response = await _dio.put(
+          '/keeper/$id',
+          options: Options(headers: {'Authorization': ' Bearer $token'}),
+          data: {
+            'data': {
+              'name': name,
+              "space": countGb * GB,
+            }
+          },
+        );
+        return response.data['id'];
+      } on DioError catch (e) {
+        print(e);
+      }
+    }
+    return null;
   }
 }

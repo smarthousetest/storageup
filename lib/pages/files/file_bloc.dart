@@ -19,6 +19,7 @@ import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/file_event.dart';
 import 'package:storageup/pages/files/file_state.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/user_repository.dart';

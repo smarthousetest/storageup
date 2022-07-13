@@ -39,17 +39,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m7(count) => "${count} Kb";
 
-  static String m8(count) => "${count} Mb";
+  static String m8(count) =>
+      "${Intl.plural(count, zero: '0 files', one: '${count} file', other: '${count} files')}";
 
-  static String m9(count) => "Minimum storage size: ${count} GB";
+  static String m9(count) => "${count} Mb";
 
-  static String m10(count) => "${count} Pb";
+  static String m10(count) => "Minimum storage size: ${count} GB";
 
-  static String m11(count) => "${count} seconds";
+  static String m11(count) => "${count} Pb";
 
-  static String m12(count) => "${count} \$/mounth";
+  static String m12(count) => "${count} seconds";
 
-  static String m13(count) => "${count} Tb";
+  static String m13(count) => "${count} \$/mounth";
+
+  static String m14(count) => "${count} Tb";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -59,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Active subscription"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
+        "add_files": MessageLookupByLibrary.simpleMessage("Add files"),
         "add_location": MessageLookupByLibrary.simpleMessage("Add location"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "all_files": MessageLookupByLibrary.simpleMessage("All files"),
@@ -91,7 +95,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_password":
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
+        "change_place": MessageLookupByLibrary.simpleMessage("Change place"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Check your internet connection and try again."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
@@ -182,6 +189,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
             "A server-side error occurred in the Storage Up application. Please repeat a little later."),
         "kb": m7,
+        "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
+            "That keeper name are already used.\nRename your keeper"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Learn more"),
@@ -194,11 +203,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "disk - rent space and make money on it!"),
         "management":
             MessageLookupByLibrary.simpleMessage("Subscription management"),
+        "many_files": m8,
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Maximum size for your drive: "),
-        "mb": m8,
+        "mb": m9,
         "media": MessageLookupByLibrary.simpleMessage("Media"),
-        "min_storage": m9,
+        "min_storage": m10,
         "money":
             MessageLookupByLibrary.simpleMessage("can make money from it."),
         "money_two_step":
@@ -231,6 +241,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Not enought space"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
             "The volume of the selected storage space does not exceed 32 GB"),
+        "not_selected": MessageLookupByLibrary.simpleMessage("Not selected"),
         "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
         "not_storage": MessageLookupByLibrary.simpleMessage(
             "You have no storage locations yet"),
@@ -269,7 +280,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Passwords don\'t match"),
         "path": MessageLookupByLibrary.simpleMessage("Path"),
         "payment": MessageLookupByLibrary.simpleMessage("Payment:"),
-        "pb": m10,
+        "pb": m11,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to permanently delete your account"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -317,13 +328,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Russian"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
-        "seconds": m11,
+        "seconds": m12,
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Select the folder on the drive where you have free space."),
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Choose storage location"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Renting a place"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "The connection to the server cannot be established."),
         "set_size": MessageLookupByLibrary.simpleMessage("Set storage size"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
@@ -340,8 +353,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m12,
-        "tb": m13,
+        "subscription_pay_mounth": m13,
+        "tb": m14,
         "technical_error": MessageLookupByLibrary.simpleMessage(
             "A technical error has occurred in the StorageUp application. Please repeat a little later."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
@@ -378,6 +391,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Well"),
+        "where_download":
+            MessageLookupByLibrary.simpleMessage("Where download?"),
         "where_move":
             MessageLookupByLibrary.simpleMessage("Where to move it to?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(

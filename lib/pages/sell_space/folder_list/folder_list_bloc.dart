@@ -161,7 +161,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
               needToValidatePopup: true,
             ),
           );
-        } else {
+        } else if (result.left == ResponseStatus.failed) {
           emit(
             state.copyWith(
               statusHttpRequest: FormzStatus.submissionFailure,
@@ -266,7 +266,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         Uri.decodeFull(await box.get(event.location.id.toString()));
     await box.delete(event.location.id.toString());
     String keeperId = '';
-    var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
+    var keeperIdFile = File(
+        '$keeperDir${Platform.pathSeparator}.keeper${Platform.pathSeparator}keeper_id.txt');
     if (keeperIdFile.existsSync()) {
       keeperId = keeperIdFile.readAsStringSync().trim();
     }
@@ -286,6 +287,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         print(e);
         if (e.response?.statusCode == 401 ||
             e.response?.statusCode == 429 ||
+            e.response?.statusCode == 404 ||
             e.response?.statusCode == 500 ||
             e.response?.statusCode == 502 ||
             e.response?.statusCode == 504) {
@@ -324,8 +326,10 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       );
     }
 
-    if (Directory(keeperDir).existsSync()) {
-      Directory(keeperDir).deleteSync(recursive: true);
+    if (Directory('${keeperDir}${Platform.pathSeparator}.keeper')
+        .existsSync()) {
+      Directory('${keeperDir}${Platform.pathSeparator}.keeper')
+          .deleteSync(recursive: true);
     }
     emit(state.copyWith(locationsInfo: _repository.locationsInfo));
   }
@@ -379,6 +383,10 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       keeperDirPath: event.location.dirPath,
     );
     _emitNewLocalKeepersState(emit, event.location.name, false);
+    for (int i = 0; i < 4; i++) {
+      add(GetKeeperInfo());
+      await Future.delayed(Duration(seconds: 5));
+    }
   }
 
   void _emitNewLocalKeepersState(
@@ -436,7 +444,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       if (bearerToken != null) {
         os.startProcess('keeper', [
           domainName,
-          keeperDirPath,
+          "${keeperDirPath}${Platform.pathSeparator}.keeper",
           bearerToken,
         ]);
       } else {

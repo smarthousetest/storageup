@@ -14,20 +14,19 @@ import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/latest_file_repository.dart';
 import 'package:storageup/utilities/services/files_service.dart';
-
-import '../sell_space/space_view.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
 @Injectable()
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeState()) {
-    on<HomeUserActionChosen>((event, emit) async {
+    on<HomeUserActionChoosed>((event, emit) async {
       switch (event.action) {
         case UserAction.uploadFiles:
           _uploadFiles(event, emit);
@@ -113,7 +112,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _uploadFiles(
-    HomeUserActionChosen event,
+    HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {
     if (event.values != null) {
@@ -131,7 +130,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _createFolder(
-    HomeUserActionChosen event,
+    HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {
     String? folderId;
@@ -163,7 +162,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _createAlbum(
-    HomeUserActionChosen event,
+    HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {
     String? mediaRootFolderId;
@@ -197,7 +196,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _uploadMedia(
-    HomeUserActionChosen event,
+    HomeUserActionChoosed event,
     Emitter<HomeState> emit,
   ) async {
     if (event.values != null && event.values!.isNotEmpty) {

@@ -16,12 +16,12 @@ class FileTapped extends HomeEvent {
   FileTapped({required this.record});
 }
 
-class HomeUserActionChosen extends HomeEvent {
+class HomeUserActionChoosed extends HomeEvent {
   final UserAction action;
   final List<String?>? values;
   final String? folderId;
 
-  HomeUserActionChosen({
+  HomeUserActionChoosed({
     required this.action,
     this.values,
     this.folderId,
