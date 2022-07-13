@@ -19,6 +19,7 @@ class MoveCubit extends Cubit<MoveState> {
 
     emit(state.copyWith(
       folders: allFolders,
+      currentFolder: rootFolder,
     ));
   }
 
