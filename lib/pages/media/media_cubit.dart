@@ -204,6 +204,25 @@ class MediaCubit extends Cubit<MediaState> {
     });
   }
 
+  Future<void> update() async {
+    var allMediaFolders = await _filesController.getMediaFolders(true);
+    var currentFolder = allMediaFolders
+        ?.firstWhere((element) => element.id == state.currentFolder.id);
+    User? user = await _userController.getUser;
+    bool progress = true;
+    var valueNotifier = _userController.getValueNotifier();
+    emit(state.copyWith(
+      albums: allMediaFolders,
+      currentFolder: currentFolder,
+      currentFolderRecords: currentFolder?.records?.reversed.toList(),
+      allRecords: currentFolder?.records,
+      user: user,
+      progress: progress,
+      status: FormzStatus.pure,
+      valueNotifier: valueNotifier,
+    ));
+  }
+
   @override
   Future<void> close() async {
     _loadController.getState.unregisterObserver(_updateObserver);

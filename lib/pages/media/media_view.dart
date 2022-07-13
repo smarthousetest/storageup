@@ -524,6 +524,64 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                     ),
                                     BlocBuilder<MediaCubit, MediaState>(
                                         builder: (context, state) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          context.read<MediaCubit>().update();
+                                        },
+                                        child: MouseRegion(
+                                          cursor: SystemMouseCursors.click,
+                                          child: Container(
+                                            width: 128,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/file_page/update.svg',
+                                                  color: Theme.of(context)
+                                                      .splashColor,
+                                                  width: 24,
+                                                  height: 24,
+                                                ),
+                                                SizedBox(
+                                                  width: 7,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 2.0),
+                                                  child: Text(
+                                                    translate.update,
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .splashColor,
+                                                      fontFamily:
+                                                          kNormalTextFontFamily,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                    SizedBox(
+                                      width: 6,
+                                    ),
+                                    BlocBuilder<MediaCubit, MediaState>(
+                                        builder: (context, state) {
                                       return IconButton(
                                         padding: EdgeInsets.zero,
                                         iconSize: 30,
