@@ -62,6 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "active_sub":
             MessageLookupByLibrary.simpleMessage("Active subscription"),
         "add": MessageLookupByLibrary.simpleMessage("Add"),
+        "add_files": MessageLookupByLibrary.simpleMessage("Add files"),
         "add_location": MessageLookupByLibrary.simpleMessage("Add location"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "all_files": MessageLookupByLibrary.simpleMessage("All files"),
@@ -94,7 +95,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_password":
             MessageLookupByLibrary.simpleMessage("Change password"),
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
+        "change_place": MessageLookupByLibrary.simpleMessage("Change place"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
+        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
+            "Check your internet connection and try again."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
@@ -185,6 +189,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
             "A server-side error occurred in the Storage Up application. Please repeat a little later."),
         "kb": m7,
+        "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
+            "That keeper name are already used.\nRename your keeper"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "latest_file": MessageLookupByLibrary.simpleMessage("Latest file"),
         "learn_more": MessageLookupByLibrary.simpleMessage("Learn more"),
@@ -235,6 +241,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Not enought space"),
         "not_exceed": MessageLookupByLibrary.simpleMessage(
             "The volume of the selected storage space does not exceed 32 GB"),
+        "not_selected": MessageLookupByLibrary.simpleMessage("Not selected"),
         "not_space": MessageLookupByLibrary.simpleMessage("Not enough space?"),
         "not_storage": MessageLookupByLibrary.simpleMessage(
             "You have no storage locations yet"),
@@ -328,6 +335,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Choose storage location"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Renting a place"),
+        "server_connection_error": MessageLookupByLibrary.simpleMessage(
+            "The connection to the server cannot be established."),
         "set_size": MessageLookupByLibrary.simpleMessage("Set storage size"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
@@ -344,8 +353,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Don\'t have an account yet? Hurry to join us!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "We use this space to store files, and you "),
-        "subscription_pay_mounth": m12,
-        "tb": m13,
+        "subscription_pay_mounth": m13,
+        "tb": m14,
         "technical_error": MessageLookupByLibrary.simpleMessage(
             "A technical error has occurred in the StorageUp application. Please repeat a little later."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
@@ -382,6 +391,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "welcome_to_upstorage":
             MessageLookupByLibrary.simpleMessage("Welcome to StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Well"),
+        "where_download":
+            MessageLookupByLibrary.simpleMessage("Where download?"),
         "where_move":
             MessageLookupByLibrary.simpleMessage("Where to move it to?"),
         "will_be_deleted": MessageLookupByLibrary.simpleMessage(

@@ -59,6 +59,8 @@ dependencies:
   file_typification:
     git:
       url: ssh://git@gitlab.upstorage.net:2289/a.som/file_typification.git
+  syncfusion_flutter_sliders: ^20.1.61
+  contextmenu: ^3.0.0
 
   window_size:
     git:

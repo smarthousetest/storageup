@@ -16,7 +16,7 @@ class PercentIndicator extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const arcCenter = Offset(57, 65);
+    const arcCenter = Offset(60, 65);
     final arcRect = Rect.fromCircle(center: arcCenter, radius: 65);
     final startAngle = -math.pi;
     final sweepAngle = value != null ? value : math.pi;
@@ -51,7 +51,8 @@ class PercentArc extends StatefulWidget {
   _PercentArc createState() => _PercentArc();
 }
 
-class _PercentArc extends State<PercentArc> with SingleTickerProviderStateMixin {
+class _PercentArc extends State<PercentArc>
+    with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
 
@@ -64,12 +65,14 @@ class _PercentArc extends State<PercentArc> with SingleTickerProviderStateMixin 
       duration: Duration(seconds: 3),
       vsync: this,
     );
-    final curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.easeInOutCubic);
+    final curvedAnimation =
+        CurvedAnimation(parent: controller, curve: Curves.easeInOutCubic);
 
-    animation = Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
-      ..addListener(() {
-        setState(() {});
-      });
+    animation =
+        Tween<double>(begin: 0.0, end: widget.value).animate(curvedAnimation)
+          ..addListener(() {
+            setState(() {});
+          });
   }
 
   @override
