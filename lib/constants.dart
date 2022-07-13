@@ -12,7 +12,7 @@ const kPathDBName = 'file_path_db';
 /// Only domain <storageup.net> works, other domains crash application
 final String domainName = readFromFileDomainName();
 
-const kServerUrl = 'https://storageup.net';
+final kServerUrl = 'https://${domainName}';
 //Shared Prefs constants
 const kIsFirstOpeningApp = 'is_first_opening_app';
 const kIsAutouploadEnabled = 'is_autoupload_enabled';

@@ -101,6 +101,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     });
   }
 
+  // changeIndexAfterDelete(int newIndex) {
+  //   setState(() {
+  //     index = newIndex;
+  //   });
+  // }
+
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
     return BlocProvider(
@@ -356,8 +362,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             setState(() {
               index = 0;
               changeKeeper = null;
-              myController.text = '';
+              myController.clear();
               _currentSliderValue = 32;
+              firstOpen = true;
             });
           },
           child: MouseRegion(
@@ -417,7 +424,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               onPressed: () {
                 setState(() {
                   index = 1;
-                  print(index);
+                  myController.clear();
+                  firstOpen = true;
                 });
               },
               style: OutlinedButton.styleFrom(
@@ -621,6 +629,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               onPressed: () {
                 setState(() {
                   index = 1;
+                  firstOpen = true;
                 });
               },
               style: OutlinedButton.styleFrom(

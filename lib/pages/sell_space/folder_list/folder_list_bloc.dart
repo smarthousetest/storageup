@@ -231,19 +231,25 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     var keeper = await _keeperService.getAllKeepers();
     List<Keeper> localKeeper = [];
     List<Keeper> serverKeeper = [];
+    List<String> localPaths = [];
     if (keeper.right != null) {
       for (var element in keeper.right!) {
         if (updateLocations.any((info) => info.keeperId == element.id)) {
           localKeeper.add(element);
+          for (var locationInfo in updateLocations) {
+            localPaths.add(locationInfo.dirPath);
+          }
         } else {
           serverKeeper.add(element);
         }
       }
       emit(
         state.copyWith(
+          keepers: keeper.right,
           locationsInfo: updateLocations,
           localKeeper: localKeeper.reversed.toList(),
           serverKeeper: serverKeeper,
+          localPath: localPaths.reversed.toList(),
           statusHttpRequest: FormzStatus.pure,
           needToValidatePopup: false,
         ),
@@ -266,7 +272,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         Uri.decodeFull(await box.get(event.location.id.toString()));
     await box.delete(event.location.id.toString());
     String keeperId = '';
-    var keeperIdFile = File('$keeperDir${Platform.pathSeparator}keeper_id.txt');
+    var keeperIdFile = File(
+        '$keeperDir${Platform.pathSeparator}.keeper${Platform.pathSeparator}keeper_id.txt');
     if (keeperIdFile.existsSync()) {
       keeperId = keeperIdFile.readAsStringSync().trim();
     }
@@ -325,8 +332,10 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       );
     }
 
-    if (Directory(keeperDir).existsSync()) {
-      Directory(keeperDir).deleteSync(recursive: true);
+    if (Directory('${keeperDir}${Platform.pathSeparator}.keeper')
+        .existsSync()) {
+      Directory('${keeperDir}${Platform.pathSeparator}.keeper')
+          .deleteSync(recursive: true);
     }
     emit(state.copyWith(locationsInfo: _repository.locationsInfo));
   }

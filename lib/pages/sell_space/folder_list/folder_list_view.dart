@@ -266,6 +266,12 @@ class _ButtonTemplateState extends State<FolderList> {
                                 if (deleteKeeper != null) {
                                   context.read<FolderListBloc>().add(
                                       DeleteLocation(location: deleteKeeper));
+                                  context.read<FolderListBloc>().stream.first;
+                                  // if (state.keepers == null) {
+                                  //   SpaceInheritedWidget.of(context)
+                                  //       .state
+                                  //       .changeIndexAfterDelete(0);
+                                  // }
                                 }
                               }
                               setState(() {});
