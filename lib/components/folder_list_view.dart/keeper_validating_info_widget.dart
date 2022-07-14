@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:storageup/components/folder_list_view.dart/validate_keeper_progress_inidcator.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -12,11 +15,15 @@ class KeeperValidatingInfoWidget extends StatefulWidget {
     required this.keeper,
     required this.localPath,
     required this.popupControllers,
+    required this.validDate,
+    required this.onValidateEnd,
   }) : super(key: key);
 
   final Keeper keeper;
   final String localPath;
   final List<CustomPopupMenuController> popupControllers;
+  final DateTime validDate;
+  final VoidCallback onValidateEnd;
 
   @override
   State<KeeperValidatingInfoWidget> createState() =>
@@ -26,6 +33,32 @@ class KeeperValidatingInfoWidget extends StatefulWidget {
 class _KeeperValidatingInfoWidgetState
     extends State<KeeperValidatingInfoWidget> {
   final translate = getIt<S>();
+  Duration timeLeft = Duration(hours: 3);
+  Timer? timer;
+
+  @override
+  void initState() {
+    timer = Timer.periodic(Duration(milliseconds: 300), (timer) {
+      var nowDateTime = DateTime.now();
+      timeLeft = widget.validDate.difference(nowDateTime);
+
+      if (timeLeft < Duration.zero) {
+        widget.onValidateEnd();
+        timeLeft = Duration.zero;
+      }
+
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +108,7 @@ class _KeeperValidatingInfoWidgetState
               ),
             ),
             Text(
-              'На данный момент проверяется надежность вашего принимающего устройства. Проверка может занять до 3 часов.',
+              translate.we_validating_your_keeper,
               style: TextStyle(
                 color: Theme.of(context).disabledColor,
               ),
@@ -88,7 +121,9 @@ class _KeeperValidatingInfoWidgetState
                 height: 130,
                 width: 130,
                 child: ValidateKeeperProgressIndicator(
-                  value: 75,
+                  value: (1 -
+                          (timeLeft.inSeconds / Duration(hours: 3).inSeconds)) *
+                      100,
                 ),
               ),
             ),
@@ -100,7 +135,7 @@ class _KeeperValidatingInfoWidgetState
               child: Column(
                 children: [
                   Text(
-                    'Оставшееся время проверки',
+                    translate.remaining_validation_time,
                     style: TextStyle(
                       color: Theme.of(context).disabledColor,
                     ),
@@ -109,7 +144,7 @@ class _KeeperValidatingInfoWidgetState
                     height: 5,
                   ),
                   Text(
-                    '5 часов 23 минуты',
+                    _humanReadableTimeLeft(timeLeft),
                     style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).textTheme.headline2?.color),
@@ -121,5 +156,18 @@ class _KeeperValidatingInfoWidgetState
         ),
       ),
     );
+  }
+
+  String _humanReadableTimeLeft(Duration timeLeft) {
+    String time = '';
+
+    if (timeLeft.inHours >= 1) {
+      time += '${translate.many_hours(timeLeft.inHours)} ';
+    }
+
+    time +=
+        translate.many_minutes(timeLeft.inMinutes % Duration.minutesPerHour);
+
+    return time;
   }
 }
