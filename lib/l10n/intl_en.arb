@@ -271,6 +271,10 @@
     "null_file": "An error occurred in the StorageUp application when working with a file. The file cannot be downloaded.",
     "not_enought_space": "Not enought space",
     "no_available_space": "The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space.",
+    "many_hours": "{count,plural, =0{0 hours} =1{{count} hour} other{{count} hours}}",
+    "many_minutes": "{count,plural, =0{0 minutes} =1{{count} minute} other{{count} minutes}}",
+    "remaining_validation_time": "Remaining check time",
+    "we_validating_your_keeper": "At this point, your receiving device is being tested for reliability. This check can take up to 3 hours."
     "many_files": "{count,plural, =0{0 files} =1{{count} file} other{{count} files}}",
     "add_files": "Add files",
     "change_place": "Change place",

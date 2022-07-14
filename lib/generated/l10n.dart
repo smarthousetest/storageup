@@ -2499,6 +2499,52 @@ class S {
     );
   }
 
+  /// `{count,plural, =0{0 hours} =1{{count} hour} other{{count} hours}}`
+  String many_hours(num count) {
+    return Intl.plural(
+      count,
+      zero: '0 hours',
+      one: '$count hour',
+      other: '$count hours',
+      name: 'many_hours',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count,plural, =0{0 minutes} =1{{count} minute} other{{count} minutes}}`
+  String many_minutes(num count) {
+    return Intl.plural(
+      count,
+      zero: '0 minutes',
+      one: '$count minute',
+      other: '$count minutes',
+      name: 'many_minutes',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Remaining check time`
+  String get remaining_validation_time {
+    return Intl.message(
+      'Remaining check time',
+      name: 'remaining_validation_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At this point, your receiving device is being tested for reliability. This check can take up to 3 hours.`
+  String get we_validating_your_keeper {
+    return Intl.message(
+      'At this point, your receiving device is being tested for reliability. This check can take up to 3 hours.',
+      name: 'we_validating_your_keeper',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Add files`
   String get add_files {
     return Intl.message(

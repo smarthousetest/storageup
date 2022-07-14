@@ -41,18 +41,24 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m8(count) =>
       "${Intl.plural(count, zero: '0 файлов', one: '${count} файл', two: '${count} файла', few: '${count} файла', many: '${count} файлов', other: '${count} файлов')}";
 
-  static String m9(count) => "${count} Мб";
+  static String m9(count) =>
+      "${Intl.plural(count, zero: '0 часов', one: '${count} час', two: '${count} часа', few: '${count} часа', many: '${count} часов', other: '${count} часов')}";
 
-  static String m10(count) => "Минимальный размер хранилища: ${count} ГБ";
+  static String m10(count) =>
+      "${Intl.plural(count, zero: '0 минут', one: '${count} минута', two: '${count} минуты', few: '${count} минуты', many: '${count} минут', other: '${count} минут')}";
 
-  static String m11(count) => "${count} Пб";
+  static String m11(count) => "${count} Мб";
 
-  static String m12(count) =>
+  static String m12(count) => "Минимальный размер хранилища: ${count} ГБ";
+
+  static String m13(count) => "${count} Пб";
+
+  static String m14(count) =>
       "${Intl.plural(count, zero: '0 секунд', one: '${count} секунду', two: '${count} секунды', few: '${count} секунды', many: '${count} секунд', other: '${count} секунд')}";
 
-  static String m13(count) => "${count} ₽/месяц";
+  static String m15(count) => "${count} ₽/месяц";
 
-  static String m14(count) => "${count} Тб";
+  static String m16(count) => "${count} Тб";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -207,11 +213,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "management":
             MessageLookupByLibrary.simpleMessage("Управление подпиской"),
         "many_files": m8,
+        "many_hours": m9,
+        "many_minutes": m10,
         "max_storage": MessageLookupByLibrary.simpleMessage(
             "Максимальный размер для вашего диска: "),
-        "mb": m9,
+        "mb": m11,
         "media": MessageLookupByLibrary.simpleMessage("Медиа"),
-        "min_storage": m10,
+        "min_storage": m12,
         "money":
             MessageLookupByLibrary.simpleMessage("сможете на этом заработать."),
         "money_two_step": MessageLookupByLibrary.simpleMessage(
@@ -282,7 +290,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Пароли не совпадают"),
         "path": MessageLookupByLibrary.simpleMessage("Путь"),
         "payment": MessageLookupByLibrary.simpleMessage("Оплата:"),
-        "pb": m11,
+        "pb": m13,
         "permanently_delete": MessageLookupByLibrary.simpleMessage(
             "Вы уверены, что хотите окончательно удалить ваш аккаунт"),
         "personal": MessageLookupByLibrary.simpleMessage(
@@ -313,6 +321,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "registration": MessageLookupByLibrary.simpleMessage("Регистрация"),
         "regulations":
             MessageLookupByLibrary.simpleMessage("Нормативные документы"),
+        "remaining_validation_time":
+            MessageLookupByLibrary.simpleMessage("Оставшееся время проверки"),
         "remember_me": MessageLookupByLibrary.simpleMessage("Запомнить меня"),
         "rename": MessageLookupByLibrary.simpleMessage("Переименовать"),
         "rent": MessageLookupByLibrary.simpleMessage("Сдать"),
@@ -331,7 +341,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Русский"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
-        "seconds": m12,
+        "seconds": m14,
         "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(
             "Выберите папку на диске, где у вас есть свободное пространство."),
@@ -357,8 +367,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Еще нет аккаунта? Скорее присоединяйся к нам!"),
         "store_files": MessageLookupByLibrary.simpleMessage(
             "Мы используем это пространство для хранения файлов, а вы"),
-        "subscription_pay_mounth": m13,
-        "tb": m14,
+        "subscription_pay_mounth": m15,
+        "tb": m16,
         "technical_error": MessageLookupByLibrary.simpleMessage(
             "В приложении StorageUp произошла техническая ошибка. Повторите, пожалуйста, чуть позже."),
         "tell_us": MessageLookupByLibrary.simpleMessage(
@@ -394,6 +404,8 @@ class MessageLookup extends MessageLookupByLibrary {
             ", возможно, мы сможем вам помочь."),
         "we_send": MessageLookupByLibrary.simpleMessage(
             "Мы отправили письмо на почту"),
+        "we_validating_your_keeper": MessageLookupByLibrary.simpleMessage(
+            "На данный момент проверяется надежность вашего принимающего устройства. Проверка может занять до 3 часов."),
         "welcome_to_upstorage": MessageLookupByLibrary.simpleMessage(
             "Добро пожаловать в StorageUp"),
         "well": MessageLookupByLibrary.simpleMessage("Хорошо"),
