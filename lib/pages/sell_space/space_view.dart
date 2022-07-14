@@ -1758,8 +1758,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       canSave = false;
                                       dropdownValue = null;
                                     });
+                                    context
+                                        .read<FolderListBloc>()
+                                        .add(FolderListPageOpened());
                                     var bloc = context.read<FolderListBloc>();
-                                    await Future.delayed(Duration(seconds: 5));
+                                    await Future.delayed(Duration(seconds: 4));
                                     bloc.add(FolderListPageOpened());
                                   } else {
                                     canSave = false;
