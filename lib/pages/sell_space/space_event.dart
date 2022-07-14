@@ -8,15 +8,6 @@ abstract class SpaceEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// class SpaceSearchFieldChanged extends SpaceEvent {
-//   String itemName;
-//   SpaceSearchFieldChanged(this.itemName);
-
-//   @override
-//   // TODO: implement props
-//   List<Object?> get props => [itemName];
-// }
-
 class SpacePageOpened extends SpaceEvent {
   const SpacePageOpened();
 }

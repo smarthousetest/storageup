@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:desktop_window/desktop_window.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -50,11 +49,11 @@ class _AuthViewState extends State<AuthView> {
   @override
   void initState() {
     var os = OsSpecifications.getOs();
-    var height = 780.0;
-    var width = 1280.0;
+    double height = 780.0;
+    double width = 1280.0;
     if (Platform.isWindows) {
-      height = 780 * os.getWinScreenScale();
-      width = 1296 * os.getWinScreenScale();
+      height = 780 * os.getScreenScale();
+      width = 1296 * os.getScreenScale();
     }
     if (Platform.isLinux) {
       width = 1332.0;
@@ -101,7 +100,6 @@ class _AuthViewState extends State<AuthView> {
     var theme = Theme.of(context);
 
     if (!_isSignIn && _isAnimationCompleted) {
-      //controller.jumpTo(MediaQuery.of(context).size.width * 0.6);
       controller.jumpTo(720);
     }
 
@@ -212,27 +210,28 @@ class _AuthViewState extends State<AuthView> {
   }
 
   Widget _mainSection(ThemeData theme) {
-    //var width = MediaQuery.of(context).size.width * 0.565;
     var width = 720.0;
-    return LayoutBuilder(builder: (context, constrains) {
-      return ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: width, minWidth: width),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          controller: controller,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width, minWidth: width),
-                child: _signInMain()),
-            ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width, minWidth: width),
-                child: _registerMain()),
-          ],
-        ),
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: width, minWidth: width),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            controller: controller,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: width, minWidth: width),
+                  child: _signInMain()),
+              ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: width, minWidth: width),
+                  child: _registerMain()),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _signInMain() {

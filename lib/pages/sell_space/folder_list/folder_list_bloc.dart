@@ -56,7 +56,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     emit(state.copyWith(user: user));
     add(GetKeeperInfo());
     try {
-      // if (timerUpdateKeeperInfo == null || !timerUpdateKeeperInfo!.isActive) {
       timerUpdateKeeperInfo?.cancel();
       timerUpdateKeeperInfo = Timer.periodic(
         Duration(seconds: updateKeeperInfoDelay),
@@ -66,8 +65,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         },
       );
       print("Timer of updating keeper info started");
-      // }
-
     } catch (e) {
       print('error timer in get keeper');
     }
@@ -128,7 +125,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         ),
       );
     }
-    // print('5 seconds update keeper');
   }
 
   void _listener() {
@@ -348,7 +344,6 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         'session': session,
       }),
     );
-    // await channel.sink.done;
   }
 
   Future _getKeeperSession(String keeperId, Dio dio, String bearerToken) async {

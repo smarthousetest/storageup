@@ -50,7 +50,6 @@ class FilesState extends Equatable {
 
   FilesState.init({
     this.allFiles = const [],
-    //this.sortedFiles = const [],
     this.status = FormzStatus.pure,
     this.groupedFiles = const {},
     this.currentFolder,

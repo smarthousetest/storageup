@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:cpp_native/cpp_native.dart';
 import 'package:cpp_native/file_proc/encryption.dart';
-import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
@@ -50,6 +49,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
   }
+
   final AuthenticationRepository _authenticationRepository =
       getIt<AuthenticationRepository>();
   final TokenRepository _tokenRepository = getIt<TokenRepository>();

@@ -9,15 +9,6 @@ abstract class FolderListEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// class SpaceSearchFieldChanged extends SpaceEvent {
-//   String itemName;
-//   SpaceSearchFieldChanged(this.itemName);
-
-//   @override
-//   // TODO: implement props
-//   List<Object?> get props => [itemName];
-// }
-
 class FolderListPageOpened extends FolderListEvent {
   const FolderListPageOpened();
 }
@@ -49,5 +40,6 @@ class UpdateLocationsList extends FolderListEvent {
 
 class KeeperReboot extends FolderListEvent {
   final DownloadLocation location;
+
   KeeperReboot({required this.location});
 }

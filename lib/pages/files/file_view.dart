@@ -2,17 +2,14 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_view.dart';
-import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
-import 'package:storageup/utilities/state_containers/state_info_container.dart';
 import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 
 import 'file_bloc.dart';
@@ -22,7 +19,7 @@ import 'file_state.dart';
 class FilePage extends StatefulWidget {
   @override
   _FilePageState createState() => new _FilePageState();
-  //var index = 0;
+
   FilePage();
 }
 
@@ -31,12 +28,14 @@ class _FilePageState extends State<FilePage> {
   S translate = getIt<S>();
   var index = 0;
 
-  List<OpenedFolderView> _opendedFolders = [];
+  List<OpenedFolderView> _openedFolders = [];
   int _sortingTextFieldIndex = -1;
-  final double _rowSpasing = 20.0;
+  final double _rowSpacing = 20.0;
   final double _rowPadding = 30.0;
+
+  //TODO почему это не используется?
   double? _searchFieldWidth;
-  bool _isSearchFieldChoosen = true;
+  bool _isSearchFieldChosen = true;
   final TextEditingController _searchingFieldController =
       TextEditingController();
   final FocusNode focusNode = FocusNode();
@@ -46,9 +45,9 @@ class _FilePageState extends State<FilePage> {
 
   @override
   void initState() {
-    _opendedFolders.add(
+    _openedFolders.add(
       OpenedFolderView(
-        currentFolder: null, //state.currentFolder!,
+        currentFolder: null,
         previousFolders: [],
         pop: _pop,
         push: _push,
@@ -63,12 +62,12 @@ class _FilePageState extends State<FilePage> {
     if (MediaQuery.of(context).size.width < 967) {
       setState(() {
         _searchFieldWidth =
-            width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
+            width - _rowSpacing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
       });
     } else
       setState(() {
         _searchFieldWidth =
-            width - _rowSpasing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
+            width - _rowSpacing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
       });
   }
 
@@ -76,7 +75,7 @@ class _FilePageState extends State<FilePage> {
     final width = MediaQuery.of(context).size.width;
 
     _searchFieldWidth =
-        width - _rowSpasing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
+        width - _rowSpacing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
   }
 
   void _initFilterList() {
@@ -126,9 +125,8 @@ class _FilePageState extends State<FilePage> {
 
   void _changeSortFieldsVisibility(BuildContext context) {
     setState(() {
-      _isSearchFieldChoosen = !_isSearchFieldChoosen;
+      _isSearchFieldChosen = !_isSearchFieldChosen;
     });
-    //context.read<FilesBloc>().add(FilesSortingClear());
   }
 
   Widget _fileView(BuildContext context) {
@@ -163,34 +161,14 @@ class _FilePageState extends State<FilePage> {
                       ],
                     ),
                   ),
-                  /* Expanded(
-                    child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 1200),
-                      transitionBuilder: (child, animation) => SizeTransition(
-                        sizeFactor: animation,
-                        child: IndexedStack(
-                          key: ValueKey<int>(widget.index),
-                          index: widget.index,
-                          children: _opendedFolders,
-                        ),
-                      ),
-                      child:*/
                   Expanded(
                     child: IndexedStack(
                       sizing: StackFit.expand,
                       key: ValueKey<int>(index),
                       index: index,
-                      children: _opendedFolders,
+                      children: _openedFolders,
                     ),
                   ),
-                  // ),
-                  // ),
-                  // Expanded(
-                  //   child: IndexedStack(
-                  //     index: widget.index,
-                  //     children: _opendedFolders,
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -213,7 +191,7 @@ class _FilePageState extends State<FilePage> {
         children: [
           GestureDetector(
             onTap: () {
-              //controller.showMenu();
+              //TODO добавить действие или убрать детектор
             },
             child: Container(
               //width: 46,
@@ -245,8 +223,9 @@ class _FilePageState extends State<FilePage> {
                                     .text,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    color: Theme.of(context).disabledColor,
-                                    fontSize: 16.0),
+                                  color: Theme.of(context).disabledColor,
+                                  fontSize: 16.0,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -315,7 +294,6 @@ class _FilePageState extends State<FilePage> {
                       controller: controller,
                       menuBuilder: () {
                         var items = _getSortingElements();
-                        //_changeSortFieldsVisibility(context);
                         return SortingMenuActions(
                           theme: Theme.of(context),
                           translate: translate,
@@ -347,7 +325,7 @@ class _FilePageState extends State<FilePage> {
                             padding: const EdgeInsets.all(9.0),
                             child: GestureDetector(
                               onTap: () {
-                                _isSearchFieldChoosen
+                                _isSearchFieldChosen
                                     ? setState(() {
                                         _changeSortFieldsVisibility(context);
                                         StateSortedContainer.of(context)
@@ -411,7 +389,7 @@ class _FilePageState extends State<FilePage> {
                 ),
               ),
             ),
-            onTap: _isSearchFieldChoosen
+            onTap: _isSearchFieldChosen
                 ? null
                 : () {
                     setState(() {
@@ -420,9 +398,7 @@ class _FilePageState extends State<FilePage> {
                       StateSortedContainer.of(context)
                           .newSortedCriterion(SortingCriterion.byDateCreated);
                       focusNode.requestFocus();
-                      // _searchingFieldController
                     });
-                    // _searchingFieldController.clear();
                   },
           ),
           Expanded(
@@ -448,7 +424,9 @@ class _FilePageState extends State<FilePage> {
                           fontSize: 16.0,
                           color: Theme.of(context).disabledColor,
                         ),
-                      ).copyWith(suffix: _clearSearchButton(context)),
+                      ).copyWith(
+                        suffix: _clearSearchButton(context),
+                      ),
                     ),
                   );
                 },
@@ -517,7 +495,8 @@ class _FilePageState extends State<FilePage> {
                       textInfoConstraints:
                           BoxConstraints(maxWidth: 95, minWidth: 50),
                     );
-                  })
+                  },
+                )
               : Container();
         },
       ),
@@ -530,34 +509,12 @@ class _FilePageState extends State<FilePage> {
       _sortingTextFieldIndex = _getSortingElements()
           .indexWhere((element) => element.text == item.text);
     });
-    // _lastCriterion = item.type;
     StateSortedContainer.of(context).newSortedCriterion(item.type);
   }
 
-  // Function() _onArrowTap(BuildContext context) {
-  //   return !_isSearchFieldChoosen
-  //       ? () {
-  //           setState(() {
-  //             if (_direction == SortingDirection.down) {
-  //               _direction = SortingDirection.up;
-  //             } else {
-  //               _direction = SortingDirection.down;
-  //             }
-  //           });
-  //           context.read<FilesBloc>().add(FileSortingByCriterion(
-  //               criterion: _lastCriterion, direction: _direction));
-  //         }
-  //       : () {
-  //           _changeSortFieldsVisibility(context);
-  //           context.read<FilesBloc>().add(FileSortingByCriterion(
-  //               criterion: _lastCriterion, direction: _direction));
-  //           _direction = SortingDirection.down;
-  //         };
-  // }
-
   void _push({required OpenedFolderView child, required String? folderId}) {
     setState(() {
-      _opendedFolders.add(child);
+      _openedFolders.add(child);
       index++;
     });
 
@@ -567,16 +524,16 @@ class _FilePageState extends State<FilePage> {
   void _pop(int countOfPop) {
     for (var i = 0; i < countOfPop; i++) {
       setState(() {
-        if (_opendedFolders.length != 1) {
-          _opendedFolders.removeLast();
+        if (_openedFolders.length != 1) {
+          _openedFolders.removeLast();
           index--;
         }
       });
     }
 
-    final choosedFolder = _opendedFolders[index].currentFolder?.id;
+    final chosenFolder = _openedFolders[index].currentFolder?.id;
 
-    StateContainer.of(context).changeChoosedFilesFolderId(choosedFolder);
+    StateContainer.of(context).changeChoosedFilesFolderId(chosenFolder);
   }
 }
 
@@ -629,7 +586,7 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
       fontSize: 14,
       color: Theme.of(context).disabledColor,
     );
-    var choosedStyle = TextStyle(
+    var chosenStyle = TextStyle(
       fontFamily: kNormalTextFontFamily,
       fontSize: 14,
       color: Theme.of(context).splashColor,
@@ -642,7 +599,7 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
             color: mainColor,
             spreadRadius: 3,
             blurRadius: 3,
-            offset: Offset(0, 3), // changes position of shadow
+            offset: Offset(0, 3),
           ),
         ],
       ),
@@ -675,7 +632,7 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
                         children: [
                           Text(
                             widget.translate.by_type,
-                            style: ind == 0 ? choosedStyle : style,
+                            style: ind == 0 ? chosenStyle : style,
                           ),
                         ],
                       ),
@@ -706,7 +663,7 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
                         children: [
                           Text(
                             widget.translate.by_name,
-                            style: ind == 1 ? choosedStyle : style,
+                            style: ind == 1 ? chosenStyle : style,
                           ),
                         ],
                       ),
@@ -737,7 +694,7 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
                         children: [
                           Text(
                             widget.translate.by_date_added,
-                            style: ind == 2 ? choosedStyle : style,
+                            style: ind == 2 ? chosenStyle : style,
                           ),
                         ],
                       ),
@@ -768,7 +725,7 @@ class _SortingPopupMenuActionsState extends State<SortingMenuActions> {
                         children: [
                           Text(
                             widget.translate.by_size,
-                            style: ind == 3 ? choosedStyle : style,
+                            style: ind == 3 ? chosenStyle : style,
                           ),
                         ],
                       ),

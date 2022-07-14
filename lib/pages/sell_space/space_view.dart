@@ -15,7 +15,6 @@ import 'package:storageup/pages/sell_space/folder_list/folder_list_view.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/pages/sell_space/space_event.dart';
 import 'package:storageup/pages/sell_space/space_state.dart';
-import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 
@@ -28,10 +27,7 @@ class SpaceSellPage extends StatefulWidget {
   SpaceSellPage();
 }
 
-
-
 class _SpaceSellPageState extends State<SpaceSellPage> {
-  //final List<DownloadLocation> locationsInfo;
   double? _searchFieldWidth;
 
   var index = 0;
@@ -63,55 +59,50 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     });
   }
 
-  // changeIndexAfterDelete(int newIndex) {
-  //   setState(() {
-  //     index = newIndex;
-  //   });
-  // }
-
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
     return BlocProvider(
-        create: (context) => SpaceBloc()
-          ..add(SpacePageOpened())
-          ..add(SendKeeperVersion()),
-        child: BlocListener<SpaceBloc, SpaceState>(
-          listener: (context, state) async {
-            if (StateContainer.of(context).isPopUpShowing == false) {
-              if (state.statusHttpRequest == FormzStatus.submissionFailure) {
-                canSave = true;
-                StateContainer.of(context).changeIsPopUpShowing(true);
-                await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BlurCustomErrorPopUp(
-                      middleText: translate.something_goes_wrong,
-                    );
-                  },
-                );
-                StateContainer.of(context).changeIsPopUpShowing(false);
-              } else if (state.statusHttpRequest ==
-                  FormzStatus.submissionCanceled) {
-                canSave = true;
-                StateContainer.of(context).changeIsPopUpShowing(true);
-                await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return BlurCustomErrorPopUp(
-                        middleText: translate.no_internet);
-                  },
-                );
-                StateContainer.of(context).changeIsPopUpShowing(false);
-              } else if (state.statusHttpRequest ==
-                  FormzStatus.submissionSuccess) {
-                canSave = true;
-              } else if (state.statusHttpRequest == FormzStatus.valid) {
-                canSave = true;
-              }
+      create: (context) => SpaceBloc()
+        ..add(SpacePageOpened())
+        ..add(SendKeeperVersion()),
+      child: BlocListener<SpaceBloc, SpaceState>(
+        listener: (context, state) async {
+          if (StateContainer.of(context).isPopUpShowing == false) {
+            if (state.statusHttpRequest == FormzStatus.submissionFailure) {
+              canSave = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                    middleText: translate.something_goes_wrong,
+                  );
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            } else if (state.statusHttpRequest ==
+                FormzStatus.submissionCanceled) {
+              canSave = true;
+              StateContainer.of(context).changeIsPopUpShowing(true);
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(
+                      middleText: translate.no_internet);
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            } else if (state.statusHttpRequest ==
+                FormzStatus.submissionSuccess) {
+              canSave = true;
+            } else if (state.statusHttpRequest == FormzStatus.valid) {
+              canSave = true;
             }
-          },
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          }
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Padding(
               padding: const EdgeInsets.only(
                 left: 30,
@@ -119,8 +110,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 top: 30,
               ),
               child: Container(
-                  height: 46,
-                  child: Row(children: [
+                height: 46,
+                child: Row(
+                  children: [
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20),
@@ -258,8 +250,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
               ),
             )
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _title(BuildContext context, SpaceState state) {
@@ -370,37 +364,60 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   }
 
   Widget rentingAPlace(BuildContext context) {
-    return ListView(controller: ScrollController(), children: [
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
-          child: Container(
-            height: 1,
-            decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20),
-          child: Container(
-            child: Text(
-              translate.how_work,
-              style: TextStyle(
-                color: Theme.of(context).focusColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 18,
+    return ListView(
+      controller: ScrollController(),
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+              child: Container(
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).dividerColor,
+                ),
               ),
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 15),
-          child: Row(
-            children: [
-              Container(
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Container(
                 child: Text(
-                  translate.rent_space + "\n" + translate.make_money,
+                  translate.how_work,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Row(
+                children: [
+                  Container(
+                    child: Text(
+                      translate.rent_space + "\n" + translate.make_money,
+                      style: TextStyle(
+                        color: Theme.of(context).disabledColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Container(
+                child: Text(
+                  translate.select_folder +
+                      "\n" +
+                      translate.store_files +
+                      "\n" +
+                      translate.money,
                   style: TextStyle(
                     color: Theme.of(context).disabledColor,
                     fontFamily: kNormalTextFontFamily,
@@ -408,177 +425,162 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 15),
-          child: Container(
-            child: Text(
-              translate.select_folder +
-                  "\n" +
-                  translate.store_files +
-                  "\n" +
-                  translate.money,
-              style: TextStyle(
-                color: Theme.of(context).disabledColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 14,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Container(
+                child: Text(
+                  translate.money_two_step,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20),
-          child: Container(
-            child: Text(
-              translate.money_two_step,
-              style: TextStyle(
-                color: Theme.of(context).focusColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 18,
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Row(
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        color: Color(0xff868FFF), shape: BoxShape.circle),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Container(
+                      child: Text(
+                        translate.folder,
+                        style: TextStyle(
+                          color: Theme.of(context).disabledColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20),
-          child: Row(
-            children: [
-              Container(
-                width: 6,
-                height: 6,
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 10),
+              child: Row(
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                        color: Color(0xff868FFF), shape: BoxShape.circle),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Container(
+                      child: Text(
+                        translate.size_of_space,
+                        style: TextStyle(
+                          color: Theme.of(context).disabledColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 15),
+              child: Container(
+                child: Text(
+                  translate.upload_file + "\n" + translate.your_balance,
+                  style: TextStyle(
+                    color: Theme.of(context).disabledColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+              child: Container(
+                height: 1,
                 decoration: BoxDecoration(
-                    color: Color(0xff868FFF), shape: BoxShape.circle),
+                  color: Theme.of(context).dividerColor,
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Container(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20),
+              child: Container(
+                child: Text(
+                  translate.not_storage,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20, bottom: 30),
+              child: Container(
+                height: 42,
+                width: 200,
+                child: OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      index = 1;
+                      firstOpen = true;
+                    });
+                  },
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.maxFinite, 60),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    backgroundColor: Theme.of(context).splashColor,
+                  ),
                   child: Text(
-                    translate.folder,
+                    translate.add_location,
                     style: TextStyle(
-                      color: Theme.of(context).disabledColor,
+                      color: Theme.of(context).primaryColor,
                       fontFamily: kNormalTextFontFamily,
-                      fontSize: 14,
+                      fontSize: 17,
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 10),
-          child: Row(
-            children: [
-              Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                    color: Color(0xff868FFF), shape: BoxShape.circle),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Container(
-                  child: Text(
-                    translate.size_of_space,
-                    style: TextStyle(
-                      color: Theme.of(context).disabledColor,
-                      fontFamily: kNormalTextFontFamily,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 15),
-          child: Container(
-            child: Text(
-              translate.upload_file + "\n" + translate.your_balance,
-              style: TextStyle(
-                color: Theme.of(context).disabledColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 14,
               ),
             ),
-          ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
-          child: Container(
-            height: 1,
-            decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20),
-          child: Container(
-            child: Text(
-              translate.not_storage,
-              style: TextStyle(
-                color: Theme.of(context).focusColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 18,
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20, bottom: 30),
-          child: Container(
-            height: 42,
-            width: 200,
-            child: OutlinedButton(
-              onPressed: () {
-                setState(() {
-                  index = 1;
-                  firstOpen = true;
-                });
-              },
-              style: OutlinedButton.styleFrom(
-                minimumSize: Size(double.maxFinite, 60),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                backgroundColor: Theme.of(context).splashColor,
-              ),
-              child: Text(
-                translate.add_location,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 17,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]),
-    ]);
+      ],
+    );
   }
 
   Widget addSpace(BuildContext context, DownloadLocation? changeKepper) {
-    return ListView(controller: ScrollController(), children: [
-      BlocBuilder<SpaceBloc, SpaceState>(
-        builder: (context, state) {
-          if (firstOpen == true) {
-            context.read<SpaceBloc>().add(UpdateKeepersList());
-            firstOpen = false;
-          }
-          if (changeKeeper != null && needToCheck == true) {
-            needToCheck = false;
-            context
-                .read<SpaceBloc>()
-                .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
-          }
+    return ListView(
+      controller: ScrollController(),
+      children: [
+        BlocBuilder<SpaceBloc, SpaceState>(
+          builder: (context, state) {
+            if (firstOpen == true) {
+              context.read<SpaceBloc>().add(UpdateKeepersList());
+              firstOpen = false;
+            }
+            if (changeKeeper != null && needToCheck == true) {
+              needToCheck = false;
+              context
+                  .read<SpaceBloc>()
+                  .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+            }
 
-          var maxSpace = (state.availableSpace / GB).round();
-          //print(maxSpace);
-          return Column(
+            var maxSpace = (state.availableSpace / GB).round();
+            //print(maxSpace);
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -647,63 +649,66 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                       ),
                     ),
                     BlocBuilder<SpaceBloc, SpaceState>(
-                        builder: (context, state) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 15),
-                        child: Container(
-                          height: 42,
-                          width: 101,
-                          child: OutlinedButton(
-                            onPressed: () async {
-                              if (changeKeeper == null) {
-                                context
-                                    .read<SpaceBloc>()
-                                    .add(GetPathToKeeper());
-                                print(state.pathToKeeper);
-                                setState(
-                                  () {
-                                    dirPath = state.pathToKeeper;
-                                  },
-                                );
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: changeKeeper == null
-                                  ? Theme.of(context).splashColor
-                                  : Theme.of(context).canvasColor,
-                            ),
-                            child: Text(
-                              translate.overview,
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 17,
+                      builder: (context, state) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 15),
+                          child: Container(
+                            height: 42,
+                            width: 101,
+                            child: OutlinedButton(
+                              onPressed: () async {
+                                if (changeKeeper == null) {
+                                  context
+                                      .read<SpaceBloc>()
+                                      .add(GetPathToKeeper());
+                                  print(state.pathToKeeper);
+                                  setState(
+                                    () {
+                                      dirPath = state.pathToKeeper;
+                                    },
+                                  );
+                                }
+                              },
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: Size(double.maxFinite, 60),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: changeKeeper == null
+                                    ? Theme.of(context).splashColor
+                                    : Theme.of(context).canvasColor,
+                              ),
+                              child: Text(
+                                translate.overview,
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 17,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 _setName(context, state),
                 Row(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(left: 40, top: 25),
-                        child: Container(
-                          child: Text(
-                            translate.set_size,
-                            style: TextStyle(
-                              color: Theme.of(context).focusColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 16,
-                            ),
+                      padding: const EdgeInsets.only(left: 40, top: 25),
+                      child: Container(
+                        child: Text(
+                          translate.set_size,
+                          style: TextStyle(
+                            color: Theme.of(context).focusColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 25),
                       child: MouseRegion(
@@ -718,19 +723,20 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   ],
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 10),
-                    child: Container(
-                      child: Text(
-                        translate.min_storage(
-                          changeKeeper == null ? 32 : changeKeeper!.countGb,
-                        ),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 14,
-                        ),
+                  padding: const EdgeInsets.only(left: 40, top: 10),
+                  child: Container(
+                    child: Text(
+                      translate.min_storage(
+                        changeKeeper == null ? 32 : changeKeeper!.countGb,
                       ),
-                    )),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
                 state.pathToKeeper.isNotEmpty || changeKeeper != null
                     ? maxSpace < 32
                         ? Padding(
@@ -795,8 +801,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             thumbColor: Theme.of(context).primaryColor,
                             overlayShape:
                                 RoundSliderOverlayShape(overlayRadius: 0),
-                            //thumbShape:
-                            //RoundSliderThumbShape(enabledThumbRadius: 10),
                           ),
                           child: Slider(
                             activeColor: Theme.of(context).splashColor,
@@ -824,158 +828,170 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     ),
-                    Stack(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 20),
-                        child: Container(
-                          height: 42,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: state.pathToKeeper.isEmpty && maxSpace < 32
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              translate.gb(_currentSliderValue.toInt()),
-                              style: TextStyle(
-                                color:
-                                    state.pathToKeeper.isEmpty && maxSpace < 32
-                                        ? Theme.of(context).canvasColor
-                                        : Theme.of(context).disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 20),
-                        child: Container(
-                          height: 42,
-                          width: 42,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              if (state.pathToKeeper.isEmpty && maxSpace < 32) {
-                              } else {
-                                var minSpace = maxSpace > 32 ? 32 : 0;
-                                setState(() {
-                                  if (_currentSliderValue.toInt() > minSpace) {
-                                    _currentSliderValue =
-                                        _currentSliderValue - 1;
-                                  }
-                                });
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10.0),
-                                      bottomLeft: Radius.circular(10.0))),
-                              backgroundColor:
-                                  state.pathToKeeper.isEmpty && maxSpace < 32
-                                      ? Color(0xffF1F3F6)
-                                      : Theme.of(context).cardColor,
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          child: Container(
+                            height: 42,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: state.pathToKeeper.isEmpty && maxSpace < 32
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
-                              child: Icon(
-                                Icons.remove,
-                                size: 15,
-                                color:
-                                    state.pathToKeeper.isEmpty && maxSpace < 32
-                                        ? Theme.of(context).canvasColor
-                                        : Theme.of(context).disabledColor,
+                              child: Text(
+                                translate.gb(_currentSliderValue.toInt()),
+                                style: TextStyle(
+                                  color: state.pathToKeeper.isEmpty &&
+                                          maxSpace < 32
+                                      ? Theme.of(context).canvasColor
+                                      : Theme.of(context).disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 178, top: 20),
-                        child: Container(
-                          height: 42,
-                          width: 42,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              if (state.pathToKeeper.isEmpty && maxSpace < 32) {
-                              } else {
-                                var max = maxSpace == 0 ? 180 : maxSpace;
-                                setState(() {
-                                  if (_currentSliderValue.toInt() < max) {
-                                    _currentSliderValue =
-                                        _currentSliderValue + 1;
-                                  }
-                                });
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          child: Container(
+                            height: 42,
+                            width: 42,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                if (state.pathToKeeper.isEmpty &&
+                                    maxSpace < 32) {
+                                } else {
+                                  var minSpace = maxSpace > 32 ? 32 : 0;
+                                  setState(() {
+                                    if (_currentSliderValue.toInt() >
+                                        minSpace) {
+                                      _currentSliderValue =
+                                          _currentSliderValue - 1;
+                                    }
+                                  });
+                                }
+                              },
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: Size(double.maxFinite, 60),
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10.0),
-                                      bottomRight: Radius.circular(10.0))),
-                              backgroundColor:
-                                  state.pathToKeeper.isEmpty && maxSpace < 32
-                                      ? Color(0xffF1F3F6)
-                                      : Theme.of(context).cardColor,
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.add,
-                                size: 15,
-                                color:
+                                    topLeft: Radius.circular(10.0),
+                                    bottomLeft: Radius.circular(10.0),
+                                  ),
+                                ),
+                                backgroundColor:
                                     state.pathToKeeper.isEmpty && maxSpace < 32
-                                        ? Theme.of(context).canvasColor
-                                        : Theme.of(context).disabledColor,
+                                        ? Color(0xffF1F3F6)
+                                        : Theme.of(context).cardColor,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 15,
+                                  color: state.pathToKeeper.isEmpty &&
+                                          maxSpace < 32
+                                      ? Theme.of(context).canvasColor
+                                      : Theme.of(context).disabledColor,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ])
+                        Padding(
+                          padding: const EdgeInsets.only(left: 178, top: 20),
+                          child: Container(
+                            height: 42,
+                            width: 42,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                if (state.pathToKeeper.isEmpty &&
+                                    maxSpace < 32) {
+                                } else {
+                                  var max = maxSpace == 0 ? 180 : maxSpace;
+                                  setState(() {
+                                    if (_currentSliderValue.toInt() < max) {
+                                      _currentSliderValue =
+                                          _currentSliderValue + 1;
+                                    }
+                                  });
+                                }
+                              },
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: Size(double.maxFinite, 60),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10.0),
+                                    bottomRight: Radius.circular(10.0),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    state.pathToKeeper.isEmpty && maxSpace < 32
+                                        ? Color(0xffF1F3F6)
+                                        : Theme.of(context).cardColor,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.add,
+                                  size: 15,
+                                  color: state.pathToKeeper.isEmpty &&
+                                          maxSpace < 32
+                                      ? Theme.of(context).canvasColor
+                                      : Theme.of(context).disabledColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 25),
-                    child: Container(
-                      child: Text(
-                        translate.your_income,
-                        style: TextStyle(
-                          color: Theme.of(context).focusColor,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 16,
-                        ),
+                  padding: const EdgeInsets.only(left: 40, top: 25),
+                  child: Container(
+                    child: Text(
+                      translate.your_income,
+                      style: TextStyle(
+                        color: Theme.of(context).focusColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 16,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 8),
-                    child: Container(
-                      child: Text(
-                        translate.our_tariff,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.subtitle1?.color,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 14,
-                        ),
+                  padding: const EdgeInsets.only(left: 40, top: 8),
+                  child: Container(
+                    child: Text(
+                      translate.our_tariff,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.subtitle1?.color,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
                 Row(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(left: 40, top: 30),
-                        child: Container(
-                          child: Text(
-                            translate.earnings,
-                            style: TextStyle(
-                              color: Theme.of(context).focusColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 16,
-                            ),
+                      padding: const EdgeInsets.only(left: 40, top: 30),
+                      child: Container(
+                        child: Text(
+                          translate.earnings,
+                          style: TextStyle(
+                            color: Theme.of(context).focusColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 27, top: 30),
                       child: Container(
@@ -1005,116 +1021,125 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     height: 42,
                     width: 200,
                     child: BlocBuilder<SpaceBloc, SpaceState>(
-                        builder: (context, state) {
-                      return OutlinedButton(
-                        onPressed: _isFieldsValid(state)
-                            ? () async {
-                                if (changeKeeper != null) {
-                                  context.read<SpaceBloc>().add(ChangeKeeper(
-                                      countGb: _currentSliderValue.toInt(),
-                                      keeper: changeKeeper!));
-                                  setState(() {
-                                    index = 2;
-                                    myController.text = '';
-                                    _currentSliderValue = 32;
-                                    changeKeeper = null;
-                                    needToCheck = true;
-                                  });
-                                } else {
-                                  context
-                                      .read<SpaceBloc>()
-                                      .add(UpdateKeepersList());
-                                  countOfNotSameName = 0;
-                                  for (var keeper in state.keeper) {
-                                    if (state.name.value != keeper.name) {
-                                      countOfNotSameName =
-                                          countOfNotSameName + 1;
-                                    }
-                                  }
-                                  if (countOfNotSameName ==
-                                      state.keeper.length) {
-                                    canSave = true;
-                                  } else {
-                                    canSave = false;
-                                  }
-                                  if (canSave == true) {
-                                    context.read<SpaceBloc>().add(SaveDirPath(
-                                          pathDir: dirPath,
-                                          countGb: _currentSliderValue.toInt(),
-                                        ));
-                                    await context
-                                        .read<SpaceBloc>()
-                                        .stream
-                                        .first;
+                      builder: (context, state) {
+                        return OutlinedButton(
+                          onPressed: _isFieldsValid(state)
+                              ? () async {
+                                  if (changeKeeper != null) {
+                                    context.read<SpaceBloc>().add(ChangeKeeper(
+                                        countGb: _currentSliderValue.toInt(),
+                                        keeper: changeKeeper!));
                                     setState(() {
                                       index = 2;
-                                      _currentSliderValue = 32;
                                       myController.text = '';
+                                      _currentSliderValue = 32;
+                                      changeKeeper = null;
+                                      needToCheck = true;
                                     });
-                                    canSave = false;
                                   } else {
-                                    canSave = false;
-                                    await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return BlurCustomErrorPopUp(
-                                            middleText: translate
-                                                .keeper_name_are_the_same);
-                                      },
-                                    );
+                                    context
+                                        .read<SpaceBloc>()
+                                        .add(UpdateKeepersList());
+                                    countOfNotSameName = 0;
+                                    for (var keeper in state.keeper) {
+                                      if (state.name.value != keeper.name) {
+                                        countOfNotSameName =
+                                            countOfNotSameName + 1;
+                                      }
+                                    }
+                                    if (countOfNotSameName ==
+                                        state.keeper.length) {
+                                      canSave = true;
+                                    } else {
+                                      canSave = false;
+                                    }
+                                    if (canSave == true) {
+                                      context.read<SpaceBloc>().add(
+                                            SaveDirPath(
+                                              pathDir: dirPath,
+                                              countGb:
+                                                  _currentSliderValue.toInt(),
+                                            ),
+                                          );
+                                      await context
+                                          .read<SpaceBloc>()
+                                          .stream
+                                          .first;
+                                      setState(() {
+                                        index = 2;
+                                        _currentSliderValue = 32;
+                                        myController.text = '';
+                                      });
+                                      canSave = false;
+                                    } else {
+                                      canSave = false;
+                                      await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return BlurCustomErrorPopUp(
+                                              middleText: translate
+                                                  .keeper_name_are_the_same);
+                                        },
+                                      );
+                                    }
                                   }
                                 }
-                              }
-                            : null,
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(double.maxFinite, 60),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: _isFieldsValid(state) && canSave
-                              ? Theme.of(context).splashColor
-                              : Theme.of(context).canvasColor,
-                        ),
-                        child: Text(
-                          changeKeeper == null
-                              ? translate.save
-                              : translate.change,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 17,
+                              : null,
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size(double.maxFinite, 60),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            backgroundColor: _isFieldsValid(state) && canSave
+                                ? Theme.of(context).splashColor
+                                : Theme.of(context).canvasColor,
                           ),
-                        ),
-                      );
-                    }),
+                          child: Text(
+                            changeKeeper == null
+                                ? translate.save
+                                : translate.change,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 17,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ]);
-        },
-      ),
-    ]);
+              ],
+            );
+          },
+        ),
+      ],
+    );
   }
 
   Widget addSpaceWindows(BuildContext context, DownloadLocation? changeKepper) {
-    return ListView(controller: ScrollController(), children: [
-      BlocBuilder<SpaceBloc, SpaceState>(
-        builder: (context, state) {
-          if (firstOpen == true) {
-            context.read<SpaceBloc>().add(UpdateKeepersList());
-            context.read<SpaceBloc>().add(GetAlreadyUsedDisk());
-            firstOpen = false;
-          }
-          if (changeKeeper != null && needToCheck == true) {
-            needToCheck = false;
-            context
-                .read<SpaceBloc>()
-                .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
-            context
-                .read<SpaceBloc>()
-                .add(NameChanged(name: changeKeeper!.name));
-          }
-          var maxSpace = (state.availableSpace / GB).round();
-          print(maxSpace);
-          return Column(
+    return ListView(
+      controller: ScrollController(),
+      children: [
+        BlocBuilder<SpaceBloc, SpaceState>(
+          builder: (context, state) {
+            if (firstOpen == true) {
+              context.read<SpaceBloc>().add(UpdateKeepersList());
+              context.read<SpaceBloc>().add(GetAlreadyUsedDisk());
+              firstOpen = false;
+            }
+            if (changeKeeper != null && needToCheck == true) {
+              needToCheck = false;
+              context
+                  .read<SpaceBloc>()
+                  .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+              context
+                  .read<SpaceBloc>()
+                  .add(NameChanged(name: changeKeeper!.name));
+            }
+            var maxSpace = (state.availableSpace / GB).round();
+            print(maxSpace);
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -1128,29 +1153,31 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 40, top: 26),
-                  child: Row(children: [
-                    Container(
-                      child: Text(
-                        translate.select_storage,
-                        style: TextStyle(
-                          color: Theme.of(context).focusColor,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: Container(
-                          child: SvgPicture.asset(
-                            'assets/file_page/prompt.svg',
+                  child: Row(
+                    children: [
+                      Container(
+                        child: Text(
+                          translate.select_storage,
+                          style: TextStyle(
+                            color: Theme.of(context).focusColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
                           ),
                         ),
                       ),
-                    ),
-                  ]),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: Container(
+                            child: SvgPicture.asset(
+                              'assets/file_page/prompt.svg',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1162,9 +1189,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         height: 42,
                         width: 350,
                         decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Color(0xffE4E7ED))),
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Color(0xffE4E7ED),
+                          ),
+                        ),
                         child: new BlocBuilder<SpaceBloc, SpaceState>(
                           builder: (context, state) {
                             return Theme(
@@ -1210,11 +1240,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                                       dropdownValue?.trim()));
                                         });
                                       },
-                                      // onTap: () => {
-                                      //   context
-                                      //       .read<SpaceBloc>()
-                                      //       .add(GetAlreadyUsedDisk()),
-                                      // },
                                       items: state.diskList
                                           .map<DropdownMenuItem<String>>(
                                               (String disk) {
@@ -1228,19 +1253,22 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       }).toList(),
                                     )
                                   : Container(
-                                      height: 42,
+                                height: 42,
                                       width: 350,
                                       decoration: BoxDecoration(
-                                          color: Theme.of(context).cardColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: Color(0xffE4E7ED))),
+                                        color: Theme.of(context).cardColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: Color(0xffE4E7ED),
+                                        ),
+                                      ),
                                       child: BlocBuilder<SpaceBloc, SpaceState>(
                                         builder: (context, state) {
                                           return Padding(
                                             padding: const EdgeInsets.only(
-                                                left: 15, top: 11),
+                                              left: 15,
+                                              top: 11,
+                                            ),
                                             child: Text(
                                               changeKeeper!.dirPath,
                                               maxLines: 1,
@@ -1263,17 +1291,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 Row(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(left: 40, top: 25),
-                        child: Container(
-                          child: Text(
-                            translate.set_size,
-                            style: TextStyle(
-                              color: Theme.of(context).focusColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 16,
-                            ),
+                      padding: const EdgeInsets.only(left: 40, top: 25),
+                      child: Container(
+                        child: Text(
+                          translate.set_size,
+                          style: TextStyle(
+                            color: Theme.of(context).focusColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 25),
                       child: MouseRegion(
@@ -1288,19 +1317,20 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   ],
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 10),
-                    child: Container(
-                      child: Text(
-                        translate.min_storage(
-                          changeKeeper == null ? 32 : changeKeeper!.countGb,
-                        ),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 14,
-                        ),
+                  padding: const EdgeInsets.only(left: 40, top: 10),
+                  child: Container(
+                    child: Text(
+                      translate.min_storage(
+                        changeKeeper == null ? 32 : changeKeeper!.countGb,
                       ),
-                    )),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
                 state.pathToKeeper.isNotEmpty || changeKeeper != null
                     ? maxSpace < 32
                         ? Padding(
@@ -1392,158 +1422,170 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                         ),
                       ),
                     ),
-                    Stack(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 20),
-                        child: Container(
-                          height: 42,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            color: state.pathToKeeper.isEmpty && maxSpace < 32
-                                ? Theme.of(context).primaryColor
-                                : Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              translate.gb(_currentSliderValue.toInt()),
-                              style: TextStyle(
-                                color:
-                                    state.pathToKeeper.isEmpty && maxSpace < 32
-                                        ? Theme.of(context).canvasColor
-                                        : Theme.of(context).disabledColor,
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 20),
-                        child: Container(
-                          height: 42,
-                          width: 42,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              if (state.pathToKeeper.isEmpty && maxSpace < 32) {
-                              } else {
-                                var minSpace = maxSpace > 32 ? 32 : 0;
-                                setState(() {
-                                  if (_currentSliderValue.toInt() > minSpace) {
-                                    _currentSliderValue =
-                                        _currentSliderValue - 1;
-                                  }
-                                });
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10.0),
-                                      bottomLeft: Radius.circular(10.0))),
-                              backgroundColor:
-                                  state.pathToKeeper.isEmpty && maxSpace < 32
-                                      ? Color(0xffF1F3F6)
-                                      : Theme.of(context).cardColor,
+                    Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          child: Container(
+                            height: 42,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: state.pathToKeeper.isEmpty && maxSpace < 32
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
-                              child: Icon(
-                                Icons.remove,
-                                size: 15,
-                                color:
-                                    state.pathToKeeper.isEmpty && maxSpace < 32
-                                        ? Theme.of(context).canvasColor
-                                        : Theme.of(context).disabledColor,
+                              child: Text(
+                                translate.gb(_currentSliderValue.toInt()),
+                                style: TextStyle(
+                                  color: state.pathToKeeper.isEmpty &&
+                                          maxSpace < 32
+                                      ? Theme.of(context).canvasColor
+                                      : Theme.of(context).disabledColor,
+                                  fontFamily: kNormalTextFontFamily,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 178, top: 20),
-                        child: Container(
-                          height: 42,
-                          width: 42,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              if (state.pathToKeeper.isEmpty && maxSpace < 32) {
-                              } else {
-                                var max = maxSpace == 0 ? 180 : maxSpace;
-                                setState(() {
-                                  if (_currentSliderValue.toInt() < max) {
-                                    _currentSliderValue =
-                                        _currentSliderValue + 1;
-                                  }
-                                });
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: Size(double.maxFinite, 60),
-                              shape: RoundedRectangleBorder(
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          child: Container(
+                            height: 42,
+                            width: 42,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                if (state.pathToKeeper.isEmpty &&
+                                    maxSpace < 32) {
+                                } else {
+                                  var minSpace = maxSpace > 32 ? 32 : 0;
+                                  setState(() {
+                                    if (_currentSliderValue.toInt() >
+                                        minSpace) {
+                                      _currentSliderValue =
+                                          _currentSliderValue - 1;
+                                    }
+                                  });
+                                }
+                              },
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: Size(double.maxFinite, 60),
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10.0),
-                                      bottomRight: Radius.circular(10.0))),
-                              backgroundColor:
-                                  state.pathToKeeper.isEmpty && maxSpace < 32
-                                      ? Color(0xffF1F3F6)
-                                      : Theme.of(context).cardColor,
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.add,
-                                size: 15,
-                                color:
+                                    topLeft: Radius.circular(10.0),
+                                    bottomLeft: Radius.circular(10.0),
+                                  ),
+                                ),
+                                backgroundColor:
                                     state.pathToKeeper.isEmpty && maxSpace < 32
-                                        ? Theme.of(context).canvasColor
-                                        : Theme.of(context).disabledColor,
+                                        ? Color(0xffF1F3F6)
+                                        : Theme.of(context).cardColor,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 15,
+                                  color: state.pathToKeeper.isEmpty &&
+                                          maxSpace < 32
+                                      ? Theme.of(context).canvasColor
+                                      : Theme.of(context).disabledColor,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ])
+                        Padding(
+                          padding: const EdgeInsets.only(left: 178, top: 20),
+                          child: Container(
+                            height: 42,
+                            width: 42,
+                            child: OutlinedButton(
+                              onPressed: () {
+                                if (state.pathToKeeper.isEmpty &&
+                                    maxSpace < 32) {
+                                } else {
+                                  var max = maxSpace == 0 ? 180 : maxSpace;
+                                  setState(() {
+                                    if (_currentSliderValue.toInt() < max) {
+                                      _currentSliderValue =
+                                          _currentSliderValue + 1;
+                                    }
+                                  });
+                                }
+                              },
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: Size(double.maxFinite, 60),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10.0),
+                                    bottomRight: Radius.circular(10.0),
+                                  ),
+                                ),
+                                backgroundColor:
+                                    state.pathToKeeper.isEmpty && maxSpace < 32
+                                        ? Color(0xffF1F3F6)
+                                        : Theme.of(context).cardColor,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.add,
+                                  size: 15,
+                                  color: state.pathToKeeper.isEmpty &&
+                                          maxSpace < 32
+                                      ? Theme.of(context).canvasColor
+                                      : Theme.of(context).disabledColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 25),
-                    child: Container(
-                      child: Text(
-                        translate.your_income,
-                        style: TextStyle(
-                          color: Theme.of(context).focusColor,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 16,
-                        ),
+                  padding: const EdgeInsets.only(left: 40, top: 25),
+                  child: Container(
+                    child: Text(
+                      translate.your_income,
+                      style: TextStyle(
+                        color: Theme.of(context).focusColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 16,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 40, top: 8),
-                    child: Container(
-                      child: Text(
-                        translate.our_tariff,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.subtitle1?.color,
-                          fontFamily: kNormalTextFontFamily,
-                          fontSize: 14,
-                        ),
+                  padding: const EdgeInsets.only(left: 40, top: 8),
+                  child: Container(
+                    child: Text(
+                      translate.our_tariff,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.subtitle1?.color,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 14,
                       ),
-                    )),
+                    ),
+                  ),
+                ),
                 Row(
                   children: [
                     Padding(
-                        padding: const EdgeInsets.only(left: 40, top: 30),
-                        child: Container(
-                          child: Text(
-                            translate.earnings,
-                            style: TextStyle(
-                              color: Theme.of(context).focusColor,
-                              fontFamily: kNormalTextFontFamily,
-                              fontSize: 16,
-                            ),
+                      padding: const EdgeInsets.only(left: 40, top: 30),
+                      child: Container(
+                        child: Text(
+                          translate.earnings,
+                          style: TextStyle(
+                            color: Theme.of(context).focusColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 27, top: 30),
                       child: Container(
@@ -1573,92 +1615,98 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     height: 42,
                     width: 200,
                     child: BlocBuilder<SpaceBloc, SpaceState>(
-                        builder: (context, state) {
-                      return OutlinedButton(
-                        onPressed: _isFieldsValid(state)
-                            ? () async {
-                                if (changeKeeper != null) {
-                                  context.read<SpaceBloc>().add(ChangeKeeper(
-                                      countGb: _currentSliderValue.toInt(),
-                                      keeper: changeKeeper!));
-                                  setState(() {
-                                    index = 2;
-                                    myController.text = '';
-                                    _currentSliderValue = 32;
-                                    changeKeeper = null;
-                                    needToCheck = true;
-                                  });
-                                } else if (maxSpace > 32) {
-                                  firstOpen = true;
-                                  countOfNotSameName = 0;
-                                  for (var keeper in state.keeper) {
-                                    if (state.name.value != keeper.name) {
-                                      countOfNotSameName =
-                                          countOfNotSameName + 1;
-                                    }
-                                  }
-                                  if (countOfNotSameName ==
-                                          state.keeper.length &&
-                                      dropdownValue != null) {
-                                    canSave = true;
-                                  } else {
-                                    canSave = false;
-                                  }
-                                  if (canSave == true) {
-                                    context.read<SpaceBloc>().add(SaveDirPath(
-                                          pathDir: dropdownValue ?? '',
-                                          countGb: _currentSliderValue.toInt(),
-                                        ));
-                                    await context
-                                        .read<SpaceBloc>()
-                                        .stream
-                                        .first;
+                      builder: (context, state) {
+                        return OutlinedButton(
+                          onPressed: _isFieldsValid(state)
+                              ? () async {
+                                  if (changeKeeper != null) {
+                                    context.read<SpaceBloc>().add(ChangeKeeper(
+                                        countGb: _currentSliderValue.toInt(),
+                                        keeper: changeKeeper!));
                                     setState(() {
                                       index = 2;
-                                      canSave = false;
-                                      dropdownValue = null;
+                                      myController.text = '';
+                                      _currentSliderValue = 32;
+                                      changeKeeper = null;
+                                      needToCheck = true;
                                     });
-                                  } else {
-                                    canSave = false;
-                                    await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return BlurCustomErrorPopUp(
+                                  } else if (maxSpace > 32) {
+                                    firstOpen = true;
+                                    countOfNotSameName = 0;
+                                    for (var keeper in state.keeper) {
+                                      if (state.name.value != keeper.name) {
+                                        countOfNotSameName =
+                                            countOfNotSameName + 1;
+                                      }
+                                    }
+                                    if (countOfNotSameName ==
+                                            state.keeper.length &&
+                                        dropdownValue != null) {
+                                      canSave = true;
+                                    } else {
+                                      canSave = false;
+                                    }
+                                    if (canSave == true) {
+                                      context.read<SpaceBloc>().add(SaveDirPath(
+                                            pathDir: dropdownValue ?? '',
+                                            countGb:
+                                                _currentSliderValue.toInt(),
+                                          ));
+                                      await context
+                                          .read<SpaceBloc>()
+                                          .stream
+                                          .first;
+                                      setState(() {
+                                        index = 2;
+                                        canSave = false;
+                                        dropdownValue = null;
+                                      });
+                                    } else {
+                                      canSave = false;
+                                      await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return BlurCustomErrorPopUp(
                                             middleText: translate
-                                                .keeper_name_are_the_same);
-                                      },
-                                    );
+                                                .keeper_name_are_the_same,
+                                          );
+                                        },
+                                      );
+                                    }
                                   }
                                 }
-                              }
-                            : null,
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(double.maxFinite, 60),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor:
-                              _isFieldsValid(state) && canSave && maxSpace > 32
-                                  ? Theme.of(context).splashColor
-                                  : Theme.of(context).canvasColor,
-                        ),
-                        child: Text(
-                          changeKeeper == null
-                              ? translate.save
-                              : translate.change,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontFamily: kNormalTextFontFamily,
-                            fontSize: 17,
+                              : null,
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size(double.maxFinite, 60),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            backgroundColor: _isFieldsValid(state) &&
+                                    canSave &&
+                                    maxSpace > 32
+                                ? Theme.of(context).splashColor
+                                : Theme.of(context).canvasColor,
                           ),
-                        ),
-                      );
-                    }),
+                          child: Text(
+                            changeKeeper == null
+                                ? translate.save
+                                : translate.change,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontFamily: kNormalTextFontFamily,
+                              fontSize: 17,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ]);
-        },
-      ),
-    ]);
+              ],
+            );
+          },
+        ),
+      ],
+    );
   }
 
   bool _isFieldsValid(SpaceState state) {
@@ -1674,29 +1722,31 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 40, top: 26),
-          child: Row(children: [
-            Container(
-              child: Text(
-                translate.name_storage,
-                style: TextStyle(
-                  color: Theme.of(context).focusColor,
-                  fontFamily: kNormalTextFontFamily,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: Container(
-                  child: SvgPicture.asset(
-                    'assets/file_page/prompt.svg',
+          child: Row(
+            children: [
+              Container(
+                child: Text(
+                  translate.name_storage,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 16,
                   ),
                 ),
               ),
-            ),
-          ]),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Container(
+                    child: SvgPicture.asset(
+                      'assets/file_page/prompt.svg',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         state.name.valid || state.name.value.isEmpty
             ? SizedBox(
@@ -1718,15 +1768,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           child: Container(
             height: 42,
             width: 350,
-            // decoration: BoxDecoration(
-            //     color: Theme.of(context).primaryColor,
-            //     borderRadius: BorderRadius.circular(10),
-            //     border: Border.all(color: Color(0xffE4E7ED))),
             child: BlocBuilder<SpaceBloc, SpaceState>(
               builder: (context, state) {
                 return TextField(
                   controller: myController,
-
                   onChanged: (value) {
                     context
                         .read<SpaceBloc>()
@@ -1735,7 +1780,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   },
                   textAlignVertical: TextAlignVertical.bottom,
                   textAlign: TextAlign.start,
-                  //autofocus: true,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(left: 15, bottom: 21),
                     focusedBorder: OutlineInputBorder(

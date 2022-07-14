@@ -268,11 +268,6 @@ class _ButtonTemplateState extends State<FolderList> {
                                   context.read<FolderListBloc>().add(
                                       DeleteLocation(location: deleteKeeper));
                                   context.read<FolderListBloc>().stream.first;
-                                  // if (state.keepers == null) {
-                                  //   SpaceInheritedWidget.of(context)
-                                  //       .state
-                                  //       .changeIndexAfterDelete(0);
-                                  // }
                                 }
                               }
                               setState(() {});
@@ -551,7 +546,6 @@ class _ButtonTemplateState extends State<FolderList> {
                         keeper.sleepStatus == false && keeper.online == 1
                             ? translate.on
                             : translate.off,
-                        //textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).disabledColor,
                           fontFamily: kNormalTextFontFamily,
@@ -876,7 +870,7 @@ class _ButtonTemplateState extends State<FolderList> {
             height: 5,
           ),
           Text(
-            "0 Р",
+            "0 Р", //TODO перевод
             maxLines: 1,
             textAlign: TextAlign.left,
             style: TextStyle(

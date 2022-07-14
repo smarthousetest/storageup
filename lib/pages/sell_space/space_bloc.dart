@@ -338,7 +338,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           (_locationInfo) => _locationInfo.dirPath == availableDisk.trim())) {
       } else {
         checkedDisk.add(availableDisk.trim());
-        // print(checkedDisk);
       }
     emit(state.copyWith(
         diskList: checkedDisk, statusHttpRequest: FormzStatus.valid));

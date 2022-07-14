@@ -26,7 +26,6 @@ void main() async {
   ui.Server().startServer();
 
   await configureInjection();
-  //HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(new StateContainer(child: new MyApp()));
 }
@@ -40,10 +39,6 @@ class MyApp extends StatefulWidget {
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
     state?.setLocale(newLocale);
   }
-// static void setLocale(BuildContext context, Locale newLocale) {
-//   _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
-//   state?.setLocale(newLocale);
-// }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -71,12 +66,6 @@ class _MyAppState extends State<MyApp> {
     await StateContainer.of(context).changeLocale(locale);
   }
 
-//  Locale? _locale = StateContainer.of(context).locale;
-//   setLocale(Locale locale) {
-//     setState(() {
-//       _locale = locale;
-//     });
-//   }
   @override
   void initState() {
     initLoadController();
@@ -121,9 +110,7 @@ class _MyAppState extends State<MyApp> {
           S.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
-        // initialRoute: AuthView.route,
         initialRoute: AuthView.route,
-
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case AuthView.route:
@@ -145,12 +132,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
-  // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
         PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
-        // etc.
       };
 }
 

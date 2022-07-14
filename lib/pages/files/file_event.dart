@@ -25,6 +25,7 @@ class FilesPageOpened extends FilesEvent {
   final BaseObject? choosedFolder;
   final String? folderId;
   final List<BaseObject>? filesToMove;
+
   const FilesPageOpened({this.folderId, this.filesToMove, this.choosedFolder});
 }
 
@@ -47,6 +48,7 @@ class FileSortingByCriterion extends FilesEvent {
 
 class FileTapped extends FilesEvent {
   final Record record;
+
   FileTapped({required this.record});
 }
 
@@ -75,6 +77,7 @@ class FileRename extends FilesEvent {
 
 class FileAddFile extends FilesEvent {
   final BuildContext context;
+
   FileAddFile({required this.context});
 
   @override
@@ -83,6 +86,7 @@ class FileAddFile extends FilesEvent {
 
 class FileDownloadFile extends FilesEvent {
   final Record file;
+
   FileDownloadFile({required this.file});
 
   @override
@@ -138,7 +142,9 @@ class FilesDiscardSelecting extends FilesEvent {
 
 class FilesDeleteChosen extends FilesEvent {
   final List<BaseObject> chosenObjects;
+
   FilesDeleteChosen({required this.chosenObjects});
+
   @override
   List<Object?> get props => [chosenObjects];
 }

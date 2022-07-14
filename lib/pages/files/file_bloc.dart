@@ -15,19 +15,16 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:storageup/constants.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/file_event.dart';
 import 'package:storageup/pages/files/file_state.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
-import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/repositories/latest_file_repository.dart';
 import 'package:storageup/utilities/repositories/user_repository.dart';
 
-import '../../constants.dart';
-import '../../utilities/repositories/latest_file_repository.dart';
-
-//enum SortingDirection { neutral, up, down }
 enum ContextActionEnum {
   share,
   move,
@@ -82,9 +79,6 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
   }
 
   FilesController _controller;
-
-  //Box  get _box async  => await Hive.openBox('file_path_db');
-  //final TokenRepository _tokenRepository = getIt<TokenRepository>();
   final LoadController _loadController = LoadController.instance;
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
@@ -131,7 +125,6 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
         ),
       );
     }
-    // print('Load controller init is: ${_loadController.isNotInited()}');
   }
 
   Future<void> _mapUpdateFilesList(
@@ -150,13 +143,9 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     }
 
     if (event.id != null) {
-      try {
-        // (files?.firstWhere((element) => element.id == event.id) as Record)
-        //     .loadPercent = 0;
-      } catch (e) {
-        print(
-            'on updating files can\'t find file with the same id as sended in event');
-      }
+      print(
+        'on updating files can\'t find file with the same id as sended in event',
+      );
     }
     emit(state.copyWith(
       allFiles: files,
@@ -330,9 +319,6 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
   }
 
   int _compareDates(DateTime a, DateTime b) {
-    // var dateA = DateTime.parse(a);
-    // var dateB = DateTime.parse(b);
-
     return a.compareTo(b);
   }
 
@@ -354,12 +340,9 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     FilesState state,
     Emitter<FilesState> emit,
   ) async {
-    // emit(state.copyWith(status: FormzStatus.submissionInProgress));
     print('${event.action} ${event.file}');
     if (event.action == ContextActionEnum.delete) {
       await _mapDeleteFile(event, state, emit);
-    } else if (event.action == ContextActionEnum.share) {
-      // await _mapDownloadFile(event, state, emit); //TODO remove this
     } else if (event.action == ContextActionEnum.select) {
       await _mapSelectFile(event, state, emit);
     } else {
@@ -421,7 +404,6 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     }
 
     if (result == ResponseStatus.ok) {
-      // var files = await _controller.getFiles();
       add(FileUpdateFiles());
       emit(state.copyWith(
         status: FormzStatus.submissionSuccess,
@@ -454,80 +436,7 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
   ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.any, allowCompression: false, allowMultiple: true);
-
-    // if (result != null && result.paths.isNotEmpty) {
-    //   result.paths.forEach((element) async {
-    //     if (element != null) {
-    //       var observer = UploadObserver(element, (_) {
-    //         _uploadListener(element);
-    //       });
-    //       _listeners.add(observer);
-    //       _loadController.getState.registerObserver(observer);
-
-    //       await _loadController.uploadFile(
-    //         filePath: element,
-    //         folderId: state.currentFolder?.id,
-    //       );
-    //     }
-    //   });
-    // }
   }
-
-  // void _uploadListener(String pathToFile) async {
-  //   var controllerState = _loadController.getState;
-  //   try {
-  //     var currentFile = controllerState.uploadingFiles.firstWhere(
-  //         (element) => element.localPath == pathToFile && element.isInProgress);
-
-  //     if (currentFile.uploadPercent == -1 && currentFile.id.isNotEmpty) {
-  //       add(FileUpdateFiles(id: currentFile.id));
-  //       return;
-  //     }
-
-  //     if (!currentFile.isInProgress && currentFile.uploadPercent == -1) {
-  //       return;
-  //     }
-
-  //     if (currentFile.uploadPercent >= 0 && currentFile.uploadPercent < 100) {
-  //       print(
-  //           'file\'s $pathToFile upload percent = ${currentFile.uploadPercent}');
-  //       add(FileChangeUploadPercent(
-  //         id: currentFile.id,
-  //         percent: currentFile.uploadPercent.toDouble(),
-  //       ));
-  //     } else if (currentFile.uploadPercent != -1) {
-  //       // add(FileUpdateFiles());
-  //       add(FileChangeUploadPercent(
-  //         id: currentFile.id,
-  //         percent: null,
-  //       ));
-  //       var observer =
-  //           _listeners.firstWhere((element) => element.id == pathToFile);
-  //       controllerState.unregisterObserver(observer);
-
-  //       _listeners.remove(observer);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //     var ind = controllerState.uploadingFiles
-  //         .indexWhere((e) => e.id == pathToFile && e.endedWithException);
-  //     if (ind != -1) {
-  //       var observer =
-  //           _listeners.firstWhere((element) => element.id == pathToFile);
-  //       controllerState.unregisterObserver(observer);
-
-  //       _listeners.remove(observer);
-
-  //       var connect = await Connectivity().checkConnectivity();
-
-  //       if (connect == ConnectivityResult.none) {
-  //         add(FilesNoInternet());
-  //       } else {
-  //         add(FileUpdateFiles());
-  //       }
-  //     }
-  //   }
-  // }
 
   Future<void> _mapAddFolder(
     FilesState state,
@@ -640,8 +549,11 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     Emitter<FilesState> emit,
   ) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    var choosedObjects =
-        state.allFiles.where((element) => element.isChoosed).toList();
+    var choosedObjects = state.allFiles
+        .where(
+          (element) => element.isChoosed,
+        )
+        .toList();
 
     var result = await _controller.deleteObjects(choosedObjects);
 
@@ -668,9 +580,9 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     FilesState state,
   ) async {
     await _filesController.setRecentFile(event.record, DateTime.now());
-    var recentsFile = await _filesController.getRecentFiles();
-    if (recentsFile != null) {
-      await _repository.addFiles(latestFile: recentsFile);
+    var recentFiles = await _filesController.getRecentFiles();
+    if (recentFiles != null) {
+      await _repository.addFiles(latestFile: recentFiles);
     }
 
     var box = await Hive.openBox(kPathDBName);
@@ -685,7 +597,6 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
 
       var fullPathToFile = "$appPath/$path";
       var isExisting = await File(fullPathToFile).exists();
-      //var isExistingSync = File(fullPathToFile).watch();
       print(fullPathToFile);
       if (isExisting) {
         var res = await OpenFile.open(fullPathToFile);
@@ -700,10 +611,9 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
 
   void _downloadFile(String recordId, Emitter<FilesState> emit) async {
     _loadController.downloadFile(fileId: recordId);
-
-    //_setRecordDownloading(recordId: recordId, emit: emit);
   }
 
+  //TODO почему это не используется?
   void _setRecordDownloading({
     required String recordId,
     bool isDownloading = true,
@@ -753,13 +663,19 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } else {
       var connect = await Connectivity().checkConnectivity();
-
       if (connect == ConnectivityResult.none) {
-        emit(state.copyWith(
+        emit(
+          state.copyWith(
             status: FormzStatus.submissionFailure,
-            errorType: ErrorType.noInternet));
+            errorType: ErrorType.noInternet,
+          ),
+        );
       } else {
-        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(
+          state.copyWith(
+            status: FormzStatus.submissionFailure,
+          ),
+        );
       }
     }
   }
