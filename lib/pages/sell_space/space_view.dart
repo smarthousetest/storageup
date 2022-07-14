@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,10 +12,13 @@ import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/download_location.dart';
 import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_bloc.dart';
+import 'package:storageup/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_view.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/pages/sell_space/space_event.dart';
 import 'package:storageup/pages/sell_space/space_state.dart';
+import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 
@@ -61,10 +65,16 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
 
   Widget build(BuildContext context) {
     _setWidthSearchFields(context);
-    return BlocProvider(
-      create: (context) => SpaceBloc()
-        ..add(SpacePageOpened())
-        ..add(SendKeeperVersion()),
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) => SpaceBloc()
+              ..add(SpacePageOpened())
+              ..add(SendKeeperVersion())),
+        BlocProvider(
+            create: (context) => FolderListBloc()..add(FolderListPageOpened()))
+      ],
       child: BlocListener<SpaceBloc, SpaceState>(
         listener: (context, state) async {
           if (StateContainer.of(context).isPopUpShowing == false) {
@@ -318,6 +328,52 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           Expanded(
             flex: 100,
             child: Container(),
+          ),
+          GestureDetector(
+            onTap: (() {
+              context.read<FolderListBloc>().add(GetKeeperInfo());
+            }),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                width: 128,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/file_page/update.svg',
+                      color: Theme.of(context).splashColor,
+                      width: 24,
+                      height: 24,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0),
+                      child: Text(
+                        translate.update,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Theme.of(context).splashColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 20,
           ),
           Container(
             height: 30,
@@ -1253,7 +1309,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       }).toList(),
                                     )
                                   : Container(
-                                height: 42,
+                                      height: 42,
                                       width: 350,
                                       decoration: BoxDecoration(
                                         color: Theme.of(context).cardColor,
@@ -1661,6 +1717,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                         canSave = false;
                                         dropdownValue = null;
                                       });
+                                      context
+                                          .read<FolderListBloc>()
+                                          .add(FolderListPageOpened());
+                                      var bloc = context.read<FolderListBloc>();
+                                      await Future.delayed(
+                                          Duration(seconds: 4));
+                                      bloc.add(FolderListPageOpened());
                                     } else {
                                       canSave = false;
                                       await showDialog(

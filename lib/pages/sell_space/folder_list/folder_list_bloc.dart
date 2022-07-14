@@ -41,7 +41,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   }
 
   UserController _userController = getIt<UserController>();
-  late final DownloadLocationsRepository _repository;
+  late DownloadLocationsRepository _downloadLocationRepository;
   final KeeperService _keeperService = getIt<KeeperService>();
   static Timer? timerUpdateKeeperInfo;
 
@@ -52,23 +52,13 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     int updateKeeperInfoDelay,
   ) async {
     User? user = await _userController.getUser;
-    _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
+    _downloadLocationRepository =
+        await GetIt.instance.getAsync<DownloadLocationsRepository>();
     emit(state.copyWith(user: user));
     add(GetKeeperInfo());
-    try {
-      timerUpdateKeeperInfo?.cancel();
-      timerUpdateKeeperInfo = Timer.periodic(
-        Duration(seconds: updateKeeperInfoDelay),
-        (Timer t) async {
-          add(GetKeeperInfo());
-          print("Update keeper info");
-        },
-      );
-      print("Timer of updating keeper info started");
-    } catch (e) {
-      print('error timer in get keeper');
-    }
-    _repository.getDownloadLocationsValueListenable.addListener(_listener);
+
+    _downloadLocationRepository.getDownloadLocationsValueListenable
+        .addListener(_listener);
   }
 
   Future<void> _getKeeperInfo(
@@ -79,17 +69,19 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     List<Keeper> localKeepers = [];
     List<Keeper> serverKeepers = [];
     List<String> localPaths = [];
+    _downloadLocationRepository =
+        await GetIt.instance.getAsync<DownloadLocationsRepository>();
     var keepers = await _keeperService.getAllKeepers();
-    final locationsInfo = await _repository.locationsInfo;
+    final locationsInfo = await _downloadLocationRepository.locationsInfo;
     if (keepers.right != null) {
       for (var keeper in keepers.right ?? []) {
         if (locationsInfo
             .any((_locationInfo) => _locationInfo.keeperId == keeper.id)) {
           if (state.localKeepers.isNotEmpty) {
             localKeepers.add(keeper.copyWith(
-                isRebooting: (state.localKeepers
-                        .firstWhere((keeper2) => keeper.name == keeper2.name))
-                    .isRebooting));
+                isRebooting: (state.localKeepers.firstWhere(
+                    (keeper2) => keeper.name == keeper2.name,
+                    orElse: (() => keeper))).isRebooting));
           } else {
             localKeepers.add(keeper);
           }
@@ -128,7 +120,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
   }
 
   void _listener() {
-    final info = _repository.locationsInfo;
+    final info = _downloadLocationRepository.locationsInfo;
     if (!isClosed) {
       add(UpdateLocationsList(locations: info));
     }
@@ -170,7 +162,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       List<Keeper> serverKeepers = [];
       List<String> localPaths = [];
       var keepers = await _keeperService.getAllKeepers();
-      final locationsInfo = _repository.locationsInfo;
+      final locationsInfo = _downloadLocationRepository.locationsInfo;
 
       if (keepers.right != null) {
         for (var keeper in keepers.right!) {
@@ -220,8 +212,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       needToValidatePopup: false,
     ));
     var idLocation = event.location.id;
-    await _repository.deleteLocation(id: idLocation);
-    var updateLocations = _repository.locationsInfo;
+    await _downloadLocationRepository.deleteLocation(id: idLocation);
+    var updateLocations = _downloadLocationRepository.locationsInfo;
     var tmpState = state.copyWith(locationsInfo: updateLocations);
     await _deleteKeeper(event, tmpState, emit);
     var keeper = await _keeperService.getAllKeepers();
@@ -333,7 +325,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       Directory('${keeperDir}${Platform.pathSeparator}.keeper')
           .deleteSync(recursive: true);
     }
-    emit(state.copyWith(locationsInfo: _repository.locationsInfo));
+    emit(state.copyWith(
+        locationsInfo: _downloadLocationRepository.locationsInfo));
   }
 
   Future _disconnectKeeper(String proxyUrl, String session) async {
