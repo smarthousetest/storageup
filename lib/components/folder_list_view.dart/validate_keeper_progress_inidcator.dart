@@ -14,8 +14,8 @@ class _ValidateKeeperArcIndicator extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const arcCenter = Offset(70, 70);
-    final arcRect = Rect.fromCircle(center: arcCenter, radius: 70);
+    const arcCenter = Offset(65, 65);
+    final arcRect = Rect.fromCircle(center: arcCenter, radius: 65);
     final startAngle = -math.pi;
     final sweepAngle = value != null ? value : math.pi;
     final useCenter = false;
@@ -76,7 +76,7 @@ class _CircularArc extends State<ValidateKeeperProgressIndicator>
           });
   }
 
-  Widget _smail(double value) {
+  Widget _validationTimeLeft(double value) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +110,7 @@ class _CircularArc extends State<ValidateKeeperProgressIndicator>
   Widget build(BuildContext context) {
     return Container(
       width: 140,
-      height: 75,
+      height: 65,
       child: Stack(
         children: [
           CustomPaint(
@@ -129,7 +129,7 @@ class _CircularArc extends State<ValidateKeeperProgressIndicator>
           ),
           Align(
             alignment: FractionalOffset.center,
-            child: _smail(widget.value),
+            child: _validationTimeLeft(widget.value),
           ),
         ],
       ),

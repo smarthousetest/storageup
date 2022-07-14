@@ -85,8 +85,8 @@ class _KeeperValidatingInfoWidgetState
             ),
             Center(
               child: Container(
-                height: 140,
-                width: 140,
+                height: 130,
+                width: 130,
                 child: ValidateKeeperProgressIndicator(
                   value: 75,
                 ),
