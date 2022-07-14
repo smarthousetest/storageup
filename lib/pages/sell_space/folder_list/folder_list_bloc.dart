@@ -91,9 +91,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
             .any((_locationInfo) => _locationInfo.keeperId == keeper.id)) {
           if (state.localKeepers.isNotEmpty) {
             localKeepers.add(keeper.copyWith(
-                isRebooting: (state.localKeepers
-                        .firstWhere((keeper2) => keeper.name == keeper2.name))
-                    .isRebooting));
+                isRebooting: (state.localKeepers.firstWhere(
+                    (keeper2) => keeper.name == keeper2.name,
+                    orElse: (() => keeper))).isRebooting));
           } else {
             localKeepers.add(keeper);
           }

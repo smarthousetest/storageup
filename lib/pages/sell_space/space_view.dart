@@ -1757,6 +1757,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       canSave = false;
                                       dropdownValue = null;
                                     });
+                                    context
+                                        .read<FolderListBloc>()
+                                        .add(FolderListPageOpened());
                                   } else {
                                     canSave = false;
                                     await showDialog(
