@@ -102,7 +102,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     //     as MediaListMoveToFolderSettings;
 
     return BlocProvider<MediaCubit>(
-      create: (_) => MediaCubit()..init(),
+      create: (_) => MediaCubit(
+        stateContainer: StateContainer.of(context),
+      )..init(),
       child: BlocListener<MediaCubit, MediaState>(
         listener: (context, state) async {
           if (StateContainer.of(context).isPopUpShowing == false) {
@@ -665,10 +667,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     String icon = 'album';
     if (album.id == '-1') {
       activeColor = Color(0xFF868FFF);
-    } else if (album.name == 'Фото') {
+    } else if (album.name == 'Фото' || album.name == 'Photos') {
       activeColor = Color(0xFF59D7AB);
       icon = 'photo';
-    } else if (album.name == 'Видео') {
+    } else if (album.name == 'Видео' || album.name == 'Video') {
       activeColor = Color(0xFFFF847E);
       icon = 'video';
     } else {

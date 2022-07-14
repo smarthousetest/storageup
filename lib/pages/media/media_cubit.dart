@@ -7,11 +7,13 @@ import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
+import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
@@ -20,19 +22,49 @@ import 'package:storageup/utilities/controllers/user_controller.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
+import 'package:storageup/utilities/state_containers/state_container.dart';
 
 import '../../constants.dart';
 import 'media_state.dart';
 
 class MediaCubit extends Cubit<MediaState> {
-  MediaCubit() : super(MediaState());
+  MediaCubit({required this.stateContainer}) : super(MediaState()) {
+    localeChangedStreamSubscription =
+        stateContainer.localeChangedController.stream.listen((newLocale) {
+      onLocaleChanged(newLocale);
+    });
+  }
 
+  StreamSubscription<Locale>? localeChangedStreamSubscription;
+  final StateContainerState stateContainer;
   FilesController _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
   var _loadController = LoadController.instance;
   UserController _userController = getIt<UserController>();
   StreamSubscription? updatePageSubscription;
   String idTappedFile = '';
+
+  void onLocaleChanged(Locale locale) {
+    S translate = getIt<S>();
+    var albums = state.albums.map((e) => e.copyWith()).toList();
+
+    String photos =
+        Intl.withLocale(locale.languageCode, () => translate.photos);
+    String video = Intl.withLocale(locale.languageCode, () => translate.video);
+    String all = Intl.withLocale(locale.languageCode, () => translate.all);
+
+    for (var album in albums) {
+      if (album.name == 'Все' || album.name == 'All') {
+        album.name = all;
+      } else if (album.name == 'Фото' || album.name == 'Photos') {
+        album.name = photos;
+      } else if (album.name == 'Видео' || album.name == 'Video') {
+        album.name = video;
+      }
+    }
+
+    emit(state.copyWith(albums: albums));
+  }
 
   late var _updateObserver = Observer((e) async {
     if (e is LoadNotification) {
