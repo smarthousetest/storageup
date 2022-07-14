@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -421,7 +422,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
           GestureDetector(
             onTap: (() {
-              // context.read<SpaceBloc>().add(SpacePageOpened());
               context.read<FolderListBloc>().add(GetKeeperInfo());
             }),
             child: MouseRegion(
@@ -1752,14 +1752,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                         .read<SpaceBloc>()
                                         .stream
                                         .first;
+
                                     setState(() {
                                       index = 2;
                                       canSave = false;
                                       dropdownValue = null;
                                     });
-                                    context
-                                        .read<FolderListBloc>()
-                                        .add(FolderListPageOpened());
+                                    var bloc = context.read<FolderListBloc>();
+                                    await Future.delayed(Duration(seconds: 5));
+                                    bloc.add(FolderListPageOpened());
                                   } else {
                                     canSave = false;
                                     await showDialog(

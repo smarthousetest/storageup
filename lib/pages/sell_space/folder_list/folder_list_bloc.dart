@@ -71,6 +71,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     // } catch (e) {
     //   print('error timer in get keeper');
     // }
+
     _repository.getDownloadLocationsValueListenable.addListener(_listener);
   }
 
