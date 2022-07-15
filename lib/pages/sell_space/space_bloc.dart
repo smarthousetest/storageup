@@ -243,7 +243,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       _mapRunSoft(tmpState, id.right!);
     } else if (id.left == ResponseStatus.declined) {
       emit(state.copyWith(statusHttpRequest: FormzStatus.submissionCanceled));
-    } else {
+    } else if (id.left == ResponseStatus.failed) {
       emit(state.copyWith(statusHttpRequest: FormzStatus.submissionFailure));
     }
   }
@@ -310,6 +310,13 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       emit(state.copyWith(
         keeper: keeper.right,
         statusHttpRequest: FormzStatus.valid,
+      ));
+    } else if (keeper.left == ResponseStatus.declined) {
+      emit(state.copyWith(statusHttpRequest: FormzStatus.submissionCanceled));
+    } else if (keeper.left == ResponseStatus.failed) {
+      print("folder");
+      emit(state.copyWith(
+        statusHttpRequest: FormzStatus.submissionFailure,
       ));
     }
   }

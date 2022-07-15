@@ -119,7 +119,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 context: context,
                 builder: (BuildContext context) {
                   return BlurCustomErrorPopUp(
-                    middleText: translate.something_goes_wrong,
+                    middleText: translate.internal_server_error,
                   );
                 },
               );
@@ -131,6 +131,15 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 builder: (BuildContext context) {
                   return BlurCustomErrorPopUp(
                       middleText: translate.no_internet);
+                },
+              );
+              StateContainer.of(context).changeIsPopUpShowing(false);
+            } else if (state.status == FormzStatus.invalid) {
+              StateContainer.of(context).changeIsPopUpShowing(true);
+              await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return BlurCustomErrorPopUp(middleText: translate.wrong_path);
                 },
               );
               StateContainer.of(context).changeIsPopUpShowing(false);

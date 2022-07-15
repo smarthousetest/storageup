@@ -85,7 +85,7 @@ class _FinancePageState extends State<FinancePage> {
               context: context,
               builder: (BuildContext context) {
                 return BlurCustomErrorPopUp(
-                    middleText: translate.something_goes_wrong);
+                    middleText: translate.internal_server_error);
               },
             );
             StateContainer.of(context).changeIsPopUpShowing(false);

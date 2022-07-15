@@ -104,8 +104,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_photo": MessageLookupByLibrary.simpleMessage("Изменить фото"),
         "change_place": MessageLookupByLibrary.simpleMessage("Изменить место"),
         "changed": MessageLookupByLibrary.simpleMessage("Изменено"),
-        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
-            "Проверьте соединение с Интернетом и повторите попытку."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Подтвердите свою почту!"),
         "contact_us": MessageLookupByLibrary.simpleMessage(" свяжитесь с нами"),
@@ -348,8 +346,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Выберите место хранения"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Сдача места"),
-        "server_connection_error": MessageLookupByLibrary.simpleMessage(
-            "Не удаётся установить соединение с сервером."),
+        "sell_space_no_internet_part_1": MessageLookupByLibrary.simpleMessage(
+            "Отсутствует интернет соединение"),
+        "sell_space_no_internet_part_2": MessageLookupByLibrary.simpleMessage(
+            "Пожалуйста, проверьте ваше подключение к интернету"),
         "set_size":
             MessageLookupByLibrary.simpleMessage("Установите размер хранилища"),
         "settings": MessageLookupByLibrary.simpleMessage("Настройки"),
@@ -424,6 +424,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Неверный пароль"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Пароль должен содержать более 8 символов"),
+        "wrong_path": MessageLookupByLibrary.simpleMessage(
+            "Угазанный путь не корректен.\nВозможно он содрежит следующие названия папок: OneDrive, Program Files, Program Files (x86)"),
         "wrong_symbvols": MessageLookupByLibrary.simpleMessage(
             "Имя файла не должно содержать следующих знаков: \\/:*?\"<>|"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(

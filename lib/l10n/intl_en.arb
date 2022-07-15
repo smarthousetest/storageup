@@ -252,8 +252,6 @@
     "reboot_keeper": "It is possible to restart keeper locally",
     "of_percent": " of 100%",
     "error": "Error",
-    "server_connection_error": "The connection to the server cannot be established.",
-    "check_ethernet_connection": "Check your internet connection and try again.",
     "no_internet": "The connection to the server cannot be established.\nCheck your internet connection and try again.",
     "ok": "Ok",
     "resend_letter_available": "Resend letter will be available in",
@@ -280,5 +278,8 @@
     "change_place": "Change place",
     "where_download": "Where download?",
     "keeper_name_are_the_same": "That keeper name are already used.\nRename your keeper",
-    "not_selected": "Not selected"
+    "not_selected": "Not selected",
+    "sell_space_no_internet_part_1": "There is no internet connection",
+    "sell_space_no_internet_part_2": "Please check your internet connection",
+    "wrong_path": "File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)"
 }
