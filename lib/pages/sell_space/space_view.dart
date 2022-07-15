@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,7 +17,6 @@ import 'package:storageup/pages/sell_space/folder_list/folder_list_view.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/pages/sell_space/space_event.dart';
 import 'package:storageup/pages/sell_space/space_state.dart';
-import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 
@@ -54,12 +52,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     _searchFieldWidth = width - _rowPadding * 4 - 274 - 222;
   }
 
-  changePageIndex(int newIndex, DownloadLocation keeper) {
+  changePageIndexChangeKeeper(int newIndex, DownloadLocation keeper) {
     setState(() {
       index = newIndex;
       changeKeeper = keeper;
       myController.text = keeper.name;
       _currentSliderValue = changeKeeper!.countGb.toDouble();
+    });
+  }
+
+  changePageIndex(int newIndex) {
+    setState(() {
+      index = newIndex;
     });
   }
 
@@ -78,20 +82,20 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
       child: BlocListener<SpaceBloc, SpaceState>(
         listener: (context, state) async {
           if (StateContainer.of(context).isPopUpShowing == false) {
-            if (state.statusHttpRequest == FormzStatus.submissionFailure) {
+            if (state.statusHttpRequest == FormzStatus.submissionCanceled) {
               canSave = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
               await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return BlurCustomErrorPopUp(
-                    middleText: translate.something_goes_wrong,
+                    middleText: translate.internal_server_error,
                   );
                 },
               );
               StateContainer.of(context).changeIsPopUpShowing(false);
             } else if (state.statusHttpRequest ==
-                FormzStatus.submissionCanceled) {
+                FormzStatus.submissionFailure) {
               canSave = true;
               StateContainer.of(context).changeIsPopUpShowing(true);
               await showDialog(
@@ -102,11 +106,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 },
               );
               StateContainer.of(context).changeIsPopUpShowing(false);
+              changePageIndex(3);
             } else if (state.statusHttpRequest ==
                 FormzStatus.submissionSuccess) {
               canSave = true;
+              if (index == 3) {
+                changePageIndex(0);
+              }
             } else if (state.statusHttpRequest == FormzStatus.valid) {
               canSave = true;
+              if (index == 3) {
+                changePageIndex(0);
+              }
             }
           }
         },
@@ -248,7 +259,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   Platform.isWindows
                                       ? addSpaceWindows(context, changeKeeper)
                                       : addSpace(context, changeKeeper),
-                                  fl
+                                  fl,
+                                  rentingAPlaceNoInternet(context)
                                 ],
                               ));
                             },
@@ -314,14 +326,17 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          Container(
-            child: Text(
-              translate.sell_space,
-              maxLines: 1,
-              style: TextStyle(
-                color: Theme.of(context).focusColor,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 20,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+            child: Container(
+              child: Text(
+                translate.sell_space,
+                maxLines: 1,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 20,
+                ),
               ),
             ),
           ),
@@ -331,7 +346,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
           GestureDetector(
             onTap: (() {
-              context.read<FolderListBloc>().add(GetKeeperInfo());
+              context.read<SpaceBloc>().add(UpdateKeepersList());
             }),
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -380,18 +395,122 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             width: 142,
             child: OutlinedButton(
               onPressed: () {
-                setState(() {
-                  index = 1;
-                  myController.clear();
-                  firstOpen = true;
-                });
+                if (index != 3) {
+                  setState(() {
+                    index = 1;
+                    print(index);
+                  });
+                }
               },
               style: OutlinedButton.styleFrom(
-                minimumSize: Size(double.maxFinite, 60),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                backgroundColor: Theme.of(context).splashColor,
+                  minimumSize: Size(double.maxFinite, 60),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  backgroundColor: index != 3
+                      ? Theme.of(context).splashColor
+                      : Theme.of(context).canvasColor),
+              child: Text(
+                translate.add_location,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                ),
               ),
+            ),
+          ),
+        ],
+      );
+    } else if (index == 3) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
+        mainAxisAlignment: MainAxisAlignment.start,
+        textBaseline: TextBaseline.alphabetic,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+            child: Container(
+              child: Text(
+                translate.sell_space,
+                maxLines: 1,
+                style: TextStyle(
+                  color: Theme.of(context).focusColor,
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 100,
+            child: Container(),
+          ),
+          GestureDetector(
+            onTap: (() async {
+              context.read<SpaceBloc>().add(UpdateKeepersList());
+            }),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                width: 128,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/file_page/update.svg',
+                      color: Theme.of(context).splashColor,
+                      width: 24,
+                      height: 24,
+                    ),
+                    SizedBox(
+                      width: 7,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0),
+                      child: Text(
+                        translate.update,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Theme.of(context).splashColor,
+                          fontFamily: kNormalTextFontFamily,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+          Container(
+            height: 30,
+            width: 142,
+            child: OutlinedButton(
+              onPressed: () {
+                if (index != 3) {
+                  setState(() {
+                    index = 1;
+                    print(index);
+                  });
+                }
+              },
+              style: OutlinedButton.styleFrom(
+                  minimumSize: Size(double.maxFinite, 60),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  backgroundColor: index != 3
+                      ? Theme.of(context).splashColor
+                      : Theme.of(context).canvasColor),
               child: Text(
                 translate.add_location,
                 style: TextStyle(
@@ -615,6 +734,52 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
         ),
       ],
     );
+  }
+
+  Widget rentingAPlaceNoInternet(BuildContext context) {
+    return ListView(controller: ScrollController(), children: [
+      Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: Container(
+            height: 1,
+            decoration: BoxDecoration(
+              color: Theme.of(context).dividerColor,
+            ),
+          ),
+        ),
+        Container(
+            child: Image.asset("assets/space_sell/sell_space_no_internet.png")),
+        Padding(
+          padding: const EdgeInsets.only(left: 15, top: 30),
+          child: Container(
+            child: Text(
+              translate.sell_space_no_internet_part_1,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.subtitle1?.color,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 15, top: 15),
+          child: Container(
+            child: Text(
+              translate.sell_space_no_internet_part_2,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.subtitle1?.color,
+                fontFamily: kNormalTextFontFamily,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ),
+      ]),
+    ]);
   }
 
   Widget addSpace(BuildContext context, DownloadLocation? changeKepper) {
@@ -1129,14 +1294,21 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       canSave = false;
                                     } else {
                                       canSave = false;
-                                      await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return BlurCustomErrorPopUp(
-                                              middleText: translate
-                                                  .keeper_name_are_the_same);
-                                        },
-                                      );
+                                      if (StateContainer.of(context)
+                                              .isErrorPopUpShowing ==
+                                          false) {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return BlurCustomErrorPopUp(
+                                                middleText: translate
+                                                    .keeper_name_are_the_same);
+                                          },
+                                        );
+                                        StateContainer.of(context)
+                                            .changeIsPopUpShowing(false);
+                                      }
+                                      ;
                                     }
                                   }
                                 }
@@ -1726,15 +1898,21 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       bloc.add(FolderListPageOpened());
                                     } else {
                                       canSave = false;
-                                      await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return BlurCustomErrorPopUp(
-                                            middleText: translate
-                                                .keeper_name_are_the_same,
-                                          );
-                                        },
-                                      );
+                                      if (StateContainer.of(context)
+                                              .isErrorPopUpShowing ==
+                                          false) {
+                                        await showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return BlurCustomErrorPopUp(
+                                                middleText: translate
+                                                    .keeper_name_are_the_same,
+                                              );
+                                            });
+                                        StateContainer.of(context)
+                                            .changeIsPopUpShowing(false);
+                                      }
+                                      ;
                                     }
                                   }
                                 }

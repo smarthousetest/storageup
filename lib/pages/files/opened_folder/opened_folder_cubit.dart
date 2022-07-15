@@ -505,8 +505,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           await _loadController.uploadFile(
               filePath: filePaths[i], folderId: folderId);
         } else {
-          print(
-              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+          emit(state.copyWith(status: FormzStatus.invalid));
+          emit(state.copyWith(status: FormzStatus.pure));
         }
       }
     } else {

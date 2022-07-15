@@ -103,8 +103,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_photo": MessageLookupByLibrary.simpleMessage("Change photo"),
         "change_place": MessageLookupByLibrary.simpleMessage("Change place"),
         "changed": MessageLookupByLibrary.simpleMessage("Changed"),
-        "check_ethernet_connection": MessageLookupByLibrary.simpleMessage(
-            "Check your internet connection and try again."),
         "confirm_email":
             MessageLookupByLibrary.simpleMessage("Confirm your e-mail!"),
         "contact_us": MessageLookupByLibrary.simpleMessage("contact us"),
@@ -345,8 +343,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "select_storage":
             MessageLookupByLibrary.simpleMessage("Choose storage location"),
         "sell_space": MessageLookupByLibrary.simpleMessage("Renting a place"),
-        "server_connection_error": MessageLookupByLibrary.simpleMessage(
-            "The connection to the server cannot be established."),
+        "sell_space_no_internet_part_1": MessageLookupByLibrary.simpleMessage(
+            "There is no internet connection"),
+        "sell_space_no_internet_part_2": MessageLookupByLibrary.simpleMessage(
+            "Please check your internet connection"),
         "set_size": MessageLookupByLibrary.simpleMessage("Set storage size"),
         "settings": MessageLookupByLibrary.simpleMessage("Settings"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
@@ -419,6 +419,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Invalid password"),
         "wrong_password": MessageLookupByLibrary.simpleMessage(
             "Password must be more than 8 characters"),
+        "wrong_path": MessageLookupByLibrary.simpleMessage(
+            "File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)"),
         "wrong_symbvols": MessageLookupByLibrary.simpleMessage(
             "The file name must not contain the following characters: \\/:*?\"<>|"),
         "wrong_username": MessageLookupByLibrary.simpleMessage(

@@ -17,10 +17,13 @@ import 'package:storageup/models/keeper/keeper.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_bloc.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_event.dart';
 import 'package:storageup/pages/sell_space/folder_list/folder_list_state.dart';
+import 'package:storageup/pages/sell_space/space_event.dart';
 import 'package:storageup/pages/sell_space/space_view.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
+
+import '../space_bloc.dart';
 
 class FolderList extends StatefulWidget {
   @override
@@ -62,59 +65,74 @@ class _ButtonTemplateState extends State<FolderList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FolderListBloc, FolderListState>(
-      listener: (context, state) async {
-        if (StateContainer.of(context).isPopUpShowing == false) {
-          if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
-              popUpWasShown == false) {
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurCustomErrorPopUp(middleText: translate.no_internet);
-              },
-            );
-            StateContainer.of(context).changeIsPopUpShowing(false);
-          } else if (state.statusHttpRequest == FormzStatus.submissionFailure &&
-              popUpWasShown == false) {
-            StateContainer.of(context).changeIsPopUpShowing(true);
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return BlurCustomErrorPopUp(middleText: translate.no_internet);
-              },
-            );
-            StateContainer.of(context).changeIsPopUpShowing(false);
-          }
-          if (state.needToValidatePopup == true) {
-            popUpWasShown = true;
-          } else {
-            popUpWasShown = false;
-          }
-        }
-      },
-      child: BlocBuilder<FolderListBloc, FolderListState>(
-        builder: (context, state) {
-          _initiatingControllers(state);
-          locationsInfo = state.localKeepers;
-          return SingleChildScrollView(
-            controller: ScrollController(),
-            child: Column(
-              children: [
-                state.localKeepers.isNotEmpty
-                    ? _thisKeeper(context, state)
-                    : Container(),
-                state.serverKeepers.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: _otherKeeper(context, state),
-                      )
-                    : Container(),
-              ],
-            ),
-          );
-        },
-      ),
-    );
+    return BlocProvider(
+        create: (context) => bloc..add(FolderListPageOpened()),
+        child: BlocListener<FolderListBloc, FolderListState>(
+          listener: (context, state) async {
+            if (StateContainer.of(context).isPopUpShowing == false) {
+              if (state.statusHttpRequest == FormzStatus.submissionCanceled &&
+                  popUpWasShown == false) {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return BlurCustomErrorPopUp(
+                        middleText: translate.internal_server_error);
+                  },
+                );
+                StateContainer.of(context).changeIsPopUpShowing(false);
+              } else if (state.statusHttpRequest ==
+                  FormzStatus.submissionFailure) {
+                if (popUpWasShown == false) {
+                  StateContainer.of(context).changeIsPopUpShowing(true);
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return BlurCustomErrorPopUp(
+                          middleText: translate.no_internet);
+                    },
+                  );
+                  StateContainer.of(context).changeIsPopUpShowing(false);
+                }
+                SpaceInheritedWidget.of(context).state.changePageIndex(3);
+              } else if (state.statusHttpRequest ==
+                  FormzStatus.submissionFailure) {
+                SpaceInheritedWidget.of(context).state.changePageIndex(3);
+              } else if (state.statusHttpRequest ==
+                  FormzStatus.submissionSuccess) {
+                if (SpaceInheritedWidget.of(context).state.index != 1) {
+                  SpaceInheritedWidget.of(context).state.changePageIndex(0);
+                }
+              }
+            }
+            if (state.needToValidatePopup == true) {
+              popUpWasShown = true;
+            } else if (state.needToValidatePopup == false) {
+              popUpWasShown = false;
+            }
+          },
+          child: BlocBuilder<FolderListBloc, FolderListState>(
+            builder: (context, state) {
+              _initiatingControllers(state);
+              locationsInfo = state.localKeepers;
+              return SingleChildScrollView(
+                controller: ScrollController(),
+                child: Column(
+                  children: [
+                    state.localKeepers.isNotEmpty
+                        ? _thisKeeper(context, state)
+                        : Container(),
+                    state.serverKeepers.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: _otherKeeper(context, state),
+                          )
+                        : Container(),
+                  ],
+                ),
+              );
+            },
+          ),
+        ));
   }
 
   Widget _thisKeeper(
@@ -242,7 +260,7 @@ class _ButtonTemplateState extends State<FolderList> {
                               }
                               SpaceInheritedWidget.of(context)
                                   .state
-                                  .changePageIndex(1, changeKeeper);
+                                  .changePageIndexChangeKeeper(1, changeKeeper);
                             } else {
                               var result = await showDialog(
                                 context: context,
@@ -259,6 +277,9 @@ class _ButtonTemplateState extends State<FolderList> {
                                   }
                                 }
                                 if (deleteKeeper != null) {
+                                  context
+                                      .read<SpaceBloc>()
+                                      .add(UpdateKeepersList());
                                   context.read<FolderListBloc>().add(
                                       DeleteLocation(location: deleteKeeper));
                                   context.read<FolderListBloc>().stream.first;

@@ -122,8 +122,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           await _loadController.uploadFile(
               filePath: event.values![i], folderId: event.folderId);
         } else {
-          print(
-              "File path is not correct: may by it can contain this words: ${PathCheck().toString()}");
+          emit(state.copyWith(status: FormzStatus.invalid));
+          emit(state.copyWith(status: FormzStatus.pure));
         }
       }
     }

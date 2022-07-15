@@ -2296,26 +2296,6 @@ class S {
     );
   }
 
-  /// `The connection to the server cannot be established.`
-  String get server_connection_error {
-    return Intl.message(
-      'The connection to the server cannot be established.',
-      name: 'server_connection_error',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Check your internet connection and try again.`
-  String get check_ethernet_connection {
-    return Intl.message(
-      'Check your internet connection and try again.',
-      name: 'check_ethernet_connection',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `The connection to the server cannot be established.\nCheck your internet connection and try again.`
   String get no_internet {
     return Intl.message(
@@ -2590,6 +2570,36 @@ class S {
     return Intl.message(
       'Not selected',
       name: 'not_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There is no internet connection`
+  String get sell_space_no_internet_part_1 {
+    return Intl.message(
+      'There is no internet connection',
+      name: 'sell_space_no_internet_part_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please check your internet connection`
+  String get sell_space_no_internet_part_2 {
+    return Intl.message(
+      'Please check your internet connection',
+      name: 'sell_space_no_internet_part_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)`
+  String get wrong_path {
+    return Intl.message(
+      'File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)',
+      name: 'wrong_path',
       desc: '',
       args: [],
     );

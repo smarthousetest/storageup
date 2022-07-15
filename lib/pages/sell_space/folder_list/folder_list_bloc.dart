@@ -93,12 +93,13 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
         }
         emit(
           state.copyWith(
+            keepers: keepers.right,
             locationsInfo: locationsInfo,
             localKeeper: localKeepers.reversed.toList(),
             serverKeeper: serverKeepers,
             localPath: localPaths.reversed.toList(),
             needToValidatePopup: false,
-            statusHttpRequest: FormzStatus.pure,
+            statusHttpRequest: FormzStatus.submissionSuccess,
           ),
         );
       }
@@ -109,7 +110,8 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
           needToValidatePopup: true,
         ),
       );
-    } else {
+    } else if (keepers.left == ResponseStatus.failed) {
+      print("list");
       emit(
         state.copyWith(
           statusHttpRequest: FormzStatus.submissionFailure,
@@ -268,7 +270,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     if (bearerToken != null) {
       await _getKeeperSession(keeperId, dio, bearerToken);
       try {
-        await dio.delete(
+        final result = await dio.delete(
           '/keeper',
           queryParameters: {'ids[]': keeperId},
           options: Options(
@@ -277,6 +279,13 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
             },
           ),
         );
+        if (result.statusCode == 200) {
+          emit(
+            state.copyWith(
+                statusHttpRequest: FormzStatus.submissionSuccess,
+                needToValidatePopup: false),
+          );
+        }
       } on DioError catch (e) {
         print(e);
         if (e.response?.statusCode == 401 ||
@@ -311,7 +320,9 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
     } else {
       emit(
         state.copyWith(
-            statusHttpRequest: FormzStatus.pure, needToValidatePopup: false),
+          statusHttpRequest: FormzStatus.pure,
+          needToValidatePopup: false,
+        ),
       );
       emit(
         state.copyWith(
