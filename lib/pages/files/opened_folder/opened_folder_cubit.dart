@@ -194,8 +194,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     emit(
       state.copyWith(
         currentFolder: currentFolder,
-        objects: objects,
-        sortedFiles: objects,
+        // objects: objects,
+        // sortedFiles: objects,
         previousFolders: previousFolders,
         user: user,
         progress: progress,
@@ -516,7 +516,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<ErrorType?> onActionRenameChoosedFile(
       BaseObject object, String newName) async {
-    var result = await _filesController.renameRecord(newName, object.id);
+    var result = await _filesController.rename(name: newName, object: object);
     print(result);
     if (result == ResponseStatus.ok) {
       update();
@@ -532,7 +532,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<ErrorType?> onActionRenameChosenFolder(
       BaseObject object, String newName) async {
-    var result = await _filesController.renameFolder(newName, object.id);
+    var result = await _filesController.rename(name: newName, object: object);
     print(result);
     if (result == ResponseStatus.ok) {
       update();
@@ -647,16 +647,16 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     var objects = await _filesController
         .getContentFromFolderById(state.currentFolder!.id);
 
-    if (uploadingFileId != null) {
-      var uploadingFileIndex =
-          objects.indexWhere((element) => element.id == uploadingFileId);
-      if (uploadingFileIndex != -1)
-        objects[uploadingFileIndex] =
-            (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
-    }
+    // if (uploadingFileId != null) {
+    //   var uploadingFileIndex =
+    //       objects.indexWhere((element) => element.id == uploadingFileId);
+    //   if (uploadingFileIndex != -1)
+    //     objects[uploadingFileIndex] =
+    //         (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
+    // }
     await _packetController.updatePacket();
     emit(state.copyWith(
-      objects: objects,
+      // objects: objects,
       status: FormzStatus.pure,
     ));
 
@@ -792,8 +792,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     print('index if uploading filse is $indexOfUploadingFile');
 
     if (indexOfUploadingFile == -1) {
-      objects = await _filesController
-          .getContentFromFolderById(state.currentFolder!.id);
+      // objects = await _filesController
+      //     .getContentFromFolderById(state.currentFolder!.id);
       indexOfUploadingFile =
           objects.indexWhere((element) => element.id == fileId);
     }

@@ -34,9 +34,6 @@ abstract class ServiceModule {
   @lazySingleton
   FilesRepository get filesRepo => FilesRepository();
 
-  @Named('files_controller')
-  FilesController get filesController => FilesController();
-
   @Named('user_repo')
   @lazySingleton
   UserRepository get userRepository => UserRepository();

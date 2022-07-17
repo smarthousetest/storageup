@@ -15,8 +15,7 @@ import 'package:storageup/utilities/services/subscription_service.dart';
 
 @injectable
 class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
-  FinanceBloc(@Named('files_controller') FilesController filesController)
-      : super(FinanceState()) {
+  FinanceBloc(this._filesController) : super(FinanceState()) {
     on<FinanceEvent>((event, emit) async {
       if (event is FinancePageOpened) {
         await _mapFinancePageOpened(event, state, emit);
@@ -27,7 +26,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
   }
 
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
-
+  FilesController _filesController;
   UserController _userController = getIt<UserController>();
   var _packetController =
       getIt<PacketController>(instanceName: 'packet_controller');
@@ -89,7 +88,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     Emitter<FinanceState> emit,
   ) async {
     var choosedSub = event.choosedSub;
-emit(state.copyWith(
+    emit(state.copyWith(
       statusHttpRequest: FormzStatus.pure,
     ));
     var status = await _subscriptionService.changeSubscription(choosedSub);
@@ -98,7 +97,7 @@ emit(state.copyWith(
           await _subscriptionService.getCurrentSubscription();
       emit(state.copyWith(
         sub: updatedSubscription.left,
-        statusHttpRequest: FormzStatus.pure, 
+        statusHttpRequest: FormzStatus.pure,
       ));
     } else if (status == ResponseStatus.declined) {
       emit(state.copyWith(

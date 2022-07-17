@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:cpp_native/cpp_native.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:dio/dio.dart';
@@ -207,7 +209,35 @@ class FilesService {
     return null;
   }
 
-  Future<ResponseStatus> createFolder(
+  Future<Either<int, Record>> getRecordById(String recordId) async {
+    String url(String recorId) {
+      return 'https://upstorage.net/api/tenant/%20/record/$recorId';
+    }
+
+    try {
+      String? token = await _tokenRepository.getApiToken();
+
+      final path = '/record/$recordId';
+
+      final response = await _dio.get(
+        path,
+        options: Options(
+          headers: {'Authorization': ' Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return Either.right(Record.fromJson(response.data));
+      } else {
+        return Either.left(response.statusCode);
+      }
+    } on DioError catch (e) {
+      log(e.toString());
+      return Either.left(e.response?.statusCode ?? 0);
+    }
+  }
+
+  Future<Either<ResponseStatus, Folder?>> createFolder(
       String name, String? parentFolderId) async {
     try {
       String? token = await _tokenRepository.getApiToken();
@@ -224,9 +254,9 @@ class FilesService {
         data: query,
       );
       if (response.statusCode == 200)
-        return ResponseStatus.ok;
+        return Either.right(Folder.fromJson(response.data));
       else
-        return ResponseStatus.failed;
+        return Either.left(ResponseStatus.failed);
     } on DioError catch (e) {
       print(e);
       if (e.response?.statusCode == 401 ||
@@ -235,9 +265,9 @@ class FilesService {
           e.response?.statusCode == 500 ||
           e.response?.statusCode == 502 ||
           e.response?.statusCode == 504) {
-        return ResponseStatus.failed;
+        return Either.left(ResponseStatus.failed);
       } else {
-        return ResponseStatus.noInternet;
+        return Either.left(ResponseStatus.noInternet);
       }
     }
   }
@@ -263,7 +293,8 @@ class FilesService {
     }
   }
 
-  Future<ResponseStatus> renameFolder(String newName, String folderId) async {
+  Future<Either<ResponseStatus, Folder>> renameFolder(
+      String newName, String folderId) async {
     try {
       String? token = await _tokenRepository.getApiToken();
 
@@ -284,9 +315,9 @@ class FilesService {
       );
 
       if (response.statusCode == 200)
-        return ResponseStatus.ok;
+        return Either.right(Folder.fromJson(response.data));
       else
-        return ResponseStatus.failed;
+        return Either.left(ResponseStatus.failed);
     } on DioError catch (e) {
       print(e);
       if (e.response?.statusCode == 401 ||
@@ -294,16 +325,17 @@ class FilesService {
           e.response?.statusCode == 500 ||
           e.response?.statusCode == 502 ||
           e.response?.statusCode == 504) {
-        return ResponseStatus.failed;
+        return Either.left(ResponseStatus.failed);
       } else if (e.response?.statusCode == 403) {
-        return ResponseStatus.notExecuted;
+        return Either.left(ResponseStatus.notExecuted);
       } else {
-        return ResponseStatus.noInternet;
+        return Either.left(ResponseStatus.noInternet);
       }
     }
   }
 
-  Future<ResponseStatus> renameRecord(String newName, String recordId) async {
+  Future<Either<ResponseStatus, Record>> renameRecord(
+      String newName, String recordId) async {
     try {
       String? token = await _tokenRepository.getApiToken();
 
@@ -324,9 +356,9 @@ class FilesService {
       );
 
       if (response.statusCode == 200) {
-        return ResponseStatus.ok;
+        return Either.right(Record.fromJson(response.data));
       } else {
-        return ResponseStatus.failed;
+        return Either.left(ResponseStatus.failed);
       }
     } on DioError catch (e) {
       print(e);
@@ -335,11 +367,11 @@ class FilesService {
           e.response?.statusCode == 500 ||
           e.response?.statusCode == 502 ||
           e.response?.statusCode == 504) {
-        return ResponseStatus.failed;
+        return Either.left(ResponseStatus.failed);
       } else if (e.response?.statusCode == 403) {
-        return ResponseStatus.notExecuted;
+        return Either.left(ResponseStatus.notExecuted);
       } else {
-        return ResponseStatus.noInternet;
+        return Either.left(ResponseStatus.noInternet);
       }
     }
   }

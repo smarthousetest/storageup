@@ -47,6 +47,8 @@ dependencies:
   objectbox_flutter_libs: any
   linked_scroll_controller: ^0.2.0
   event_bus: ^2.0.0
+  freezed_annotation: ^1.0.0
+  rxdart: ^0.27.3
 
   os_specification:
     git:

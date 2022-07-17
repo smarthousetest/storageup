@@ -20,8 +20,9 @@ import 'media_open_state.dart';
 
 @injectable
 class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
-  MediaOpenBloc(@Named('files_controller') this._controller)
-      : super(MediaOpenState()) {
+  MediaOpenBloc(
+    this._filesController,
+  ) : super(MediaOpenState()) {
     on((event, emit) async {
       if (event is MediaOpenPageOpened) {
         await _mapMediaOpenPageOpened(state, event, emit);
@@ -48,7 +49,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     return super.close();
   }
 
-  FilesController _controller;
+  FilesController _filesController;
   final LoadController _loadController = LoadController.instance;
   late var _loadObserver = Observer<LoadNotification>(
     (notification) {
@@ -89,18 +90,19 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     List<BaseObject> mediaFromFolder = [];
     _loadController.getState.registerObserver(_loadObserver);
     if (event.choosedFolder?.id == '-1') {
-      var allMediaFolders = await _controller.getMediaFolders(true);
+      var allMediaFolders = await _filesController.getMediaFolders(true);
 
       for (var folder in allMediaFolders!) {
         if (folder.id != '-1') {
-          var records = await _controller.getContentFromFolderById(folder.id);
+          var records =
+              await _filesController.getContentFromFolderById(folder.id);
 
-          mediaFromFolder.addAll(records);
+          //mediaFromFolder.addAll(records);
         }
       }
     } else {
-      mediaFromFolder = await _controller.getContentFromFolderById(
-          event.choosedFolder?.id ?? state.choosedMedia.id);
+      // mediaFromFolder = await _controller.getContentFromFolderById(
+      //     event.choosedFolder?.id ?? state.choosedMedia.id);
     }
     var box = await Hive.openBox(kPathDBName);
     var appPath = (await getApplicationDocumentsDirectory()).path;
@@ -229,19 +231,19 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
   ) async {
     var isFavorite = event.media.favorite;
     print(!isFavorite);
-    var res = await _controller.setFavorite(event.media, !isFavorite);
+    var res = await _filesController.setFavorite(event.media, !isFavorite);
     print(res);
     var mediaList =
-        await _controller.getContentFromFolderById(state.openedFolder.id);
+        await _filesController.getContentFromFolderById(state.openedFolder.id);
     // MediaInfo choosedMedia =
     //     await _controller.addToFavorites(event.mediaId, state.openedFolder.id);
     // List<MediaInfo> mediaFromFolder =
     //     await _controller.getMediaListFromFolder(state.openedFolder.id);
     emit(
       state.copyWith(
-        mediaFromFolder: mediaList,
-        choosedMedia:
-            mediaList.firstWhere((element) => element.id == event.media.id),
+        //mediaFromFolder: mediaList,
+        // choosedMedia:
+        //     mediaList.firstWhere((element) => element.id == event.media.id),
         status: FormzStatus.submissionSuccess,
       ),
     );
@@ -287,24 +289,25 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     MediaOpenDelete event,
     Emitter<MediaOpenState> emit,
   ) async {
-    await _controller.deleteFiles([
+    await _filesController.deleteFiles([
       state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId)
     ]);
 
     List<BaseObject> mediaFromFolder = [];
     if (state.openedFolder.id == '-1') {
-      var allMediaFolders = await _controller.getMediaFolders(true);
+      var allMediaFolders = await _filesController.getMediaFolders(true);
 
       for (var folder in allMediaFolders!) {
         if (folder.id != '-1') {
-          var records = await _controller.getContentFromFolderById(folder.id);
+          var records =
+              await _filesController.getContentFromFolderById(folder.id);
 
-          mediaFromFolder.addAll(records);
+          //  mediaFromFolder.addAll(records);
         }
       }
     } else {
-      mediaFromFolder =
-          await _controller.getContentFromFolderById(state.openedFolder.id);
+      // mediaFromFolder =
+      //     await _controller.getContentFromFolderById(state.openedFolder.id);
     }
 
     emit(
