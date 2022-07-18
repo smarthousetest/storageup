@@ -175,19 +175,6 @@ class _AuthViewState extends State<AuthView> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0, left: 50),
-                        child: Text(
-                          '© АО "НПП "Радар ммс"',
-                          style: TextStyle(
-                            color: _isSignIn
-                                ? theme.accentColor
-                                : theme.primaryColor,
-                            fontSize: 11,
-                            fontFamily: kNormalTextFontFamily,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
