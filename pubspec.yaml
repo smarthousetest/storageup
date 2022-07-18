@@ -66,6 +66,7 @@ dependencies:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
+  bloc_concurrency: ^0.2.0
 
 dev_dependencies:
   injectable_generator:

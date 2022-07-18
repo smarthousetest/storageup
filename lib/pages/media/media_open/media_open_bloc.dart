@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:cpp_native/models/base_object.dart';
+import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -14,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/extensions.dart';
 
 import 'media_open_event.dart';
 import 'media_open_state.dart';
@@ -22,7 +25,7 @@ import 'media_open_state.dart';
 class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
   MediaOpenBloc(@Named('files_controller') this._controller)
       : super(MediaOpenState()) {
-    on((event, emit) async {
+    on<MediaOpenEvent>((event, emit) async {
       if (event is MediaOpenPageOpened) {
         await _mapMediaOpenPageOpened(state, event, emit);
       } else if (event is MediaOpenChangeFavoriteState) {
@@ -39,8 +42,10 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         await _mapChangeDownloadStatus(state, event, emit);
       } else if (event is MediaOpenError) {
         _onError(event, state, emit);
+      } else if (event is MediaUpdateChoosedMedia) {
+        await _mapUpdateChoosedMedia(state, event, emit);
       }
-    });
+    }, transformer: sequential());
   }
   @override
   Future<void> close() {
@@ -64,17 +69,37 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
           path: downloadingFile.localPath.isEmpty
               ? null
               : downloadingFile.localPath,
+          loadPercent: downloadingFile.loadPercent.toDouble(),
         );
 
-        var indexOfChoosedFile = state.mediaFromFolder
-            .indexWhere((element) => element.id == choosedMedia.id);
-
-        final mediaFromFolder = List<Record>.from(state.mediaFromFolder);
-
-        mediaFromFolder[indexOfChoosedFile] = choosedMedia;
+        if (downloadingFile.loadPercent == 100) {
+          add(MediaUpdateChoosedMedia(media: choosedMedia));
+        }
       }
     },
   );
+
+  Future<void> _mapUpdateChoosedMedia(
+    MediaOpenState state,
+    MediaUpdateChoosedMedia event,
+    Emitter<MediaOpenState> emit,
+  ) async {
+    var indexOfChoosedFile = state.mediaFromFolder
+        .indexWhere((element) => element.id == event.media.id);
+
+    var downloadFolder = '${await getDownloadAppFolder()}${event.media.path}';
+    var newMedia = event.media.copyWith(path: downloadFolder);
+
+    final mediaFromFolder = List<Record>.from(state.mediaFromFolder);
+    print(mediaFromFolder != state.mediaFromFolder);
+
+    mediaFromFolder[indexOfChoosedFile] = newMedia;
+    emit(state.copyWith(
+      choosedMedia:
+          state.choosedMedia.id == newMedia.id ? newMedia : state.choosedMedia,
+      mediaFromFolder: mediaFromFolder,
+    ));
+  }
 
   Future<void> _mapMediaOpenPageOpened(
     MediaOpenState state,
@@ -86,24 +111,12 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
       add(MediaOpenError(ErrorType.noInternet));
     }
 
-    List<BaseObject> mediaFromFolder = [];
+    List<BaseObject> mediaFromFolder =
+        (event.choosedFolder as Folder).records ?? [];
     _loadController.getState.registerObserver(_loadObserver);
-    if (event.choosedFolder?.id == '-1') {
-      var allMediaFolders = await _controller.getMediaFolders(true);
 
-      for (var folder in allMediaFolders!) {
-        if (folder.id != '-1') {
-          var records = await _controller.getContentFromFolderById(folder.id);
-
-          mediaFromFolder.addAll(records);
-        }
-      }
-    } else {
-      mediaFromFolder = await _controller.getContentFromFolderById(
-          event.choosedFolder?.id ?? state.choosedMedia.id);
-    }
     var box = await Hive.openBox(kPathDBName);
-    var appPath = (await getApplicationDocumentsDirectory()).path;
+    var appPath = await getDownloadAppFolder();
 
     mediaFromFolder.forEach((record) {
       var path = box.get(record.id);
@@ -142,7 +155,6 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
       var id = event.choosedMedia.id;
       var isAllreadyLoading = _loadController.isCurrentFileDownloading(id);
       if (!isAllreadyLoading) {
-        await _loadController.discardDownloading();
         _loadController.downloadFile(fileId: id);
       }
 
@@ -317,34 +329,31 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     MediaOpenChangeChoosedMedia event,
     Emitter<MediaOpenState> emit,
   ) async {
-    print('new choosed image index is ${event.index}');
-    var choosedMedia = state.mediaFromFolder[event.index] as Record;
+    if (event.index >= 0 && event.index < state.mediaFromFolder.length) {
+      print('new choosed image index is ${event.index}');
 
-    emit(
-      state.copyWith(choosedMedia: choosedMedia),
-    );
+      var choosedMedia = state.mediaFromFolder[event.index] as Record;
 
-    // if (choosedMedia.path == null || choosedMedia.path!.isEmpty) {
-    //   var loadState = _loadController.getState;
-    //   if (loadState.downloadingFiles
-    //       .any((element) => element.id == choosedMedia.id)) {
-    //     _loadController.increasePriorityOfRecord(choosedMedia.id);
-    //   } else {
-    //     add(MediaOpenDownload(mediaId: choosedMedia.id));
-    //   }
-    // }
-    // if (choosedMedia.path != null) {
-    //   var loadState = _loadController.getState;
-    //   var file = File(choosedMedia.path!);
-    //   if (!file.existsSync()) {
-    //     if (loadState.downloadingFiles
-    //         .any((element) => element.id == choosedMedia.id)) {
-    //       _loadController.increasePriorityOfRecord(choosedMedia.id);
-    //     } else {
-    //       add(MediaOpenDownload(mediaId: choosedMedia.id));
-    //     }
-    //   }
-    // }
+      emit(
+        state.copyWith(choosedMedia: choosedMedia),
+      );
+
+      var box = await Hive.openBox(kPathDBName);
+
+      String path = box.get(choosedMedia.id, defaultValue: '');
+      if (path.isNotEmpty) {
+        var appPath = await getDownloadAppFolder();
+        var fullPathToFile = '$appPath/$path';
+        var isExisting = await File(fullPathToFile).exists();
+        if (isExisting) {
+          state.copyWith(choosedMedia: choosedMedia.copyWith(path: path));
+        } else {
+          _loadController.downloadFile(fileId: choosedMedia.id);
+        }
+      } else {
+        _loadController.downloadFile(fileId: choosedMedia.id);
+      }
+    }
   }
 
   Future<void> _mapChangeDownloadStatus(

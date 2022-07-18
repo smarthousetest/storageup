@@ -90,3 +90,12 @@ class MediaOpenChangeDownloadStatus extends MediaOpenEvent {
   @override
   List<Object?> get props => [media];
 }
+
+class MediaUpdateChoosedMedia extends MediaOpenEvent {
+  final Record media;
+
+  const MediaUpdateChoosedMedia({required this.media});
+
+  @override
+  List<Object?> get props => [media];
+}

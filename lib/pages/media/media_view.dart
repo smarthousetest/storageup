@@ -797,17 +797,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   child: GestureDetector(
                     onTap: () {
                       //_photoOpen(context, state.currentFolderRecords);
-                      // _onTapItem(state.currentFolderRecords, record, context,
-                      //     state.currentFolder);
-                      if (_indexObject != index) {
-                        setState(() {
-                          _indexObject = index;
-                        });
-                        startTimer();
-                        blocContext
-                            .read<MediaCubit>()
-                            .fileTapped(state.currentFolderRecords[index]);
-                      }
+                      _onTapItem(state.currentFolderRecords, record, context,
+                          state.currentFolder);
                     },
                     child: Listener(
                       onPointerDown: _onPointerDown,
