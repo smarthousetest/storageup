@@ -22,7 +22,7 @@ class _AlreadyHaveAccountState extends State<AlreadyHaveAccount> {
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
-          color: theme.accentColor,
+          color: theme.scaffoldBackgroundColor,
           image: DecorationImage(
             fit: BoxFit.fitWidth,
             image: AssetImage('assets/auth/cloudsLeft.png'),
@@ -72,7 +72,7 @@ class _AlreadyHaveAccountState extends State<AlreadyHaveAccount> {
                   translate.sign_in,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: theme.accentColor,
+                    color: theme.scaffoldBackgroundColor,
                     fontFamily: kNormalTextFontFamily,
                     fontSize: 17,
                   ),

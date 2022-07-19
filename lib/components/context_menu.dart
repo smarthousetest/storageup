@@ -28,102 +28,56 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
   @override
   Widget build(BuildContext context) {
     var mainColor = widget.theme.colorScheme.onSecondary;
-    int widgetIndex = -1;
     return ContextMenuArea(
       builder: (context) => [
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
+        ListTile(
+          iconColor: widget.theme.disabledColor,
+          textColor: widget.theme.disabledColor,
+          tileColor: widget.theme.primaryColor,
+          hoverColor: mainColor,
+          leading: SvgPicture.asset(
+            'assets/options/add_files.svg',
+            height: 20,
           ),
-          child: IntrinsicWidth(
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    widget.onTap(ContextMenuAction.addFiles);
-                  },
-                  child: MouseRegion(
-                    onEnter: (event) {
-                      setState(() {
-                        widgetIndex = 0;
-                      });
-                    },
-                    child: Container(
-                      width: 190,
-                      height: 40,
-                      color: widgetIndex == 0 ? mainColor : null,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/options/add_files.svg',
-                            height: 20,
-                            color: widgetIndex == 0
-                                ? widget.theme.splashColor
-                                : widget.theme.disabledColor,
-                          ),
-                          Container(
-                            width: 15,
-                          ),
-                          Text(widget.translate.add_files,
-                              style: TextStyle(
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 14,
-                                color: widgetIndex == 0
-                                    ? widget.theme.splashColor
-                                    : widget.theme.disabledColor,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    widget.onTap(ContextMenuAction.createFolder);
-                  },
-                  child: MouseRegion(
-                    onEnter: (event) {
-                      setState(() {
-                        widgetIndex = 1;
-                      });
-                    },
-                    child: Container(
-                      width: 190,
-                      height: 40,
-                      color: widgetIndex == 1 ? mainColor : null,
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/options/create_folder.svg',
-                            height: 20,
-                            color: widgetIndex == 1
-                                ? widget.theme.splashColor
-                                : widget.theme.disabledColor,
-                          ),
-                          Container(
-                            width: 15,
-                          ),
-                          Text(widget.translate.create_a_folder,
-                              style: TextStyle(
-                                fontFamily: kNormalTextFontFamily,
-                                fontSize: 14,
-                                color: widgetIndex == 1
-                                    ? widget.theme.splashColor
-                                    : widget.theme.disabledColor,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          title: Transform.translate(
+            offset: Offset(-20, 0),
+            child: Text(widget.translate.add_files,
+                softWrap: false,
+                overflow: TextOverflow.visible,
+                style: TextStyle(
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                )),
           ),
+          onTap: () {
+            widget.onTap(ContextMenuAction.addFiles);
+          },
         ),
+        Divider(
+          color: mainColor,
+          height: 1,
+        ),
+        ListTile(
+          iconColor: widget.theme.disabledColor,
+          textColor: widget.theme.disabledColor,
+          tileColor: widget.theme.primaryColor,
+          hoverColor: mainColor,
+          leading: SvgPicture.asset(
+            'assets/options/create_folder.svg',
+            height: 20,
+          ),
+          title: Transform.translate(
+            offset: Offset(-20, 0),
+            child: Text(widget.translate.create_a_folder,
+                style: TextStyle(
+                  fontFamily: kNormalTextFontFamily,
+                  fontSize: 14,
+                )),
+          ),
+          onTap: () {
+            widget.onTap(ContextMenuAction.createFolder);
+          },
+        )
       ],
       child: widget.child,
     );

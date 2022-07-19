@@ -200,10 +200,10 @@ class _SignInMainState extends State<SignInMain> {
                         side: BorderSide(
                             width: 1,
                             color: rememberMeNode.hasFocus
-                                ? theme.accentColor
+                                ? theme.scaffoldBackgroundColor
                                 : Colors.transparent),
                         splashRadius: 0,
-                        checkColor: theme.accentColor,
+                        checkColor: theme.scaffoldBackgroundColor,
                         activeColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6.0)),

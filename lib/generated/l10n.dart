@@ -2466,19 +2466,6 @@ class S {
     );
   }
 
-  /// `{count,plural, =0{0 files} =1{{count} file} other{{count} files}}`
-  String many_files(num count) {
-    return Intl.plural(
-      count,
-      zero: '0 files',
-      one: '$count file',
-      other: '$count files',
-      name: 'many_files',
-      desc: '',
-      args: [count],
-    );
-  }
-
   /// `{count,plural, =0{0 hours} =1{{count} hour} other{{count} hours}}`
   String many_hours(num count) {
     return Intl.plural(
@@ -2522,6 +2509,19 @@ class S {
       name: 'we_validating_your_keeper',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `{count,plural, =0{0 files} =1{{count} file} other{{count} files}}`
+  String many_files(num count) {
+    return Intl.plural(
+      count,
+      zero: '0 files',
+      one: '$count file',
+      other: '$count files',
+      name: 'many_files',
+      desc: '',
+      args: [count],
     );
   }
 
@@ -2600,6 +2600,26 @@ class S {
     return Intl.message(
       'File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)',
       name: 'wrong_path',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You can request the link again via`
+  String get email_send {
+    return Intl.message(
+      'You can request the link again via',
+      name: 'email_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `sec`
+  String get sec {
+    return Intl.message(
+      'sec',
+      name: 'sec',
       desc: '',
       args: [],
     );

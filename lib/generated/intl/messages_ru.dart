@@ -155,6 +155,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Для подтверждения перейдите по ссылке внутри письма."),
         "email_confirming_reg":
             MessageLookupByLibrary.simpleMessage("Подтверждение e-mail адреса"),
+        "email_send": MessageLookupByLibrary.simpleMessage(
+            "Запросить ссылку повторно можно через"),
         "email_successfully": MessageLookupByLibrary.simpleMessage(
             "Ваш e-mail адрес успешно подтверждён"),
         "english": MessageLookupByLibrary.simpleMessage("Английский"),
@@ -339,6 +341,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Русский"),
         "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
+        "sec": MessageLookupByLibrary.simpleMessage("сек"),
         "seconds": m14,
         "select": MessageLookupByLibrary.simpleMessage("Выбрать"),
         "select_folder": MessageLookupByLibrary.simpleMessage(

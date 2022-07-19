@@ -153,6 +153,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "To confirm, follow the link inside the letter."),
         "email_confirming_reg": MessageLookupByLibrary.simpleMessage(
             "Confirmation of e-mail address"),
+        "email_send": MessageLookupByLibrary.simpleMessage(
+            "You can request the link again via"),
         "email_successfully": MessageLookupByLibrary.simpleMessage(
             "Your e-mail address has been successfully confirmed"),
         "english": MessageLookupByLibrary.simpleMessage("English"),
@@ -336,6 +338,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "russian": MessageLookupByLibrary.simpleMessage("Russian"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
+        "sec": MessageLookupByLibrary.simpleMessage("sec"),
         "seconds": m14,
         "select": MessageLookupByLibrary.simpleMessage("Select"),
         "select_folder": MessageLookupByLibrary.simpleMessage(

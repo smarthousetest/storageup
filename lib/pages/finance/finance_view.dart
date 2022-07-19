@@ -13,7 +13,6 @@ import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/finance/finance_bloc.dart';
 import 'package:storageup/pages/finance/finance_event.dart';
 import 'package:storageup/pages/finance/finance_state.dart';
-import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 
