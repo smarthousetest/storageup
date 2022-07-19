@@ -22,9 +22,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    player = Player(
-      id: widget.videoPath.hashCode,
-    );
+    player = Player(id: widget.videoPath.hashCode, registerTexture: false);
     player.open(Media.file(File(widget.videoPath)));
   }
 
@@ -36,13 +34,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Video(
-      fillColor: Colors.transparent,
+    return NativeVideo(
       fit: BoxFit.contain,
       player: player,
       scale: 1.0,
       showControls: true,
-      showFullscreenButton: true,
     );
   }
 }

@@ -28,7 +28,7 @@ void main() async {
 
   await configureInjection();
   WidgetsFlutterBinding.ensureInitialized();
-  await DartVLC.initialize();
+  await DartVLC.initialize(useFlutterNativeView: true);
   runApp(new StateContainer(child: new MyApp()));
 }
 
