@@ -32,81 +32,76 @@ class _MediaViewerState extends State<MediaViewer> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Stack(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          children: [
+            Expanded(child: _imageView(context)),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: _previewList(),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  FractionallySizedBox _controlElements(BuildContext context) {
+    return FractionallySizedBox(
+      heightFactor: 1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Expanded(child: _imageView(context)),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: _previewList(),
-                )
-              ],
+          Padding(
+            padding: const EdgeInsets.only(left: 30.0),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  if (_mainListPositionsListener.itemPositions.value.isEmpty) {
+                    print("MainListPositionsListener is empty");
+                    return;
+                  }
+
+                  print(_mainListPositionsListener.itemPositions.value);
+                  var pos = _mainListPositionsListener
+                      .itemPositions.value.first.index;
+
+                  _mainListScrollController.scrollTo(
+                      index: pos - 1, duration: Duration(milliseconds: 200));
+                  context
+                      .read<MediaOpenBloc>()
+                      .add(MediaOpenChangeChoosedMedia(index: pos - 1));
+                },
+                child: SvgPicture.asset('assets/options/arrow_left.svg'),
+              ),
             ),
           ),
-          FractionallySizedBox(
-            heightFactor: 1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 30.0),
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (_mainListPositionsListener
-                            .itemPositions.value.isEmpty) {
-                          print("MainListPositionsListener is empty");
-                          return;
-                        }
+          Padding(
+            padding: const EdgeInsets.only(right: 30.0),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  if (_mainListPositionsListener.itemPositions.value.isEmpty) {
+                    print("MainListPositionsListener is empty");
+                    return;
+                  }
 
-                        print(_mainListPositionsListener.itemPositions.value);
-                        var pos = _mainListPositionsListener
-                            .itemPositions.value.first.index;
+                  print(_mainListPositionsListener.itemPositions.value);
+                  var pos = _mainListPositionsListener
+                      .itemPositions.value.first.index;
 
-                        _mainListScrollController.scrollTo(
-                            index: pos - 1,
-                            duration: Duration(milliseconds: 200));
-                        context
-                            .read<MediaOpenBloc>()
-                            .add(MediaOpenChangeChoosedMedia(index: pos - 1));
-                      },
-                      child: SvgPicture.asset('assets/options/arrow_left.svg'),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 30.0),
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (_mainListPositionsListener
-                            .itemPositions.value.isEmpty) {
-                          print("MainListPositionsListener is empty");
-                          return;
-                        }
-
-                        print(_mainListPositionsListener.itemPositions.value);
-                        var pos = _mainListPositionsListener
-                            .itemPositions.value.first.index;
-
-                        _mainListScrollController.scrollTo(
-                            index: pos + 1,
-                            duration: Duration(milliseconds: 200));
-                        context
-                            .read<MediaOpenBloc>()
-                            .add(MediaOpenChangeChoosedMedia(index: pos + 1));
-                      },
-                      child: SvgPicture.asset('assets/options/arrow_right.svg'),
-                    ),
-                  ),
-                ),
-              ],
+                  _mainListScrollController.scrollTo(
+                      index: pos + 1, duration: Duration(milliseconds: 200));
+                  context
+                      .read<MediaOpenBloc>()
+                      .add(MediaOpenChangeChoosedMedia(index: pos + 1));
+                },
+                child: SvgPicture.asset('assets/options/arrow_right.svg'),
+              ),
             ),
           ),
         ],
@@ -122,58 +117,64 @@ class _MediaViewerState extends State<MediaViewer> {
       }
 
       return state.isInitialized
-          ? ScrollConfiguration(
-              behavior: NoColorOverscrollBehavior(),
-              child: ScrollablePositionedList.builder(
-                shrinkWrap: false,
-                scrollDirection: Axis.horizontal,
-                itemCount: state.mediaFromFolder.length,
-                itemScrollController: _mainListScrollController,
-                initialScrollIndex: state.mediaFromFolder.indexWhere(
-                    (element) => element.id == state.choosedMedia.id),
-                itemPositionsListener: _mainListPositionsListener,
-                physics: PageScrollPhysics(),
-                itemBuilder: (context, index) {
-                  var media = state.mediaFromFolder[index] as Record;
+          ? Stack(
+              children: [
+                ScrollConfiguration(
+                  behavior: NoColorOverscrollBehavior(),
+                  child: ScrollablePositionedList.builder(
+                    shrinkWrap: false,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: state.mediaFromFolder.length,
+                    itemScrollController: _mainListScrollController,
+                    initialScrollIndex: state.mediaFromFolder.indexWhere(
+                        (element) => element.id == state.choosedMedia.id),
+                    itemPositionsListener: _mainListPositionsListener,
+                    physics: PageScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      var media = state.mediaFromFolder[index] as Record;
 
-                  String? mediaPath = media.path;
-                  var isExisting = File(mediaPath ?? '').existsSync();
+                      String? mediaPath = media.path;
+                      var isExisting = File(mediaPath ?? '').existsSync();
 
-                  print('Building item $index exists $isExisting');
-                  // return Container(
-                  //   alignment: Alignment.center,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   child: Text('Item ${}'),
-                  // )
+                      print('Building item $index exists $isExisting');
+                      // return Container(
+                      //   alignment: Alignment.center,
+                      //   width: MediaQuery.of(context).size.width,
+                      //   child: Text('Item ${}'),
+                      // )
 
-                  if (!isExisting) {
-                    return Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      child: Text('Building item $index exists $isExisting'),
-                    );
-                  }
+                      if (!isExisting) {
+                        return Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child:
+                              Text('Building item $index exists $isExisting'),
+                        );
+                      }
 
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        _buildMedia(media, mediaPath, isExisting),
-                        (media.path != null &&
-                                    media.path?.isNotEmpty == true) ||
-                                (media.loadPercent != null)
-                            ? Container()
-                            : Center(
-                                child: CircularProgressIndicator(
-                                  value: media.loadPercent,
-                                ),
-                              ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            _buildMedia(media, mediaPath, isExisting),
+                            (media.path != null &&
+                                        media.path?.isNotEmpty == true) ||
+                                    (media.loadPercent != null)
+                                ? Container()
+                                : Center(
+                                    child: CircularProgressIndicator(
+                                      value: media.loadPercent,
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                _controlElements(context),
+              ],
             )
           : Container(
               width: double.infinity,
