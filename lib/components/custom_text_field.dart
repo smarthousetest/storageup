@@ -58,7 +58,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               color: widget.invalid
                   ? theme.errorColor
                   : isEnabled
-                      ? theme.accentColor
+                      ? theme.scaffoldBackgroundColor
                       : theme.colorScheme.onPrimary)
           : BorderSide(color: Colors.transparent),
       borderRadius: fCustomTextFormBorderRadius,

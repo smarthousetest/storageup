@@ -272,7 +272,7 @@
     "many_hours": "{count,plural, =0{0 hours} =1{{count} hour} other{{count} hours}}",
     "many_minutes": "{count,plural, =0{0 minutes} =1{{count} minute} other{{count} minutes}}",
     "remaining_validation_time": "Remaining check time",
-    "we_validating_your_keeper": "At this point, your receiving device is being tested for reliability. This check can take up to 3 hours."
+    "we_validating_your_keeper": "At this point, your receiving device is being tested for reliability. This check can take up to 3 hours.",
     "many_files": "{count,plural, =0{0 files} =1{{count} file} other{{count} files}}",
     "add_files": "Add files",
     "change_place": "Change place",
@@ -281,5 +281,7 @@
     "not_selected": "Not selected",
     "sell_space_no_internet_part_1": "There is no internet connection",
     "sell_space_no_internet_part_2": "Please check your internet connection",
-    "wrong_path": "File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)"
+    "wrong_path": "File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)",
+    "email_send": "You can request the link again via",
+    "sec": "sec"
 }

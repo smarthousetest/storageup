@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storageup/constants.dart';
@@ -6,6 +8,29 @@ import 'package:storageup/pages/auth/auth_bloc.dart';
 import 'package:storageup/pages/auth/auth_event.dart';
 import 'package:storageup/pages/auth/auth_state.dart';
 import 'package:storageup/utilities/injection.dart';
+
+class TimerSave {
+  static Timer? timer;
+  static int timerTime = 30;
+  static Function()? onTick;
+
+  static void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (timerTime == 1) {
+          timer.cancel();
+          timerTime = 30;
+          onTick?.call();
+        } else {
+          timerTime--;
+          onTick?.call();
+        }
+      },
+    );
+  }
+}
 
 class NotConfirmedEmail extends StatefulWidget {
   NotConfirmedEmail({
@@ -23,14 +48,26 @@ class NotConfirmedEmail extends StatefulWidget {
 
 class _NotConfirmedEmailState extends State<NotConfirmedEmail> {
   S translate = getIt<S>();
+  bool get canPress => TimerSave.timerTime == 30;
 
   @override
+  void initState() {
+    TimerSave.onTick = () => setState(() {});
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    TimerSave.onTick = null;
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
             child: Container(),
@@ -97,27 +134,55 @@ class _NotConfirmedEmailState extends State<NotConfirmedEmail> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 240, top: 97),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () =>
-                    context.read<AuthBloc>().add(AuthSendEmailVerify()),
-                child: Text(
-                  translate.to_send_letter,
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontFamily: kNormalTextFontFamily,
-                    fontSize: 17.0,
-                    color: theme.splashColor,
+          canPress
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 240, top: 40),
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                        onTap: (() {
+                          if (canPress == true) {
+                            context.read<AuthBloc>().add(AuthSendEmailVerify());
+                            TimerSave.startTimer();
+                            setState(() {});
+                          }
+                        }),
+                        child: Text(
+                          translate.to_send_letter,
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 17.0,
+                            color: theme.splashColor,
+                          ),
+                        )),
                   ),
+                )
+              : Container(
+                  padding: const EdgeInsets.only(
+                      bottom: 10.0, left: 190, right: 35, top: 40),
+                  child: Text(
+                      translate.email_send +
+                          "\n${TimerSave.timerTime}" +
+                          translate.sec,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: theme.splashColor,
+                        fontFamily: kNormalTextFontFamily,
+                        fontSize: 17,
+                      )),
                 ),
-              ),
-            ),
-          ),
+          canPress
+              ? Expanded(
+                  child: Container(),
+                  flex: 3,
+                )
+              : Expanded(
+                  child: Container(),
+                  flex: 2,
+                ),
           Padding(
-            padding: const EdgeInsets.only(left: 110, top: 131),
+            padding: const EdgeInsets.only(left: 110, top: 110),
             child: ElevatedButton(
               onPressed: widget.onPressed,
               style: ElevatedButton.styleFrom(

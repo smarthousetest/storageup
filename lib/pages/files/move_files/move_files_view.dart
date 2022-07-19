@@ -202,14 +202,14 @@ class _MoveFileState extends State<MoveFileView> {
                                               child: Image.asset(
                                                 'assets/file_page/plus.png',
                                                 color: Theme.of(context)
-                                                    .accentColor,
+                                                    .scaffoldBackgroundColor,
                                               ),
                                             ),
                                             Text(
                                               translate.create,
                                               style: TextStyle(
                                                 color: Theme.of(context)
-                                                    .accentColor,
+                                                    .scaffoldBackgroundColor,
                                                 fontSize: 17,
                                                 fontFamily:
                                                     kNormalTextFontFamily,
@@ -289,13 +289,13 @@ class _MoveFileState extends State<MoveFileView> {
                                                 ),
                                                 style: ElevatedButton.styleFrom(
                                                   primary: Theme.of(context)
-                                                      .accentColor,
+                                                      .scaffoldBackgroundColor,
                                                   fixedSize: Size(155, 42),
                                                   elevation: 0,
                                                   side: BorderSide(
                                                     style: BorderStyle.solid,
                                                     color: Theme.of(context)
-                                                        .accentColor,
+                                                        .scaffoldBackgroundColor,
                                                   ),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:

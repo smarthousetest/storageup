@@ -20,7 +20,8 @@ class PasswordTextField extends StatefulWidget {
     FocusNode? focusNode,
     List<TextInputFormatter>? inputFormatters,
   })  : this.focusNode = focusNode ?? FocusNode(),
-        this.inputFormatters = inputFormatters ?? [FilteringTextInputFormatter.deny(RegExp('[ ]'))];
+        this.inputFormatters = inputFormatters ??
+            [FilteringTextInputFormatter.deny(RegExp('[ ]'))];
 
   final bool autofocus;
 
@@ -57,7 +58,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               color: widget.invalid
                   ? theme.errorColor
                   : isEnabled
-                      ? theme.accentColor
+                      ? theme.scaffoldBackgroundColor
                       : theme.colorScheme.onPrimary)
           : BorderSide(color: Colors.transparent),
       borderRadius: fCustomTextFormBorderRadius,
@@ -179,7 +180,10 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       child: Text(
         widget.invalid ? widget.errorMessage : '',
         textAlign: TextAlign.left,
-        style: TextStyle(fontFamily: kNormalTextFontFamily, fontSize: 14.0, color: Theme.of(context).errorColor),
+        style: TextStyle(
+            fontFamily: kNormalTextFontFamily,
+            fontSize: 14.0,
+            color: Theme.of(context).errorColor),
       ),
     );
   }

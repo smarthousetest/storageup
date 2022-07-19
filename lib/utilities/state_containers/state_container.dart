@@ -25,7 +25,7 @@ class StateContainer extends StatefulWidget {
 class StateContainerState extends State<StateContainer> {
   var _choosedPage = ChosenPage.home;
   var _locale = Locale('ru');
-  var localeChangedController = StreamController<Locale>();
+  var localeChangedController = StreamController<Locale>.broadcast();
   ChosenPage get choosedPage => _choosedPage;
   Locale get locale => _locale;
 

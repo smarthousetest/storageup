@@ -255,7 +255,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide: BorderSide(
                                       color: wrongOldPass
-                                          ? Theme.of(context).accentColor
+                                          ? Theme.of(context)
+                                              .scaffoldBackgroundColor
                                           : Theme.of(context).errorColor,
                                       width: 1.5,
                                     ),
@@ -401,7 +402,8 @@ class _ButtonTemplateState extends State<BlurChangePassword> {
                                               BorderRadius.circular(10.0),
                                           borderSide: BorderSide(
                                             color: hintBorder1
-                                                ? Theme.of(context).accentColor
+                                                ? Theme.of(context)
+                                                    .scaffoldBackgroundColor
                                                 : Theme.of(context).errorColor,
                                             width: 1.5,
                                           ),

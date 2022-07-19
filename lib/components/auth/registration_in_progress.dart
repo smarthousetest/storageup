@@ -226,10 +226,10 @@ class _RegistrationInProgressState extends State<RegistrationInProgress> {
                             side: BorderSide(
                                 width: 1,
                                 color: signUpTermsOfUse.hasFocus
-                                    ? theme.accentColor
+                                    ? theme.scaffoldBackgroundColor
                                     : Colors.transparent),
                             splashRadius: 0,
-                            checkColor: theme.accentColor,
+                            checkColor: theme.scaffoldBackgroundColor,
                             activeColor: Colors.transparent,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6.0)),
@@ -266,7 +266,7 @@ class _RegistrationInProgressState extends State<RegistrationInProgress> {
                     //           : theme.errorColor,
                     //     ),
                     //     splashRadius: 0,
-                    //     checkColor: theme.accentColor,
+                    //     checkColor: theme.scaffoldBackgroundColor,
                     //     activeColor: theme.primaryColor,
                     //     shape: RoundedRectangleBorder(
                     //         borderRadius: BorderRadius.circular(6.0)),
@@ -293,7 +293,7 @@ class _RegistrationInProgressState extends State<RegistrationInProgress> {
                                 style: TextStyle(
                                   fontFamily: kNormalTextFontFamily,
                                   fontSize: 16,
-                                  color: theme.accentColor,
+                                  color: theme.scaffoldBackgroundColor,
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -366,7 +366,7 @@ class _RegistrationInProgressState extends State<RegistrationInProgress> {
               //     translate.register,
               //     style: TextStyle(
               //       color: _isRegisterFieldsValid(state)
-              //           ? theme.accentColor
+              //           ? theme.scaffoldBackgroundColor
               //           : theme.textTheme.headline1?.color,
               //       fontFamily: kNormalTextFontFamily,
               //       fontSize: 20,

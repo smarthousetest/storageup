@@ -26,7 +26,7 @@ class _SignInWelcomeState extends State<SignInWelcome> {
     return Container(
       width: widthOfContainer,
       decoration: BoxDecoration(
-          color: theme.accentColor,
+          color: theme.scaffoldBackgroundColor,
           image: DecorationImage(
             fit: BoxFit.fitWidth,
             image: AssetImage('assets/auth/oblakaRight.png'),
@@ -91,7 +91,7 @@ class _SignInWelcomeState extends State<SignInWelcome> {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 style: TextStyle(
-                  color: theme.accentColor,
+                  color: theme.scaffoldBackgroundColor,
                   fontFamily: kNormalTextFontFamily,
                   //height: 1.176470588235294,
                   fontSize: 17,

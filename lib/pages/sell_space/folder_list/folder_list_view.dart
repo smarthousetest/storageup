@@ -1,3 +1,4 @@
+import 'package:cpp_native/cpp_native.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -258,9 +259,17 @@ class _ButtonTemplateState extends State<FolderList> {
                                   break;
                                 }
                               }
+                              var path = DiskSpaceController(
+                                  pathToDir: changeKeeper.dirPath);
+                              int result = await path.getAvailableDiskSpace();
+
+                              double maxCountOfBytes =
+                                  (result / GB).roundToDouble();
+
                               SpaceInheritedWidget.of(context)
                                   .state
-                                  .changePageIndexChangeKeeper(1, changeKeeper);
+                                  .changePageIndexChangeKeeper(
+                                      1, changeKeeper, maxCountOfBytes);
                             } else {
                               var result = await showDialog(
                                 context: context,

@@ -36,6 +36,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   S translate = getIt<S>();
   String dirPath = '';
   double _currentSliderValue = 32;
+  double maxSpace = 0;
   int countGbSpace = 0;
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
@@ -52,12 +53,14 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     _searchFieldWidth = width - _rowPadding * 4 - 274 - 222;
   }
 
-  changePageIndexChangeKeeper(int newIndex, DownloadLocation keeper) {
+  changePageIndexChangeKeeper(
+      int newIndex, DownloadLocation keeper, maxCountOfGb) {
     setState(() {
       index = newIndex;
       changeKeeper = keeper;
       myController.text = keeper.name;
       _currentSliderValue = changeKeeper!.countGb.toDouble();
+      maxSpace = maxCountOfGb;
     });
   }
 
@@ -798,9 +801,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   .read<SpaceBloc>()
                   .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
             }
-
-            var maxSpace = (state.availableSpace / GB).round();
-            //print(maxSpace);
+            maxSpace = (state.availableSpace / GB).roundToDouble();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -979,7 +980,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               child: Text(
                                 translate.max_storage +
                                     translate.gb(
-                                      maxSpace,
+                                      maxSpace.toInt(),
                                     ),
                                 style: TextStyle(
                                   color: Theme.of(context)
@@ -1033,8 +1034,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 ? maxSpace > 32
                                     ? maxSpace.roundToDouble()
                                     : 180
-                                : changeKeeper!.countGb.roundToDouble() +
-                                    maxSpace.roundToDouble(),
+                                : maxSpace.roundToDouble(),
                             value: _currentSliderValue,
                             onChanged: maxSpace < 32
                                 ? null
@@ -1089,10 +1089,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 } else {
                                   var minSpace = maxSpace > 32 ? 32 : 0;
                                   setState(() {
-                                    if (_currentSliderValue.toInt() >
-                                        minSpace) {
-                                      _currentSliderValue =
-                                          _currentSliderValue - 1;
+                                    if (changeKeeper == null) {
+                                      if (_currentSliderValue.toInt() >
+                                          minSpace) {
+                                        _currentSliderValue =
+                                            _currentSliderValue - 1;
+                                      }
+                                    } else {
+                                      if (_currentSliderValue.toInt() >
+                                          changeKeeper!.countGb) {
+                                        _currentSliderValue =
+                                            _currentSliderValue.toInt() - 1;
+                                      }
                                     }
                                   });
                                 }
@@ -1137,7 +1145,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   setState(() {
                                     if (_currentSliderValue.toInt() < max) {
                                       _currentSliderValue =
-                                          _currentSliderValue + 1;
+                                          _currentSliderValue.toInt() + 1;
                                     }
                                   });
                                 }
@@ -1580,7 +1588,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                               child: Text(
                                 translate.max_storage +
                                     translate.gb(
-                                      maxSpace,
+                                      maxSpace.toInt(),
                                     ),
                                 style: TextStyle(
                                   color: Theme.of(context)
@@ -1634,8 +1642,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 ? maxSpace > 32
                                     ? maxSpace.roundToDouble()
                                     : 180
-                                : changeKeeper!.countGb.roundToDouble() +
-                                    maxSpace.roundToDouble(),
+                                : maxSpace.roundToDouble(),
                             value: _currentSliderValue,
                             onChanged: maxSpace < 32
                                 ? null
@@ -1690,10 +1697,18 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 } else {
                                   var minSpace = maxSpace > 32 ? 32 : 0;
                                   setState(() {
-                                    if (_currentSliderValue.toInt() >
-                                        minSpace) {
-                                      _currentSliderValue =
-                                          _currentSliderValue - 1;
+                                    if (changeKeeper == null) {
+                                      if (_currentSliderValue.toInt() >
+                                          minSpace) {
+                                        _currentSliderValue =
+                                            _currentSliderValue - 1;
+                                      }
+                                    } else {
+                                      if (_currentSliderValue.toInt() >
+                                          changeKeeper!.countGb) {
+                                        _currentSliderValue =
+                                            _currentSliderValue.toInt() - 1;
+                                      }
                                     }
                                   });
                                 }
@@ -1738,7 +1753,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                   setState(() {
                                     if (_currentSliderValue.toInt() < max) {
                                       _currentSliderValue =
-                                          _currentSliderValue + 1;
+                                          _currentSliderValue.toInt() + 1;
                                     }
                                   });
                                 }

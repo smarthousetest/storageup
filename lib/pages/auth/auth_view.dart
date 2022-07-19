@@ -155,7 +155,7 @@ class _AuthViewState extends State<AuthView> {
                             child: SvgPicture.asset(
                               'assets/auth/logo.svg',
                               color: _isSignIn
-                                  ? theme.accentColor
+                                  ? theme.scaffoldBackgroundColor
                                   : theme.primaryColor,
                             ),
                           ),
@@ -169,7 +169,7 @@ class _AuthViewState extends State<AuthView> {
                               fontWeight: FontWeight.w900,
                               fontSize: 24,
                               color: _isSignIn
-                                  ? theme.accentColor
+                                  ? theme.scaffoldBackgroundColor
                                   : theme.primaryColor,
                             ),
                           ),
