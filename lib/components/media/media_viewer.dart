@@ -72,14 +72,14 @@ class _MediaViewerState extends State<MediaViewer> {
                       int pos = _mainListPositionsListener
                           .itemPositions.value.first.index;
                       int newPosition = pos - 1;
-                      if (newPosition < 0 &&
-                          newPosition >= state.mediaFromFolder.length)
+                      if (newPosition >= 0 &&
+                          newPosition < state.mediaFromFolder.length)
                         _mainListScrollController.scrollTo(
-                            index: pos - 1,
+                            index: newPosition,
                             duration: Duration(milliseconds: 200));
                       context
                           .read<MediaOpenBloc>()
-                          .add(MediaOpenChangeChoosedMedia(index: pos - 1));
+                          .add(MediaOpenChangeChoosedMedia(index: newPosition));
                     },
                     child: SvgPicture.asset('assets/options/arrow_left.svg'),
                   ),
@@ -98,15 +98,17 @@ class _MediaViewerState extends State<MediaViewer> {
                       }
 
                       print(_mainListPositionsListener.itemPositions.value);
-                      var pos = _mainListPositionsListener
+                      int pos = _mainListPositionsListener
                           .itemPositions.value.first.index;
-
-                      _mainListScrollController.scrollTo(
-                          index: pos + 1,
-                          duration: Duration(milliseconds: 200));
+                      int newPosition = pos + 1;
+                      if (newPosition >= 0 &&
+                          newPosition < state.mediaFromFolder.length)
+                        _mainListScrollController.scrollTo(
+                            index: newPosition,
+                            duration: Duration(milliseconds: 200));
                       context
                           .read<MediaOpenBloc>()
-                          .add(MediaOpenChangeChoosedMedia(index: pos + 1));
+                          .add(MediaOpenChangeChoosedMedia(index: newPosition));
                     },
                     child: SvgPicture.asset('assets/options/arrow_right.svg'),
                   ),
@@ -200,6 +202,7 @@ class _MediaViewerState extends State<MediaViewer> {
   Widget _previewList() {
     return BlocBuilder<MediaOpenBloc, MediaOpenState>(
       builder: (context, state) {
+        print('Bloc build');
         if (!state.isInitialized) {
           return Container(
             height: 64,
@@ -208,77 +211,71 @@ class _MediaViewerState extends State<MediaViewer> {
 
         return Container(
           height: 64,
-          child: ScrollablePositionedList.builder(
+          child: ListView.builder(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               itemCount: state.mediaFromFolder.length,
-              itemPositionsListener: _previewListItemPositionsListener,
-              itemScrollController: _previewListScrollController,
-              initialScrollIndex: state.mediaFromFolder
-                  .indexWhere((element) => element.id == state.choosedMedia.id),
               itemBuilder: (context, index) {
-                if (index < 0) {
-                  return SizedBox();
-                }
-
-                var media = state.mediaFromFolder[index] as Record;
-
-                var mediaMiniatureAdress = '';
-                if (media.thumbnail != null && media.thumbnail!.isNotEmpty) {
-                  mediaMiniatureAdress = media.thumbnail!.first.publicUrl ?? '';
-                }
-
-                final isVideo = media.mimeType?.contains('video') ?? false;
-
-                return Padding(
-                  padding: const EdgeInsets.all(1.0),
-                  child: GestureDetector(
-                      onTap: () {
-                        context.read<MediaOpenBloc>().add(
-                              MediaOpenChangeChoosedMedia(index: index),
-                            );
-                        _mainListScrollController.scrollTo(
-                          index: index,
-                          duration: Duration(milliseconds: 200),
-                        );
-                      },
-                      child: mediaMiniatureAdress.isEmpty
-                          ? Image.asset(
-                              isVideo
-                                  ? 'assets/file_icons/video.png'
-                                  : 'assets/file_icons/image.png',
-                              fit: BoxFit.fitHeight,
-                              // width: MediaQuery.of(context).size.width - 2,
-                            )
-                          : CachedNetworkImage(
-                              imageUrl: mediaMiniatureAdress,
-                              fit: BoxFit.contain,
-                              errorWidget: (context, obj, st) =>
-                                  _getImagePlaceholder(isVideo),
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) {
-                                return Center(
-                                  child: Container(
-                                    color: Colors.black38,
-                                  ),
-                                );
-                              },
-                            )
-                      // Image.asset(
-                      //   'assets/test_image2.png',
-                      //   //state.mediaFromFolder[index].imagePreview,
-                      //   fit: BoxFit.fitHeight,
-                      // ),
-                      ),
-                );
-                // } else
-                //   return SizedBox(
-                //     width: MediaQuery.of(context).size.width / 5,
-                //     child: Container(),
-                //   );
+                return _buildPreviewItem(state, index);
               }),
         );
       },
+    );
+  }
+
+  Widget _buildPreviewItem(MediaOpenState state, int index) {
+    if (index < 0) {
+      return SizedBox();
+    }
+
+    var media = state.mediaFromFolder[index] as Record;
+
+    var mediaMiniatureAdress = '';
+    if (media.thumbnail != null && media.thumbnail!.isNotEmpty) {
+      mediaMiniatureAdress = media.thumbnail!.first.publicUrl ?? '';
+    }
+
+    final isVideo = media.mimeType?.contains('video') ?? false;
+
+    return Padding(
+      padding: const EdgeInsets.all(1.0),
+      child: GestureDetector(
+          onTap: () {
+            context.read<MediaOpenBloc>().add(
+                  MediaOpenChangeChoosedMedia(index: index),
+                );
+            _mainListScrollController.scrollTo(
+              index: index,
+              duration: Duration(milliseconds: 200),
+            );
+          },
+          child: mediaMiniatureAdress.isEmpty
+              ? Image.asset(
+                  isVideo
+                      ? 'assets/file_icons/video.png'
+                      : 'assets/file_icons/image.png',
+                  fit: BoxFit.fitHeight,
+                  // width: MediaQuery.of(context).size.width - 2,
+                )
+              : CachedNetworkImage(
+                  imageUrl: mediaMiniatureAdress,
+                  fit: BoxFit.contain,
+                  errorWidget: (context, obj, st) =>
+                      _getImagePlaceholder(isVideo),
+                  progressIndicatorBuilder: (context, url, downloadProgress) {
+                    return Center(
+                      child: Container(
+                        color: Colors.black38,
+                      ),
+                    );
+                  },
+                )
+          // Image.asset(
+          //   'assets/test_image2.png',
+          //   //state.mediaFromFolder[index].imagePreview,
+          //   fit: BoxFit.fitHeight,
+          // ),
+          ),
     );
   }
 
