@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';

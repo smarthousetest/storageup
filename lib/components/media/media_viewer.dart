@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:storageup/components/media/video_player_widget.dart';
 import 'package:storageup/pages/media/media_open/media_open_bloc.dart';
 import 'package:storageup/pages/media/media_open/media_open_event.dart';
 import 'package:storageup/pages/media/media_open/media_open_state.dart';
@@ -31,7 +34,18 @@ class _MediaViewerState extends State<MediaViewer> {
     return Expanded(
       child: Stack(
         children: [
-          _imageView(context),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                Expanded(child: _imageView(context)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 20),
+                  child: _previewList(),
+                )
+              ],
+            ),
+          ),
           FractionallySizedBox(
             heightFactor: 1,
             child: Row(
@@ -110,91 +124,54 @@ class _MediaViewerState extends State<MediaViewer> {
       return state.isInitialized
           ? ScrollConfiguration(
               behavior: NoColorOverscrollBehavior(),
-              child: NotificationListener(
-                child: ScrollablePositionedList.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.mediaFromFolder.length,
-                  itemScrollController: _mainListScrollController,
-                  initialScrollIndex: state.mediaFromFolder.indexWhere(
-                      (element) => element.id == state.choosedMedia.id),
-                  itemPositionsListener: _mainListPositionsListener,
-                  physics: PageScrollPhysics(),
-                  itemBuilder: (context, index) {
+              child: ScrollablePositionedList.builder(
+                shrinkWrap: false,
+                scrollDirection: Axis.horizontal,
+                itemCount: state.mediaFromFolder.length,
+                itemScrollController: _mainListScrollController,
+                initialScrollIndex: state.mediaFromFolder.indexWhere(
+                    (element) => element.id == state.choosedMedia.id),
+                itemPositionsListener: _mainListPositionsListener,
+                physics: PageScrollPhysics(),
+                itemBuilder: (context, index) {
+                  var media = state.mediaFromFolder[index] as Record;
+
+                  String? mediaPath = media.path;
+                  var isExisting = File(mediaPath ?? '').existsSync();
+
+                  print('Building item $index exists $isExisting');
+                  // return Container(
+                  //   alignment: Alignment.center,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   child: Text('Item ${}'),
+                  // )
+
+                  if (!isExisting) {
                     return Container(
+                      alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.all(1.0),
-                        child: BlocBuilder<MediaOpenBloc, MediaOpenState>(
-                          builder: (context, state) {
-                            var media = state.mediaFromFolder[index] as Record;
-
-                            return Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                _buildMedia(media),
-                                (media.path != null &&
-                                            media.path?.isNotEmpty == true) ||
-                                        (media.loadPercent != null)
-                                    ? Container()
-                                    : Center(
-                                        child: CircularProgressIndicator(
-                                          value: media.loadPercent,
-                                        ),
-                                      ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
+                      child: Text('Building item $index exists $isExisting'),
                     );
-                  },
-                ),
-                onNotification: (notification) {
-                  if (notification is UserScrollNotification) {
-                    _direction = notification.direction;
                   }
-                  if (notification is ScrollEndNotification) {
-                    print(notification.runtimeType);
 
-                    var pos = _mainListPositionsListener
-                        .itemPositions.value.first.index;
-                    var pos2 = _mainListPositionsListener
-                        .itemPositions.value.last.index;
-                    // var path = (state.mediaFromFolder[pos] as Record).path;
-                    // print('pos: $pos, pos2:$pos2');
-                    // var positions =
-                    //     _mainListPositionsListener.itemPositions.value;
-
-                    // var min = positions
-                    //     .where((element) => element.itemTrailingEdge > 0)
-                    //     .reduce((min, pos) =>
-                    //         pos.itemTrailingEdge < min.itemTrailingEdge
-                    //             ? pos
-                    //             : min)
-                    //     .index;
-
-                    // var max = positions
-                    //     .where((element) => element.itemLeadingEdge < 1)
-                    //     .reduce((max, pos) =>
-                    //         pos.itemTrailingEdge > max.itemTrailingEdge
-                    //             ? pos
-                    //             : max)
-                    //     .index;
-
-                    // print('min = $min');
-                    // print('max = $max');
-                    // var tmp = min == max;
-                    // print(min == max);
-
-                    // print('dragDetails: ${notification.dragDetails}');
-                    // print('dept: ${notification.depth}');
-
-                    // if (path == null || path.isEmpty) {
-                    //   context.read<MediaOpenBloc>().add(MediaOpenDownload(
-                    //       mediaId: state.mediaFromFolder[pos].id));
-                    // }
-                  }
-                  return true;
+                  return Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        _buildMedia(media, mediaPath, isExisting),
+                        (media.path != null &&
+                                    media.path?.isNotEmpty == true) ||
+                                (media.loadPercent != null)
+                            ? Container()
+                            : Center(
+                                child: CircularProgressIndicator(
+                                  value: media.loadPercent,
+                                ),
+                              ),
+                      ],
+                    ),
+                  );
                 },
               ),
             )
@@ -204,12 +181,105 @@ class _MediaViewerState extends State<MediaViewer> {
     }));
   }
 
-  Widget _buildMedia(Record media) {
+  ItemPositionsListener _previewListItemPositionsListener =
+      ItemPositionsListener.create();
+  ItemScrollController _previewListScrollController = ItemScrollController();
+
+  Widget _previewList() {
+    return BlocBuilder<MediaOpenBloc, MediaOpenState>(
+      builder: (context, state) {
+        if (!state.isInitialized) {
+          return Container(
+            height: 64,
+          );
+        }
+
+        return Container(
+          height: 64,
+          child: ScrollablePositionedList.builder(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: state.mediaFromFolder.length,
+              itemPositionsListener: _previewListItemPositionsListener,
+              itemScrollController: _previewListScrollController,
+              initialScrollIndex: state.mediaFromFolder
+                  .indexWhere((element) => element.id == state.choosedMedia.id),
+              itemBuilder: (context, index) {
+                if (index < 0) {
+                  return SizedBox();
+                }
+
+                var media = state.mediaFromFolder[index] as Record;
+
+                var mediaMiniatureAdress = '';
+                if (media.thumbnail != null && media.thumbnail!.isNotEmpty) {
+                  mediaMiniatureAdress = media.thumbnail!.first.publicUrl ?? '';
+                }
+
+                final isVideo = media.mimeType?.contains('video') ?? false;
+
+                return Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: GestureDetector(
+                      onTap: () {
+                        context.read<MediaOpenBloc>().add(
+                              MediaOpenChangeChoosedMedia(index: index),
+                            );
+                        _mainListScrollController.scrollTo(
+                          index: index,
+                          duration: Duration(milliseconds: 200),
+                        );
+                      },
+                      child: mediaMiniatureAdress.isEmpty
+                          ? Image.asset(
+                              isVideo
+                                  ? 'assets/file_icons/video.png'
+                                  : 'assets/file_icons/image.png',
+                              fit: BoxFit.fitHeight,
+                              // width: MediaQuery.of(context).size.width - 2,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: mediaMiniatureAdress,
+                              fit: BoxFit.contain,
+                              errorWidget: (context, obj, st) =>
+                                  _getImagePlaceholder(isVideo),
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) {
+                                return Center(
+                                  child: Container(
+                                    color: Colors.black38,
+                                  ),
+                                );
+                              },
+                            )
+                      // Image.asset(
+                      //   'assets/test_image2.png',
+                      //   //state.mediaFromFolder[index].imagePreview,
+                      //   fit: BoxFit.fitHeight,
+                      // ),
+                      ),
+                );
+                // } else
+                //   return SizedBox(
+                //     width: MediaQuery.of(context).size.width / 5,
+                //     child: Container(),
+                //   );
+              }),
+        );
+      },
+    );
+  }
+
+  Widget _getImagePlaceholder(bool isVideo) {
+    return Image.asset(
+      isVideo ? 'assets/file_icons/video.png' : 'assets/file_icons/image.png',
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget _buildMedia(Record media, String? mediaPath, bool isExisting) {
     Widget element;
 
-    var mediaPath = media.path;
-
-    var isExisting = File(mediaPath ?? '').existsSync();
     var isVideo = media.mimeType?.contains('video') ?? false;
 
     var mediaMiniatureAdress = '';
@@ -230,7 +300,9 @@ class _MediaViewerState extends State<MediaViewer> {
         element = Container(
           alignment: Alignment.center,
           width: MediaQuery.of(context).size.width,
-          child: Text('Video is not supported yet'),
+          child: VideoPlayerWidget(
+            videoPath: mediaPath,
+          ),
         );
       } else {
         element = Image.file(

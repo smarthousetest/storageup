@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
@@ -61,18 +61,18 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
 
       if (downloadingFile != null &&
           state.choosedMedia.id == downloadingFile.id) {
-        var choosedMedia = state.choosedMedia as Record;
-
-        choosedMedia = choosedMedia.copyWith(
-          isDownloading: downloadingFile.localPath.isEmpty,
-          isInProgress: downloadingFile.localPath.isEmpty,
-          path: downloadingFile.localPath.isEmpty
-              ? null
-              : downloadingFile.localPath,
-          loadPercent: downloadingFile.loadPercent.toDouble(),
-        );
-
         if (downloadingFile.loadPercent == 100) {
+          var choosedMedia = state.choosedMedia as Record;
+
+          choosedMedia = choosedMedia.copyWith(
+            isDownloading: downloadingFile.localPath.isEmpty,
+            isInProgress: downloadingFile.localPath.isEmpty,
+            path: downloadingFile.localPath.isEmpty
+                ? null
+                : downloadingFile.localPath,
+            loadPercent: downloadingFile.loadPercent.toDouble(),
+          );
+
           add(MediaUpdateChoosedMedia(media: choosedMedia));
         }
       }
@@ -121,8 +121,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     mediaFromFolder.forEach((record) {
       var path = box.get(record.id);
       if (path != null) {
-        if (File('$appPath/$path').existsSync())
-          (record as Record).path = '$appPath/$path';
+        if (File('$appPath$path').existsSync())
+          (record as Record).path = '$appPath$path';
         else {
           print('Deleting file with id: ${record.id}');
           box.delete(record.id);
@@ -134,7 +134,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     var filePath = box.get(event.choosedMedia.id);
 
     if (filePath != null) {
-      var path = '$appPath/$filePath';
+      var path = '$appPath$filePath';
       var choosedMedia = event.choosedMedia as Record;
 
       choosedMedia.path = path;
@@ -343,7 +343,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
       String path = box.get(choosedMedia.id, defaultValue: '');
       if (path.isNotEmpty) {
         var appPath = await getDownloadAppFolder();
-        var fullPathToFile = '$appPath/$path';
+        var fullPathToFile = '$appPath$path';
         var isExisting = await File(fullPathToFile).exists();
         if (isExisting) {
           state.copyWith(choosedMedia: choosedMedia.copyWith(path: path));

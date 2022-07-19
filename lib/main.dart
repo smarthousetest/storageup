@@ -1,6 +1,7 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/cpp_native.dart';
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,7 @@ void main() async {
 
   await configureInjection();
   WidgetsFlutterBinding.ensureInitialized();
+  await DartVLC.initialize();
   runApp(new StateContainer(child: new MyApp()));
 }
 
@@ -101,6 +103,14 @@ class _MyAppState extends State<MyApp> {
       builder: (light, dark) => MaterialApp(
         darkTheme: dark,
         theme: light,
+        scrollBehavior: MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+            PointerDeviceKind.stylus,
+            PointerDeviceKind.unknown
+          },
+        ),
         navigatorKey: NavigatorService.navigatorKey,
         locale: StateContainer.of(context).locale,
         localizationsDelegates: [
