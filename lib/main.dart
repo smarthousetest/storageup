@@ -31,13 +31,12 @@ void main() async {
   await configureInjection();
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows){
-    await DartVLC.initialize(useFlutterNativeView: true); 
-  } else {
+  if (Platform.isWindows) {
+    await DartVLC.initialize(useFlutterNativeView: true);
+  } else if (Platform.isLinux) {
     await DartVLC.initialize(useFlutterNativeView: false);
   }
 
-  
   runApp(new StateContainer(child: new MyApp()));
 }
 
