@@ -188,6 +188,11 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
         bearerToken,
       ]);
     }
+    // for(int i = 0; i < 5; i++){
+    //   add(GetKeeperInfo());
+    //   print("Try to keeper update");
+    //   await Future.delayed(Duration(seconds: 3));
+    // }
   }
 
   void _writeKeeperName(SpaceState state) {

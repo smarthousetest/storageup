@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -349,7 +350,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
           GestureDetector(
             onTap: (() {
-              context.read<SpaceBloc>().add(UpdateKeepersList());
+              context.read<FolderListBloc>().add(GetKeeperInfo());
             }),
             child: MouseRegion(
               cursor: SystemMouseCursors.click,

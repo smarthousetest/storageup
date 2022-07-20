@@ -25,15 +25,11 @@ class KeeperService {
             'Authorization': ' Bearer $token',
           }),
         );
-
-        if (response.statusCode == 200) {
-          //final body = Keeper.fromJson(response);
-          List<Keeper> allKeeper = [];
-          (response.data as List).forEach((element) {
-            allKeeper.add(Keeper.fromMap(element));
-          });
-          return Either.right(allKeeper);
-        }
+        List<Keeper> allKeeper = [];
+        (response.data as List).forEach((element) {
+          allKeeper.add(Keeper.fromMap(element));
+        });
+        return Either.right(allKeeper);
       }
     } on DioError catch (e) {
       print(e);
