@@ -25,7 +25,7 @@ extension StringExtension on String {
 }
 
 extension FileExtension on File {
-  String get name => this.path.split('/').last;
+  String get name => this.path.split(Platform.pathSeparator).last;
 }
 
 extension GlobalKeyExtension on GlobalKey {
