@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -132,8 +134,23 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
                                     child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
+                                        onTap: () async {
+                                          String? filePath = await FilePicker
+                                              .platform
+                                              .saveFile(
+                                                  fileName:
+                                                      state.choosedMedia.name);
+
+                                          if (filePath != null) {
+                                            String? choosedMediaPath =
+                                                (state.choosedMedia as Record)
+                                                    .path;
+
+                                            if (choosedMediaPath != null) {
+                                              File(choosedMediaPath)
+                                                  .copy(filePath);
+                                            }
+                                          }
                                         },
                                         child: SvgPicture.asset(
                                           'assets/options/download.svg',
