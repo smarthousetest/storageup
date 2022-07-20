@@ -4,7 +4,6 @@ import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/info/info_event.dart';
 import 'package:storageup/pages/info/info_state.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
-import 'package:storageup/utilities/controllers/packet_controllers.dart';
 import 'package:storageup/utilities/controllers/user_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/services/subscription_service.dart';
@@ -18,15 +17,15 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
       }
     });
   }
+
   // final AuthenticationRepository _authenticationRepository =
   // getIt<AuthenticationRepository>();
 
   UserController _userController = getIt<UserController>();
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
-  var _packetController =
-      getIt<PacketController>(instanceName: 'packet_controller');
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
+
   Future _mapInfoPageOpened(
     InfoPageOpened event,
     InfoState state,
@@ -34,19 +33,20 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
   ) async {
     User? user = await _userController.getUser;
     await _filesController.updateFilesList();
-    var folder = _filesController.getFilesRootFolder;
+    var folder = await _filesController.getRootFolder;
     var sub = await _subscriptionService.getCurrentSubscription();
-    await _packetController.updatePacket();
+    //await _packetController.updatePacket();
     var allMediaFolders = await _filesController.getMediaFolders(true);
-    //var packetInfo = await _subscriptionService.getPacketInfo();
     var valueNotifier = _userController.getValueNotifier();
-    var packetNotifier = _packetController.getValueNotifier();
+    var filesNotifier = _filesController.getFilesValueNotifier();
+    var mediaNotifier = _filesController.getMediaValueNotifier();
     emit(state.copyWith(
       user: user,
       folder: folder,
       allMediaFolders: allMediaFolders,
       sub: sub.left,
-      packetNotifier: packetNotifier,
+      filesRootNotifier: filesNotifier,
+      mediaRootNotifier: mediaNotifier,
       valueNotifier: valueNotifier,
     ));
   }

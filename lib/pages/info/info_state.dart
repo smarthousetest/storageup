@@ -27,7 +27,8 @@ class InfoState extends Equatable {
   final List<Folder>? allMediaFolders;
 
   final ValueNotifier<User?>? valueNotifier;
-  final ValueNotifier<Packet?>? packetNotifier;
+  final ValueNotifier<Folder?>? filesRootNotifier;
+  final ValueNotifier<Folder?>? mediaRootNotifier;
 
   InfoState({
     this.usingSpace = 0,
@@ -49,7 +50,8 @@ class InfoState extends Equatable {
     this.rootFolders,
     this.folder,
     this.allMediaFolders,
-    this.packetNotifier,
+    this.filesRootNotifier,
+    this.mediaRootNotifier,
     this.valueNotifier,
   });
 
@@ -70,7 +72,8 @@ class InfoState extends Equatable {
     List<Folder>? allMediaFolders,
     Packet? packetInfo,
     ValueNotifier<User?>? valueNotifier,
-    ValueNotifier<Packet?>? packetNotifier,
+    ValueNotifier<Folder?>? filesRootNotifier,
+    ValueNotifier<Folder?>? mediaRootNotifier,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -88,8 +91,9 @@ class InfoState extends Equatable {
       sub: sub ?? this.sub,
       rootFolders: rootFolders ?? this.rootFolders,
       allMediaFolders: allMediaFolders ?? this.allMediaFolders,
-      packetNotifier: packetNotifier ?? this.packetNotifier,
+      filesRootNotifier: filesRootNotifier ?? this.filesRootNotifier,
       valueNotifier: valueNotifier ?? this.valueNotifier,
+      mediaRootNotifier: mediaRootNotifier ?? this.mediaRootNotifier,
     );
   }
 
@@ -109,7 +113,8 @@ class InfoState extends Equatable {
         rootFolders,
         allMediaFolders,
         sub,
-        packetNotifier,
+        filesRootNotifier,
         valueNotifier,
+        mediaRootNotifier,
       ];
 }

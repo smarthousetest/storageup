@@ -5,6 +5,7 @@ import 'package:cpp_native/interfaces/load_interfaces.dart';
 import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
+import 'package:flutter/foundation.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -28,6 +29,10 @@ class FilesController extends IFilesController {
 
     return _filesRepo.getFiles;
   }
+
+  ValueNotifier<Folder?> getFilesValueNotifier() => _filesRepo.getValueNotifier;
+
+  ValueNotifier<Folder?> getMediaValueNotifier() => _mediaRepo.getValueNotifier;
 
   Folder? get getFilesRootFolder => _filesRepo.getRootFolder;
 
@@ -139,6 +144,7 @@ class FilesController extends IFilesController {
     // var filesFolder = await _service.getFolderById(filesFolderId!.id);
 
     _filesRepo.setRootFolder = filesFolder;
+    _mediaRepo.setMediaRootFolder = mediaFolder;
 
     _mediaRepo.mediaRootFolderId = mediaFolder?.id;
 
