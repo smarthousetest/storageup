@@ -1,3 +1,4 @@
+import 'package:cpp_native/models/record.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
@@ -22,9 +23,9 @@ class HomeState extends Equatable {
   final FormzStatus status;
   final String? upToDateVersion;
   final String? version;
-  final List<LatestFile> latestFile;
-  final List<LatestFile> checkLatestFile;
-  final ValueListenable<Box<LatestFile>>? objectsValueListenable;
+  final List<Record> latestFile;
+  final List<Record> checkLatestFile;
+  final ValueListenable<Box<Record>>? objectsValueListenable;
 
   HomeState({
     this.usingSpace = 0,
@@ -62,15 +63,16 @@ class HomeState extends Equatable {
     FormzStatus? status,
     String? upToDateVersion,
     String? version,
-    List<LatestFile>? latestFile,
-    List<LatestFile>? checkLatestFile,
-    ValueListenable<Box<LatestFile>>? objectsValueListenable,
+    List<Record>? latestFile,
+    List<Record>? checkLatestFile,
+    ValueListenable<Box<Record>>? objectsValueListenable,
   }) {
     return HomeState(
       usingSpace: usingSpace ?? this.usingSpace,
       allSpace: allSpace ?? this.allSpace,
       loadPercentRentPlace: loadPercentRentPlace ?? this.loadPercentRentPlace,
-      loadPercentPentPlaceFull: loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
+      loadPercentPentPlaceFull:
+          loadPercentPentPlaceFull ?? this.loadPercentPentPlaceFull,
       dailyProfit: dailyProfit ?? this.dailyProfit,
       yourBalance: yourBalance ?? this.yourBalance,
       homeTab: homeTab ?? this.homeTab,
@@ -79,7 +81,8 @@ class HomeState extends Equatable {
       status: status ?? FormzStatus.pure,
       upToDateVersion: upToDateVersion ?? this.upToDateVersion,
       version: version ?? this.version,
-      objectsValueListenable: objectsValueListenable ?? this.objectsValueListenable,
+      objectsValueListenable:
+          objectsValueListenable ?? this.objectsValueListenable,
       latestFile: latestFile ?? this.latestFile,
       checkLatestFile: checkLatestFile ?? this.checkLatestFile,
     );

@@ -2,14 +2,17 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cpp_native/cpp_native.dart';
+import 'package:cpp_native/models/base_object.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 
 extension StringExtension on String {
@@ -44,6 +47,238 @@ extension GlobalKeyExtension on GlobalKey {
 Future<String> getDownloadAppFolder() async {
   var appPath = await getApplicationSupportDirectory();
   return appPath.path + '/downloads/';
+}
+
+///Don't use it with [SortingCriterion.byType]
+extension FilesSorting on Iterable<BaseObject> {
+  List<BaseObject> getSortedObjects({
+    required List<String> parentFoldersId,
+    SortingCriterion? criterio,
+    SortingDirection direction = SortingDirection.down,
+    String? sortingText,
+  }) {
+    if (sortingText != null) {
+      return _sortByText(
+        parentFoldersId: parentFoldersId,
+        direction: direction,
+        sortingText: sortingText,
+      );
+    } else if (criterio != null) {
+      if (criterio == SortingCriterion.byName) {
+        return _sortByName(
+          parentFoldersId: parentFoldersId,
+          direction: direction,
+        );
+      } else if (criterio == SortingCriterion.byDateCreated) {
+        return _sortByDate(
+          parentFoldersId: parentFoldersId,
+          direction: direction,
+        );
+      } else if (criterio == SortingCriterion.bySize) {
+        return _sortBySize(
+          parentFoldersId: parentFoldersId,
+          direction: direction,
+        );
+      }
+    }
+    return this
+        .where(
+          (element) => parentFoldersId
+              .any((parentFolderId) => element.parentFolder == parentFolderId),
+        )
+        .toList();
+  }
+
+  Map<String, List<BaseObject>> getObjectsSortedByTypes({
+    required String parentFolderId,
+    SortingDirection direction = SortingDirection.down,
+  }) {
+    final objects =
+        this.where((element) => element.parentFolder == parentFolderId);
+
+    Map<String, List<BaseObject>> groupedFiles = {};
+
+    objects.forEach((element) {
+      String key;
+      if (element.extension == null) {
+        key = 'folder';
+      } else {
+        key = element.extension!.toLowerCase();
+      }
+
+      if (groupedFiles.containsKey(key)) {
+        groupedFiles[key]?.add(element);
+      } else {
+        groupedFiles[key] = [element];
+      }
+    });
+
+    if (direction == SortingDirection.up)
+      return groupedFiles;
+    else
+      return groupedFiles
+          .map((key, value) => MapEntry(key, value.reversed.toList()));
+  }
+
+  Map<DateTime, List<BaseObject>> getObjectsSortedByTime({
+    required String parentFolderId,
+    SortingDirection direction = SortingDirection.down,
+  }) {
+    final objects =
+        this.where((element) => element.parentFolder == parentFolderId);
+
+    Map<DateTime, List<BaseObject>> groupedObjects = {};
+
+    objects.forEach((element) {
+      var date = DateTime.utc(
+        element.createdAt!.year,
+        element.createdAt!.month,
+      );
+      if (groupedObjects.containsKey(date)) {
+        groupedObjects[date]?.add(element);
+      } else {
+        groupedObjects[date] = [element];
+      }
+    });
+
+    if (direction == SortingDirection.up)
+      return groupedObjects;
+    else
+      return groupedObjects
+          .map((key, value) => MapEntry(key, value.reversed.toList()));
+  }
+
+  Map<DateTime, List<BaseObject>> getObjectsSortedByTimeFromMultipleFolders({
+    required List<String> parentFoldersId,
+    SortingDirection direction = SortingDirection.down,
+  }) {
+    final objects = this.where((element) => parentFoldersId
+        .any((parentFolderId) => parentFolderId == element.parentFolder));
+
+    Map<DateTime, List<BaseObject>> groupedObjects = {};
+
+    objects.forEach((element) {
+      var date = DateTime.utc(
+        element.createdAt!.year,
+        element.createdAt!.month,
+      );
+      if (groupedObjects.containsKey(date)) {
+        groupedObjects[date]?.add(element);
+      } else {
+        groupedObjects[date] = [element];
+      }
+    });
+
+    if (direction == SortingDirection.up)
+      return groupedObjects;
+    else
+      return groupedObjects
+          .map((key, value) => MapEntry(key, value.reversed.toList()));
+  }
+
+  List<BaseObject> _sortBySize({
+    required List<String> parentFoldersId,
+    required SortingDirection direction,
+  }) {
+    final objects = this
+        .where((element) => parentFoldersId
+            .any((parentFolderId) => element.parentFolder == parentFolderId))
+        .toList();
+
+    objects.sort((a, b) {
+      return a.size.compareTo(b.size);
+    });
+
+    if (direction == SortingDirection.up)
+      return objects;
+    else
+      return objects.reversed.toList();
+  }
+
+  List<BaseObject> _sortByDate({
+    required List<String> parentFoldersId,
+    required SortingDirection direction,
+  }) {
+    final objects = this
+        .where((element) => parentFoldersId
+            .any((parentFolderId) => parentFolderId == element.parentFolder))
+        .toList();
+
+    objects.sort((a, b) {
+      if (a.createdAt != null && b.createdAt != null) {
+        return a.createdAt!.compareTo(b.createdAt!);
+      } else if (a.createdAt == null && b.createdAt == null) {
+        return a.id.compareTo(b.id);
+      } else
+        return a.createdAt == null ? 0 : 1;
+    });
+
+    if (direction == SortingDirection.up)
+      return objects;
+    else
+      return objects.reversed.toList();
+  }
+
+  List<BaseObject> _sortByName({
+    required List<String> parentFoldersId,
+    required SortingDirection direction,
+  }) {
+    final objects = this
+        .where((element) => parentFoldersId
+            .any((parentFolderId) => element.parentFolder == parentFolderId))
+        .toList();
+
+    objects.sort((a, b) {
+      if (a.name != null && b.name != null) {
+        return b.name!.toLowerCase().compareTo(a.name!.toLowerCase());
+      } else if (a.name == null && b.name == null) {
+        return a.id.compareTo(b.id);
+      } else
+        return a.name == null ? 0 : 1;
+    });
+    if (direction == SortingDirection.up)
+      return objects;
+    else
+      return objects.reversed.toList();
+  }
+
+  List<BaseObject> _sortByText({
+    required List<String> parentFoldersId,
+    required SortingDirection direction,
+    required String sortingText,
+  }) {
+    bool _checkCreatedAt(BaseObject object) {
+      return (object.createdAt != null &&
+          DateFormat.yMd(Intl.getCurrentLocale())
+              .format(object.createdAt!)
+              .toString()
+              .toLowerCase()
+              .contains(sortingText.toLowerCase()));
+    }
+
+    bool _checkName(BaseObject object) {
+      return (object.name != null &&
+          object.name!.toLowerCase().contains(sortingText.toLowerCase()));
+    }
+
+    bool _checkExtension(BaseObject object) {
+      return (object.extension != null &&
+          object.extension!.toLowerCase().contains(sortingText.toLowerCase()));
+    }
+
+    final objects = this
+        .where((element) =>
+            parentFoldersId.any(
+                (parentFolderId) => element.parentFolder == parentFolderId) &&
+            (_checkCreatedAt(element) ||
+                _checkName(element) ||
+                _checkExtension(element)))
+        .toList();
+    if (direction == SortingDirection.up)
+      return objects;
+    else
+      return objects.reversed.toList();
+  }
 }
 
 extension UserProficeImage on User? {

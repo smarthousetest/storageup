@@ -13,8 +13,8 @@ import '../pages/auth/auth_bloc.dart' as _i3;
 import '../pages/auth/forgot_password/forgot_password_bloc.dart' as _i11;
 import '../pages/files/file_bloc.dart' as _i6;
 import '../pages/finance/finance_bloc.dart' as _i10;
-import '../pages/home/home_bloc.dart' as _i13;
-import '../pages/info/info_bloc.dart' as _i14;
+import '../pages/home/home_bloc.dart' as _i12;
+import '../pages/info/info_bloc.dart' as _i13;
 import '../pages/loadind_files.dart/loading_container_bloc.dart' as _i16;
 import '../pages/media/media_open/media_open_bloc.dart' as _i18;
 import '../pages/settings/settings_bloc.dart' as _i23;
@@ -27,14 +27,13 @@ import 'repositories/latest_file_repository.dart' as _i15;
 import 'repositories/media_repository.dart' as _i19;
 import 'repositories/packet_repository.dart' as _i21;
 import 'repositories/space_repository.dart' as _i5;
-
-import 'repositories/storage_files.dart' as _i12;
+import 'repositories/storage_files.dart' as _i7;
 import 'repositories/token_repository.dart' as _i25;
 import 'repositories/user_repository.dart' as _i27;
 import 'services/auth_service.dart' as _i28;
 import 'services/files_service.dart' as _i9;
 import 'services/keeper_service.dart' as _i14;
-import 'services/services_module.dart' as _i30;
+import 'services/services_module.dart' as _i31;
 import 'services/subscription_service.dart'
     as _i24; // ignore_for_file: unnecessary_lambdas
 
@@ -50,25 +49,22 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       instanceName: 'record_dio');
   gh.lazySingletonAsync<_i5.DownloadLocationsRepository>(
       () => _i5.DownloadLocationsRepository.create());
-  gh.factoryAsync<_i6.FilesBloc>(
-      () async => _i6.FilesBloc(await get<_i30.FilesController>()));
+  gh.factory<_i6.FilesBloc>(() => _i6.FilesBloc());
+  gh.lazySingletonAsync<_i7.LocalStorage>(() => _i7.LocalStorage.create());
   gh.factory<_i8.FilesRepository>(() => _i8.FilesRepository());
   gh.lazySingleton<_i8.FilesRepository>(() => serviceModule.filesRepo,
       instanceName: 'files_repo');
   gh.factory<_i9.FilesService>(
       () => _i9.FilesService(get<_i4.Dio>(instanceName: 'record_dio')));
-  gh.factoryAsync<_i10.FinanceBloc>(
-      () async => _i10.FinanceBloc(await get<_i30.FilesController>()));
+  gh.factory<_i10.FinanceBloc>(() => _i10.FinanceBloc());
   gh.factory<_i11.ForgotPasswordBloc>(() => _i11.ForgotPasswordBloc());
-
-  gh.lazySingletonAsync<_i12.LocalStorage>(() => _i12.LocalStorage.create());
-  gh.factory<_i13.HomeBloc>(() => _i13.HomeBloc());
-  gh.factory<_i14.InfoBloc>(() => _i14.InfoBloc());
+  gh.factory<_i12.HomeBloc>(() => _i12.HomeBloc());
+  gh.factory<_i13.InfoBloc>(() => _i13.InfoBloc());
   gh.factory<_i14.KeeperService>(() => _i14.KeeperService());
-
   gh.lazySingletonAsync<_i15.LatestFileRepository>(
       () => _i15.LatestFileRepository.create());
   gh.factory<_i16.LoadingContainerBloc>(() => _i16.LoadingContainerBloc());
+
   gh.factoryAsync<_i18.MediaOpenBloc>(
       () async => _i18.MediaOpenBloc(await get<_i30.FilesController>()));
   gh.factory<_i19.MediaRepository>(() => _i19.MediaRepository());
@@ -86,15 +82,14 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i26.UserController>(() => _i26.UserController());
   gh.lazySingleton<_i27.UserRepository>(() => serviceModule.userRepository,
       instanceName: 'user_repo');
-
   gh.factory<_i28.AuthService>(
       () => _i28.AuthService(get<_i4.Dio>(instanceName: 'auth_dio')));
   gh.singleton<_i29.AuthenticationRepository>(
       _i29.AuthenticationRepository(get<_i28.AuthService>()));
   gh.singletonAsync<_i30.FilesController>(
-      () async => _i30.FilesController(await get.getAsync<_i12.LocalStorage>()),
+      () async => _i30.FilesController(await get.getAsync<_i7.LocalStorage>()),
       dispose: (i) => i.dispose());
   return get;
 }
 
-class _$ServiceModule extends _i30.ServiceModule {}
+class _$ServiceModule extends _i31.ServiceModule {}

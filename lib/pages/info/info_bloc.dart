@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/info/info_event.dart';
@@ -22,8 +23,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
   // getIt<AuthenticationRepository>();
 
   UserController _userController = getIt<UserController>();
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
   var _packetController =
       getIt<PacketController>(instanceName: 'packet_controller');
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
@@ -32,6 +32,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     InfoState state,
     Emitter<InfoState> emit,
   ) async {
+    _filesController = await GetIt.I.getAsync<FilesController>();
     User? user = await _userController.getUser;
     await _filesController.updateFilesList();
     var folder = _filesController.getFilesRootFolder;

@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:path_provider/path_provider.dart';
@@ -74,7 +75,7 @@ class _MyAppState extends State<MyApp> {
 
   void initLoadController() async {
     LoadController.instance.init(
-      filesController: getIt<FilesController>(instanceName: 'files_controller'),
+      filesController: await GetIt.I.getAsync<FilesController>(),
       tokenRepository: getIt<TokenRepository>(),
       documentsDirectory: (await getApplicationSupportDirectory()).path,
       supportDirectory: (await getApplicationSupportDirectory()).path,

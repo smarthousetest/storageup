@@ -48,8 +48,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           previousFolders: [],
         ));
 
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
   var _loadController = LoadController.instance;
   StreamSubscription? updatePageSubscription;
   late final LatestFileRepository _repository;
@@ -174,6 +173,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   void init(Folder? folder, List<Folder> previousFolders) async {
+    _filesController = await GetIt.I.getAsync<FilesController>();
     Folder? currentFolder;
     if (folder == null) {
       await _filesController.updateFilesList();

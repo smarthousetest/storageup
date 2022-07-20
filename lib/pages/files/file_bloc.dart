@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/pages/files/file_event.dart';
 import 'package:storageup/pages/files/file_state.dart';
@@ -22,9 +23,10 @@ enum ContextActionEnum {
 @Injectable()
 class FilesBloc extends Bloc<FilesEvent, FilesState> {
   FilesBloc(
-    this._controller,
-    //@Named('files_location_database') this._box,
-  ) : super(FilesState()) {
+
+      //@Named('files_location_database') this._box,
+      )
+      : super(FilesState()) {
     on<FilesEvent>((event, emit) async {
       if (event is FilesPageOpened) {
         await _mapFilesPageOpened(state, event, emit);
@@ -34,17 +36,16 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     });
   }
 
-  FilesController _controller;
+  late FilesController _controller;
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
 
   Future<void> _mapFilesPageOpened(
     FilesState state,
     FilesPageOpened event,
     Emitter<FilesState> emit,
   ) async {
+    _controller = await GetIt.I.getAsync<FilesController>();
     var folderId = event.folderId;
     var filesToMove = event.filesToMove;
     if (folderId == null) {

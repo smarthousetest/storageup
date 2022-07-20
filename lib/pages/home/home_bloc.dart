@@ -58,8 +58,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     on<HomePageOpened>((event, emit) async {
+      _filesController = await GetIt.I.getAsync<FilesController>();
       var os = OsSpecifications.getOs();
-      Hive.init(os.supportDir);
+      await Hive.initFlutter(os.supportDir);
       print('Hive initialized');
       var remoteAppVersion = await _filesService.getRemoteAppVersion();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
@@ -97,8 +98,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final FilesService _filesService = getIt<FilesService>();
   var _loadController = LoadController.instance;
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
   late final LatestFileRepository _repository;
 
   String _getLocalAppVersion() {
@@ -245,9 +245,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     bool isDownloading = true,
   }) {
     try {
-      var currentRecordIndex = state.latestFile
-          .indexWhere((element) => element.latestFile.id == recordId);
-      var record = state.latestFile.map((e) => e.latestFile).toList();
+      var currentRecordIndex =
+          state.latestFile.indexWhere((element) => element.id == recordId);
+      var record = state.latestFile.map((e) => e).toList();
       var objects = [...record];
       var currentRecord = objects[currentRecordIndex];
       objects[currentRecordIndex] =

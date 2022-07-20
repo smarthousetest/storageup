@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:cpp_native/models/folder.dart';
@@ -35,11 +34,10 @@ class LocalStorage {
     // Hive.registerAdapter(BaseObjectAdapter());
     Hive.registerAdapter(RecordAdapter());
     Hive.registerAdapter(FolderAdapter());
-    
-   WidgetsFlutterBinding.ensureInitialized();
+
+    WidgetsFlutterBinding.ensureInitialized();
     var os = OsSpecifications.getOs();
     Hive.init(os.supportDir);
-    
 
     final objectsBox = await Hive.openBox<BaseObject>(_objectsBoxName);
     final relationsBox = await Hive.openBox<List<String>>(_relationsBoxName);

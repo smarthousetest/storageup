@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
@@ -22,6 +23,7 @@ import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/media/media_cubit.dart';
 import 'package:storageup/pages/media/media_open/media_open_view.dart';
@@ -29,6 +31,7 @@ import 'package:storageup/pages/media/media_state.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
+import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 
 class MediaPage extends StatefulWidget {
   @override
@@ -376,21 +379,63 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                               scrollDirection: Axis.horizontal,
                                               controller:
                                                   _folderListScrollController,
-                                              child: Row(
-                                                children: [
-                                                  ...state.albums
-                                                      .map(
-                                                        (album) => _folderIcon(
-                                                          album,
-                                                          isChoosed: album.id ==
+                                              child: BlocBuilder<MediaCubit,
+                                                  MediaState>(
+                                                builder: (context, state) {
+                                                  if (state
+                                                          .folderValueListenable !=
+                                                      null)
+                                                    return ValueListenableBuilder(
+                                                        valueListenable: state
+                                                            .folderValueListenable!,
+                                                        builder: (context,
+                                                            Box<BaseObject> box,
+                                                            widget) {
+                                                          final foldersList = box
+                                                              .values
+                                                              .getSortedObjects(
+                                                            parentFoldersId: [
                                                               state
                                                                   .currentFolder
-                                                                  .id,
-                                                          blocContext: context,
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                                ],
+                                                                  .id
+                                                            ],
+                                                          );
+
+                                                          if (foldersList.any(
+                                                              (element) =>
+                                                                  element
+                                                                      .name ==
+                                                                  'Media'))
+                                                            foldersList.removeWhere(
+                                                                (element) =>
+                                                                    element
+                                                                        .name ==
+                                                                    'Media');
+
+                                                          return Row(
+                                                            children: [
+                                                              ...foldersList
+                                                                  .map(
+                                                                    (album) =>
+                                                                        _folderIcon(
+                                                                      album
+                                                                          as Folder,
+                                                                      isChoosed: album
+                                                                              .id ==
+                                                                          state
+                                                                              .currentFolder
+                                                                              .id,
+                                                                      blocContext:
+                                                                          context,
+                                                                    ),
+                                                                  )
+                                                                  .toList(),
+                                                            ],
+                                                          );
+                                                        });
+                                                  else
+                                                    return Container();
+                                                },
                                               )
 
                                               // children: [
@@ -438,7 +483,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           constraints:
                                               BoxConstraints(maxWidth: 200),
                                           child: Text(
-                                            state.currentFolder.name ?? ':(',
+                                            state.currentFolder.name == 'Media'
+                                                ? translate.all
+                                                : state.currentFolder.name ??
+                                                    ':(',
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               color:
@@ -760,146 +808,177 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         return LayoutBuilder(builder: (context, constrains) {
           // print('min width ${constrains.smallest.width}');
 
-          return Container(
-            // padding: EdgeInsets.symmetric(horizontal: 40),
-            child: GridView.builder(
-              itemCount: state.currentFolderRecords.length,
-              shrinkWrap: true,
-              controller: ScrollController(),
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constrains.smallest.width ~/ 110,
-                childAspectRatio: (1 / 1.22),
-                mainAxisSpacing: 15,
-              ),
-              itemBuilder: (context, index) {
-                var record = state.currentFolderRecords[index];
-
-                if (state.currentFolderRecords.length !=
-                    _popupControllers.length) {
-                  final controller = CustomPopupMenuController();
-                  _popupControllers.add(controller);
-                }
-
-                _onPointerDown(PointerDownEvent event) {
-                  if (event.kind == PointerDeviceKind.mouse &&
-                      event.buttons == kSecondaryMouseButton) {
-                    print("right button click");
-
-                    _popupControllers[
-                            state.currentFolderRecords.indexOf(record)]
-                        .showMenu();
-                  }
-                }
-
-                return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () {
-                      //_photoOpen(context, state.currentFolderRecords);
-                      // _onTapItem(state.currentFolderRecords, record, context,
-                      //     state.currentFolder);
-                      if (_indexObject != index) {
-                        setState(() {
-                          _indexObject = index;
-                        });
-                        startTimer();
-                        blocContext
-                            .read<MediaCubit>()
-                            .fileTapped(state.currentFolderRecords[index]);
-                      }
-                    },
-                    child: Listener(
-                      onPointerDown: _onPointerDown,
-                      behavior: HitTestBehavior.opaque,
-                      child: IgnorePointer(
-                        child: CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            enablePassEvent: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
-                            controller: _popupControllers[
-                                state.currentFolderRecords.indexOf(record)],
-                            menuBuilder: () {
-                              return MediaPopupMenuActions(
-                                theme: Theme.of(context),
-                                translate: translate,
-                                onTap: (action) async {
-                                  _popupControllers[state.currentFolderRecords
-                                          .indexOf(record)]
-                                      .hideMenu();
-                                  if (action == MediaAction.properties) {
-                                    var res = await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return FileInfoView(
-                                              object: record,
-                                              user: state.valueNotifier?.value);
-                                        });
-                                    if (res != null) {
-                                      blocContext
-                                          .read<MediaCubit>()
-                                          .fileTapped(record);
-                                    }
-                                  } else if (action == MediaAction.rename) {
-                                    var fileExtention = FileAttribute()
-                                        .getFileExtension(record.name ?? '');
-                                    var result = await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        var filename = FileAttribute()
-                                            .getFileName(record.name ?? '');
-                                        return BlurRename(filename, true);
-                                      },
-                                    );
-                                    if (result != null &&
-                                        result is String &&
-                                        result !=
-                                            FileAttribute().getFileName(
-                                                record.name ?? '')) {
-                                      result = result + '.' + fileExtention;
-                                      final res = await context
-                                          .read<MediaCubit>()
-                                          .onActionRenameChosen(record, result);
-                                      if (res == ErrorType.alreadyExist) {
-                                        _rename(blocContext, record, result,
-                                            fileExtention);
-                                      }
-                                    }
-                                  } else {
-                                    //   controller.hideMenu();
-                                    var result = await showDialog<bool>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return BlurDelete();
-                                      },
-                                    );
-                                    if (result == true) {
-                                      context
-                                          .read<MediaCubit>()
-                                          .onActionDeleteChosen(record);
-                                    }
-                                  }
-                                },
-                              );
-                            },
-                            child: MediaGridElement(
-                                record: state.currentFolderRecords[index])),
+          if (state.objectsValueListenable != null)
+            return ValueListenableBuilder(
+                valueListenable: state.objectsValueListenable!,
+                builder: (context, Box<BaseObject> box, widget) {
+                  Map<DateTime, List<BaseObject>> media = {};
+                  if (state.foldersToListen == null)
+                    media = box.values.getObjectsSortedByTime(
+                      parentFolderId: state.currentFolder.id,
+                      direction: SortingDirection.down,
+                    );
+                  else
+                    media =
+                        box.values.getObjectsSortedByTimeFromMultipleFolders(
+                      parentFoldersId: state.foldersToListen!,
+                      direction: SortingDirection.down,
+                    );
+                  var mediaList;
+                  media.forEach((key, value) {
+                    mediaList = media[key];
+                  });
+                  // List<DateTime> keys = media.keys.toList();
+                  return Container(
+                    // padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: GridView.builder(
+                      itemCount: mediaList.length,
+                      shrinkWrap: true,
+                      controller: ScrollController(),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: constrains.smallest.width ~/ 110,
+                        childAspectRatio: (1 / 1.22),
+                        mainAxisSpacing: 15,
                       ),
+                      itemBuilder: (context, index) {
+                        var record = mediaList[index];
+
+                        if (mediaList.length != _popupControllers.length) {
+                          final controller = CustomPopupMenuController();
+                          _popupControllers.add(controller);
+                        }
+
+                        _onPointerDown(PointerDownEvent event) {
+                          if (event.kind == PointerDeviceKind.mouse &&
+                              event.buttons == kSecondaryMouseButton) {
+                            print("right button click");
+
+                            _popupControllers[mediaList.indexOf(record)]
+                                .showMenu();
+                          }
+                        }
+
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              //_photoOpen(context, state.currentFolderRecords);
+                              // _onTapItem(state.currentFolderRecords, record, context,
+                              //     state.currentFolder);
+                              if (_indexObject != index) {
+                                setState(() {
+                                  _indexObject = index;
+                                });
+                                startTimer();
+                                blocContext.read<MediaCubit>().fileTapped(
+                                    state.currentFolderRecords[index]);
+                              }
+                            },
+                            child: Listener(
+                              onPointerDown: _onPointerDown,
+                              behavior: HitTestBehavior.opaque,
+                              child: IgnorePointer(
+                                child: CustomPopupMenu(
+                                    pressType: PressType.singleClick,
+                                    barrierColor: Colors.transparent,
+                                    showArrow: false,
+                                    enablePassEvent: false,
+                                    horizontalMargin: 110,
+                                    verticalMargin: 0,
+                                    controller: _popupControllers[
+                                        mediaList.indexOf(record)],
+                                    menuBuilder: () {
+                                      return MediaPopupMenuActions(
+                                        theme: Theme.of(context),
+                                        translate: translate,
+                                        onTap: (action) async {
+                                          _popupControllers[
+                                                  mediaList.indexOf(record)]
+                                              .hideMenu();
+                                          if (action ==
+                                              MediaAction.properties) {
+                                            var res = await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return FileInfoView(
+                                                      object: record,
+                                                      user: state.valueNotifier
+                                                          ?.value);
+                                                });
+                                            if (res != null) {
+                                              blocContext
+                                                  .read<MediaCubit>()
+                                                  .fileTapped(record as Record);
+                                            }
+                                          } else if (action ==
+                                              MediaAction.rename) {
+                                            var fileExtention = FileAttribute()
+                                                .getFileExtension(
+                                                    record.name ?? '');
+                                            var result = await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                var filename = FileAttribute()
+                                                    .getFileName(
+                                                        record.name ?? '');
+                                                return BlurRename(
+                                                    filename, true);
+                                              },
+                                            );
+                                            if (result != null &&
+                                                result is String &&
+                                                result !=
+                                                    FileAttribute().getFileName(
+                                                        record.name ?? '')) {
+                                              result =
+                                                  result + '.' + fileExtention;
+                                              final res = await context
+                                                  .read<MediaCubit>()
+                                                  .onActionRenameChosen(
+                                                      record, result);
+                                              if (res ==
+                                                  ErrorType.alreadyExist) {
+                                                _rename(blocContext, record,
+                                                    result, fileExtention);
+                                              }
+                                            }
+                                          } else {
+                                            //   controller.hideMenu();
+                                            var result = await showDialog<bool>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return BlurDelete();
+                                              },
+                                            );
+                                            if (result == true) {
+                                              context
+                                                  .read<MediaCubit>()
+                                                  .onActionDeleteChosen(record);
+                                            }
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: MediaGridElement(record: record)),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
-            ),
-          );
+                  );
+                });
+          else
+            return Container();
         });
       },
     );
   }
 
-  void _rename(BuildContext context, Record record, String name,
+  void _rename(BuildContext context, BaseObject record, String name,
       String extention) async {
     String newName = await showDialog(
       context: context,

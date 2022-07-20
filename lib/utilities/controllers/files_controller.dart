@@ -155,10 +155,10 @@ class FilesController extends FilesObservable<Error>
     }
     if (mediaFolder != null) {
       media.addAll(mediaFolder.folders ?? []);
+      await _prepareMediaFolders(mediaFolder);
     }
 
     _filesRepo.setFiles(files);
-    //await _prepareMediaFolders(media);
   }
 
   Future<ResponseStatus> deleteObjects(List<BaseObject> objects) async {
