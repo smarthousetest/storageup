@@ -346,7 +346,14 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
         var fullPathToFile = '$appPath$path';
         var isExisting = await File(fullPathToFile).exists();
         if (isExisting) {
-          state.copyWith(choosedMedia: choosedMedia.copyWith(path: path));
+          var mediaFromFolder = List<BaseObject>.from(state.mediaFromFolder);
+          mediaFromFolder[event.index] =
+              choosedMedia.copyWith(path: fullPathToFile);
+          emit(
+            state.copyWith(
+                choosedMedia: mediaFromFolder[event.index],
+                mediaFromFolder: mediaFromFolder),
+          );
         } else {
           _loadController.downloadFile(fileId: choosedMedia.id);
         }
