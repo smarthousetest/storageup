@@ -146,31 +146,20 @@ class _MediaViewerState extends State<MediaViewer> {
                       var media = state.mediaFromFolder[index] as Record;
 
                       String? mediaPath = media.path;
-                      var isExisting = File(mediaPath ?? '').existsSync();
+                      bool isExisting = File(mediaPath ?? '').existsSync();
+                      bool isChosen = state.mediaFromFolder.indexWhere(
+                              (element) =>
+                                  element.id == state.choosedMedia.id) ==
+                          index;
 
                       print(
-                          'Building item $index exists $isExisting path $mediaPath');
-                      // return Container(
-                      //   alignment: Alignment.center,
-                      //   width: MediaQuery.of(context).size.width,
-                      //   child: Text('Item ${}'),
-                      // )
-
-                      if (!isExisting) {
-                        return Container(
-                          alignment: Alignment.center,
-                          width: MediaQuery.of(context).size.width,
-                          child:
-                              Text('Building item $index exists $isExisting'),
-                        );
-                      }
-
+                          'Building item $index exists $isExisting path $mediaPath isChosen $isChosen');
                       return Container(
                         width: MediaQuery.of(context).size.width,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            _buildMedia(media, mediaPath, isExisting),
+                            _buildMedia(media, mediaPath, isExisting, isChosen),
                             (media.path != null &&
                                         media.path?.isNotEmpty == true) ||
                                     (media.loadPercent != null)
@@ -286,7 +275,8 @@ class _MediaViewerState extends State<MediaViewer> {
     );
   }
 
-  Widget _buildMedia(Record media, String? mediaPath, bool isExisting) {
+  Widget _buildMedia(
+      Record media, String? mediaPath, bool isExisting, bool isChosen) {
     Widget element;
 
     var isVideo = media.mimeType?.contains('video') ?? false;
@@ -298,21 +288,31 @@ class _MediaViewerState extends State<MediaViewer> {
 
     if (mediaPath != null && mediaPath.isNotEmpty && isExisting) {
       if (isVideo) {
-        String? mediaFile = media.path;
-
-        if (mediaFile is String) {
-          if (Platform.isIOS) {
-            mediaFile = Uri.encodeFull(mediaFile);
+        if (isChosen) {
+          element = Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            child: VideoPlayerWidget(
+              videoPath: mediaPath,
+            ),
+          );
+        } else {
+          if (mediaMiniatureAdress.isEmpty) {
+            element = Image.asset(
+              isVideo
+                  ? 'assets/file_icons/video.png'
+                  : 'assets/file_icons/image.png',
+              fit: BoxFit.contain,
+              width: MediaQuery.of(context).size.width,
+            );
+          } else {
+            element = Image.network(
+              mediaMiniatureAdress,
+              fit: BoxFit.contain,
+              width: MediaQuery.of(context).size.width,
+            );
           }
         }
-
-        element = Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          child: VideoPlayerWidget(
-            videoPath: mediaPath,
-          ),
-        );
       } else {
         element = Image.file(
           File(mediaPath),

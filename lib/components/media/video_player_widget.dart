@@ -22,7 +22,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    player = Player(id: widget.videoPath.hashCode, registerTexture: false);
+    player = Player(id: widget.videoPath.hashCode, registerTexture: !Platform.isWindows);
     player.open(Media.file(File(widget.videoPath)));
   }
 
@@ -34,7 +34,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return NativeVideo(
+    return Platform.isWindows ? NativeVideo(
+      fit: BoxFit.contain,
+      player: player,
+      scale: 1.0,
+      showControls: true,
+    ) : Video(
       fit: BoxFit.contain,
       player: player,
       scale: 1.0,

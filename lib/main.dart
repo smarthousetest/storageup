@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/cpp_native.dart';
@@ -28,7 +30,14 @@ void main() async {
 
   await configureInjection();
   WidgetsFlutterBinding.ensureInitialized();
-  await DartVLC.initialize(useFlutterNativeView: true);
+
+  if (Platform.isWindows){
+    await DartVLC.initialize(useFlutterNativeView: true); 
+  } else {
+    await DartVLC.initialize(useFlutterNativeView: false);
+  }
+
+  
   runApp(new StateContainer(child: new MyApp()));
 }
 

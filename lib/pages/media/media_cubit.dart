@@ -132,7 +132,7 @@ class MediaCubit extends Cubit<MediaState> {
             var appPath = await getDownloadAppFolder();
             var fullPathToFile = '$appPath$path';
             // fullPathToFile = Uri.decodeFull(fullPathToFile);
-            await OpenFile.open(fullPathToFile);
+            // await OpenFile.open(fullPathToFile);
           }
         }
       }
