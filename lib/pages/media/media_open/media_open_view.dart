@@ -1,14 +1,11 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:storageup/components/media/media_viewer.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/pages/media/media_open/media_open_bloc.dart';
