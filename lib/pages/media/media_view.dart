@@ -383,11 +383,11 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                   MediaState>(
                                                 builder: (context, state) {
                                                   if (state
-                                                          .folderValueListenable !=
+                                                          .objectsValueListenable !=
                                                       null)
                                                     return ValueListenableBuilder(
                                                         valueListenable: state
-                                                            .folderValueListenable!,
+                                                            .objectsValueListenable!,
                                                         builder: (context,
                                                             Box<BaseObject> box,
                                                             widget) {
@@ -805,6 +805,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         return needToUpdate;
       },
       builder: (blocContext, state) {
+        var sortigText = _searchingFieldController.value.text;
         return LayoutBuilder(builder: (context, constrains) {
           // print('min width ${constrains.smallest.width}');
 
@@ -812,22 +813,22 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
             return ValueListenableBuilder(
                 valueListenable: state.objectsValueListenable!,
                 builder: (context, Box<BaseObject> box, widget) {
-                  Map<DateTime, List<BaseObject>> media = {};
-                  if (state.foldersToListen == null)
-                    media = box.values.getObjectsSortedByTime(
-                      parentFolderId: state.currentFolder.id,
-                      direction: SortingDirection.down,
-                    );
-                  else
-                    media =
-                        box.values.getObjectsSortedByTimeFromMultipleFolders(
+                  // Map<DateTime, List<BaseObject>> media = {};
+                  // if (state.foldersToListen == null)
+                  //   media = box.values.getObjectsSortedByTime(
+                  //     parentFolderId: state.currentFolder.id,
+                  //     direction: SortingDirection.down,
+                  //   );
+                  // else
+                  var media = box.values.getSortedObjects(
                       parentFoldersId: state.foldersToListen!,
                       direction: SortingDirection.down,
-                    );
-                  var mediaList;
-                  media.forEach((key, value) {
-                    mediaList = media[key];
-                  });
+                      sortingText: sortigText);
+
+                  var mediaList = media;
+                  // media.forEach((key, value) {
+                  //   mediaList = media[key];
+                  // });
                   // List<DateTime> keys = media.keys.toList();
                   return Container(
                     // padding: EdgeInsets.symmetric(horizontal: 40),
@@ -962,7 +963,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         },
                                       );
                                     },
-                                    child: MediaGridElement(record: record)),
+                                    child: MediaGridElement(
+                                        record: record as Record)),
                               ),
                             ),
                           ),

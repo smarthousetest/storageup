@@ -50,11 +50,11 @@ class FilesBloc extends Bloc<FilesEvent, FilesState> {
     var filesToMove = event.filesToMove;
     if (folderId == null) {
       var files = await _controller.getFiles();
-      var currentFolder = _controller.getFilesRootFolder;
+      var currentFolder = await _controller.getFilesRootFolder();
       var user = _userRepository.getUser;
       var valueNotifier = _userRepository.getValueNotifier;
       print(files?.length);
-      print(currentFolder?.name);
+      // print(currentFolder?.name);
       emit(
         state.copyWith(
           currentFolder: currentFolder,

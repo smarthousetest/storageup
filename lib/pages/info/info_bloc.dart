@@ -35,7 +35,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     _filesController = await GetIt.I.getAsync<FilesController>();
     User? user = await _userController.getUser;
     await _filesController.updateFilesList();
-    var folder = _filesController.getFilesRootFolder;
+    var folder = await _filesController.getFilesRootFolder();
     var sub = await _subscriptionService.getCurrentSubscription();
     await _packetController.updatePacket();
     var allMediaFolders = await _filesController.getMediaFolders(true);

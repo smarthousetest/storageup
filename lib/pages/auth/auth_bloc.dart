@@ -10,6 +10,7 @@ import 'package:os_specification/os_specification.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/models/email.dart';
 import 'package:storageup/pages/auth/models/name.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/auth_repository.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';
@@ -18,7 +19,7 @@ import 'auth_event.dart';
 import 'auth_state.dart';
 import 'models/password.dart';
 
-@Injectable()
+@injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthState()) {
     on((event, emit) async {
@@ -186,6 +187,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isNeedSave: state.rememberMe,
         );
         if (result == AuthenticationStatus.authenticated) {
+          // await _filesController.clearLocalDatabase();
+          // await _filesController.initDatabase();
           emit(state.copyWith(
               status: FormzStatus.submissionSuccess,
               action: RequestedAction.login));

@@ -1,19 +1,19 @@
 import 'package:cpp_native/models/folder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:storageup/pages/files/move_files/move_state.dart';
 import 'package:storageup/pages/home/home_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/event_bus.dart';
-import 'package:storageup/utilities/injection.dart';
 
 class MoveCubit extends Cubit<MoveState> {
   MoveCubit() : super(MoveState());
 
-  FilesController _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
 
   void init() async {
-    var rootFolder = _filesController.getFilesRootFolder;
+    _filesController = await GetIt.I.getAsync<FilesController>();
+    var rootFolder = await _filesController.getFilesRootFolder();
     List<Folder> allFolders = [];
     if (rootFolder != null) allFolders.add(rootFolder);
 
@@ -29,7 +29,8 @@ class MoveCubit extends Cubit<MoveState> {
     List<Folder>? moveFolder,
   ) async {
     if (moveToFolder == null) {
-      moveToFolder = _filesController.getFilesRootFolder;
+      var rootFilesFolder = await _filesController.getFilesRootFolder();
+      moveToFolder = rootFilesFolder;
     }
 
     await _filesController.createFolder(name, moveToFolder!.id);

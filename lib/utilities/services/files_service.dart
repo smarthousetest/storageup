@@ -209,7 +209,7 @@ class FilesService {
     return null;
   }
 
-  Future<Either<int, Record>> getRecordById(String recordId) async {
+  Future<Either<int?, Record>> getRecordById(String recordId) async {
     String url(String recorId) {
       return 'https://upstorage.net/api/tenant/%20/record/$recorId';
     }

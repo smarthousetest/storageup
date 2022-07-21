@@ -82,7 +82,7 @@ class MediaState extends Equatable {
           objectsValueListenable ?? this.objectsValueListenable,
       folderValueListenable:
           folderValueListenable ?? this.folderValueListenable,
-      foldersToListen: foldersToListen,
+      foldersToListen: foldersToListen ?? this.foldersToListen,
     );
   }
 

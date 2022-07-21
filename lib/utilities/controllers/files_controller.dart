@@ -48,8 +48,6 @@ class FilesController extends FilesObservable<Error>
     return _filesRepo.getFiles;
   }
 
-  Folder? get getFilesRootFolder => _filesRepo.getRootFolder;
-
   Future<Folder?> get getRootFolder => _service.getRootFolder();
 
   Future<List<Folder>?> getMediaFolders(bool withUpdate) async {
@@ -97,16 +95,8 @@ class FilesController extends FilesObservable<Error>
     return _filesRepo.getFiles;
   }
 
-  Future<ResponseStatus> deleteFolder(String id) {
-    return _service.deleteFolder(id);
-  }
-
   Future<List<Record>?> getRecentFiles() {
     return _service.getRecentsRecords();
-  }
-
-  Future<Folder?> getFolderById(String id) async {
-    return _service.getFolderById(id);
   }
 
   List<String>? getContentFromFolderById(String folderId) {
@@ -161,53 +151,6 @@ class FilesController extends FilesObservable<Error>
     _filesRepo.setFiles(files);
   }
 
-  Future<ResponseStatus> deleteObjects(List<BaseObject> objects) async {
-    List<String>? foldersIds;
-    List<String>? recordsIds;
-
-    for (var i = 0; i < objects.length; i++) {
-      if (objects[i] is Record) {
-        if (recordsIds == null) recordsIds = [];
-
-        recordsIds.add(objects[i].id);
-      } else if (objects[i] is Folder) {
-        if (foldersIds == null) foldersIds = [];
-
-        foldersIds.add(objects[i].id);
-      }
-    }
-
-    ResponseStatus? recordsResult;
-    if (recordsIds != null) {
-      recordsResult = await _service.deleteRecords(recordsIds);
-    }
-
-    ResponseStatus? foldersResult;
-    if (foldersIds != null) {
-      foldersResult = await _service.deleteFolders(foldersIds);
-    }
-
-    if (foldersResult == null && recordsResult != null) {
-      return recordsResult;
-    } else if (foldersResult != null && recordsResult == null) {
-      return foldersResult;
-    } else {
-      if (recordsResult == ResponseStatus.ok &&
-          foldersResult == ResponseStatus.ok) {
-        return ResponseStatus.ok;
-      } else if (recordsResult == ResponseStatus.noInternet &&
-          foldersResult == ResponseStatus.noInternet) {
-        return ResponseStatus.noInternet;
-      } else {
-        return ResponseStatus.failed;
-      }
-      // return recordsResult == ResponseStatus.ok &&
-      //         foldersResult == ResponseStatus.ok
-      //     ? ResponseStatus.ok
-      //     : ResponseStatus.failed;
-    }
-  }
-
   String? getMediaRootFolderId() {
     return _mediaRepo.mediaRootFolderId;
   }
@@ -226,28 +169,6 @@ class FilesController extends FilesObservable<Error>
     } else {
       return ResponseStatus.failed;
     }
-  }
-
-  Future<void> moveToFolder({
-    required String folderId,
-    List<String>? records,
-    List<String>? folders,
-  }) async {
-    final result = await _service.moveToFolder(
-      folderId: folderId,
-      folders: folders,
-      records: records,
-    );
-
-    if (result == ResponseStatus.ok) {
-      List<String> objectsIds = [];
-
-      if (records != null) objectsIds.addAll(records);
-      if (folders != null) objectsIds.addAll(folders);
-
-      _localStorage.moveContentToFolder(folderId, objectsIds);
-    } else
-      throw ServerError();
   }
 
   @override

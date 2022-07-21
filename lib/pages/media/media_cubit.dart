@@ -308,28 +308,8 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void mapSortedFieldChanged(String sortText) {
-    // final tmpState = _resetSortedList(state: state);
-    // final allFiles = tmpState.allRecords;
-
-    // List<Record> sortedMedia = [];
-    // var textLoverCase = sortText.toLowerCase();
-
-    // allFiles.forEach((element) {
-    //   var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
-    //       .format(element.createdAt!)
-    //       .toString()
-    //       .toLowerCase()
-    //       .contains(textLoverCase);
-    //   if ((element.createdAt != null && containsDate) ||
-    //       (element.name != null &&
-    //           element.name!.toLowerCase().contains(textLoverCase)) ||
-    //       (element.extension != null &&
-    //           element.extension!.toLowerCase().contains(textLoverCase))) {
-    //     sortedMedia.add(element);
-    //   }
-    // });
-
-    emit(state.copyWith(searchText: sortText, status: FormzStatus.pure));
+    var newState = state.copyWith(searchText: sortText);
+    emit(newState);
   }
 
   MediaState _resetSortedList({
@@ -648,15 +628,15 @@ class MediaCubit extends Cubit<MediaState> {
   void onActionDeleteChosen(BaseObject record) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    var result = await _filesController.deleteObjects([record]);
-    print(result);
-    if (result == ResponseStatus.ok) {
-      _update();
-    } else if (result == ResponseStatus.noInternet) {
-      emit(state.copyWith(status: FormzStatus.submissionCanceled));
-    } else {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
+    var result = await _filesController.delete([record]);
+    // print(result);
+    // if (result == ResponseStatus.ok) {
+    //   _update();
+    // } else if (result == ResponseStatus.noInternet) {
+    //   emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    // } else {
+    //   emit(state.copyWith(status: FormzStatus.submissionFailure));
+    // }
   }
 
   Future<ErrorType?> onActionRenameChosen(
@@ -726,7 +706,7 @@ class MediaCubit extends Cubit<MediaState> {
           _filesController.getObjectsValueListenableByFolderId('-1');
 
       ns = state.copyWith(
-          currentFolder: newFolder,
+          // currentFolder: newFolder,
           foldersToListen: foldersId,
           objectsValueListenable: valueListenable);
       emit(ns);
@@ -737,18 +717,19 @@ class MediaCubit extends Cubit<MediaState> {
     } else {
       final valueListenable =
           _filesController.getObjectsValueListenableByFolderId(newFolder.id);
-
+      final foldersId =
+          _filesController.getContentFromFolderById(newFolder.parentFolder!);
       final folder =
           _filesController.getObjectByIdFromLocalStorage(newFolder.id);
 
       ns = state.copyWith(
-        foldersToListen: null,
-        currentFolder: folder as Folder,
+        foldersToListen: foldersId,
+        // currentFolder: folder as Folder,
         objectsValueListenable: valueListenable,
       );
       emit(ns);
 
-      _filesController.getRelationsValueListenable(folder.id).addListener(() {
+      _filesController.getRelationsValueListenable(folder!.id).addListener(() {
         update();
       });
 

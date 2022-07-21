@@ -175,14 +175,29 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   void init(Folder? folder, List<Folder> previousFolders) async {
     _filesController = await GetIt.I.getAsync<FilesController>();
     Folder? currentFolder;
+    OpenedFolderState newState;
     if (folder == null) {
       await _filesController.updateFilesList();
-      currentFolder = _filesController.getFilesRootFolder;
+      currentFolder =
+          await _filesController.getFilesRootFolder(withUpdate: true);
+      final objectsVL = _filesController
+          .getObjectsValueListenableByFolderId(currentFolder!.id);
+
+      newState = state.copyWith(
+        currentFolder: currentFolder,
+        objectsValueListenable: objectsVL,
+      );
     } else {
       currentFolder = await _filesController.getFolderById(folder.id);
+      final objectsVL = _filesController
+          .getObjectsValueListenableByFolderId(currentFolder!.id);
+      newState = state.copyWith(
+        currentFolder: currentFolder,
+        objectsValueListenable: objectsVL,
+      );
     }
-    var objects =
-        await _filesController.getContentFromFolderById(currentFolder!.id);
+    // var objects =
+    //     await _filesController.getContentFromFolderById(currentFolder!.id);
 
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       update();
@@ -191,9 +206,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     bool progress = true;
     _repository = await GetIt.instance.getAsync<LatestFileRepository>();
     var valueNotifier = _userRepository.getValueNotifier;
+    emit(newState);
     emit(
       state.copyWith(
-        currentFolder: currentFolder,
+        //currentFolder: currentFolder,
         // objects: objects,
         // sortedFiles: objects,
         previousFolders: previousFolders,
@@ -431,21 +447,21 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   void _onActionDeleteChoosed(BaseObject object) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    var result = await _filesController.deleteObjects([object]);
+    var result = await _filesController.delete([object]);
 
     var recentsFile = await _filesController.getRecentFiles();
     if (recentsFile != null) {
       await _repository.addFiles(latestFile: recentsFile);
     }
-    print(result);
-    if (result == ResponseStatus.ok) {
-      await _packetController.updatePacket();
-      update();
-    } else if (result == ResponseStatus.noInternet) {
-      emit(state.copyWith(status: FormzStatus.submissionCanceled));
-    } else {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
+
+    // if (result == ResponseStatus.ok) {
+    //   await _packetController.updatePacket();
+    //   update();
+    // } else if (result == ResponseStatus.noInternet) {
+    //   emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    // } else {
+    //   emit(state.copyWith(status: FormzStatus.submissionFailure));
+    // }
   }
 
   Future<void> onActionMoveFiles(
@@ -593,7 +609,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       try {
         await _filesController.updateFilesList();
       } catch (_) {}
-      folderId = _filesController.getFilesRootFolder?.id;
+      var rootFilesFolder = await _filesController.getFilesRootFolder();
+      folderId = rootFilesFolder!.id;
     } else {
       folderId = folderId;
     }
@@ -644,19 +661,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> update({String? uploadingFileId}) async {
     await _filesController.updateFilesList();
-    var objects = await _filesController
-        .getContentFromFolderById(state.currentFolder!.id);
 
-    // if (uploadingFileId != null) {
-    //   var uploadingFileIndex =
-    //       objects.indexWhere((element) => element.id == uploadingFileId);
-    //   if (uploadingFileIndex != -1)
-    //     objects[uploadingFileIndex] =
-    //         (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
-    // }
+    final valueListenable = _filesController
+        .getObjectsValueListenableByFolderId(state.currentFolder!.id);
+
     await _packetController.updatePacket();
     emit(state.copyWith(
-      // objects: objects,
+      objectsValueListenable: valueListenable,
       status: FormzStatus.pure,
     ));
 

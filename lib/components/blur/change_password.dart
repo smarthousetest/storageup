@@ -16,6 +16,7 @@ import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/auth/auth_bloc.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/services/auth_service.dart';
 

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
@@ -408,6 +409,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   }
 
   Widget _filesGrid(OpenedFolderState state) {
+    if (state.objectsValueListenable == null) return Container();
     return Expanded(
       child: LayoutBuilder(builder: (context, constrains) {
         //print('min width ${constrains.smallest.width}');
@@ -416,105 +418,117 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             child: BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
                 bloc: _bloc,
                 builder: (context, state) {
-                  return GridView.builder(
-                    itemCount: state.sortedFiles.length,
-                    shrinkWrap: true,
-                    controller: ScrollController(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: constrains.smallest.width ~/ 110,
-                      childAspectRatio: (1 / 1.22),
-                      mainAxisSpacing: 15,
-                    ),
-                    itemBuilder: (context, index) {
-                      Function() onTap;
-                      var obj = state.sortedFiles[index];
+                  return ValueListenableBuilder<Box<BaseObject>>(
+                      valueListenable: state.objectsValueListenable!,
+                      builder: (context, box, child) {
+                        final currentValues = box.values.getSortedObjects(
+                          parentFoldersId: [state.currentFolder!.id],
+                          criterio: state.criterion,
+                          direction: state.direction,
+                          sortingText: state.search,
+                        );
 
-                      // if (state.sortedFiles.length !=
-                      // _popupControllers.length) {
-                      // _popupControllers = [];
-                      // _initiatingControllers(state);
-                      // }
-                      if (state.sortedFiles.length !=
-                          _popupControllers.length) {
-                        final controller = CustomPopupMenuController();
-                        _popupControllers.add(controller);
-                      }
-                      _onPointerDown() {
-                        _popupControllers[state.sortedFiles.indexOf(obj)]
-                            .showMenu();
-                        //controller.showMenu();
-                      }
+                        return GridView.builder(
+                          itemCount: currentValues.length,
+                          shrinkWrap: true,
+                          controller: ScrollController(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: constrains.smallest.width ~/ 110,
+                            childAspectRatio: (1 / 1.22),
+                            mainAxisSpacing: 15,
+                          ),
+                          itemBuilder: (context, index) {
+                            Function() onTap;
+                            BaseObject obj = currentValues.elementAt(index);
 
-                      if (obj is Folder) {
-                        onTap = () {
-                          print(obj);
-                          widget.push(
-                            child: OpenedFolderView(
-                              currentFolder: obj,
-                              previousFolders: [
-                                ...state.previousFolders,
-                                state.currentFolder!
-                              ],
-                              pop: widget.pop,
-                              push: widget.push,
-                            ),
-                            folderId: obj.id,
-                          );
-                        };
-                      } else {
-                        onTap = () {
-                          if (_indexObject != index) {
-                            setState(() {
-                              _indexObject = index;
-                            });
-                            print('file tapped');
-                            startTimer();
-                            context
-                                .read<OpenedFolderCubit>()
-                                .fileTapped(obj as Record);
-                          }
-                        };
-                      }
+                            // if (state.sortedFiles.length !=
+                            // _popupControllers.length) {
+                            // _popupControllers = [];
+                            // _initiatingControllers(state);
+                            // }
+                            if (currentValues.length !=
+                                _popupControllers.length) {
+                              final controller = CustomPopupMenuController();
+                              _popupControllers.add(controller);
+                            }
+                            _onPointerDown() {
+                              _popupControllers[currentValues.indexOf(obj)]
+                                  .showMenu();
+                              //controller.showMenu();
+                            }
 
-                      return MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onSecondaryTapUp: (_) {
-                              _onPointerDown();
-                            },
-                            onTap: onTap,
-                            child: IgnorePointer(
-                              child: CustomPopupMenu(
-                                  pressType: PressType.singleClick,
-                                  barrierColor: Colors.transparent,
-                                  showArrow: false,
-                                  enablePassEvent: false,
-                                  horizontalMargin: -90,
-                                  verticalMargin: -90,
-                                  controller: _popupControllers[
-                                      state.sortedFiles.indexOf(obj)],
-                                  menuBuilder: () {
-                                    return FilesPopupMenuActions(
-                                      theme: Theme.of(context),
-                                      translate: translate,
-                                      object: obj,
-                                      onTap: (action) async {
-                                        _popupControllers[
-                                                state.sortedFiles.indexOf(obj)]
-                                            .hideMenu();
-                                        _popupActions(
-                                            state, context, action, obj);
-                                      },
-                                    );
+                            if (obj is Folder) {
+                              onTap = () {
+                                print(obj);
+                                widget.push(
+                                  child: OpenedFolderView(
+                                    currentFolder: obj,
+                                    previousFolders: [
+                                      ...state.previousFolders,
+                                      state.currentFolder!
+                                    ],
+                                    pop: widget.pop,
+                                    push: widget.push,
+                                  ),
+                                  folderId: obj.id,
+                                );
+                              };
+                            } else {
+                              onTap = () {
+                                if (_indexObject != index) {
+                                  setState(() {
+                                    _indexObject = index;
+                                  });
+                                  print('file tapped');
+                                  startTimer();
+                                  context
+                                      .read<OpenedFolderCubit>()
+                                      .fileTapped(obj as Record);
+                                }
+                              };
+                            }
+
+                            return MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onSecondaryTapUp: (_) {
+                                    _onPointerDown();
                                   },
-                                  child: ObjectView(
-                                      object: state.sortedFiles[index])),
-                            ),
-                          ));
-                      //folderId: obj.id,
-                    },
-                  );
+                                  onTap: onTap,
+                                  child: IgnorePointer(
+                                    child: CustomPopupMenu(
+                                        pressType: PressType.singleClick,
+                                        barrierColor: Colors.transparent,
+                                        showArrow: false,
+                                        enablePassEvent: false,
+                                        horizontalMargin: -90,
+                                        verticalMargin: -90,
+                                        controller: _popupControllers[
+                                            currentValues.indexOf(obj)],
+                                        menuBuilder: () {
+                                          return FilesPopupMenuActions(
+                                            theme: Theme.of(context),
+                                            translate: translate,
+                                            object: obj,
+                                            onTap: (action) async {
+                                              _popupControllers[currentValues
+                                                      .indexOf(obj)]
+                                                  .hideMenu();
+                                              _popupActions(
+                                                  state, context, action, obj);
+                                            },
+                                          );
+                                        },
+                                        child: ObjectView(
+                                            object: currentValues[index])),
+                                  ),
+                                ));
+                            //folderId: obj.id,
+                          },
+                        );
+                      });
                 }));
       }),
     );
@@ -1393,7 +1407,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
         context.read<OpenedFolderCubit>().uploadFilesAction(folderId);
         break;
       case ContextMenuAction.createFolder:
-        final folderId = StateContainer.of(context).chosenFilesFolderId;
+        final folderId = state.currentFolder?.id;
         var folderName = await showDialog<String?>(
             context: context,
             builder: (BuildContext context) {

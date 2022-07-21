@@ -138,7 +138,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
         await _filesController.updateFilesList();
       } catch (_) {}
-      folderId = _filesController.getFilesRootFolder?.id;
+      var rootFilesFolder = await _filesController.getFilesRootFolder();
+      folderId = rootFilesFolder!.id;
     } else {
       folderId = event.folderId;
     }
