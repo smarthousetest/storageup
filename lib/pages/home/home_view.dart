@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/create_album.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
@@ -70,26 +71,6 @@ class _HomePageState extends State<HomePage> {
       setWindowMaxSize(Size(double.infinity, double.infinity));
     }
   }
-
-  @override
-  void initState() {
-    infoPage = InfoPage();
-    filePage = StateSortedContainer(child: FilePage());
-    likePage = LikePage();
-    spaceSellPage = SpaceSellPage();
-    financePage = FinancePage();
-    settingsPage = SettingsPage();
-    mediaPage = MediaPage();
-    super.initState();
-  }
-
-  late Widget infoPage;
-  late Widget filePage;
-  late Widget likePage;
-  late Widget spaceSellPage;
-  late Widget financePage;
-  late Widget settingsPage;
-  late Widget mediaPage;
 
   Widget getPage() {
     return IndexedStack(
@@ -222,7 +203,65 @@ class _HomePageState extends State<HomePage> {
                   );
                 }),
               ),
-              Expanded(child: getPage()),
+              Expanded(
+                child: Stack(
+                  children: [
+                    getPage(),
+                    Positioned(
+                      right: 30,
+                      bottom: 20,
+                      child: Container(
+                        height: 68,
+                        width: 500,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Color(0xFFF1F8FE)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Color.fromARGB(25, 23, 69, 139),
+                              blurRadius: 6,
+                              offset: Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Идет загрузка файлов',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  '2/6',
+                                  style: TextStyle(fontSize: 16),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            LinearPercentIndicator(
+                              padding: EdgeInsets.zero,
+                              animation: false,
+                              backgroundColor: Color(0xFFF7F9FB),
+                              lineHeight: 4.0,
+                              barRadius: Radius.circular(7),
+                              alignment: MainAxisAlignment.end,
+                              percent: 70 / 100,
+                              progressColor: Color(0xFF70BBF6),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
