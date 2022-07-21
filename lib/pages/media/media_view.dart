@@ -827,61 +827,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                 theme: Theme.of(context),
                                 translate: translate,
                                 onTap: (action) async {
-                                  _popupControllers[state.currentFolderRecords
-                                          .indexOf(record)]
-                                      .hideMenu();
-                                  if (action == MediaAction.properties) {
-                                    var res = await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return FileInfoView(
-                                              object: record,
-                                              user: state.valueNotifier?.value);
-                                        });
-                                    if (res != null) {
-                                      blocContext
-                                          .read<MediaCubit>()
-                                          .fileTapped(record);
-                                    }
-                                  } else if (action == MediaAction.rename) {
-                                    var fileExtention = FileAttribute()
-                                        .getFileExtension(record.name ?? '');
-                                    var result = await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        var filename = FileAttribute()
-                                            .getFileName(record.name ?? '');
-                                        return BlurRename(filename, true);
-                                      },
-                                    );
-                                    if (result != null &&
-                                        result is String &&
-                                        result !=
-                                            FileAttribute().getFileName(
-                                                record.name ?? '')) {
-                                      result = result + '.' + fileExtention;
-                                      final res = await context
-                                          .read<MediaCubit>()
-                                          .onActionRenameChosen(record, result);
-                                      if (res == ErrorType.alreadyExist) {
-                                        _rename(blocContext, record, result,
-                                            fileExtention);
-                                      }
-                                    }
-                                  } else {
-                                    //   controller.hideMenu();
-                                    var result = await showDialog<bool>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return BlurDelete();
-                                      },
-                                    );
-                                    if (result == true) {
-                                      context
-                                          .read<MediaCubit>()
-                                          .onActionDeleteChosen(record);
-                                    }
-                                  }
+                                  onActionTap(context, action, state, record);
                                 },
                               );
                             },
@@ -916,6 +862,54 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
       if (res == ErrorType.alreadyExist) {
         _rename(context, record, newName, extention);
       }
+    }
+  }
+
+  void onActionTap(BuildContext context, MediaAction action, MediaState state,
+      Record record) async {
+    _popupControllers[state.currentFolderRecords.indexOf(record)].hideMenu();
+    if (action == MediaAction.properties) {
+      var res = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return FileInfoView(
+                object: record, user: state.valueNotifier?.value);
+          });
+      if (res != null) {
+        context.read<MediaCubit>().fileTapped(record);
+      }
+    } else if (action == MediaAction.rename) {
+      var fileExtention = FileAttribute().getFileExtension(record.name ?? '');
+      var result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          var filename = FileAttribute().getFileName(record.name ?? '');
+          return BlurRename(filename, true);
+        },
+      );
+      if (result != null &&
+          result is String &&
+          result != FileAttribute().getFileName(record.name ?? '')) {
+        result = result + '.' + fileExtention;
+        final res = await context
+            .read<MediaCubit>()
+            .onActionRenameChosen(record, result);
+        if (res == ErrorType.alreadyExist) {
+          _rename(context, record, result, fileExtention);
+        }
+      }
+    } else if (action == MediaAction.delete) {
+      var result = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return BlurDelete();
+        },
+      );
+      if (result == true) {
+        context.read<MediaCubit>().onActionDeleteChosen(record);
+      }
+    } else if (action == MediaAction.save) {
+      context.read<MediaCubit>().fileSave(record);
     }
   }
 
@@ -1110,67 +1104,12 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                 state.currentFolderRecords.indexOf(e)],
                             menuBuilder: () {
                               return MediaPopupMenuActions(
-                                  theme: Theme.of(context),
-                                  translate: translate,
-                                  onTap: (action) async {
-                                    _popupControllers[state.currentFolderRecords
-                                            .indexOf(e)]
-                                        .hideMenu();
-                                    if (action == MediaAction.properties) {
-                                      var res = await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return FileInfoView(
-                                                object: e,
-                                                user:
-                                                    state.valueNotifier?.value);
-                                          });
-                                      if (res != null) {
-                                        context
-                                            .read<MediaCubit>()
-                                            .fileTapped(e);
-                                      }
-                                    } else if (action == MediaAction.rename) {
-                                      var fileExtention = FileAttribute()
-                                          .getFileExtension(record.name ?? '');
-                                      var result = await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          var filename = FileAttribute()
-                                              .getFileName(record.name ?? '');
-                                          return BlurRename(filename, true);
-                                        },
-                                      );
-                                      if (result != null &&
-                                          result is String &&
-                                          result !=
-                                              FileAttribute().getFileName(
-                                                  record.name ?? '')) {
-                                        result = result + '.' + fileExtention;
-                                        final res = await context
-                                            .read<MediaCubit>()
-                                            .onActionRenameChosen(
-                                                record, result);
-                                        if (res == ErrorType.alreadyExist) {
-                                          _rename(context, record, result,
-                                              fileExtention);
-                                        }
-                                      }
-                                    } else {
-                                      //   controller.hideMenu();
-                                      var result = await showDialog<bool>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return BlurDelete();
-                                        },
-                                      );
-                                      if (result == true) {
-                                        context
-                                            .read<MediaCubit>()
-                                            .onActionDeleteChosen(e);
-                                      }
-                                    }
-                                  });
+                                theme: Theme.of(context),
+                                translate: translate,
+                                onTap: (MediaAction action) {
+                                  onActionTap(context, action, state, record);
+                                },
+                              );
                             },
                             child: Container(
                               height: 30,
@@ -1352,6 +1291,49 @@ class _MediaPopupMenuActionsState extends State<MediaPopupMenuActions> {
                           ),
                           Text(
                             widget.translate.rename,
+                            style: style,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: mainColor,
+                  height: 1,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    widget.onTap(MediaAction.save);
+                  },
+                  child: MouseRegion(
+                    onEnter: (event) {
+                      setState(() {
+                        ind = 6;
+                      });
+                    },
+                    child: Container(
+                      width: 190,
+                      height: 40,
+                      color: ind == 6 ? mainColor : null,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.zero,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   'assets/file_page/file_options/info.png',
+                          //   height: 20,
+                          // ),
+                          SvgPicture.asset(
+                            'assets/options/download.svg',
+                            height: 20,
+                          ),
+                          Container(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.translate.download,
                             style: style,
                           ),
                         ],

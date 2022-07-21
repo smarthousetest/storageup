@@ -832,7 +832,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     if (path == null) {
       String? downloadPath = await FilePicker.platform.getDirectoryPath();
       if (downloadPath != null) {
-        _downloadFile(record.id, downloadPath);
+        _downloadFile(record.id, '$downloadPath/');
       }
     } else {
       String downloadFolderPath = await getDownloadAppFolder();
@@ -848,7 +848,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       } else {
         String? downloadPath = await FilePicker.platform.getDirectoryPath();
         if (downloadPath != null) {
-          _downloadFile(record.id, downloadPath);
+          _downloadFile(record.id, '$downloadPath/');
         }
       }
     }
