@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:storageup/components/media/media_viewer.dart';
+import 'package:storageup/components/media/short_file_info.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/pages/media/media_open/media_open_bloc.dart';
 import 'package:storageup/pages/media/media_open/media_open_event.dart';
@@ -183,8 +184,14 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
                                     child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
+                                        onTap: () async {
+                                          await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return ShortFileInfo(
+                                                  object: state.choosedMedia,
+                                                );
+                                              });
                                         },
                                         child: SvgPicture.asset(
                                           'assets/options/info.svg',
