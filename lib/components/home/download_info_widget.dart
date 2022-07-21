@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/main_download_info.dart';
 
 class DownloadInfoWidget extends StatelessWidget {
   const DownloadInfoWidget({
     Key? key,
     required this.downloadInfo,
+    required this.translate,
   }) : super(key: key);
 
   final MainDownloadInfo downloadInfo;
+  final S translate;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class DownloadInfoWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Идет скачивание файлов',
+                translate.downloading_files,
                 style: TextStyle(fontSize: 16),
               ),
               Text(

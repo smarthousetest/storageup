@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/main_download_info.dart';
 import 'package:storageup/models/main_upload_info.dart';
 
@@ -7,9 +8,11 @@ class UploadInfoWidget extends StatelessWidget {
   const UploadInfoWidget({
     Key? key,
     required this.uploadInfo,
+    required this.translate,
   }) : super(key: key);
 
   final MainUploadInfo uploadInfo;
+  final S translate;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class UploadInfoWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Идет загрузка файлов',
+                translate.uploading_files,
                 style: TextStyle(fontSize: 16),
               ),
               Text(

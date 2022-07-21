@@ -139,6 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
         "down": MessageLookupByLibrary.simpleMessage("Скачать"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
+        "downloading_files":
+            MessageLookupByLibrary.simpleMessage("Идет скачивание файлов"),
         "downloating": MessageLookupByLibrary.simpleMessage("Скачивание"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Ваш заработок составит"),
@@ -400,6 +402,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Загрузить в файлы"),
         "upload_to_media":
             MessageLookupByLibrary.simpleMessage("Загрузить в медиа"),
+        "uploading_files":
+            MessageLookupByLibrary.simpleMessage("Идет загрузка файлов"),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
         "video": MessageLookupByLibrary.simpleMessage("Видео"),
         "viewed": MessageLookupByLibrary.simpleMessage("Просмотрено"),

@@ -236,6 +236,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           DownloadInfoWidget(
             downloadInfo: state.downloadInfo,
+            translate: translate,
           ),
           if (state.downloadInfo.isDownloading && state.uploadInfo.isUploading)
             SizedBox(
@@ -243,6 +244,7 @@ class _HomePageState extends State<HomePage> {
             ),
           UploadInfoWidget(
             uploadInfo: state.uploadInfo,
+            translate: translate,
           ),
         ],
       ),
