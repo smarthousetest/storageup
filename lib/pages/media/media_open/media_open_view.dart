@@ -11,9 +11,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:storageup/components/media/media_viewer.dart';
 import 'package:storageup/components/media/short_file_info.dart';
 import 'package:storageup/constants.dart';
+import 'package:storageup/pages/media/media_cubit.dart';
 import 'package:storageup/pages/media/media_open/media_open_bloc.dart';
 import 'package:storageup/pages/media/media_open/media_open_event.dart';
 import 'package:storageup/pages/media/media_open/media_open_state.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 
 class Positions {
@@ -37,7 +39,9 @@ class MediaOpenPage extends StatefulWidget {
 class _MediaOpenPageState extends State<MediaOpenPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<MediaOpenBloc>()
+      create: (context) => MediaOpenBloc(
+          getIt<FilesController>(instanceName: 'files_controller'),
+          widget.arguments.mediaCubit)
         ..add(MediaOpenPageOpened(
             choosedFolder: (widget.arguments.selectedFolder as Folder).copyWith(
                 records: (widget.arguments.selectedFolder as Folder)
@@ -206,8 +210,23 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                   child: MouseRegion(
                                     cursor: SystemMouseCursors.click,
                                     child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
+                                        onTap: () async {
+                                          if (state.mediaFromFolder.length ==
+                                              1) {
+                                            await widget.arguments.mediaCubit
+                                                .onActionDeleteChosen(
+                                              state.choosedMedia as Record,
+                                            );
+                                            Navigator.pop(context);
+                                            return;
+                                          }
+
+                                          context.read<MediaOpenBloc>().add(
+                                                MediaOpenDelete(
+                                                  mediaId:
+                                                      state.choosedMedia.id,
+                                                ),
+                                              );
                                         },
                                         child: SvgPicture.asset(
                                           'assets/options/trash.svg',
@@ -251,10 +270,12 @@ class MediaOpenPageArgs {
   List<BaseObject> media;
   BaseObject selectedMedia;
   BaseObject? selectedFolder;
+  MediaCubit mediaCubit;
 
   MediaOpenPageArgs({
     required this.media,
     required this.selectedMedia,
+    required this.mediaCubit,
     this.selectedFolder,
   });
 }

@@ -599,7 +599,7 @@ class MediaCubit extends Cubit<MediaState> {
     _setRecordDownloading(recordId: recordId);
   }
 
-  void onActionDeleteChosen(Record record) async {
+  Future<void> onActionDeleteChosen(Record record) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([record]);

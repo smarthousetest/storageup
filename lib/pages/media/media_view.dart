@@ -737,14 +737,18 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
 
   void _onTapItem(List<BaseObject> media, BaseObject selectedMedia,
       BuildContext context, Folder? openedFolder) {
+    var cubit = context.read<MediaCubit>();
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return MediaOpenPage(
             arguments: MediaOpenPageArgs(
-                media: media,
-                selectedMedia: selectedMedia,
-                selectedFolder: openedFolder),
+              media: media,
+              selectedMedia: selectedMedia,
+              selectedFolder: openedFolder,
+              mediaCubit: cubit,
+            ),
           );
         });
   }

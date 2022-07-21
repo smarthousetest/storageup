@@ -15,6 +15,7 @@ import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/models/enums.dart';
+import 'package:storageup/pages/media/media_cubit.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/extensions.dart';
 
@@ -23,7 +24,7 @@ import 'media_open_state.dart';
 
 @injectable
 class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
-  MediaOpenBloc(@Named('files_controller') this._controller)
+  MediaOpenBloc(@Named('files_controller') this._controller, this._mediaCubit)
       : super(MediaOpenState()) {
     on<MediaOpenEvent>((event, emit) async {
       if (event is MediaOpenPageOpened) {
@@ -54,6 +55,7 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
   }
 
   FilesController _controller;
+  MediaCubit _mediaCubit;
   final LoadController _loadController = LoadController.instance;
   late var _loadObserver = Observer<LoadNotification>(
     (notification) {
@@ -299,28 +301,32 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     MediaOpenDelete event,
     Emitter<MediaOpenState> emit,
   ) async {
-    await _controller.deleteFiles([
-      state.mediaFromFolder.firstWhere((element) => element.id == event.mediaId)
-    ]);
+    int recordToDeleteIndex = state.mediaFromFolder
+        .indexWhere((element) => element.id == event.mediaId);
+    Record recordToDelete =
+        state.mediaFromFolder[recordToDeleteIndex] as Record;
 
-    List<BaseObject> mediaFromFolder = [];
-    if (state.openedFolder.id == '-1') {
-      var allMediaFolders = await _controller.getMediaFolders(true);
+    await _mediaCubit.onActionDeleteChosen(recordToDelete);
 
-      for (var folder in allMediaFolders!) {
-        if (folder.id != '-1') {
-          var records = await _controller.getContentFromFolderById(folder.id);
+    List<BaseObject> newMediaFromFolder =
+        state.mediaFromFolder.map((e) => (e as Record).copyWith()).toList();
 
-          mediaFromFolder.addAll(records);
-        }
-      }
+    newMediaFromFolder.removeAt(recordToDeleteIndex);
+    BaseObject choosedMedia;
+
+    if (newMediaFromFolder.length == recordToDeleteIndex) {
+      choosedMedia = newMediaFromFolder[recordToDeleteIndex - 1];
+      add(MediaOpenChangeChoosedMedia(index: recordToDeleteIndex - 1));
     } else {
-      mediaFromFolder =
-          await _controller.getContentFromFolderById(state.openedFolder.id);
+      choosedMedia = newMediaFromFolder[recordToDeleteIndex];
+      add(MediaOpenChangeChoosedMedia(index: recordToDeleteIndex));
     }
 
     emit(
-      state.copyWith(mediaFromFolder: mediaFromFolder),
+      state.copyWith(
+        mediaFromFolder: newMediaFromFolder,
+        choosedMedia: choosedMedia,
+      ),
     );
   }
 
