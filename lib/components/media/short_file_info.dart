@@ -111,13 +111,6 @@ class _ButtonTemplateState extends State<ShortFileInfo> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(30),
-                            child: Divider(
-                              height: 1,
-                              color: Theme.of(context).dividerColor,
-                            ),
-                          ),
-                          Padding(
                             padding: const EdgeInsets.only(top: 0),
                             child: Center(
                               child: Text(
