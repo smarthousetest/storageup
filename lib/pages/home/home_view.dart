@@ -15,6 +15,7 @@ import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/exit.dart';
 import 'package:storageup/components/blur/menu_upload.dart';
 import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/components/home/upload_info_widget.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
@@ -207,57 +208,10 @@ class _HomePageState extends State<HomePage> {
                 child: Stack(
                   children: [
                     getPage(),
-                    Positioned(
-                      right: 30,
-                      bottom: 20,
-                      child: Container(
-                        height: 68,
-                        width: 500,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Color(0xFFF1F8FE)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Color.fromARGB(25, 23, 69, 139),
-                              blurRadius: 6,
-                              offset: Offset(0, 4),
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Идет загрузка файлов',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  '2/6',
-                                  style: TextStyle(fontSize: 16),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            LinearPercentIndicator(
-                              padding: EdgeInsets.zero,
-                              animation: false,
-                              backgroundColor: Color(0xFFF7F9FB),
-                              lineHeight: 4.0,
-                              barRadius: Radius.circular(7),
-                              alignment: MainAxisAlignment.end,
-                              percent: 70 / 100,
-                              progressColor: Color(0xFF70BBF6),
-                            ),
-                          ],
-                        ),
-                      ),
+                    BlocBuilder<HomeBloc, HomeState>(
+                      builder: (context, state) {
+                        return _buildProgressBars(state);
+                      },
                     )
                   ],
                 ),
@@ -267,6 +221,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget _buildProgressBars(HomeState state) {
+    if (!state.uploadInfo.isUploading) {
+      return SizedBox.shrink();
+    }
+
+    return UploadInfoWidget();
   }
 
   List<CustomMenuButton> _customMenuItem() {
