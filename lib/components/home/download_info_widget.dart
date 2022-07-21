@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:storageup/models/main_download_info.dart';
-import 'package:storageup/models/main_upload_info.dart';
 
-class UploadInfoWidget extends StatelessWidget {
-  const UploadInfoWidget({
+class DownloadInfoWidget extends StatelessWidget {
+  const DownloadInfoWidget({
     Key? key,
-    required this.uploadInfo,
+    required this.downloadInfo,
   }) : super(key: key);
 
-  final MainUploadInfo uploadInfo;
+  final MainDownloadInfo downloadInfo;
 
   @override
   Widget build(BuildContext context) {
-    if (!uploadInfo.isUploading) {
+    if (!downloadInfo.isDownloading) {
       return SizedBox.shrink();
     }
 
@@ -39,11 +38,11 @@ class UploadInfoWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Идет загрузка файлов',
+                'Идет скачивание файлов',
                 style: TextStyle(fontSize: 16),
               ),
               Text(
-                '${uploadInfo.countOfUploadedFiles} / ${uploadInfo.countOfUploadingFiles}',
+                '${downloadInfo.countOfDownloadedFiles} / ${downloadInfo.countOfDownloadingFiles}',
                 style: TextStyle(fontSize: 16),
               )
             ],
@@ -58,7 +57,7 @@ class UploadInfoWidget extends StatelessWidget {
             lineHeight: 4.0,
             barRadius: Radius.circular(7),
             alignment: MainAxisAlignment.end,
-            percent: uploadInfo.uploadingFilePercent / 100,
+            percent: downloadInfo.downloadingFilePercent / 100,
             progressColor: Color(0xFF70BBF6),
           ),
         ],

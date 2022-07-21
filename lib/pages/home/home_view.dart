@@ -15,6 +15,7 @@ import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/exit.dart';
 import 'package:storageup/components/blur/menu_upload.dart';
 import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/components/home/download_info_widget.dart';
 import 'package:storageup/components/home/upload_info_widget.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -224,11 +225,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildProgressBars(HomeState state) {
-    if (!state.uploadInfo.isUploading) {
+    if (!state.uploadInfo.isUploading && !state.downloadInfo.isDownloading) {
       return SizedBox.shrink();
     }
 
-    return UploadInfoWidget();
+    return Positioned(
+      right: 30,
+      bottom: 20,
+      child: Column(
+        children: [
+          DownloadInfoWidget(
+            downloadInfo: state.downloadInfo,
+          ),
+          if (state.downloadInfo.isDownloading && state.uploadInfo.isUploading)
+            SizedBox(
+              height: 20,
+            ),
+          UploadInfoWidget(
+            uploadInfo: state.uploadInfo,
+          ),
+        ],
+      ),
+    );
   }
 
   List<CustomMenuButton> _customMenuItem() {
