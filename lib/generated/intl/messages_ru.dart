@@ -138,7 +138,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleting": MessageLookupByLibrary.simpleMessage("Удаление"),
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
         "down": MessageLookupByLibrary.simpleMessage("Скачать"),
-        "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
+        "download": MessageLookupByLibrary.simpleMessage("Скачать"),
         "downloading_files":
             MessageLookupByLibrary.simpleMessage("Идет скачивание файлов"),
         "downloating": MessageLookupByLibrary.simpleMessage("Скачивание"),

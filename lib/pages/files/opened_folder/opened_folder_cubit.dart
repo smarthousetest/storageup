@@ -825,9 +825,27 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> fileSave(Record record) async {
-    String? result = await FilePicker.platform.getDirectoryPath();
-    if (result != null) {
-      _downloadFile(record.id, result);
+    var box = await Hive.openBox(kPathDBName);
+
+    var path = box.get(record.id);
+
+    if (path == null) {
+      String? downloadPath = await FilePicker.platform.getDirectoryPath();
+      if (downloadPath != null) {
+        _downloadFile(record.id, downloadPath);
+      }
+    } else {
+      String downloadFolderPath = await getDownloadAppFolder();
+      String fullPath = '${downloadFolderPath}${path}';
+
+      if (await File(fullPath).exists()) {
+        String? downloadPath =
+            await FilePicker.platform.saveFile(fileName: record.name);
+
+        if (downloadPath != null) {
+          File(fullPath).copy(downloadPath);
+        }
+      }
     }
   }
 
