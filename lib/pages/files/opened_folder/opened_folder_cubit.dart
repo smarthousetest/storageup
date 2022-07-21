@@ -845,6 +845,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         if (downloadPath != null) {
           File(fullPath).copy(downloadPath);
         }
+      } else {
+        String? downloadPath = await FilePicker.platform.getDirectoryPath();
+        if (downloadPath != null) {
+          _downloadFile(record.id, downloadPath);
+        }
       }
     }
   }
