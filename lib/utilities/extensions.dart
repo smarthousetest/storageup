@@ -57,7 +57,7 @@ extension FilesSorting on Iterable<BaseObject> {
     SortingDirection direction = SortingDirection.down,
     String? sortingText,
   }) {
-    if (sortingText != null) {
+    if (sortingText != null && sortingText.isNotEmpty) {
       return _sortByText(
         parentFoldersId: parentFoldersId,
         direction: direction,

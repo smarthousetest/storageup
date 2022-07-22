@@ -268,20 +268,20 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     OpenedFolderState newState = state;
     var criterion = newState.criterion;
     var direction = newState.direction;
-    switch (criterion) {
-      case SortingCriterion.byType:
-        await _sortByType(newState, direction, criterion);
-        break;
-      case SortingCriterion.byDateCreated:
-        await _sortByDate(newState, direction, criterion);
-        break;
-      case SortingCriterion.byName:
-        await _sortByName(newState, direction, criterion);
-        break;
-      case SortingCriterion.bySize:
-        await _sortBySize(newState, direction, criterion);
-        break;
-    }
+    // switch (criterion) {
+    //   case SortingCriterion.byType:
+    //     await _sortByType(newState, direction, criterion);
+    //     break;
+    //   case SortingCriterion.byDateCreated:
+    //     await _sortByDate(newState, direction, criterion);
+    //     break;
+    //   case SortingCriterion.byName:
+    //     await _sortByName(newState, direction, criterion);
+    //     break;
+    //   case SortingCriterion.bySize:
+    //     await _sortBySize(newState, direction, criterion);
+    //     break;
+    // }
   }
 
   OpenedFolderState _clearGroupedMap(
@@ -313,129 +313,129 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     return sortedFiles;
   }
 
-  Future<void> _sortByType(
-    OpenedFolderState state,
-    SortingDirection direction,
-    SortingCriterion criterion,
-  ) async {
-    List<BaseObject> items = mapSortedFieldChanged(state.search);
-    //await _getClearListOfFiles(state);
+  // Future<void> _sortByType(
+  //   OpenedFolderState state,
+  //   SortingDirection direction,
+  //   SortingCriterion criterion,
+  // ) async {
+  //   List<BaseObject> items = mapSortedFieldChanged(state.search);
+  //   //await _getClearListOfFiles(state);
 
-    Map<String, List<BaseObject>> groupedFiles = {};
+  //   Map<String, List<BaseObject>> groupedFiles = {};
 
-    items.forEach((element) {
-      String key;
-      if (element.extension == null) {
-        key = 'folder';
-      } else {
-        key = element.extension!.toLowerCase();
-      }
-      if (groupedFiles.containsKey(key)) {
-        groupedFiles[key]?.add(element);
-      } else {
-        groupedFiles[key] = [element];
-      }
-    });
+  //   items.forEach((element) {
+  //     String key;
+  //     if (element.extension == null) {
+  //       key = 'folder';
+  //     } else {
+  //       key = element.extension!.toLowerCase();
+  //     }
+  //     if (groupedFiles.containsKey(key)) {
+  //       groupedFiles[key]?.add(element);
+  //     } else {
+  //       groupedFiles[key] = [element];
+  //     }
+  //   });
 
-    if (direction == SortingDirection.down) {
-      emit(state.copyWith(
-        groupedFiles: groupedFiles,
-        criterion: SortingCriterion.byType,
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        criterion: SortingCriterion.byType,
-        groupedFiles:
-            // SplayTreeMap<String, List<BaseObject>>.from(
-            //     groupedFiles, (a, b) => a.compareTo(b))
-            //groupedFiles.keys.toList()..sort()
-            // LinkedHashMap.fromEntries(groupedFiles.entries.toList().reversed)
-            groupedFiles
-                .map((key, value) => MapEntry(key, value.reversed.toList())),
-      ));
-    }
-  }
+  //   if (direction == SortingDirection.down) {
+  //     emit(state.copyWith(
+  //       groupedFiles: groupedFiles,
+  //       criterion: SortingCriterion.byType,
+  //       status: FormzStatus.pure,
+  //     ));
+  //   } else {
+  //     emit(state.copyWith(
+  //       criterion: SortingCriterion.byType,
+  //       groupedFiles:
+  //           // SplayTreeMap<String, List<BaseObject>>.from(
+  //           //     groupedFiles, (a, b) => a.compareTo(b))
+  //           //groupedFiles.keys.toList()..sort()
+  //           // LinkedHashMap.fromEntries(groupedFiles.entries.toList().reversed)
+  //           groupedFiles
+  //               .map((key, value) => MapEntry(key, value.reversed.toList())),
+  //     ));
+  //   }
+  // }
 
-  Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction,
-      SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
-    sortedFiles.sort((a, b) {
-      // if (a.size != null && b.size != null) {
-      return a.size.compareTo(b.size);
-      // }
-      // else if (a.size == null && b.size == null) {
-      //   return a.id.compareTo(b.id);
-      // } else
-      //   return a.size == null ? 0 : 1;
-    });
-    if (direction == SortingDirection.down) {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles.reversed.toList(),
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles,
-        status: FormzStatus.pure,
-      ));
-    }
-  }
+  // Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction,
+  //     SortingCriterion criterion) async {
+  //   List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
+  //   sortedFiles.sort((a, b) {
+  //     // if (a.size != null && b.size != null) {
+  //     return a.size.compareTo(b.size);
+  //     // }
+  //     // else if (a.size == null && b.size == null) {
+  //     //   return a.id.compareTo(b.id);
+  //     // } else
+  //     //   return a.size == null ? 0 : 1;
+  //   });
+  //   if (direction == SortingDirection.down) {
+  //     emit(state.copyWith(
+  //       sortedFiles: sortedFiles.reversed.toList(),
+  //       status: FormzStatus.pure,
+  //     ));
+  //   } else {
+  //     emit(state.copyWith(
+  //       sortedFiles: sortedFiles,
+  //       status: FormzStatus.pure,
+  //     ));
+  //   }
+  // }
 
-  Future<void> _sortByName(OpenedFolderState state, SortingDirection direction,
-      SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
-    sortedFiles.sort((a, b) {
-      if (a.name != null && b.name != null) {
-        return a.name!.compareTo(b.name!);
-      } else if (a.name == null && b.name == null) {
-        return a.id.compareTo(b.id);
-      } else
-        return a.name == null ? 0 : 1;
-    });
-    if (direction == SortingDirection.up) {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles.reversed.toList(),
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles,
-        status: FormzStatus.pure,
-      ));
-    }
-  }
+  // Future<void> _sortByName(OpenedFolderState state, SortingDirection direction,
+  //     SortingCriterion criterion) async {
+  //   List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
+  //   sortedFiles.sort((a, b) {
+  //     if (a.name != null && b.name != null) {
+  //       return a.name!.compareTo(b.name!);
+  //     } else if (a.name == null && b.name == null) {
+  //       return a.id.compareTo(b.id);
+  //     } else
+  //       return a.name == null ? 0 : 1;
+  //   });
+  //   if (direction == SortingDirection.up) {
+  //     emit(state.copyWith(
+  //       sortedFiles: sortedFiles.reversed.toList(),
+  //       status: FormzStatus.pure,
+  //     ));
+  //   } else {
+  //     emit(state.copyWith(
+  //       sortedFiles: sortedFiles,
+  //       status: FormzStatus.pure,
+  //     ));
+  //   }
+  // }
 
-  Future<void> _sortByDate(
-    OpenedFolderState state,
-    SortingDirection direction,
-    SortingCriterion criterion,
-  ) async {
-    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
+  // Future<void> _sortByDate(
+  //   OpenedFolderState state,
+  //   SortingDirection direction,
+  //   SortingCriterion criterion,
+  // ) async {
+  //   List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
 
-    sortedFiles.sort((a, b) {
-      if (a.createdAt != null && b.createdAt != null) {
-        return _compareDates(a.createdAt!, b.createdAt!);
-      } else if (a.createdAt == null && b.createdAt == null) {
-        return a.id.compareTo(b.id);
-      } else
-        return a.createdAt == null ? 0 : 1;
-    });
+  //   sortedFiles.sort((a, b) {
+  //     if (a.createdAt != null && b.createdAt != null) {
+  //       return _compareDates(a.createdAt!, b.createdAt!);
+  //     } else if (a.createdAt == null && b.createdAt == null) {
+  //       return a.id.compareTo(b.id);
+  //     } else
+  //       return a.createdAt == null ? 0 : 1;
+  //   });
 
-    //mapSortedFieldChanged(state.search);
+  //   //mapSortedFieldChanged(state.search);
 
-    if (direction == SortingDirection.down) {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles.reversed.toList(),
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles,
-        status: FormzStatus.pure,
-      ));
-    }
-  }
+  //   if (direction == SortingDirection.down) {
+  //     emit(state.copyWith(
+  //       sortedFiles: sortedFiles.reversed.toList(),
+  //       status: FormzStatus.pure,
+  //     ));
+  //   } else {
+  //     emit(state.copyWith(
+  //       sortedFiles: sortedFiles,
+  //       status: FormzStatus.pure,
+  //     ));
+  //   }
+  // }
 
   int _compareDates(DateTime a, DateTime b) {
     // var dateA = DateTime.parse(a);
@@ -630,7 +630,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
-      SortingDirection direction, String sortText) async {
+      SortingDirection direction, String? sortText) async {
     // final allFiles = state.sortedFiles;
 
     // List<BaseObject> sortedFiles = [];
@@ -651,6 +651,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     //   }
     // });
     //mapSortedFieldChanged(sortText);
+    // if (sortText != null && sortText.isEmpty) sortText = null;
     emit(state.copyWith(
       criterion: criterion,
       direction: direction,

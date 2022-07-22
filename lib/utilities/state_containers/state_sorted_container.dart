@@ -9,7 +9,9 @@ class StateSortedContainer extends StatefulWidget {
   });
 
   static StateSortedContainerState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<_InheritedStateSortedContainer>())!.data;
+    return (context.dependOnInheritedWidgetOfExactType<
+            _InheritedStateSortedContainer>())!
+        .data;
   }
 
   @override
@@ -21,8 +23,8 @@ class StateSortedContainerState extends State<StateSortedContainer> {
   SortingCriterion get sortedCriterion => _sortedCriterion;
   SortingDirection _direction = SortingDirection.down;
   SortingDirection get direction => _direction;
-  String _search = '';
-  String get search => _search;
+  String? _search;
+  String? get search => _search;
   bool _sortedActionButton = false;
   bool get sortedActionButton => _sortedActionButton;
 
@@ -52,7 +54,7 @@ class StateSortedContainerState extends State<StateSortedContainer> {
     });
   }
 
-  void searchAction(String search) {
+  void searchAction(String? search) {
     setState(() {
       _search = search;
     });

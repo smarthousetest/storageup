@@ -18,7 +18,7 @@ class OpenedFolderState extends Equatable {
   final Map<String, List<BaseObject>> groupedFiles;
   final SortingCriterion criterion;
   final SortingDirection direction;
-  final String search;
+  final String? search;
   final bool progress;
   final ResponseStatus? responseStatus;
   final User? user;
@@ -34,7 +34,7 @@ class OpenedFolderState extends Equatable {
     this.direction = SortingDirection.down,
     required this.previousFolders,
     this.responseStatus,
-    this.search = '',
+    this.search,
     this.groupedFiles = const {},
     this.progress = false,
     this.representation = FilesRepresentation.grid,

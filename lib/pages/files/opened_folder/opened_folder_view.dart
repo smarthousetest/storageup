@@ -584,113 +584,285 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     }
   }
 
+  // Widget _gridGrouppedFiles(
+  //   OpenedFolderState state,
+  // ) {
+  //   if (state.objectsValueListenable == null) return Container();
+
+  //   return LayoutBuilder(builder: (context, constrains) {
+  //     return ValueListenableBuilder<Box<BaseObject>>(
+  //         valueListenable: state.objectsValueListenable!,
+  //         builder: (context, box, child) {
+  //           List<Widget> result = [];
+
+  //           final objects = box.values.getObjectsSortedByTypes(
+  //             parentFolderId: state.currentFolder!.id,
+  //             direction: state.direction,
+  //           );
+
+  //           for (var entrie in objects.entries) {
+  //             final i = objects.keys.toList().indexOf(entrie.key);
+  //             final type = SliverToBoxAdapter(
+  //               child: Padding(
+  //                 padding: const EdgeInsets.symmetric(
+  //                     vertical: 15.0, horizontal: 19.0),
+  //                 child: Container(
+  //                   width: double.infinity,
+  //                   child: Text(
+  //                     entrie.key.toString().split('.').last,
+  //                     textAlign: TextAlign.left,
+  //                     style: TextStyle(
+  //                       color: Theme.of(context).disabledColor,
+  //                       fontSize: 14,
+  //                       fontFamily: kNormalTextFontFamily,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+
+  //             result.add(type);
+
+  //             final object = entrie.value;
+  //                 List<BaseObject> files = entrie.value;
+  //                 Function() onTap;
+  //                 var obj = files[index];
+
+  //                 if (entrie.value.length != _popupControllersGrouped.length) {
+  //                   _popupControllersGrouped = [];
+  //                   _initiatingControllersForGroupedFiles(state);
+  //                 }
+
+  //                 _onPointerDown() {
+  //                   //print("right button click");
+  //                   _popupControllersGrouped[entrie.value
+  //                           .indexWhere((element) => element.id == obj.id)]
+  //                       .showMenu();
+  //                 }
+
+  //                 final object = files[index];
+
+  //                 if (object is Folder) {
+  //                   onTap = () {
+  //                     print(obj);
+  //                     widget.push(
+  //                       child: OpenedFolderView(
+  //                         currentFolder: object,
+  //                         previousFolders: [
+  //                           ...state.previousFolders,
+  //                           state.currentFolder!,
+  //                         ],
+  //                         pop: widget.pop,
+  //                         push: widget.push,
+  //                       ),
+  //                       folderId: obj.id,
+  //                     );
+  //                   };
+  //                 } else {
+  //                   onTap = () {
+  //                     if (_indexObject != index) {
+  //                       setState(() {
+  //                         _indexObject = index;
+  //                       });
+  //                       print('file tapped');
+  //                       startTimer();
+  //                       context
+  //                           .read<OpenedFolderCubit>()
+  //                           .fileTapped(obj as Record);
+  //                     }
+  //                   };
+  //                 }
+  //             // print(
+  //             //     '${entrie.value.first is Folder} ${_gridControllerWrappers[i].controller.value.itemList?.length}');
+
+  //             final grid =  MouseRegion(
+  //                   cursor: SystemMouseCursors.click,
+  //                   child: GestureDetector(
+  //                     onSecondaryTapDown: (_) {
+  //                       _onPointerDown();
+  //                     },
+  //                     behavior: HitTestBehavior.opaque,
+  //                     onTap: onTap,
+  //                     child: IgnorePointer(
+  //                       child: CustomPopupMenu(
+  //                           pressType: PressType.singleClick,
+  //                           barrierColor: Colors.transparent,
+  //                           showArrow: false,
+  //                           enablePassEvent: false,
+  //                           horizontalMargin: -90,
+  //                           verticalMargin: -90,
+  //                           controller: _popupControllersGrouped[state.objects
+  //                               .indexWhere((element) => element.id == obj.id)],
+  //                           menuBuilder: () {
+  //                             return FilesPopupMenuActions(
+  //                                 theme: Theme.of(context),
+  //                                 translate: translate,
+  //                                 object: obj,
+  //                                 onTap: (action) async {
+  //                                   _popupControllersGrouped[state.objects
+  //                                           .indexWhere((element) =>
+  //                                               element.id == obj.id)]
+  //                                       .hideMenu();
+  //                                   _popupActions(state, context, action, obj);
+  //                                 });
+  //                           },
+  //                           child: ObjectView(object: files[index])),
+  //                     ),
+  //                   ),
+  //                 );
+
+  //             result.add(grid);
+
+  //             final divider = SliverToBoxAdapter(
+  //               child: Divider(
+  //                 height: 1.0,
+  //                 color: Theme.of(context).disabledColor.withOpacity(0.5),
+  //               ),
+  //             );
+
+  //             result.add(divider);
+  //           }
+  //           return GridView.builder(
+  //              scrollDirection: Axis.vertical,
+  //               itemCount: result.length,
+  //               primary: false,
+  //               shrinkWrap: true,
+  //               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //                 crossAxisCount: constrains.smallest.width ~/ 113.5,
+  //                 childAspectRatio: (1 / 1.1),
+  //               ),
+  //               itemBuilder: (context, index) {
+
+  //                 return grid;
+  //               },
+  //             );
+  //         });
+  //   });
+  // }
+
   List<GridElement> _gridList(
       OpenedFolderState state, BoxConstraints constrains) {
+    List<GridElement> grids = [];
+    if (state.objectsValueListenable == null) return grids;
+
     print(state.sortedFiles.length);
     print(_popupControllersGrouped.length);
-    List<GridElement> grids = [];
-    state.groupedFiles.forEach((key, value) {
-      grids.add(
-        GridElement(
-            grid: GridView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: value.length,
-              primary: false,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constrains.smallest.width ~/ 113.5,
-                childAspectRatio: (1 / 1.1),
-              ),
-              itemBuilder: (context, index) {
-                List<BaseObject> files = value;
 
-                Function() onTap;
-                var obj = value[index];
+    ValueListenableBuilder<Box<BaseObject>>(
+        valueListenable: state.objectsValueListenable!,
+        builder: (context, box, _) {
+          final objects = box.values.getObjectsSortedByTypes(
+            parentFolderId: state.currentFolder!.id,
+            direction: state.direction,
+          );
 
-                if (state.objects.length != _popupControllersGrouped.length) {
-                  _popupControllersGrouped = [];
-                  _initiatingControllersForGroupedFiles(state);
-                }
-
-                _onPointerDown() {
-                  //print("right button click");
-                  _popupControllersGrouped[state.sortedFiles
-                          .indexWhere((element) => element.id == obj.id)]
-                      .showMenu();
-                }
-
-                final object = files[index];
-
-                if (object is Folder) {
-                  onTap = () {
-                    print(obj);
-                    widget.push(
-                      child: OpenedFolderView(
-                        currentFolder: object,
-                        previousFolders: [
-                          ...state.previousFolders,
-                          state.currentFolder!,
-                        ],
-                        pop: widget.pop,
-                        push: widget.push,
-                      ),
-                      folderId: obj.id,
-                    );
-                  };
-                } else {
-                  onTap = () {
-                    if (_indexObject != index) {
-                      setState(() {
-                        _indexObject = index;
-                      });
-                      print('file tapped');
-                      startTimer();
-                      context
-                          .read<OpenedFolderCubit>()
-                          .fileTapped(obj as Record);
-                    }
-                  };
-                }
-                return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onSecondaryTapDown: (_) {
-                      _onPointerDown();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    onTap: onTap,
-                    child: IgnorePointer(
-                      child: CustomPopupMenu(
-                          pressType: PressType.singleClick,
-                          barrierColor: Colors.transparent,
-                          showArrow: false,
-                          enablePassEvent: false,
-                          horizontalMargin: -90,
-                          verticalMargin: -90,
-                          controller: _popupControllersGrouped[state.objects
-                              .indexWhere((element) => element.id == obj.id)],
-                          menuBuilder: () {
-                            return FilesPopupMenuActions(
-                                theme: Theme.of(context),
-                                translate: translate,
-                                object: obj,
-                                onTap: (action) async {
-                                  _popupControllersGrouped[state.objects
-                                          .indexWhere((element) =>
-                                              element.id == obj.id)]
-                                      .hideMenu();
-                                  _popupActions(state, context, action, obj);
-                                });
-                          },
-                          child: ObjectView(object: value[index])),
+          objects.forEach((key, value) {
+            grids.add(
+              GridElement(
+                  grid: GridView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: value.length,
+                    primary: false,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: constrains.smallest.width ~/ 113.5,
+                      childAspectRatio: (1 / 1.1),
                     ),
+                    itemBuilder: (context, index) {
+                      List<BaseObject> files = value;
+
+                      Function() onTap;
+                      var obj = value[index];
+
+                      if (state.objects.length !=
+                          _popupControllersGrouped.length) {
+                        _popupControllersGrouped = [];
+                        _initiatingControllersForGroupedFiles(state);
+                      }
+
+                      _onPointerDown() {
+                        //print("right button click");
+                        _popupControllersGrouped[state.sortedFiles
+                                .indexWhere((element) => element.id == obj.id)]
+                            .showMenu();
+                      }
+
+                      final object = files[index];
+
+                      if (object is Folder) {
+                        onTap = () {
+                          print(obj);
+                          widget.push(
+                            child: OpenedFolderView(
+                              currentFolder: object,
+                              previousFolders: [
+                                ...state.previousFolders,
+                                state.currentFolder!,
+                              ],
+                              pop: widget.pop,
+                              push: widget.push,
+                            ),
+                            folderId: obj.id,
+                          );
+                        };
+                      } else {
+                        onTap = () {
+                          if (_indexObject != index) {
+                            setState(() {
+                              _indexObject = index;
+                            });
+                            print('file tapped');
+                            startTimer();
+                            context
+                                .read<OpenedFolderCubit>()
+                                .fileTapped(obj as Record);
+                          }
+                        };
+                      }
+                      return MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onSecondaryTapDown: (_) {
+                            _onPointerDown();
+                          },
+                          behavior: HitTestBehavior.opaque,
+                          onTap: onTap,
+                          child: IgnorePointer(
+                            child: CustomPopupMenu(
+                                pressType: PressType.singleClick,
+                                barrierColor: Colors.transparent,
+                                showArrow: false,
+                                enablePassEvent: false,
+                                horizontalMargin: -90,
+                                verticalMargin: -90,
+                                controller: _popupControllersGrouped[
+                                    state.objects.indexWhere(
+                                        (element) => element.id == obj.id)],
+                                menuBuilder: () {
+                                  return FilesPopupMenuActions(
+                                      theme: Theme.of(context),
+                                      translate: translate,
+                                      object: obj,
+                                      onTap: (action) async {
+                                        _popupControllersGrouped[state.objects
+                                                .indexWhere((element) =>
+                                                    element.id == obj.id)]
+                                            .hideMenu();
+                                        _popupActions(
+                                            state, context, action, obj);
+                                      });
+                                },
+                                child: ObjectView(object: value[index])),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-            type: key),
-      );
-    });
+                  type: key),
+            );
+          });
+          return Container();
+        });
     return grids;
   }
 
@@ -778,276 +950,295 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       fontSize: 14,
       fontFamily: kNormalTextFontFamily,
     );
-
+    if (state.objectsValueListenable == null) return Container();
     return BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
       bloc: _bloc,
       builder: (context, state) {
         return Expanded(
           child: LayoutBuilder(builder: (context, constraints) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              controller: ScrollController(),
-              child: DataTable(
-                columnSpacing: 0,
-                dataRowColor:
-                    MaterialStateProperty.resolveWith<Color?>(_getDataRowColor),
-                columns: [
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.5,
-                      child: Text(
-                        translate.name,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.15,
-                      child: Text(
-                        translate.format,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.15,
-                      child: Text(
-                        translate.date,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.1,
-                      child: Text(
-                        translate.size,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.1,
-                      child: SizedBox(
-                        width: constraints.maxWidth * 0.1,
-                      ),
-                    ),
-                  ),
-                ],
-                rows: state.sortedFiles.map((element) {
-                  String? type = '';
-                  bool isFile = false;
-                  if (element is Record) {
-                    var record = element;
-                    isFile = true;
-                    if (record.thumbnail != null &&
-                        record.thumbnail!.isNotEmpty) {
-                      type = FileAttribute()
-                          .getFilesType(record.name!.toLowerCase());
-                    }
-                  }
-
-                  return DataRow.byIndex(
-                    index: state.sortedFiles.indexOf(element),
-                    color: MaterialStateProperty.resolveWith<Color?>((states) {
-                      print(states.toList().toString());
-                      if (states.contains(MaterialState.focused)) {
-                        return Theme.of(context).splashColor;
-                      }
-                      return null;
-                    }),
-                    cells: [
-                      DataCell(
-                        GestureDetector(
-                          onTap: () {
-                            // if (StateInfoContainer.of(context)?.open == true) {
-
-                            // }
-                            var index = state.sortedFiles.indexOf(element);
-                            if (element is Folder) {
-                              print(element);
-                              print("lol");
-
-                              widget.push(
-                                child: OpenedFolderView(
-                                  currentFolder: element,
-                                  previousFolders: [
-                                    ...state.previousFolders,
-                                    state.currentFolder!
-                                  ],
-                                  pop: widget.pop,
-                                  push: widget.push,
-                                ),
-                                folderId: element.id,
-                              );
-                              context
-                                  .read<OpenedFolderCubit>()
-                                  .changeRepresentation(
-                                      FilesRepresentation.table);
-                            } else {
-                              if (_indexObject != index) {
-                                setState(() {
-                                  _indexObject = index;
-                                });
-                                print('file tapped');
-                                startTimer();
-                                context
-                                    .read<OpenedFolderCubit>()
-                                    .fileTapped(element as Record);
-                              }
-                              print('file tapped');
-                            }
-                          },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Image.asset(
-                                      isFile
-                                          ? type.isNotEmpty
-                                              ? 'assets/file_icons/${type}_s.png'
-                                              : 'assets/file_icons/unexpected_s.png'
-                                          : 'assets/file_icons/folder.png',
-                                      fit: BoxFit.contain,
-                                      height: 24,
-                                      width: 24,
-                                    ),
-                                    ...isFile &&
-                                            (element as Record).loadPercent !=
-                                                null
-                                        ? _uploadProgress(element.loadPercent)
-                                        : [],
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    width: constraints.maxWidth * 0.3,
-                                    child: Text(
-                                      element.name ?? '',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: cellTextStyle,
-                                    ),
-                                  ),
-                                ),
-                                // Spacer(),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: BlocBuilder<OpenedFolderCubit,
-                                      OpenedFolderState>(
-                                    bloc: _bloc,
-                                    builder: (context, state) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .read<OpenedFolderCubit>()
-                                              .setFavorite(element);
-                                        },
-                                        child: Image.asset(
-                                          element.favorite
-                                              ? 'assets/file_page/favorite.png'
-                                              : 'assets/file_page/not_favorite.png',
-                                          height: 18,
-                                          width: 18,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                )
-                              ],
+            return ValueListenableBuilder<Box<BaseObject>>(
+                valueListenable: state.objectsValueListenable!,
+                builder: (context, box, _) {
+                  final currentValues = box.values.getSortedObjects(
+                    parentFoldersId: [state.currentFolder!.id],
+                    criterio: state.criterion,
+                    direction: state.direction,
+                    sortingText: state.search,
+                  );
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: ScrollController(),
+                    child: DataTable(
+                      columnSpacing: 0,
+                      dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+                          _getDataRowColor),
+                      columns: [
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.5,
+                            child: Text(
+                              translate.name,
+                              style: style,
                             ),
                           ),
                         ),
-                      ),
-                      DataCell(
-                        Container(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Text(
-                            type.isEmpty ? translate.foldr : type.toUpperCase(),
-                            overflow: TextOverflow.ellipsis,
-                            style: cellTextStyle,
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.15,
+                            child: Text(
+                              translate.format,
+                              style: style,
+                            ),
                           ),
                         ),
-                      ),
-                      DataCell(
-                        Text(
-                          DateFormat('dd.MM.yyyy').format(element.createdAt!),
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Text(
-                          fileSize(element.size, translate, 1),
-                          maxLines: 1,
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            hoverColor: Colors.transparent,
-                            splashColor: Colors.transparent,
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.15,
+                            child: Text(
+                              translate.date,
+                              style: style,
+                            ),
                           ),
-                          child:
-                              BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
-                            bloc: _bloc,
-                            builder: (context, snapshot) {
-                              if (state.sortedFiles.length >
-                                  _popupControllers.length) {
-                                _popupControllers = [];
-                                _initiatingControllers(state);
-                              }
-                              return CustomPopupMenu(
-                                pressType: PressType.singleClick,
-                                barrierColor: Colors.transparent,
-                                showArrow: false,
-                                horizontalMargin: 110,
-                                verticalMargin: 0,
-                                controller: _popupControllers[
-                                    state.sortedFiles.indexOf(element)],
-                                menuBuilder: () {
-                                  return FilesPopupMenuActions(
-                                      theme: Theme.of(context),
-                                      translate: translate,
-                                      object: element,
-                                      onTap: (action) async {
-                                        _popupControllers[state.sortedFiles
-                                                .indexOf(element)]
-                                            .hideMenu();
-                                        _popupActions(
-                                            state, context, action, element);
-                                      });
-                                },
-                                child: Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/file_page/three_dots.svg',
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.1,
+                            child: Text(
+                              translate.size,
+                              style: style,
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: constraints.maxWidth * 0.1,
+                            child: SizedBox(
+                              width: constraints.maxWidth * 0.1,
+                            ),
+                          ),
+                        ),
+                      ],
+                      rows: currentValues.map((element) {
+                        String? type = '';
+                        bool isFile = false;
+                        if (element is Record) {
+                          var record = element;
+                          isFile = true;
+                          if (record.thumbnail != null &&
+                              record.thumbnail!.isNotEmpty) {
+                            type = FileAttribute()
+                                .getFilesType(record.name!.toLowerCase());
+                          }
+                        }
+
+                        return DataRow.byIndex(
+                          index: currentValues.indexOf(element),
+                          color: MaterialStateProperty.resolveWith<Color?>(
+                              (states) {
+                            print(states.toList().toString());
+                            if (states.contains(MaterialState.focused)) {
+                              return Theme.of(context).splashColor;
+                            }
+                            return null;
+                          }),
+                          cells: [
+                            DataCell(
+                              GestureDetector(
+                                onTap: () {
+                                  // if (StateInfoContainer.of(context)?.open == true) {
+
+                                  // }
+                                  var index =
+                                      state.sortedFiles.indexOf(element);
+                                  if (element is Folder) {
+                                    print(element);
+                                    print("lol");
+
+                                    widget.push(
+                                      child: OpenedFolderView(
+                                        currentFolder: element,
+                                        previousFolders: [
+                                          ...state.previousFolders,
+                                          state.currentFolder!
+                                        ],
+                                        pop: widget.pop,
+                                        push: widget.push,
                                       ),
+                                      folderId: element.id,
+                                    );
+                                    context
+                                        .read<OpenedFolderCubit>()
+                                        .changeRepresentation(
+                                            FilesRepresentation.table);
+                                  } else {
+                                    if (_indexObject != index) {
+                                      setState(() {
+                                        _indexObject = index;
+                                      });
+                                      print('file tapped');
+                                      startTimer();
+                                      context
+                                          .read<OpenedFolderCubit>()
+                                          .fileTapped(element as Record);
+                                    }
+                                    print('file tapped');
+                                  }
+                                },
+                                child: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: Row(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Image.asset(
+                                            isFile
+                                                ? type.isNotEmpty
+                                                    ? 'assets/file_icons/${type}_s.png'
+                                                    : 'assets/file_icons/unexpected_s.png'
+                                                : 'assets/file_icons/folder.png',
+                                            fit: BoxFit.contain,
+                                            height: 24,
+                                            width: 24,
+                                          ),
+                                          ...isFile &&
+                                                  (element as Record)
+                                                          .loadPercent !=
+                                                      null
+                                              ? _uploadProgress(
+                                                  element.loadPercent)
+                                              : [],
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          width: constraints.maxWidth * 0.3,
+                                          child: Text(
+                                            element.name ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: cellTextStyle,
+                                          ),
+                                        ),
+                                      ),
+                                      // Spacer(),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: BlocBuilder<OpenedFolderCubit,
+                                            OpenedFolderState>(
+                                          bloc: _bloc,
+                                          builder: (context, state) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                context
+                                                    .read<OpenedFolderCubit>()
+                                                    .setFavorite(element);
+                                              },
+                                              child: Image.asset(
+                                                element.favorite
+                                                    ? 'assets/file_page/favorite.png'
+                                                    : 'assets/file_page/not_favorite.png',
+                                                height: 18,
+                                                width: 18,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
+                              ),
+                            ),
+                            DataCell(
+                              Container(
+                                padding: EdgeInsets.only(left: 5),
+                                child: Text(
+                                  type.isEmpty
+                                      ? translate.foldr
+                                      : type.toUpperCase(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                DateFormat('dd.MM.yyyy')
+                                    .format(element.createdAt!),
+                                style: cellTextStyle,
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                fileSize(element.size, translate, 1),
+                                maxLines: 1,
+                                style: cellTextStyle,
+                              ),
+                            ),
+                            DataCell(
+                              Theme(
+                                data: Theme.of(context).copyWith(
+                                  hoverColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                ),
+                                child: BlocBuilder<OpenedFolderCubit,
+                                    OpenedFolderState>(
+                                  bloc: _bloc,
+                                  builder: (context, snapshot) {
+                                    if (currentValues.length >
+                                        _popupControllers.length) {
+                                      _popupControllers = [];
+                                      _initiatingControllers(state);
+                                    }
+                                    return CustomPopupMenu(
+                                      pressType: PressType.singleClick,
+                                      barrierColor: Colors.transparent,
+                                      showArrow: false,
+                                      horizontalMargin: 110,
+                                      verticalMargin: 0,
+                                      controller: _popupControllers[
+                                          currentValues.indexOf(element)],
+                                      menuBuilder: () {
+                                        return FilesPopupMenuActions(
+                                            theme: Theme.of(context),
+                                            translate: translate,
+                                            object: element,
+                                            onTap: (action) async {
+                                              _popupControllers[currentValues
+                                                      .indexOf(element)]
+                                                  .hideMenu();
+                                              _popupActions(state, context,
+                                                  action, element);
+                                            });
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/file_page/three_dots.svg',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
                   );
-                }).toList(),
-              ),
-            );
+                });
           }),
         );
       },
