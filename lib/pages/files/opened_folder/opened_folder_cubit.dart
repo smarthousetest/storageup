@@ -131,7 +131,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           if (downloadObject!.localPath.isNotEmpty) {
             var box = await Hive.openBox(kPathDBName);
             var path = downloadObject.localPath;
-            await box.put(downloadObject.id, path);
+
+            if (downloadObject.savePath == null) {
+              await box.put(downloadObject.id, path);
+            }
 
             _setRecordDownloading(
               recordId: downloadObject.id,
