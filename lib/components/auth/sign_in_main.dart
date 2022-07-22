@@ -356,7 +356,9 @@ class _SignInMainState extends State<SignInMain> {
                           ? translate.wrong_cred
                           : widget.state.error == AuthError.noVerifiedEmail
                               ? ''
-                              : translate.something_goes_wrong,
+                              : widget.state.error == AuthError.noInternet
+                                  ? translate.no_internet_auth
+                                  : translate.internal_server_error_auth,
                       style: TextStyle(
                         fontFamily: kNormalTextFontFamily,
                         fontSize: 16,
