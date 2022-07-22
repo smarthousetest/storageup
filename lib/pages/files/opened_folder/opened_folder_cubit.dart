@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_shared_state_cubit.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
@@ -169,11 +170,19 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   Future<void> close() async {
     _loadController.getState.unregisterObserver(_updateObserver);
 
+    filesSharedStateSubscription?.cancel();
     updatePageSubscription?.cancel();
     return super.close();
   }
 
-  void init(Folder? folder, List<Folder> previousFolders) async {
+  StreamSubscription? filesSharedStateSubscription;
+
+  void init(Folder? folder, List<Folder> previousFolders,
+      FilesSharedStateCubit filesSharedStateCubit) async {
+    filesSharedStateSubscription = filesSharedStateCubit.stream.listen((state) {
+      changeRepresentation(state.representation);
+    });
+
     Folder? currentFolder;
     if (folder == null) {
       await _filesController.updateFilesList();
@@ -200,6 +209,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         user: user,
         progress: progress,
         valueNotifier: valueNotifier,
+        representation: filesSharedStateCubit.state.representation,
       ),
     );
 

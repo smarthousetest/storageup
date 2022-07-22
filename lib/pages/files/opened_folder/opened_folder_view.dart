@@ -23,6 +23,7 @@ import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/move_files/move_files_view.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_cubit.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_shared_state_cubit.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -36,6 +37,7 @@ class OpenedFolderView extends StatefulWidget {
     required this.previousFolders,
     required this.pop,
     required this.push,
+    required this.filesSharedStateCubit,
   }) : super(key: key);
 
   final Folder? currentFolder;
@@ -45,6 +47,7 @@ class OpenedFolderView extends StatefulWidget {
     required String? folderId,
   }) push;
   final Function(int) pop;
+  final FilesSharedStateCubit filesSharedStateCubit;
 
   @override
   _OpenedFolderViewState createState() => _OpenedFolderViewState();
@@ -105,10 +108,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => _bloc
-        ..init(
-          widget.currentFolder,
-          widget.previousFolders,
-        ),
+        ..init(widget.currentFolder, widget.previousFolders,
+            widget.filesSharedStateCubit),
       child: BlocListener<OpenedFolderCubit, OpenedFolderState>(
         listener: (context, state) async {
           if (StateContainer.of(context).isPopUpShowing == false) {
@@ -294,8 +295,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 padding: EdgeInsets.zero,
                 iconSize: 30,
                 onPressed: () {
-                  context
-                      .read<OpenedFolderCubit>()
+                  widget.filesSharedStateCubit
                       .changeRepresentation(FilesRepresentation.table);
                 },
                 icon: SvgPicture.asset(
@@ -309,8 +309,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             IconButton(
               iconSize: 30,
               onPressed: () {
-                context
-                    .read<OpenedFolderCubit>()
+                widget.filesSharedStateCubit
                     .changeRepresentation(FilesRepresentation.grid);
               },
               icon: SvgPicture.asset(
@@ -456,6 +455,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                               ],
                               pop: widget.pop,
                               push: widget.push,
+                              filesSharedStateCubit:
+                                  widget.filesSharedStateCubit,
                             ),
                             folderId: obj.id,
                           );
@@ -618,6 +619,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         ],
                         pop: widget.pop,
                         push: widget.push,
+                        filesSharedStateCubit: widget.filesSharedStateCubit,
                       ),
                       folderId: obj.id,
                     );
@@ -865,13 +867,11 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   ],
                                   pop: widget.pop,
                                   push: widget.push,
+                                  filesSharedStateCubit:
+                                      widget.filesSharedStateCubit,
                                 ),
                                 folderId: element.id,
                               );
-                              context
-                                  .read<OpenedFolderCubit>()
-                                  .changeRepresentation(
-                                      FilesRepresentation.table);
                             } else {
                               if (_indexObject != index) {
                                 setState(() {
@@ -1215,6 +1215,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                         ],
                         pop: widget.pop,
                         push: widget.push,
+                        filesSharedStateCubit: widget.filesSharedStateCubit,
                       ),
                       folderId: obj.id,
                     );
@@ -1429,6 +1430,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 ],
                 pop: widget.pop,
                 push: widget.push,
+                filesSharedStateCubit: widget.filesSharedStateCubit,
               ),
               folderId: object.id,
             );
