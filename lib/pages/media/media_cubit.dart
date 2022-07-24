@@ -247,7 +247,7 @@ class MediaCubit extends Cubit<MediaState> {
     // }
 
     emit(state.copyWith(
-      // albums: allMediaFolders?.folders,
+      // albums: allMediaFolders,
       currentFolder: rootFolder,
       // mediaFolder as Folder,
       folderValueListenable: valueListenable,
@@ -274,7 +274,7 @@ class MediaCubit extends Cubit<MediaState> {
     _syncWithLoadController(allMedia);
     print("all media2 $allMedia");
     updatePageSubscription = eventBusUpdateAlbum.on().listen((event) {
-      _update();
+      update();
     });
   }
 
@@ -287,6 +287,8 @@ class MediaCubit extends Cubit<MediaState> {
     var valueNotifier = _userController.getValueNotifier();
     final valueListenable = _filesController
         .getObjectsValueListenableByFolderId(state.currentFolder.id);
+    final foldersId =
+        _filesController.getContentFromFolderById(state.currentFolder.id);
     emit(state.copyWith(
       // albums: allMediaFolders,
       // currentFolder: currentFolder,
@@ -294,6 +296,7 @@ class MediaCubit extends Cubit<MediaState> {
       // allRecords: currentFolder?.records,
       // user: user,
       // progress: progress,
+      foldersToListen: foldersId,
       objectsValueListenable: valueListenable,
       status: FormzStatus.pure,
       valueNotifier: valueNotifier,
@@ -706,7 +709,7 @@ class MediaCubit extends Cubit<MediaState> {
           _filesController.getObjectsValueListenableByFolderId('-1');
 
       ns = state.copyWith(
-          // currentFolder: newFolder,
+          currentFolder: newFolder,
           foldersToListen: foldersId,
           objectsValueListenable: valueListenable);
       emit(ns);
@@ -717,19 +720,19 @@ class MediaCubit extends Cubit<MediaState> {
     } else {
       final valueListenable =
           _filesController.getObjectsValueListenableByFolderId(newFolder.id);
-      final foldersId =
-          _filesController.getContentFromFolderById(newFolder.parentFolder!);
+      final foldersId = _filesController.getContentFromFolderById(newFolder.id);
       final folder =
           _filesController.getObjectByIdFromLocalStorage(newFolder.id);
 
-      ns = state.copyWith(
+      emit(state.copyWith(
         foldersToListen: foldersId,
-        // currentFolder: folder as Folder,
+        currentFolder: folder as Folder,
         objectsValueListenable: valueListenable,
-      );
-      emit(ns);
+      ));
+      // emit(ns);
+      print(state.currentFolder);
 
-      _filesController.getRelationsValueListenable(folder!.id).addListener(() {
+      _filesController.getRelationsValueListenable(folder.id).addListener(() {
         update();
       });
 

@@ -801,12 +801,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     return BlocBuilder<MediaCubit, MediaState>(
       buildWhen: (previous, current) {
         var needToUpdate =
-            previous.currentFolderRecords != current.currentFolderRecords;
+            previous.objectsValueListenable != current.objectsValueListenable;
         return needToUpdate;
       },
       builder: (blocContext, state) {
+        print(state.currentFolder);
         var sortigText = _searchingFieldController.value.text;
-        return LayoutBuilder(builder: (context, constrains) {
+        return LayoutBuilder(builder: (layoutContext, constrains) {
           // print('min width ${constrains.smallest.width}');
 
           if (state.objectsValueListenable != null)
@@ -820,6 +821,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   //     direction: SortingDirection.down,
                   //   );
                   // else
+                  print(state.currentFolder);
+
                   var media = box.values.getSortedObjects(
                       parentFoldersId: state.foldersToListen!,
                       direction: SortingDirection.down,
@@ -942,8 +945,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                       record, result);
                                               if (res ==
                                                   ErrorType.alreadyExist) {
-                                                _rename(blocContext, record,
-                                                    result, fileExtention);
+                                                _rename(context, record, result,
+                                                    fileExtention);
                                               }
                                             }
                                           } else {
@@ -955,7 +958,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                               },
                                             );
                                             if (result == true) {
-                                              context
+                                              blocContext
                                                   .read<MediaCubit>()
                                                   .onActionDeleteChosen(record);
                                             }
