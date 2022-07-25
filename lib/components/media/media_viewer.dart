@@ -213,7 +213,7 @@ class _MediaViewerState extends State<MediaViewer> {
             }
 
             return Container(
-              height: 64,
+              height: itemSize,
               alignment: Alignment.center,
               child: ListView.builder(
                   shrinkWrap: shrinkWrap,
@@ -221,7 +221,7 @@ class _MediaViewerState extends State<MediaViewer> {
                   scrollDirection: Axis.horizontal,
                   itemCount: itemCount,
                   itemBuilder: (context, index) {
-                    return _buildPreviewItem(state, index);
+                    return _buildPreviewItem(state, index, itemSize);
                   }),
             );
           }),
@@ -230,7 +230,7 @@ class _MediaViewerState extends State<MediaViewer> {
     );
   }
 
-  Widget _buildPreviewItem(MediaOpenState state, int index) {
+  Widget _buildPreviewItem(MediaOpenState state, int index, double size) {
     if (index < 0) {
       return SizedBox();
     }
@@ -244,18 +244,20 @@ class _MediaViewerState extends State<MediaViewer> {
 
     final isVideo = media.mimeType?.contains('video') ?? false;
 
-    return Padding(
-      padding: const EdgeInsets.all(1.0),
-      child: GestureDetector(
-          onTap: () {
-            context.read<MediaOpenBloc>().add(
-                  MediaOpenChangeChoosedMedia(index: index),
-                );
-            _mainListScrollController.scrollTo(
-              index: index,
-              duration: Duration(milliseconds: 200),
-            );
-          },
+    return GestureDetector(
+        onTap: () {
+          context.read<MediaOpenBloc>().add(
+                MediaOpenChangeChoosedMedia(index: index),
+              );
+          _mainListScrollController.scrollTo(
+            index: index,
+            duration: Duration(milliseconds: 200),
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.all(1),
+          width: size,
+          height: size,
           child: mediaMiniatureAdress.isEmpty
               ? Image.asset(
                   isVideo
@@ -276,14 +278,14 @@ class _MediaViewerState extends State<MediaViewer> {
                       ),
                     );
                   },
-                )
-          // Image.asset(
-          //   'assets/test_image2.png',
-          //   //state.mediaFromFolder[index].imagePreview,
-          //   fit: BoxFit.fitHeight,
-          // ),
-          ),
-    );
+                ),
+        )
+        // Image.asset(
+        //   'assets/test_image2.png',
+        //   //state.mediaFromFolder[index].imagePreview,
+        //   fit: BoxFit.fitHeight,
+        // ),
+        );
   }
 
   Widget _getImagePlaceholder(bool isVideo) {
