@@ -34,6 +34,7 @@ enum MediaAction {
   delete,
   properties,
   rename,
+  save
 }
 
 enum AvatarAction {

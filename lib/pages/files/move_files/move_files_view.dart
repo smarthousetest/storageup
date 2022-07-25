@@ -279,7 +279,7 @@ class _MoveFileState extends State<MoveFileView> {
                                                   widget.action ==
                                                           UserAction.moveFiles
                                                       ? translate.move
-                                                      : translate.download,
+                                                      : translate.upload,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 17,
