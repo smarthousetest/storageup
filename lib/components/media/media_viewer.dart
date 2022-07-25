@@ -200,15 +200,31 @@ class _MediaViewerState extends State<MediaViewer> {
           );
         }
 
-        return Container(
-          height: 64,
-          child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: state.mediaFromFolder.length,
-              itemBuilder: (context, index) {
-                return _buildPreviewItem(state, index);
-              }),
+        return FractionallySizedBox(
+          widthFactor: 1,
+          child: LayoutBuilder(builder: (context, constraints) {
+            double maxWidth = constraints.maxWidth;
+            int itemCount = state.mediaFromFolder.length;
+            double itemSize = 64;
+            bool shrinkWrap = false;
+
+            if (itemCount * itemSize <= maxWidth) {
+              shrinkWrap = true;
+            }
+
+            return Container(
+              height: 64,
+              alignment: Alignment.center,
+              child: ListView.builder(
+                  shrinkWrap: shrinkWrap,
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: itemCount,
+                  itemBuilder: (context, index) {
+                    return _buildPreviewItem(state, index);
+                  }),
+            );
+          }),
         );
       },
     );
