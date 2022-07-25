@@ -132,7 +132,9 @@ class _MediaViewerState extends State<MediaViewer> {
           ? Stack(
               children: [
                 ScrollConfiguration(
-                  behavior: NoColorOverscrollBehavior(),
+                  behavior: NoColorOverscrollBehavior().copyWith(
+                    scrollbars: false,
+                  ),
                   child: ScrollablePositionedList.builder(
                     shrinkWrap: false,
                     scrollDirection: Axis.horizontal,
