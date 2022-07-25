@@ -909,7 +909,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         context.read<MediaCubit>().onActionDeleteChosen(record);
       }
     } else if (action == MediaAction.save) {
-      context.read<MediaCubit>().fileSave(record);
+      context.read<MediaCubit>().saveFile(record);
     }
   }
 

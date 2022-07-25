@@ -679,7 +679,7 @@ class MediaCubit extends Cubit<MediaState> {
     );
   }
 
-  Future<void> fileSave(Record record) async {
+  Future<void> saveFile(Record record) async {
     var box = await Hive.openBox(kPathDBName);
 
     var path = box.get(record.id);
