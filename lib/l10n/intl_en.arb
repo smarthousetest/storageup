@@ -283,5 +283,7 @@
     "sell_space_no_internet_part_2": "Please check your internet connection",
     "wrong_path": "File path is not correct: may by it can contain this words: OneDrive, Program Files or Program Files (x86)",
     "email_send": "You can request the link again via",
-    "sec": "sec"
+    "sec": "sec",
+    "downloading_files": "Downloading files",
+    "uploading_files": "Uploading files"
 }

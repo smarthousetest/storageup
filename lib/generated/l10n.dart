@@ -2624,6 +2624,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Downloading files`
+  String get downloading_files {
+    return Intl.message(
+      'Downloading files',
+      name: 'downloading_files',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Uploading files`
+  String get uploading_files {
+    return Intl.message(
+      'Uploading files',
+      name: 'uploading_files',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
