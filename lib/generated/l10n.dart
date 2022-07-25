@@ -2306,6 +2306,16 @@ class S {
     );
   }
 
+  /// `Check your internet connection and try again`
+  String get no_internet_auth {
+    return Intl.message(
+      'Check your internet connection and try again',
+      name: 'no_internet_auth',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ok`
   String get ok {
     return Intl.message(
@@ -2411,6 +2421,16 @@ class S {
     return Intl.message(
       'A server-side error occurred in the Storage Up application. Please repeat a little later.',
       name: 'internal_server_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A server-side error occurred in the Storage Up application.`
+  String get internal_server_error_auth {
+    return Intl.message(
+      'A server-side error occurred in the Storage Up application.',
+      name: 'internal_server_error_auth',
       desc: '',
       args: [],
     );

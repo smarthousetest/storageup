@@ -39,8 +39,14 @@ class AuthService {
         return AuthenticationStatus.wrongPassword;
       else if (e.response?.statusCode == 403)
         return AuthenticationStatus.notVerifiedEmail;
-      else
+      else if (e.response?.statusCode == 404 ||
+          e.response?.statusCode == 429 ||
+          e.response?.statusCode == 500 ||
+          e.response?.statusCode == 502 ||
+          e.response?.statusCode == 504)
         return AuthenticationStatus.unauthenticated;
+      else
+        return AuthenticationStatus.noInternet;
     }
   }
 

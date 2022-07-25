@@ -14,7 +14,6 @@ import 'package:storageup/components/auth/sign_in_main.dart';
 import 'package:storageup/components/auth/sign_in_welcome.dart';
 import 'package:storageup/components/expanded_section.dart';
 import 'package:storageup/components/registration_success.dart';
-import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/auth_event.dart';

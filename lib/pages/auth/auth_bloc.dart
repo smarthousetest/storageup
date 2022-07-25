@@ -201,6 +201,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             error: AuthError.noVerifiedEmail,
             action: RequestedAction.login,
           ));
+        } else if (result == AuthenticationStatus.noInternet) {
+          emit(state.copyWith(
+            status: FormzStatus.submissionFailure,
+            error: AuthError.noInternet,
+            action: RequestedAction.login,
+          ));
         } else {
           emit(state.copyWith(
             status: FormzStatus.submissionFailure,
