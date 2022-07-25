@@ -7,6 +7,8 @@ import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_shared_state_cubit.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_view.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
@@ -43,6 +45,10 @@ class _FilePageState extends State<FilePage> {
   GlobalKey stickyKey = GlobalKey();
   GlobalKey propertiesWidthKey = GlobalKey();
 
+  FilesSharedStateCubit filesSharedStateCubit = FilesSharedStateCubit(
+    FilesSharedState(representation: FilesRepresentation.grid),
+  );
+
   @override
   void initState() {
     _openedFolders.add(
@@ -51,10 +57,17 @@ class _FilePageState extends State<FilePage> {
         previousFolders: [],
         pop: _pop,
         push: _push,
+        filesSharedStateCubit: filesSharedStateCubit,
       ),
     );
     _initFilterList();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    filesSharedStateCubit.close();
+    super.dispose();
   }
 
   void _prepareFields(BuildContext context) {
