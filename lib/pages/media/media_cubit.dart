@@ -133,7 +133,7 @@ class MediaCubit extends Cubit<MediaState> {
             var appPath = await getDownloadAppFolder();
             var fullPathToFile = '$appPath$path';
             // fullPathToFile = Uri.decodeFull(fullPathToFile);
-            await OpenFile.open(fullPathToFile);
+            // await OpenFile.open(fullPathToFile);
           }
         }
       }
@@ -600,7 +600,7 @@ class MediaCubit extends Cubit<MediaState> {
     _setRecordDownloading(recordId: recordId);
   }
 
-  void onActionDeleteChosen(Record record) async {
+  Future<void> onActionDeleteChosen(Record record) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([record]);

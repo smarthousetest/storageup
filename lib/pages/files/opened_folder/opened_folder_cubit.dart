@@ -20,6 +20,7 @@ import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/open_file_controller.dart';
 import 'package:storageup/utilities/controllers/packet_controllers.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/extensions.dart';
@@ -143,7 +144,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             var appPath = await getDownloadAppFolder();
             var fullPathToFile = '$appPath$path';
             // fullPathToFile = Uri.decodeFull(fullPathToFile);
-            await OpenFile.open(fullPathToFile);
+            getIt<OpenFileController>()
+                .requestOpenFile(downloadObject.id, fullPathToFile);
           }
         } else if (e.downloadFileInfo?.endedWithException == true &&
             e.downloadFileInfo?.errorReason ==
@@ -887,9 +889,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           print(res.message);
         } else {
           _downloadFile(record.id, null);
+          getIt<OpenFileController>().addRecordId(record.id);
         }
       } else {
         _downloadFile(record.id, null);
+        getIt<OpenFileController>().addRecordId(record.id);
       }
     } else if (result == ResponseStatus.failed) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

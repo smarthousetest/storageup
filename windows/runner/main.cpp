@@ -2,6 +2,7 @@
 #include <flutter/flutter_view_controller.h>
 #include <windows.h>
 
+#include "flutter_native_view/flutter_native_view_plugin.h"
 #include "flutter_window.h"
 #include "run_loop.h"
 #include "utils.h"
@@ -34,6 +35,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
+
+  flutternativeview::NativeViewContainer::GetInstance()->Create();
 
   run_loop.Run();
 

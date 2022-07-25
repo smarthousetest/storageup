@@ -3,10 +3,15 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  connectivity_plus_windows
   cpp_native
+  dart_vlc
   desktop_window
+  flutter_native_view
   objectbox_flutter_libs
   permission_handler_windows
+  screen_retriever
+  window_manager
   window_size
 )
 

@@ -737,14 +737,18 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
 
   void _onTapItem(List<BaseObject> media, BaseObject selectedMedia,
       BuildContext context, Folder? openedFolder) {
+    var cubit = context.read<MediaCubit>();
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return MediaOpenPage(
             arguments: MediaOpenPageArgs(
-                media: media,
-                selectedMedia: selectedMedia,
-                selectedFolder: openedFolder),
+              media: media,
+              selectedMedia: selectedMedia,
+              selectedFolder: openedFolder,
+              mediaCubit: cubit,
+            ),
           );
         });
   }
@@ -797,17 +801,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                   child: GestureDetector(
                     onTap: () {
                       //_photoOpen(context, state.currentFolderRecords);
-                      // _onTapItem(state.currentFolderRecords, record, context,
-                      //     state.currentFolder);
-                      if (_indexObject != index) {
-                        setState(() {
-                          _indexObject = index;
-                        });
-                        startTimer();
-                        blocContext
-                            .read<MediaCubit>()
-                            .fileTapped(state.currentFolderRecords[index]);
-                      }
+                      _onTapItem(state.currentFolderRecords, record, context,
+                          state.currentFolder);
                     },
                     child: Listener(
                       onPointerDown: _onPointerDown,

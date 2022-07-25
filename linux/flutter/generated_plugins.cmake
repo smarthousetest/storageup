@@ -4,8 +4,11 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   cpp_native
+  dart_vlc
   desktop_window
   objectbox_flutter_libs
+  screen_retriever
+  window_manager
   window_size
 )
 
