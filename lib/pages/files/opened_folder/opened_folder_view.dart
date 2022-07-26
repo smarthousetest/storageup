@@ -213,7 +213,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
       bloc: _bloc,
       builder: (context, state) {
         _initiatingControllers(state);
-
+        //_initiatingControllersForGroupedFiles(files);
         return Row(
           // crossAxisAlignment: CrossAxisAlignment.baseline,
           // textBaseline: TextBaseline.alphabetic,
@@ -348,7 +348,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               sortedCriterion, direction, searchText, representation);
         if (representation == FilesRepresentation.grid) {
           return state.criterion == SortingCriterion.byType
-              ? _filesGridForType(state)
+              ? _filesGridSortType(state)
               : _filesGrid(state);
         } else {
           return state.criterion == SortingCriterion.byType
@@ -554,7 +554,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     }
   }
 
-  Widget _filesGridForType(OpenedFolderState state) {
+  Widget _filesGridSortType(OpenedFolderState state) {
     List<GridElement> grids = [];
     Map<String, List<BaseObject>> objects = {};
     if (state.objectsValueListenable == null) return Container();
@@ -571,6 +571,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               parentFolderId: state.currentFolder!.id,
               direction: state.direction,
             );
+            //map<List<BaseObject>>(((e) => e));
+
+            _initiatingControllersForGroupedFiles(objects.values.reduce((a, b) {
+              a.addAll(b);
+              return a;
+            }));
 
             objects.forEach((key, value) {
               grids.add(GridElement(
@@ -585,13 +591,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                     ),
                     itemBuilder: (context, index) {
                       List<BaseObject> files = value;
-                      _initiatingControllersForGroupedFiles(files);
 
                       var obj = value[index];
 
                       if (files.length != _popupControllersGrouped.length) {
-                        _popupControllersGrouped = [];
-                        _initiatingControllersForGroupedFiles(files);
+                        final controller = CustomPopupMenuController();
+                        _popupControllersGrouped.add(controller);
                       }
 
                       _onPointerDown() {
