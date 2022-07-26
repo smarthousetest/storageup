@@ -200,7 +200,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
             "В приложении StorageUp произошла ошибка на стороне сервера. Повторите, пожалуйста, чуть позже."),
         "internal_server_error_auth": MessageLookupByLibrary.simpleMessage(
-            "В приложении StorageUp произошла ошибка на стороне сервера."),
+            "В приложении произошла ошибка на стороне сервера."),
         "kb": m7,
         "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
             "Имя кипера совпадает с уже существующими киперами.\nПереименуйте свой кипер."),
