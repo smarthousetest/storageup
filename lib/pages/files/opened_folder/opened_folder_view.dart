@@ -13,7 +13,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
@@ -29,7 +28,6 @@ import 'package:storageup/pages/files/opened_folder/opened_folder_cubit.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
-import 'package:storageup/utilities/repositories/storage_files.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 
@@ -61,7 +59,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
   SortingDirection _direction = SortingDirection.down;
   var _bloc = OpenedFolderCubit();
   List<CustomPopupMenuController> _popupControllers = [];
-  List<CustomPopupMenuController> _popupControllersGrouped = [];
+  List<List<CustomPopupMenuController>> _popupControllersGrouped = [];
   Timer? timerForOpenFile;
   int _startTimer = 1;
   var _indexObject = -1;
@@ -74,10 +72,12 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     }
   }
 
-  void _initiatingControllersForGroupedFiles(List<BaseObject> files) {
-    if (_popupControllersGrouped.isEmpty) {
+  void _initiatingControllersForGroupedFiles(
+      List<BaseObject> files, int index) {
+    if (_popupControllersGrouped[index].isEmpty) {
+      _popupControllersGrouped[index] = [];
       files.forEach((element) {
-        _popupControllersGrouped.add(CustomPopupMenuController());
+        _popupControllersGrouped[index].add(CustomPopupMenuController());
       });
     }
   }
@@ -573,12 +573,17 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
             );
             //map<List<BaseObject>>(((e) => e));
 
-            _initiatingControllersForGroupedFiles(objects.values.reduce((a, b) {
-              a.addAll(b);
-              return a;
-            }));
+            // _initiatingControllersForGroupedFiles(objects.values.reduce((a, b) {
+            //   a.addAll(b);
+            //   return a;
+            // }));
 
             objects.forEach((key, value) {
+              // _popupControllersGrouped[objects.keys.toList().indexOf(key)] = [];
+              if (_popupControllersGrouped.length !=
+                  objects.keys.toList().indexOf(key)) {
+                _popupControllersGrouped.add([]);
+              }
               grids.add(GridElement(
                   grid: GridView.builder(
                     scrollDirection: Axis.vertical,
@@ -594,15 +599,22 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
 
                       var obj = value[index];
 
-                      if (files.length != _popupControllersGrouped.length) {
+                      if (files.length !=
+                          _popupControllersGrouped[
+                                  objects.keys.toList().indexOf(key)]
+                              .length) {
                         final controller = CustomPopupMenuController();
-                        _popupControllersGrouped.add(controller);
+                        _popupControllersGrouped[
+                                objects.keys.toList().indexOf(key)]
+                            .add(controller);
                       }
 
                       _onPointerDown() {
                         //print("right button click");
-                        _popupControllersGrouped[files
-                                .indexWhere((element) => element.id == obj.id)]
+                        _popupControllersGrouped[
+                                    objects.keys.toList().indexOf(key)][
+                                files.indexWhere(
+                                    (element) => element.id == obj.id)]
                             .showMenu();
                       }
 
@@ -625,6 +637,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                 horizontalMargin: -90,
                                 verticalMargin: -90,
                                 controller: _popupControllersGrouped[
+                                        objects.keys.toList().indexOf(key)][
                                     files.indexWhere(
                                         (element) => element.id == obj.id)],
                                 menuBuilder: () {
@@ -633,7 +646,9 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                       translate: translate,
                                       object: obj,
                                       onTap: (action) async {
-                                        _popupControllersGrouped[
+                                        _popupControllersGrouped[objects.keys
+                                                    .toList()
+                                                    .indexOf(key)][
                                                 files.indexWhere((element) =>
                                                     element.id == obj.id)]
                                             .hideMenu();
@@ -1032,6 +1047,10 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
               );
 
               objects.entries.forEach((element) {
+                if (_popupControllersGrouped.length !=
+                    objects.keys.toList().indexOf(element.key)) {
+                  _popupControllersGrouped.add([]);
+                }
                 final lenght = element.value.length + 1;
                 for (var i = 0; i < lenght; i++) {
                   if (i == 0) {
@@ -1179,30 +1198,42 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                               BlocBuilder<OpenedFolderCubit, OpenedFolderState>(
                             bloc: _bloc,
                             builder: (context, snapshot) {
-                              _initiatingControllersForGroupedFiles(
-                                  listObjects);
-                              if (listObjects.length >
-                                  _popupControllersGrouped.length) {
-                                _popupControllersGrouped = [];
-                                _initiatingControllersForGroupedFiles(
-                                    listObjects);
+                              // _initiatingControllersForGroupedFiles(listObjects,
+                              //     objects.keys.toList().indexOf(element.key));
+                              if (element.value.length !=
+                                  _popupControllersGrouped[objects.keys
+                                          .toList()
+                                          .indexOf(element.key)]
+                                      .length) {
+                                final controller = CustomPopupMenuController();
+                                _popupControllersGrouped[objects.keys
+                                        .toList()
+                                        .indexOf(element.key)]
+                                    .add(controller);
                               }
+
                               return CustomPopupMenu(
                                 pressType: PressType.singleClick,
                                 barrierColor: Colors.transparent,
                                 showArrow: false,
                                 horizontalMargin: 110,
                                 verticalMargin: 0,
-                                controller: _popupControllersGrouped[
-                                    listObjects.indexOf(obj)],
+                                controller: _popupControllersGrouped[objects
+                                        .keys
+                                        .toList()
+                                        .indexOf(element.key)][
+                                    element.value.indexWhere(
+                                        (element) => element.id == obj.id)],
                                 menuBuilder: () {
                                   return FilesPopupMenuActions(
                                     theme: Theme.of(context),
                                     translate: translate,
                                     object: obj,
                                     onTap: (action) async {
-                                      _popupControllersGrouped[
-                                              listObjects.indexOf(obj)]
+                                      _popupControllersGrouped[objects.keys
+                                                  .toList()
+                                                  .indexOf(element.key)]
+                                              [listObjects.indexOf(obj)]
                                           .hideMenu();
                                       _popupActions(
                                           state, context, action, obj);
