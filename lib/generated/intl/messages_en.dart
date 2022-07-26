@@ -197,7 +197,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
             "A server-side error occurred in the Storage Up application. Please repeat a little later."),
         "internal_server_error_auth": MessageLookupByLibrary.simpleMessage(
-            "A server-side error occurred in the Storage Up application."),
+            "A server-side error occurred in the application."),
         "kb": m7,
         "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
             "That keeper name are already used.\nRename your keeper"),

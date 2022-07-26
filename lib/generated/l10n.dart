@@ -2426,10 +2426,10 @@ class S {
     );
   }
 
-  /// `A server-side error occurred in the Storage Up application.`
+  /// `A server-side error occurred in the application.`
   String get internal_server_error_auth {
     return Intl.message(
-      'A server-side error occurred in the Storage Up application.',
+      'A server-side error occurred in the application.',
       name: 'internal_server_error_auth',
       desc: '',
       args: [],

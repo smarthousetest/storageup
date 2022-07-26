@@ -14,6 +14,7 @@ import 'package:storageup/components/auth/sign_in_main.dart';
 import 'package:storageup/components/auth/sign_in_welcome.dart';
 import 'package:storageup/components/expanded_section.dart';
 import 'package:storageup/components/registration_success.dart';
+import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/auth_event.dart';
@@ -37,6 +38,7 @@ class _AuthViewState extends State<AuthView> {
   bool _isSignIn = true;
   bool _isAnimationCompleted = true;
   bool showNotConfirmedEmail = false;
+  bool showLoadPage = true;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
@@ -98,7 +100,10 @@ class _AuthViewState extends State<AuthView> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
 
-    if (!_isSignIn && _isAnimationCompleted) {
+    if (!_isSignIn &&
+        _isAnimationCompleted &&
+        showLoadPage == false &&
+        controller.hasClients) {
       controller.jumpTo(720);
     }
 
@@ -110,6 +115,22 @@ class _AuthViewState extends State<AuthView> {
               state.action == RequestedAction.login) {
             Navigator.pushNamedAndRemoveUntil(
                 context, HomePage.route, (route) => false);
+          } else if (state.status == FormzStatus.valid &&
+              state.action == RequestedAction.login) {
+            setState(() {
+              showLoadPage = false;
+            });
+          }
+          //  else if (state.status == FormzStatus.submissionInProgress) {
+          //   setState(() {
+          //     showLoadPage = true;
+          //     mainLoadPage = false;
+          //   });
+          // }
+          else {
+            setState(() {
+              showLoadPage = false;
+            });
           }
         },
         child: GestureDetector(
@@ -119,25 +140,57 @@ class _AuthViewState extends State<AuthView> {
           child: Scaffold(
             body: Stack(
               children: [
-                Container(
-                  width: 1280,
-                  color: theme.primaryColor,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ExpandedSection(
-                        child: _register(theme),
-                        expand: !_isSignIn,
+                showLoadPage
+                    ? Container(
+                        color: theme.scaffoldBackgroundColor,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(top: 300),
+                                child: Container(
+                                  width: 120.64,
+                                  height: 137.3,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/auth/normalFormatLogo.png'),
+                                    ),
+                                  ),
+                                )),
+                            Padding(
+                              padding: EdgeInsets.only(left: 50, top: 300),
+                              child: Text(
+                                'StorageUp',
+                                style: TextStyle(
+                                    color: theme.primaryColor,
+                                    fontFamily: kNormalTextFontFamily,
+                                    fontSize: 50,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : Container(
+                        width: 1280,
+                        color: theme.primaryColor,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ExpandedSection(
+                              child: _register(theme),
+                              expand: !_isSignIn,
+                            ),
+                            _mainSection(theme),
+                            ExpandedSection(
+                              child: _signIn(),
+                              expand: _isSignIn,
+                            ),
+                          ],
+                        ),
                       ),
-                      _mainSection(theme),
-                      ExpandedSection(
-                        child: _signIn(),
-                        expand: _isSignIn,
-                      ),
-                    ],
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 25, top: 25),
                   child: Column(
