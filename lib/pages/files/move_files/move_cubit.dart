@@ -13,7 +13,7 @@ class MoveCubit extends Cubit<MoveState> {
 
   void init() async {
     _filesController = await GetIt.I.getAsync<FilesController>();
-    var rootFolder = await _filesController.getFilesRootFolder();
+    var rootFolder = await _filesController.getRootFolderForMove;
     List<Folder> allFolders = [];
     if (rootFolder != null) allFolders.add(rootFolder);
 
@@ -29,8 +29,8 @@ class MoveCubit extends Cubit<MoveState> {
     List<Folder>? moveFolder,
   ) async {
     if (moveToFolder == null) {
-      var rootFilesFolder = await _filesController.getFilesRootFolder();
-      moveToFolder = rootFilesFolder;
+      var rootFolder = await _filesController.getRootFolderForMove;
+      moveToFolder = rootFolder;
     }
 
     await _filesController.createFolder(name, moveToFolder!.id);
@@ -93,7 +93,7 @@ class MoveCubit extends Cubit<MoveState> {
         childFolders: childFolders,
       ));
     } else {
-      var curFolder = await _filesController.getFolderById(folder.id);
+      var curFolder = await _filesController.getFolderByIdForMove(folder.id);
       if (moveFolder != null) {
         var toRemove = [];
 

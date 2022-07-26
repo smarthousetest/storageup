@@ -212,49 +212,28 @@ class MediaCubit extends Cubit<MediaState> {
     final rootFolder = await _filesController.getMediaRootFolder(
       withUpdate: true,
     );
-    // var allMediaFolders = await _filesController.getMediaFolders(true);
 
     var mediaFolder =
         await _filesController.getObjectByIdFromLocalStorage('-1');
 
-    // var currentFolder = _filesController.getReferencesById(mediaFolder!.id)
-    //     .folders
-    //     ?.firstWhere((element) => element.id == '-1');
     User? user = await _userController.getUser;
     bool progress = true;
     var valueNotifier = _userController.getValueNotifier();
     final valueListenable =
         _filesController.getObjectsValueListenableByFolderId(rootFolder!.id);
 
-    // MediaState ns;
-
-    // if (_folderId == '-1') {
     await _filesController.getMediaRootFolder(withUpdate: true);
     final foldersId =
         _filesController.getContentFromFolderById(mediaFolder!.parentFolder!);
     final valueListenableObject =
         _filesController.getObjectsValueListenableByFolderId('-1');
 
-    //   ns = state.copyWith(
-    //       choosedFolder: event.folder,
-    //       foldersToListen: foldersId,
-    //       objectsValueListenable: valueListenable);
-    //   emit(ns);
-
-    //   _controller.getRelationsBoxEventStream('-1')?.listen((event) {
-    //     add(MediaListUpdateMedia());
-    //   });
-    // }
-
     emit(state.copyWith(
-      // albums: allMediaFolders,
-      currentFolder: rootFolder,
-      // mediaFolder as Folder,
+      rootMediaFolder: rootFolder,
+      currentFolder: mediaFolder as Folder,
       folderValueListenable: valueListenable,
       objectsValueListenable: valueListenableObject,
       foldersToListen: foldersId,
-      // currentFolderRecords: currentFolder?.records?.reversed.toList(),
-      // allRecords: currentFolder?.records,
       user: user,
       progress: progress,
       status: FormzStatus.pure,
@@ -285,10 +264,10 @@ class MediaCubit extends Cubit<MediaState> {
     // User? user = await _userController.getUser;
     // bool progress = true;
     var valueNotifier = _userController.getValueNotifier();
-    final valueListenable = _filesController
-        .getObjectsValueListenableByFolderId(state.currentFolder.id);
     final foldersId =
         _filesController.getContentFromFolderById(state.currentFolder.id);
+    final valueListenable = _filesController
+        .getObjectsValueListenableByFolderId(state.currentFolder.id);
     emit(state.copyWith(
       // albums: allMediaFolders,
       // currentFolder: currentFolder,
@@ -296,7 +275,7 @@ class MediaCubit extends Cubit<MediaState> {
       // allRecords: currentFolder?.records,
       // user: user,
       // progress: progress,
-      foldersToListen: foldersId,
+      //foldersToListen: foldersId,
       objectsValueListenable: valueListenable,
       status: FormzStatus.pure,
       valueNotifier: valueNotifier,
@@ -632,6 +611,7 @@ class MediaCubit extends Cubit<MediaState> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.delete([record]);
+    update();
     // print(result);
     // if (result == ResponseStatus.ok) {
     //   _update();
@@ -725,7 +705,7 @@ class MediaCubit extends Cubit<MediaState> {
           _filesController.getObjectByIdFromLocalStorage(newFolder.id);
 
       emit(state.copyWith(
-        foldersToListen: foldersId,
+        foldersToListen: [newFolder.id],
         currentFolder: folder as Folder,
         objectsValueListenable: valueListenable,
       ));

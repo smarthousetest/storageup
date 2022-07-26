@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 
 class StateSortedContainer extends StatefulWidget {
   final Widget child;
@@ -23,6 +24,8 @@ class StateSortedContainerState extends State<StateSortedContainer> {
   SortingCriterion get sortedCriterion => _sortedCriterion;
   SortingDirection _direction = SortingDirection.down;
   SortingDirection get direction => _direction;
+  FilesRepresentation _representation = FilesRepresentation.grid;
+  FilesRepresentation get representation => _representation;
   String? _search;
   String? get search => _search;
   bool _sortedActionButton = false;
@@ -45,6 +48,12 @@ class StateSortedContainerState extends State<StateSortedContainer> {
   void newSortedDirection(SortingDirection direction) {
     setState(() {
       _direction = direction;
+    });
+  }
+
+  void newRepresentationFiles(FilesRepresentation representation) {
+    setState(() {
+      _representation = representation;
     });
   }
 

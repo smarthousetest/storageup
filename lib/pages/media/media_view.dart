@@ -396,7 +396,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                               .getSortedObjects(
                                                             parentFoldersId: [
                                                               state
-                                                                  .currentFolder
+                                                                  .rootMediaFolder
                                                                   .id
                                                             ],
                                                           );
@@ -799,14 +799,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
 
   Widget _filesGrid() {
     return BlocBuilder<MediaCubit, MediaState>(
-      buildWhen: (previous, current) {
-        var needToUpdate =
-            previous.objectsValueListenable != current.objectsValueListenable;
-        return needToUpdate;
-      },
       builder: (blocContext, state) {
-        print(state.currentFolder);
-        var sortigText = _searchingFieldController.value.text;
         return LayoutBuilder(builder: (layoutContext, constrains) {
           // print('min width ${constrains.smallest.width}');
 
@@ -815,24 +808,20 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                 valueListenable: state.objectsValueListenable!,
                 builder: (context, Box<BaseObject> box, widget) {
                   // Map<DateTime, List<BaseObject>> media = {};
-                  // if (state.foldersToListen == null)
+                  // if (state.foldersToListen == [])
                   //   media = box.values.getObjectsSortedByTime(
                   //     parentFolderId: state.currentFolder.id,
                   //     direction: SortingDirection.down,
                   //   );
                   // else
-                  print(state.currentFolder);
 
                   var media = box.values.getSortedObjects(
                       parentFoldersId: state.foldersToListen!,
                       direction: SortingDirection.down,
-                      sortingText: sortigText);
+                      sortingText: state.searchText);
 
-                  var mediaList = media;
-                  // media.forEach((key, value) {
-                  //   mediaList = media[key];
-                  // });
-                  // List<DateTime> keys = media.keys.toList();
+                  var mediaList = media.reversed.toList();
+
                   return Container(
                     // padding: EdgeInsets.symmetric(horizontal: 40),
                     child: GridView.builder(
@@ -1019,264 +1008,304 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     return BlocBuilder<MediaCubit, MediaState>(
       builder: (context, state) {
         return LayoutBuilder(builder: (context, constraints) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            controller: ScrollController(),
-            child: Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: DataTable(
-                columnSpacing: 25,
-                showCheckboxColumn: false,
-                columns: [
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.5,
-                      child: Text(
-                        translate.name,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.06,
-                      child: Text(
-                        translate.format,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.05,
-                      child: Text(
-                        translate.date,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.06,
-                      child: Text(
-                        translate.size,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.001,
-                      child: SizedBox(
-                        width: constraints.maxWidth * 0.001,
-                      ),
-                    ),
-                  ),
-                ],
-                rows: state.currentFolderRecords.map((e) {
-                  String? type = '';
-                  bool isFile = false;
-                  if (state.currentFolderRecords.length >
-                      _popupControllers.length) {
-                    _popupControllers = [];
-                    _initiatingControllers(state);
-                  }
+          if (state.objectsValueListenable != null)
+            return ValueListenableBuilder(
+                valueListenable: state.objectsValueListenable!,
+                builder: (context, Box<BaseObject> box, widget) {
+                  // Map<DateTime, List<BaseObject>> media = {};
+                  // if (state.foldersToListen == [])
+                  //   media = box.values.getObjectsSortedByTime(
+                  //     parentFolderId: state.currentFolder.id,
+                  //     direction: SortingDirection.down,
+                  //   );
+                  // else
 
-                  var record = e;
-                  isFile = true;
-                  if (record.thumbnail != null &&
-                      record.thumbnail!.isNotEmpty) {
-                    type = FileAttribute()
-                        .getFilesType(record.name!.toLowerCase());
-                  }
+                  var media = box.values.getSortedObjects(
+                      parentFoldersId: state.foldersToListen!,
+                      direction: SortingDirection.down,
+                      sortingText: state.searchText);
 
-                  return DataRow.byIndex(
-                    index: state.currentFolderRecords.indexOf(e),
-                    color: MaterialStateProperty.resolveWith<Color?>((states) {
-                      print(states.toList().toString());
-                      if (states.contains(MaterialState.focused)) {
-                        return Theme.of(context).splashColor;
-                      }
-                      return null;
-                    }),
-                    cells: [
-                      DataCell(
-                        GestureDetector(
-                          onTap: () {
-                            var index = state.currentFolderRecords.indexOf(e);
-                            if (_indexObject != index) {
-                              setState(() {
-                                _indexObject = index;
-                              });
-                              startTimer();
-                              context.read<MediaCubit>().fileTapped(e);
-                            }
-                          },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Image.asset(
-                                  type.isNotEmpty
-                                      ? 'assets/file_icons/${type}_s.png'
-                                      : 'assets/file_icons/unexpected_s.png',
-                                  fit: BoxFit.contain,
-                                  height: 24,
-                                  width: 24,
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    e.name ?? '',
-                                    style: cellTextStyle,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                // Spacer(),
-                                BlocBuilder<MediaCubit, MediaState>(
-                                  builder: (context, state) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        context
-                                            .read<MediaCubit>()
-                                            .setFavorite(e);
-                                      },
-                                      child: Image.asset(
-                                        e.favorite
-                                            ? 'assets/file_page/favorite.png'
-                                            : 'assets/file_page/not_favorite.png',
-                                        height: 18,
-                                        width: 18,
-                                      ),
-                                    );
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      DataCell(
-                        Text(
-                          type.isEmpty ? translate.foldr : type.toUpperCase(),
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Text(
-                          DateFormat('dd.MM.yyyy').format(e.createdAt!),
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Text(
-                          fileSize(e.size, translate, 1),
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            hoverColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                          ),
-                          child: CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
-                            controller: _popupControllers[
-                                state.currentFolderRecords.indexOf(e)],
-                            menuBuilder: () {
-                              return MediaPopupMenuActions(
-                                  theme: Theme.of(context),
-                                  translate: translate,
-                                  onTap: (action) async {
-                                    _popupControllers[state.currentFolderRecords
-                                            .indexOf(e)]
-                                        .hideMenu();
-                                    if (action == MediaAction.properties) {
-                                      var res = await showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return FileInfoView(
-                                                object: e,
-                                                user:
-                                                    state.valueNotifier?.value);
-                                          });
-                                      if (res != null) {
-                                        context
-                                            .read<MediaCubit>()
-                                            .fileTapped(e);
-                                      }
-                                    } else if (action == MediaAction.rename) {
-                                      var fileExtention = FileAttribute()
-                                          .getFileExtension(record.name ?? '');
-                                      var result = await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          var filename = FileAttribute()
-                                              .getFileName(record.name ?? '');
-                                          return BlurRename(filename, true);
-                                        },
-                                      );
-                                      if (result != null &&
-                                          result is String &&
-                                          result !=
-                                              FileAttribute().getFileName(
-                                                  record.name ?? '')) {
-                                        result = result + '.' + fileExtention;
-                                        final res = await context
-                                            .read<MediaCubit>()
-                                            .onActionRenameChosen(
-                                                record, result);
-                                        if (res == ErrorType.alreadyExist) {
-                                          _rename(context, record, result,
-                                              fileExtention);
-                                        }
-                                      }
-                                    } else {
-                                      //   controller.hideMenu();
-                                      var result = await showDialog<bool>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return BlurDelete();
-                                        },
-                                      );
-                                      if (result == true) {
-                                        context
-                                            .read<MediaCubit>()
-                                            .onActionDeleteChosen(e);
-                                      }
-                                    }
-                                  });
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/file_page/three_dots.svg',
-                                  ),
-                                ],
+                  var mediaList = media.reversed.toList();
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: ScrollController(),
+                    child: Theme(
+                      data: Theme.of(context)
+                          .copyWith(dividerColor: Colors.transparent),
+                      child: DataTable(
+                        columnSpacing: 25,
+                        showCheckboxColumn: false,
+                        columns: [
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.5,
+                              child: Text(
+                                translate.name,
+                                style: style,
                               ),
                             ),
                           ),
-                        ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.06,
+                              child: Text(
+                                translate.format,
+                                style: style,
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.05,
+                              child: Text(
+                                translate.date,
+                                style: style,
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.06,
+                              child: Text(
+                                translate.size,
+                                style: style,
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.001,
+                              child: SizedBox(
+                                width: constraints.maxWidth * 0.001,
+                              ),
+                            ),
+                          ),
+                        ],
+                        rows: mediaList.map((e) {
+                          String? type = '';
+                          bool isFile = false;
+                          if (mediaList.length > _popupControllers.length) {
+                            _popupControllers = [];
+                            _initiatingControllers(state);
+                          }
+
+                          var record = e as Record;
+                          isFile = true;
+                          if (record.thumbnail != null &&
+                              record.thumbnail!.isNotEmpty) {
+                            type = FileAttribute()
+                                .getFilesType(record.name!.toLowerCase());
+                          }
+
+                          return DataRow.byIndex(
+                            index: mediaList.indexOf(e),
+                            color: MaterialStateProperty.resolveWith<Color?>(
+                                (states) {
+                              print(states.toList().toString());
+                              if (states.contains(MaterialState.focused)) {
+                                return Theme.of(context).splashColor;
+                              }
+                              return null;
+                            }),
+                            cells: [
+                              DataCell(
+                                GestureDetector(
+                                  onTap: () {
+                                    var index = mediaList.indexOf(e);
+                                    if (_indexObject != index) {
+                                      setState(() {
+                                        _indexObject = index;
+                                      });
+                                      startTimer();
+                                      context.read<MediaCubit>().fileTapped(e);
+                                    }
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Row(
+                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset(
+                                          type.isNotEmpty
+                                              ? 'assets/file_icons/${type}_s.png'
+                                              : 'assets/file_icons/unexpected_s.png',
+                                          fit: BoxFit.contain,
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            e.name ?? '',
+                                            style: cellTextStyle,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        // Spacer(),
+                                        BlocBuilder<MediaCubit, MediaState>(
+                                          builder: (context, state) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                context
+                                                    .read<MediaCubit>()
+                                                    .setFavorite(e);
+                                              },
+                                              child: Image.asset(
+                                                e.favorite
+                                                    ? 'assets/file_page/favorite.png'
+                                                    : 'assets/file_page/not_favorite.png',
+                                                height: 18,
+                                                width: 18,
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  type.isEmpty
+                                      ? translate.foldr
+                                      : type.toUpperCase(),
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  DateFormat('dd.MM.yyyy').format(e.createdAt!),
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  fileSize(e.size, translate, 1),
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                              DataCell(
+                                Theme(
+                                  data: Theme.of(context).copyWith(
+                                    hoverColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                  ),
+                                  child: CustomPopupMenu(
+                                    pressType: PressType.singleClick,
+                                    barrierColor: Colors.transparent,
+                                    showArrow: false,
+                                    horizontalMargin: 110,
+                                    verticalMargin: 0,
+                                    controller:
+                                        _popupControllers[mediaList.indexOf(e)],
+                                    menuBuilder: () {
+                                      return MediaPopupMenuActions(
+                                          theme: Theme.of(context),
+                                          translate: translate,
+                                          onTap: (action) async {
+                                            _popupControllers[
+                                                    mediaList.indexOf(e)]
+                                                .hideMenu();
+                                            if (action ==
+                                                MediaAction.properties) {
+                                              var res = await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return FileInfoView(
+                                                        object: e,
+                                                        user: state
+                                                            .valueNotifier
+                                                            ?.value);
+                                                  });
+                                              if (res != null) {
+                                                context
+                                                    .read<MediaCubit>()
+                                                    .fileTapped(e);
+                                              }
+                                            } else if (action ==
+                                                MediaAction.rename) {
+                                              var fileExtention =
+                                                  FileAttribute()
+                                                      .getFileExtension(
+                                                          record.name ?? '');
+                                              var result = await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  var filename = FileAttribute()
+                                                      .getFileName(
+                                                          record.name ?? '');
+                                                  return BlurRename(
+                                                      filename, true);
+                                                },
+                                              );
+                                              if (result != null &&
+                                                  result is String &&
+                                                  result !=
+                                                      FileAttribute()
+                                                          .getFileName(
+                                                              record.name ??
+                                                                  '')) {
+                                                result = result +
+                                                    '.' +
+                                                    fileExtention;
+                                                final res = await context
+                                                    .read<MediaCubit>()
+                                                    .onActionRenameChosen(
+                                                        record, result);
+                                                if (res ==
+                                                    ErrorType.alreadyExist) {
+                                                  _rename(context, record,
+                                                      result, fileExtention);
+                                                }
+                                              }
+                                            } else {
+                                              //   controller.hideMenu();
+                                              var result =
+                                                  await showDialog<bool>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return BlurDelete();
+                                                },
+                                              );
+                                              if (result == true) {
+                                                context
+                                                    .read<MediaCubit>()
+                                                    .onActionDeleteChosen(e);
+                                              }
+                                            }
+                                          });
+                                    },
+                                    child: Container(
+                                      height: 30,
+                                      width: 30,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/file_page/three_dots.svg',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
-                    ],
+                    ),
                   );
-                }).toList(),
-              ),
-            ),
-          );
+                });
+          else
+            return Container();
         });
       },
     );

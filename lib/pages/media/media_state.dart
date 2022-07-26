@@ -15,6 +15,7 @@ class MediaState extends Equatable {
   final List<Record> allRecords;
   final List<Folder> albums;
   final Folder currentFolder;
+  final Folder rootMediaFolder;
   final FilesRepresentation representation;
   final User? user;
   final bool progress;
@@ -44,11 +45,14 @@ class MediaState extends Equatable {
     this.foldersToListen,
     this.searchText,
     this.valueNotifier,
-  }) : this.currentFolder = currentFolder ?? Folder.empty();
+    Folder? rootMediaFolder,
+  })  : this.currentFolder = currentFolder ?? Folder.empty(),
+        this.rootMediaFolder = rootMediaFolder ?? Folder.empty();
 
   MediaState copyWith({
     List<Folder>? albums,
     Folder? currentFolder,
+    Folder? rootMediaFolder,
     FormzStatus? status,
     List<Record>? sortedRecords,
     List<Record>? allRecords,
@@ -83,6 +87,7 @@ class MediaState extends Equatable {
       folderValueListenable:
           folderValueListenable ?? this.folderValueListenable,
       foldersToListen: foldersToListen ?? this.foldersToListen,
+      rootMediaFolder: rootMediaFolder ?? this.rootMediaFolder,
     );
   }
 
@@ -105,5 +110,6 @@ class MediaState extends Equatable {
         searchText,
         foldersToListen,
         folderValueListenable,
+        rootMediaFolder,
       ];
 }

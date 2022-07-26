@@ -119,6 +119,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             fileId: uploadingFile.id,
             percent: uploadingFile.loadPercent,
           );
+          update();
         } else if (e.downloadFileInfo != null &&
             e.isDownloadingInProgress &&
             e.downloadFileInfo?.loadPercent == -1) {
@@ -212,6 +213,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         //currentFolder: currentFolder,
         // objects: objects,
         // sortedFiles: objects,
+
         previousFolders: previousFolders,
         user: user,
         progress: progress,
@@ -629,8 +631,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
-      SortingDirection direction, String? sortText) async {
+  Future<void> setNewCriterionAndDirection(
+      SortingCriterion criterion,
+      SortingDirection direction,
+      String? sortText,
+      FilesRepresentation representation) async {
     // final allFiles = state.sortedFiles;
 
     // List<BaseObject> sortedFiles = [];
@@ -655,6 +660,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     emit(state.copyWith(
       criterion: criterion,
       direction: direction,
+      representation: representation,
       search: sortText,
       status: FormzStatus.pure,
     ));

@@ -48,7 +48,13 @@ class FilesController extends FilesObservable<Error>
     return _filesRepo.getFiles;
   }
 
+  Folder? get getRootFolderForMove => _filesRepo.getRootFolder;
+
   Future<Folder?> get getRootFolder => _service.getRootFolder();
+
+  Future<Folder?> getFolderByIdForMove(String id) async {
+    return _service.getFolderById(id);
+  }
 
   Future<List<Folder>?> getMediaFolders(bool withUpdate) async {
     if (withUpdate) {
