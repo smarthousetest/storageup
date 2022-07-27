@@ -20,13 +20,13 @@ import '../pages/loadind_files.dart/loading_container_bloc.dart' as _i15;
 import '../pages/media/media_open/media_open_bloc.dart' as _i16;
 import '../pages/settings/settings_bloc.dart' as _i21;
 import 'controllers/files_controller.dart' as _i6;
-import 'controllers/packet_controllers.dart' as _i18;
+import 'controllers/subscription_controllers.dart' as _i18;
 import 'controllers/user_controller.dart' as _i24;
 import 'repositories/auth_repository.dart' as _i27;
 import 'repositories/file_repository.dart' as _i7;
 import 'repositories/latest_file_repository.dart' as _i14;
 import 'repositories/media_repository.dart' as _i17;
-import 'repositories/packet_repository.dart' as _i19;
+import 'repositories/subscription_repository.dart' as _i19;
 import 'repositories/space_repository.dart' as _i5;
 import 'repositories/token_repository.dart' as _i23;
 import 'repositories/user_repository.dart' as _i25;
@@ -69,11 +69,13 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i17.MediaRepository>(() => _i17.MediaRepository());
   gh.lazySingleton<_i17.MediaRepository>(() => serviceModule.mediaRepo,
       instanceName: 'media_repo');
-  gh.factory<_i18.PacketController>(() => _i18.PacketController());
-  gh.factory<_i18.PacketController>(() => serviceModule.packetController,
-      instanceName: 'packet_controller');
-  gh.lazySingleton<_i19.PacketRepository>(() => serviceModule.packetRepository,
-      instanceName: 'packet_repo');
+  gh.factory<_i18.SubscriptionController>(() => _i18.SubscriptionController());
+  gh.factory<_i18.SubscriptionController>(
+      () => serviceModule.subscriptionController,
+      instanceName: 'subscription_controller');
+  gh.lazySingleton<_i19.SubscriptionRepository>(
+      () => serviceModule.subscriptionRepository,
+      instanceName: 'subscription_repo');
   gh.singleton<_i20.S>(serviceModule.s);
   gh.factory<_i21.SettingsBloc>(() => _i21.SettingsBloc());
   gh.factory<_i22.SubscriptionService>(() => _i22.SubscriptionService());

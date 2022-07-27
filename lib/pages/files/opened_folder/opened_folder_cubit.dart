@@ -22,7 +22,7 @@ import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/open_file_controller.dart';
-import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/controllers/subscription_controllers.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -58,8 +58,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   String idTappedFile = '';
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
-  var _packetController =
-      getIt<PacketController>(instanceName: 'packet_controller');
+  var _subscriptionController =
+      getIt<SubscriptionController>(instanceName: 'subscription_controller');
 
   //    void _processLoadChanges(LoadNotification notification) async {
   //   MainUploadInfo? upload;
@@ -454,7 +454,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
     print(result);
     if (result == ResponseStatus.ok) {
-      await _packetController.updatePacket();
+      await _subscriptionController.updateSubscription();
       update();
     } else if (result == ResponseStatus.noInternet) {
       emit(state.copyWith(status: FormzStatus.submissionCanceled));
@@ -669,7 +669,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         objects[uploadingFileIndex] =
             (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
     }
-    await _packetController.updatePacket();
+    await _subscriptionController.updateSubscription();
     emit(state.copyWith(
       objects: objects,
       status: FormzStatus.pure,

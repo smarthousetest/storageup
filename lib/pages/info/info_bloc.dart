@@ -4,6 +4,7 @@ import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/info/info_event.dart';
 import 'package:storageup/pages/info/info_state.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/subscription_controllers.dart';
 import 'package:storageup/utilities/controllers/user_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/services/subscription_service.dart';
@@ -25,6 +26,8 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
+  var _subscriptionController =
+      getIt<SubscriptionController>(instanceName: 'subscription_controller');
 
   Future _mapInfoPageOpened(
     InfoPageOpened event,
@@ -40,6 +43,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     var valueNotifier = _userController.getValueNotifier();
     var filesNotifier = _filesController.getFilesValueNotifier();
     var mediaNotifier = _filesController.getMediaValueNotifier();
+    var subscriptionNotifier = _subscriptionController.getValueNotifier();
     emit(state.copyWith(
       user: user,
       folder: folder,
@@ -48,6 +52,7 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
       filesRootNotifier: filesNotifier,
       mediaRootNotifier: mediaNotifier,
       valueNotifier: valueNotifier,
+      packetNotifier: subscriptionNotifier,
     ));
   }
 }
