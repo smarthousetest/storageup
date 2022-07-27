@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -19,6 +20,7 @@ class _ButtonTemplateState extends State<BlurExit> {
   final myController = TextEditingController();
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
+  var _loadController = LoadController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +126,8 @@ class _ButtonTemplateState extends State<BlurExit> {
                                           await _tokenRepository.setApiToken(
                                               '', false);
                                         }
-
+                                        _loadController.abortSend();
+                                        _loadController.clearLoadState();
                                         Navigator.pushNamedAndRemoveUntil(
                                             context,
                                             AuthView.route,
