@@ -16,7 +16,6 @@ import 'package:intl/intl.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
 import 'package:storageup/components/blur/rename.dart';
-import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
@@ -31,7 +30,6 @@ import 'package:storageup/pages/media/media_state.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
-import 'package:storageup/utilities/state_containers/state_sorted_container.dart';
 
 class MediaPage extends StatefulWidget {
   @override

@@ -7,7 +7,6 @@ import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
-import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_view.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
@@ -31,7 +30,6 @@ class _FilePageState extends State<FilePage> {
 
   List<OpenedFolderView> _openedFolders = [];
   int _sortingTextFieldIndex = -1;
-  final double _rowSpacing = 20.0;
   final double _rowPadding = 30.0;
 
   bool _isSearchFieldChosen = true;

@@ -380,8 +380,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   void _syncWithLoadController() async {
-    final loadState = _loadController.getState;
-    final filesInFolder = state.objects;
+    // final loadState = _loadController.getState;
+    // final filesInFolder = state.objects;
 
     // filesInFolder.forEach((fileInFolder) {
     //   var index = loadState.uploadingFiles
@@ -432,7 +432,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       folderId = folderId;
     }
 
-    if (name != null && folderId != null) {
+    if (name != null) {
       final result = await _filesController.createFolder(name, folderId);
       update();
 
@@ -441,8 +441,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       } else if (result == ResponseStatus.noInternet) {
         emit(state.copyWith(status: FormzStatus.submissionCanceled));
       }
-    } else if (folderId == null) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
 
@@ -478,7 +476,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   void _tryToFindObservableRecords() {
-    var controllerState = _loadController.getState;
+    // var controllerState = _loadController.getState;
 
     // if (controllerState.uploadingFiles.isNotEmpty) {
     //   try {

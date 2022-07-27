@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
-import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/packet_controllers.dart';
 import 'package:storageup/utilities/repositories/file_repository.dart';
 import 'package:storageup/utilities/repositories/media_repository.dart';

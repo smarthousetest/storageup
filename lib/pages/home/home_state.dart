@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:storageup/models/latest_file.dart';
 
 class HomeState extends Equatable {
   final double usingSpace;

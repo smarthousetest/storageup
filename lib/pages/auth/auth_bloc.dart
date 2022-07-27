@@ -10,7 +10,6 @@ import 'package:os_specification/os_specification.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/models/email.dart';
 import 'package:storageup/pages/auth/models/name.dart';
-import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/auth_repository.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';

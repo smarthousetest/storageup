@@ -312,13 +312,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 3;
+                        ind = 2;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 3 ? mainColor : null,
+                      color: ind == 2 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       margin: EdgeInsets.zero,
                       child: Row(
@@ -351,13 +351,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 4;
+                        ind = 3;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 4 ? mainColor : null,
+                      color: ind == 3 ? mainColor : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       margin: EdgeInsets.zero,
                       child: Row(
@@ -394,13 +394,13 @@ class _FilesPopupMenuActionsState extends State<FilesPopupMenuActions> {
                   child: MouseRegion(
                     onEnter: (event) {
                       setState(() {
-                        ind = 5;
+                        ind = 4;
                       });
                     },
                     child: Container(
                       width: 190,
                       height: 40,
-                      color: ind == 5
+                      color: ind == 4
                           ? widget.theme.indicatorColor.withOpacity(0.1)
                           : null,
                       padding: EdgeInsets.symmetric(horizontal: 15),
