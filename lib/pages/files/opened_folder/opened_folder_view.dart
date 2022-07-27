@@ -467,7 +467,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                                   onSecondaryTapUp: (_) {
                                     _onPointerDown();
                                   },
-                                  onTap: _onTapFiles(obj, state, index),
+                                  onTap:
+                                      _onTapFiles(obj, state, index, context),
                                   child: IgnorePointer(
                                     child: CustomPopupMenu(
                                         pressType: PressType.singleClick,
@@ -618,8 +619,6 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                             .showMenu();
                       }
 
-                      final object = files[index];
-
                       return MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
@@ -627,7 +626,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                             _onPointerDown();
                           },
                           behavior: HitTestBehavior.opaque,
-                          onTap: _onTapFiles(object, state, index),
+                          onTap: _onTapFiles(obj, state, index, context),
                           child: IgnorePointer(
                             child: CustomPopupMenu(
                                 pressType: PressType.singleClick,
@@ -841,7 +840,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                           cells: [
                             DataCell(
                               GestureDetector(
-                                onTap: _onTapFiles(element, state, index),
+                                onTap:
+                                    _onTapFiles(element, state, index, context),
                                 child: MouseRegion(
                                   cursor: SystemMouseCursors.click,
                                   child: Row(
@@ -1099,7 +1099,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                     keyFiles.add(DataRow(cells: [
                       DataCell(
                         GestureDetector(
-                          onTap: _onTapFiles(obj, state, index),
+                          onTap: _onTapFiles(obj, state, index, context),
                           child: MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: Row(
@@ -1353,7 +1353,8 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
     }
   }
 
-  _onTapFiles(BaseObject object, OpenedFolderState state, int index) {
+  _onTapFiles(BaseObject object, OpenedFolderState state, int index,
+      BuildContext context) {
     Function()? _onTap;
     if (object is Folder) {
       return _onTap = () {
