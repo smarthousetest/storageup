@@ -290,7 +290,9 @@ class _MediaViewerState extends State<MediaViewer> {
 
   Widget _getImagePlaceholder(bool isVideo) {
     return Image.asset(
-      isVideo ? 'assets/file_icons/video.png' : 'assets/file_icons/image.png',
+      isVideo
+          ? 'assets/file_icons/video.png'
+          : 'assets/file_icons/image_default.png',
       fit: BoxFit.cover,
     );
   }
