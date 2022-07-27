@@ -427,6 +427,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                                                               .id,
                                                                       blocContext:
                                                                           context,
+                                                                      state:
+                                                                          state,
                                                                     ),
                                                                   )
                                                                   .toList(),
@@ -710,6 +712,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     Folder album, {
     required bool isChoosed,
     required BuildContext blocContext,
+    required MediaState state,
   }) {
     Color activeColor;
     String icon = 'album';
@@ -732,7 +735,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
           _searchingFieldController.clear();
           blocContext.read<MediaCubit>().changeFolder(album);
 
-          final mediaAlbumId = album.id == '-1' ? null : album.id;
+          final mediaAlbumId = state.rootMediaFolder.id;
           StateContainer.of(context).changeChoosedMediaFolderId(mediaAlbumId);
 
           log('${StateContainer.of(context).choosedMediaFolderId}');
@@ -865,8 +868,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                   _indexObject = index;
                                 });
                                 startTimer();
-                                blocContext.read<MediaCubit>().fileTapped(
-                                    state.currentFolderRecords[index]);
+                                blocContext
+                                    .read<MediaCubit>()
+                                    .fileTapped(record as Record);
                               }
                             },
                             child: Listener(
