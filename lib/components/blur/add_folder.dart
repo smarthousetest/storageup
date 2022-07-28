@@ -18,6 +18,12 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
   bool canSave = false;
   bool hintSymbvols = true;
 
+  void onSubmit() async {
+    if (canSave == true) {
+      Navigator.pop(context, addFolderController.text.trim());
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -186,14 +192,7 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20),
                                     child: ElevatedButton(
-                                      onPressed: () async {
-                                        if (canSave == true) {
-                                          Navigator.pop(context,
-                                              addFolderController.text.trim());
-                                        } else {
-                                          null;
-                                        }
-                                      },
+                                      onPressed: onSubmit,
                                       child: Text(
                                         translate.save,
                                         style: TextStyle(

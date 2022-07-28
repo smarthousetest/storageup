@@ -380,11 +380,13 @@ class FilesService {
       String? token = await _tokenRepository.getApiToken();
 
       var data = {
-        'isFavorite': isFavorite,
+        "data": {
+          "isFavorite": isFavorite,
+        }
       };
 
-      var response = await _dio.post(
-        '/folder/$id/favorite',
+      var response = await _dio.put(
+        '/folder/$id',
         options: Options(headers: {'Authorization': ' Bearer $token'}),
         data: data,
       );
@@ -404,11 +406,13 @@ class FilesService {
       String? token = await _tokenRepository.getApiToken();
 
       var data = {
-        'isFavorite': isFavorite,
+        "data": {
+          "isFavorite": isFavorite,
+        }
       };
 
-      var response = await _dio.post(
-        '/record/$id/favorite',
+      var response = await _dio.put(
+        '/record/$id',
         options: Options(headers: {'Authorization': ' Bearer $token'}),
         data: data,
       );
@@ -428,11 +432,13 @@ class FilesService {
       String? token = await _tokenRepository.getApiToken();
 
       var data = {
-        'accessDate': time.toString(),
+        'data': {
+          'accessDate': time.toString(),
+        }
       };
 
-      var response = await _dio.post(
-        '/record/$id/accessDateCommit',
+      var response = await _dio.put(
+        '/record/$id',
         options: Options(headers: {'Authorization': ' Bearer $token'}),
         data: data,
       );

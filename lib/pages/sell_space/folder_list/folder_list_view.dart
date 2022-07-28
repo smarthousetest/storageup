@@ -542,15 +542,13 @@ class _ButtonTemplateState extends State<FolderList> {
                         if (valueSwitch != null && keeper.online == 1) {
                           valueSwitch = !valueSwitch;
                         }
-
                         return FlutterSwitch(
                           value: valueSwitch ?? true,
                           height: 20.0,
                           width: 40.0,
                           onToggle: (_) {
-                            context
-                                .read<FolderListBloc>()
-                                .add(SleepStatus(keeper: keeper));
+                            context.read<FolderListBloc>().add(SleepStatus(
+                                keeper: keeper, sleepStatus: valueSwitch!));
                           },
                           toggleSize: 16,
                           padding: 2,
