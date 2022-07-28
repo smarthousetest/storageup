@@ -8,12 +8,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/create_album.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/exit.dart';
 import 'package:storageup/components/blur/menu_upload.dart';
 import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/components/home/download_info_widget.dart';
+import 'package:storageup/components/home/upload_info_widget.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
@@ -70,26 +73,6 @@ class _HomePageState extends State<HomePage> {
       setWindowMaxSize(Size(double.infinity, double.infinity));
     }
   }
-
-  @override
-  void initState() {
-    infoPage = InfoPage();
-    filePage = StateSortedContainer(child: FilePage());
-    likePage = LikePage();
-    spaceSellPage = SpaceSellPage();
-    financePage = FinancePage();
-    settingsPage = SettingsPage();
-    mediaPage = MediaPage();
-    super.initState();
-  }
-
-  late Widget infoPage;
-  late Widget filePage;
-  late Widget likePage;
-  late Widget spaceSellPage;
-  late Widget financePage;
-  late Widget settingsPage;
-  late Widget mediaPage;
 
   Widget getPage() {
     return IndexedStack(
@@ -222,10 +205,48 @@ class _HomePageState extends State<HomePage> {
                   );
                 }),
               ),
-              Expanded(child: getPage()),
+              Expanded(
+                child: Stack(
+                  children: [
+                    getPage(),
+                    BlocBuilder<HomeBloc, HomeState>(
+                      builder: (context, state) {
+                        return _buildProgressBars(state);
+                      },
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProgressBars(HomeState state) {
+    if (!state.uploadInfo.isUploading && !state.downloadInfo.isDownloading) {
+      return SizedBox.shrink();
+    }
+
+    return Positioned(
+      right: 30,
+      bottom: 20,
+      child: Column(
+        children: [
+          DownloadInfoWidget(
+            downloadInfo: state.downloadInfo,
+            translate: translate,
+          ),
+          if (state.downloadInfo.isDownloading && state.uploadInfo.isUploading)
+            SizedBox(
+              height: 20,
+            ),
+          UploadInfoWidget(
+            uploadInfo: state.uploadInfo,
+            translate: translate,
+          ),
+        ],
       ),
     );
   }

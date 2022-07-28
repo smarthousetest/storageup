@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:cpp_native/cpp_native.dart';
 import 'package:cpp_native/file_proc/encryption.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:injectable/injectable.dart';
@@ -163,18 +164,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     print(state.status.isValidated);
     if (state.status.isValidated) {
       var plainPwd = state.passwordLogin.value;
-      var hashedPassword = aesCbcEncrypt(
-        // Encrypting password
-        passphraseToKey(state.emailLogin.value, bitLength: 128),
-        Uint8List.fromList(IV.codeUnits),
-        pad(
-          utf8.encode(plainPwd) as Uint8List,
-          128,
-        ),
-      );
-      var os = OsSpecifications.getOs();
-      os.setKeeperHash(state.emailLogin.value, hashedPassword);
-
       emit(state.copyWith(
           status: FormzStatus.submissionInProgress,
           action: RequestedAction.login));
@@ -189,6 +178,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(state.copyWith(
               status: FormzStatus.submissionSuccess,
               action: RequestedAction.login));
+          hashUserPassword(plainPwd, state.emailLogin.value);
         } else if (result == AuthenticationStatus.wrongPassword) {
           emit(state.copyWith(
             status: FormzStatus.submissionFailure,
@@ -199,6 +189,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(state.copyWith(
             status: FormzStatus.submissionFailure,
             error: AuthError.noVerifiedEmail,
+            action: RequestedAction.login,
+          ));
+        } else if (result == AuthenticationStatus.noInternet) {
+          emit(state.copyWith(
+            status: FormzStatus.submissionFailure,
+            error: AuthError.noInternet,
             action: RequestedAction.login,
           ));
         } else {
@@ -233,7 +229,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: state.passwordRegister.value,
         );
         if (result == AuthenticationStatus.authenticated) {
-          emit(state.copyWith(status: FormzStatus.submissionSuccess));
+          emit(state.copyWith(
+              status: FormzStatus.submissionSuccess,
+              action: RequestedAction.registration));
         } else if (result == AuthenticationStatus.emailAllreadyRegistered) {
           emit(state.copyWith(
             status: FormzStatus.submissionFailure,
@@ -252,6 +250,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           action: RequestedAction.registration,
         ));
       }
+    } else {
+      emit(state.copyWith(
+        status: FormzStatus.submissionFailure,
+        action: RequestedAction.registration,
+      ));
     }
   }
 
@@ -264,7 +267,30 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(state.copyWith(
             status: FormzStatus.submissionSuccess,
             action: RequestedAction.login));
+      } else {
+        emit(state.copyWith(
+            status: FormzStatus.valid, action: RequestedAction.login));
       }
+    } else {
+      emit(state.copyWith(
+          status: FormzStatus.valid, action: RequestedAction.login));
     }
   }
+}
+
+void hashUserPassword(String password, String email) async {
+  var hashedPassword = await compute<List<String>, Uint8List>((message) {
+    return aesCbcEncrypt(
+      // Encrypting password
+      passphraseToKey(message[0], bitLength: 128),
+      Uint8List.fromList(IV.codeUnits),
+      pad(
+        utf8.encode(message[1]) as Uint8List,
+        128,
+      ),
+    );
+  }, [email, password]);
+
+  var os = OsSpecifications.getOs();
+  os.setKeeperHash(email, hashedPassword);
 }

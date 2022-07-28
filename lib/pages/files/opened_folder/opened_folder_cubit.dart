@@ -17,9 +17,11 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_shared_state_cubit.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/open_file_controller.dart';
 import 'package:storageup/utilities/controllers/packet_controllers.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/extensions.dart';
@@ -131,7 +133,10 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           if (downloadObject!.localPath.isNotEmpty) {
             var box = await Hive.openBox(kPathDBName);
             var path = downloadObject.localPath;
-            await box.put(downloadObject.id, path);
+
+            if (downloadObject.savePath == null) {
+              await box.put(downloadObject.id, path);
+            }
 
             _setRecordDownloading(
               recordId: downloadObject.id,
@@ -140,7 +145,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             var appPath = await getDownloadAppFolder();
             var fullPathToFile = '$appPath$path';
             // fullPathToFile = Uri.decodeFull(fullPathToFile);
-            await OpenFile.open(fullPathToFile);
+            getIt<OpenFileController>()
+                .requestOpenFile(downloadObject.id, fullPathToFile);
           }
         } else if (e.downloadFileInfo?.endedWithException == true &&
             e.downloadFileInfo?.errorReason ==
@@ -169,11 +175,19 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   Future<void> close() async {
     _loadController.getState.unregisterObserver(_updateObserver);
 
+    filesSharedStateSubscription?.cancel();
     updatePageSubscription?.cancel();
     return super.close();
   }
 
-  void init(Folder? folder, List<Folder> previousFolders) async {
+  StreamSubscription? filesSharedStateSubscription;
+
+  void init(Folder? folder, List<Folder> previousFolders,
+      FilesSharedStateCubit filesSharedStateCubit) async {
+    filesSharedStateSubscription = filesSharedStateCubit.stream.listen((state) {
+      changeRepresentation(state.representation);
+    });
+
     Folder? currentFolder;
     if (folder == null) {
       await _filesController.updateFilesList();
@@ -200,6 +214,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         user: user,
         progress: progress,
         valueNotifier: valueNotifier,
+        representation: filesSharedStateCubit.state.representation,
       ),
     );
 
@@ -825,9 +840,32 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   Future<void> fileSave(Record record) async {
-    String? result = await FilePicker.platform.getDirectoryPath();
-    if (result != null) {
-      _downloadFile(record.id, result);
+    var box = await Hive.openBox(kPathDBName);
+
+    var path = box.get(record.id);
+
+    if (path == null) {
+      String? downloadPath = await FilePicker.platform.getDirectoryPath();
+      if (downloadPath != null) {
+        _downloadFile(record.id, '$downloadPath/');
+      }
+    } else {
+      String downloadFolderPath = await getDownloadAppFolder();
+      String fullPath = '${downloadFolderPath}${path}';
+
+      if (await File(fullPath).exists()) {
+        String? downloadPath =
+            await FilePicker.platform.saveFile(fileName: record.name);
+
+        if (downloadPath != null) {
+          File(fullPath).copy(downloadPath);
+        }
+      } else {
+        String? downloadPath = await FilePicker.platform.getDirectoryPath();
+        if (downloadPath != null) {
+          _downloadFile(record.id, '$downloadPath/');
+        }
+      }
     }
   }
 
@@ -861,9 +899,11 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           print(res.message);
         } else {
           _downloadFile(record.id, null);
+          getIt<OpenFileController>().addRecordId(record.id);
         }
       } else {
         _downloadFile(record.id, null);
+        getIt<OpenFileController>().addRecordId(record.id);
       }
     } else if (result == ResponseStatus.failed) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

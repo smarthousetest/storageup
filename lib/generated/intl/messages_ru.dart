@@ -138,7 +138,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleting": MessageLookupByLibrary.simpleMessage("Удаление"),
         "documents": MessageLookupByLibrary.simpleMessage("Документы"),
         "down": MessageLookupByLibrary.simpleMessage("Скачать"),
-        "download": MessageLookupByLibrary.simpleMessage("Загрузить"),
+        "download": MessageLookupByLibrary.simpleMessage("Скачать"),
+        "downloading_files":
+            MessageLookupByLibrary.simpleMessage("Идет скачивание файлов"),
         "downloating": MessageLookupByLibrary.simpleMessage("Скачивание"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Ваш заработок составит"),
@@ -197,6 +199,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Установить обновление"),
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
             "В приложении StorageUp произошла ошибка на стороне сервера. Повторите, пожалуйста, чуть позже."),
+        "internal_server_error_auth": MessageLookupByLibrary.simpleMessage(
+            "В приложении произошла ошибка на стороне сервера."),
         "kb": m7,
         "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
             "Имя кипера совпадает с уже существующими киперами.\nПереименуйте свой кипер."),
@@ -246,6 +250,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Текущая подписка не позволяет загрузить выбранные файлы. Вы заполнили всё своё свободное пространство. Чтобы продолжить загрузку, перейдите на подписку с большим количеством гигабайт или осободите текущее пространство."),
         "no_internet": MessageLookupByLibrary.simpleMessage(
             "Не удаётся установить соединение с сервером.\nПроверьте соединение с Интернетом и повторите попытку."),
+        "no_internet_auth": MessageLookupByLibrary.simpleMessage(
+            "Проверьте соединение с Интернетом и повторите попытку."),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Неcуществующий e-mail"),
         "not_enought_space":
@@ -400,6 +406,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Загрузить в файлы"),
         "upload_to_media":
             MessageLookupByLibrary.simpleMessage("Загрузить в медиа"),
+        "uploading_files":
+            MessageLookupByLibrary.simpleMessage("Идет загрузка файлов"),
         "user_name": MessageLookupByLibrary.simpleMessage("Имя пользователя"),
         "video": MessageLookupByLibrary.simpleMessage("Видео"),
         "viewed": MessageLookupByLibrary.simpleMessage("Просмотрено"),

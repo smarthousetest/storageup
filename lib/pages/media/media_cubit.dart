@@ -7,6 +7,7 @@ import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -132,7 +133,7 @@ class MediaCubit extends Cubit<MediaState> {
             var appPath = await getDownloadAppFolder();
             var fullPathToFile = '$appPath$path';
             // fullPathToFile = Uri.decodeFull(fullPathToFile);
-            await OpenFile.open(fullPathToFile);
+            // await OpenFile.open(fullPathToFile);
           }
         }
       }
@@ -594,12 +595,12 @@ class MediaCubit extends Cubit<MediaState> {
     }
   }
 
-  void _downloadFile(String recordId) async {
-    _loadController.downloadFile(fileId: recordId);
+  void _downloadFile(String recordId, [String? path]) async {
+    _loadController.downloadFile(fileId: recordId, path: path);
     _setRecordDownloading(recordId: recordId);
   }
 
-  void onActionDeleteChosen(Record record) async {
+  Future<void> onActionDeleteChosen(Record record) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     var result = await _filesController.deleteObjects([record]);
@@ -676,5 +677,35 @@ class MediaCubit extends Cubit<MediaState> {
         status: FormzStatus.pure,
       ),
     );
+  }
+
+  Future<void> saveFile(Record record) async {
+    var box = await Hive.openBox(kPathDBName);
+
+    var path = box.get(record.id);
+
+    if (path == null) {
+      String? downloadPath = await FilePicker.platform.getDirectoryPath();
+      if (downloadPath != null) {
+        _downloadFile(record.id, '$downloadPath/');
+      }
+    } else {
+      String downloadFolderPath = await getDownloadAppFolder();
+      String fullPath = '${downloadFolderPath}${path}';
+
+      if (await File(fullPath).exists()) {
+        String? downloadPath =
+            await FilePicker.platform.saveFile(fileName: record.name);
+
+        if (downloadPath != null) {
+          File(fullPath).copy(downloadPath);
+        }
+      } else {
+        String? downloadPath = await FilePicker.platform.getDirectoryPath();
+        if (downloadPath != null) {
+          _downloadFile(record.id, '$downloadPath/');
+        }
+      }
+    }
   }
 }

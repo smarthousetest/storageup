@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cpp_native/controllers/load/load_controller.dart';
+import 'package:cpp_native/controllers/load/models.dart';
+import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
@@ -14,6 +16,8 @@ import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/models/enums.dart';
+import 'package:storageup/models/main_download_info.dart';
+import 'package:storageup/models/main_upload_info.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/event_bus.dart';
@@ -58,6 +62,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     on<HomePageOpened>((event, emit) async {
+      initLoadControllerObserver();
       var os = OsSpecifications.getOs();
       Hive.init(os.supportDir);
       print('Hive initialized');
@@ -93,6 +98,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         );
       }
     });
+
+    on<MainPageChangeUploadInfo>(
+        (event, emit) => emit(state.copyWith(uploadInfo: event.uploadInfo)));
+    on<MainPageChangeDownloadInfo>((event, emit) =>
+        emit(state.copyWith(downloadInfo: event.downloadInfo)));
   }
 
   final FilesService _filesService = getIt<FilesService>();
@@ -100,6 +110,63 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   var _filesController =
       getIt<FilesController>(instanceName: 'files_controller');
   late final LatestFileRepository _repository;
+
+  late Observer loadControllerObserver;
+
+  void initLoadControllerObserver() async {
+    loadControllerObserver = Observer((value) {
+      if (value is LoadNotification) {
+        _processLoadChanges(value);
+      }
+    });
+
+    _loadController.getState.registerObserver(loadControllerObserver);
+  }
+
+  void _processLoadChanges(LoadNotification notification) async {
+    MainUploadInfo? upload;
+    MainDownloadInfo? download;
+
+    final isUploadingInProgress = notification.countOfUploadingFiles != 0 &&
+        notification.isUploadingInProgress;
+
+    if (isUploadingInProgress) {
+      final loadPercent = notification.uploadFileInfo?.loadPercent.toDouble();
+
+      upload = MainUploadInfo(
+        countOfUploadedFiles: notification.countOfUploadedFiles,
+        countOfUploadingFiles: notification.countOfUploadingFiles,
+        isUploading: true,
+        uploadingFilePercent:
+            loadPercent == null || loadPercent == -1 ? 0 : loadPercent,
+      );
+
+      add(MainPageChangeUploadInfo(uploadInfo: upload));
+    } else {
+      add(MainPageChangeUploadInfo(
+          uploadInfo: MainUploadInfo(isUploading: false)));
+    }
+
+    final isDownloadingInProgress = notification.countOfDownloadingFiles != 0 &&
+        notification.isDownloadingInProgress;
+
+    if (isDownloadingInProgress) {
+      final loadPercent = notification.downloadFileInfo?.loadPercent.toDouble();
+
+      download = MainDownloadInfo(
+        countOfDownloadedFiles: notification.countOfDownloadedFiles,
+        countOfDownloadingFiles: notification.countOfDownloadingFiles,
+        isDownloading: true,
+        downloadingFilePercent:
+            loadPercent == null || loadPercent == -1 ? 0 : loadPercent,
+      );
+
+      add(MainPageChangeDownloadInfo(downloadInfo: download));
+    } else {
+      add(MainPageChangeDownloadInfo(
+          downloadInfo: MainDownloadInfo(isDownloading: false)));
+    }
+  }
 
   String _getLocalAppVersion() {
     var os = OsSpecifications.getOs();

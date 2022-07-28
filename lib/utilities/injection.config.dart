@@ -7,6 +7,7 @@
 import 'package:dio/dio.dart' as _i4;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
+import 'package:storageup/utilities/controllers/open_file_controller.dart';
 
 import '../generated/l10n.dart' as _i20;
 import '../pages/auth/auth_bloc.dart' as _i3;
@@ -64,8 +65,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingletonAsync<_i14.LatestFileRepository>(
       () => _i14.LatestFileRepository.create());
   gh.factory<_i15.LoadingContainerBloc>(() => _i15.LoadingContainerBloc());
-  gh.factory<_i16.MediaOpenBloc>(() => _i16.MediaOpenBloc(
-      get<_i6.FilesController>(instanceName: 'files_controller')));
+
   gh.factory<_i17.MediaRepository>(() => _i17.MediaRepository());
   gh.lazySingleton<_i17.MediaRepository>(() => serviceModule.mediaRepo,
       instanceName: 'media_repo');
@@ -87,6 +87,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       _i27.AuthenticationRepository(get<_i26.AuthService>()));
   gh.factory<_i28.FilesBloc>(() => _i28.FilesBloc(
       get<_i6.FilesController>(instanceName: 'files_controller')));
+  gh.singleton<OpenFileController>(OpenFileController());
   return get;
 }
 

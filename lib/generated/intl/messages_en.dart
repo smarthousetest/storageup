@@ -137,6 +137,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "documents": MessageLookupByLibrary.simpleMessage("Documents"),
         "down": MessageLookupByLibrary.simpleMessage("Download"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
+        "downloading_files":
+            MessageLookupByLibrary.simpleMessage("Downloading files"),
         "downloating": MessageLookupByLibrary.simpleMessage("Downloating"),
         "earnings":
             MessageLookupByLibrary.simpleMessage("Your earnings will be"),
@@ -194,6 +196,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Install update"),
         "internal_server_error": MessageLookupByLibrary.simpleMessage(
             "A server-side error occurred in the Storage Up application. Please repeat a little later."),
+        "internal_server_error_auth": MessageLookupByLibrary.simpleMessage(
+            "A server-side error occurred in the application."),
         "kb": m7,
         "keeper_name_are_the_same": MessageLookupByLibrary.simpleMessage(
             "That keeper name are already used.\nRename your keeper"),
@@ -243,6 +247,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "The current subscription does not allow you to download the selected files. You have filled all your free space. To continue downloading, switch to a subscription with a large number of gigabytes or free up the current space."),
         "no_internet": MessageLookupByLibrary.simpleMessage(
             "The connection to the server cannot be established.\nCheck your internet connection and try again."),
+        "no_internet_auth": MessageLookupByLibrary.simpleMessage(
+            "Check your internet connection and try again"),
         "non_existent_email":
             MessageLookupByLibrary.simpleMessage("Non-existent e-mail"),
         "not_enought_space":
@@ -394,6 +400,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Upload to files"),
         "upload_to_media":
             MessageLookupByLibrary.simpleMessage("Upload to media"),
+        "uploading_files":
+            MessageLookupByLibrary.simpleMessage("Uploading files"),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
         "video": MessageLookupByLibrary.simpleMessage("Video"),
         "viewed": MessageLookupByLibrary.simpleMessage("Viewed"),
