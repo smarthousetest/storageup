@@ -447,7 +447,7 @@ class FolderListBloc extends Bloc<FolderListEvent, FolderListState> {
       String? bearerToken = await TokenRepository().getApiToken();
       print(bearerToken);
       if (bearerToken != null) {
-        os.startProcess('keeper', [
+        os.startProcess(Processes.keeper, true, [
           domainName,
           "${keeperDirPath}${Platform.pathSeparator}.keeper",
           bearerToken,

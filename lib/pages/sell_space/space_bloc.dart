@@ -181,7 +181,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     if (bearerToken != null) {
       _writeKeeperName(state);
       _writeKeeperMemorySize(state);
-      os.startProcess('keeper', [
+      os.startProcess(Processes.keeper, true, [
         domainName,
         Uri.encodeFull(
             "${state.locationsInfo.last.dirPath}${Platform.pathSeparator}.keeper"),
