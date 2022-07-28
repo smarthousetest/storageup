@@ -18,6 +18,17 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
 
   String? get mediaRootFolderId => mediaRootFolderId;
 
+  void onSubmit() async {
+    if (canSave == true) {
+      Navigator.pop(
+        context,
+        textController.value.text.trim(),
+      );
+    } else {
+      null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -80,6 +91,7 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                             textAlign: TextAlign.start,
                             autofocus: true,
                             controller: textController,
+                            onSubmitted: (_) => onSubmit(),
                             onChanged: (textController) {
                               textController = textController.trim();
                               if (textController.contains(
@@ -178,16 +190,7 @@ class _ButtonTemplateState extends State<BlurCreateAlbum> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 20),
                                 child: ElevatedButton(
-                                  onPressed: () async {
-                                    if (canSave == true) {
-                                      Navigator.pop(
-                                        context,
-                                        textController.value.text.trim(),
-                                      );
-                                    } else {
-                                      null;
-                                    }
-                                  },
+                                  onPressed: onSubmit,
                                   child: Text(
                                     translate.save,
                                     style: TextStyle(

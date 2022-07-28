@@ -94,10 +94,11 @@ class _ButtonTemplateState extends State<BlurAddFolder> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               alignment: Alignment.center,
-                              child: TextField(
+                              child: TextFormField(
                                 controller: addFolderController,
                                 textAlignVertical: TextAlignVertical.bottom,
                                 textAlign: TextAlign.start,
+                                onFieldSubmitted: (_) => onSubmit(),
                                 autofocus: true,
                                 onChanged: (myController) {
                                   myController = myController.trim();
