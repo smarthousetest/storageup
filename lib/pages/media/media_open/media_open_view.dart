@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:open_file/open_file.dart';
 import 'package:storageup/components/media/media_viewer.dart';
 import 'package:storageup/components/media/short_file_info.dart';
 import 'package:storageup/constants.dart';
@@ -107,7 +108,13 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                     cursor: SystemMouseCursors.click,
                                     child: GestureDetector(
                                         onTap: () {
-                                          Navigator.pop(context);
+                                          String? path =
+                                              (state.choosedMedia as Record)
+                                                  .path;
+
+                                          if (path != null) {
+                                            OpenFile.open(path);
+                                          }
                                         },
                                         child: SvgPicture.asset(
                                           'assets/options/share.svg',
