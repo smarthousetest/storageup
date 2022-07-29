@@ -20,7 +20,7 @@ class DownloadInfoWidget extends StatelessWidget {
     }
 
     return Container(
-      height: 68,
+      height: 70,
       width: 500,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: BoxDecoration(
