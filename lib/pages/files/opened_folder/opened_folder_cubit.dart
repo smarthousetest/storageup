@@ -51,7 +51,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   late FilesController _filesController;
   var _loadController = LoadController.instance;
   StreamSubscription? updatePageSubscription;
-  late final LatestFileRepository _repository;
+  late final LatestFileRepository _recentsFilesRepository;
   String idTappedFile = '';
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
@@ -178,7 +178,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     Folder? currentFolder;
     OpenedFolderState newState;
     if (folder == null) {
-      await _filesController.updateFilesList();
       currentFolder =
           await _filesController.getFilesRootFolder(withUpdate: true);
       final objectsVL = _filesController
@@ -203,15 +202,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       update();
     });
-    var user = _userRepository.getUser;
+
     bool progress = true;
-    _repository = await GetIt.instance.getAsync<LatestFileRepository>();
+    _recentsFilesRepository =
+        await GetIt.instance.getAsync<LatestFileRepository>();
     var valueNotifier = _userRepository.getValueNotifier;
     emit(newState);
     emit(
       state.copyWith(
         previousFolders: previousFolders,
-        user: user,
         progress: progress,
         valueNotifier: valueNotifier,
       ),
@@ -268,7 +267,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
     var recentsFile = await _filesController.getRecentFiles();
     if (recentsFile != null) {
-      await _repository.addFiles(latestFile: recentsFile);
+      await _recentsFilesRepository.addFiles(latestFile: recentsFile);
     }
 
     // if (result == ResponseStatus.ok) {
@@ -643,7 +642,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       var recentsFile = await _filesController.getRecentFiles();
       if (recentsFile != null) {
         // recentsFile.forEach((element) {
-        await _repository.addFiles(latestFile: recentsFile);
+        await _recentsFilesRepository.addFiles(latestFile: recentsFile);
         // });
       }
       //_repository.addFile(latestFile: record);

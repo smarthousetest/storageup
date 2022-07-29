@@ -54,10 +54,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     _filesController = await GetIt.I.getAsync<FilesController>();
     var locale = await getLocale();
-    User? user = await _userController.getUser;
     var valueNotifier = _userController.getValueNotifier();
     emit(state.copyWith(
-      user: user,
       language: locale.languageCode,
       valueNotifier: valueNotifier,
     ));

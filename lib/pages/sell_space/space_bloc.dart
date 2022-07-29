@@ -63,7 +63,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     SpaceState state,
     Emitter<SpaceState> emit,
   ) async {
-    User? user = await _userController.getUser;
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.locationsInfo;
     var keeper = await _keeperService.getAllKeepers();
@@ -79,7 +78,6 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
       }
     if (keeper.left == null) {
       emit(state.copyWith(
-        user: user,
         locationsInfo: locationsInfo,
         keeper: keeper.right,
         valueNotifier: valueNotifier,
@@ -181,7 +179,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     if (bearerToken != null) {
       _writeKeeperName(state);
       _writeKeeperMemorySize(state);
-      os.startProcess('keeper', [
+      os.startProcess(Processes.keeper, true, [
         domainName,
         Uri.encodeFull(
             "${state.locationsInfo.last.dirPath}${Platform.pathSeparator}.keeper"),

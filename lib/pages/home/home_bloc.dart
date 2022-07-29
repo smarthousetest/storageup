@@ -58,6 +58,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<HomePageOpened>((event, emit) async {
       _filesController = await GetIt.I.getAsync<FilesController>();
+      // _filesController.clearLocalDatabase();
       var os = OsSpecifications.getOs();
       await Hive.initFlutter(os.supportDir);
       print('Hive initialized');

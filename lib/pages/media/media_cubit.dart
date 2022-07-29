@@ -216,13 +216,11 @@ class MediaCubit extends Cubit<MediaState> {
     var mediaFolder =
         await _filesController.getObjectByIdFromLocalStorage('-1');
 
-    User? user = await _userController.getUser;
     bool progress = true;
     var valueNotifier = _userController.getValueNotifier();
     final valueListenable =
         _filesController.getObjectsValueListenableByFolderId(rootFolder!.id);
 
-    await _filesController.getMediaRootFolder(withUpdate: true);
     final foldersId =
         _filesController.getContentFromFolderById(mediaFolder!.parentFolder!);
     final valueListenableObject =
@@ -234,7 +232,6 @@ class MediaCubit extends Cubit<MediaState> {
       folderValueListenable: valueListenable,
       objectsValueListenable: valueListenableObject,
       foldersToListen: foldersId,
-      user: user,
       progress: progress,
       status: FormzStatus.pure,
       valueNotifier: valueNotifier,

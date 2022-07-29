@@ -33,17 +33,14 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     Emitter<InfoState> emit,
   ) async {
     _filesController = await GetIt.I.getAsync<FilesController>();
-    User? user = await _userController.getUser;
-    await _filesController.updateFilesList();
+
     var folder = await _filesController.getFilesRootFolder();
     var sub = await _subscriptionService.getCurrentSubscription();
-    await _packetController.updatePacket();
     var allMediaFolders = await _filesController.getMediaFolders(true);
     //var packetInfo = await _subscriptionService.getPacketInfo();
     var valueNotifier = _userController.getValueNotifier();
     var packetNotifier = _packetController.getValueNotifier();
     emit(state.copyWith(
-      user: user,
       folder: folder,
       allMediaFolders: allMediaFolders,
       sub: sub.left,
