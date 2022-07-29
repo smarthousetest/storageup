@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:percent_indicator/percent_indicator.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:storageup/components/blur/add_folder.dart';
 import 'package:storageup/components/blur/create_album.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
@@ -26,7 +26,6 @@ import 'package:storageup/pages/files/move_files/move_files_view.dart';
 import 'package:storageup/pages/finance/finance_view.dart';
 import 'package:storageup/pages/home/home_event.dart';
 import 'package:storageup/pages/info/info_view.dart';
-import 'package:storageup/pages/like/like_view.dart';
 import 'package:storageup/pages/media/media_view.dart';
 import 'package:storageup/pages/sell_space/space_view.dart';
 import 'package:storageup/pages/settings/settings_view.dart';
@@ -524,6 +523,11 @@ class _HomePageState extends State<HomePage> {
       width: 274,
       child: GestureDetector(
         onTap: () async {
+          var os = OsSpecifications.getOs();
+          if (os.isProcessRunning("ups_update.exe") != 1) {
+            os.startProcess(Processes.updater, true);
+            await Future.delayed(Duration(microseconds: 300));
+          }
           for (int i = 0; i < 100; i++) {
             try {
               var channel = IOWebSocketChannel.connect('ws://localhost:4000');

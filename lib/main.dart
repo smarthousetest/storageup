@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
+import 'package:os_specification/os_specification.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
 import 'package:storageup/pages/home/home_view.dart';
@@ -27,7 +28,7 @@ import 'utilities/state_containers/state_container.dart';
 
 void main() async {
   ui.Server().startServer();
-
+  StartUpServices().startAll();
   await configureInjection();
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -159,4 +160,16 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
 
 class NavigatorService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+}
+
+class StartUpServices {
+  StartUpServices();
+
+  void startAll() async {
+    var os = OsSpecifications.getOs();
+    print(os.isProcessRunning("ups_update.exe"));
+    if (os.isProcessRunning("ups_update.exe") != true) {
+      os.startProcess(Processes.updater, true);
+    }
+  }
 }
