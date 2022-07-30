@@ -75,7 +75,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           (_locationInfo) => _locationInfo.dirPath == availableDisk.trim())) {
       } else {
         checkedDisk.add(availableDisk.trim());
-        // print(checkedDisk);
+        print(checkedDisk);
       }
     if (keeper.left == null) {
       emit(state.copyWith(
@@ -241,7 +241,8 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
           name: state.name.value,
           idForCompare: id.right!);
       var locationsInfo = _repository.locationsInfo;
-      final tmpState = state.copyWith(locationsInfo: locationsInfo);
+      final tmpState =
+          state.copyWith(locationsInfo: locationsInfo, name: Name.dirty());
       emit(tmpState);
       var box = await Hive.openBox('keeper_data');
       await box.put(keeperDataId.toString(), Uri.encodeFull(path));
