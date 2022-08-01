@@ -30,12 +30,7 @@ enum FileAction {
   addFiles,
 }
 
-enum MediaAction {
-  delete,
-  properties,
-  rename,
-  save
-}
+enum MediaAction { delete, properties, rename, save }
 
 enum AvatarAction {
   changeAvatar,
@@ -45,6 +40,11 @@ enum AvatarAction {
 enum KeeperAction {
   delete,
   change,
+}
+
+enum WhereFromContextMenu {
+  files,
+  media,
 }
 
 enum ErrorType {

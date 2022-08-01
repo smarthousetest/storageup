@@ -287,5 +287,6 @@
     "email_send": "You can request the link again via",
     "sec": "sec",
     "downloading_files": "Downloading files",
-    "uploading_files": "Uploading files"
+    "uploading_files": "Uploading files",
+    "add_media": "Add media"
 }
