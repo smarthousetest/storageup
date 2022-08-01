@@ -811,8 +811,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               context
                   .read<SpaceBloc>()
                   .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+              context.read<SpaceBloc>().add(NameChanged(
+                    name: state.name.value,
+                    needValidation: true,
+                  ));
+            } else if (changeKeeper == null) {
+              maxSpace = (state.availableSpace / GB).roundToDouble();
             }
-            maxSpace = (state.availableSpace / GB).roundToDouble();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1157,6 +1162,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     if (_currentSliderValue.toInt() < max) {
                                       _currentSliderValue =
                                           _currentSliderValue.toInt() + 1;
+                                      canSave = true;
                                     }
                                   });
                                 }
@@ -1380,11 +1386,15 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               context
                   .read<SpaceBloc>()
                   .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+            }
+            if (changeKeeper != null) {
               context
                   .read<SpaceBloc>()
                   .add(NameChanged(name: changeKeeper!.name));
             }
-            var maxSpace = (state.availableSpace / GB).round();
+            if (changeKeeper == null) {
+              var maxSpace = (state.availableSpace / GB).round();
+            }
             print(maxSpace);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1874,6 +1884,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           onPressed: _isFieldsValid(state)
                               ? () async {
                                   if (changeKeeper != null) {
+                                    canSave = true;
                                     context.read<SpaceBloc>().add(ChangeKeeper(
                                         countGb: _currentSliderValue.toInt(),
                                         keeper: changeKeeper!));
