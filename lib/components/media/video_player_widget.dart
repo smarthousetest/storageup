@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
+import 'package:storageup/components/media/full_screen_video_player_widget.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({Key? key, required this.videoPath})
@@ -51,18 +53,44 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           ));
     }
 
-    return Platform.isWindows
-        ? NativeVideo(
-            fit: BoxFit.contain,
-            player: player,
-            scale: 1.0,
-            showControls: true,
-          )
-        : Video(
-            fit: BoxFit.contain,
-            player: player,
-            scale: 1.0,
-            showControls: true,
+    return Stack(
+      children: [
+        Platform.isWindows
+            ? NativeVideo(
+                fit: BoxFit.contain,
+                player: player,
+                scale: 1.0,
+                showControls: true,
+              )
+            : Video(
+                fit: BoxFit.contain,
+                player: player,
+                scale: 1.0,
+                showControls: true,
+              ),
+        LayoutBuilder(builder: (context, size) {
+          return Container(
+            height: size.maxHeight - 80,
+            child: GestureDetector(
+              onTap: () {
+                print('Video player click');
+                player.playOrPause();
+              },
+              onDoubleTap: () {
+                if (Platform.isMacOS) {
+                  return;
+                }
+
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return FullScreenVideoPlayerWidget(player: player);
+                    });
+              },
+            ),
           );
+        })
+      ],
+    );
   }
 }
