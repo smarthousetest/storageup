@@ -41,7 +41,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   int countGbSpace = 0;
   final double _rowPadding = 30.0;
   GlobalKey nameWidthKey = GlobalKey();
-  final myController = TextEditingController();
+  final keeperNameTextController = TextEditingController();
   bool canSave = true;
   int countOfNotSameName = 0;
   String? dropdownValue;
@@ -59,7 +59,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
     setState(() {
       index = newIndex;
       changeKeeper = keeper;
-      myController.text = keeper.name;
+      keeperNameTextController.text = keeper.name;
       _currentSliderValue = changeKeeper!.countGb.toDouble();
       maxSpace = maxCountOfGb;
     });
@@ -81,7 +81,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               ..add(SpacePageOpened())
               ..add(SendKeeperVersion())),
         BlocProvider(
-            create: (context) => FolderListBloc()..add(FolderListPageOpened()))
+            create: (contextFolderList) =>
+                FolderListBloc()..add(FolderListPageOpened()))
       ],
       child: BlocListener<SpaceBloc, SpaceState>(
         listener: (context, state) async {
@@ -290,7 +291,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             setState(() {
               index = 0;
               changeKeeper = null;
-              myController.clear();
+              keeperNameTextController.clear();
               _currentSliderValue = 32;
               firstOpen = true;
             });
@@ -406,6 +407,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 if (index != 3) {
                   setState(() {
                     index = 1;
+                    firstOpen = true;
+                    keeperNameTextController.clear();
                     print(index);
                   });
                 }
@@ -508,6 +511,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                 if (index != 3) {
                   setState(() {
                     index = 1;
+                    firstOpen = true;
+                    keeperNameTextController.clear();
                     print(index);
                   });
                 }
@@ -719,6 +724,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                     setState(() {
                       index = 1;
                       firstOpen = true;
+                      keeperNameTextController.clear();
                     });
                   },
                   style: OutlinedButton.styleFrom(
@@ -1265,7 +1271,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                         keeper: changeKeeper!));
                                     setState(() {
                                       index = 2;
-                                      myController.text = '';
+                                      keeperNameTextController.text = '';
                                       _currentSliderValue = 32;
                                       changeKeeper = null;
                                       needToCheck = true;
@@ -1302,7 +1308,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                       setState(() {
                                         index = 2;
                                         _currentSliderValue = 32;
-                                        myController.text = '';
+                                        keeperNameTextController.text = '';
                                       });
                                       canSave = false;
                                     } else {
@@ -1873,7 +1879,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                         keeper: changeKeeper!));
                                     setState(() {
                                       index = 2;
-                                      myController.text = '';
+                                      keeperNameTextController.text = '';
                                       _currentSliderValue = 32;
                                       changeKeeper = null;
                                       needToCheck = true;
@@ -1943,7 +1949,8 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                 borderRadius: BorderRadius.circular(10)),
                             backgroundColor: _isFieldsValid(state) &&
                                     canSave &&
-                                    maxSpace > 32
+                                    maxSpace > 32 &&
+                                    state.diskList.isNotEmpty
                                 ? Theme.of(context).splashColor
                                 : Theme.of(context).canvasColor,
                           ),
@@ -2032,7 +2039,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
             child: BlocBuilder<SpaceBloc, SpaceState>(
               builder: (context, state) {
                 return TextField(
-                  controller: myController,
+                  controller: keeperNameTextController,
                   onChanged: (value) {
                     context
                         .read<SpaceBloc>()
