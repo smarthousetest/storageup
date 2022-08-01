@@ -350,7 +350,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
           GestureDetector(
             onTap: (() {
+              setState(() {
+                index = 0;
+              });
               context.read<FolderListBloc>().add(GetKeeperInfo());
+              context.read<SpaceBloc>().add(UpdateKeepersList());
             }),
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
