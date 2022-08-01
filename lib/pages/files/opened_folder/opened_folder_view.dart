@@ -1564,10 +1564,14 @@ class _GridFileElementState extends State<GridFileElement> {
                             type == 'video' &&
                                 thumbnail != null &&
                                 thumbnail.isNotEmpty
-                        ? Image.network(
-                            thumbnail!,
-                            fit: BoxFit.contain,
-                          )
+                        ? thumbnail!.isURL()
+                            ? Image.network(
+                                thumbnail,
+                                fit: BoxFit.contain,
+                              )
+                            : Image.asset(
+                                'assets/file_icons/image_default.png',
+                              )
                         : type == 'video' &&
                                 (thumbnail == null || thumbnail.isEmpty)
                             ? Image.asset(
