@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -57,6 +58,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   changePageIndexChangeKeeper(
       int newIndex, DownloadLocation keeper, maxCountOfGb) {
     setState(() {
+      needToCheck = true;
       index = newIndex;
       changeKeeper = keeper;
       keeperNameTextController.text = keeper.name;
@@ -811,10 +813,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               context
                   .read<SpaceBloc>()
                   .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
-              context.read<SpaceBloc>().add(NameChanged(
-                    name: state.name.value,
-                    needValidation: true,
-                  ));
             } else if (changeKeeper == null) {
               maxSpace = (state.availableSpace / GB).roundToDouble();
             }
@@ -1343,9 +1341,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            backgroundColor: _isFieldsValid(state) && canSave
-                                ? Theme.of(context).splashColor
-                                : Theme.of(context).canvasColor,
+                            backgroundColor:
+                                (_isFieldsValid(state) && canSave) ||
+                                        (changeKepper != null &&
+                                            _isFieldsValid(state) &&
+                                            canSave)
+                                    ? Theme.of(context).splashColor
+                                    : Theme.of(context).canvasColor,
                           ),
                           child: Text(
                             changeKeeper == null
@@ -1386,11 +1388,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               context
                   .read<SpaceBloc>()
                   .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
-            }
-            if (changeKeeper != null) {
-              context
-                  .read<SpaceBloc>()
-                  .add(NameChanged(name: changeKeeper!.name));
             }
             if (changeKeeper == null) {
               maxSpace = (state.availableSpace / GB).roundToDouble();
@@ -1884,7 +1881,6 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                           onPressed: _isFieldsValid(state)
                               ? () async {
                                   if (changeKeeper != null) {
-                                    canSave = true;
                                     context.read<SpaceBloc>().add(ChangeKeeper(
                                         countGb: _currentSliderValue.toInt(),
                                         keeper: changeKeeper!));
@@ -1958,10 +1954,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             minimumSize: Size(double.maxFinite, 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            backgroundColor: _isFieldsValid(state) &&
-                                    canSave &&
-                                    maxSpace > 32 &&
-                                    state.diskList.isNotEmpty
+                            backgroundColor: (_isFieldsValid(state) &&
+                                        canSave &&
+                                        state.diskList.isNotEmpty) ||
+                                    (changeKepper != null &&
+                                        _isFieldsValid(state) &&
+                                        canSave)
                                 ? Theme.of(context).splashColor
                                 : Theme.of(context).canvasColor,
                           ),
