@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
+import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 
 class StateSortedContainer extends StatefulWidget {
   final Widget child;
@@ -9,7 +10,9 @@ class StateSortedContainer extends StatefulWidget {
   });
 
   static StateSortedContainerState of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<_InheritedStateSortedContainer>())!.data;
+    return (context.dependOnInheritedWidgetOfExactType<
+            _InheritedStateSortedContainer>())!
+        .data;
   }
 
   @override
@@ -21,8 +24,10 @@ class StateSortedContainerState extends State<StateSortedContainer> {
   SortingCriterion get sortedCriterion => _sortedCriterion;
   SortingDirection _direction = SortingDirection.down;
   SortingDirection get direction => _direction;
-  String _search = '';
-  String get search => _search;
+  FilesRepresentation _representation = FilesRepresentation.grid;
+  FilesRepresentation get representation => _representation;
+  String? _search;
+  String? get search => _search;
   bool _sortedActionButton = false;
   bool get sortedActionButton => _sortedActionButton;
 
@@ -46,13 +51,19 @@ class StateSortedContainerState extends State<StateSortedContainer> {
     });
   }
 
+  void newRepresentationFiles(FilesRepresentation representation) {
+    setState(() {
+      _representation = representation;
+    });
+  }
+
   void actionForButton() {
     setState(() {
       _sortedActionButton = !sortedActionButton;
     });
   }
 
-  void searchAction(String search) {
+  void searchAction(String? search) {
     setState(() {
       _search = search;
     });

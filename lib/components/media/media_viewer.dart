@@ -262,7 +262,7 @@ class _MediaViewerState extends State<MediaViewer> {
               ? Image.asset(
                   isVideo
                       ? 'assets/file_icons/video.png'
-                      : 'assets/file_icons/image.png',
+                      : 'assets/file_icons/image_default.png',
                   fit: BoxFit.fitHeight,
                   // width: MediaQuery.of(context).size.width - 2,
                 )
@@ -323,7 +323,7 @@ class _MediaViewerState extends State<MediaViewer> {
             element = Image.asset(
               isVideo
                   ? 'assets/file_icons/video.png'
-                  : 'assets/file_icons/image.png',
+                  : 'assets/file_icons/image_default.png',
               fit: BoxFit.contain,
               width: MediaQuery.of(context).size.width,
             );
@@ -344,7 +344,9 @@ class _MediaViewerState extends State<MediaViewer> {
       }
     } else if (mediaMiniatureAdress.isEmpty) {
       element = Image.asset(
-        isVideo ? 'assets/file_icons/video.png' : 'assets/file_icons/image.png',
+        isVideo
+            ? 'assets/file_icons/video.png'
+            : 'assets/file_icons/image_default.png',
         fit: BoxFit.contain,
         width: MediaQuery.of(context).size.width,
       );

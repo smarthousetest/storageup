@@ -3,6 +3,7 @@ import 'package:cpp_native/models/folder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
+import 'package:hive/hive.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/models/sorting_element.dart';
@@ -17,11 +18,12 @@ class OpenedFolderState extends Equatable {
   final Map<String, List<BaseObject>> groupedFiles;
   final SortingCriterion criterion;
   final SortingDirection direction;
-  final String search;
+  final String? search;
   final bool progress;
   final ResponseStatus? responseStatus;
   final User? user;
   final ValueNotifier<User?>? valueNotifier;
+  final ValueListenable<Box<BaseObject>>? objectsValueListenable;
 
   OpenedFolderState({
     this.currentFolder,
@@ -32,12 +34,13 @@ class OpenedFolderState extends Equatable {
     this.direction = SortingDirection.down,
     required this.previousFolders,
     this.responseStatus,
-    this.search = '',
+    this.search,
     this.groupedFiles = const {},
     this.progress = false,
     this.representation = FilesRepresentation.grid,
     this.user,
     this.valueNotifier,
+    this.objectsValueListenable,
   });
 
   OpenedFolderState copyWith({
@@ -55,6 +58,7 @@ class OpenedFolderState extends Equatable {
     bool? progress,
     User? user,
     ValueNotifier<User?>? valueNotifier,
+    ValueListenable<Box<BaseObject>>? objectsValueListenable,
   }) {
     return OpenedFolderState(
       currentFolder: currentFolder ?? this.currentFolder,
@@ -71,6 +75,8 @@ class OpenedFolderState extends Equatable {
       responseStatus: responseStatus ?? this.responseStatus,
       user: user ?? this.user,
       valueNotifier: valueNotifier ?? this.valueNotifier,
+      objectsValueListenable:
+          objectsValueListenable ?? this.objectsValueListenable,
     );
   }
 
@@ -90,6 +96,7 @@ class OpenedFolderState extends Equatable {
         responseStatus,
         user,
         valueNotifier,
+        objectsValueListenable
       ];
 }
 
