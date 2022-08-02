@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/info/info_event.dart';
@@ -22,8 +23,8 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
   // getIt<AuthenticationRepository>();
 
   UserController _userController = getIt<UserController>();
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
+
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
 
   Future _mapInfoPageOpened(
@@ -31,17 +32,15 @@ class InfoBloc extends Bloc<InfoEvent, InfoState> {
     InfoState state,
     Emitter<InfoState> emit,
   ) async {
-    User? user = await _userController.getUser;
-    await _filesController.updateFilesList();
-    var folder = await _filesController.getRootFolder;
+    _filesController = await GetIt.I.getAsync<FilesController>();
+
+    var folder = await _filesController.getFilesRootFolder();
     var sub = await _subscriptionService.getCurrentSubscription();
-    //await _packetController.updatePacket();
     var allMediaFolders = await _filesController.getMediaFolders(true);
     var valueNotifier = _userController.getValueNotifier();
     var filesNotifier = _filesController.getFilesValueNotifier();
     var mediaNotifier = _filesController.getMediaValueNotifier();
     emit(state.copyWith(
-      user: user,
       folder: folder,
       allMediaFolders: allMediaFolders,
       sub: sub.left,

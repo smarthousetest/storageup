@@ -10,6 +10,7 @@ import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,8 +25,7 @@ import 'media_open_state.dart';
 
 @injectable
 class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
-  MediaOpenBloc(@Named('files_controller') this._controller, this._mediaCubit)
-      : super(MediaOpenState()) {
+  MediaOpenBloc(this._mediaCubit) : super(MediaOpenState()) {
     on<MediaOpenEvent>((event, emit) async {
       if (event is MediaOpenPageOpened) {
         await _mapMediaOpenPageOpened(state, event, emit);
@@ -54,8 +54,8 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     return super.close();
   }
 
-  FilesController _controller;
   MediaCubit _mediaCubit;
+  late FilesController _filesController;
   final LoadController _loadController = LoadController.instance;
   late var _loadObserver = Observer<LoadNotification>(
     (notification) {
@@ -108,13 +108,13 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
     MediaOpenPageOpened event,
     Emitter<MediaOpenState> emit,
   ) async {
+    _filesController = await GetIt.I.getAsync<FilesController>();
     var connect = await Connectivity().checkConnectivity();
     if (connect == ConnectivityResult.none) {
       add(MediaOpenError(ErrorType.noInternet));
     }
 
-    List<BaseObject> mediaFromFolder =
-        (event.choosedFolder as Folder).records ?? [];
+    List<BaseObject> mediaFromFolder = event.mediaList;
     _loadController.getState.registerObserver(_loadObserver);
 
     var box = await Hive.openBox(kPathDBName);
@@ -243,19 +243,19 @@ class MediaOpenBloc extends Bloc<MediaOpenEvent, MediaOpenState> {
   ) async {
     var isFavorite = event.media.favorite;
     print(!isFavorite);
-    var res = await _controller.setFavorite(event.media, !isFavorite);
+    var res = await _filesController.setFavorite(event.media, !isFavorite);
     print(res);
     var mediaList =
-        await _controller.getContentFromFolderById(state.openedFolder.id);
+        await _filesController.getContentFromFolderById(state.openedFolder.id);
     // MediaInfo choosedMedia =
     //     await _controller.addToFavorites(event.mediaId, state.openedFolder.id);
     // List<MediaInfo> mediaFromFolder =
     //     await _controller.getMediaListFromFolder(state.openedFolder.id);
     emit(
       state.copyWith(
-        mediaFromFolder: mediaList,
-        choosedMedia:
-            mediaList.firstWhere((element) => element.id == event.media.id),
+        //mediaFromFolder: mediaList,
+        // choosedMedia:
+        //     mediaList.firstWhere((element) => element.id == event.media.id),
         status: FormzStatus.submissionSuccess,
       ),
     );

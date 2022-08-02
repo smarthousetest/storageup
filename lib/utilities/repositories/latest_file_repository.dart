@@ -6,33 +6,37 @@ import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
-import 'package:storageup/models/latest_file.dart';
 
 const _latestFileBoxName = 'latestFileBox';
 
 @lazySingleton
 class LatestFileRepository {
-  late List<LatestFile> _latestFileInfo;
-  late Box<LatestFile> _latestFileBox;
+  late List<Record> _latestFileInfo;
+  late Box<Record> _latestFileBox;
 
   @factoryMethod
   static Future<LatestFileRepository> create() async {
     //Hive.deleteFromDisk();
 
-    Hive.registerAdapter(LatestFileAdapter());
-    Hive.registerAdapter(RecordAdapter());
-    Hive.registerAdapter(FileAdapter());
+    if (!Hive.isAdapterRegistered(7) && !Hive.isAdapterRegistered(5)) {
+      Hive.registerAdapter(RecordAdapter());
+      Hive.registerAdapter(FileAdapter());
+    }
 
     WidgetsFlutterBinding.ensureInitialized();
     var os = OsSpecifications.getOs();
     Hive.init(os.supportDir);
 
-    final box = await Hive.openBox<LatestFile>(_latestFileBoxName);
+    final latestFileBox = await Hive.openBox<Record>(_latestFileBoxName);
     //box.deleteFromDisk();
-    return LatestFileRepository._(latestFileBox: box);
+    return LatestFileRepository._(latestFileBox: latestFileBox);
   }
 
-  LatestFileRepository._({required Box<LatestFile> latestFileBox}) {
+  Future<void> init() async {
+    _latestFileBox = await Hive.openBox<Record>(_latestFileBoxName);
+  }
+
+  LatestFileRepository._({required Box<Record> latestFileBox}) {
     _latestFileBox = latestFileBox;
     _latestFileInfo = _latestFileBox.values.toList();
 
@@ -40,9 +44,9 @@ class LatestFileRepository {
       final key = event.key;
       final value = event.value;
 
-      if (_latestFileInfo.any((element) => element.latestFile.id == key)) {
-        final currentLocationInfoIndex = _latestFileInfo
-            .indexWhere((element) => element.latestFile.id == key);
+      if (_latestFileInfo.any((element) => element.id == key)) {
+        final currentLocationInfoIndex =
+            _latestFileInfo.indexWhere((element) => element.id == key);
 
         if (event.deleted)
           _latestFileInfo.removeAt(currentLocationInfoIndex);
@@ -56,20 +60,19 @@ class LatestFileRepository {
     });
   }
 
-  List<LatestFile> get getLatestFile => _latestFileBox.values.toList();
+  List<Record> get getLatestFile => _latestFileBox.values.toList();
 
   // set setlocationsInfo(List<DownloadLocation> locationsInfo) =>
   //     _locationsInfo = locationsInfo;
 
-  ValueListenable<Box<LatestFile>> getLatestFilesValueListenable() {
+  ValueListenable<Box<Record>> getLatestFilesValueListenable() {
     return _latestFileBox.listenable();
   }
 
   Future<void> addFiles({
     required List<Record> latestFile,
   }) async {
-    final List<LatestFile> latestFileInfo =
-        latestFile.map((e) => LatestFile(latestFile: e)).toList();
+    final List<Record> latestFileInfo = latestFile.map((e) => e).toList();
 
     await _latestFileBox.clear();
 

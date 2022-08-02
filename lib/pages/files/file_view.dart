@@ -32,11 +32,8 @@ class _FilePageState extends State<FilePage> {
 
   List<OpenedFolderView> _openedFolders = [];
   int _sortingTextFieldIndex = -1;
-  final double _rowSpacing = 20.0;
   final double _rowPadding = 30.0;
 
-  //TODO почему это не используется?
-  double? _searchFieldWidth;
   bool _isSearchFieldChosen = true;
   final TextEditingController _searchingFieldController =
       TextEditingController();
@@ -70,27 +67,7 @@ class _FilePageState extends State<FilePage> {
     super.dispose();
   }
 
-  void _prepareFields(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    if (MediaQuery.of(context).size.width < 967) {
-      setState(() {
-        _searchFieldWidth =
-            width - _rowSpacing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 80;
-      });
-    } else
-      setState(() {
-        _searchFieldWidth =
-            width - _rowSpacing * 3 - 30 * 3 - _rowPadding * 2 - 274 - 173;
-      });
-  }
-
-  void postPrepareFields(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
-    _searchFieldWidth =
-        width - _rowSpacing * 3 - 30 * 2 - _rowPadding * 2 - 274 - 60 - 320;
-  }
-
+  
   void _initFilterList() {
     _sortingTextFieldIndex = -1;
   }
@@ -118,7 +95,7 @@ class _FilePageState extends State<FilePage> {
 
   @override
   Widget build(BuildContext context) {
-    _prepareFields(context);
+    //_prepareFields(context);
     return BlocProvider(
       create: (context) => getIt<FilesBloc>()..add(FilesPageOpened()),
       child: BlocListener<FilesBloc, FilesState>(
@@ -202,168 +179,163 @@ class _FilePageState extends State<FilePage> {
     ) {
       return Row(
         children: [
-          GestureDetector(
-            onTap: () {
-              //TODO добавить действие или убрать детектор
-            },
-            child: Container(
-              //width: 46,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (_sortingTextFieldIndex != -1)
-                    FractionallySizedBox(
-                      heightFactor: 1,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Color.fromARGB(25, 23, 69, 139),
-                              blurRadius: 4,
-                              offset: Offset(1, 4),
-                            )
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                _getSortingElements()[_sortingTextFieldIndex]
-                                    .text,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Theme.of(context).disabledColor,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                var item = _getSortingElements()[2];
-                                _onActionSheetTap(context, item);
-                                setState(() {
-                                  _sortingTextFieldIndex = -1;
-                                });
-                              },
-                              child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                onEnter: (event) {
-                                  setState(() {
-                                    isRemoveFilterButtonHovered = false;
-                                  });
-                                },
-                                onHover: (event) {
-                                  setState(() {
-                                    isRemoveFilterButtonHovered = true;
-                                  });
-                                },
-                                onExit: (event) {
-                                  setState(() {
-                                    isRemoveFilterButtonHovered = false;
-                                  });
-                                },
-                                child: SvgPicture.asset(
-                                  'assets/file_page/close.svg',
-                                  height: 16,
-                                  width: 16,
-                                  color: isRemoveFilterButtonHovered
-                                      ? null
-                                      : Theme.of(context).disabledColor,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+          Container(
+            //width: 46,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (_sortingTextFieldIndex != -1)
+                  FractionallySizedBox(
+                    heightFactor: 1,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Color.fromARGB(25, 23, 69, 139),
+                            blurRadius: 4,
+                            offset: Offset(1, 4),
+                          )
+                        ],
                       ),
-                    ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: Color.fromARGB(25, 23, 69, 139),
-                          blurRadius: 4,
-                          offset: Offset(1, 4),
-                        )
-                      ],
-                    ),
-                    child: CustomPopupMenu(
-                      pressType: PressType.singleClick,
-                      barrierColor: Colors.transparent,
-                      showArrow: false,
-                      horizontalMargin: 210,
-                      verticalMargin: 0,
-                      controller: controller,
-                      menuBuilder: () {
-                        var items = _getSortingElements();
-                        return SortingMenuActions(
-                          theme: Theme.of(context),
-                          translate: translate,
-                          onTap: (action) {
-                            controller.hideMenu();
-                            switch (action) {
-                              case SortingCriterion.byType:
-                                _onActionSheetTap(context, items[0]);
-                                break;
-                              case SortingCriterion.byName:
-                                _onActionSheetTap(context, items[1]);
-                                break;
-                              case SortingCriterion.byDateCreated:
-                                _onActionSheetTap(context, items[2]);
-                                break;
-
-                              case SortingCriterion.bySize:
-                                _onActionSheetTap(context, items[3]);
-                                break;
-                            }
-                          },
-                        );
-                      },
                       child: Row(
                         children: [
-                          Container(
-                            width: 46,
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.all(9.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                _isSearchFieldChosen
-                                    ? setState(() {
-                                        _changeSortFieldsVisibility(context);
-                                        StateSortedContainer.of(context)
-                                            .actionForButton();
-                                      })
-                                    : print('a');
-                                controller.showMenu();
-                              },
-                              child: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: SvgPicture.asset(
-                                  "assets/file_page/settings.svg",
-                                  color: _sortingTextFieldIndex != -1
-                                      ? Theme.of(context).splashColor
-                                      : Theme.of(context).disabledColor,
-                                ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              _getSortingElements()[_sortingTextFieldIndex]
+                                  .text,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontSize: 16.0,
                               ),
                             ),
                           ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              var item = _getSortingElements()[2];
+                              _onActionSheetTap(context, item);
+                              setState(() {
+                                _sortingTextFieldIndex = -1;
+                              });
+                            },
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              onEnter: (event) {
+                                setState(() {
+                                  isRemoveFilterButtonHovered = false;
+                                });
+                              },
+                              onHover: (event) {
+                                setState(() {
+                                  isRemoveFilterButtonHovered = true;
+                                });
+                              },
+                              onExit: (event) {
+                                setState(() {
+                                  isRemoveFilterButtonHovered = false;
+                                });
+                              },
+                              child: SvgPicture.asset(
+                                'assets/file_page/close.svg',
+                                height: 16,
+                                width: 16,
+                                color: isRemoveFilterButtonHovered
+                                    ? null
+                                    : Theme.of(context).disabledColor,
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                SizedBox(
+                  width: 15,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Color.fromARGB(25, 23, 69, 139),
+                        blurRadius: 4,
+                        offset: Offset(1, 4),
+                      )
+                    ],
+                  ),
+                  child: CustomPopupMenu(
+                    pressType: PressType.singleClick,
+                    barrierColor: Colors.transparent,
+                    showArrow: false,
+                    horizontalMargin: 210,
+                    verticalMargin: 0,
+                    controller: controller,
+                    menuBuilder: () {
+                      var items = _getSortingElements();
+                      return SortingMenuActions(
+                        theme: Theme.of(context),
+                        translate: translate,
+                        onTap: (action) {
+                          controller.hideMenu();
+                          switch (action) {
+                            case SortingCriterion.byType:
+                              _onActionSheetTap(context, items[0]);
+                              break;
+                            case SortingCriterion.byName:
+                              _onActionSheetTap(context, items[1]);
+                              break;
+                            case SortingCriterion.byDateCreated:
+                              _onActionSheetTap(context, items[2]);
+                              break;
+
+                            case SortingCriterion.bySize:
+                              _onActionSheetTap(context, items[3]);
+                              break;
+                          }
+                        },
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 46,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.all(9.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              _isSearchFieldChosen
+                                  ? setState(() {
+                                      _changeSortFieldsVisibility(context);
+                                      StateSortedContainer.of(context)
+                                          .actionForButton();
+                                    })
+                                  : print('a');
+                              controller.showMenu();
+                            },
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: SvgPicture.asset(
+                                "assets/file_page/settings.svg",
+                                color: _sortingTextFieldIndex != -1
+                                    ? Theme.of(context).splashColor
+                                    : Theme.of(context).disabledColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ],

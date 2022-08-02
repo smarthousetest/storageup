@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:storageup/components/folder_list_view.dart/validate_keeper_progress_inidcator.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';

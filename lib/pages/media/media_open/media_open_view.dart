@@ -39,9 +39,7 @@ class MediaOpenPage extends StatefulWidget {
 class _MediaOpenPageState extends State<MediaOpenPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MediaOpenBloc(
-          getIt<FilesController>(instanceName: 'files_controller'),
-          widget.arguments.mediaCubit)
+      create: (context) => MediaOpenBloc(widget.arguments.mediaCubit)
         ..add(MediaOpenPageOpened(
             choosedFolder: (widget.arguments.selectedFolder as Folder).copyWith(
                 records: (widget.arguments.selectedFolder as Folder)
@@ -49,7 +47,8 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                         ?.reversed
                         .toList() ??
                     []),
-            choosedMedia: widget.arguments.selectedMedia)),
+            choosedMedia: widget.arguments.selectedMedia,
+            mediaList: widget.arguments.media)),
       child: Material(
         color: Colors.transparent,
         child: Stack(children: [
@@ -215,7 +214,7 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                               1) {
                                             await widget.arguments.mediaCubit
                                                 .onActionDeleteChosen(
-                                              state.choosedMedia as Record,
+                                              state.choosedMedia,
                                             );
                                             Navigator.pop(context);
                                             return;

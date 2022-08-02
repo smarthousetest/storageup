@@ -8,7 +8,6 @@ import 'package:cpp_native/controllers/load/observable_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:open_file/open_file.dart';
@@ -63,8 +62,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<HomePageOpened>((event, emit) async {
       initLoadControllerObserver();
+      _filesController = await GetIt.I.getAsync<FilesController>();
+      // _filesController.clearLocalDatabase();
       var os = OsSpecifications.getOs();
-      Hive.init(os.supportDir);
+      await Hive.initFlutter(os.supportDir);
       print('Hive initialized');
       var remoteAppVersion = await _filesService.getRemoteAppVersion();
       _repository = await GetIt.instance.getAsync<LatestFileRepository>();
@@ -107,8 +108,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final FilesService _filesService = getIt<FilesService>();
   var _loadController = LoadController.instance;
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
   late final LatestFileRepository _repository;
 
   late Observer loadControllerObserver;
@@ -205,7 +205,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       try {
         await _filesController.updateFilesList();
       } catch (_) {}
-      folderId = _filesController.getFilesRootFolder?.id;
+      var rootFilesFolder = await _filesController.getFilesRootFolder();
+      folderId = rootFilesFolder!.id;
     } else {
       folderId = event.folderId;
     }
@@ -312,9 +313,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     bool isDownloading = true,
   }) {
     try {
-      var currentRecordIndex = state.latestFile
-          .indexWhere((element) => element.latestFile.id == recordId);
-      var record = state.latestFile.map((e) => e.latestFile).toList();
+      var currentRecordIndex =
+          state.latestFile.indexWhere((element) => element.id == recordId);
+      var record = state.latestFile.map((e) => e).toList();
       var objects = [...record];
       var currentRecord = objects[currentRecordIndex];
       objects[currentRecordIndex] =

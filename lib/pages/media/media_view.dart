@@ -11,17 +11,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
 import 'package:storageup/components/blur/rename.dart';
-import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
+import 'package:storageup/pages/files/models/sorting_element.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/media/media_cubit.dart';
 import 'package:storageup/pages/media/media_open/media_open_view.dart';
@@ -376,21 +377,65 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                               scrollDirection: Axis.horizontal,
                                               controller:
                                                   _folderListScrollController,
-                                              child: Row(
-                                                children: [
-                                                  ...state.albums
-                                                      .map(
-                                                        (album) => _folderIcon(
-                                                          album,
-                                                          isChoosed: album.id ==
+                                              child: BlocBuilder<MediaCubit,
+                                                  MediaState>(
+                                                builder: (context, state) {
+                                                  if (state
+                                                          .objectsValueListenable !=
+                                                      null)
+                                                    return ValueListenableBuilder(
+                                                        valueListenable: state
+                                                            .objectsValueListenable!,
+                                                        builder: (context,
+                                                            Box<BaseObject> box,
+                                                            widget) {
+                                                          final foldersList = box
+                                                              .values
+                                                              .getSortedObjects(
+                                                            parentFoldersId: [
                                                               state
-                                                                  .currentFolder
-                                                                  .id,
-                                                          blocContext: context,
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                                ],
+                                                                  .rootMediaFolder
+                                                                  .id
+                                                            ],
+                                                          );
+
+                                                          if (foldersList.any(
+                                                              (element) =>
+                                                                  element
+                                                                      .name ==
+                                                                  'Media'))
+                                                            foldersList.removeWhere(
+                                                                (element) =>
+                                                                    element
+                                                                        .name ==
+                                                                    'Media');
+
+                                                          return Row(
+                                                            children: [
+                                                              ...foldersList
+                                                                  .map(
+                                                                    (album) =>
+                                                                        _folderIcon(
+                                                                      album
+                                                                          as Folder,
+                                                                      isChoosed: album
+                                                                              .id ==
+                                                                          state
+                                                                              .currentFolder
+                                                                              .id,
+                                                                      blocContext:
+                                                                          context,
+                                                                      state:
+                                                                          state,
+                                                                    ),
+                                                                  )
+                                                                  .toList(),
+                                                            ],
+                                                          );
+                                                        });
+                                                  else
+                                                    return Container();
+                                                },
                                               )
 
                                               // children: [
@@ -438,7 +483,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           constraints:
                                               BoxConstraints(maxWidth: 200),
                                           child: Text(
-                                            state.currentFolder.name ?? ':(',
+                                            state.currentFolder.name == 'Media'
+                                                ? translate.all
+                                                : state.currentFolder.name ??
+                                                    ':(',
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               color:
@@ -662,6 +710,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     Folder album, {
     required bool isChoosed,
     required BuildContext blocContext,
+    required MediaState state,
   }) {
     Color activeColor;
     String icon = 'album';
@@ -684,9 +733,10 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
           _searchingFieldController.clear();
           blocContext.read<MediaCubit>().changeFolder(album);
 
-          final mediaAlbumId = album.id == '-1' ? null : album.id;
-          StateContainer.of(context).changeChoosedMediaFolderId(mediaAlbumId);
+          final mediaAlbumId = state.currentFolder.id;
 
+          StateContainer.of(context)
+              .changeChoosedMediaFolderId(album.id == '-1' ? null : album.id);
           log('${StateContainer.of(context).choosedMediaFolderId}');
         },
         child: Container(
@@ -755,92 +805,172 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
 
   Widget _filesGrid() {
     return BlocBuilder<MediaCubit, MediaState>(
-      buildWhen: (previous, current) {
-        var needToUpdate =
-            previous.currentFolderRecords != current.currentFolderRecords;
-        return needToUpdate;
-      },
       builder: (blocContext, state) {
-        return LayoutBuilder(builder: (context, constrains) {
+        return LayoutBuilder(builder: (layoutContext, constrains) {
           // print('min width ${constrains.smallest.width}');
 
-          return Container(
-            // padding: EdgeInsets.symmetric(horizontal: 40),
-            child: GridView.builder(
-              itemCount: state.currentFolderRecords.length,
-              shrinkWrap: true,
-              controller: ScrollController(),
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: constrains.smallest.width ~/ 110,
-                childAspectRatio: (1 / 1.22),
-                mainAxisSpacing: 15,
-              ),
-              itemBuilder: (context, index) {
-                var record = state.currentFolderRecords[index];
+          if (state.objectsValueListenable != null)
+            return ValueListenableBuilder(
+                valueListenable: state.objectsValueListenable!,
+                builder: (context, Box<BaseObject> box, widget) {
+                  // Map<DateTime, List<BaseObject>> media = {};
+                  // if (state.foldersToListen == [])
+                  //   media = box.values.getObjectsSortedByTime(
+                  //     parentFolderId: state.currentFolder.id,
+                  //     direction: SortingDirection.down,
+                  //   );
+                  // else
 
-                if (state.currentFolderRecords.length !=
-                    _popupControllers.length) {
-                  final controller = CustomPopupMenuController();
-                  _popupControllers.add(controller);
-                }
+                  var media = box.values.getSortedObjects(
+                      parentFoldersId: state.foldersToListen!,
+                      direction: SortingDirection.down,
+                      sortingText: state.searchText);
 
-                _onPointerDown(PointerDownEvent event) {
-                  if (event.kind == PointerDeviceKind.mouse &&
-                      event.buttons == kSecondaryMouseButton) {
-                    print("right button click");
+                  var mediaList = media.reversed.toList();
 
-                    _popupControllers[
-                            state.currentFolderRecords.indexOf(record)]
-                        .showMenu();
-                  }
-                }
-
-                return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () {
-                      //_photoOpen(context, state.currentFolderRecords);
-                      _onTapItem(state.currentFolderRecords, record, context,
-                          state.currentFolder);
-                    },
-                    child: Listener(
-                      onPointerDown: _onPointerDown,
-                      behavior: HitTestBehavior.opaque,
-                      child: IgnorePointer(
-                        child: CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            enablePassEvent: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
-                            controller: _popupControllers[
-                                state.currentFolderRecords.indexOf(record)],
-                            menuBuilder: () {
-                              return MediaPopupMenuActions(
-                                theme: Theme.of(context),
-                                translate: translate,
-                                onTap: (action) async {
-                                  onActionTap(context, action, state, record);
-                                },
-                              );
-                            },
-                            child: MediaGridElement(
-                                record: state.currentFolderRecords[index])),
+                  return Container(
+                    // padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: GridView.builder(
+                      itemCount: mediaList.length,
+                      shrinkWrap: true,
+                      controller: ScrollController(),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: constrains.smallest.width ~/ 110,
+                        childAspectRatio: (1 / 1.22),
+                        mainAxisSpacing: 15,
                       ),
+                      itemBuilder: (context, index) {
+                        var record = mediaList[index];
+
+                        if (mediaList.length != _popupControllers.length) {
+                          final controller = CustomPopupMenuController();
+                          _popupControllers.add(controller);
+                        }
+
+                        _onPointerDown(PointerDownEvent event) {
+                          if (event.kind == PointerDeviceKind.mouse &&
+                              event.buttons == kSecondaryMouseButton) {
+                            print("right button click");
+
+                            _popupControllers[mediaList.indexOf(record)]
+                                .showMenu();
+                          }
+                        }
+
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              //_photoOpen(context, state.currentFolderRecords);
+                              _onTapItem(mediaList, record, context,
+                                  state.currentFolder);
+                            },
+                            child: Listener(
+                              onPointerDown: _onPointerDown,
+                              behavior: HitTestBehavior.opaque,
+                              child: IgnorePointer(
+                                child: CustomPopupMenu(
+                                    pressType: PressType.singleClick,
+                                    barrierColor: Colors.transparent,
+                                    showArrow: false,
+                                    enablePassEvent: false,
+                                    horizontalMargin: 110,
+                                    verticalMargin: 0,
+                                    controller: _popupControllers[
+                                        mediaList.indexOf(record)],
+                                    menuBuilder: () {
+                                      return MediaPopupMenuActions(
+                                        theme: Theme.of(context),
+                                        translate: translate,
+                                        onTap: (action) async {
+                                          _popupControllers[
+                                                  mediaList.indexOf(record)]
+                                              .hideMenu();
+                                          if (action ==
+                                              MediaAction.properties) {
+                                            var res = await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return FileInfoView(
+                                                      object: record,
+                                                      user: state.valueNotifier
+                                                          ?.value);
+                                                });
+                                            if (res != null) {
+                                              blocContext
+                                                  .read<MediaCubit>()
+                                                  .fileTapped(record as Record);
+                                            }
+                                          } else if (action ==
+                                              MediaAction.rename) {
+                                            var fileExtention = FileAttribute()
+                                                .getFileExtension(
+                                                    record.name ?? '');
+                                            var result = await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                var filename = FileAttribute()
+                                                    .getFileName(
+                                                        record.name ?? '');
+                                                return BlurRename(
+                                                    filename, true);
+                                              },
+                                            );
+                                            if (result != null &&
+                                                result is String &&
+                                                result !=
+                                                    FileAttribute().getFileName(
+                                                        record.name ?? '')) {
+                                              result =
+                                                  result + '.' + fileExtention;
+                                              final res = await context
+                                                  .read<MediaCubit>()
+                                                  .onActionRenameChosen(
+                                                      record, result);
+                                              if (res ==
+                                                  ErrorType.alreadyExist) {
+                                                _rename(context, record, result,
+                                                    fileExtention);
+                                              }
+                                            }
+                                          } else {
+                                            //   controller.hideMenu();
+                                            var result = await showDialog<bool>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return BlurDelete();
+                                              },
+                                            );
+                                            if (result == true) {
+                                              blocContext
+                                                  .read<MediaCubit>()
+                                                  .onActionDeleteChosen(record);
+                                            }
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: MediaGridElement(
+                                        record: record as Record)),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
-            ),
-          );
+                  );
+                });
+          else
+            return Container();
         });
       },
     );
   }
 
-  void _rename(BuildContext context, Record record, String name,
+  void _rename(BuildContext context, BaseObject record, String name,
       String extention) async {
     String newName = await showDialog(
       context: context,
@@ -924,209 +1054,298 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     return BlocBuilder<MediaCubit, MediaState>(
       builder: (context, state) {
         return LayoutBuilder(builder: (context, constraints) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            controller: ScrollController(),
-            child: Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: DataTable(
-                columnSpacing: 25,
-                showCheckboxColumn: false,
-                columns: [
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.5,
-                      child: Text(
-                        translate.name,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.06,
-                      child: Text(
-                        translate.format,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.05,
-                      child: Text(
-                        translate.date,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.06,
-                      child: Text(
-                        translate.size,
-                        style: style,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Container(
-                      width: constraints.maxWidth * 0.001,
-                      child: SizedBox(
-                        width: constraints.maxWidth * 0.001,
-                      ),
-                    ),
-                  ),
-                ],
-                rows: state.currentFolderRecords.map((e) {
-                  String? type = '';
-                  bool isFile = false;
-                  if (state.currentFolderRecords.length >
-                      _popupControllers.length) {
-                    _popupControllers = [];
-                    _initiatingControllers(state);
-                  }
+          if (state.objectsValueListenable != null)
+            return ValueListenableBuilder(
+                valueListenable: state.objectsValueListenable!,
+                builder: (context, Box<BaseObject> box, widget) {
+                  // Map<DateTime, List<BaseObject>> media = {};
+                  // if (state.foldersToListen == [])
+                  //   media = box.values.getObjectsSortedByTime(
+                  //     parentFolderId: state.currentFolder.id,
+                  //     direction: SortingDirection.down,
+                  //   );
+                  // else
 
-                  var record = e;
-                  isFile = true;
-                  if (record.thumbnail != null &&
-                      record.thumbnail!.isNotEmpty) {
-                    type = FileAttribute()
-                        .getFilesType(record.name!.toLowerCase());
-                  }
+                  var media = box.values.getSortedObjects(
+                      parentFoldersId: state.foldersToListen!,
+                      direction: SortingDirection.down,
+                      sortingText: state.searchText);
 
-                  return DataRow.byIndex(
-                    index: state.currentFolderRecords.indexOf(e),
-                    color: MaterialStateProperty.resolveWith<Color?>((states) {
-                      print(states.toList().toString());
-                      if (states.contains(MaterialState.focused)) {
-                        return Theme.of(context).splashColor;
-                      }
-                      return null;
-                    }),
-                    cells: [
-                      DataCell(
-                        GestureDetector(
-                          onTap: () {
-                            var index = state.currentFolderRecords.indexOf(e);
-                            if (_indexObject != index) {
-                              setState(() {
-                                _indexObject = index;
-                              });
-                              startTimer();
-                              context.read<MediaCubit>().fileTapped(e);
-                            }
-                          },
-                          child: MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Image.asset(
-                                  type.isNotEmpty
-                                      ? 'assets/file_icons/${type}_s.png'
-                                      : 'assets/file_icons/unexpected_s.png',
-                                  fit: BoxFit.contain,
-                                  height: 24,
-                                  width: 24,
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    e.name ?? '',
-                                    style: cellTextStyle,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                // Spacer(),
-                                BlocBuilder<MediaCubit, MediaState>(
-                                  builder: (context, state) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        context
-                                            .read<MediaCubit>()
-                                            .setFavorite(e);
-                                      },
-                                      child: Image.asset(
-                                        e.favorite
-                                            ? 'assets/file_page/favorite.png'
-                                            : 'assets/file_page/not_favorite.png',
-                                        height: 18,
-                                        width: 18,
-                                      ),
-                                    );
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      DataCell(
-                        Text(
-                          type.isEmpty ? translate.foldr : type.toUpperCase(),
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Text(
-                          DateFormat('dd.MM.yyyy').format(e.createdAt!),
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Text(
-                          fileSize(e.size, translate, 1),
-                          style: cellTextStyle,
-                        ),
-                      ),
-                      DataCell(
-                        Theme(
-                          data: Theme.of(context).copyWith(
-                            hoverColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                          ),
-                          child: CustomPopupMenu(
-                            pressType: PressType.singleClick,
-                            barrierColor: Colors.transparent,
-                            showArrow: false,
-                            horizontalMargin: 110,
-                            verticalMargin: 0,
-                            controller: _popupControllers[
-                                state.currentFolderRecords.indexOf(e)],
-                            menuBuilder: () {
-                              return MediaPopupMenuActions(
-                                theme: Theme.of(context),
-                                translate: translate,
-                                onTap: (MediaAction action) {
-                                  onActionTap(context, action, state, record);
-                                },
-                              );
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/file_page/three_dots.svg',
-                                  ),
-                                ],
+                  var mediaList = media.reversed.toList();
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: ScrollController(),
+                    child: Theme(
+                      data: Theme.of(context)
+                          .copyWith(dividerColor: Colors.transparent),
+                      child: DataTable(
+                        columnSpacing: 25,
+                        showCheckboxColumn: false,
+                        columns: [
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.5,
+                              child: Text(
+                                translate.name,
+                                style: style,
                               ),
                             ),
                           ),
-                        ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.06,
+                              child: Text(
+                                translate.format,
+                                style: style,
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.05,
+                              child: Text(
+                                translate.date,
+                                style: style,
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.06,
+                              child: Text(
+                                translate.size,
+                                style: style,
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Container(
+                              width: constraints.maxWidth * 0.001,
+                              child: SizedBox(
+                                width: constraints.maxWidth * 0.001,
+                              ),
+                            ),
+                          ),
+                        ],
+                        rows: mediaList.map((e) {
+                          String? type = '';
+                          bool isFile = false;
+                          if (mediaList.length > _popupControllers.length) {
+                            _popupControllers = [];
+                            _initiatingControllers(state);
+                          }
+
+                          var record = e as Record;
+                          isFile = true;
+                          if (record.thumbnail != null &&
+                              record.thumbnail!.isNotEmpty) {
+                            type = FileAttribute()
+                                .getFilesType(record.name!.toLowerCase());
+                          }
+
+                          return DataRow.byIndex(
+                            index: mediaList.indexOf(e),
+                            color: MaterialStateProperty.resolveWith<Color?>(
+                                (states) {
+                              print(states.toList().toString());
+                              if (states.contains(MaterialState.focused)) {
+                                return Theme.of(context).splashColor;
+                              }
+                              return null;
+                            }),
+                            cells: [
+                              DataCell(
+                                GestureDetector(
+                                  onTap: () {
+                                    _onTapItem(mediaList, record, context,
+                                        state.currentFolder);
+                                  },
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Row(
+                                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Image.asset(
+                                          type.isNotEmpty
+                                              ? 'assets/file_icons/${type}_s.png'
+                                              : 'assets/file_icons/unexpected_s.png',
+                                          fit: BoxFit.contain,
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            e.name ?? '',
+                                            style: cellTextStyle,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        // Spacer(),
+                                        BlocBuilder<MediaCubit, MediaState>(
+                                          builder: (context, state) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                context
+                                                    .read<MediaCubit>()
+                                                    .setFavorite(e);
+                                              },
+                                              child: Image.asset(
+                                                e.favorite
+                                                    ? 'assets/file_page/favorite.png'
+                                                    : 'assets/file_page/not_favorite.png',
+                                                height: 18,
+                                                width: 18,
+                                              ),
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  type.isEmpty
+                                      ? translate.foldr
+                                      : type.toUpperCase(),
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  DateFormat('dd.MM.yyyy').format(e.createdAt!),
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  fileSize(e.size, translate, 1),
+                                  style: cellTextStyle,
+                                ),
+                              ),
+                              DataCell(
+                                Theme(
+                                  data: Theme.of(context).copyWith(
+                                    hoverColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                  ),
+                                  child: CustomPopupMenu(
+                                    pressType: PressType.singleClick,
+                                    barrierColor: Colors.transparent,
+                                    showArrow: false,
+                                    horizontalMargin: 110,
+                                    verticalMargin: 0,
+                                    controller:
+                                        _popupControllers[mediaList.indexOf(e)],
+                                    menuBuilder: () {
+                                      return MediaPopupMenuActions(
+                                          theme: Theme.of(context),
+                                          translate: translate,
+                                          onTap: (action) async {
+                                            _popupControllers[
+                                                    mediaList.indexOf(e)]
+                                                .hideMenu();
+                                            if (action ==
+                                                MediaAction.properties) {
+                                              var res = await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return FileInfoView(
+                                                        object: e,
+                                                        user: state
+                                                            .valueNotifier
+                                                            ?.value);
+                                                  });
+                                              if (res != null) {
+                                                context
+                                                    .read<MediaCubit>()
+                                                    .fileTapped(e);
+                                              }
+                                            } else if (action ==
+                                                MediaAction.rename) {
+                                              var fileExtention =
+                                                  FileAttribute()
+                                                      .getFileExtension(
+                                                          record.name ?? '');
+                                              var result = await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  var filename = FileAttribute()
+                                                      .getFileName(
+                                                          record.name ?? '');
+                                                  return BlurRename(
+                                                      filename, true);
+                                                },
+                                              );
+                                              if (result != null &&
+                                                  result is String &&
+                                                  result !=
+                                                      FileAttribute()
+                                                          .getFileName(
+                                                              record.name ??
+                                                                  '')) {
+                                                result = result +
+                                                    '.' +
+                                                    fileExtention;
+                                                final res = await context
+                                                    .read<MediaCubit>()
+                                                    .onActionRenameChosen(
+                                                        record, result);
+                                                if (res ==
+                                                    ErrorType.alreadyExist) {
+                                                  _rename(context, record,
+                                                      result, fileExtention);
+                                                }
+                                              }
+                                            } else {
+                                              //   controller.hideMenu();
+                                              var result =
+                                                  await showDialog<bool>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return BlurDelete();
+                                                },
+                                              );
+                                              if (result == true) {
+                                                context
+                                                    .read<MediaCubit>()
+                                                    .onActionDeleteChosen(e);
+                                              }
+                                            }
+                                          });
+                                    },
+                                    child: Container(
+                                      height: 30,
+                                      width: 30,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/file_page/three_dots.svg',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
                       ),
-                    ],
+                    ),
                   );
-                }).toList(),
-              ),
-            ),
-          );
+                });
+          else
+            return Container();
         });
       },
     );
