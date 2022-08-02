@@ -94,11 +94,8 @@ class _ButtonTemplateState extends State<FolderList> {
             SpaceInheritedWidget.of(context).state.changePageIndex(3);
           } else if (state.statusHttpRequest == FormzStatus.submissionFailure) {
             SpaceInheritedWidget.of(context).state.changePageIndex(3);
-          } else if (state.statusHttpRequest == FormzStatus.submissionSuccess) {
-            if (SpaceInheritedWidget.of(context).state.index != 1) {
-              SpaceInheritedWidget.of(context).state.changePageIndex(0);
-            }
-          }
+          } else if (state.statusHttpRequest ==
+              FormzStatus.submissionSuccess) {}
         }
         if (state.needToValidatePopup == true) {
           popUpWasShown = true;

@@ -351,11 +351,11 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           ),
           GestureDetector(
             onTap: (() {
+              context.read<FolderListBloc>().add(GetKeeperInfo());
+              context.read<SpaceBloc>().add(UpdateKeepersList());
               setState(() {
                 index = 0;
               });
-              context.read<FolderListBloc>().add(GetKeeperInfo());
-              context.read<SpaceBloc>().add(UpdateKeepersList());
             }),
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -1393,7 +1393,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                   .add(NameChanged(name: changeKeeper!.name));
             }
             if (changeKeeper == null) {
-              var maxSpace = (state.availableSpace / GB).round();
+              maxSpace = (state.availableSpace / GB).roundToDouble();
             }
             print(maxSpace);
             return Column(
