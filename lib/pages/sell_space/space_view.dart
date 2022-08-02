@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/components/sell_space_no_internet_page.dart';
 import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -753,49 +754,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   }
 
   Widget rentingAPlaceNoInternet(BuildContext context) {
-    return ListView(controller: ScrollController(), children: [
-      Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40),
-          child: Container(
-            height: 1,
-            decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-        ),
-        Container(
-            child: Image.asset("assets/space_sell/sell_space_no_internet.png")),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, top: 30),
-          child: Container(
-            child: Text(
-              translate.sell_space_no_internet_part_1,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.subtitle1?.color,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, top: 15),
-          child: Container(
-            child: Text(
-              translate.sell_space_no_internet_part_2,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.subtitle1?.color,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ),
-      ]),
-    ]);
+    return SellSpaceNoInternetPage();
   }
 
   Widget addSpace(BuildContext context, DownloadLocation? changeKepper) {
