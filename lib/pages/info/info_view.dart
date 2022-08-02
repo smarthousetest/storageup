@@ -261,17 +261,17 @@ class _InfoPageState extends State<InfoPage> {
         //     .records
         //     ?.length;
 
-        var countMediaFolderPhoto = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Фото")
-                .records
-                ?.length ??
-            0;
+        // var countMediaFolderPhoto = state.allMediaFolders
+        //         ?.firstWhere((element) => element.name == "Фото")
+        //         .records
+        //         ?.length ??
+        //     0;
 
-        var countMediaFolderVideo = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Видео")
-                .records
-                ?.length ??
-            0;
+        // var countMediaFolderVideo = state.allMediaFolders
+        //         ?.firstWhere((element) => element.name == "Видео")
+        //         .records
+        //         ?.length ??
+        //     0;
         return state.filesRootNotifier != null
             ? ValueListenableBuilder<Folder?>(
                 valueListenable: state.filesRootNotifier!,
@@ -284,7 +284,7 @@ class _InfoPageState extends State<InfoPage> {
                           builder: (context, value, _) {
                             var countMediaFolderRecords = value?.folders
                                 ?.firstWhere(
-                                    (element) => element.name == "Photo")
+                                    (element) => element.name == "Фото")
                                 .records
                                 ?.length;
                             return Expanded(
@@ -408,7 +408,7 @@ class _InfoPageState extends State<InfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                "${(countMediaFolderPhoto)} файлов",
+                                                "${(countMediaFolderRecords)} файлов",
                                                 // 's',
                                                 style: TextStyle(
                                                   fontSize: 12,
@@ -470,7 +470,7 @@ class _InfoPageState extends State<InfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                "${(countMediaFolderVideo)} файлов",
+                                                "${(countMediaFolderRecords)} файлов",
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Theme.of(context)
@@ -1469,7 +1469,7 @@ class _InfoPageState extends State<InfoPage> {
         child: SizedBox(
           height: 422,
           child:
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 19, left: 40),
               child: Text(
