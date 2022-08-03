@@ -7,7 +7,8 @@ import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/finance/finance_event.dart';
 import 'package:storageup/pages/finance/finance_state.dart';
-import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
+import 'package:storageup/utilities/controllers/subscription_controllers.dart';
 import 'package:storageup/utilities/controllers/user_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/services/subscription_service.dart';
@@ -27,8 +28,8 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
   final SubscriptionService _subscriptionService = getIt<SubscriptionService>();
 
   UserController _userController = getIt<UserController>();
-  var _packetController =
-      getIt<PacketController>(instanceName: 'packet_controller');
+  var _subscriptionController =
+      getIt<SubscriptionController>(instanceName: 'subscription_controller');
 
   Future _mapFinancePageOpened(
     FinancePageOpened event,
@@ -38,7 +39,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     User? user = await _userController.getUser;
     var sub = await _subscriptionService.getCurrentSubscription();
     var allSub = await _subscriptionService.getAllTariffs();
-    var packetNotifier = _packetController.getValueNotifier();
+    var packetNotifier = _subscriptionController.getValueNotifier();
 
     var valueNotifier = _userController.getValueNotifier();
     if (sub.right == ResponseStatus.declined) {
@@ -94,6 +95,7 @@ class FinanceBloc extends Bloc<FinanceEvent, FinanceState> {
     if (status == ResponseStatus.ok) {
       var updatedSubscription =
           await _subscriptionService.getCurrentSubscription();
+      await _subscriptionController.updateSubscription();
       emit(state.copyWith(
         sub: updatedSubscription.left,
         statusHttpRequest: FormzStatus.pure,

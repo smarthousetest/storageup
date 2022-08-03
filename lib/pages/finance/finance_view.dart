@@ -9,6 +9,7 @@ import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/packet/packet.dart';
+import 'package:storageup/models/subscription.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/finance/finance_bloc.dart';
 import 'package:storageup/pages/finance/finance_event.dart';
@@ -493,15 +494,14 @@ class _FinancePageState extends State<FinancePage> {
                       ),
                     ),
                     state.packetNotifier != null
-                        ? ValueListenableBuilder<Packet?>(
+                        ? ValueListenableBuilder<Subscription?>(
                             valueListenable: state.packetNotifier!,
                             builder: (context, value, _) {
                               return BlocBuilder<FinanceBloc, FinanceState>(
                                   builder: (context, state) {
                                 var choosedSubGb = state.sub?.tariff?.spaceGb;
-                                var allFilledGb = value?.filledSpace ?? 0;
-                                if (allFilledGb == null &&
-                                    choosedSubGb == null) {
+                                // var allFilledGb = value?.filledSpace ?? 0;
+                                if (choosedSubGb == null) {
                                   return GestureDetector(
                                     onTap: () async {
                                       StateContainer.of(context)
@@ -542,8 +542,8 @@ class _FinancePageState extends State<FinancePage> {
                                       await showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return BlurCancelSub(choosedSubGb,
-                                              DateTime.now(), allFilledGb);
+                                          return BlurCancelSub(
+                                              choosedSubGb, DateTime.now(), 10);
                                         },
                                       );
                                     },

@@ -6,7 +6,7 @@ import 'package:storageup/models/packet/packet.dart';
 import 'package:storageup/models/subscription.dart';
 import 'package:storageup/models/tariff.dart';
 import 'package:storageup/utilities/injection.dart';
-import 'package:storageup/utilities/repositories/packet_repository.dart';
+import 'package:storageup/utilities/repositories/subscription_repository.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';
 
 @Injectable()
@@ -16,8 +16,8 @@ class SubscriptionService {
   SubscriptionService();
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
-  final PacketRepository _packetRepository =
-      getIt<PacketRepository>(instanceName: 'packet_repo');
+  final SubscriptionRepository _subscriptionRepository =
+      getIt<SubscriptionRepository>(instanceName: 'subscription_repo');
 
   Future<Either<Subscription?, ResponseStatus>> getCurrentSubscription() async {
     try {
@@ -32,6 +32,7 @@ class SubscriptionService {
 
         if (response.statusCode == 200) {
           var currentSub = Subscription.fromMap(response.data);
+          _subscriptionRepository.setSubscriptionInfo = currentSub;
           return Either(left: currentSub);
         }
       }
@@ -108,29 +109,29 @@ class SubscriptionService {
     }
   }
 
-  Future<ResponseStatus?> getPacketInfo() async {
-    try {
-      String? token = await _tokenRepository.getApiToken();
-      if (token != null && token.isNotEmpty) {
-        var path = '/packet/current';
+  // Future<ResponseStatus?> getPacketInfo() async {
+  //   try {
+  //     String? token = await _tokenRepository.getApiToken();
+  //     if (token != null && token.isNotEmpty) {
+  //       var path = '/packet/current';
 
-        var response = await _dio.get(
-          path,
-          options: Options(headers: {'Authorization': ' Bearer $token'}),
-        );
+  //       var response = await _dio.get(
+  //         path,
+  //         options: Options(headers: {'Authorization': ' Bearer $token'}),
+  //       );
 
-        if (response.statusCode == 200) {
-          // List<Packet> packetInfo = [];
-          // (response.data as List).forEach((element) {
-          //   packetInfo.add(Packet.fromMap(element));
-          // });
-          _packetRepository.setPacketInfo = Packet.fromMap(response.data);
-          return ResponseStatus.ok;
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
+  //       if (response.statusCode == 200) {
+  //         // List<Packet> packetInfo = [];
+  //         // (response.data as List).forEach((element) {
+  //         //   packetInfo.add(Packet.fromMap(element));
+  //         // });
+  //         _packetRepository.setPacketInfo = Packet.fromMap(response.data);
+  //         return ResponseStatus.ok;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  //   return null;
+  // }
 }

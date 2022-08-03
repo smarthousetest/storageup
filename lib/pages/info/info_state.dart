@@ -24,10 +24,11 @@ class InfoState extends Equatable {
   final bool financeTab;
   final User? user;
   final Folder? folder;
-  final Subscription? sub;
+
   final Folder? rootFolders;
   final List<Folder>? allMediaFolders;
 
+  final ValueNotifier<Subscription?>? packetNotifier;
   final ValueNotifier<User?>? valueNotifier;
   final ValueNotifier<Folder?>? mediaRootNotifier;
   final ValueNotifier<Folder?>? filesRootNotifier;
@@ -48,7 +49,6 @@ class InfoState extends Equatable {
     this.settingsTab = false,
     this.trashTab = false,
     this.financeTab = false,
-    this.sub,
     this.user,
     this.rootFolders,
     this.folder,
@@ -56,6 +56,7 @@ class InfoState extends Equatable {
     this.filesRootNotifier,
     this.mediaRootListenable,
     this.valueNotifier,
+    this.packetNotifier,
     this.mediaRootNotifier,
   });
 
@@ -70,12 +71,12 @@ class InfoState extends Equatable {
     bool? filesTab,
     bool? mediaTab,
     User? user,
-    Subscription? sub,
     Folder? rootFolders,
     Folder? folder,
     List<Folder>? allMediaFolders,
     Packet? packetInfo,
     ValueNotifier<User?>? valueNotifier,
+    ValueNotifier<Subscription?>? packetNotifier,
     ValueNotifier<Folder?>? filesRootNotifier,
     ValueNotifier<Folder?>? mediaRootNotifier,
     ValueListenable<Box<BaseObject>>? mediaRootListenable,
@@ -93,12 +94,11 @@ class InfoState extends Equatable {
       mediaTab: mediaTab ?? this.mediaTab,
       user: user ?? this.user,
       folder: folder ?? this.folder,
-      sub: sub ?? this.sub,
       rootFolders: rootFolders ?? this.rootFolders,
       allMediaFolders: allMediaFolders ?? this.allMediaFolders,
       filesRootNotifier: filesRootNotifier ?? this.filesRootNotifier,
       valueNotifier: valueNotifier ?? this.valueNotifier,
-      mediaRootListenable: mediaRootListenable ?? this.mediaRootListenable,
+      packetNotifier: packetNotifier ?? this.packetNotifier,
       mediaRootNotifier: mediaRootNotifier ?? this.mediaRootNotifier,
     );
   }
@@ -118,10 +118,10 @@ class InfoState extends Equatable {
         folder,
         rootFolders,
         allMediaFolders,
-        sub,
         filesRootNotifier,
         valueNotifier,
         mediaRootListenable,
         mediaRootNotifier,
+        packetNotifier,
       ];
 }
