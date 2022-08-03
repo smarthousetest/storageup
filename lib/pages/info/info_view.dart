@@ -1,7 +1,10 @@
+import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/components/custom_progress_bar.dart';
 import 'package:storageup/components/custom_round_graph.dart';
@@ -282,11 +285,11 @@ class _InfoPageState extends State<InfoPage> {
                       ? ValueListenableBuilder<Folder?>(
                           valueListenable: state.mediaRootNotifier!,
                           builder: (context, value, _) {
-                            var countMediaFolderRecords = value?.folders
-                                ?.firstWhere(
-                                    (element) => element.name == "Фото")
-                                .records
-                                ?.length;
+                            var media = value?.records?.length;
+                            // final foldersList = box.values.getSortedObjects(
+                            //   parentFoldersId: [state.folder!.id],
+                            // );
+
                             return Expanded(
                               child: ListView(
                                 children: [
@@ -408,7 +411,7 @@ class _InfoPageState extends State<InfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                "${(countMediaFolderRecords)} файлов",
+                                                "${(media)} файлов",
                                                 // 's',
                                                 style: TextStyle(
                                                   fontSize: 12,
@@ -470,7 +473,7 @@ class _InfoPageState extends State<InfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                "${(countMediaFolderRecords)} файлов",
+                                                "${(media)} файлов",
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Theme.of(context)

@@ -1,6 +1,8 @@
+import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:storageup/models/packet/packet.dart';
 import 'package:storageup/models/subscription.dart';
 import 'package:storageup/models/user.dart';
@@ -27,8 +29,9 @@ class InfoState extends Equatable {
   final List<Folder>? allMediaFolders;
 
   final ValueNotifier<User?>? valueNotifier;
-  final ValueNotifier<Folder?>? filesRootNotifier;
   final ValueNotifier<Folder?>? mediaRootNotifier;
+  final ValueNotifier<Folder?>? filesRootNotifier;
+  final ValueListenable<Box<BaseObject>>? mediaRootListenable;
 
   InfoState({
     this.usingSpace = 0,
@@ -51,8 +54,9 @@ class InfoState extends Equatable {
     this.folder,
     this.allMediaFolders,
     this.filesRootNotifier,
-    this.mediaRootNotifier,
+    this.mediaRootListenable,
     this.valueNotifier,
+    this.mediaRootNotifier,
   });
 
   InfoState copyWith({
@@ -74,6 +78,7 @@ class InfoState extends Equatable {
     ValueNotifier<User?>? valueNotifier,
     ValueNotifier<Folder?>? filesRootNotifier,
     ValueNotifier<Folder?>? mediaRootNotifier,
+    ValueListenable<Box<BaseObject>>? mediaRootListenable,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -93,6 +98,7 @@ class InfoState extends Equatable {
       allMediaFolders: allMediaFolders ?? this.allMediaFolders,
       filesRootNotifier: filesRootNotifier ?? this.filesRootNotifier,
       valueNotifier: valueNotifier ?? this.valueNotifier,
+      mediaRootListenable: mediaRootListenable ?? this.mediaRootListenable,
       mediaRootNotifier: mediaRootNotifier ?? this.mediaRootNotifier,
     );
   }
@@ -115,6 +121,7 @@ class InfoState extends Equatable {
         sub,
         filesRootNotifier,
         valueNotifier,
+        mediaRootListenable,
         mediaRootNotifier,
       ];
 }
