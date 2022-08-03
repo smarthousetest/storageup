@@ -256,8 +256,6 @@ class _InfoPageState extends State<InfoPage> {
   Widget _progressDescription(BuildContext context) {
     return BlocBuilder<InfoBloc, InfoState>(
       builder: (context, state) {
-        var filesFolder = state.folder?.records?.length ?? 0;
-
         // var sizeFolder = state.folder?.size ?? 0;
 
         // var mediaFolder = state.rootFolders?.folders

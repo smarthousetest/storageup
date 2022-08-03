@@ -606,12 +606,10 @@ class _HomePageState extends State<HomePage> {
           //   result: [name],
           // );
 
-          final folderId = StateContainer.of(context).choosedMediaFolderId;
-
           context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
-                folderId: folderId,
+                folderId: null,
               ));
         }
         break;
