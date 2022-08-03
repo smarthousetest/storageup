@@ -6,11 +6,13 @@ import 'package:cpp_native/file_proc/encryption.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:os_specification/os_specification.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/pages/auth/models/email.dart';
 import 'package:storageup/pages/auth/models/name.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/auth_repository.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';
@@ -54,6 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthenticationRepository _authenticationRepository =
       getIt<AuthenticationRepository>();
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
+  late FilesController _filesController;
 
   void _mapLoginEmailChanged(
     AuthState state,
@@ -175,8 +178,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isNeedSave: state.rememberMe,
         );
         if (result == AuthenticationStatus.authenticated) {
-          // await _filesController.clearLocalDatabase();
-          // await _filesController.initDatabase();
+          _filesController = await GetIt.I.getAsync<FilesController>();
+          await _filesController.clearLocalDatabase();
+          await _filesController.initDatabase();
           emit(state.copyWith(
               status: FormzStatus.submissionSuccess,
               action: RequestedAction.login));

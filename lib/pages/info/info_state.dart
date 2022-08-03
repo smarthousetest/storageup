@@ -1,6 +1,8 @@
+import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:storageup/models/packet/packet.dart';
 import 'package:storageup/models/subscription.dart';
 import 'package:storageup/models/user.dart';
@@ -22,13 +24,15 @@ class InfoState extends Equatable {
   final bool financeTab;
   final User? user;
   final Folder? folder;
-  final Subscription? sub;
+
   final Folder? rootFolders;
   final List<Folder>? allMediaFolders;
 
+  final ValueNotifier<Subscription?>? packetNotifier;
   final ValueNotifier<User?>? valueNotifier;
-  final ValueNotifier<Folder?>? filesRootNotifier;
   final ValueNotifier<Folder?>? mediaRootNotifier;
+  final ValueNotifier<Folder?>? filesRootNotifier;
+  final ValueListenable<Box<BaseObject>>? mediaRootListenable;
 
   InfoState({
     this.usingSpace = 0,
@@ -45,14 +49,15 @@ class InfoState extends Equatable {
     this.settingsTab = false,
     this.trashTab = false,
     this.financeTab = false,
-    this.sub,
     this.user,
     this.rootFolders,
     this.folder,
     this.allMediaFolders,
     this.filesRootNotifier,
-    this.mediaRootNotifier,
+    this.mediaRootListenable,
     this.valueNotifier,
+    this.packetNotifier,
+    this.mediaRootNotifier,
   });
 
   InfoState copyWith({
@@ -66,14 +71,15 @@ class InfoState extends Equatable {
     bool? filesTab,
     bool? mediaTab,
     User? user,
-    Subscription? sub,
     Folder? rootFolders,
     Folder? folder,
     List<Folder>? allMediaFolders,
     Packet? packetInfo,
     ValueNotifier<User?>? valueNotifier,
+    ValueNotifier<Subscription?>? packetNotifier,
     ValueNotifier<Folder?>? filesRootNotifier,
     ValueNotifier<Folder?>? mediaRootNotifier,
+    ValueListenable<Box<BaseObject>>? mediaRootListenable,
   }) {
     return InfoState(
       usingSpace: usingSpace ?? this.usingSpace,
@@ -88,11 +94,11 @@ class InfoState extends Equatable {
       mediaTab: mediaTab ?? this.mediaTab,
       user: user ?? this.user,
       folder: folder ?? this.folder,
-      sub: sub ?? this.sub,
       rootFolders: rootFolders ?? this.rootFolders,
       allMediaFolders: allMediaFolders ?? this.allMediaFolders,
       filesRootNotifier: filesRootNotifier ?? this.filesRootNotifier,
       valueNotifier: valueNotifier ?? this.valueNotifier,
+      packetNotifier: packetNotifier ?? this.packetNotifier,
       mediaRootNotifier: mediaRootNotifier ?? this.mediaRootNotifier,
     );
   }
@@ -112,9 +118,10 @@ class InfoState extends Equatable {
         folder,
         rootFolders,
         allMediaFolders,
-        sub,
         filesRootNotifier,
         valueNotifier,
+        mediaRootListenable,
         mediaRootNotifier,
+        packetNotifier,
       ];
 }

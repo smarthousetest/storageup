@@ -19,6 +19,7 @@ import 'package:storageup/utilities/repositories/media_repository.dart';
 import 'package:storageup/utilities/repositories/storage_files.dart';
 import 'package:storageup/utilities/services/files_service.dart';
 
+@Singleton()
 class FilesController extends FilesObservable<Error>
     implements IFilesController {
   MediaRepository _mediaRepo =

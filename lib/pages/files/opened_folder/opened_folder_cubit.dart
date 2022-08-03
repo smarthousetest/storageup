@@ -22,7 +22,7 @@ import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/open_file_controller.dart';
-import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/controllers/subscription_controllers.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -57,8 +57,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   String idTappedFile = '';
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
-  var _packetController =
-      getIt<PacketController>(instanceName: 'packet_controller');
+  var _subscriptionController =
+      getIt<SubscriptionController>(instanceName: 'subscription_controller');
 
   //    void _processLoadChanges(LoadNotification notification) async {
   //   MainUploadInfo? upload;
@@ -278,16 +278,16 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   void _onActionDeleteChoosed(BaseObject object) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    var result = await _filesController.delete([object]);
+    await _filesController.delete([object]);
 
     var recentsFile = await _filesController.getRecentFiles();
     if (recentsFile != null) {
       await _recentsFilesRepository.addFiles(latestFile: recentsFile);
     }
-
+    await _subscriptionController.updateSubscription();
+    update();
+    // print(result);
     // if (result == ResponseStatus.ok) {
-    //   await _packetController.updatePacket();
-    //   update();
     // } else if (result == ResponseStatus.noInternet) {
     //   emit(state.copyWith(status: FormzStatus.submissionCanceled));
     // } else {
@@ -477,7 +477,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     final valueListenable = _filesController
         .getObjectsValueListenableByFolderId(state.currentFolder!.id);
 
-    await _packetController.updatePacket();
+    await _subscriptionController.updateSubscription();
+
     emit(state.copyWith(
       objectsValueListenable: valueListenable,
       status: FormzStatus.pure,
