@@ -21,6 +21,7 @@ import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/language_locale.dart';
 import 'package:storageup/utilities/local_server/local_server.dart' as ui;
 import 'package:storageup/utilities/repositories/token_repository.dart';
+import 'package:storageup/utilities/services/cache_cleaner_service.dart';
 
 import 'constants.dart';
 import 'generated/l10n.dart';
@@ -38,6 +39,8 @@ void main() async {
   } else if (Platform.isLinux) {
     await DartVLC.initialize(useFlutterNativeView: false);
   }
+
+  CacheCleanerService().cleanInIsolate();
 
   runApp(new StateContainer(child: new MyApp()));
 }
