@@ -20,6 +20,7 @@ const kPurpleColor = Color(0xFF868FFF);
 const GB = 1024 * 1024 * 1024;
 const kNeedSendEmail = false;
 const kCleanCachedFileAfterNotAccessedDuration = Duration(days: 7);
+const kCleanStartSizeInMB = 3 * 1024; // 3 GB
 
 String readFromFileDomainName() {
   var os = OsSpecifications.getOs();
