@@ -405,7 +405,7 @@ Future<void> copyFileToDownloadDir({
 
 String getErrorReasonDescription({
   required S translate,
-  required ErrorReason reason,
+  required Enum reason,
 }) {
   switch (reason) {
     case ErrorReason.internalServerError:
