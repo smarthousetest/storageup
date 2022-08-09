@@ -270,7 +270,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                 child: Row(
                                   children: [
                                     Text(
-                                      translate.folder_dir,
+                                      translate.albums,
                                       style: TextStyle(
                                         color: Theme.of(context).focusColor,
                                         fontSize: 20,
@@ -1079,7 +1079,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                       data: Theme.of(context)
                           .copyWith(dividerColor: Colors.transparent),
                       child: DataTable(
-                        columnSpacing: 25,
+                        columnSpacing: 0,
                         showCheckboxColumn: false,
                         columns: [
                           DataColumn(
@@ -1093,7 +1093,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           ),
                           DataColumn(
                             label: Container(
-                              width: constraints.maxWidth * 0.06,
+                              width: constraints.maxWidth * 0.15,
                               child: Text(
                                 translate.format,
                                 style: style,
@@ -1102,7 +1102,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           ),
                           DataColumn(
                             label: Container(
-                              width: constraints.maxWidth * 0.05,
+                              width: constraints.maxWidth * 0.15,
                               child: Text(
                                 translate.date,
                                 style: style,
@@ -1111,7 +1111,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           ),
                           DataColumn(
                             label: Container(
-                              width: constraints.maxWidth * 0.06,
+                              width: constraints.maxWidth * 0.1,
                               child: Text(
                                 translate.size,
                                 style: style,
@@ -1120,9 +1120,9 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           ),
                           DataColumn(
                             label: Container(
-                              width: constraints.maxWidth * 0.001,
+                              width: constraints.maxWidth * 0.1,
                               child: SizedBox(
-                                width: constraints.maxWidth * 0.001,
+                                width: constraints.maxWidth * 0.1,
                               ),
                             ),
                           ),
@@ -1177,10 +1177,13 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                           width: 15,
                                         ),
                                         Expanded(
-                                          child: Text(
-                                            e.name ?? '',
-                                            style: cellTextStyle,
-                                            overflow: TextOverflow.ellipsis,
+                                          child: Container(
+                                            width: constraints.maxWidth * 0.3,
+                                            child: Text(
+                                              e.name ?? '',
+                                              style: cellTextStyle,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                         ),
                                         // Spacer(),
