@@ -214,7 +214,7 @@ class LocalStorage {
         name: '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',
         size: 999999999999999999,
         mimeType: '',
-        folder: folderId,
+        parentFolder: folderId,
         createdAt: DateTime.now(),
       );
 
