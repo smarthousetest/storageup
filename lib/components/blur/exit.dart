@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
+import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/injection.dart';
 import 'package:storageup/utilities/repositories/token_repository.dart';
 
@@ -21,6 +22,7 @@ class _ButtonTemplateState extends State<BlurExit> {
 
   final TokenRepository _tokenRepository = getIt<TokenRepository>();
   var _loadController = LoadController.instance;
+  final FilesController _filesController = getIt<FilesController>();
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +122,7 @@ class _ButtonTemplateState extends State<BlurExit> {
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (_tokenRepository.token == null) {
+                                          _filesController.clearLocalDatabase();
                                           await _tokenRepository
                                               .setApiToken('');
                                         } else {

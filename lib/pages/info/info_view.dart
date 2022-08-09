@@ -1,11 +1,15 @@
+import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:storageup/components/custom_button_template.dart';
 import 'package:storageup/components/custom_progress_bar.dart';
 import 'package:storageup/components/custom_round_graph.dart';
 import 'package:storageup/generated/l10n.dart';
+import 'package:storageup/models/subscription.dart';
 import 'package:storageup/pages/info/info_bloc.dart';
 import 'package:storageup/pages/info/info_event.dart';
 import 'package:storageup/pages/info/info_state.dart';
@@ -184,63 +188,63 @@ class _InfoPageState extends State<InfoPage> {
   Widget _filledGbCount(BuildContext context) {
     return BlocBuilder<InfoBloc, InfoState>(
       builder: (context, state) {
-        // var filesFolderSize = state.rootFolders?.folders
-        //         ?.firstWhere((folder) => folder.name == 'Files')
-        //         .size ??
-        //     0;
-        // var mediaFolderSize = state.rootFolders?.folders
-        //         ?.firstWhere((folder) => folder.name == 'Media')
-        //         .size ??
-        //     0;
-        //var allSpaceGb = state.packetInfo?.filledSpace ?? 0;
-        //var allFolderSize = state.rootFolders?.size ?? 0;
-
-        var currenSub = state.sub?.tariff?.spaceGb ?? 0;
-        return state.filesRootNotifier != null
-            ? ValueListenableBuilder<Folder?>(
-                valueListenable: state.filesRootNotifier!,
-                builder: (context, value, _) {
-                  var filesSize = value?.size ?? 0;
-                  return state.mediaRootNotifier != null
+        return state.packetNotifier != null
+            ? ValueListenableBuilder<Subscription?>(
+                valueListenable: state.packetNotifier!,
+                builder: (context, subValue, _) {
+                  var currenSub = subValue?.tariff?.spaceGb ?? 0;
+                  return state.filesRootNotifier != null
                       ? ValueListenableBuilder<Folder?>(
-                          valueListenable: state.mediaRootNotifier!,
+                          valueListenable: state.filesRootNotifier!,
                           builder: (context, value, _) {
-                            var mediaSize = value?.size ?? 0;
-                            var allSize = filesSize + mediaSize;
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${fileSize(allSize, translate, 0)}',
-                                  style: TextStyle(
-                                    color: Theme.of(context).bottomAppBarColor,
-                                    fontSize: 28,
-                                    fontFamily: kNormalTextFontFamily,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 11, right: 11, top: 10),
-                                  child: Text(
-                                    'из',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Theme.of(context).shadowColor,
-                                      fontSize: 24,
-                                      fontFamily: kNormalTextFontFamily,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  translate.gb(currenSub),
-                                  style: TextStyle(
-                                    color: Theme.of(context).shadowColor,
-                                    fontSize: 28,
-                                    fontFamily: kNormalTextFontFamily,
-                                  ),
-                                ),
-                              ],
-                            );
+                            var filesSize = value?.size ?? 0;
+                            return state.mediaRootNotifier != null
+                                ? ValueListenableBuilder<Folder?>(
+                                    valueListenable: state.mediaRootNotifier!,
+                                    builder: (context, value, _) {
+                                      var mediaSize = value?.size ?? 0;
+                                      var allSize = filesSize + mediaSize;
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${fileSize(allSize, translate, 0)}',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .bottomAppBarColor,
+                                              fontSize: 28,
+                                              fontFamily: kNormalTextFontFamily,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 11, right: 11, top: 10),
+                                            child: Text(
+                                              'из',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .shadowColor,
+                                                fontSize: 24,
+                                                fontFamily:
+                                                    kNormalTextFontFamily,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            translate.gb(currenSub),
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(context).shadowColor,
+                                              fontSize: 28,
+                                              fontFamily: kNormalTextFontFamily,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    })
+                                : Container();
                           })
                       : Container();
                 })
@@ -252,8 +256,6 @@ class _InfoPageState extends State<InfoPage> {
   Widget _progressDescription(BuildContext context) {
     return BlocBuilder<InfoBloc, InfoState>(
       builder: (context, state) {
-        var filesFolder = state.folder?.records?.length ?? 0;
-
         // var sizeFolder = state.folder?.size ?? 0;
 
         // var mediaFolder = state.rootFolders?.folders
@@ -261,17 +263,17 @@ class _InfoPageState extends State<InfoPage> {
         //     .records
         //     ?.length;
 
-        var countMediaFolderPhoto = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Фото")
-                .records
-                ?.length ??
-            0;
+        // var countMediaFolderPhoto = state.allMediaFolders
+        //         ?.firstWhere((element) => element.name == "Фото")
+        //         .records
+        //         ?.length ??
+        //     0;
 
-        var countMediaFolderVideo = state.allMediaFolders
-                ?.firstWhere((element) => element.name == "Видео")
-                .records
-                ?.length ??
-            0;
+        // var countMediaFolderVideo = state.allMediaFolders
+        //         ?.firstWhere((element) => element.name == "Видео")
+        //         .records
+        //         ?.length ??
+        //     0;
         return state.filesRootNotifier != null
             ? ValueListenableBuilder<Folder?>(
                 valueListenable: state.filesRootNotifier!,
@@ -282,11 +284,11 @@ class _InfoPageState extends State<InfoPage> {
                       ? ValueListenableBuilder<Folder?>(
                           valueListenable: state.mediaRootNotifier!,
                           builder: (context, value, _) {
-                            var countMediaFolderRecords = value?.folders
-                                ?.firstWhere(
-                                    (element) => element.name == "Photo")
-                                .records
-                                ?.length;
+                            var media = value?.records?.length;
+                            // final foldersList = box.values.getSortedObjects(
+                            //   parentFoldersId: [state.folder!.id],
+                            // );
+
                             return Expanded(
                               child: ListView(
                                 children: [
@@ -408,7 +410,7 @@ class _InfoPageState extends State<InfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                "${(countMediaFolderPhoto)} файлов",
+                                                "${(media)} файлов",
                                                 // 's',
                                                 style: TextStyle(
                                                   fontSize: 12,
@@ -470,7 +472,7 @@ class _InfoPageState extends State<InfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                "${(countMediaFolderVideo)} файлов",
+                                                "${(media)} файлов",
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Theme.of(context)
@@ -498,68 +500,78 @@ class _InfoPageState extends State<InfoPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: BlocBuilder<InfoBloc, InfoState>(builder: (context, state) {
-        return state.filesRootNotifier != null
-            ? ValueListenableBuilder<Folder?>(
-                valueListenable: state.filesRootNotifier!,
-                builder: (context, value, _) {
-                  var currentSubSpace = state.sub?.tariff?.spaceGb ?? 0;
-                  var filesSpaceGb = value?.size ?? 0;
-                  var e;
-
-                  e = (filesSpaceGb * (0.000000001));
-
-                  double percentFiles =
-                      ((e / currentSubSpace) * 100).toDouble();
-                  if (percentFiles.isNaN) {
-                    percentFiles = 0;
-                  }
-                  return state.mediaRootNotifier != null
+        return state.packetNotifier != null
+            ? ValueListenableBuilder<Subscription?>(
+                valueListenable: state.packetNotifier!,
+                builder: (context, subValue, _) {
+                  var currentSubSpace = subValue?.tariff?.spaceGb ?? 0;
+                  return state.filesRootNotifier != null
                       ? ValueListenableBuilder<Folder?>(
-                          valueListenable: state.mediaRootNotifier!,
+                          valueListenable: state.filesRootNotifier!,
                           builder: (context, value, _) {
-                            var mediaSpaceGb = value?.size ?? 0;
-                            var x = (mediaSpaceGb * (0.000000001));
-                            double percentMedia =
-                                ((x / currentSubSpace) * 100).toDouble() +
-                                    percentFiles;
+                            var filesSpaceGb = value?.size ?? 0;
+                            var e;
+
+                            e = (filesSpaceGb * (0.000000001));
+
+                            double percentFiles =
+                                ((e / currentSubSpace) * 100).toDouble();
                             if (percentFiles.isNaN) {
                               percentFiles = 0;
                             }
-                            return SizedBox(
-                              height: 10,
-                              child: Stack(
-                                children: [
-                                  // MyProgressBar(
-                                  //   percent: 75,
-                                  //   color: Color(0xffFFD75E),
-                                  //   bgColor: Theme.of(context).cardColor,
-                                  // ),
-                                  // MyProgressBar(
-                                  //   percent: 50,
-                                  //   color: Color(0xffFF847E),
-                                  //   bgColor: Theme.of(context).cardColor,
+                            return state.mediaRootNotifier != null
+                                ? ValueListenableBuilder<Folder?>(
+                                    valueListenable: state.mediaRootNotifier!,
+                                    builder: (context, value, _) {
+                                      var mediaSpaceGb = value?.size ?? 0;
+                                      var x = (mediaSpaceGb * (0.000000001));
+                                      double percentMedia =
+                                          ((x / currentSubSpace) * 100)
+                                                  .toDouble() +
+                                              percentFiles;
+                                      if (percentFiles.isNaN) {
+                                        percentFiles = 0;
+                                      }
+                                      return SizedBox(
+                                        height: 10,
+                                        child: Stack(
+                                          children: [
+                                            // MyProgressBar(
+                                            //   percent: 75,
+                                            //   color: Color(0xffFFD75E),
+                                            //   bgColor: Theme.of(context).cardColor,
+                                            // ),
+                                            // MyProgressBar(
+                                            //   percent: 50,
+                                            //   color: Color(0xffFF847E),
+                                            //   bgColor: Theme.of(context).cardColor,
 
-                                  //   ///
-                                  // ),
-                                  MyProgressBar(
-                                    percent: percentMedia,
-                                    color: Color(0xff59D7AB),
-                                    bgColor: Color.fromARGB(0, 0, 0, 0),
-                                  ),
-                                  MyProgressBar(
-                                    percent: percentFiles.ceilToDouble(),
-                                    color: Color(0xff868FFF),
-                                    bgColor: Theme.of(context).cardColor,
+                                            //   ///
+                                            // ),
+                                            MyProgressBar(
+                                              percent: percentMedia,
+                                              color: Color(0xff59D7AB),
+                                              bgColor:
+                                                  Color.fromARGB(0, 0, 0, 0),
+                                            ),
+                                            MyProgressBar(
+                                              percent:
+                                                  percentFiles.ceilToDouble(),
+                                              color: Color(0xff868FFF),
+                                              bgColor:
+                                                  Theme.of(context).cardColor,
 
-                                    ///
-                                  ),
-                                ],
-                              ),
-                            );
-                          })
+                                              ///
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    })
+                                : Container();
+                          },
+                        )
                       : Container();
-                },
-              )
+                })
             : Container();
       }),
     );
@@ -1469,7 +1481,7 @@ class _InfoPageState extends State<InfoPage> {
         child: SizedBox(
           height: 422,
           child:
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 19, left: 40),
               child: Text(

@@ -1,3 +1,4 @@
+import 'package:cpp_native/models/record.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
@@ -24,11 +25,12 @@ class HomeState extends Equatable {
   final FormzStatus status;
   final String? upToDateVersion;
   final String? version;
-  final List<LatestFile> latestFile;
-  final List<LatestFile> checkLatestFile;
-  final ValueListenable<Box<LatestFile>>? objectsValueListenable;
+
   final MainDownloadInfo downloadInfo;
   final MainUploadInfo uploadInfo;
+  final List<Record> latestFile;
+  final List<Record> checkLatestFile;
+  final ValueListenable<Box<Record>>? objectsValueListenable;
 
   HomeState({
     this.usingSpace = 0,
@@ -68,9 +70,9 @@ class HomeState extends Equatable {
     FormzStatus? status,
     String? upToDateVersion,
     String? version,
-    List<LatestFile>? latestFile,
-    List<LatestFile>? checkLatestFile,
-    ValueListenable<Box<LatestFile>>? objectsValueListenable,
+    List<Record>? latestFile,
+    List<Record>? checkLatestFile,
+    ValueListenable<Box<Record>>? objectsValueListenable,
     MainDownloadInfo? downloadInfo,
     MainUploadInfo? uploadInfo,
   }) {

@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
+import 'package:storageup/components/media/full_screen_video_player_widget.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({Key? key, required this.videoPath})
@@ -16,6 +18,7 @@ class VideoPlayerWidget extends StatefulWidget {
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late final Player player;
+  StreamSubscription<PlaybackState>? playbackSubscription;
 
   @override
   void initState() {
@@ -32,6 +35,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
 
   @override
   void dispose() {
+    playbackSubscription?.cancel();
+
     if (!Platform.isMacOS) {
       player.dispose();
     }
@@ -51,18 +56,68 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           ));
     }
 
-    return Platform.isWindows
-        ? NativeVideo(
-            fit: BoxFit.contain,
-            player: player,
-            scale: 1.0,
-            showControls: true,
-          )
-        : Video(
-            fit: BoxFit.contain,
-            player: player,
-            scale: 1.0,
-            showControls: true,
+    return Stack(
+      children: [
+        Platform.isWindows
+            ? NativeVideo(
+                fit: BoxFit.contain,
+                player: player,
+                scale: 1.0,
+                showControls: true,
+              )
+            : Video(
+                fit: BoxFit.contain,
+                player: player,
+                scale: 1.0,
+                showControls: true,
+              ),
+        LayoutBuilder(builder: (context, size) {
+          return Container(
+            height: size.maxHeight - 80,
+            child: GestureDetector(
+              onTap: () {
+                print('Video player click');
+                player.playOrPause();
+              },
+              onDoubleTap: () {
+                if (Platform.isMacOS) {
+                  return;
+                }
+
+                if (Platform.isWindows) {
+                  player.pause();
+                }
+
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return FullScreenVideoPlayerWidget(
+                        player: player,
+                        videoPath: widget.videoPath,
+                        isPlaying: player.playback.isPlaying,
+                      );
+                    }).then((value) {
+                  if (Platform.isWindows) {
+                    if (value is FullScreenVideoClosedArgs) {
+                      var position = value.position;
+                      if (position is Duration) {
+                        if (value.isPlaying) {
+                          player.play();
+                          player.seek(position);
+                        } else {
+                          player.play();
+                          player.seek(position);
+                          player.pause();
+                        }
+                      }
+                    }
+                  }
+                });
+              },
+            ),
           );
+        })
+      ],
+    );
   }
 }

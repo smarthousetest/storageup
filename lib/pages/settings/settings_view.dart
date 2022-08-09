@@ -11,7 +11,6 @@ import 'package:storageup/components/blur/delete_avatar.dart';
 import 'package:storageup/components/blur/rename_name.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
-import 'package:storageup/main.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/auth/auth_view.dart';
 import 'package:storageup/pages/settings/settings_bloc.dart';
@@ -19,7 +18,6 @@ import 'package:storageup/pages/settings/settings_event.dart';
 import 'package:storageup/pages/settings/settings_state.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
-import 'package:storageup/utilities/language_locale.dart';
 import 'package:storageup/utilities/state_containers/state_container.dart';
 
 import '../../models/enums.dart';

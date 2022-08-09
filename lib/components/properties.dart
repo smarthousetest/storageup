@@ -203,14 +203,22 @@ class _ButtonTemplateState extends State<FileInfoView> {
                                             : ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(10),
-                                                child: Image.network(
-                                                  (widget.object as Record)
-                                                      .thumbnail!
-                                                      .first
-                                                      .publicUrl!,
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
+                                                child: (widget.object as Record)
+                                                        .thumbnail!
+                                                        .first
+                                                        .publicUrl!
+                                                        .isNotEmpty
+                                                    ? Image.network(
+                                                        (widget.object
+                                                                as Record)
+                                                            .thumbnail!
+                                                            .first
+                                                            .publicUrl!,
+                                                        fit: BoxFit.contain,
+                                                      )
+                                                    : Image.asset(
+                                                        'assets/file_icons/image_default.png',
+                                                      )),
                                   ),
                                 ),
                               ),

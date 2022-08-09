@@ -14,7 +14,7 @@ class FinanceState extends Equatable {
   final Folder? rootFolders;
   final ValueNotifier<User?>? valueNotifier;
 
-  final ValueNotifier<Packet?>? packetNotifier;
+  final ValueNotifier<Subscription?>? packetNotifier;
   final FormzStatus statusHttpRequest;
 
   FinanceState({
@@ -33,7 +33,7 @@ class FinanceState extends Equatable {
     Folder? rootFolders,
     List<Tariff>? allSub,
     ValueNotifier<User?>? valueNotifier,
-    ValueNotifier<Packet?>? packetNotifier,
+    ValueNotifier<Subscription?>? packetNotifier,
     FormzStatus? statusHttpRequest,
   }) {
     return FinanceState(

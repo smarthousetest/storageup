@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:open_file/open_file.dart';
 import 'package:storageup/components/media/media_viewer.dart';
 import 'package:storageup/components/media/short_file_info.dart';
 import 'package:storageup/constants.dart';
@@ -39,9 +40,7 @@ class MediaOpenPage extends StatefulWidget {
 class _MediaOpenPageState extends State<MediaOpenPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MediaOpenBloc(
-          getIt<FilesController>(instanceName: 'files_controller'),
-          widget.arguments.mediaCubit)
+      create: (context) => MediaOpenBloc(widget.arguments.mediaCubit)
         ..add(MediaOpenPageOpened(
             choosedFolder: (widget.arguments.selectedFolder as Folder).copyWith(
                 records: (widget.arguments.selectedFolder as Folder)
@@ -49,7 +48,8 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                         ?.reversed
                         .toList() ??
                     []),
-            choosedMedia: widget.arguments.selectedMedia)),
+            choosedMedia: widget.arguments.selectedMedia,
+            mediaList: widget.arguments.media)),
       child: Material(
         color: Colors.transparent,
         child: Stack(children: [
@@ -108,7 +108,13 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                     cursor: SystemMouseCursors.click,
                                     child: GestureDetector(
                                         onTap: () {
-                                          Navigator.pop(context);
+                                          String? path =
+                                              (state.choosedMedia as Record)
+                                                  .path;
+
+                                          if (path != null) {
+                                            OpenFile.open(path);
+                                          }
                                         },
                                         child: SvgPicture.asset(
                                           'assets/options/share.svg',
@@ -215,7 +221,7 @@ class _MediaOpenPageState extends State<MediaOpenPage> {
                                               1) {
                                             await widget.arguments.mediaCubit
                                                 .onActionDeleteChosen(
-                                              state.choosedMedia as Record,
+                                              state.choosedMedia,
                                             );
                                             Navigator.pop(context);
                                             return;

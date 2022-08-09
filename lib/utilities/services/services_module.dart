@@ -3,10 +3,10 @@ import 'package:injectable/injectable.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
-import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/controllers/subscription_controllers.dart';
 import 'package:storageup/utilities/repositories/file_repository.dart';
 import 'package:storageup/utilities/repositories/media_repository.dart';
-import 'package:storageup/utilities/repositories/packet_repository.dart';
+import 'package:storageup/utilities/repositories/subscription_repository.dart';
 import 'package:storageup/utilities/repositories/user_repository.dart';
 
 @module
@@ -34,17 +34,14 @@ abstract class ServiceModule {
   @lazySingleton
   FilesRepository get filesRepo => FilesRepository();
 
-  @Named('files_controller')
-  FilesController get filesController => FilesController();
-
   @Named('user_repo')
   @lazySingleton
   UserRepository get userRepository => UserRepository();
 
-  @Named('packet_repo')
+  @Named('subscription_repo')
   @lazySingleton
-  PacketRepository get packetRepository => PacketRepository();
+  SubscriptionRepository get subscriptionRepository => SubscriptionRepository();
 
-  @Named('packet_controller')
-  PacketController get packetController => PacketController();
+  @Named('subscription_controller')
+  SubscriptionController get subscriptionController => SubscriptionController();
 }

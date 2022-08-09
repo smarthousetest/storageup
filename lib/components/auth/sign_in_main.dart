@@ -393,14 +393,25 @@ class _SignInMainState extends State<SignInMain> {
                   autofocus: true,
                   focusNode: submitButtonNode,
                   onPressed: () async => {
+                    context.read<AuthBloc>().add(AuthLoginPasswordChanged(
+                          password: widget.state.emailLogin.value,
+                          needValidation: true,
+                        )),
+                    context.read<AuthBloc>().add(AuthLoginPasswordChanged(
+                          password: widget.state.passwordLogin.value,
+                          needValidation: true,
+                        )),
                     onSignIn(context, widget.state),
-                    await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        dialogContext = context;
-                        return BlurLoadPage();
-                      },
-                    ),
+                    if (_isLoginFieldValid(widget.state))
+                      {
+                        await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            dialogContext = context;
+                            return BlurLoadPage();
+                          },
+                        ),
+                      }
                   },
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.maxFinite, 60),

@@ -13,10 +13,12 @@ abstract class MediaOpenEvent extends Equatable {
 class MediaOpenPageOpened extends MediaOpenEvent {
   final BaseObject? choosedFolder;
   final BaseObject choosedMedia;
+  final List<BaseObject> mediaList;
 
   const MediaOpenPageOpened({
     required this.choosedFolder,
     required this.choosedMedia,
+    required this.mediaList,
   });
 
   @override

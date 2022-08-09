@@ -8,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:os_specification/os_specification.dart';
@@ -20,6 +21,7 @@ import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/language_locale.dart';
 import 'package:storageup/utilities/local_server/local_server.dart' as ui;
 import 'package:storageup/utilities/repositories/token_repository.dart';
+import 'package:storageup/utilities/services/cache_cleaner_service.dart';
 
 import 'constants.dart';
 import 'generated/l10n.dart';
@@ -37,6 +39,8 @@ void main() async {
   } else if (Platform.isLinux) {
     await DartVLC.initialize(useFlutterNativeView: false);
   }
+
+  CacheCleanerService().cleanInIsolate();
 
   runApp(new StateContainer(child: new MyApp()));
 }
@@ -85,7 +89,7 @@ class _MyAppState extends State<MyApp> {
 
   void initLoadController() async {
     LoadController.instance.init(
-      filesController: getIt<FilesController>(instanceName: 'files_controller'),
+      filesController: await GetIt.I.getAsync<FilesController>(),
       tokenRepository: getIt<TokenRepository>(),
       documentsDirectory: (await getApplicationSupportDirectory()).path,
       supportDirectory: (await getApplicationSupportDirectory()).path,

@@ -5,12 +5,14 @@ import 'dart:io';
 import 'package:cpp_native/controllers/load/load_controller.dart';
 import 'package:cpp_native/controllers/load/models.dart';
 import 'package:cpp_native/controllers/load/observable_utils.dart';
+import 'package:cpp_native/models/base_object.dart';
 import 'package:cpp_native/models/folder.dart';
 import 'package:cpp_native/models/record.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -39,8 +41,7 @@ class MediaCubit extends Cubit<MediaState> {
 
   StreamSubscription<Locale>? localeChangedStreamSubscription;
   final StateContainerState stateContainer;
-  FilesController _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
   var _loadController = LoadController.instance;
   UserController _userController = getIt<UserController>();
   StreamSubscription? updatePageSubscription;
@@ -72,9 +73,10 @@ class MediaCubit extends Cubit<MediaState> {
     if (e is LoadNotification) {
       final uploadingMedia = e.uploadFileInfo;
       final downloadingMedia = e.downloadFileInfo;
-      List<Folder> albums = state.albums;
-      Folder all = state.albums.firstWhere((element) => element.id == '-1');
-      if (albums.any((element) => element.id == uploadingMedia?.folderId)) {
+      List<String> albums = state.foldersToListen!;
+      // String all =
+      //     state.foldersToListen!.firstWhere((element) => element == '-1');
+      if (albums.any((element) => element == uploadingMedia?.folderId)) {
         _update(uploadingFile: uploadingMedia?.copyWith());
       }
       // for (var album in albums) {
@@ -208,50 +210,72 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void init() async {
-    var allMediaFolders = await _filesController.getMediaFolders(true);
-    var currentFolder =
-        allMediaFolders?.firstWhere((element) => element.id == '-1');
-    User? user = await _userController.getUser;
+    _filesController = await GetIt.I.getAsync<FilesController>();
+    final rootFolder = await _filesController.getMediaRootFolder(
+      withUpdate: true,
+    );
+
+    var mediaFolder =
+        await _filesController.getObjectByIdFromLocalStorage('-1');
+
     bool progress = true;
     var valueNotifier = _userController.getValueNotifier();
+    final valueListenable =
+        _filesController.getObjectsValueListenableByFolderId(rootFolder!.id);
+
+    final foldersId =
+        _filesController.getContentFromFolderById(mediaFolder!.parentFolder!);
+    final valueListenableObject =
+        _filesController.getObjectsValueListenableByFolderId('-1');
+
     emit(state.copyWith(
-      albums: allMediaFolders,
-      currentFolder: currentFolder,
-      currentFolderRecords: currentFolder?.records?.reversed.toList(),
-      allRecords: currentFolder?.records,
-      user: user,
+      rootMediaFolder: rootFolder,
+      currentFolder: mediaFolder as Folder,
+      folderValueListenable: valueListenable,
+      objectsValueListenable: valueListenableObject,
+      foldersToListen: foldersId,
       progress: progress,
       status: FormzStatus.pure,
       valueNotifier: valueNotifier,
     ));
 
+    _filesController.getRelationsValueListenable(rootFolder.id).addListener(() {
+      _update();
+    });
+
     _loadController.getState.registerObserver(_updateObserver);
     List<Record> allMedia = [];
-    for (int i = 1; i < allMediaFolders!.length; i++) {
-      allMedia.addAll(allMediaFolders[i].records!);
-      print("all media $allMedia");
-    }
+    // for (int i = 1; i < rootFolder.folders!.length; i++) {
+    //   allMedia.addAll(rootFolder.folders![i].records!);
+    //   print("all media $allMedia");
+    // }
     _syncWithLoadController(allMedia);
     print("all media2 $allMedia");
     updatePageSubscription = eventBusUpdateAlbum.on().listen((event) {
-      _update();
+      update();
     });
   }
 
   Future<void> update() async {
-    var allMediaFolders = await _filesController.getMediaFolders(true);
-    var currentFolder = allMediaFolders
-        ?.firstWhere((element) => element.id == state.currentFolder.id);
-    User? user = await _userController.getUser;
-    bool progress = true;
+    // var allMediaFolders = await _filesController.getMediaFolders(true);
+    // var currentFolder = allMediaFolders
+    //     ?.firstWhere((element) => element.id == state.currentFolder.id);
+    // User? user = await _userController.getUser;
+    // bool progress = true;
     var valueNotifier = _userController.getValueNotifier();
+    final foldersId =
+        _filesController.getContentFromFolderById(state.currentFolder.id);
+    final valueListenable = _filesController
+        .getObjectsValueListenableByFolderId(state.currentFolder.id);
     emit(state.copyWith(
-      albums: allMediaFolders,
-      currentFolder: currentFolder,
-      currentFolderRecords: currentFolder?.records?.reversed.toList(),
-      allRecords: currentFolder?.records,
-      user: user,
-      progress: progress,
+      // albums: allMediaFolders,
+      // currentFolder: currentFolder,
+      // currentFolderRecords: currentFolder?.records?.reversed.toList(),
+      // allRecords: currentFolder?.records,
+      // user: user,
+      // progress: progress,
+      //foldersToListen: foldersId,
+      objectsValueListenable: valueListenable,
       status: FormzStatus.pure,
       valueNotifier: valueNotifier,
     ));
@@ -265,29 +289,8 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void mapSortedFieldChanged(String sortText) {
-    final tmpState = _resetSortedList(state: state);
-    final allFiles = tmpState.allRecords;
-
-    List<Record> sortedMedia = [];
-    var textLoverCase = sortText.toLowerCase();
-
-    allFiles.forEach((element) {
-      var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
-          .format(element.createdAt!)
-          .toString()
-          .toLowerCase()
-          .contains(textLoverCase);
-      if ((element.createdAt != null && containsDate) ||
-          (element.name != null &&
-              element.name!.toLowerCase().contains(textLoverCase)) ||
-          (element.extension != null &&
-              element.extension!.toLowerCase().contains(textLoverCase))) {
-        sortedMedia.add(element);
-      }
-    });
-
-    emit(state.copyWith(
-        currentFolderRecords: sortedMedia, status: FormzStatus.pure));
+    var newState = state.copyWith(searchText: sortText);
+    emit(newState);
   }
 
   MediaState _resetSortedList({
@@ -335,14 +338,16 @@ class MediaCubit extends Cubit<MediaState> {
 
   Future<void> _update({UploadFileInfo? uploadingFile}) async {
     // await _filesController.updateFilesList();
-
+    final valueListenable = _filesController
+        .getObjectsValueListenableByFolderId(state.currentFolder.id);
     var albums = await _filesController.getMediaFolders(true);
-    var updatedChoosedFolder =
-        albums?.firstWhere((element) => element.id == state.currentFolder.id);
+    // var updatedChoosedFolder =
+    //     albums?.firstWhere((element) => element.id == state.currentFolder.id);
     var newState = state.copyWith(
-      albums: albums,
-      currentFolder: updatedChoosedFolder,
-      currentFolderRecords: updatedChoosedFolder?.records?.reversed.toList(),
+      objectsValueListenable: valueListenable,
+      // albums: albums,
+      // currentFolder: updatedChoosedFolder,
+      // currentFolderRecords: updatedChoosedFolder?.records?.reversed.toList(),
     );
 
     emit(newState);
@@ -645,23 +650,25 @@ class MediaCubit extends Cubit<MediaState> {
     _setRecordDownloading(recordId: recordId);
   }
 
-  Future<void> onActionDeleteChosen(Record record) async {
+  Future<void> onActionDeleteChosen(BaseObject record) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    var result = await _filesController.deleteObjects([record]);
-    print(result);
-    if (result == ResponseStatus.ok) {
-      _update();
-    } else if (result == ResponseStatus.noInternet) {
-      emit(state.copyWith(status: FormzStatus.submissionCanceled));
-    } else {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
+    var result = await _filesController.delete([record]);
+    update();
+    // print(result);
+    // if (result == ResponseStatus.ok) {
+    //   _update();
+    // } else if (result == ResponseStatus.noInternet) {
+    //   emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    // } else {
+    //   emit(state.copyWith(status: FormzStatus.submissionFailure));
+    // }
   }
 
-  Future<ErrorType?> onActionRenameChosen(Record object, String newName) async {
+  Future<ErrorType?> onActionRenameChosen(
+      BaseObject object, String newName) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    var result = await _filesController.renameRecord(newName, object.id);
+    var result = await _filesController.rename(name: newName, object: object);
     print(result);
     if (result == ResponseStatus.ok) {
       _update();
@@ -715,13 +722,54 @@ class MediaCubit extends Cubit<MediaState> {
   }
 
   void changeFolder(Folder newFolder) async {
-    emit(
-      state.copyWith(
-        currentFolder: newFolder,
-        currentFolderRecords: newFolder.records?.reversed.toList(),
-        status: FormzStatus.pure,
-      ),
-    );
+    MediaState ns;
+
+    if (newFolder.id == '-1') {
+      await _filesController.getMediaRootFolder(withUpdate: true);
+      final foldersId =
+          _filesController.getContentFromFolderById(newFolder.parentFolder!);
+      final valueListenable =
+          _filesController.getObjectsValueListenableByFolderId('-1');
+
+      ns = state.copyWith(
+          currentFolder: newFolder,
+          foldersToListen: foldersId,
+          objectsValueListenable: valueListenable);
+      emit(ns);
+
+      _filesController.getRelationsBoxEventStream('-1')?.listen((event) {
+        update();
+      });
+    } else {
+      final valueListenable =
+          _filesController.getObjectsValueListenableByFolderId(newFolder.id);
+      final foldersId = _filesController.getContentFromFolderById(newFolder.id);
+      final folder =
+          _filesController.getObjectByIdFromLocalStorage(newFolder.id);
+
+      emit(state.copyWith(
+        foldersToListen: [newFolder.id],
+        currentFolder: folder as Folder,
+        objectsValueListenable: valueListenable,
+      ));
+      // emit(ns);
+      print(state.currentFolder);
+
+      _filesController.getRelationsValueListenable(folder.id).addListener(() {
+        update();
+      });
+
+      _filesController.updateFolder(folder.id);
+    }
+
+    // emit(
+    //   state.copyWith(
+    //     currentFolder: newFolder,
+    //     objectsValueListenable: ,
+    //     currentFolderRecords: newFolder.records?.reversed.toList(),
+    //     status: FormzStatus.pure,
+    //   ),
+    // );
   }
 
   Future<void> saveFile(Record record) async {

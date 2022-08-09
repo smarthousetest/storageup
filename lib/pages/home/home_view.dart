@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cpp_native/models/record.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:file_typification/file_typification.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +21,6 @@ import 'package:storageup/components/home/upload_info_widget.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
-import 'package:storageup/models/latest_file.dart';
 import 'package:storageup/pages/files/file_view.dart';
 import 'package:storageup/pages/files/move_files/move_files_view.dart';
 import 'package:storageup/pages/finance/finance_view.dart';
@@ -438,9 +438,9 @@ class _HomePageState extends State<HomePage> {
               width: 250,
               child: Padding(
                 padding: const EdgeInsets.only(left: 40.0),
-                child: ValueListenableBuilder<Box<LatestFile>>(
+                child: ValueListenableBuilder<Box<Record>>(
                     valueListenable:
-                        Hive.box<LatestFile>('latestFileBox').listenable(),
+                        Hive.box<Record>('latestFileBox').listenable(),
                     builder: (context, box, widget) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,10 +449,10 @@ class _HomePageState extends State<HomePage> {
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
                                   onTap: () {
-                                    print(e.latestFile.name);
+                                    print(e.name);
                                     context
                                         .read<HomeBloc>()
-                                        .add(FileTapped(record: e.latestFile));
+                                        .add(FileTapped(record: e));
                                   },
                                   child: LatestFileView(object: e)))),
                         ],
@@ -606,12 +606,10 @@ class _HomePageState extends State<HomePage> {
           //   result: [name],
           // );
 
-          final folderId = StateContainer.of(context).choosedMediaFolderId;
-
           context.read<HomeBloc>().add(HomeUserActionChosen(
                 action: userAction.action,
                 values: [name],
-                folderId: folderId,
+                folderId: null,
               ));
         }
         break;
@@ -660,12 +658,12 @@ class _HomePageState extends State<HomePage> {
 
 class LatestFileView extends StatelessWidget {
   const LatestFileView({Key? key, required this.object}) : super(key: key);
-  final LatestFile object;
+  final Record object;
 
   @override
   Widget build(BuildContext context) {
     String? type = '';
-    var record = object.latestFile;
+    var record = object;
     // var isFile = true;
     type = FileAttribute().getFilesType(record.name!.toLowerCase());
     return LayoutBuilder(

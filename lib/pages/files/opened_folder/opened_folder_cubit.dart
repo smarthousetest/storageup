@@ -22,7 +22,7 @@ import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
 import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/open_file_controller.dart';
-import 'package:storageup/utilities/controllers/packet_controllers.dart';
+import 'package:storageup/utilities/controllers/subscription_controllers.dart';
 import 'package:storageup/utilities/event_bus.dart';
 import 'package:storageup/utilities/extensions.dart';
 import 'package:storageup/utilities/injection.dart';
@@ -50,16 +50,15 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
           previousFolders: [],
         ));
 
-  var _filesController =
-      getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
   var _loadController = LoadController.instance;
   StreamSubscription? updatePageSubscription;
-  late final LatestFileRepository _repository;
+  late final LatestFileRepository _recentsFilesRepository;
   String idTappedFile = '';
   final UserRepository _userRepository =
       getIt<UserRepository>(instanceName: 'user_repo');
-  var _packetController =
-      getIt<PacketController>(instanceName: 'packet_controller');
+  var _subscriptionController =
+      getIt<SubscriptionController>(instanceName: 'subscription_controller');
 
   //    void _processLoadChanges(LoadNotification notification) async {
   //   MainUploadInfo? upload;
@@ -122,6 +121,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
             fileId: uploadingFile.id,
             percent: uploadingFile.loadPercent,
           );
+          update();
         } else if (e.downloadFileInfo != null &&
             e.isDownloadingInProgress &&
             e.downloadFileInfo?.loadPercent == -1) {
@@ -188,30 +188,43 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       changeRepresentation(state.representation);
     });
 
+    _filesController = await GetIt.I.getAsync<FilesController>();
     Folder? currentFolder;
+    OpenedFolderState newState;
     if (folder == null) {
-      await _filesController.updateFilesList();
-      currentFolder = _filesController.getFilesRootFolder;
+      currentFolder =
+          await _filesController.getFilesRootFolder(withUpdate: true);
+      final objectsVL = _filesController
+          .getObjectsValueListenableByFolderId(currentFolder!.id);
+
+      newState = state.copyWith(
+        currentFolder: currentFolder,
+        objectsValueListenable: objectsVL,
+      );
     } else {
       currentFolder = await _filesController.getFolderById(folder.id);
+      final objectsVL = _filesController
+          .getObjectsValueListenableByFolderId(currentFolder!.id);
+      newState = state.copyWith(
+        currentFolder: currentFolder,
+        objectsValueListenable: objectsVL,
+      );
     }
-    var objects =
-        await _filesController.getContentFromFolderById(currentFolder!.id);
+    // var objects =
+    //     await _filesController.getContentFromFolderById(currentFolder!.id);
 
     updatePageSubscription = eventBusUpdateFolder.on().listen((event) {
       update();
     });
-    var user = _userRepository.getUser;
+
     bool progress = true;
-    _repository = await GetIt.instance.getAsync<LatestFileRepository>();
+    _recentsFilesRepository =
+        await GetIt.instance.getAsync<LatestFileRepository>();
     var valueNotifier = _userRepository.getValueNotifier;
+    emit(newState);
     emit(
       state.copyWith(
-        currentFolder: currentFolder,
-        objects: objects,
-        sortedFiles: objects,
         previousFolders: previousFolders,
-        user: user,
         progress: progress,
         valueNotifier: valueNotifier,
         representation: filesSharedStateCubit.state.representation,
@@ -262,205 +275,24 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     }
   }
 
-  Future<void> mapFileSortingByCriterion() async {
-    emit(state.copyWith(status: FormzStatus.pure));
-    OpenedFolderState newState = state;
-    var criterion = newState.criterion;
-    var direction = newState.direction;
-    switch (criterion) {
-      case SortingCriterion.byType:
-        await _sortByType(newState, direction, criterion);
-        break;
-      case SortingCriterion.byDateCreated:
-        await _sortByDate(newState, direction, criterion);
-        break;
-      case SortingCriterion.byName:
-        await _sortByName(newState, direction, criterion);
-        break;
-      case SortingCriterion.bySize:
-        await _sortBySize(newState, direction, criterion);
-        break;
-    }
-  }
-
-  OpenedFolderState _clearGroupedMap(
-    OpenedFolderState state,
-  ) {
-    return state.copyWith(groupedFiles: Map());
-  }
-
-  void _mapSortedClear(
-    OpenedFolderState state,
-  ) {
-    final clearedState = _clearGroupedMap(state);
-    emit(
-      state.copyWith(
-        sortedFiles: clearedState.sortedFiles,
-        groupedFiles: clearedState.groupedFiles,
-        status: FormzStatus.valid,
-      ),
-    );
-  }
-
-  Future<List<BaseObject>> _getClearListOfFiles(
-    OpenedFolderState state,
-  ) async {
-    List<BaseObject> items = state.objects;
-    List<BaseObject> sortedFiles = [];
-    sortedFiles.addAll(items);
-
-    return sortedFiles;
-  }
-
-  Future<void> _sortByType(
-    OpenedFolderState state,
-    SortingDirection direction,
-    SortingCriterion criterion,
-  ) async {
-    List<BaseObject> items = mapSortedFieldChanged(state.search);
-    //await _getClearListOfFiles(state);
-
-    Map<String, List<BaseObject>> groupedFiles = {};
-
-    items.forEach((element) {
-      String key;
-      if (element.extension == null) {
-        key = 'folder';
-      } else {
-        key = element.extension!.toLowerCase();
-      }
-      if (groupedFiles.containsKey(key)) {
-        groupedFiles[key]?.add(element);
-      } else {
-        groupedFiles[key] = [element];
-      }
-    });
-
-    if (direction == SortingDirection.down) {
-      emit(state.copyWith(
-        groupedFiles: groupedFiles,
-        criterion: SortingCriterion.byType,
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        criterion: SortingCriterion.byType,
-        groupedFiles:
-            // SplayTreeMap<String, List<BaseObject>>.from(
-            //     groupedFiles, (a, b) => a.compareTo(b))
-            //groupedFiles.keys.toList()..sort()
-            // LinkedHashMap.fromEntries(groupedFiles.entries.toList().reversed)
-            groupedFiles
-                .map((key, value) => MapEntry(key, value.reversed.toList())),
-      ));
-    }
-  }
-
-  Future<void> _sortBySize(OpenedFolderState state, SortingDirection direction,
-      SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
-    sortedFiles.sort((a, b) {
-      // if (a.size != null && b.size != null) {
-      return a.size.compareTo(b.size);
-      // }
-      // else if (a.size == null && b.size == null) {
-      //   return a.id.compareTo(b.id);
-      // } else
-      //   return a.size == null ? 0 : 1;
-    });
-    if (direction == SortingDirection.down) {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles.reversed.toList(),
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles,
-        status: FormzStatus.pure,
-      ));
-    }
-  }
-
-  Future<void> _sortByName(OpenedFolderState state, SortingDirection direction,
-      SortingCriterion criterion) async {
-    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
-    sortedFiles.sort((a, b) {
-      if (a.name != null && b.name != null) {
-        return a.name!.compareTo(b.name!);
-      } else if (a.name == null && b.name == null) {
-        return a.id.compareTo(b.id);
-      } else
-        return a.name == null ? 0 : 1;
-    });
-    if (direction == SortingDirection.up) {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles.reversed.toList(),
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles,
-        status: FormzStatus.pure,
-      ));
-    }
-  }
-
-  Future<void> _sortByDate(
-    OpenedFolderState state,
-    SortingDirection direction,
-    SortingCriterion criterion,
-  ) async {
-    List<BaseObject> sortedFiles = mapSortedFieldChanged(state.search);
-
-    sortedFiles.sort((a, b) {
-      if (a.createdAt != null && b.createdAt != null) {
-        return _compareDates(a.createdAt!, b.createdAt!);
-      } else if (a.createdAt == null && b.createdAt == null) {
-        return a.id.compareTo(b.id);
-      } else
-        return a.createdAt == null ? 0 : 1;
-    });
-
-    //mapSortedFieldChanged(state.search);
-
-    if (direction == SortingDirection.down) {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles.reversed.toList(),
-        status: FormzStatus.pure,
-      ));
-    } else {
-      emit(state.copyWith(
-        sortedFiles: sortedFiles,
-        status: FormzStatus.pure,
-      ));
-    }
-  }
-
-  int _compareDates(DateTime a, DateTime b) {
-    // var dateA = DateTime.parse(a);
-    // var dateB = DateTime.parse(b);
-
-    return a.compareTo(b);
-  }
-
   void _onActionDeleteChoosed(BaseObject object) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-    var result = await _filesController.deleteObjects([object]);
+    await _filesController.delete([object]);
 
     var recentsFile = await _filesController.getRecentFiles();
     if (recentsFile != null) {
-      await _repository.addFiles(latestFile: recentsFile);
+      await _recentsFilesRepository.addFiles(latestFile: recentsFile);
     }
-    print(result);
-    if (result == ResponseStatus.ok) {
-      await _packetController.updatePacket();
-      update();
-    } else if (result == ResponseStatus.noInternet) {
-      emit(state.copyWith(status: FormzStatus.submissionCanceled));
-    } else {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
-    }
+    await _subscriptionController.updateSubscription();
+    update();
+    // print(result);
+    // if (result == ResponseStatus.ok) {
+    // } else if (result == ResponseStatus.noInternet) {
+    //   emit(state.copyWith(status: FormzStatus.submissionCanceled));
+    // } else {
+    //   emit(state.copyWith(status: FormzStatus.submissionFailure));
+    // }
   }
 
   Future<void> onActionMoveFiles(
@@ -531,7 +363,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<ErrorType?> onActionRenameChoosedFile(
       BaseObject object, String newName) async {
-    var result = await _filesController.renameRecord(newName, object.id);
+    var result = await _filesController.rename(name: newName, object: object);
     print(result);
     if (result == ResponseStatus.ok) {
       update();
@@ -547,7 +379,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<ErrorType?> onActionRenameChosenFolder(
       BaseObject object, String newName) async {
-    var result = await _filesController.renameFolder(newName, object.id);
+    var result = await _filesController.rename(name: newName, object: object);
     print(result);
     if (result == ResponseStatus.ok) {
       update();
@@ -562,8 +394,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   void _syncWithLoadController() async {
-    final loadState = _loadController.getState;
-    final filesInFolder = state.objects;
+    // final loadState = _loadController.getState;
+    // final filesInFolder = state.objects;
 
     // filesInFolder.forEach((fileInFolder) {
     //   var index = loadState.uploadingFiles
@@ -608,12 +440,13 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       try {
         await _filesController.updateFilesList();
       } catch (_) {}
-      folderId = _filesController.getFilesRootFolder?.id;
+      var rootFilesFolder = await _filesController.getFilesRootFolder();
+      folderId = rootFilesFolder!.id;
     } else {
       folderId = folderId;
     }
 
-    if (name != null && folderId != null) {
+    if (name != null) {
       final result = await _filesController.createFolder(name, folderId);
       update();
 
@@ -622,33 +455,14 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       } else if (result == ResponseStatus.noInternet) {
         emit(state.copyWith(status: FormzStatus.submissionCanceled));
       }
-    } else if (folderId == null) {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }
 
-  Future<void> setNewCriterionAndDirection(SortingCriterion criterion,
-      SortingDirection direction, String sortText) async {
-    // final allFiles = state.sortedFiles;
-
-    // List<BaseObject> sortedFiles = [];
-    // var textLoverCase = sortText.toLowerCase();
-
-    // allFiles.forEach((element) {
-    //   var containsDate = DateFormat.yMd(Intl.getCurrentLocale())
-    //       .format(element.createdAt!)
-    //       .toString()
-    //       .toLowerCase()
-    //       .contains(textLoverCase);
-    //   if ((element.createdAt != null && containsDate) ||
-    //       (element.name != null &&
-    //           element.name!.toLowerCase().contains(textLoverCase)) ||
-    //       (element.extension != null &&
-    //           element.extension!.toLowerCase().contains(textLoverCase))) {
-    //     sortedFiles.add(element);
-    //   }
-    // });
-    //mapSortedFieldChanged(sortText);
+  Future<void> setNewCriterionAndDirection(
+    SortingCriterion criterion,
+    SortingDirection direction,
+    String? sortText,
+  ) async {
     emit(state.copyWith(
       criterion: criterion,
       direction: direction,
@@ -659,23 +473,16 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
 
   Future<void> update({String? uploadingFileId}) async {
     await _filesController.updateFilesList();
-    var objects = await _filesController
-        .getContentFromFolderById(state.currentFolder!.id);
 
-    if (uploadingFileId != null) {
-      var uploadingFileIndex =
-          objects.indexWhere((element) => element.id == uploadingFileId);
-      if (uploadingFileIndex != -1)
-        objects[uploadingFileIndex] =
-            (objects[uploadingFileIndex] as Record).copyWith(loadPercent: 0);
-    }
-    await _packetController.updatePacket();
+    final valueListenable = _filesController
+        .getObjectsValueListenableByFolderId(state.currentFolder!.id);
+
+    await _subscriptionController.updateSubscription();
+
     emit(state.copyWith(
-      objects: objects,
+      objectsValueListenable: valueListenable,
       status: FormzStatus.pure,
     ));
-
-    mapFileSortingByCriterion();
 
     print('files was updated');
 
@@ -683,7 +490,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
   }
 
   void _tryToFindObservableRecords() {
-    var controllerState = _loadController.getState;
+    // var controllerState = _loadController.getState;
 
     // if (controllerState.uploadingFiles.isNotEmpty) {
     //   try {
@@ -807,8 +614,8 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
     print('index if uploading filse is $indexOfUploadingFile');
 
     if (indexOfUploadingFile == -1) {
-      objects = await _filesController
-          .getContentFromFolderById(state.currentFolder!.id);
+      // objects = await _filesController
+      //     .getContentFromFolderById(state.currentFolder!.id);
       indexOfUploadingFile =
           objects.indexWhere((element) => element.id == fileId);
     }
@@ -833,8 +640,6 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
         );
 
         emit(newState);
-
-        mapFileSortingByCriterion();
       }
     }
   }
@@ -875,7 +680,7 @@ class OpenedFolderCubit extends Cubit<OpenedFolderState> {
       var recentsFile = await _filesController.getRecentFiles();
       if (recentsFile != null) {
         // recentsFile.forEach((element) {
-        await _repository.addFiles(latestFile: recentsFile);
+        await _recentsFilesRepository.addFiles(latestFile: recentsFile);
         // });
       }
       //_repository.addFile(latestFile: record);

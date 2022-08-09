@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
@@ -40,7 +41,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   TokenRepository _tokenRepository = getIt<TokenRepository>();
   FilesService _filesService = getIt<FilesService>();
-  FilesController _filesController = getIt<FilesController>(instanceName: 'files_controller');
+  late FilesController _filesController;
 
   UserController _userController = getIt<UserController>();
 
@@ -51,13 +52,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     SettingsState state,
     Emitter<SettingsState> emit,
   ) async {
+    _filesController = await GetIt.I.getAsync<FilesController>();
     var locale = await getLocale();
     User? user = await _userController.getUser;
+
     var valueNotifier = _userController.getValueNotifier();
     emit(state.copyWith(
-      user: user,
       language: locale.languageCode,
       valueNotifier: valueNotifier,
+      user: user,
     ));
   }
 

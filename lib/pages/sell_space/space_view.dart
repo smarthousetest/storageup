@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cpp_native/cpp_native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/custom_button_template.dart';
+import 'package:storageup/components/sell_space_no_internet_page.dart';
 import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -57,6 +59,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   changePageIndexChangeKeeper(
       int newIndex, DownloadLocation keeper, maxCountOfGb) {
     setState(() {
+      needToCheck = true;
       index = newIndex;
       changeKeeper = keeper;
       keeperNameTextController.text = keeper.name;
@@ -352,6 +355,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
           GestureDetector(
             onTap: (() {
               context.read<FolderListBloc>().add(GetKeeperInfo());
+              context.read<SpaceBloc>().add(UpdateKeepersList());
+              setState(() {
+                index = 0;
+              });
             }),
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -747,49 +754,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
   }
 
   Widget rentingAPlaceNoInternet(BuildContext context) {
-    return ListView(controller: ScrollController(), children: [
-      Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40),
-          child: Container(
-            height: 1,
-            decoration: BoxDecoration(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-        ),
-        Container(
-            child: Image.asset("assets/space_sell/sell_space_no_internet.png")),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, top: 30),
-          child: Container(
-            child: Text(
-              translate.sell_space_no_internet_part_1,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.subtitle1?.color,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, top: 15),
-          child: Container(
-            child: Text(
-              translate.sell_space_no_internet_part_2,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.subtitle1?.color,
-                fontFamily: kNormalTextFontFamily,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ),
-      ]),
-    ]);
+    return SellSpaceNoInternetPage();
   }
 
   Widget addSpace(BuildContext context, DownloadLocation? changeKepper) {
@@ -807,8 +772,9 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               context
                   .read<SpaceBloc>()
                   .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
+            } else if (changeKeeper == null) {
+              maxSpace = (state.availableSpace / GB).roundToDouble();
             }
-            maxSpace = (state.availableSpace / GB).roundToDouble();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1153,6 +1119,7 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                                     if (_currentSliderValue.toInt() < max) {
                                       _currentSliderValue =
                                           _currentSliderValue.toInt() + 1;
+                                      canSave = true;
                                     }
                                   });
                                 }
@@ -1333,9 +1300,13 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            backgroundColor: _isFieldsValid(state) && canSave
-                                ? Theme.of(context).splashColor
-                                : Theme.of(context).canvasColor,
+                            backgroundColor:
+                                (_isFieldsValid(state) && canSave) ||
+                                        (changeKepper != null &&
+                                            _isFieldsValid(state) &&
+                                            canSave)
+                                    ? Theme.of(context).splashColor
+                                    : Theme.of(context).canvasColor,
                           ),
                           child: Text(
                             changeKeeper == null
@@ -1376,11 +1347,10 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
               context
                   .read<SpaceBloc>()
                   .add(GetPathToKeeper(pathForChange: changeKepper?.dirPath));
-              context
-                  .read<SpaceBloc>()
-                  .add(NameChanged(name: changeKeeper!.name));
             }
-            var maxSpace = (state.availableSpace / GB).round();
+            if (changeKeeper == null) {
+              maxSpace = (state.availableSpace / GB).roundToDouble();
+            }
             print(maxSpace);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1943,10 +1913,12 @@ class _SpaceSellPageState extends State<SpaceSellPage> {
                             minimumSize: Size(double.maxFinite, 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            backgroundColor: _isFieldsValid(state) &&
-                                    canSave &&
-                                    maxSpace > 32 &&
-                                    state.diskList.isNotEmpty
+                            backgroundColor: (_isFieldsValid(state) &&
+                                        canSave &&
+                                        state.diskList.isNotEmpty) ||
+                                    (changeKepper != null &&
+                                        _isFieldsValid(state) &&
+                                        canSave)
                                 ? Theme.of(context).splashColor
                                 : Theme.of(context).canvasColor,
                           ),

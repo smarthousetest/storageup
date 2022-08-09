@@ -94,11 +94,8 @@ class _ButtonTemplateState extends State<FolderList> {
             SpaceInheritedWidget.of(context).state.changePageIndex(3);
           } else if (state.statusHttpRequest == FormzStatus.submissionFailure) {
             SpaceInheritedWidget.of(context).state.changePageIndex(3);
-          } else if (state.statusHttpRequest == FormzStatus.submissionSuccess) {
-            if (SpaceInheritedWidget.of(context).state.index != 1) {
-              SpaceInheritedWidget.of(context).state.changePageIndex(0);
-            }
-          }
+          } else if (state.statusHttpRequest ==
+              FormzStatus.submissionSuccess) {}
         }
         if (state.needToValidatePopup == true) {
           popUpWasShown = true;
@@ -106,27 +103,31 @@ class _ButtonTemplateState extends State<FolderList> {
           popUpWasShown = false;
         }
       },
-      child: BlocBuilder<FolderListBloc, FolderListState>(
-        builder: (context, state) {
-          _initiatingControllers(state);
-          locationsInfo = state.localKeepers;
-          return SingleChildScrollView(
-            controller: ScrollController(),
-            child: Column(
-              children: [
-                state.localKeepers.isNotEmpty
-                    ? _thisKeeper(context, state)
-                    : Container(),
-                state.serverKeepers.isNotEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: _otherKeeper(context, state),
-                      )
-                    : Container(),
-              ],
-            ),
-          );
-        },
+      child: BlocProvider(
+        create: (contextFolderList) =>
+            FolderListBloc()..add(FolderListPageOpened()),
+        child: BlocBuilder<FolderListBloc, FolderListState>(
+          builder: (context, state) {
+            _initiatingControllers(state);
+            locationsInfo = state.localKeepers;
+            return SingleChildScrollView(
+              controller: ScrollController(),
+              child: Column(
+                children: [
+                  state.localKeepers.isNotEmpty
+                      ? _thisKeeper(context, state)
+                      : Container(),
+                  state.serverKeepers.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: _otherKeeper(context, state),
+                        )
+                      : Container(),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
