@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "add": MessageLookupByLibrary.simpleMessage("Добавить"),
         "add_files": MessageLookupByLibrary.simpleMessage("Добавить файлы"),
         "add_location": MessageLookupByLibrary.simpleMessage("Добавить место"),
+        "add_media": MessageLookupByLibrary.simpleMessage("Добавить медиа"),
         "albums": MessageLookupByLibrary.simpleMessage("Альбомы"),
         "all": MessageLookupByLibrary.simpleMessage("Все"),
         "all_files": MessageLookupByLibrary.simpleMessage("Все файлы"),

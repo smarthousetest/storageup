@@ -20,6 +20,7 @@ import 'package:storageup/generated/l10n.dart';
 import 'package:storageup/models/enums.dart';
 import 'package:storageup/models/user.dart';
 import 'package:storageup/pages/files/opened_folder/opened_folder_state.dart';
+import 'package:storageup/pages/sell_space/space_bloc.dart';
 import 'package:storageup/utilities/controllers/files_controller.dart';
 import 'package:storageup/utilities/controllers/user_controller.dart';
 import 'package:storageup/utilities/event_bus.dart';
@@ -577,6 +578,50 @@ class MediaCubit extends Cubit<MediaState> {
         );
         emit(newState);
       }
+    }
+  }
+
+  Future<void> createAlbum(
+    String? name,
+  ) async {
+    var albumId = _filesController.getMediaRootFolderId();
+
+    if (name != null && albumId != null) {
+      final result = await _filesController.createFolder(name, albumId);
+      update();
+      if (result == ResponseStatus.failed) {
+        emit(state.copyWith(status: FormzStatus.submissionCanceled));
+        emit(state.copyWith(status: FormzStatus.pure));
+      } else if (result == ResponseStatus.noInternet) {
+        emit(state.copyWith(status: FormzStatus.submissionFailure));
+        emit(state.copyWith(status: FormzStatus.pure));
+      }
+    } else if (albumId == null) {
+      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      emit(state.copyWith(status: FormzStatus.pure));
+    }
+  }
+
+  Future<void> uploadMediaAction(String? folderId) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.media,
+    );
+    if (result != null) {
+      List<String?> filePaths = result.paths;
+
+      for (int i = 0; i < filePaths.length; i++) {
+        if (filePaths[i] != null &&
+            PathCheck().isPathCorrect(filePaths[i].toString())) {
+          await _loadController.uploadFile(
+              filePath: filePaths[i], folderId: folderId);
+        } else {
+          emit(state.copyWith(status: FormzStatus.invalid));
+          emit(state.copyWith(status: FormzStatus.pure));
+        }
+      }
+    } else {
+      return null;
     }
   }
 

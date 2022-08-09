@@ -171,6 +171,7 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                 return ContextMenuRightTap(
                   translate: translate,
                   theme: Theme.of(context),
+                  contextAction: WhereFromContextMenu.files,
                   onTap: (action) {
                     Navigator.of(context).pop();
                     _contextAction(state, context, action);

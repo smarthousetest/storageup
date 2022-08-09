@@ -288,5 +288,6 @@
     "sec": "sec",
     "downloading_files": "Downloading files",
     "uploading_files": "Uploading files",
-    "albums": "Albums"
+    "albums": "Albums",
+    "add_media": "Add media"
 }

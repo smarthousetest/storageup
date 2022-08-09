@@ -14,6 +14,7 @@ class ContextMenuRightTap extends StatefulWidget {
       required this.onTap,
       required this.child,
       required this.theme,
+      required this.contextAction,
       Key? key})
       : super(key: key);
 
@@ -21,6 +22,7 @@ class ContextMenuRightTap extends StatefulWidget {
   final Function(ContextMenuAction) onTap;
   final Widget child;
   final ThemeData theme;
+  final WhereFromContextMenu contextAction;
 
   @override
   _ContextMenuRightTapState createState() => _ContextMenuRightTapState();
@@ -38,12 +40,17 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
           tileColor: widget.theme.primaryColor,
           hoverColor: mainColor,
           leading: SvgPicture.asset(
-            'assets/options/add_files.svg',
+            widget.contextAction == WhereFromContextMenu.files
+                ? 'assets/options/add_files.svg'
+                : 'assets/options/add_media.svg',
             height: 20,
           ),
           title: Transform.translate(
             offset: Offset(-20, 0),
-            child: Text(widget.translate.add_files,
+            child: Text(
+                widget.contextAction == WhereFromContextMenu.files
+                    ? widget.translate.add_files
+                    : widget.translate.add_media,
                 softWrap: false,
                 overflow: TextOverflow.visible,
                 style: TextStyle(
@@ -65,12 +72,17 @@ class _ContextMenuRightTapState extends State<ContextMenuRightTap> {
           tileColor: widget.theme.primaryColor,
           hoverColor: mainColor,
           leading: SvgPicture.asset(
-            'assets/options/create_folder.svg',
+            widget.contextAction == WhereFromContextMenu.files
+                ? 'assets/options/create_folder.svg'
+                : 'assets/options/create_album.svg',
             height: 20,
           ),
           title: Transform.translate(
             offset: Offset(-20, 0),
-            child: Text(widget.translate.create_a_folder,
+            child: Text(
+                widget.contextAction == WhereFromContextMenu.files
+                    ? widget.translate.create_a_folder
+                    : widget.translate.create_album,
                 style: TextStyle(
                   fontFamily: kNormalTextFontFamily,
                   fontSize: 14,

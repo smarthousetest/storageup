@@ -2674,6 +2674,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Add media`
+  String get add_media {
+    return Intl.message(
+      'Add media',
+      name: 'add_media',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

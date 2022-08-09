@@ -13,9 +13,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:storageup/components/blur/create_album.dart';
 import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
 import 'package:storageup/components/blur/rename.dart';
+
+import 'package:storageup/components/context_menu.dart';
+
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/components/user_info.dart';
 import 'package:storageup/constants.dart';
@@ -468,174 +472,54 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                             ],
                           ),
                           alignment: Alignment.center,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 20, 30, 0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                          child: BlocBuilder<MediaCubit, MediaState>(
+                            builder: (context, state) {
+                              return ContextMenuRightTap(
+                                translate: translate,
+                                theme: Theme.of(context),
+                                contextAction: WhereFromContextMenu.media,
+                                onTap: (action) {
+                                  Navigator.of(context).pop();
+                                  _contextMenuAction(state, context, action);
+                                },
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
+                                    _pathSection(),
+                                    ifGrid
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 40),
+                                            child: Divider(
+                                              height: 1,
+                                              color: Theme.of(context)
+                                                  .dividerColor,
+                                            ),
+                                          )
+                                        : Container(),
                                     BlocBuilder<MediaCubit, MediaState>(
                                       builder: (context, state) {
-                                        return Container(
-                                          constraints:
-                                              BoxConstraints(maxWidth: 200),
-                                          child: Text(
-                                            state.currentFolder.name == 'Media'
-                                                ? translate.all
-                                                : state.currentFolder.name ??
-                                                    ':(',
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color:
-                                                  Theme.of(context).focusColor,
-                                              fontFamily: kNormalTextFontFamily,
-                                              fontSize: 20,
-                                            ),
-                                          ),
+                                        return Expanded(
+                                          child: state.representation ==
+                                                  FilesRepresentation.grid
+                                              ? state.progress == true
+                                                  ? _filesGrid()
+                                                  : _progressIndicator(context)
+                                              : Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20),
+                                                  child: _filesList(
+                                                      context, state),
+                                                ),
                                         );
                                       },
-                                    ),
-                                    Expanded(
-                                      flex: 821,
-                                      child: Container(),
-                                    ),
-                                    BlocBuilder<MediaCubit, MediaState>(
-                                        builder: (context, state) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          context.read<MediaCubit>().update();
-                                        },
-                                        child: MouseRegion(
-                                          cursor: SystemMouseCursors.click,
-                                          child: Container(
-                                            width: 128,
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  Theme.of(context).cardColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                SvgPicture.asset(
-                                                  'assets/file_page/update.svg',
-                                                  color: Theme.of(context)
-                                                      .splashColor,
-                                                  width: 24,
-                                                  height: 24,
-                                                ),
-                                                SizedBox(
-                                                  width: 7,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 2.0),
-                                                  child: Text(
-                                                    translate.update,
-                                                    maxLines: 1,
-                                                    style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .splashColor,
-                                                      fontFamily:
-                                                          kNormalTextFontFamily,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                                    SizedBox(
-                                      width: 6,
-                                    ),
-                                    BlocBuilder<MediaCubit, MediaState>(
-                                        builder: (context, state) {
-                                      return IconButton(
-                                        padding: EdgeInsets.zero,
-                                        iconSize: 30,
-                                        onPressed: () {
-                                          context
-                                              .read<MediaCubit>()
-                                              .changeRepresentation(
-                                                  FilesRepresentation.table);
-                                        },
-                                        icon: SvgPicture.asset(
-                                            'assets/file_page/list.svg',
-                                            color: state.representation ==
-                                                    FilesRepresentation.table
-                                                ? Theme.of(context).splashColor
-                                                : Theme.of(context)
-                                                    .toggleButtonsTheme
-                                                    .color),
-                                      );
-                                    }),
-                                    BlocBuilder<MediaCubit, MediaState>(
-                                      builder: (context, state) {
-                                        return IconButton(
-                                          iconSize: 30,
-                                          onPressed: () {
-                                            context
-                                                .read<MediaCubit>()
-                                                .changeRepresentation(
-                                                    FilesRepresentation.grid);
-                                          },
-                                          icon: SvgPicture.asset(
-                                              'assets/file_page/block.svg',
-                                              // width: 30,
-                                              // height: 30,
-                                              //colorBlendMode: BlendMode.softLight,
-                                              color: state.representation ==
-                                                      FilesRepresentation.grid
-                                                  ? Theme.of(context)
-                                                      .splashColor
-                                                  : Theme.of(context)
-                                                      .toggleButtonsTheme
-                                                      .color),
-                                        );
-                                      },
-                                    ),
+                                    )
                                   ],
                                 ),
-                              ),
-                              ifGrid
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 40),
-                                      child: Divider(
-                                        height: 1,
-                                        color: Theme.of(context).dividerColor,
-                                      ),
-                                    )
-                                  : Container(),
-                              BlocBuilder<MediaCubit, MediaState>(
-                                builder: (context, state) {
-                                  return Expanded(
-                                    child: state.representation ==
-                                            FilesRepresentation.grid
-                                        ? state.progress == true
-                                            ? _filesGrid()
-                                            : _progressIndicator(context)
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            child: _filesList(context, state),
-                                          ),
-                                  );
-                                },
-                              )
-                            ],
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -646,6 +530,119 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _pathSection() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(40, 20, 30, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          BlocBuilder<MediaCubit, MediaState>(
+            builder: (context, state) {
+              return Container(
+                constraints: BoxConstraints(maxWidth: 200),
+                child: Text(
+                  state.currentFolder.name ?? ':(',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Theme.of(context).focusColor,
+                    fontFamily: kNormalTextFontFamily,
+                    fontSize: 20,
+                  ),
+                ),
+              );
+            },
+          ),
+          Expanded(
+            flex: 821,
+            child: Container(),
+          ),
+          BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
+            return GestureDetector(
+              onTap: () {
+                context.read<MediaCubit>().update();
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Container(
+                  width: 128,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/file_page/update.svg',
+                        color: Theme.of(context).splashColor,
+                        width: 24,
+                        height: 24,
+                      ),
+                      SizedBox(
+                        width: 7,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.0),
+                        child: Text(
+                          translate.update,
+                          maxLines: 1,
+                          style: TextStyle(
+                            color: Theme.of(context).splashColor,
+                            fontFamily: kNormalTextFontFamily,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+          SizedBox(
+            width: 6,
+          ),
+          BlocBuilder<MediaCubit, MediaState>(builder: (context, state) {
+            return IconButton(
+              padding: EdgeInsets.zero,
+              iconSize: 30,
+              onPressed: () {
+                context
+                    .read<MediaCubit>()
+                    .changeRepresentation(FilesRepresentation.table);
+              },
+              icon: SvgPicture.asset('assets/file_page/list.svg',
+                  color: state.representation == FilesRepresentation.table
+                      ? Theme.of(context).splashColor
+                      : Theme.of(context).toggleButtonsTheme.color),
+            );
+          }),
+          BlocBuilder<MediaCubit, MediaState>(
+            builder: (context, state) {
+              return IconButton(
+                iconSize: 30,
+                onPressed: () {
+                  context
+                      .read<MediaCubit>()
+                      .changeRepresentation(FilesRepresentation.grid);
+                },
+                icon: SvgPicture.asset('assets/file_page/block.svg',
+                    // width: 30,
+                    // height: 30,
+                    //colorBlendMode: BlendMode.softLight,
+                    color: state.representation == FilesRepresentation.grid
+                        ? Theme.of(context).splashColor
+                        : Theme.of(context).toggleButtonsTheme.color),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -803,6 +800,31 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
         });
   }
 
+  _contextMenuAction(
+    MediaState state,
+    BuildContext context,
+    ContextMenuAction action,
+  ) async {
+    switch (action) {
+      case ContextMenuAction.addFiles:
+        final folderId = StateContainer.of(context).choosedMediaFolderId;
+        context.read<MediaCubit>().uploadMediaAction(folderId);
+        break;
+      case ContextMenuAction.createFolder:
+        var albumName = await showDialog<String?>(
+            context: context,
+            builder: (BuildContext context) {
+              return BlurCreateAlbum();
+            });
+        if (albumName != null) {
+          context.read<MediaCubit>().createAlbum(albumName);
+        }
+
+        break;
+      default:
+    }
+  }
+
   Widget _filesGrid() {
     return BlocBuilder<MediaCubit, MediaState>(
       builder: (blocContext, state) {
@@ -849,28 +871,22 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                           _popupControllers.add(controller);
                         }
 
-                        _onPointerDown(PointerDownEvent event) {
-                          if (event.kind == PointerDeviceKind.mouse &&
-                              event.buttons == kSecondaryMouseButton) {
-                            print("right button click");
-
-                            _popupControllers[mediaList.indexOf(record)]
-                                .showMenu();
-                          }
+                        _onPointerDown() {
+                          _popupControllers[mediaList.indexOf(record)]
+                              .showMenu();
                         }
 
                         return MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              //_photoOpen(context, state.currentFolderRecords);
-                              _onTapItem(mediaList, record, context,
-                                  state.currentFolder);
-                            },
-                            child: Listener(
-                              onPointerDown: _onPointerDown,
-                              behavior: HitTestBehavior.opaque,
-                              child: IgnorePointer(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onSecondaryTapUp: (_) {
+                                  _onPointerDown();
+                                },
+                                onTap: () {
+                                  _onTapItem(state.currentFolderRecords, record,
+                                      context, state.currentFolder);
+                                },
                                 child: CustomPopupMenu(
                                     pressType: PressType.singleClick,
                                     barrierColor: Colors.transparent,
@@ -882,83 +898,15 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                         mediaList.indexOf(record)],
                                     menuBuilder: () {
                                       return MediaPopupMenuActions(
-                                        theme: Theme.of(context),
-                                        translate: translate,
-                                        onTap: (action) async {
-                                          _popupControllers[
-                                                  mediaList.indexOf(record)]
-                                              .hideMenu();
-                                          if (action ==
-                                              MediaAction.properties) {
-                                            var res = await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return FileInfoView(
-                                                      object: record,
-                                                      user: state.valueNotifier
-                                                          ?.value);
-                                                });
-                                            if (res != null) {
-                                              blocContext
-                                                  .read<MediaCubit>()
-                                                  .fileTapped(record as Record);
-                                            }
-                                          } else if (action ==
-                                              MediaAction.rename) {
-                                            var fileExtention = FileAttribute()
-                                                .getFileExtension(
-                                                    record.name ?? '');
-                                            var result = await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                var filename = FileAttribute()
-                                                    .getFileName(
-                                                        record.name ?? '');
-                                                return BlurRename(
-                                                    filename, true);
-                                              },
-                                            );
-                                            if (result != null &&
-                                                result is String &&
-                                                result !=
-                                                    FileAttribute().getFileName(
-                                                        record.name ?? '')) {
-                                              result =
-                                                  result + '.' + fileExtention;
-                                              final res = await context
-                                                  .read<MediaCubit>()
-                                                  .onActionRenameChosen(
-                                                      record, result);
-                                              if (res ==
-                                                  ErrorType.alreadyExist) {
-                                                _rename(context, record, result,
-                                                    fileExtention);
-                                              }
-                                            }
-                                          } else {
-                                            //   controller.hideMenu();
-                                            var result = await showDialog<bool>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return BlurDelete();
-                                              },
-                                            );
-                                            if (result == true) {
-                                              blocContext
-                                                  .read<MediaCubit>()
-                                                  .onActionDeleteChosen(record);
-                                            }
-                                          }
-                                        },
-                                      );
+                                          theme: Theme.of(context),
+                                          translate: translate,
+                                          onTap: (action) async {
+                                            onActionTap(context, action, state,
+                                                record as Record);
+                                          });
                                     },
                                     child: MediaGridElement(
-                                        record: record as Record)),
-                              ),
-                            ),
-                          ),
-                        );
+                                        record: record as Record))));
                       },
                     ),
                   );
