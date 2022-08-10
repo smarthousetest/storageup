@@ -66,7 +66,7 @@ class SpaceBloc extends Bloc<SpaceEvent, SpaceState> {
     _repository = await GetIt.instance.getAsync<DownloadLocationsRepository>();
     final locationsInfo = _repository.locationsInfo;
     var keeper = await _keeperService.getAllKeepers();
-    var valueNotifier = _userController.getValueNotifier();
+    var valueNotifier = await _userController.getValueNotifier();
     final diskList = await getDisksList();
     List<String> checkedDisk = [];
     for (String availableDisk in diskList)
