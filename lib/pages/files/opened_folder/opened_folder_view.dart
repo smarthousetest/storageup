@@ -17,6 +17,7 @@ import 'package:storageup/components/blur/custom_error_popup.dart';
 import 'package:storageup/components/blur/delete.dart';
 import 'package:storageup/components/blur/rename.dart';
 import 'package:storageup/components/context_menu.dart';
+import 'package:storageup/components/context_menu_lib.dart';
 import 'package:storageup/components/properties.dart';
 import 'package:storageup/constants.dart';
 import 'package:storageup/generated/l10n.dart';
@@ -839,73 +840,87 @@ class _OpenedFolderViewState extends State<OpenedFolderView>
                           }),
                           cells: [
                             DataCell(
-                              GestureDetector(
-                                onTap:
-                                    _onTapFiles(element, state, index, context),
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.click,
-                                  child: Row(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Image.asset(
-                                            isFile
-                                                ? type.isNotEmpty
-                                                    ? 'assets/file_icons/${type}_s.png'
-                                                    : 'assets/file_icons/unexpected_s.png'
-                                                : 'assets/file_icons/folder.png',
-                                            fit: BoxFit.contain,
-                                            height: 24,
-                                            width: 24,
-                                          ),
-                                          ...isFile &&
-                                                  (element as Record)
-                                                          .loadPercent !=
-                                                      null
-                                              ? _uploadProgress(
-                                                  element.loadPercent)
-                                              : [],
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          width: constraints.maxWidth * 0.3,
-                                          child: Text(
-                                            element.name ?? '',
-                                            overflow: TextOverflow.ellipsis,
-                                            style: cellTextStyle,
+                              ContextMenuArea(
+                                builder: (contextArea) => [
+                                  FilesPopupMenuActions(
+                                    object: element,
+                                    onTap: (action) {
+                                      Navigator.of(contextArea).pop();
+                                      _popupActions(
+                                          state, context, action, element);
+                                    },
+                                    theme: Theme.of(context),
+                                    translate: translate,
+                                  )
+                                ],
+                                child: GestureDetector(
+                                  onTap: _onTapFiles(
+                                      element, state, index, context),
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: Row(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Image.asset(
+                                              isFile
+                                                  ? type.isNotEmpty
+                                                      ? 'assets/file_icons/${type}_s.png'
+                                                      : 'assets/file_icons/unexpected_s.png'
+                                                  : 'assets/file_icons/folder.png',
+                                              fit: BoxFit.contain,
+                                              height: 24,
+                                              width: 24,
+                                            ),
+                                            ...isFile &&
+                                                    (element as Record)
+                                                            .loadPercent !=
+                                                        null
+                                                ? _uploadProgress(
+                                                    element.loadPercent)
+                                                : [],
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            width: constraints.maxWidth * 0.3,
+                                            child: Text(
+                                              element.name ?? '',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: cellTextStyle,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      // Spacer(),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
-                                        child: BlocBuilder<OpenedFolderCubit,
-                                            OpenedFolderState>(
-                                          bloc: _bloc,
-                                          builder: (context, state) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                context
-                                                    .read<OpenedFolderCubit>()
-                                                    .setFavorite(element);
-                                              },
-                                              child: Image.asset(
-                                                element.favorite
-                                                    ? 'assets/file_page/favorite.png'
-                                                    : 'assets/file_page/not_favorite.png',
-                                                height: 18,
-                                                width: 18,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      )
-                                    ],
+                                        // Spacer(),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: BlocBuilder<OpenedFolderCubit,
+                                              OpenedFolderState>(
+                                            bloc: _bloc,
+                                            builder: (context, state) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  context
+                                                      .read<OpenedFolderCubit>()
+                                                      .setFavorite(element);
+                                                },
+                                                child: Image.asset(
+                                                  element.favorite
+                                                      ? 'assets/file_page/favorite.png'
+                                                      : 'assets/file_page/not_favorite.png',
+                                                  height: 18,
+                                                  width: 18,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
