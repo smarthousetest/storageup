@@ -887,26 +887,31 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                   _onTapItem(state.currentFolderRecords, record,
                                       context, state.currentFolder);
                                 },
-                                child: CustomPopupMenu(
-                                    pressType: PressType.singleClick,
-                                    barrierColor: Colors.transparent,
-                                    showArrow: false,
-                                    enablePassEvent: false,
-                                    horizontalMargin: 110,
-                                    verticalMargin: 0,
-                                    controller: _popupControllers[
-                                        mediaList.indexOf(record)],
-                                    menuBuilder: () {
-                                      return MediaPopupMenuActions(
-                                          theme: Theme.of(context),
-                                          translate: translate,
-                                          onTap: (action) async {
-                                            onActionTap(context, action, state,
-                                                record as Record);
-                                          });
-                                    },
-                                    child: MediaGridElement(
-                                        record: record as Record))));
+                                child: IgnorePointer(
+                                  child: CustomPopupMenu(
+                                      pressType: PressType.singleClick,
+                                      barrierColor: Colors.transparent,
+                                      showArrow: false,
+                                      enablePassEvent: false,
+                                      horizontalMargin: 110,
+                                      verticalMargin: 0,
+                                      controller: _popupControllers[
+                                          mediaList.indexOf(record)],
+                                      menuBuilder: () {
+                                        return MediaPopupMenuActions(
+                                            theme: Theme.of(context),
+                                            translate: translate,
+                                            onTap: (action) async {
+                                              _popupControllers[
+                                                      mediaList.indexOf(record)]
+                                                  .hideMenu();
+                                              onActionTap(context, action,
+                                                  state, record as Record);
+                                            });
+                                      },
+                                      child: MediaGridElement(
+                                          record: record as Record)),
+                                )));
                       },
                     ),
                   );
@@ -940,7 +945,7 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
 
   void onActionTap(BuildContext context, MediaAction action, MediaState state,
       Record record) async {
-    _popupControllers[state.currentFolderRecords.indexOf(record)].hideMenu();
+    // _popupControllers[state.currentFolderRecords.indexOf(record)].hideMenu();
     if (action == MediaAction.properties) {
       var res = await showDialog(
           context: context,
