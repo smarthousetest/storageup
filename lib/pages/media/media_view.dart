@@ -924,6 +924,52 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
     );
   }
 
+  _popupActions(MediaState state, BuildContext context, FileAction action,
+      Record object) async {
+    if (action.name == "properties") {
+      var res = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return FileInfoView(
+                object: object, user: state.valueNotifier?.value);
+          });
+      if (res != null) {
+        context.read<MediaCubit>().fileTapped(object);
+      }
+    } else if (action.name == "rename") {
+      var fileExtention = FileAttribute().getFileExtension(object.name ?? '');
+      var result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          var filename = FileAttribute().getFileName(object.name ?? '');
+          return BlurRename(filename, true);
+        },
+      );
+      if (result != null &&
+          result is String &&
+          result != FileAttribute().getFileName(object.name ?? '')) {
+        result = result + '.' + fileExtention;
+        final res = await context
+            .read<MediaCubit>()
+            .onActionRenameChosen(object, result);
+        if (res == ErrorType.alreadyExist) {
+          _rename(context, object, result, fileExtention);
+        }
+      }
+    } else {
+      //   controller.hideMenu();
+      var result = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return BlurDelete();
+        },
+      );
+      if (result == true) {
+        context.read<MediaCubit>().onActionDeleteChosen(object);
+      }
+    }
+  }
+
   void _rename(BuildContext context, BaseObject record, String name,
       String extention) async {
     String newName = await showDialog(
@@ -1115,7 +1161,8 @@ class _MediaPageState extends State<MediaPage> with TickerProviderStateMixin {
                                       object: record,
                                       onTap: (action) {
                                         Navigator.of(contextArea).pop();
-                                        // _popupActions(state, context, action, record);
+                                        _popupActions(
+                                            state, context, action, record);
                                       },
                                       theme: Theme.of(context),
                                       translate: translate,
